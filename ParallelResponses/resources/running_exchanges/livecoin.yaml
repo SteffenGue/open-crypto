@@ -1,0 +1,84 @@
+name: livecoin
+terms:
+  terms_url: https://www.livecoin.net/en/useragreement
+  permission: null
+  search_targets:
+  - tag: section
+    class: content
+api_url: https://api.livecoin.net/
+rate_limit: null
+requests:
+  ticker:
+    request:
+      template: exchange/ticker
+      pair_template: null # e.g. BNT/BTC
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          cur: # e.g. BNT
+            type: str
+          symbol: # e.g. BNT/BTC
+            type: str
+          last:
+            type: float
+          high:
+            type: float
+          low:
+            type: float
+          volume:
+            type: float
+          vwap:
+            type: float
+          max_bid:
+            type: float
+          min_ask:
+            type: float
+          best_bid:
+            type: float
+          best_ask:
+            type: float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path: 
+      - symbol
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: currency_pair_second
+      path:
+      - symbol
+      type:
+      - str
+      - split
+      - "/"
+      - 1
+    - key: ticker_last_price
+      path:
+      - last
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - volume
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - best_bid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - best_ask
+      type:
+      - float

@@ -1,0 +1,2514 @@
+{
+    "code": "200",
+    "msg": "success",
+    "data": {
+        "NPXS_ETH": {
+            "id": 14487612,
+            "last": "0.00000104",
+            "lowestAsk": "0.00000104",
+            "highestBid": "0.00000103",
+            "percentChange": "0.0505",
+            "baseVolume": "30593114",
+            "quoteVolume": "30.84229609",
+            "isFrozen": "0",
+            "high24hr": "0.00000105",
+            "low24hr": "0.00000098"
+        },
+        "DIVI_BTC": {
+            "id": 1674317145,
+            "last": "0.0000016981",
+            "lowestAsk": "0.0000016975",
+            "highestBid": "0.0000016970",
+            "percentChange": "0.0241",
+            "baseVolume": "4084422",
+            "quoteVolume": "6.8628289826",
+            "isFrozen": "0",
+            "high24hr": "0.0000017288",
+            "low24hr": "0.0000016310"
+        },
+        "POWR_BTC": {
+            "id": 1759909623,
+            "last": "0.00000561",
+            "lowestAsk": "0.00000562",
+            "highestBid": "0.00000561",
+            "percentChange": "0.0126",
+            "baseVolume": "41571",
+            "quoteVolume": "0.23159976",
+            "isFrozen": "0",
+            "high24hr": "0.00000568",
+            "low24hr": "0.00000543"
+        },
+        "BNT_ETH": {
+            "id": 763316977,
+            "last": "0.001892",
+            "lowestAsk": "0.00188000",
+            "highestBid": "0.00186400",
+            "percentChange": "0.0892",
+            "baseVolume": "5132.07",
+            "quoteVolume": "9.534547",
+            "isFrozen": "0",
+            "high24hr": "0.001955",
+            "low24hr": "0.001732"
+        },
+        "DASH_USDT": {
+            "id": 1767883328,
+            "last": "54.398",
+            "lowestAsk": "54.277",
+            "highestBid": "54.237",
+            "percentChange": "0.0891",
+            "baseVolume": "34519.073",
+            "quoteVolume": "1822570.886",
+            "isFrozen": "0",
+            "high24hr": "54.939",
+            "low24hr": "49.714"
+        },
+        "CSC_BTC": {
+            "id": 796054398,
+            "last": "0.0000000482",
+            "lowestAsk": "0.0000000483",
+            "highestBid": "0.0000000441",
+            "percentChange": "0.0147",
+            "baseVolume": "29099526",
+            "quoteVolume": "1.3889641651",
+            "isFrozen": "0",
+            "high24hr": "0.0000000484",
+            "low24hr": "0.0000000441"
+        },
+        "PAX_USDT": {
+            "id": 1360130261,
+            "last": "0.9996",
+            "lowestAsk": "0.99980000",
+            "highestBid": "0.99970000",
+            "percentChange": "0.0001",
+            "baseVolume": "133148.14",
+            "quoteVolume": "133064.5485",
+            "isFrozen": "0",
+            "high24hr": "1.0005",
+            "low24hr": "0.9986"
+        },
+        "OMG_XRP": {
+            "id": 1134203341,
+            "last": "3.481",
+            "lowestAsk": "3.461",
+            "highestBid": "3.443",
+            "percentChange": "0.0136",
+            "baseVolume": "225432.56",
+            "quoteVolume": "780739.977",
+            "isFrozen": "0",
+            "high24hr": "3.524",
+            "low24hr": "3.403"
+        },
+        "WTC_BTC": {
+            "id": 1369560939,
+            "last": "0.0000735",
+            "lowestAsk": "0.00007360",
+            "highestBid": "0.00007340",
+            "percentChange": "0.0575",
+            "baseVolume": "494260.07",
+            "quoteVolume": "36.3890504",
+            "isFrozen": "0",
+            "high24hr": "0.0000775",
+            "low24hr": "0.0000685"
+        },
+        "ETC_XRP": {
+            "id": 854257314,
+            "last": "17.863",
+            "lowestAsk": "17.78800000",
+            "highestBid": "17.77200000",
+            "percentChange": "0.0217",
+            "baseVolume": "24627.50",
+            "quoteVolume": "432565.421",
+            "isFrozen": "0",
+            "high24hr": "17.880",
+            "low24hr": "17.352"
+        },
+        "RVN_BTC": {
+            "id": 1228589927,
+            "last": "0.00000304",
+            "lowestAsk": "0.00000304",
+            "highestBid": "0.00000303",
+            "percentChange": "0.0066",
+            "baseVolume": "206670.39",
+            "quoteVolume": "0.62524259",
+            "isFrozen": "0",
+            "high24hr": "0.00000306",
+            "low24hr": "0.00000299"
+        },
+        "ENG_BTC": {
+            "id": 848814259,
+            "last": "0.00007323",
+            "lowestAsk": "0.00007317",
+            "highestBid": "0.00007299",
+            "percentChange": "-0.0617",
+            "baseVolume": "30585",
+            "quoteVolume": "2.28366199",
+            "isFrozen": "0",
+            "high24hr": "0.00007898",
+            "low24hr": "0.00007181"
+        },
+        "TRX_XRP": {
+            "id": 1282473148,
+            "last": "0.070800",
+            "lowestAsk": "0.070741",
+            "highestBid": "0.070385",
+            "percentChange": "-0.0074",
+            "baseVolume": "19688585",
+            "quoteVolume": "1392337.669898",
+            "isFrozen": "0",
+            "high24hr": "0.071737",
+            "low24hr": "0.069729"
+        },
+        "XLM_XRP": {
+            "id": 1391120925,
+            "last": "0.258432",
+            "lowestAsk": "0.258718",
+            "highestBid": "0.258300",
+            "percentChange": "0.0021",
+            "baseVolume": "4334731",
+            "quoteVolume": "1118715.404552",
+            "isFrozen": "0",
+            "high24hr": "0.260826",
+            "low24hr": "0.255051"
+        },
+        "DASH_BTC": {
+            "id": 1442483583,
+            "last": "0.007167",
+            "lowestAsk": "0.007180",
+            "highestBid": "0.007176",
+            "percentChange": "0.0713",
+            "baseVolume": "14563.756",
+            "quoteVolume": "102.586748",
+            "isFrozen": "0",
+            "high24hr": "0.007310",
+            "low24hr": "0.006667"
+        },
+        "BNB_XRP": {
+            "id": 762798944,
+            "last": "69.9651",
+            "lowestAsk": "69.8318",
+            "highestBid": "69.7844",
+            "percentChange": "-0.0058",
+            "baseVolume": "1125.99",
+            "quoteVolume": "78349.1830",
+            "isFrozen": "0",
+            "high24hr": "70.6855",
+            "low24hr": "68.7620"
+        },
+        "ICX_BTC": {
+            "id": 953678579,
+            "last": "0.0000184",
+            "lowestAsk": "0.00001840",
+            "highestBid": "0.00001837",
+            "percentChange": "0.00",
+            "baseVolume": "131180.33",
+            "quoteVolume": "2.4026685",
+            "isFrozen": "0",
+            "high24hr": "0.0000189",
+            "low24hr": "0.0000180"
+        },
+        "ZAP_XRP": {
+            "id": 1438309869,
+            "last": "0.017804",
+            "lowestAsk": "0.019899",
+            "highestBid": "0.017001",
+            "percentChange": "-0.1074",
+            "baseVolume": "3754691",
+            "quoteVolume": "72396.187761",
+            "isFrozen": "0",
+            "high24hr": "0.020997",
+            "low24hr": "0.016500"
+        },
+        "NPXS_USDT": {
+            "id": 449591659,
+            "last": "0.00016000",
+            "lowestAsk": "0.00016000",
+            "highestBid": "0.00015910",
+            "percentChange": "0.0666",
+            "baseVolume": "22167769",
+            "quoteVolume": "3383.00336704",
+            "isFrozen": "0",
+            "high24hr": "0.00016210",
+            "low24hr": "0.00014900"
+        },
+        "POLY_BTC": {
+            "id": 1749959429,
+            "last": "0.00000294",
+            "lowestAsk": "0.00000292",
+            "highestBid": "0.00000291",
+            "percentChange": "-0.0033",
+            "baseVolume": "212938",
+            "quoteVolume": "0.61975169",
+            "isFrozen": "0",
+            "high24hr": "0.00000302",
+            "low24hr": "0.00000285"
+        },
+        "QKC_ETH": {
+            "id": 1189477232,
+            "last": "0.00002667",
+            "lowestAsk": "0.00002683",
+            "highestBid": "0.00002667",
+            "percentChange": "-0.0089",
+            "baseVolume": "34612",
+            "quoteVolume": "0.93755342",
+            "isFrozen": "0",
+            "high24hr": "0.00002742",
+            "low24hr": "0.00002667"
+        },
+        "ZRX_XRP": {
+            "id": 1454248054,
+            "last": "1.221",
+            "lowestAsk": "1.21600000",
+            "highestBid": "1.21500000",
+            "percentChange": "0.0391",
+            "baseVolume": "353241",
+            "quoteVolume": "425932.097",
+            "isFrozen": "0",
+            "high24hr": "1.229",
+            "low24hr": "1.173"
+        },
+        "UOS_BTC": {
+            "id": 1308161688,
+            "last": "0.0000037236",
+            "lowestAsk": "0.0000037236",
+            "highestBid": "0.0000036530",
+            "percentChange": "0.1407",
+            "baseVolume": "102887.60",
+            "quoteVolume": "0.3741619307",
+            "isFrozen": "0",
+            "high24hr": "0.0000038066",
+            "low24hr": "0.0000032643"
+        },
+        "SNT_ETH": {
+            "id": 1250012544,
+            "last": "0.00007483",
+            "lowestAsk": "0.00007497",
+            "highestBid": "0.00007456",
+            "percentChange": "0.0061",
+            "baseVolume": "113502",
+            "quoteVolume": "8.34235680",
+            "isFrozen": "0",
+            "high24hr": "0.00007570",
+            "low24hr": "0.00007139"
+        },
+        "PRO_BTC": {
+            "id": 1167667332,
+            "last": "0.00001044",
+            "lowestAsk": "0.00001046",
+            "highestBid": "0.00001042",
+            "percentChange": "0.0185",
+            "baseVolume": "393717.70",
+            "quoteVolume": "4.08673531",
+            "isFrozen": "0",
+            "high24hr": "0.00001052",
+            "low24hr": "0.00001003"
+        },
+        "TRX_USDT": {
+            "id": 1101873256,
+            "last": "0.01612",
+            "lowestAsk": "0.01609000",
+            "highestBid": "0.01607000",
+            "percentChange": "0.0081",
+            "baseVolume": "139896878.3",
+            "quoteVolume": "2236633.20116",
+            "isFrozen": "0",
+            "high24hr": "0.01628",
+            "low24hr": "0.01561"
+        },
+        "LTC_BTC": {
+            "id": 1054640278,
+            "last": "0.00639000",
+            "lowestAsk": "0.00641500",
+            "highestBid": "0.00640900",
+            "percentChange": "0.0107",
+            "baseVolume": "39421.38",
+            "quoteVolume": "248.69225514",
+            "isFrozen": "0",
+            "high24hr": "0.00643002",
+            "low24hr": "0.00622800"
+        },
+        "SHA_XRP": {
+            "id": 1243923594,
+            "last": "0.002300",
+            "lowestAsk": "0.002200",
+            "highestBid": "0.001650",
+            "percentChange": "-0.1119",
+            "baseVolume": "541286",
+            "quoteVolume": "1187.164287",
+            "isFrozen": "0",
+            "high24hr": "0.002590",
+            "low24hr": "0.001813"
+        },
+        "NEO_XRP": {
+            "id": 1098424350,
+            "last": "42.181",
+            "lowestAsk": "42.013",
+            "highestBid": "41.932",
+            "percentChange": "0.0089",
+            "baseVolume": "25256.42",
+            "quoteVolume": "1054315.543",
+            "isFrozen": "0",
+            "high24hr": "42.249",
+            "low24hr": "41.250"
+        },
+        "FUN_BTC": {
+            "id": 884116594,
+            "last": "0.00000040",
+            "lowestAsk": "0.00000041",
+            "highestBid": "0.00000040",
+            "percentChange": "-0.0243",
+            "baseVolume": "5021924",
+            "quoteVolume": "2.06761559",
+            "isFrozen": "0",
+            "high24hr": "0.00000043",
+            "low24hr": "0.00000040"
+        },
+        "GAS_BTC": {
+            "id": 894424280,
+            "last": "0.00015000",
+            "lowestAsk": "0.00015140",
+            "highestBid": "0.00015110",
+            "percentChange": "0.0351",
+            "baseVolume": "1633.12",
+            "quoteVolume": "0.23906639",
+            "isFrozen": "0",
+            "high24hr": "0.00015084",
+            "low24hr": "0.00014310"
+        },
+        "TRX_ETH": {
+            "id": 1282454943,
+            "last": "0.00010388",
+            "lowestAsk": "0.00010427",
+            "highestBid": "0.00010396",
+            "percentChange": "-0.0219",
+            "baseVolume": "6141187",
+            "quoteVolume": "645.49419637",
+            "isFrozen": "0",
+            "high24hr": "0.00010665",
+            "low24hr": "0.00010333"
+        },
+        "DGD_BTC": {
+            "id": 813631088,
+            "last": "0.002033",
+            "lowestAsk": "0.00202400",
+            "highestBid": "0.00201300",
+            "percentChange": "0.144",
+            "baseVolume": "4987.494",
+            "quoteVolume": "9.653032",
+            "isFrozen": "0",
+            "high24hr": "0.002107",
+            "low24hr": "0.001757"
+        },
+        "XTZ_XRP": {
+            "id": 1398896376,
+            "last": "5.6892",
+            "lowestAsk": "5.6533",
+            "highestBid": "5.6467",
+            "percentChange": "0.0482",
+            "baseVolume": "3992.05",
+            "quoteVolume": "22735.3490",
+            "isFrozen": "0",
+            "high24hr": "5.9547",
+            "low24hr": "5.4142"
+        },
+        "XLM_ETH": {
+            "id": 1391102720,
+            "last": "0.00038001",
+            "lowestAsk": "0.00038174",
+            "highestBid": "0.00038105",
+            "percentChange": "-0.0148",
+            "baseVolume": "318959",
+            "quoteVolume": "122.20477840",
+            "isFrozen": "0",
+            "high24hr": "0.00038641",
+            "low24hr": "0.00037902"
+        },
+        "ZIL_BTC": {
+            "id": 1445557780,
+            "last": "0.00000071",
+            "lowestAsk": "0.00000071",
+            "highestBid": "0.00000070",
+            "percentChange": "0.0142",
+            "baseVolume": "16882263",
+            "quoteVolume": "11.94498877",
+            "isFrozen": "0",
+            "high24hr": "0.00000072",
+            "low24hr": "0.00000069"
+        },
+        "LINK_XRP": {
+            "id": 177104508,
+            "last": "10.220740",
+            "lowestAsk": "10.20558000",
+            "highestBid": "10.19355900",
+            "percentChange": "0.0379",
+            "baseVolume": "104468",
+            "quoteVolume": "1050284.046628",
+            "isFrozen": "0",
+            "high24hr": "10.361323",
+            "low24hr": "9.710033"
+        },
+        "ZRX_ETH": {
+            "id": 1454229849,
+            "last": "0.00179511",
+            "lowestAsk": "0.00179510",
+            "highestBid": "0.00179026",
+            "percentChange": "0.0201",
+            "baseVolume": "116132",
+            "quoteVolume": "207.61057836",
+            "isFrozen": "0",
+            "high24hr": "0.00182062",
+            "low24hr": "0.00175180"
+        },
+        "NEXO_BTC": {
+            "id": 1846928547,
+            "last": "0.00001262",
+            "lowestAsk": "0.00001266",
+            "highestBid": "0.00001265",
+            "percentChange": "0.0185",
+            "baseVolume": "1106625",
+            "quoteVolume": "13.86550373",
+            "isFrozen": "0",
+            "high24hr": "0.00001267",
+            "low24hr": "0.00001236"
+        },
+        "WAN_XRP": {
+            "id": 1352362834,
+            "last": "0.965",
+            "lowestAsk": "0.96400000",
+            "highestBid": "0.96100000",
+            "percentChange": "0.0398",
+            "baseVolume": "62630.65",
+            "quoteVolume": "59865.658",
+            "isFrozen": "0",
+            "high24hr": "0.974",
+            "low24hr": "0.926"
+        },
+        "PAX_XRP": {
+            "id": 1152256687,
+            "last": "4.3925",
+            "lowestAsk": "4.39160000",
+            "highestBid": "4.39040000",
+            "percentChange": "-0.0114",
+            "baseVolume": "102830.16",
+            "quoteVolume": "454892.1625",
+            "isFrozen": "0",
+            "high24hr": "4.4901",
+            "low24hr": "4.3594"
+        },
+        "HOT_ETH": {
+            "id": 936015404,
+            "last": "0.00000539",
+            "lowestAsk": "0.00000540",
+            "highestBid": "0.00000539",
+            "percentChange": "-0.0164",
+            "baseVolume": "38639526",
+            "quoteVolume": "209.62418334",
+            "isFrozen": "0",
+            "high24hr": "0.00000548",
+            "low24hr": "0.00000537"
+        },
+        "BAT_ETH": {
+            "id": 751311204,
+            "last": "0.00135883",
+            "lowestAsk": "0.00137328",
+            "highestBid": "0.00136431",
+            "percentChange": "0.0035",
+            "baseVolume": "57549",
+            "quoteVolume": "78.11672623",
+            "isFrozen": "0",
+            "high24hr": "0.00136905",
+            "low24hr": "0.00133020"
+        },
+        "XEM_BTC": {
+            "id": 1384635185,
+            "last": "0.00000485",
+            "lowestAsk": "0.00000487",
+            "highestBid": "0.00000485",
+            "percentChange": "0.0062",
+            "baseVolume": "2590761",
+            "quoteVolume": "12.48748224",
+            "isFrozen": "0",
+            "high24hr": "0.00000487",
+            "low24hr": "0.00000477"
+        },
+        "VET_XRP": {
+            "id": 1327606513,
+            "last": "0.027845",
+            "lowestAsk": "0.027898",
+            "highestBid": "0.027705",
+            "percentChange": "-0.0241",
+            "baseVolume": "102068175",
+            "quoteVolume": "2901524.889899",
+            "isFrozen": "0",
+            "high24hr": "0.029343",
+            "low24hr": "0.027530"
+        },
+        "WAN_USDT": {
+            "id": 1120969874,
+            "last": "0.2196",
+            "lowestAsk": "0.2195",
+            "highestBid": "0.2189",
+            "percentChange": "0.0522",
+            "baseVolume": "37896.15",
+            "quoteVolume": "8174.3658",
+            "isFrozen": "0",
+            "high24hr": "0.2200",
+            "low24hr": "0.2081"
+        },
+        "EOS_BTC": {
+            "id": 850095272,
+            "last": "0.00036410",
+            "lowestAsk": "0.00036380",
+            "highestBid": "0.00036370",
+            "percentChange": "0.0256",
+            "baseVolume": "667908.18",
+            "quoteVolume": "237.06334364",
+            "isFrozen": "0",
+            "high24hr": "0.00036610",
+            "low24hr": "0.00034620"
+        },
+        "ENG_ETH": {
+            "id": 848817147,
+            "last": "0.0035985",
+            "lowestAsk": "0.00358250",
+            "highestBid": "0.00357260",
+            "percentChange": "-0.0671",
+            "baseVolume": "2534",
+            "quoteVolume": "9.4329884",
+            "isFrozen": "0",
+            "high24hr": "0.0038984",
+            "low24hr": "0.0035289"
+        },
+        "HOT_BTC": {
+            "id": 936012516,
+            "last": "0.00000011",
+            "lowestAsk": "0.00000012",
+            "highestBid": "0.00000011",
+            "percentChange": "0.00",
+            "baseVolume": "366856270",
+            "quoteVolume": "40.30628102",
+            "isFrozen": "0",
+            "high24hr": "0.00000012",
+            "low24hr": "0.00000010"
+        },
+        "VET_USDT": {
+            "id": 353523923,
+            "last": "0.006341",
+            "lowestAsk": "0.006312",
+            "highestBid": "0.006303",
+            "percentChange": "-0.0124",
+            "baseVolume": "452902292",
+            "quoteVolume": "2906458.401701",
+            "isFrozen": "0",
+            "high24hr": "0.006665",
+            "low24hr": "0.006201"
+        },
+        "GNT_ETH": {
+            "id": 906462732,
+            "last": "0.00024687",
+            "lowestAsk": "0.00024775",
+            "highestBid": "0.00024642",
+            "percentChange": "-0.0164",
+            "baseVolume": "1054",
+            "quoteVolume": "0.26414299",
+            "isFrozen": "0",
+            "high24hr": "0.00025300",
+            "low24hr": "0.00024620"
+        },
+        "BCH_USDT": {
+            "id": 1862462581,
+            "last": "225.55",
+            "lowestAsk": "224.33",
+            "highestBid": "224.19",
+            "percentChange": "0.0248",
+            "baseVolume": "5032.288",
+            "quoteVolume": "1110427.38",
+            "isFrozen": "0",
+            "high24hr": "226.00",
+            "low24hr": "216.23"
+        },
+        "IOST_BTC": {
+            "id": 1986200298,
+            "last": "0.00000073",
+            "lowestAsk": "0.00000074",
+            "highestBid": "0.00000073",
+            "percentChange": "-0.0135",
+            "baseVolume": "62925172",
+            "quoteVolume": "46.70897103",
+            "isFrozen": "0",
+            "high24hr": "0.00000077",
+            "low24hr": "0.00000073"
+        },
+        "LUNA_BTC": {
+            "id": 520335317,
+            "last": "0.00003779",
+            "lowestAsk": "0.00003905",
+            "highestBid": "0.00003700",
+            "percentChange": "0.3116",
+            "baseVolume": "215854.50",
+            "quoteVolume": "6.99908052",
+            "isFrozen": "0",
+            "high24hr": "0.00003810",
+            "low24hr": "0.00002827"
+        },
+        "LRC_BTC": {
+            "id": 1052793236,
+            "last": "0.00000326",
+            "lowestAsk": "0.00000326",
+            "highestBid": "0.00000324",
+            "percentChange": "0.0415",
+            "baseVolume": "1514203",
+            "quoteVolume": "4.86220868",
+            "isFrozen": "0",
+            "high24hr": "0.00000329",
+            "low24hr": "0.00000313"
+        },
+        "PPT_ETH": {
+            "id": 1165972133,
+            "last": "0.003344",
+            "lowestAsk": "0.00336500",
+            "highestBid": "0.00333400",
+            "percentChange": "-0.0029",
+            "baseVolume": "258.67",
+            "quoteVolume": "0.870434",
+            "isFrozen": "0",
+            "high24hr": "0.003407",
+            "low24hr": "0.003311"
+        },
+        "LINK_ETH": {
+            "id": 177086303,
+            "last": "0.01502784",
+            "lowestAsk": "0.01507493",
+            "highestBid": "0.01504146",
+            "percentChange": "0.0232",
+            "baseVolume": "44720",
+            "quoteVolume": "667.15459521",
+            "isFrozen": "0",
+            "high24hr": "0.01531354",
+            "low24hr": "0.01445126"
+        },
+        "STORM_XRP": {
+            "id": 1717420845,
+            "last": "0.006391",
+            "lowestAsk": "0.006388",
+            "highestBid": "0.006324",
+            "percentChange": "-0.0655",
+            "baseVolume": "3784297",
+            "quoteVolume": "24733.086240",
+            "isFrozen": "0",
+            "high24hr": "0.006911",
+            "low24hr": "0.006323"
+        },
+        "ICX_XRP": {
+            "id": 953699672,
+            "last": "0.6129",
+            "lowestAsk": "0.6110",
+            "highestBid": "0.6086",
+            "percentChange": "0.0095",
+            "baseVolume": "8992.50",
+            "quoteVolume": "5463.4647",
+            "isFrozen": "0",
+            "high24hr": "0.6289",
+            "low24hr": "0.5965"
+        },
+        "AION_ETH": {
+            "id": 1152976946,
+            "last": "0.000427",
+            "lowestAsk": "0.00042800",
+            "highestBid": "0.00042500",
+            "percentChange": "0.019",
+            "baseVolume": "16982.68",
+            "quoteVolume": "7.181512",
+            "isFrozen": "0",
+            "high24hr": "0.000438",
+            "low24hr": "0.000416"
+        },
+        "POWR_ETH": {
+            "id": 1759912511,
+            "last": "0.00027502",
+            "lowestAsk": "0.00027539",
+            "highestBid": "0.00027427",
+            "percentChange": "0.0033",
+            "baseVolume": "4387",
+            "quoteVolume": "1.20962557",
+            "isFrozen": "0",
+            "high24hr": "0.00027965",
+            "low24hr": "0.00026939"
+        },
+        "NEO_ETH": {
+            "id": 1098406145,
+            "last": "0.061955",
+            "lowestAsk": "0.06197900",
+            "highestBid": "0.06191200",
+            "percentChange": "-0.0085",
+            "baseVolume": "3906.17",
+            "quoteVolume": "241.936991",
+            "isFrozen": "0",
+            "high24hr": "0.062857",
+            "low24hr": "0.061201"
+        },
+        "LBA_XRP": {
+            "id": 1037978411,
+            "last": "0.0998",
+            "lowestAsk": "0.1000",
+            "highestBid": "0.0996",
+            "percentChange": "-0.0099",
+            "baseVolume": "255162.69",
+            "quoteVolume": "25977.7285",
+            "isFrozen": "0",
+            "high24hr": "0.1049",
+            "low24hr": "0.0990"
+        },
+        "VET_ETH": {
+            "id": 1327588308,
+            "last": "0.00004084",
+            "lowestAsk": "0.00004094",
+            "highestBid": "0.00004081",
+            "percentChange": "-0.0413",
+            "baseVolume": "5967407",
+            "quoteVolume": "252.03908427",
+            "isFrozen": "0",
+            "high24hr": "0.00004350",
+            "low24hr": "0.00004066"
+        },
+        "BAT_XRP": {
+            "id": 751329409,
+            "last": "0.9224",
+            "lowestAsk": "0.9323",
+            "highestBid": "0.9247",
+            "percentChange": "0.0194",
+            "baseVolume": "32885.04",
+            "quoteVolume": "30063.0631",
+            "isFrozen": "0",
+            "high24hr": "0.9292",
+            "low24hr": "0.8964"
+        },
+        "LBA_USDT": {
+            "id": 2112471001,
+            "last": "0.022714",
+            "lowestAsk": "0.022753",
+            "highestBid": "0.022523",
+            "percentChange": "-0.0052",
+            "baseVolume": "2157726.44",
+            "quoteVolume": "49614.926874",
+            "isFrozen": "0",
+            "high24hr": "0.024004",
+            "low24hr": "0.022441"
+        },
+        "DGD_ETH": {
+            "id": 813633976,
+            "last": "0.09951",
+            "lowestAsk": "0.09913000",
+            "highestBid": "0.09859000",
+            "percentChange": "0.1305",
+            "baseVolume": "7912.566",
+            "quoteVolume": "713.90866",
+            "isFrozen": "0",
+            "high24hr": "0.10331",
+            "low24hr": "0.08679"
+        },
+        "DASH_XRP": {
+            "id": 1442504676,
+            "last": "238.980",
+            "lowestAsk": "238.459",
+            "highestBid": "238.247",
+            "percentChange": "0.0763",
+            "baseVolume": "7826.525",
+            "quoteVolume": "1832996.458",
+            "isFrozen": "0",
+            "high24hr": "243.403",
+            "low24hr": "221.053"
+        },
+        "GNT_XRP": {
+            "id": 906480937,
+            "last": "0.167986",
+            "lowestAsk": "0.168194",
+            "highestBid": "0.167017",
+            "percentChange": "-0.0006",
+            "baseVolume": "1478.63",
+            "quoteVolume": "248.886975",
+            "isFrozen": "0",
+            "high24hr": "0.170319",
+            "low24hr": "0.166198"
+        },
+        "BTT_XRP": {
+            "id": 768876308,
+            "last": "0.00142714",
+            "lowestAsk": "0.00141481",
+            "highestBid": "0.00141102",
+            "percentChange": "0.0097",
+            "baseVolume": "19510728",
+            "quoteVolume": "27665.53825625",
+            "isFrozen": "0",
+            "high24hr": "0.00144754",
+            "low24hr": "0.00139496"
+        },
+        "DGB_XRP": {
+            "id": 813592599,
+            "last": "0.030000",
+            "lowestAsk": "0.030000",
+            "highestBid": "0.027203",
+            "percentChange": "0.00",
+            "baseVolume": "24605",
+            "quoteVolume": "738.160473",
+            "isFrozen": "0",
+            "high24hr": "0.030001",
+            "low24hr": "0.030000"
+        },
+        "ETC_USDT": {
+            "id": 712084290,
+            "last": "4.0654",
+            "lowestAsk": "4.05060000",
+            "highestBid": "4.04630000",
+            "percentChange": "0.0341",
+            "baseVolume": "64420.82",
+            "quoteVolume": "255491.4436",
+            "isFrozen": "0",
+            "high24hr": "4.0760",
+            "low24hr": "3.8699"
+        },
+        "ADA_XRP": {
+            "id": 724904792,
+            "last": "0.18206",
+            "lowestAsk": "0.18134",
+            "highestBid": "0.18094",
+            "percentChange": "0.0654",
+            "baseVolume": "24946987",
+            "quoteVolume": "4368076.50147",
+            "isFrozen": "0",
+            "high24hr": "0.18607",
+            "low24hr": "0.17042"
+        },
+        "WAX_BTC": {
+            "id": 1352639651,
+            "last": "0.00000280",
+            "lowestAsk": "0.00000275",
+            "highestBid": "0.00000274",
+            "percentChange": "-0.0378",
+            "baseVolume": "39637.3548",
+            "quoteVolume": "0.11333022",
+            "isFrozen": "0",
+            "high24hr": "0.00000300",
+            "low24hr": "0.00000275"
+        },
+        "ADA_USDT": {
+            "id": 997123404,
+            "last": "0.04144",
+            "lowestAsk": "0.04122",
+            "highestBid": "0.04118",
+            "percentChange": "0.078",
+            "baseVolume": "68106832.97",
+            "quoteVolume": "2721761.20156",
+            "isFrozen": "0",
+            "high24hr": "0.04195",
+            "low24hr": "0.03837"
+        },
+        "ETC_ETH": {
+            "id": 854239109,
+            "last": "0.02624900",
+            "lowestAsk": "0.02624900",
+            "highestBid": "0.02619000",
+            "percentChange": "0.0031",
+            "baseVolume": "1924.50",
+            "quoteVolume": "50.16641441",
+            "isFrozen": "0",
+            "high24hr": "0.02645000",
+            "low24hr": "0.02586300"
+        },
+        "ZRX_BTC": {
+            "id": 1454226961,
+            "last": "0.00003661",
+            "lowestAsk": "0.00003661",
+            "highestBid": "0.00003660",
+            "percentChange": "0.0341",
+            "baseVolume": "441368",
+            "quoteVolume": "16.03103640",
+            "isFrozen": "0",
+            "high24hr": "0.00003700",
+            "low24hr": "0.00003540"
+        },
+        "QKC_XRP": {
+            "id": 1189495437,
+            "last": "0.018000",
+            "lowestAsk": "0.01826600",
+            "highestBid": "0.01792800",
+            "percentChange": "0.0046",
+            "baseVolume": "9936482",
+            "quoteVolume": "181002.865045",
+            "isFrozen": "0",
+            "high24hr": "0.018667",
+            "low24hr": "0.017798"
+        },
+        "TRX_BTC": {
+            "id": 1282452055,
+            "last": "0.00000213",
+            "lowestAsk": "0.00000213",
+            "highestBid": "0.00000212",
+            "percentChange": "-0.0046",
+            "baseVolume": "36327315",
+            "quoteVolume": "77.32974373",
+            "isFrozen": "0",
+            "high24hr": "0.00000216",
+            "low24hr": "0.00000210"
+        },
+        "NCASH_BTC": {
+            "id": 1138072080,
+            "last": "0.0000001400",
+            "lowestAsk": "0.0000001499",
+            "highestBid": "0.0000001400",
+            "percentChange": "-0.0514",
+            "baseVolume": "706394",
+            "quoteVolume": "0.1000442908",
+            "isFrozen": "0",
+            "high24hr": "0.0000001499",
+            "low24hr": "0.0000001400"
+        },
+        "DNT_BTC": {
+            "id": 820572391,
+            "last": "0.00000082",
+            "lowestAsk": "0.00000083",
+            "highestBid": "0.00000082",
+            "percentChange": "0.0123",
+            "baseVolume": "2201381",
+            "quoteVolume": "1.80681530",
+            "isFrozen": "0",
+            "high24hr": "0.00000087",
+            "low24hr": "0.00000078"
+        },
+        "TUSD_USDT": {
+            "id": 154587968,
+            "last": "0.9996",
+            "lowestAsk": "0.99960000",
+            "highestBid": "0.99930000",
+            "percentChange": "0.00",
+            "baseVolume": "268663.12",
+            "quoteVolume": "268561.1929",
+            "isFrozen": "0",
+            "high24hr": "1.0008",
+            "low24hr": "0.9987"
+        },
+        "MCO_BTC": {
+            "id": 1067927064,
+            "last": "0.00054510",
+            "lowestAsk": "0.00054730",
+            "highestBid": "0.00054620",
+            "percentChange": "0.0011",
+            "baseVolume": "667.55",
+            "quoteVolume": "0.36640113",
+            "isFrozen": "0",
+            "high24hr": "0.00055890",
+            "low24hr": "0.00053610"
+        },
+        "BTR_XRP": {
+            "id": 768816726,
+            "last": "0.23662",
+            "lowestAsk": "0.23900",
+            "highestBid": "0.23600",
+            "percentChange": "0.003",
+            "baseVolume": "5728655.9",
+            "quoteVolume": "1350517.69907",
+            "isFrozen": "0",
+            "high24hr": "0.24485",
+            "low24hr": "0.22800"
+        },
+        "STORM_ETH": {
+            "id": 1717402640,
+            "last": "0.00000940",
+            "lowestAsk": "0.00000941",
+            "highestBid": "0.00000933",
+            "percentChange": "-0.0802",
+            "baseVolume": "1709655",
+            "quoteVolume": "16.63939080",
+            "isFrozen": "0",
+            "high24hr": "0.00001027",
+            "low24hr": "0.00000930"
+        },
+        "LTC_ETH": {
+            "id": 1054643166,
+            "last": "0.31287000",
+            "lowestAsk": "0.31415000",
+            "highestBid": "0.31360000",
+            "percentChange": "-0.0009",
+            "baseVolume": "2461.400",
+            "quoteVolume": "765.04001629",
+            "isFrozen": "0",
+            "high24hr": "0.31415000",
+            "low24hr": "0.30800000"
+        },
+        "ELF_ETH": {
+            "id": 846940314,
+            "last": "0.00043731",
+            "lowestAsk": "0.00043975",
+            "highestBid": "0.00043714",
+            "percentChange": "0.00",
+            "baseVolume": "1997",
+            "quoteVolume": "0.86797792",
+            "isFrozen": "0",
+            "high24hr": "0.00044161",
+            "low24hr": "0.00042576"
+        },
+        "KNC_XRP": {
+            "id": 1020491094,
+            "last": "0.771",
+            "lowestAsk": "0.76600000",
+            "highestBid": "0.76400000",
+            "percentChange": "0.0211",
+            "baseVolume": "132191",
+            "quoteVolume": "101880.472",
+            "isFrozen": "0",
+            "high24hr": "0.805",
+            "low24hr": "0.742"
+        },
+        "PRO_XRP": {
+            "id": 1167688425,
+            "last": "0.348116",
+            "lowestAsk": "0.347393",
+            "highestBid": "0.345950",
+            "percentChange": "0.0232",
+            "baseVolume": "106719",
+            "quoteVolume": "36837.366801",
+            "isFrozen": "0",
+            "high24hr": "0.349632",
+            "low24hr": "0.334770"
+        },
+        "NEO_BTC": {
+            "id": 1098403257,
+            "last": "0.001265",
+            "lowestAsk": "0.00126500",
+            "highestBid": "0.00126300",
+            "percentChange": "0.0039",
+            "baseVolume": "39881.43",
+            "quoteVolume": "50.123716",
+            "isFrozen": "0",
+            "high24hr": "0.001275",
+            "low24hr": "0.001245"
+        },
+        "PPT_BTC": {
+            "id": 1165969245,
+            "last": "0.0000684",
+            "lowestAsk": "0.00006870",
+            "highestBid": "0.00006840",
+            "percentChange": "0.0029",
+            "baseVolume": "65868.17",
+            "quoteVolume": "4.4900011",
+            "isFrozen": "0",
+            "high24hr": "0.0000692",
+            "low24hr": "0.0000672"
+        },
+        "BAT_USDT": {
+            "id": 1816286531,
+            "last": "0.2113",
+            "lowestAsk": "0.2113",
+            "highestBid": "0.2111",
+            "percentChange": "0.0368",
+            "baseVolume": "734517.67",
+            "quoteVolume": "151999.3552",
+            "isFrozen": "0",
+            "high24hr": "0.2114",
+            "low24hr": "0.2032"
+        },
+        "EOS_USDT": {
+            "id": 583714871,
+            "last": "2.76419",
+            "lowestAsk": "2.75040",
+            "highestBid": "2.74840",
+            "percentChange": "0.0428",
+            "baseVolume": "1300537.60",
+            "quoteVolume": "3465592.19619",
+            "isFrozen": "0",
+            "high24hr": "2.77370",
+            "low24hr": "2.59420"
+        },
+        "TUSD_XRP": {
+            "id": 1182641892,
+            "last": "4.3925",
+            "lowestAsk": "4.39080000",
+            "highestBid": "4.38870000",
+            "percentChange": "-0.0117",
+            "baseVolume": "21270.77",
+            "quoteVolume": "94338.5825",
+            "isFrozen": "0",
+            "high24hr": "4.4962",
+            "low24hr": "4.3586"
+        },
+        "WAX_XRP": {
+            "id": 1352660744,
+            "last": "0.0933",
+            "lowestAsk": "0.0913",
+            "highestBid": "0.0910",
+            "percentChange": "-0.0331",
+            "baseVolume": "33814.0341",
+            "quoteVolume": "3286.3351",
+            "isFrozen": "0",
+            "high24hr": "0.0996",
+            "low24hr": "0.0909"
+        },
+        "USDC_USDT": {
+            "id": 1839513803,
+            "last": "0.9996",
+            "lowestAsk": "0.9998",
+            "highestBid": "0.9996",
+            "percentChange": "0.00",
+            "baseVolume": "25388.86",
+            "quoteVolume": "25369.9094",
+            "isFrozen": "0",
+            "high24hr": "1.0001",
+            "low24hr": "0.9985"
+        },
+        "ZIL_XRP": {
+            "id": 1445578873,
+            "last": "0.023632",
+            "lowestAsk": "0.023591",
+            "highestBid": "0.023478",
+            "percentChange": "0.0121",
+            "baseVolume": "960851.57",
+            "quoteVolume": "22533.710861",
+            "isFrozen": "0",
+            "high24hr": "0.023775",
+            "low24hr": "0.023099"
+        },
+        "LINK_BTC": {
+            "id": 177083415,
+            "last": "0.00030669",
+            "lowestAsk": "0.00030729",
+            "highestBid": "0.00030703",
+            "percentChange": "0.033",
+            "baseVolume": "126846",
+            "quoteVolume": "38.32275259",
+            "isFrozen": "0",
+            "high24hr": "0.00031177",
+            "low24hr": "0.00029159"
+        },
+        "LOOM_BTC": {
+            "id": 349841424,
+            "last": "0.00000239",
+            "lowestAsk": "0.00000239",
+            "highestBid": "0.00000238",
+            "percentChange": "0.0127",
+            "baseVolume": "997429",
+            "quoteVolume": "2.34108382",
+            "isFrozen": "0",
+            "high24hr": "0.00000240",
+            "low24hr": "0.00000229"
+        },
+        "POLY_XRP": {
+            "id": 1749980522,
+            "last": "0.098",
+            "lowestAsk": "0.098",
+            "highestBid": "0.097",
+            "percentChange": "0.00",
+            "baseVolume": "110979684",
+            "quoteVolume": "10846444.624",
+            "isFrozen": "0",
+            "high24hr": "0.100",
+            "low24hr": "0.094"
+        },
+        "KNC_ETH": {
+            "id": 1020472889,
+            "last": "0.0011265",
+            "lowestAsk": "0.00113000",
+            "highestBid": "0.00112650",
+            "percentChange": "0.00",
+            "baseVolume": "14324",
+            "quoteVolume": "16.2960099",
+            "isFrozen": "0",
+            "high24hr": "0.0011998",
+            "low24hr": "0.0010998"
+        },
+        "GAS_XRP": {
+            "id": 894445373,
+            "last": "5.005",
+            "lowestAsk": "5.028",
+            "highestBid": "5.017",
+            "percentChange": "0.0409",
+            "baseVolume": "33029.94",
+            "quoteVolume": "160224.368",
+            "isFrozen": "0",
+            "high24hr": "5.020",
+            "low24hr": "4.749"
+        },
+        "LRC_ETH": {
+            "id": 1052796124,
+            "last": "0.00015965",
+            "lowestAsk": "0.00015992",
+            "highestBid": "0.00015882",
+            "percentChange": "0.0188",
+            "baseVolume": "20481",
+            "quoteVolume": "3.22576859",
+            "isFrozen": "0",
+            "high24hr": "0.00016133",
+            "low24hr": "0.00015560"
+        },
+        "ZAP_BTC": {
+            "id": 1438288776,
+            "last": "0.00000057",
+            "lowestAsk": "0.00000059",
+            "highestBid": "0.00000050",
+            "percentChange": "-0.0655",
+            "baseVolume": "1454117",
+            "quoteVolume": "0.82283970",
+            "isFrozen": "0",
+            "high24hr": "0.00000069",
+            "low24hr": "0.00000049"
+        },
+        "VET_BTC": {
+            "id": 1327585420,
+            "last": "0.0000008300",
+            "lowestAsk": "0.0000008400",
+            "highestBid": "0.0000008300",
+            "percentChange": "-0.0348",
+            "baseVolume": "256776644",
+            "quoteVolume": "219.7681661803",
+            "isFrozen": "0",
+            "high24hr": "0.0000008950",
+            "low24hr": "0.0000008300"
+        },
+        "WAN_BTC": {
+            "id": 1352341741,
+            "last": "0.00002900",
+            "lowestAsk": "0.0000290",
+            "highestBid": "0.0000289",
+            "percentChange": "0.0349",
+            "baseVolume": "913740.66",
+            "quoteVolume": "26.18921725",
+            "isFrozen": "0",
+            "high24hr": "0.00002938",
+            "low24hr": "0.00002801"
+        },
+        "RVN_XRP": {
+            "id": 1228611020,
+            "last": "0.101367",
+            "lowestAsk": "0.100963",
+            "highestBid": "0.100598",
+            "percentChange": "0.0116",
+            "baseVolume": "2576435.62",
+            "quoteVolume": "259526.580531",
+            "isFrozen": "0",
+            "high24hr": "0.101966",
+            "low24hr": "0.099427"
+        },
+        "BTR_ETH": {
+            "id": 768798521,
+            "last": "0.00035145",
+            "lowestAsk": "0.00035720",
+            "highestBid": "0.00034001",
+            "percentChange": "0.0016",
+            "baseVolume": "2382321.4",
+            "quoteVolume": "835.99371630",
+            "isFrozen": "0",
+            "high24hr": "0.00035868",
+            "low24hr": "0.00033241"
+        },
+        "MCO_USDT": {
+            "id": 894049479,
+            "last": "4.1272",
+            "lowestAsk": "4.1318",
+            "highestBid": "4.1283",
+            "percentChange": "0.0193",
+            "baseVolume": "5353.72",
+            "quoteVolume": "21975.1442",
+            "isFrozen": "0",
+            "high24hr": "4.2369",
+            "low24hr": "4.0031"
+        },
+        "HOT_USDT": {
+            "id": 1099665787,
+            "last": "0.0008360",
+            "lowestAsk": "0.0008344",
+            "highestBid": "0.0008318",
+            "percentChange": "0.0167",
+            "baseVolume": "143112909",
+            "quoteVolume": "118230.6175551",
+            "isFrozen": "0",
+            "high24hr": "0.0008408",
+            "low24hr": "0.0008064"
+        },
+        "XEM_XRP": {
+            "id": 1384656278,
+            "last": "0.161721",
+            "lowestAsk": "0.161740",
+            "highestBid": "0.161023",
+            "percentChange": "0.0112",
+            "baseVolume": "2129354",
+            "quoteVolume": "341190.837562",
+            "isFrozen": "0",
+            "high24hr": "0.162442",
+            "low24hr": "0.158311"
+        },
+        "NEXO_XRP": {
+            "id": 1846949640,
+            "last": "0.420786",
+            "lowestAsk": "0.420458",
+            "highestBid": "0.419987",
+            "percentChange": "0.0199",
+            "baseVolume": "1764107",
+            "quoteVolume": "735372.698269",
+            "isFrozen": "0",
+            "high24hr": "0.423038",
+            "low24hr": "0.407982"
+        },
+        "OMG_BTC": {
+            "id": 1134182248,
+            "last": "0.000104",
+            "lowestAsk": "0.00010420",
+            "highestBid": "0.00010370",
+            "percentChange": "0.0097",
+            "baseVolume": "18996.64",
+            "quoteVolume": "1.976875",
+            "isFrozen": "0",
+            "high24hr": "0.000105",
+            "low24hr": "0.000103"
+        },
+        "LTC_XRP": {
+            "id": 1054661371,
+            "last": "213.14",
+            "lowestAsk": "212.99000000",
+            "highestBid": "212.78000000",
+            "percentChange": "0.0163",
+            "baseVolume": "12257.425",
+            "quoteVolume": "2567176.37",
+            "isFrozen": "0",
+            "high24hr": "214.66",
+            "low24hr": "207.14"
+        },
+        "BTR_USDT": {
+            "id": 210909710,
+            "last": "0.05342",
+            "lowestAsk": "0.05524",
+            "highestBid": "0.05105",
+            "percentChange": "-0.0044",
+            "baseVolume": "1641910.0",
+            "quoteVolume": "88002.41716",
+            "isFrozen": "0",
+            "high24hr": "0.05500",
+            "low24hr": "0.05102"
+        },
+        "ETC_BTC": {
+            "id": 854236221,
+            "last": "0.00053570",
+            "lowestAsk": "0.00053560",
+            "highestBid": "0.00053530",
+            "percentChange": "0.0165",
+            "baseVolume": "17129.55",
+            "quoteVolume": "9.05385096",
+            "isFrozen": "0",
+            "high24hr": "0.00053640",
+            "low24hr": "0.00052230"
+        },
+        "DIVI_XRP": {
+            "id": 1674338238,
+            "last": "0.056007",
+            "lowestAsk": "0.057116",
+            "highestBid": "0.055700",
+            "percentChange": "0.0103",
+            "baseVolume": "2588781",
+            "quoteVolume": "145385.771576",
+            "isFrozen": "0",
+            "high24hr": "0.058264",
+            "low24hr": "0.052760"
+        },
+        "SDT_USDT": {
+            "id": 1957351025,
+            "last": "1.2924",
+            "lowestAsk": "1.2925",
+            "highestBid": "1.2914",
+            "percentChange": "0.0458",
+            "baseVolume": "108683.23",
+            "quoteVolume": "135422.6061",
+            "isFrozen": "0",
+            "high24hr": "1.3000",
+            "low24hr": "1.2322"
+        },
+        "BNB_BTC": {
+            "id": 762777851,
+            "last": "0.00209550",
+            "lowestAsk": "0.00210320",
+            "highestBid": "0.00210250",
+            "percentChange": "-0.0116",
+            "baseVolume": "9204.78",
+            "quoteVolume": "19.28458798",
+            "isFrozen": "0",
+            "high24hr": "0.00212599",
+            "low24hr": "0.00207510"
+        },
+        "BTC_USDT": {
+            "id": 197056895,
+            "last": "7590.46",
+            "lowestAsk": "7561.08",
+            "highestBid": "7558.09",
+            "percentChange": "0.0166",
+            "baseVolume": "4120.3577",
+            "quoteVolume": "30940765.01",
+            "isFrozen": "0",
+            "high24hr": "7638.14",
+            "low24hr": "7363.19"
+        },
+        "WTC_XRP": {
+            "id": 1369582032,
+            "last": "2.451",
+            "lowestAsk": "2.44400000",
+            "highestBid": "2.43700000",
+            "percentChange": "0.0628",
+            "baseVolume": "96841.81",
+            "quoteVolume": "235120.164",
+            "isFrozen": "0",
+            "high24hr": "2.576",
+            "low24hr": "2.275"
+        },
+        "XRP_BTC": {
+            "id": 1396730331,
+            "last": "0.00002999",
+            "lowestAsk": "0.00003012",
+            "highestBid": "0.00003011",
+            "percentChange": "-0.0049",
+            "baseVolume": "13845350",
+            "quoteVolume": "416.66974510",
+            "isFrozen": "0",
+            "high24hr": "0.00003034",
+            "low24hr": "0.00002984"
+        },
+        "BCH_XRP": {
+            "id": 752818959,
+            "last": "991.33",
+            "lowestAsk": "985.32000000",
+            "highestBid": "984.59000000",
+            "percentChange": "0.0092",
+            "baseVolume": "1463.708",
+            "quoteVolume": "1423681.13",
+            "isFrozen": "0",
+            "high24hr": "995.30",
+            "low24hr": "958.94"
+        },
+        "LTC_USDT": {
+            "id": 482159113,
+            "last": "48.51",
+            "lowestAsk": "48.46000",
+            "highestBid": "48.42000",
+            "percentChange": "0.0279",
+            "baseVolume": "75595.64578",
+            "quoteVolume": "3579667.31",
+            "isFrozen": "0",
+            "high24hr": "48.69",
+            "low24hr": "46.24"
+        },
+        "UOS_XRP": {
+            "id": 1308182781,
+            "last": "0.128366",
+            "lowestAsk": "0.128117",
+            "highestBid": "0.120281",
+            "percentChange": "0.1855",
+            "baseVolume": "202395.55",
+            "quoteVolume": "24663.372015",
+            "isFrozen": "0",
+            "high24hr": "0.147000",
+            "low24hr": "0.108279"
+        },
+        "XEM_USDT": {
+            "id": 2122066638,
+            "last": "0.036678",
+            "lowestAsk": "0.036992",
+            "highestBid": "0.036544",
+            "percentChange": "0.0227",
+            "baseVolume": "638574",
+            "quoteVolume": "23152.214611",
+            "isFrozen": "0",
+            "high24hr": "0.036982",
+            "low24hr": "0.035568"
+        },
+        "WTC_ETH": {
+            "id": 1369563827,
+            "last": "0.003625",
+            "lowestAsk": "0.00361100",
+            "highestBid": "0.00358600",
+            "percentChange": "0.0485",
+            "baseVolume": "5269.48",
+            "quoteVolume": "19.332154",
+            "isFrozen": "0",
+            "high24hr": "0.003812",
+            "low24hr": "0.003391"
+        },
+        "BOX_BTC": {
+            "id": 764356774,
+            "last": "0.0000005800",
+            "lowestAsk": "0.0000005650",
+            "highestBid": "0.0000003689",
+            "percentChange": "-0.0301",
+            "baseVolume": "29262",
+            "quoteVolume": "0.0169719600",
+            "isFrozen": "0",
+            "high24hr": "0.0000005980",
+            "low24hr": "0.0000005800"
+        },
+        "ELF_BTC": {
+            "id": 846937426,
+            "last": "0.00000891",
+            "lowestAsk": "0.00000896",
+            "highestBid": "0.00000895",
+            "percentChange": "0.0056",
+            "baseVolume": "90852",
+            "quoteVolume": "0.80142857",
+            "isFrozen": "0",
+            "high24hr": "0.00000896",
+            "low24hr": "0.00000866"
+        },
+        "RVN_USDT": {
+            "id": 1579630936,
+            "last": "0.023075",
+            "lowestAsk": "0.022980",
+            "highestBid": "0.022901",
+            "percentChange": "0.0233",
+            "baseVolume": "627253.59",
+            "quoteVolume": "14283.039250",
+            "isFrozen": "0",
+            "high24hr": "0.023227",
+            "low24hr": "0.022294"
+        },
+        "EOS_ETH": {
+            "id": 850098160,
+            "last": "0.01781300",
+            "lowestAsk": "0.01782100",
+            "highestBid": "0.01780500",
+            "percentChange": "0.0106",
+            "baseVolume": "88312.64",
+            "quoteVolume": "1543.78731691",
+            "isFrozen": "0",
+            "high24hr": "0.01789100",
+            "low24hr": "0.01725700"
+        },
+        "NCASH_ETH": {
+            "id": 1138074968,
+            "last": "0.00000695",
+            "lowestAsk": "0.00000696",
+            "highestBid": "0.00000695",
+            "percentChange": "0.0014",
+            "baseVolume": "499407",
+            "quoteVolume": "3.46761935",
+            "isFrozen": "0",
+            "high24hr": "0.00000703",
+            "low24hr": "0.00000689"
+        },
+        "IOST_USDT": {
+            "id": 1443232309,
+            "last": "0.005604",
+            "lowestAsk": "0.005593",
+            "highestBid": "0.005587",
+            "percentChange": "0.0144",
+            "baseVolume": "8634887",
+            "quoteVolume": "48137.157760",
+            "isFrozen": "0",
+            "high24hr": "0.005685",
+            "low24hr": "0.005431"
+        },
+        "BNT_BTC": {
+            "id": 763314089,
+            "last": "0.00003850",
+            "lowestAsk": "0.00003824",
+            "highestBid": "0.00003811",
+            "percentChange": "0.099",
+            "baseVolume": "1758761",
+            "quoteVolume": "66.24829203",
+            "isFrozen": "0",
+            "high24hr": "0.00003975",
+            "low24hr": "0.00003475"
+        },
+        "XRP_USDT": {
+            "id": 349532516,
+            "last": "0.22766",
+            "lowestAsk": "0.22770000",
+            "highestBid": "0.22766000",
+            "percentChange": "0.012",
+            "baseVolume": "18962687.9",
+            "quoteVolume": "4285519.95635",
+            "isFrozen": "0",
+            "high24hr": "0.22934",
+            "low24hr": "0.22246"
+        },
+        "USDC_XRP": {
+            "id": 1999004665,
+            "last": "4.3919",
+            "lowestAsk": "4.3916",
+            "highestBid": "4.3900",
+            "percentChange": "-0.0117",
+            "baseVolume": "164099.07",
+            "quoteVolume": "725154.1643",
+            "isFrozen": "0",
+            "high24hr": "4.4903",
+            "low24hr": "4.3575"
+        },
+        "SHA_BTC": {
+            "id": 1243902501,
+            "last": "0.0000000605",
+            "lowestAsk": "0.0000000750",
+            "highestBid": "0.0000000501",
+            "percentChange": "0.21",
+            "baseVolume": "331679",
+            "quoteVolume": "0.0204628358",
+            "isFrozen": "0",
+            "high24hr": "0.0000000621",
+            "low24hr": "0.0000000500"
+        },
+        "SNT_BTC": {
+            "id": 1250009656,
+            "last": "0.00000153",
+            "lowestAsk": "0.00000153",
+            "highestBid": "0.00000152",
+            "percentChange": "0.02",
+            "baseVolume": "15819155",
+            "quoteVolume": "23.46030292",
+            "isFrozen": "0",
+            "high24hr": "0.00000154",
+            "low24hr": "0.00000144"
+        },
+        "GTO_BTC": {
+            "id": 911852015,
+            "last": "0.00000150",
+            "lowestAsk": "0.00000150",
+            "highestBid": "0.00000149",
+            "percentChange": "0.0416",
+            "baseVolume": "3621787",
+            "quoteVolume": "5.49482429",
+            "isFrozen": "0",
+            "high24hr": "0.00000162",
+            "low24hr": "0.00000140"
+        },
+        "LBA_BTC": {
+            "id": 1037957318,
+            "last": "0.00000300",
+            "lowestAsk": "0.00000301",
+            "highestBid": "0.00000297",
+            "percentChange": "-0.0131",
+            "baseVolume": "72767.27",
+            "quoteVolume": "0.22344238",
+            "isFrozen": "0",
+            "high24hr": "0.00000316",
+            "low24hr": "0.00000298"
+        },
+        "LOOM_ETH": {
+            "id": 349844312,
+            "last": "0.00011686",
+            "lowestAsk": "0.00011773",
+            "highestBid": "0.00011667",
+            "percentChange": "0.0015",
+            "baseVolume": "7555",
+            "quoteVolume": "0.87653197",
+            "isFrozen": "0",
+            "high24hr": "0.00011811",
+            "low24hr": "0.00011366"
+        },
+        "ICX_ETH": {
+            "id": 953681467,
+            "last": "0.000897",
+            "lowestAsk": "0.00090000",
+            "highestBid": "0.00089800",
+            "percentChange": "-0.0121",
+            "baseVolume": "16566.29",
+            "quoteVolume": "14.957809",
+            "isFrozen": "0",
+            "high24hr": "0.000933",
+            "low24hr": "0.000889"
+        },
+        "ETH_USDT": {
+            "id": 716701895,
+            "last": "155.05",
+            "lowestAsk": "154.35",
+            "highestBid": "154.30",
+            "percentChange": "0.0297",
+            "baseVolume": "59023.395",
+            "quoteVolume": "8987690.57",
+            "isFrozen": "0",
+            "high24hr": "155.19",
+            "low24hr": "149.11"
+        },
+        "MCO_XRP": {
+            "id": 1067948157,
+            "last": "18.1639",
+            "lowestAsk": "18.1948",
+            "highestBid": "18.1341",
+            "percentChange": "0.0099",
+            "baseVolume": "49.82",
+            "quoteVolume": "903.7766",
+            "isFrozen": "0",
+            "high24hr": "18.6818",
+            "low24hr": "17.7512"
+        },
+        "BCH_BTC": {
+            "id": 752797866,
+            "last": "0.02973000",
+            "lowestAsk": "0.02966800",
+            "highestBid": "0.02965700",
+            "percentChange": "0.0136",
+            "baseVolume": "2075.506",
+            "quoteVolume": "60.90140159",
+            "isFrozen": "0",
+            "high24hr": "0.02988400",
+            "low24hr": "0.02870592"
+        },
+        "BOX_ETH": {
+            "id": 764359662,
+            "last": "0.00002184",
+            "lowestAsk": "0.00002198",
+            "highestBid": "0.00002170",
+            "percentChange": "-0.028",
+            "baseVolume": "649694",
+            "quoteVolume": "14.37915993",
+            "isFrozen": "0",
+            "high24hr": "0.00002266",
+            "low24hr": "0.00002167"
+        },
+        "XTZ_BTC": {
+            "id": 1398875283,
+            "last": "0.00017062",
+            "lowestAsk": "0.00017022",
+            "highestBid": "0.00017008",
+            "percentChange": "0.0433",
+            "baseVolume": "5172.21",
+            "quoteVolume": "0.88665867",
+            "isFrozen": "0",
+            "high24hr": "0.00017865",
+            "low24hr": "0.00016345"
+        },
+        "STORM_BTC": {
+            "id": 1717399752,
+            "last": "0.00000019",
+            "lowestAsk": "0.00000020",
+            "highestBid": "0.00000019",
+            "percentChange": "-0.0952",
+            "baseVolume": "2882017",
+            "quoteVolume": "0.57316264",
+            "isFrozen": "0",
+            "high24hr": "0.00000021",
+            "low24hr": "0.00000019"
+        },
+        "NEO_USDT": {
+            "id": 1838811462,
+            "last": "9.614",
+            "lowestAsk": "9.56200000",
+            "highestBid": "9.55000000",
+            "percentChange": "0.022",
+            "baseVolume": "49829.315",
+            "quoteVolume": "470355.889",
+            "isFrozen": "0",
+            "high24hr": "9.614",
+            "low24hr": "9.176"
+        },
+        "ADA_BTC": {
+            "id": 724883699,
+            "last": "0.00000546",
+            "lowestAsk": "0.00000546",
+            "highestBid": "0.00000545",
+            "percentChange": "0.0581",
+            "baseVolume": "25792583",
+            "quoteVolume": "138.00010288",
+            "isFrozen": "0",
+            "high24hr": "0.00000561",
+            "low24hr": "0.00000514"
+        },
+        "BTR_BTC": {
+            "id": 768795633,
+            "last": "0.00000699",
+            "lowestAsk": "0.00000711",
+            "highestBid": "0.00000700",
+            "percentChange": "-0.0251",
+            "baseVolume": "1872353.3",
+            "quoteVolume": "13.33677708",
+            "isFrozen": "0",
+            "high24hr": "0.00000750",
+            "low24hr": "0.00000687"
+        },
+        "LINK_USDT": {
+            "id": 1195183784,
+            "last": "2.3311",
+            "lowestAsk": "2.3226",
+            "highestBid": "2.3202",
+            "percentChange": "0.053",
+            "baseVolume": "89231.64",
+            "quoteVolume": "201855.7779",
+            "isFrozen": "0",
+            "high24hr": "2.3399",
+            "low24hr": "2.2069"
+        },
+        "EOS_XRP": {
+            "id": 850116365,
+            "last": "12.141",
+            "lowestAsk": "12.082",
+            "highestBid": "12.075",
+            "percentChange": "0.0308",
+            "baseVolume": "232127.24",
+            "quoteVolume": "2736159.176",
+            "isFrozen": "0",
+            "high24hr": "12.211",
+            "low24hr": "11.579"
+        },
+        "KNC_BTC": {
+            "id": 1020470001,
+            "last": "0.00002304",
+            "lowestAsk": "0.00002307",
+            "highestBid": "0.00002300",
+            "percentChange": "0.0127",
+            "baseVolume": "81075",
+            "quoteVolume": "1.87310080",
+            "isFrozen": "0",
+            "high24hr": "0.00002429",
+            "low24hr": "0.00002243"
+        },
+        "XLM_USDT": {
+            "id": 174987047,
+            "last": "0.05889",
+            "lowestAsk": "0.05896000",
+            "highestBid": "0.05890000",
+            "percentChange": "0.0148",
+            "baseVolume": "14911730",
+            "quoteVolume": "869749.60662",
+            "isFrozen": "0",
+            "high24hr": "0.05902",
+            "low24hr": "0.05731"
+        },
+        "WAN_ETH": {
+            "id": 1352344629,
+            "last": "0.001417",
+            "lowestAsk": "0.00142200",
+            "highestBid": "0.00141800",
+            "percentChange": "0.0223",
+            "baseVolume": "21130.49",
+            "quoteVolume": "29.983271",
+            "isFrozen": "0",
+            "high24hr": "0.001445",
+            "low24hr": "0.001384"
+        },
+        "HOT_XRP": {
+            "id": 936033609,
+            "last": "0.003673",
+            "lowestAsk": "0.003666",
+            "highestBid": "0.003653",
+            "percentChange": "0.0043",
+            "baseVolume": "40762999",
+            "quoteVolume": "148988.081002",
+            "isFrozen": "0",
+            "high24hr": "0.003695",
+            "low24hr": "0.003610"
+        },
+        "AION_BTC": {
+            "id": 1152974058,
+            "last": "0.0000087",
+            "lowestAsk": "0.00000874",
+            "highestBid": "0.00000872",
+            "percentChange": "0.0235",
+            "baseVolume": "160741.26",
+            "quoteVolume": "1.3916045",
+            "isFrozen": "0",
+            "high24hr": "0.0000088",
+            "low24hr": "0.0000084"
+        },
+        "BNB_USDT": {
+            "id": 24358468,
+            "last": "15.9175",
+            "lowestAsk": "15.8979",
+            "highestBid": "15.8908",
+            "percentChange": "0.005",
+            "baseVolume": "12781.98",
+            "quoteVolume": "200445.7033",
+            "isFrozen": "0",
+            "high24hr": "16.0000",
+            "low24hr": "15.4404"
+        },
+        "UOS_USDT": {
+            "id": 1898871879,
+            "last": "0.027630",
+            "lowestAsk": "0.028457",
+            "highestBid": "0.028000",
+            "percentChange": "0.1864",
+            "baseVolume": "43781.05",
+            "quoteVolume": "1184.888935",
+            "isFrozen": "0",
+            "high24hr": "0.027715",
+            "low24hr": "0.023288"
+        },
+        "NPXS_XRP": {
+            "id": 14505817,
+            "last": "0.00070265",
+            "lowestAsk": "0.00070280",
+            "highestBid": "0.00069873",
+            "percentChange": "0.0529",
+            "baseVolume": "100236912",
+            "quoteVolume": "67835.79044431",
+            "isFrozen": "0",
+            "high24hr": "0.00071309",
+            "low24hr": "0.00065855"
+        },
+        "OMG_ETH": {
+            "id": 1134185136,
+            "last": "0.005107",
+            "lowestAsk": "0.00511500",
+            "highestBid": "0.00507800",
+            "percentChange": "-0.0025",
+            "baseVolume": "3182.97",
+            "quoteVolume": "16.299987",
+            "isFrozen": "0",
+            "high24hr": "0.005225",
+            "low24hr": "0.005059"
+        },
+        "ZIL_ETH": {
+            "id": 1445560668,
+            "last": "0.00003473",
+            "lowestAsk": "0.00003475",
+            "highestBid": "0.00003464",
+            "percentChange": "-0.0045",
+            "baseVolume": "2038205",
+            "quoteVolume": "70.90412132",
+            "isFrozen": "0",
+            "high24hr": "0.00003524",
+            "low24hr": "0.00003433"
+        },
+        "CSC_XRP": {
+            "id": 796075491,
+            "last": "0.001614",
+            "lowestAsk": "0.001619",
+            "highestBid": "0.001596",
+            "percentChange": "0.0189",
+            "baseVolume": "39068596",
+            "quoteVolume": "62421.035497",
+            "isFrozen": "0",
+            "high24hr": "0.001669",
+            "low24hr": "0.001524"
+        },
+        "QKC_BTC": {
+            "id": 1189474344,
+            "last": "0.00000054",
+            "lowestAsk": "0.00000055",
+            "highestBid": "0.00000054",
+            "percentChange": "0.00",
+            "baseVolume": "993640",
+            "quoteVolume": "0.54629982",
+            "isFrozen": "0",
+            "high24hr": "0.00000056",
+            "low24hr": "0.00000054"
+        },
+        "ETH_BTC": {
+            "id": 854385176,
+            "last": "0.020426",
+            "lowestAsk": "0.020418",
+            "highestBid": "0.020417",
+            "percentChange": "0.0125",
+            "baseVolume": "18973.286",
+            "quoteVolume": "384.738233",
+            "isFrozen": "0",
+            "high24hr": "0.020494",
+            "low24hr": "0.020032"
+        },
+        "DNT_XRP": {
+            "id": 820593484,
+            "last": "0.027342",
+            "lowestAsk": "0.027566",
+            "highestBid": "0.027224",
+            "percentChange": "0.0173",
+            "baseVolume": "6642420",
+            "quoteVolume": "180288.255665",
+            "isFrozen": "0",
+            "high24hr": "0.028961",
+            "low24hr": "0.025922"
+        },
+        "FUN_ETH": {
+            "id": 884119482,
+            "last": "0.00001997",
+            "lowestAsk": "0.00001998",
+            "highestBid": "0.00001981",
+            "percentChange": "0.002",
+            "baseVolume": "690908",
+            "quoteVolume": "14.05619514",
+            "isFrozen": "0",
+            "high24hr": "0.00002121",
+            "low24hr": "0.00001970"
+        },
+        "IOST_XRP": {
+            "id": 1986221391,
+            "last": "0.024572",
+            "lowestAsk": "0.024610",
+            "highestBid": "0.024501",
+            "percentChange": "0.0029",
+            "baseVolume": "87539.25",
+            "quoteVolume": "2159.160026",
+            "isFrozen": "0",
+            "high24hr": "0.025232",
+            "low24hr": "0.024231"
+        },
+        "IOST_ETH": {
+            "id": 1986203186,
+            "last": "0.00003611",
+            "lowestAsk": "0.00003625",
+            "highestBid": "0.00003615",
+            "percentChange": "-0.0136",
+            "baseVolume": "425376",
+            "quoteVolume": "15.60540849",
+            "isFrozen": "0",
+            "high24hr": "0.00003772",
+            "low24hr": "0.00003583"
+        },
+        "BAT_BTC": {
+            "id": 751308316,
+            "last": "0.00002778",
+            "lowestAsk": "0.00002794",
+            "highestBid": "0.00002792",
+            "percentChange": "0.0168",
+            "baseVolume": "1403726",
+            "quoteVolume": "38.61837523",
+            "isFrozen": "0",
+            "high24hr": "0.00002782",
+            "low24hr": "0.00002690"
+        },
+        "XRP_ETH": {
+            "id": 1396733219,
+            "last": "0.00146959",
+            "lowestAsk": "0.00147542",
+            "highestBid": "0.00147300",
+            "percentChange": "-0.0164",
+            "baseVolume": "1254897",
+            "quoteVolume": "1862.17530068",
+            "isFrozen": "0",
+            "high24hr": "0.00149879",
+            "low24hr": "0.00146487"
+        },
+        "XEM_ETH": {
+            "id": 1384638073,
+            "last": "0.00023728",
+            "lowestAsk": "0.00023964",
+            "highestBid": "0.00023684",
+            "percentChange": "-0.0114",
+            "baseVolume": "21979",
+            "quoteVolume": "5.21480152",
+            "isFrozen": "0",
+            "high24hr": "0.00024004",
+            "low24hr": "0.00023508"
+        },
+        "XLM_BTC": {
+            "id": 1391099832,
+            "last": "0.00000776",
+            "lowestAsk": "0.00000779",
+            "highestBid": "0.00000778",
+            "percentChange": "-0.0012",
+            "baseVolume": "5756303",
+            "quoteVolume": "44.70160955",
+            "isFrozen": "0",
+            "high24hr": "0.00000783",
+            "low24hr": "0.00000770"
+        },
+        "LUNA_XRP": {
+            "id": 520356410,
+            "last": "1.2822",
+            "lowestAsk": "1.2947",
+            "highestBid": "1.2800",
+            "percentChange": "0.2494",
+            "baseVolume": "181424.43",
+            "quoteVolume": "201477.2044",
+            "isFrozen": "0",
+            "high24hr": "1.2909",
+            "low24hr": "0.9030"
+        },
+        "WAX_USDT": {
+            "id": 1130205084,
+            "last": "0.021206",
+            "lowestAsk": "0.020788",
+            "highestBid": "0.020709",
+            "percentChange": "-0.0272",
+            "baseVolume": "54599.2215",
+            "quoteVolume": "1177.238938",
+            "isFrozen": "0",
+            "high24hr": "0.022700",
+            "low24hr": "0.020481"
+        },
+        "LBTC_ETH": {
+            "id": 2129468692,
+            "last": "0.013369",
+            "lowestAsk": "0.013370",
+            "highestBid": "0.011385",
+            "percentChange": "0.00",
+            "baseVolume": "0.00",
+            "quoteVolume": "0.000000",
+            "isFrozen": "0",
+            "high24hr": "0.013369",
+            "low24hr": "0.013369"
+        },
+        "GNT_BTC": {
+            "id": 906459844,
+            "last": "0.00000504",
+            "lowestAsk": "0.00000505",
+            "highestBid": "0.00000503",
+            "percentChange": "0.00",
+            "baseVolume": "319778",
+            "quoteVolume": "1.62074617",
+            "isFrozen": "0",
+            "high24hr": "0.00000514",
+            "low24hr": "0.00000500"
+        }
+    },
+    "coins": {
+        "XEM": {
+            "name": "NEM",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LOOM": {
+            "name": "Loom",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "VET": {
+            "name": "VechainThor",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "PAX": {
+            "name": "Paxos",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "WTC": {
+            "name": "Walton",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ZAP": {
+            "name": "Zap",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "USDT": {
+            "name": "TetherUS",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BNT": {
+            "name": "Bancor",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LBA": {
+            "name": "Cred",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "DNT": {
+            "name": "district0x",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "RVN": {
+            "name": "Ravencoin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "PRO": {
+            "name": "Propy",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "SHA": {
+            "name": "Safe Haven",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "DASH": {
+            "name": "dash",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "XRP": {
+            "name": "XRP",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "AION": {
+            "name": "AION",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "NPXS": {
+            "name": "Pundi X",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "TRX": {
+            "name": "Tronix",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "GUSD": {
+            "name": "GEMINI",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "DGB": {
+            "name": "DigiByte",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "DGD": {
+            "name": "DGD",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ZRX": {
+            "name": "ZRX",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "SUB": {
+            "name": "Substratum",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "SDT": {
+            "name": "TerraSDT",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BCH": {
+            "name": "Bitcoin Cash",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "OMG": {
+            "name": "OmiseGO",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BOX": {
+            "name": "ContentBOX",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "HOT": {
+            "name": "Holo",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BTC": {
+            "name": "Bitcoin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "NKN": {
+            "name": "NKN",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "IOTA": {
+            "name": "MIOTA",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "TUSD": {
+            "name": "TrueUSD",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "GAS": {
+            "name": "NEO GAS",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LTC": {
+            "name": "Litecoin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "USDC": {
+            "name": "USD Coin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "WIN": {
+            "name": "Wink",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ENG": {
+            "name": "Enigma",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "POWR": {
+            "name": "Power Ledger",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "KNC": {
+            "name": "Kyber Network",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BTR": {
+            "name": "Bitrue Coin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BTT": {
+            "name": "BitTorrent",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "WAN": {
+            "name": "wanchain",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LBTC": {
+            "name": "Lightning Bitcoin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "NEXO": {
+            "name": "Nexo",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "GNT": {
+            "name": "Golem",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "CSC": {
+            "name": "CasinoCoin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "PPT": {
+            "name": "Populous",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "SNT": {
+            "name": "Status Network",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "XLM": {
+            "name": "Stellar Lumens",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "DIVI": {
+            "name": "Divi",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LINK": {
+            "name": "ChainLink Token",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "FUN": {
+            "name": "FunFair",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "FMF": {
+            "name": "Formosa Financia",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "XTZ": {
+            "name": "Tezos",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LUNA": {
+            "name": "Luna",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BEE": {
+            "name": "BeeToken",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "QKC": {
+            "name": "Quark Chain",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "EOS": {
+            "name": "EOS",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "POLY": {
+            "name": "Polymath",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "NCASH": {
+            "name": "Nucleus Vision",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "VTHO": {
+            "name": "VeThor Token",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "STORM": {
+            "name": "Storm",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "SALT": {
+            "name": "Salt",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ETC": {
+            "name": "Ethereum Classic",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BAT": {
+            "name": "BAT",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "BNB": {
+            "name": "Binance Coin",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ETH": {
+            "name": "Ethereum",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "MCO": {
+            "name": "Crypto.com",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "UOS": {
+            "name": "Ultra",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "NEO": {
+            "name": "NEO",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "LRC": {
+            "name": "Loopring",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ELF": {
+            "name": "aelf",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ADA": {
+            "name": "Cardano",
+            "withdraw": "ON",
+            "deposit": "ON"
+        },
+        "ICX": {
+            "name": "ICON",
+            "withdraw": "ON",
+            "deposit": "ON"
+        }
+    }
+}

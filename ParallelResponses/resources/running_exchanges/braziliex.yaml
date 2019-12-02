@@ -1,0 +1,98 @@
+name: braziliex
+terms:
+  terms_url: https://braziliex.com/exchange/terms.php
+  permission: null
+  search_targets:
+  - tag: div
+    class: mdl-grid
+  - tag: div
+    class: mdl-card mdl-cell mdl-cell--8-col mc_background_card mdl-shadow--4dp
+
+api_url: https://braziliex.com/api/v1/
+rate_limit: null
+requests:
+  ticker:
+    request:
+      template: public/ticker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair: # variable key, each currency pair e.g. ltc_btc
+          type: dict
+          values:
+            active:
+              type: int
+            market:
+              type: str
+            last:
+              type:
+              - float
+            percentChange:
+              type:
+              - float
+            baseVolume:
+              type:
+              - float
+            quoteVolume:
+              type:
+              - float
+            highestBid:
+              type:
+              - float
+            lowestAsk:
+              type:
+              - float
+            baseVolume24:
+              type:
+              - float
+            quoteVolume24:
+              type:
+              - float
+            highestBid24:
+              type:
+              - float
+            lowestAsk24:
+              type:
+              - float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path:
+      - dict_key
+      type:
+      - str
+      - splitupper
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - dict_key
+      type:
+      - str
+      - splitupper
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - highestBid24
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - lowestAsk
+      type:
+      - float

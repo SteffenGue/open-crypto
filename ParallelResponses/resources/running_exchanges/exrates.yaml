@@ -1,0 +1,77 @@
+name: exrates
+terms: null
+api_url: https://api.exrates.me/openapi/v1/public/
+rate_limit: null
+
+requests:
+  ticker:
+    request:
+      template: ticker
+      pair_template: null
+      params: null
+      
+    response:
+      type: list
+      values:
+        id:
+          type: int
+        name: 
+          type: str
+        last:
+          type: float
+        lowestAsk:
+          type: float
+        highestBid:
+          type: float
+        percentChange:
+          type: float
+        baseVolume:
+          type: float
+        quoteVolume:
+          type: float
+        high:
+          type: float
+        low:
+          type: float
+    
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path:
+      - name
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - name
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - last
+      type: 
+      - float
+    - key: ticker_best_bid
+      path:
+      - highestBid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - lowestAsk
+      type:
+      - float
+
+          
+          
+          

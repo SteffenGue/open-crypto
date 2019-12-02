@@ -1,0 +1,92 @@
+name: idex
+terms:
+  terms_url: https://idex.market/legal
+  permission: true
+  search_targets:
+  - tag: article
+    class: wrapper
+api_url: https://api.idex.market/
+rate_limit: null
+
+requests:
+  ticker:
+    request:
+      template: returnTicker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values: # "N/A" possible
+        currency_pair: # variable key, each available currency pair, e.g. ETH_SAN
+          type: dict
+          values:
+            last:
+              type:
+              - str
+            high:
+              type:
+              - str
+            low:
+              type:
+              - str
+            lowestAsk:
+              type:
+              - str
+            highestBid:
+              type:
+              - str
+            percentChange:
+              type:
+              - str
+            baseVolume:
+              type:
+              - str
+            quoteVolume:
+              type:
+              - str
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now    
+    - key: currency_pair_first
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - str
+      - floatNA
+      #- "N/A"
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - lowestAsk
+      type:
+      - str
+      - floatNA
+      #- "N/A"
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - highestBid
+      type:
+      - str
+      - floatNA
+      #- "N/A"

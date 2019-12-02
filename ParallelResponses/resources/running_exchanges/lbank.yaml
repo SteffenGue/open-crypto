@@ -1,0 +1,88 @@
+name: lbank
+terms:
+  terms_url: https://lbankinfo.zendesk.com/hc/zh-cn/articles/115002292673-%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE
+  permission: true
+  search_targets:
+  - tag: div
+    class: article-container
+  - tag: article
+    class: article
+  - tag: div
+    class: article-body
+api_url: https://api.lbkex.com/v1/
+rate_limit: null
+
+requests:
+  ticker:
+    request:
+      template: ticker.do
+      pair_template: null
+      params: 
+        symbol:
+          type: str
+          default: all  
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          symbol:
+            type: str
+          ticker:
+            type: dict
+            values:
+              change:
+                type: float
+              high:
+                type: float
+              latest:
+                type: float
+              low:
+                type: float
+              turnover:
+                type: float
+              vol:
+                type: float
+          timestamp:
+            type:
+            - int
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path:
+      - symbol
+      type:
+      - str
+      - splitupper
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - symbol
+      type:
+      - str
+      - splitupper
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - ticker
+      - latest
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - ticker
+      - latest
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - ticker
+      - vol
+      type:
+      - float

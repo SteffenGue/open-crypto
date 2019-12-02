@@ -1,0 +1,99 @@
+name: bibox
+terms:
+  terms_url: https://www.bibox.com/user_agreement
+  permission: null
+  search_targets:
+  - tag: div
+    class: user-agreement
+api_url: https://api.bibox.com/v1/
+rate_limit: null
+requests:
+  tickers:
+    request:
+      template: mdata
+      pair_template: null
+      params:
+        cmd:
+          type: str
+          default: marketAll
+    response:
+      type: dict
+      values:
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              is_hide:
+                type: int
+              high_cny:
+                type: str
+              amount:
+                type: str
+              coin_symbol:
+                type: str
+              last:
+                type: str
+              currency_symbol:
+                type: str
+              low_cny:
+                type: str
+              base_last_cny:
+                type: str
+              area_id:
+                type: int
+              percent:
+                type: str
+              last_cny:
+                type: str
+              high:
+                type: str
+              low:
+                type: str
+              pair_type:
+                type: int
+              last_usd:
+                type: str
+              vol24H:
+                type: str
+              id:
+                type: int
+              high_usd:
+                type: str
+              low_usd:
+                type: str
+        cmd:
+          type: str
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path:
+      - result
+      - coin_symbol
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - result
+      - currency_symbol
+      type:
+      - str
+    - key: ticker_daily_volume
+      path:
+      - result
+      - vol24H
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - result
+      - last
+      type:
+      - str
+      - float
+

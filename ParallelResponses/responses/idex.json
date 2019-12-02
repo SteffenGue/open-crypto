@@ -1,0 +1,5152 @@
+{
+    "ETH_PLU": {
+        "last": "0.00416534001390352",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.008658881793746793",
+        "highestBid": "0.003701732823831819"
+    },
+    "ETH_1ST": {
+        "last": "0.0007",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000849150263474496",
+        "highestBid": "0.00054330093572"
+    },
+    "ETH_DGD": {
+        "last": "0.047919272479433554",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.689723999547448404",
+        "highestBid": "0.09032727905451797"
+    },
+    "ETH_RLC": {
+        "last": "0.0069999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.005999",
+        "highestBid": "0.004128367776749399"
+    },
+    "ETH_TRST": {
+        "last": "0.0000965",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000164334161998357",
+        "highestBid": "0.000092"
+    },
+    "ETH_GNO": {
+        "last": "0.07382727217903355",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.148836161570985353",
+        "highestBid": "0.08842711597688001"
+    },
+    "ETH_WINGS": {
+        "last": "0.000100021021",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000297999999",
+        "highestBid": "0.000110006007"
+    },
+    "ETH_TKN": {
+        "last": "0.0017",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001797289999964755",
+        "highestBid": "0.001672610000060539"
+    },
+    "ETH_HMQ": {
+        "last": "0.00019",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000104271832703311",
+        "highestBid": "0.00000267064903"
+    },
+    "ETH_ANT": {
+        "last": "0.00370001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.006999938599989995",
+        "highestBid": "0.00350303292846"
+    },
+    "ETH_BAT": {
+        "last": "0.0013737",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001699192148426563",
+        "highestBid": "0.00135891"
+    },
+    "ETH_MYST": {
+        "last": "0.000243567169999923",
+        "high": "0.000243567769999925",
+        "low": "0.000243567169999923",
+        "percentChange": "-0.00024634",
+        "baseVolume": "1.729999611310006811",
+        "quoteVolume": "7102.75254017",
+        "lowestAsk": "0.00024506874899992",
+        "highestBid": "0.000213745344952401"
+    },
+    "ETH_BNT": {
+        "last": "0.001771",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00185",
+        "highestBid": "0.0017103440002"
+    },
+    "ETH_SNT": {
+        "last": "0.0000438035418",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000085628192066442",
+        "highestBid": "0.00007017442246218"
+    },
+    "ETH_SNM": {
+        "last": "0.000134845648",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000358944770125754",
+        "highestBid": "0.000098636693789622"
+    },
+    "ETH_PAY": {
+        "last": "0.000620017484919295",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000494558884914711",
+        "highestBid": "0.00035466460087"
+    },
+    "ETH_PPT": {
+        "last": "0.0027",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.004",
+        "highestBid": "0.003035331442047455"
+    },
+    "ETH_FUN": {
+        "last": "0.00001837438255",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000023739000000107",
+        "highestBid": "0.000018503624884497"
+    },
+    "ETH_STORJ": {
+        "last": "0.000702017991725747",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001447991692021065",
+        "highestBid": "0.000769545654582154"
+    },
+    "ETH_ADX": {
+        "last": "0.0003601",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000943716799499499",
+        "highestBid": "0.000461366914165849"
+    },
+    "ETH_MTL": {
+        "last": "0.00299",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00323",
+        "highestBid": "0.001906632632778447"
+    },
+    "ETH_PLR": {
+        "last": "0.000198118041614691",
+        "high": "0.000198118041614691",
+        "low": "0.000198118041614691",
+        "percentChange": "0",
+        "baseVolume": "0.39980220797844646",
+        "quoteVolume": "2017.999999999999825575",
+        "lowestAsk": "0.000228033484160575",
+        "highestBid": "0.000173565406000004"
+    },
+    "ETH_CVC": {
+        "last": "0.00019",
+        "high": "0.00019",
+        "low": "0.00019",
+        "percentChange": "0",
+        "baseVolume": "1.235",
+        "quoteVolume": "6500",
+        "lowestAsk": "0.000279860000000398",
+        "highestBid": "0.000186846464402457"
+    },
+    "ETH_DNT": {
+        "last": "0.0000335001675",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000066347037288675",
+        "highestBid": "0.000036502204573174"
+    },
+    "ETH_VGX": {
+        "last": "0.00024",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00044113134093532",
+        "highestBid": "0.000160080200800539"
+    },
+    "ETH_DENT": {
+        "last": "0.00000109",
+        "high": "0.00000109",
+        "low": "0.000001089411238631",
+        "percentChange": "0.054044",
+        "baseVolume": "0.7258184021302732",
+        "quoteVolume": "666079.73811756",
+        "lowestAsk": "0.000001294985",
+        "highestBid": "0.000001120000000001"
+    },
+    "ETH_SAN": {
+        "last": "0.00122000793",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.002962056848799996",
+        "highestBid": "0.000914621196"
+    },
+    "ETH_ZRX": {
+        "last": "0.002567667235020825",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001997465823882462",
+        "highestBid": "0.001681791515316586"
+    },
+    "ETH_MCO": {
+        "last": "0.0168",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.031983999996680165",
+        "highestBid": "0.024260545670055794"
+    },
+    "ETH_POE": {
+        "last": "0.0000075619949",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000033792601055621",
+        "highestBid": "0.000013443482684381"
+    },
+    "ETH_SCL": {
+        "last": "0.00004970175",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000070017403000004",
+        "highestBid": "0.000010000200000007"
+    },
+    "ETH_RVT": {
+        "last": "0.000159479068999984",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000146828361999986",
+        "highestBid": "0.000056708290099999"
+    },
+    "ETH_TNT": {
+        "last": "0.000422689149101294",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00096",
+        "highestBid": "0.000428012327015027"
+    },
+    "ETH_MANA": {
+        "last": "0.00016",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000223836121744075",
+        "highestBid": "0.00015042049"
+    },
+    "ETH_MTH": {
+        "last": "0.000069880692024758",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00038192576480889",
+        "highestBid": "0.00007060020056023"
+    },
+    "ETH_WTC": {
+        "last": "0.00388722220004",
+        "high": "0.00388722220004",
+        "low": "0.003887222000039999",
+        "percentChange": "0.00000515",
+        "baseVolume": "1",
+        "quoteVolume": "257.253118925397739735",
+        "lowestAsk": "0.003888",
+        "highestBid": "0.003270123127"
+    },
+    "ETH_ART": {
+        "last": "0.000122631603712851",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000248995672399993",
+        "highestBid": "0.00012110906104"
+    },
+    "ETH_PRO2": {
+        "last": "0.00085",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00349085879",
+        "highestBid": "0.000485328582348642"
+    },
+    "ETH_HBT": {
+        "last": "0.001373189100600005",
+        "high": "0.001373191100600005",
+        "low": "0.001373189100600005",
+        "percentChange": "-0.00014565",
+        "baseVolume": "0.299999476837517306",
+        "quoteVolume": "218.469055319567595",
+        "lowestAsk": "0.001366956873900002",
+        "highestBid": "0.001027868348580432"
+    },
+    "ETH_KNC": {
+        "last": "0.001969227177235674",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001849700504895404",
+        "highestBid": "0.001062607396961331"
+    },
+    "ETH_RLX": {
+        "last": "0.00000104",
+        "high": "0.00000104",
+        "low": "0.00000104",
+        "percentChange": "0",
+        "baseVolume": "0.074064200957726196",
+        "quoteVolume": "71215.577843967496339223",
+        "lowestAsk": "0.00000105",
+        "highestBid": "0.00000104"
+    },
+    "ETH_LINK": {
+        "last": "0.0149400747",
+        "high": "0.014943062715",
+        "low": "0.0149400747",
+        "percentChange": "-0.019996",
+        "baseVolume": "4.482620013",
+        "quoteVolume": "300",
+        "lowestAsk": "0.015038474479677048",
+        "highestBid": "0.014928705144"
+    },
+    "ETH_RPL": {
+        "last": "0.0027",
+        "high": "0.002700015",
+        "low": "0.0027",
+        "percentChange": "-0.00037038",
+        "baseVolume": "22.742492432120312309",
+        "quoteVolume": "8423.144583911691624526",
+        "lowestAsk": "0.002994937991",
+        "highestBid": "0.00270001"
+    },
+    "ETH_CND": {
+        "last": "0.000041",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000057742181295168",
+        "highestBid": "0.000050931555139038"
+    },
+    "ETH_BTM": {
+        "last": "0.000349800400005605",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.002906249661828333",
+        "highestBid": "0.000108738529764919"
+    },
+    "ETH_SALT": {
+        "last": "0.000291890202002192",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000515112650669942",
+        "highestBid": "0.000309957760004571"
+    },
+    "ETH_HVN": {
+        "last": "0.00001399",
+        "high": "0.00001399",
+        "low": "0.00001399",
+        "percentChange": "0",
+        "baseVolume": "0.82334328949099",
+        "quoteVolume": "58852.272301",
+        "lowestAsk": "0.000018999999999999",
+        "highestBid": "0.00001399"
+    },
+    "ETH_EVX": {
+        "last": "0.001946835934583114",
+        "high": "0.001946835934583114",
+        "low": "0.001946835934583114",
+        "percentChange": "0",
+        "baseVolume": "0.151442809882472753",
+        "quoteVolume": "77.7892",
+        "lowestAsk": "0.001966466469305398",
+        "highestBid": "0.001728678693084334"
+    },
+    "ETH_ENG": {
+        "last": "0.003999999999999999",
+        "high": "0.004",
+        "low": "0.003797",
+        "percentChange": "5.34632605",
+        "baseVolume": "0.521558122457869957",
+        "quoteVolume": "133.38043653",
+        "lowestAsk": "0.0039999",
+        "highestBid": "0.003272624972013012"
+    },
+    "ETH_AST": {
+        "last": "0.000144150003646995",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000329801810344497",
+        "highestBid": "0.000137085756552797"
+    },
+    "ETH_REQ": {
+        "last": "0.00014626390864206",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00014699936455672",
+        "highestBid": "0.000086844755714545"
+    },
+    "ETH_ENJ": {
+        "last": "0.000382",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000419998",
+        "highestBid": "0.000370032489705439"
+    },
+    "ETH_DATA": {
+        "last": "0.00019193507263008",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000222222221",
+        "highestBid": "0.000137312471935378"
+    },
+    "ETH_VIB": {
+        "last": "0.000142",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000329976199999981",
+        "highestBid": "0.000000106401"
+    },
+    "ETH_RCN": {
+        "last": "0.001105577778559959",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000983488493880714",
+        "highestBid": "0.00028500929090909"
+    },
+    "ETH_BLUE": {
+        "last": "0.000055700200000004",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000074996398499988",
+        "highestBid": "0.0000558"
+    },
+    "ETH_ARN": {
+        "last": "0.000511161787963215",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0044399998",
+        "highestBid": "0.00065088840501184"
+    },
+    "ETH_LIFE": {
+        "last": "0.00000015",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000003889889",
+        "highestBid": "0.000000153501000104"
+    },
+    "ETH_EPY": {
+        "last": "0.0000366",
+        "high": "0.0000366",
+        "low": "0.0000366",
+        "percentChange": "0",
+        "baseVolume": "2.12214982622106",
+        "quoteVolume": "57982.2356891",
+        "lowestAsk": "0.00003768391096258",
+        "highestBid": "0.00003"
+    },
+    "ETH_RDN": {
+        "last": "0.0009",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.002567201985049069",
+        "highestBid": "0.000795273527272731"
+    },
+    "ETH_GRID": {
+        "last": "0.000220001400000008",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000273755999796877",
+        "highestBid": "0.000220000000000001"
+    },
+    "ETH_GVT": {
+        "last": "0.0059000295",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.013747915149900041",
+        "highestBid": "0.00657046976776236"
+    },
+    "ETH_ASTRO": {
+        "last": "0.001898762025935178",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001883458467744226",
+        "highestBid": "0.001500000000000001"
+    },
+    "ETH_DNA": {
+        "last": "0.000098269799999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000098269799999999",
+        "highestBid": "0.000085117157003618"
+    },
+    "ETH_LEND": {
+        "last": "0.0001069827",
+        "high": "0.000109254648",
+        "low": "0.000100675734",
+        "percentChange": "5.60554664",
+        "baseVolume": "21.408107088399533732",
+        "quoteVolume": "204993.594844456424617003",
+        "lowestAsk": "0.000106516509427746",
+        "highestBid": "0.000095283111"
+    },
+    "ETH_ITT": {
+        "last": "0.000015127400007051",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00004263187214",
+        "highestBid": "0.00001500020000001"
+    },
+    "ETH_DRGN": {
+        "last": "0.0001759534339",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000196537639859986",
+        "highestBid": "0.00017845838508"
+    },
+    "ETH_GET": {
+        "last": "0.001799732426253121",
+        "high": "0.0018",
+        "low": "0.001729482980582205",
+        "percentChange": "0.45804622",
+        "baseVolume": "44.225729266395642428",
+        "quoteVolume": "24699.216480825685331025",
+        "lowestAsk": "0.0018",
+        "highestBid": "0.0017100171"
+    },
+    "ETH_BNTY": {
+        "last": "0.0000158001027",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00004099976",
+        "highestBid": "0.00000389045"
+    },
+    "ETH_CAJ": {
+        "last": "0.0077",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0082",
+        "highestBid": "0.007"
+    },
+    "ETH_SPANK": {
+        "last": "0.000023",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000048",
+        "highestBid": "0.0000256344528568"
+    },
+    "ETH_BKX": {
+        "last": "0.000040516835000021",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00012899999",
+        "highestBid": "0.00001997959501"
+    },
+    "ETH_BLT": {
+        "last": "0.0001999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00019998",
+        "highestBid": "0.000125"
+    },
+    "ETH_EXRN": {
+        "last": "0.000000073000020011",
+        "high": "0.000000073000261111",
+        "low": "0.000000073000020011",
+        "percentChange": "-0.00033027",
+        "baseVolume": "2.352500544415695319",
+        "quoteVolume": "32225938",
+        "lowestAsk": "0.00000008139820446",
+        "highestBid": "0.00000007250068"
+    },
+    "ETH_WAX": {
+        "last": "0.0006583898",
+        "high": "0.0006583898",
+        "low": "0.0006583898",
+        "percentChange": "0",
+        "baseVolume": "0.065838979999999987",
+        "quoteVolume": "99.99999999",
+        "lowestAsk": "0.0006583898",
+        "highestBid": "0.000112004603000124"
+    },
+    "ETH_CAT": {
+        "last": "0.000048",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000799992",
+        "highestBid": "0.000013285026900309"
+    },
+    "ETH_MKR": {
+        "last": "3.130009",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "4.219999999999999866",
+        "highestBid": "3.295705370020001"
+    },
+    "ETH_DMT": {
+        "last": "0.0008",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000999799790041927",
+        "highestBid": "0.000708951161109964"
+    },
+    "ETH_TAU": {
+        "last": "0.00006393222022012",
+        "high": "0.00006393222022012",
+        "low": "0.00005075020000187",
+        "percentChange": "8.36887909",
+        "baseVolume": "18.520896231366663598",
+        "quoteVolume": "323948.377267395723353974",
+        "lowestAsk": "0.00006393222022022",
+        "highestBid": "0.0000522813184301"
+    },
+    "ETH_CRED": {
+        "last": "0.000047957107000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000109265538999999",
+        "highestBid": "0.000030003"
+    },
+    "ETH_VEE": {
+        "last": "0.00000698595801",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000024602999998015",
+        "highestBid": "0.000006349000030002"
+    },
+    "ETH_UFR": {
+        "last": "0.000122013",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000235507199995322",
+        "highestBid": "0.0001220132"
+    },
+    "ETH_SXUT": {
+        "last": "0.0006",
+        "high": "0.0006",
+        "low": "0.0006",
+        "percentChange": "0",
+        "baseVolume": "1.2",
+        "quoteVolume": "2000",
+        "lowestAsk": "0.001066",
+        "highestBid": "0.0006"
+    },
+    "ETH_WABI": {
+        "last": "0.001293999999901001",
+        "high": "0.001293999999901001",
+        "low": "0.001293999999901001",
+        "percentChange": "0",
+        "baseVolume": "0.401566069653993",
+        "quoteVolume": "310.329265598698",
+        "lowestAsk": "0.001294000000001",
+        "highestBid": "0.001133307101"
+    },
+    "ETH_APPC": {
+        "last": "0.0001922",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000225",
+        "highestBid": "0.000176070810084"
+    },
+    "ETH_BDG": {
+        "last": "0.000005255468698204",
+        "high": "0.000007381315401828",
+        "low": "0.000005255468698204",
+        "percentChange": "-28.80037755",
+        "baseVolume": "0.118439269171489653",
+        "quoteVolume": "19704.872808300936697281",
+        "lowestAsk": "0.000007250314157654",
+        "highestBid": "0.000005654142012431"
+    },
+    "ETH_WAND": {
+        "last": "0.000043001355",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000180664785900001",
+        "highestBid": "0.000030961115"
+    },
+    "ETH_LEV": {
+        "last": "0.000123079999800047",
+        "high": "0.000123079999800047",
+        "low": "0.000123079999800047",
+        "percentChange": "0",
+        "baseVolume": "0.10831039982404136",
+        "quoteVolume": "879.999999999",
+        "lowestAsk": "0.000119519999999999",
+        "highestBid": "0.000080000200000034"
+    },
+    "ETH_REF": {
+        "last": "0.007",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.007412086599999962",
+        "highestBid": "0.000659439169759903"
+    },
+    "ETH_TEL": {
+        "last": "0.000001975440545735",
+        "high": "0.000001975440545735",
+        "low": "0.000001975440545735",
+        "percentChange": "0",
+        "baseVolume": "0.13316257051945244",
+        "quoteVolume": "67409.05",
+        "lowestAsk": "0.000002559695964077",
+        "highestBid": "0.000001964587293706"
+    },
+    "ETH_INS": {
+        "last": "0.000911641767823401",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0018549998",
+        "highestBid": "0.00100000020000004"
+    },
+    "ETH_NEU": {
+        "last": "0.000400102412183669",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001108263141999999",
+        "highestBid": "0.000400007202000008"
+    },
+    "ETH_HQX": {
+        "last": "0.000009260424376008",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000034999999",
+        "highestBid": "0.000009091109090909"
+    },
+    "ETH_POWR": {
+        "last": "0.000246001229898141",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000354928999926877",
+        "highestBid": "0.000259238738604081"
+    },
+    "ETH_KEY": {
+        "last": "0.00000854144740544",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000028452197508356",
+        "highestBid": "0.000013414605584964"
+    },
+    "ETH_PRFT": {
+        "last": "0.00051",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.007989999979999997",
+        "highestBid": "0.00051"
+    },
+    "ETH_STK": {
+        "last": "0.000010935066",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000027022285999996",
+        "highestBid": "0.0000102002"
+    },
+    "ETH_ARY": {
+        "last": "0.00000251",
+        "high": "0.00000251",
+        "low": "0.00000251",
+        "percentChange": "0",
+        "baseVolume": "0.18",
+        "quoteVolume": "71713.14741035",
+        "lowestAsk": "0.000002541311070495",
+        "highestBid": "0.000001812830008817"
+    },
+    "ETH_CRPT": {
+        "last": "0.00291300000004",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00349770308893957",
+        "highestBid": "0.00291000000001"
+    },
+    "ETH_SAL": {
+        "last": "0.000070133199999997",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000056069299999707",
+        "highestBid": "0.0000250002"
+    },
+    "ETH_ELF": {
+        "last": "0.000509046272582528",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000874243492623506",
+        "highestBid": "0.000406173558356858"
+    },
+    "ETH_QSP": {
+        "last": "0.00007",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00008059998040284",
+        "highestBid": "0.000063265064999865"
+    },
+    "ETH_CBT": {
+        "last": "0.0001210002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00021038925409425",
+        "highestBid": "0.0001210002"
+    },
+    "ETH_INXT": {
+        "last": "0.0043001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.008929010176705237",
+        "highestBid": "0.002002514505675608"
+    },
+    "ETH_PRO": {
+        "last": "0.000176864934871676",
+        "high": "0.000176864934871676",
+        "low": "0.000176864934871676",
+        "percentChange": "0",
+        "baseVolume": "0.98248471321216168",
+        "quoteVolume": "5555",
+        "lowestAsk": "0.00109967",
+        "highestBid": "0.000000066481"
+    },
+    "ETH_IDXM": {
+        "last": "0.401541726700178045",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.479699336",
+        "highestBid": "0.405002"
+    },
+    "ETH_REAL": {
+        "last": "0.000443020195799895",
+        "high": "0.000443020195799895",
+        "low": "0.000443020195799895",
+        "percentChange": "0",
+        "baseVolume": "0.344560009960607668",
+        "quoteVolume": "777.752376138264793231",
+        "lowestAsk": "0.000443039999899998",
+        "highestBid": "0.000116275643"
+    },
+    "ETH_AGI": {
+        "last": "0.000181782000001751",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000181687999998482",
+        "highestBid": "0.000116805960801345"
+    },
+    "ETH_STORM": {
+        "last": "0.000008163836363636",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000023374426335764",
+        "highestBid": "0.000008463836363636"
+    },
+    "ETH_JNT": {
+        "last": "0.000136963407000016",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000270824426768673",
+        "highestBid": "0.000064410185260401"
+    },
+    "ETH_SRN": {
+        "last": "0.000104893237034571",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000102148907961455",
+        "highestBid": "0.000043284577770002"
+    },
+    "ETH_IDH": {
+        "last": "0.000046992273452238",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00004401744743628",
+        "highestBid": "0.000021"
+    },
+    "ETH_ESZ": {
+        "last": "0.000239005000000011",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000383948999998395",
+        "highestBid": "0.000240000007523"
+    },
+    "ETH_SETH2": {
+        "last": "0.00012799699999998",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00012499999999998",
+        "highestBid": "0.000090209999999998"
+    },
+    "ETH_BCDT": {
+        "last": "0.000145",
+        "high": "0.00014996854999979",
+        "low": "0.00012279954740837",
+        "percentChange": "18.07861109",
+        "baseVolume": "16.117774123969845498",
+        "quoteVolume": "112023.287909996440589882",
+        "lowestAsk": "0.000145",
+        "highestBid": "0.000132025"
+    },
+    "ETH_TTT": {
+        "last": "0.0000006",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000006",
+        "highestBid": "0.0000001"
+    },
+    "ETH_CXO": {
+        "last": "0.000038307132873661",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00006484879999",
+        "highestBid": "0.000015758962"
+    },
+    "ETH_WISH": {
+        "last": "0.0001842251499857",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00018422394996",
+        "highestBid": "0.00006422494998"
+    },
+    "ETH_EVE": {
+        "last": "0.0000161",
+        "high": "0.0000161",
+        "low": "0.0000161",
+        "percentChange": "0",
+        "baseVolume": "1.124189504997100621",
+        "quoteVolume": "69825.435092987616224213",
+        "lowestAsk": "0.00001679643495468",
+        "highestBid": "0.00001320914226"
+    },
+    "ETH_NEXT": {
+        "last": "0.0018751781302711",
+        "high": "0.001941718000138678",
+        "low": "0.00187430537203",
+        "percentChange": "-2.03351953",
+        "baseVolume": "2.026104680302454079",
+        "quoteVolume": "1058.405687155891605318",
+        "lowestAsk": "0.00199996984088644",
+        "highestBid": "0.0018753861357401"
+    },
+    "ETH_CV": {
+        "last": "0.0000011002475",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001247955599999",
+        "highestBid": "0.000001100000000001"
+    },
+    "ETH_TRAC": {
+        "last": "0.0000524985003001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000062974",
+        "highestBid": "0.0000528279039001"
+    },
+    "ETH_QASH": {
+        "last": "0.000594",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000688964403727485",
+        "highestBid": "0.000306000200246531"
+    },
+    "ETH_IOST": {
+        "last": "0.000042732350920783",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000061884999999976",
+        "highestBid": "0.000022621474000003"
+    },
+    "ETH_CHSB": {
+        "last": "0.000047517066090047",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00005029000000018",
+        "highestBid": "0.000044035549280014"
+    },
+    "ETH_FOTA": {
+        "last": "0.000005027605",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008896126",
+        "highestBid": "0.000004098070240043"
+    },
+    "ETH_CPC": {
+        "last": "0.000032082857524956",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000047328255297226",
+        "highestBid": "0.000031798045947214"
+    },
+    "ETH_ADB": {
+        "last": "0.000002571995646619",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000003554999999446",
+        "highestBid": "0.000002172029568904"
+    },
+    "ETH_POLY": {
+        "last": "0.0001480002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000179702851073701",
+        "highestBid": "0.0000558354656"
+    },
+    "ETH_MTN": {
+        "last": "0.0000215",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000059982",
+        "highestBid": "0.000021"
+    },
+    "ETH_BEE": {
+        "last": "0.000000962106238593",
+        "high": "0.000000962106238593",
+        "low": "0.000000962106238593",
+        "percentChange": "0",
+        "baseVolume": "0.095534268034976298",
+        "quoteVolume": "99297.005052879798688325",
+        "lowestAsk": "0.000002759599999999",
+        "highestBid": "0.000000878993748533"
+    },
+    "ETH_BLZ": {
+        "last": "0.00015719556142",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000223446833736581",
+        "highestBid": "0.000136791242396659"
+    },
+    "ETH_MWAT": {
+        "last": "0.000069000000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000134999999999999",
+        "highestBid": "0.000068298631664798"
+    },
+    "ETH_WPR": {
+        "last": "0.0000576285",
+        "high": "0.0000576285",
+        "low": "0.0000574451",
+        "percentChange": "0.31926135",
+        "baseVolume": "1.786396188342036796",
+        "quoteVolume": "31008.247507234477448941",
+        "lowestAsk": "0.0000602097",
+        "highestBid": "0.000051485218181836"
+    },
+    "ETH_SIG": {
+        "last": "0.000002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005152461899997",
+        "highestBid": "0.000001204127"
+    },
+    "ETH_REN": {
+        "last": "0.000256790830606481",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000366691473998999",
+        "highestBid": "0.000253126355494464"
+    },
+    "ETH_EDGE": {
+        "last": "0.000227178155683654",
+        "high": "0.000241724879684905",
+        "low": "0.000227178155683654",
+        "percentChange": "-6.01788447",
+        "baseVolume": "9.811645353857837252",
+        "quoteVolume": "43126.947385273800213607",
+        "lowestAsk": "0.000227592536017924",
+        "highestBid": "0.000222640027346008"
+    },
+    "ETH_REM": {
+        "last": "0.000028248989343852",
+        "high": "0.000028248989343852",
+        "low": "0.000022472611697924",
+        "percentChange": "25.70407803",
+        "baseVolume": "4.667330719468803728",
+        "quoteVolume": "197569.8731",
+        "lowestAsk": "0.000029457509385132",
+        "highestBid": "0.000023056196"
+    },
+    "ETH_DXT": {
+        "last": "0.000012329511917728",
+        "high": "0.000014",
+        "low": "0.000012329511917728",
+        "percentChange": "-11.93205773",
+        "baseVolume": "3.016134761137352",
+        "quoteVolume": "217835.33147088",
+        "lowestAsk": "0.000018439899699996",
+        "highestBid": "0.000006605077000026"
+    },
+    "ETH_DAN": {
+        "last": "0.000021519227199794",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00002369698799996",
+        "highestBid": "0.000010887063000013"
+    },
+    "ETH_HKN": {
+        "last": "0.00061",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.002068124226979319",
+        "highestBid": "0.000590966758885793"
+    },
+    "ETH_FSN": {
+        "last": "0.0018100002",
+        "high": "0.001810328600000004",
+        "low": "0.00181",
+        "percentChange": "-0.01814035",
+        "baseVolume": "0.488196700069167741",
+        "quoteVolume": "269.6917",
+        "lowestAsk": "0.00197562777304399",
+        "highestBid": "0.0018150002"
+    },
+    "ETH_DTH": {
+        "last": "0.00000872669951",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000020652634",
+        "highestBid": "0.000007013818"
+    },
+    "ETH_X8X": {
+        "last": "0.000044569078334102",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000048969447588009",
+        "highestBid": "0.000033557056000003"
+    },
+    "ETH_ITC": {
+        "last": "0.000318935480257395",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0034999998",
+        "highestBid": "0.00065654743386356"
+    },
+    "ETH_RFR": {
+        "last": "0.000003819177842403",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008247839071756",
+        "highestBid": "0.000004724068840139"
+    },
+    "ETH_FND": {
+        "last": "0.0000030002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000099985",
+        "highestBid": "0.000001621263672833"
+    },
+    "ETH_AUN": {
+        "last": "0.0000042",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000013999999999999",
+        "highestBid": "0.00000010001"
+    },
+    "ETH_NTK": {
+        "last": "0.000064915271524779",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000099994172",
+        "highestBid": "0.000072040710570867"
+    },
+    "ETH_GEM": {
+        "last": "0.0000015",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000019653585",
+        "highestBid": "0.000001360200001"
+    },
+    "ETH_CS": {
+        "last": "0.000514857502649684",
+        "high": "0.000514857502649684",
+        "low": "0.000514857502649684",
+        "percentChange": "0",
+        "baseVolume": "0.051485750264968407",
+        "quoteVolume": "99.999999",
+        "lowestAsk": "0.00055393038232625",
+        "highestBid": "0.000465358353584158"
+    },
+    "ETH_DRG": {
+        "last": "0.00038620320101401",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000419349867022607",
+        "highestBid": "0.000300909290913252"
+    },
+    "ETH_NGC": {
+        "last": "0.00013",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000182685958999999",
+        "highestBid": "0.0001230067560292"
+    },
+    "ETH_MNTP": {
+        "last": "0.00264999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.002647547550000001",
+        "highestBid": "0.000111007268"
+    },
+    "ETH_LION": {
+        "last": "0.0000725",
+        "high": "0.0000725",
+        "low": "0.0000725",
+        "percentChange": "0",
+        "baseVolume": "0.292417875000000173",
+        "quoteVolume": "4033.35000000000240625",
+        "lowestAsk": "0.000098303151501994",
+        "highestBid": "0.0000630456594"
+    },
+    "ETH_LIF": {
+        "last": "0.000488755785126153",
+        "high": "0.000488755785126153",
+        "low": "0.00043378788927672",
+        "percentChange": "12.67160684",
+        "baseVolume": "1.417061929394750067",
+        "quoteVolume": "2949.02625101058693963",
+        "lowestAsk": "0.00050549153357021",
+        "highestBid": "0.000470015"
+    },
+    "ETH_FKX": {
+        "last": "0.00000750178761",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000025794036009262",
+        "highestBid": "0.000007328461231161"
+    },
+    "ETH_STQ": {
+        "last": "0.00000012714",
+        "high": "0.00000012714",
+        "low": "0.00000012714",
+        "percentChange": "0",
+        "baseVolume": "0.108306548849727359",
+        "quoteVolume": "851868.403726029259069223",
+        "lowestAsk": "0.000000627126899998",
+        "highestBid": "0.000000127176000001"
+    },
+    "ETH_UTK": {
+        "last": "0.000091707800000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0001173889627",
+        "highestBid": "0.000090097900000001"
+    },
+    "ETH_SENT": {
+        "last": "0.00000514",
+        "high": "0.000005613338120851",
+        "low": "0.000005",
+        "percentChange": "2.17666004",
+        "baseVolume": "12.412738174096211629",
+        "quoteVolume": "2384041.04124583",
+        "lowestAsk": "0.00000564842730201",
+        "highestBid": "0.000004806407284179"
+    },
+    "ETH_EXY": {
+        "last": "0.000030551305",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000146135608142682",
+        "highestBid": "0.000087091109090909"
+    },
+    "ETH_XNK": {
+        "last": "0.000005",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000069",
+        "highestBid": "0.000003791576364646"
+    },
+    "ETH_DOCK": {
+        "last": "0.0000689999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000689999",
+        "highestBid": "0.000051637965"
+    },
+    "ETH_FT": {
+        "last": "0.000025139334482949",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000026308855286059",
+        "highestBid": "0.00000241"
+    },
+    "ETH_FDZ": {
+        "last": "0.000015687969999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00001869773002",
+        "highestBid": "0.000013205702181914"
+    },
+    "ETH_LALA": {
+        "last": "0.00000558551",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000009456",
+        "highestBid": "0.0000055855"
+    },
+    "ETH_ELEC": {
+        "last": "0.000004000026",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000006657344",
+        "highestBid": "0.000004"
+    },
+    "ETH_NCT": {
+        "last": "0.000008912868507686",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000014948757600417",
+        "highestBid": "0.00001041388900002"
+    },
+    "ETH_J8T": {
+        "last": "0.000002468942",
+        "high": "0.000002468942",
+        "low": "0.000002468942",
+        "percentChange": "0",
+        "baseVolume": "0.149129590213772535",
+        "quoteVolume": "60402.22500722",
+        "lowestAsk": "0.000005590329899929",
+        "highestBid": "0.000002576648"
+    },
+    "ETH_BANCA": {
+        "last": "0.000000130253026405",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000164399999999",
+        "highestBid": "0.00000012"
+    },
+    "ETH_SHIP": {
+        "last": "0.0000485",
+        "high": "0.0000485",
+        "low": "0.00004839999999",
+        "percentChange": "0.20661159",
+        "baseVolume": "11.366108491334456177",
+        "quoteVolume": "234641.412213081570659793",
+        "lowestAsk": "0.00005688293",
+        "highestBid": "0.000045168578508175"
+    },
+    "ETH_TFD": {
+        "last": "0.00002689077971",
+        "high": "0.00002924",
+        "low": "0.00002689077971",
+        "percentChange": "-8.03426912",
+        "baseVolume": "3.579953061267735688",
+        "quoteVolume": "123634.311251476012921806",
+        "lowestAsk": "0.000028769998599967",
+        "highestBid": "0.000026802694391265"
+    },
+    "ETH_AMB": {
+        "last": "0.000141958285",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001370700690241118",
+        "highestBid": "0.000142492596702187"
+    },
+    "ETH_BAX": {
+        "last": "0.000001651968559423",
+        "high": "0.000001851691527799",
+        "low": "0.00000154258152771",
+        "percentChange": "7.09116627",
+        "baseVolume": "7.525964355334305917",
+        "quoteVolume": "4618181.693534810445615767",
+        "lowestAsk": "0.00000186624799",
+        "highestBid": "0.000001565526280001"
+    },
+    "ETH_NPX": {
+        "last": "0.00128193999987456",
+        "high": "0.00128193999987456",
+        "low": "0.00127583",
+        "percentChange": "0.11433247",
+        "baseVolume": "15.251592149522845285",
+        "quoteVolume": "11925.64",
+        "lowestAsk": "0.001352553671986474",
+        "highestBid": "0.001233107056112599"
+    },
+    "ETH_LOC": {
+        "last": "0.002400577807862633",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.005589343101016917",
+        "highestBid": "0.002461564496304693"
+    },
+    "ETH_NCASH": {
+        "last": "0.000008847051752023",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000949675006",
+        "highestBid": "0.000006327472727272"
+    },
+    "ETH_IGNX": {
+        "last": "0.00000072000101",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000035",
+        "highestBid": "0.00000072000101"
+    },
+    "ETH_AMN": {
+        "last": "0.00000738",
+        "high": "0.00000738",
+        "low": "0.000007329173783658",
+        "percentChange": "0.14140022",
+        "baseVolume": "2.881792184272740603",
+        "quoteVolume": "391156.425740936644251365",
+        "lowestAsk": "0.000009601437256293",
+        "highestBid": "0.0000063454010001"
+    },
+    "ETH_YUP": {
+        "last": "0.000000210999999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000448092037",
+        "highestBid": "0.00000002101"
+    },
+    "ETH_LST": {
+        "last": "0.00000151953362352",
+        "high": "0.00000151953362352",
+        "low": "0.00000151953362352",
+        "percentChange": "0",
+        "baseVolume": "0.364688069644799999",
+        "quoteVolume": "240000",
+        "lowestAsk": "0.00000264959099959",
+        "highestBid": "0.000001547899791466"
+    },
+    "ETH_ABX": {
+        "last": "0.000024813502",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000154277799999944",
+        "highestBid": "0.00001364358"
+    },
+    "ETH_LOOM": {
+        "last": "0.00035999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00035",
+        "highestBid": "0.000107675420601424"
+    },
+    "ETH_BBC": {
+        "last": "0.00000749948856697",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000007389",
+        "highestBid": "0.000005114130299998"
+    },
+    "ETH_FSBT": {
+        "last": "0.000031906379718219",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000375000999",
+        "highestBid": "0.000052608487000001"
+    },
+    "ETH_XBP": {
+        "last": "0.000004769999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000004259999",
+        "highestBid": "0.000001132728"
+    },
+    "ETH_SEN": {
+        "last": "0.000003717327862247",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005548811415985",
+        "highestBid": "0.000003771239050337"
+    },
+    "ETH_CAPP": {
+        "last": "0.000009747493626016",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008486934197189",
+        "highestBid": "0.00000673230951793"
+    },
+    "ETH_IPSX": {
+        "last": "0.0000007",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001049800999999",
+        "highestBid": "0.000000122454"
+    },
+    "ETH_VIEW": {
+        "last": "0.000025134939000012",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000625239999931",
+        "highestBid": "0.000022336353000013"
+    },
+    "ETH_OCN": {
+        "last": "0.00000429",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000010737921647109",
+        "highestBid": "0.000003333083724086"
+    },
+    "ETH_DROP": {
+        "last": "0.000001351223999241",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000260401099998",
+        "highestBid": "0.000001364589751885"
+    },
+    "ETH_ADH": {
+        "last": "0.0000024",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000003812215999999",
+        "highestBid": "0.000002557102191994"
+    },
+    "ETH_XDCE": {
+        "last": "0.000005624864",
+        "high": "0.000005624864",
+        "low": "0.00000515329003768",
+        "percentChange": "8.0957483",
+        "baseVolume": "10.516950039808688701",
+        "quoteVolume": "2015305.379251040268680948",
+        "lowestAsk": "0.0000056554739",
+        "highestBid": "0.000005345000000001"
+    },
+    "ETH_BERRY": {
+        "last": "0.000001550600000004",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000002900728497164",
+        "highestBid": "0.000001836818181878"
+    },
+    "ETH_MTC": {
+        "last": "0.000035763087228214",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000083885890925426",
+        "highestBid": "0.00003673631879048"
+    },
+    "ETH_MRK": {
+        "last": "0.0000069073",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000069071",
+        "highestBid": "0.00000132453"
+    },
+    "ETH_GBX": {
+        "last": "0.000030000000000001",
+        "high": "0.000030000000000001",
+        "low": "0.000030000000000001",
+        "percentChange": "0",
+        "baseVolume": "0.504533400000016817",
+        "quoteVolume": "16817.78",
+        "lowestAsk": "0.000054999999999999",
+        "highestBid": "0.000029003000000001"
+    },
+    "ETH_LCD": {
+        "last": "0.000013",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00003713938",
+        "highestBid": "0.00001010041"
+    },
+    "ETH_MFG": {
+        "last": "0.000005157915055608",
+        "high": "0.000005157915055608",
+        "low": "0.000005157504953707",
+        "percentChange": "0.00795156",
+        "baseVolume": "0.850799999999999945",
+        "quoteVolume": "164954.810264879467455883",
+        "lowestAsk": "0.0000063298",
+        "highestBid": "0.000004126052"
+    },
+    "ETH_CMS": {
+        "last": "0.00033",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00044495277749954",
+        "highestBid": "0.00031001"
+    },
+    "ETH_SMT3": {
+        "last": "0.0014",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.002588799999999999",
+        "highestBid": "0.001"
+    },
+    "ETH_ORI": {
+        "last": "0.000024",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000065619573987631",
+        "highestBid": "0.00002"
+    },
+    "ETH_MITX": {
+        "last": "0.000045829593740422",
+        "high": "0.000045829593740422",
+        "low": "0.0000438",
+        "percentChange": "4.63377566",
+        "baseVolume": "4.778896598619633411",
+        "quoteVolume": "105773.178250368193823392",
+        "lowestAsk": "0.000045283800768428",
+        "highestBid": "0.00004401"
+    },
+    "ETH_LND": {
+        "last": "0.000013800017",
+        "high": "0.00001499",
+        "low": "0.000013800017",
+        "percentChange": "-7.93851234",
+        "baseVolume": "0.903611144622988452",
+        "quoteVolume": "64164.52691006427",
+        "lowestAsk": "0.000014999",
+        "highestBid": "0.000013185674"
+    },
+    "ETH_AUC": {
+        "last": "0.000018052049767303",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000032360850506642",
+        "highestBid": "0.000018152590919946"
+    },
+    "ETH_IVY": {
+        "last": "0.00000801002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000009148609999999",
+        "highestBid": "0.0000055002"
+    },
+    "ETH_ABYSS": {
+        "last": "0.000056451034114184",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000064330799999955",
+        "highestBid": "0.000056451034114183"
+    },
+    "ETH_PAR": {
+        "last": "0.0000027",
+        "high": "0.0000027",
+        "low": "0.0000026",
+        "percentChange": "3.84615385",
+        "baseVolume": "1.330051",
+        "quoteVolume": "503830",
+        "lowestAsk": "0.0000027",
+        "highestBid": "0.0000021501918"
+    },
+    "ETH_FTX": {
+        "last": "0.000048",
+        "high": "0.000048",
+        "low": "0.000038014751802041",
+        "percentChange": "7.10189139",
+        "baseVolume": "3.664579136395840907",
+        "quoteVolume": "85619.428177934226721224",
+        "lowestAsk": "0.000050128574028417",
+        "highestBid": "0.00004250953499263"
+    },
+    "ETH_ABT": {
+        "last": "0.000727903678159737",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001300157002990999",
+        "highestBid": "0.000933890583228729"
+    },
+    "ETH_CEL": {
+        "last": "0.00035121",
+        "high": "0.00035121",
+        "low": "0.000333",
+        "percentChange": "5.46846847",
+        "baseVolume": "3.3008150510185184",
+        "quoteVolume": "9702.4464",
+        "lowestAsk": "0.0003812",
+        "highestBid": "0.000343208642719417"
+    },
+    "ETH_VLD": {
+        "last": "0.000014718829686365",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000015454147503235",
+        "highestBid": "0.000007588790950707"
+    },
+    "ETH_HBZ": {
+        "last": "0.000011",
+        "high": "0.000011",
+        "low": "0.00001",
+        "percentChange": "10",
+        "baseVolume": "2.55",
+        "quoteVolume": "250000",
+        "lowestAsk": "0.0000129998",
+        "highestBid": "0.00000916319738396"
+    },
+    "ETH_DML": {
+        "last": "0.000003",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000007359799992777",
+        "highestBid": "0.0000021"
+    },
+    "ETH_NBAI": {
+        "last": "0.00000429",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005043999999969",
+        "highestBid": "0.000004062127999996"
+    },
+    "ETH_XES": {
+        "last": "0.000049999999999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000049899999999999",
+        "highestBid": "0.0000201344"
+    },
+    "ETH_SS": {
+        "last": "0.000012002203",
+        "high": "0.0000135018005",
+        "low": "0.00001150100011",
+        "percentChange": "-11.10664833",
+        "baseVolume": "5.20287276451343078",
+        "quoteVolume": "412840.166440559345926516",
+        "lowestAsk": "0.00001215712345",
+        "highestBid": "0.0000115"
+    },
+    "ETH_HOT": {
+        "last": "0.00000554833770375",
+        "high": "0.0000071",
+        "low": "0.00000554833770375",
+        "percentChange": "-5.64051524",
+        "baseVolume": "11.639416706160177296",
+        "quoteVolume": "1766433.406761121088983343",
+        "lowestAsk": "0.00000572",
+        "highestBid": "0.000005220210000021"
+    },
+    "ETH_GEN": {
+        "last": "0.000545000000000001",
+        "high": "0.000545000000000001",
+        "low": "0.000545000000000001",
+        "percentChange": "0",
+        "baseVolume": "0.412469547941668421",
+        "quoteVolume": "756.824858608564522781",
+        "lowestAsk": "0.000623612859999999",
+        "highestBid": "0.000545"
+    },
+    "ETH_KRL": {
+        "last": "0.0002988067",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000422236961",
+        "highestBid": "0.000296469453981002"
+    },
+    "ETH_BZNT": {
+        "last": "0.000022",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000031",
+        "highestBid": "0.0000185215043"
+    },
+    "ETH_XTRD": {
+        "last": "0.0000031",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005",
+        "highestBid": "0.000003100000011"
+    },
+    "ETH_UBT": {
+        "last": "0.000074927284905578",
+        "high": "0.000078987627533633",
+        "low": "0.000073878087850855",
+        "percentChange": "1.42017354",
+        "baseVolume": "2.825051498842822954",
+        "quoteVolume": "37471.73310236",
+        "lowestAsk": "0.00007499925000004",
+        "highestBid": "0.0000717000000001"
+    },
+    "ETH_EXRT": {
+        "last": "0.00000787042199398",
+        "high": "0.000008582699576483",
+        "low": "0.000007867254453131",
+        "percentChange": "-8.29899236",
+        "baseVolume": "0.929832378219555367",
+        "quoteVolume": "115000",
+        "lowestAsk": "0.000010765688902414",
+        "highestBid": "0.000007840093000093"
+    },
+    "ETH_CNN": {
+        "last": "0.000000333681945481",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000361094622858",
+        "highestBid": "0.0000002902"
+    },
+    "ETH_POA20": {
+        "last": "0.000085",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000568316281070871",
+        "highestBid": "0.0000016751"
+    },
+    "ETH_SNTR": {
+        "last": "0.00000003302059968",
+        "high": "0.00000003302059968",
+        "low": "0.00000003302059968",
+        "percentChange": "0",
+        "baseVolume": "0.10604993543119414",
+        "quoteVolume": "3211629.6026",
+        "lowestAsk": "0.000000052764889989",
+        "highestBid": "0.0000000232371"
+    },
+    "ETH_FXT": {
+        "last": "0.000003007735736505",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000009505991999998",
+        "highestBid": "0.000002878742"
+    },
+    "ETH_BBK": {
+        "last": "0.00012",
+        "high": "0.00012",
+        "low": "0.00012",
+        "percentChange": "0",
+        "baseVolume": "0.299683553766860116",
+        "quoteVolume": "2497.36294805716763954",
+        "lowestAsk": "0.000167095085799991",
+        "highestBid": "0.00011"
+    },
+    "ETH_WYS": {
+        "last": "0.00000279",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000004",
+        "highestBid": "0.00000081"
+    },
+    "ETH_SGN": {
+        "last": "0.0000046",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000004298999999951",
+        "highestBid": "0.000001563230689492"
+    },
+    "ETH_CLN": {
+        "last": "0.000052909512600839",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00011",
+        "highestBid": "0.000045635040955669"
+    },
+    "ETH_LBA": {
+        "last": "0.00014800074",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000177376913514536",
+        "highestBid": "0.0001500001"
+    },
+    "ETH_CEDEX": {
+        "last": "0.000035010000000001",
+        "high": "0.000035010000000001",
+        "low": "0.000035010000000001",
+        "percentChange": "0",
+        "baseVolume": "0.705262570552296344",
+        "quoteVolume": "20144.60355762",
+        "lowestAsk": "0.00014728993999994",
+        "highestBid": "0.000035010000000001"
+    },
+    "ETH_HER": {
+        "last": "0.000000750075",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000649823624511",
+        "highestBid": "0.0000005102"
+    },
+    "ETH_SNOV": {
+        "last": "0.0000217",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000021",
+        "highestBid": "0.000006359233257965"
+    },
+    "ETH_HYDRO": {
+        "last": "0.0000027774167",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000316301099",
+        "highestBid": "0.000002777"
+    },
+    "ETH_IPL": {
+        "last": "0.000032906064300727",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000057843889998388",
+        "highestBid": "0.00000814918059943"
+    },
+    "ETH_FACE": {
+        "last": "0.000008709873036485",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000011890323732323",
+        "highestBid": "0.000008840000000001"
+    },
+    "ETH_TTV": {
+        "last": "0.000003697488279041",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000003639846975946",
+        "highestBid": "0.000000563800003077"
+    },
+    "ETH_XYO": {
+        "last": "0.000002059826717728",
+        "high": "0.0000023944211288",
+        "low": "0.000002059826717728",
+        "percentChange": "-13.97391658",
+        "baseVolume": "0.401007384741198918",
+        "quoteVolume": "187822.669921707361141628",
+        "lowestAsk": "0.000002325713894224",
+        "highestBid": "0.000002048055954508"
+    },
+    "ETH_BTT": {
+        "last": "0.000251142534425439",
+        "high": "0.0002899",
+        "low": "0.000195",
+        "percentChange": "26.48577771",
+        "baseVolume": "104.001133171859339488",
+        "quoteVolume": "440900.131447050534403703",
+        "lowestAsk": "0.000274",
+        "highestBid": "0.000254385"
+    },
+    "ETH_BBO": {
+        "last": "0.000003",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000041949773",
+        "highestBid": "0.00000270001"
+    },
+    "ETH_IOTX": {
+        "last": "0.00002434691601159",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000070830334980966",
+        "highestBid": "0.000026300627220177"
+    },
+    "ETH_RTE": {
+        "last": "0.0000044999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000013920195995592",
+        "highestBid": "0.0000044070892016"
+    },
+    "ETH_ETK": {
+        "last": "0.000000210005519395",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000007333180999927",
+        "highestBid": "0.00000021"
+    },
+    "ETH_SEELE": {
+        "last": "0.00089500895",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001046808799995",
+        "highestBid": "0.000894776627912768"
+    },
+    "ETH_WEB": {
+        "last": "0.000026985839989932",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000026222039986113",
+        "highestBid": "0.000005318668"
+    },
+    "ETH_XCD": {
+        "last": "0.000016400099999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00001645",
+        "highestBid": "0.000016400099999999"
+    },
+    "ETH_EDR": {
+        "last": "0.00001851735027",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00004777936139",
+        "highestBid": "0.000018714400001066"
+    },
+    "ETH_PI": {
+        "last": "0.00002951",
+        "high": "0.00003010000007",
+        "low": "0.0000295099999999",
+        "percentChange": "-1.96013308",
+        "baseVolume": "4.037056532644336335",
+        "quoteVolume": "135676.561519060217207342",
+        "lowestAsk": "0.000030269999949995",
+        "highestBid": "0.0000295000000001"
+    },
+    "ETH_VME": {
+        "last": "0.0000027",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000016634288",
+        "highestBid": "0.0000018502"
+    },
+    "ETH_ECOM": {
+        "last": "0.00012",
+        "high": "0.00012",
+        "low": "0.00012",
+        "percentChange": "0",
+        "baseVolume": "0.979803443244347613",
+        "quoteVolume": "8165.028693702896783333",
+        "lowestAsk": "0.000272516261899981",
+        "highestBid": "0.000114460748853165"
+    },
+    "ETH_MRP": {
+        "last": "0.000005",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00004099998999998",
+        "highestBid": "0.000005"
+    },
+    "ETH_CEEK": {
+        "last": "0.000011078359",
+        "high": "0.000011078359",
+        "low": "0.0000110773585",
+        "percentChange": "0.00903194",
+        "baseVolume": "0.780218952494127864",
+        "quoteVolume": "70431.37997037981052131",
+        "lowestAsk": "0.00001398548599862",
+        "highestBid": "0.000011118401"
+    },
+    "ETH_ICNQ": {
+        "last": "0.00122",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001323",
+        "highestBid": "0.00119"
+    },
+    "ETH_ZCN": {
+        "last": "0.0003",
+        "high": "0.0003",
+        "low": "0.000259849979899999",
+        "percentChange": "15.45123079",
+        "baseVolume": "4.948664041999984815",
+        "quoteVolume": "18339.7889884868",
+        "lowestAsk": "0.0003",
+        "highestBid": "0.000240763020100116"
+    },
+    "ETH_BIT": {
+        "last": "0.000000835242052415",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000003091832569892",
+        "highestBid": "0.000000146664"
+    },
+    "ETH_0XBTC": {
+        "last": "0.000400104003790693",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00064732",
+        "highestBid": "0.000400223405031804"
+    },
+    "ETH_QKC": {
+        "last": "0.00002340652416",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000067384635039753",
+        "highestBid": "0.000024313562576291"
+    },
+    "ETH_BITCAR": {
+        "last": "0.000005",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000007629799999999",
+        "highestBid": "0.000002800811200001"
+    },
+    "ETH_LAN": {
+        "last": "0.00000695",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000002",
+        "highestBid": "N/A"
+    },
+    "ETH_MVL": {
+        "last": "0.000001073488653379",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001915486098977",
+        "highestBid": "0.000000270551384263"
+    },
+    "ETH_METM": {
+        "last": "0.00001271",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000015858599999293",
+        "highestBid": "0.0000046644"
+    },
+    "ETH_OMG": {
+        "last": "0.005102",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.005958546800001777",
+        "highestBid": "0.004815921014324284"
+    },
+    "ETH_RMESH": {
+        "last": "0.0000300002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000037826199999132",
+        "highestBid": "0.000008101647"
+    },
+    "ETH_SPN": {
+        "last": "0.0000095",
+        "high": "0.0000095",
+        "low": "0.0000095",
+        "percentChange": "0",
+        "baseVolume": "0.2053197",
+        "quoteVolume": "21612.6",
+        "lowestAsk": "0.0000104",
+        "highestBid": "0.0000092"
+    },
+    "ETH_HOLD": {
+        "last": "0.00000301",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000006488649999865",
+        "highestBid": "0.00000375"
+    },
+    "ETH_WBT": {
+        "last": "0.00000299",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000298",
+        "highestBid": "0.00000151"
+    },
+    "ETH_ATMI": {
+        "last": "0.000001489951966756",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001242067373263",
+        "highestBid": "0.000000834735518655"
+    },
+    "ETH_MVP": {
+        "last": "0.000002795360111664",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000004607889727729",
+        "highestBid": "0.000001838482891559"
+    },
+    "ETH_000": {
+        "last": "4000000",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "N/A",
+        "highestBid": "N/A"
+    },
+    "ETH_UPP": {
+        "last": "0.000109661119",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00011571682633443",
+        "highestBid": "0.00007596660962"
+    },
+    "ETH_SNX": {
+        "last": "0.0103950099",
+        "high": "0.01050001",
+        "low": "0.00912",
+        "percentChange": "13.98037171",
+        "baseVolume": "8.049405177535999998",
+        "quoteVolume": "792.331163336348066811",
+        "lowestAsk": "0.01035",
+        "highestBid": "0.00723338048289446"
+    },
+    "ETH_DGX": {
+        "last": "0.195",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "20.9",
+        "highestBid": "0.2745206532084865"
+    },
+    "ETH_PST": {
+        "last": "0.00077159863197",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001989866280000001",
+        "highestBid": "0.000000083365"
+    },
+    "ETH_AUTO": {
+        "last": "0.000002747135372719",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000026805252999985",
+        "highestBid": "0.000002623200001027"
+    },
+    "ETH_THRT": {
+        "last": "0.0000189002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000030989999999951",
+        "highestBid": "0.0000144002"
+    },
+    "ETH_TGAME": {
+        "last": "0.000014100061000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000018961929999853",
+        "highestBid": "0.000009348058000016"
+    },
+    "ETH_LIKE": {
+        "last": "0.000018",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000037971005699822",
+        "highestBid": "0.000015011998471456"
+    },
+    "ETH_DAG": {
+        "last": "0.000130283593625536",
+        "high": "0.000133983682083329",
+        "low": "0.0001240248",
+        "percentChange": "2.84699302",
+        "baseVolume": "113.539210202397663854",
+        "quoteVolume": "882872.06138345",
+        "lowestAsk": "0.00013058954299",
+        "highestBid": "0.000129301292999954"
+    },
+    "ETH_LCK": {
+        "last": "0.000012724598999947",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000127198",
+        "highestBid": "0.000000148950000746"
+    },
+    "ETH_PMA": {
+        "last": "0.0000013",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001418868299993",
+        "highestBid": "0.000001257159102798"
+    },
+    "ETH_ZINC": {
+        "last": "0.000021",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000121",
+        "highestBid": "0.000021"
+    },
+    "ETH_DAV": {
+        "last": "0.000001149999999999",
+        "high": "0.000001149999999999",
+        "low": "0.000001149999999999",
+        "percentChange": "0",
+        "baseVolume": "0.705966792999999999",
+        "quoteVolume": "613884.16782662076795237",
+        "lowestAsk": "0.00000139599999998",
+        "highestBid": "0.00000101"
+    },
+    "ETH_OLT": {
+        "last": "0.00003542999518898",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000044862499999961",
+        "highestBid": "0.0000346741738901"
+    },
+    "ETH_MEDX": {
+        "last": "0.00002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000066828450918413",
+        "highestBid": "0.000000377801"
+    },
+    "ETH_VITE": {
+        "last": "0.000051874954355461",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000059195891",
+        "highestBid": "0.000037316373"
+    },
+    "ETH_MET": {
+        "last": "0.002948257366130001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00355588928799717",
+        "highestBid": "0.002946364899600001"
+    },
+    "ETH_QNT": {
+        "last": "0.0386",
+        "high": "0.041289212987001494",
+        "low": "0.0386",
+        "percentChange": "-5.74566106",
+        "baseVolume": "192.155920490559544552",
+        "quoteVolume": "4831.537490994559035615",
+        "lowestAsk": "0.03861003000000004",
+        "highestBid": "0.038600000001"
+    },
+    "ETH_C8": {
+        "last": "0.000077500000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000071",
+        "highestBid": "0.000068"
+    },
+    "ETH_DIW": {
+        "last": "0.000009",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008",
+        "highestBid": "0.000000020012"
+    },
+    "ETH_EGT": {
+        "last": "0.000014",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000039977999999999",
+        "highestBid": "0.000013063837799692"
+    },
+    "ETH_ELY": {
+        "last": "0.000005",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000024587789999988",
+        "highestBid": "0.00000418650316955"
+    },
+    "ETH_PITCH": {
+        "last": "0.00000074004",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000877339",
+        "highestBid": "0.000000334068700593"
+    },
+    "ETH_MRPH": {
+        "last": "0.001149899999999999",
+        "high": "0.001174",
+        "low": "0.000950029480333903",
+        "percentChange": "18.3806983",
+        "baseVolume": "12.384705630195940463",
+        "quoteVolume": "11687.7862",
+        "lowestAsk": "0.001149679999999999",
+        "highestBid": "0.000980010507890447"
+    },
+    "ETH_BST": {
+        "last": "0.000115000000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000254999999999999",
+        "highestBid": "0.000115000000000001"
+    },
+    "ETH_GOT": {
+        "last": "0.000045535039276265",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000081227797362563",
+        "highestBid": "0.000037254545454545"
+    },
+    "ETH_MFT": {
+        "last": "0.0000075",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008554556123147",
+        "highestBid": "0.000005958603000011"
+    },
+    "ETH_ZXC": {
+        "last": "0.00001678888999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000951819999909",
+        "highestBid": "0.000002503163"
+    },
+    "ETH_ESS": {
+        "last": "0.000002613378038169",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005049793898423",
+        "highestBid": "0.000002613115757876"
+    },
+    "ETH_REP": {
+        "last": "0.04079208489425698",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.088899999800000009",
+        "highestBid": "0.06635393844839604"
+    },
+    "ETH_ZIPT": {
+        "last": "0.000006710001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000009280399975458",
+        "highestBid": "0.000002624438"
+    },
+    "ETH_BOX": {
+        "last": "0.000206298621426709",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0004599998",
+        "highestBid": "0.000005981166"
+    },
+    "ETH_PNK": {
+        "last": "0.000051",
+        "high": "0.000051",
+        "low": "0.000050966719531529",
+        "percentChange": "0",
+        "baseVolume": "7.73930381054194184",
+        "quoteVolume": "151766.596993487496790799",
+        "lowestAsk": "0.000051",
+        "highestBid": "0.000050680071895987"
+    },
+    "ETH_NCC": {
+        "last": "0.000011118224468638",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000021587159891181",
+        "highestBid": "0.000012231608"
+    },
+    "ETH_HYB": {
+        "last": "0.000002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000347694296771",
+        "highestBid": "0.0000016100001"
+    },
+    "ETH_AXPR": {
+        "last": "0.00002225613886",
+        "high": "0.00002225613886",
+        "low": "0.00002225613886",
+        "percentChange": "0",
+        "baseVolume": "0.153807305668410929",
+        "quoteVolume": "6910.78118428",
+        "lowestAsk": "0.000033373233685583",
+        "highestBid": "0.0000243"
+    },
+    "ETH_GARD": {
+        "last": "0.000000204374000002",
+        "high": "0.000000204374000002",
+        "low": "0.000000204374000002",
+        "percentChange": "0",
+        "baseVolume": "0.430000000000000047",
+        "quoteVolume": "2103985.8298794958",
+        "lowestAsk": "0.000000327494099863",
+        "highestBid": "0.000000204978000002"
+    },
+    "ETH_SEAL": {
+        "last": "0.00000303001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000399",
+        "highestBid": "0.000003070001"
+    },
+    "ETH_SNR": {
+        "last": "0.000001369996899968",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001369999699996",
+        "highestBid": "0.000000600002000019"
+    },
+    "ETH_DACC": {
+        "last": "0.000000110401",
+        "high": "0.000000110401",
+        "low": "0.000000110401",
+        "percentChange": "0",
+        "baseVolume": "0.4069735972434169",
+        "quoteVolume": "3686321.6569",
+        "lowestAsk": "0.00000016",
+        "highestBid": "0.000000100402"
+    },
+    "ETH_SAT": {
+        "last": "0.00001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000050012",
+        "highestBid": "N/A"
+    },
+    "ETH_T2T": {
+        "last": "0.000005999699999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000232138",
+        "highestBid": "0.00000114"
+    },
+    "ETH_NTK2": {
+        "last": "0.000000029604095822",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000064798099989",
+        "highestBid": "0.000000031203795832"
+    },
+    "ETH_SET": {
+        "last": "0.000039500000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000076486127197318",
+        "highestBid": "0.000017316700005145"
+    },
+    "ETH_PKG": {
+        "last": "0.000000061",
+        "high": "0.0000000619",
+        "low": "0.000000060247940134",
+        "percentChange": "1.24827482",
+        "baseVolume": "1.037614909930743107",
+        "quoteVolume": "16856098.074801436855523247",
+        "lowestAsk": "0.000000064977999999",
+        "highestBid": "0.00000006"
+    },
+    "ETH_ACAD": {
+        "last": "0.00007",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0004999498",
+        "highestBid": "0.000000210001000001"
+    },
+    "ETH_ONG": {
+        "last": "0.00003735",
+        "high": "0.00003875450101001",
+        "low": "0.00003735",
+        "percentChange": "-3.62409778",
+        "baseVolume": "1.620399999999999998",
+        "quoteVolume": "43228.954312050094347512",
+        "lowestAsk": "0.00004486",
+        "highestBid": "0.000030020166500005"
+    },
+    "ETH_BNC": {
+        "last": "0.000000202639062538",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000193844509872",
+        "highestBid": "0.000000060352000001"
+    },
+    "ETH_MFTU": {
+        "last": "0.0000001065064089",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000105946352787",
+        "highestBid": "0.0000000500050005"
+    },
+    "ETH_ROX": {
+        "last": "0.000253318551794451",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000283757497445173",
+        "highestBid": "0.000259030631677256"
+    },
+    "ETH_DX": {
+        "last": "0.000007338272722733",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000012308286502222",
+        "highestBid": "0.000005463216000008"
+    },
+    "ETH_IG": {
+        "last": "0.000000100010000999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000242590899788",
+        "highestBid": "0.000000052017321912"
+    },
+    "ETH_VXV": {
+        "last": "0.0002002",
+        "high": "0.000237391648085517",
+        "low": "0.0002002",
+        "percentChange": "-15.66678878",
+        "baseVolume": "8.369212581569610766",
+        "quoteVolume": "40250.642351406885139879",
+        "lowestAsk": "0.000248947924140205",
+        "highestBid": "0.0002"
+    },
+    "ETH_TALAO": {
+        "last": "0.0002439988",
+        "high": "0.0002439988",
+        "low": "0.0002439987999",
+        "percentChange": "0.00000004",
+        "baseVolume": "0.896731689148056997",
+        "quoteVolume": "3675.147948332417989147",
+        "lowestAsk": "0.0002439988",
+        "highestBid": "0.000053222006600089"
+    },
+    "ETH_SVD": {
+        "last": "0.000000849251271627",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001628956498768",
+        "highestBid": "0.000000737563636363"
+    },
+    "ETH_FTT": {
+        "last": "0.000004193985731112",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005583952028933",
+        "highestBid": "0.000003737012353481"
+    },
+    "ETH_ABL": {
+        "last": "0.000045898026496311",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000086658488733386",
+        "highestBid": "0.000006367761000008"
+    },
+    "ETH_BEAT": {
+        "last": "0.000005154402346361",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000011499999999999",
+        "highestBid": "0.000004600000000001"
+    },
+    "ETH_CDT": {
+        "last": "0.000082398230493831",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0001599998",
+        "highestBid": "0.000057751551661632"
+    },
+    "ETH_MUXE": {
+        "last": "0.000000015",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000039599899997",
+        "highestBid": "0.000000000126564011"
+    },
+    "ETH_DIP": {
+        "last": "0.000030051438738165",
+        "high": "0.000030051438738165",
+        "low": "0.000030051438738165",
+        "percentChange": "0",
+        "baseVolume": "0.298648589477238189",
+        "quoteVolume": "9937.913192088128974575",
+        "lowestAsk": "0.0000448863433",
+        "highestBid": "0.000030051238738165"
+    },
+    "ETH_UBEX": {
+        "last": "0.000001995971000009",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000002549998899988",
+        "highestBid": "0.000001909405000007"
+    },
+    "ETH_CST": {
+        "last": "0.000005658213499462",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000006853844745043",
+        "highestBid": "0.000000002012035528"
+    },
+    "ETH_HAND": {
+        "last": "0.000000002423999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000002432999999",
+        "highestBid": "0.000000001900000001"
+    },
+    "ETH_GENE": {
+        "last": "0.0000249902",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000039764999998823",
+        "highestBid": "0.00002422"
+    },
+    "ETH_FTXT": {
+        "last": "0.000000009153910002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000012099999999",
+        "highestBid": "0.00000000254210001"
+    },
+    "ETH_UUU": {
+        "last": "0.000003298256241367",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000009982459768753",
+        "highestBid": "0.00000289196"
+    },
+    "ETH_ARCONA": {
+        "last": "0.000038250032938667",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000086655791620659",
+        "highestBid": "0.0000233059"
+    },
+    "ETH_HAVY": {
+        "last": "0.000000019885",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000000213",
+        "highestBid": "0.000000010492058307"
+    },
+    "ETH_CARD": {
+        "last": "0.000001750819999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001766874",
+        "highestBid": "0.000001512201"
+    },
+    "ETH_NPXS": {
+        "last": "0.0000009400047",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000984",
+        "highestBid": "0.000000937777000001"
+    },
+    "ETH_EDN": {
+        "last": "0.000016214470900009",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000016722284531771",
+        "highestBid": "0.000011527711532951"
+    },
+    "ETH_IHF": {
+        "last": "0.000188885600000029",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00023085512",
+        "highestBid": "0.000189125663"
+    },
+    "ETH_UBBEY": {
+        "last": "0.000000900000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000002799999999999",
+        "highestBid": "0.0000005"
+    },
+    "ETH_TBE": {
+        "last": "0.000000290001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001442842454732",
+        "highestBid": "0.00000029"
+    },
+    "ETH_MAS": {
+        "last": "0.000013994092000012",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00003098753296",
+        "highestBid": "0.0000151202"
+    },
+    "ETH_DEC": {
+        "last": "0.0005",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00048",
+        "highestBid": "0.00037"
+    },
+    "TUSD_ETH": {
+        "last": "155.15644465695",
+        "high": "155.15644465695",
+        "low": "155.15644465695",
+        "percentChange": "0",
+        "baseVolume": "300.57617875961043566",
+        "quoteVolume": "1.937245851593097695",
+        "lowestAsk": "155.5639465959",
+        "highestBid": "153.63364067"
+    },
+    "USDC_ETH": {
+        "last": "151.78514251061249242",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "155.5639472",
+        "highestBid": "153.6683378"
+    },
+    "ETH_TOL": {
+        "last": "0.0000215",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000026226400073656",
+        "highestBid": "0.0000195155911"
+    },
+    "ETH_MTCN": {
+        "last": "0.000053009999999999",
+        "high": "0.000170998",
+        "low": "0.000036",
+        "percentChange": "-68.99963742",
+        "baseVolume": "2.679521181215271128",
+        "quoteVolume": "57575.196322092912408887",
+        "lowestAsk": "0.0001001",
+        "highestBid": "0.000035550000000001"
+    },
+    "ETH_ONE": {
+        "last": "0.000001943349999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001943118611",
+        "highestBid": "0.000000866011"
+    },
+    "ETH_JSE": {
+        "last": "0.0000013694",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000002326739999447",
+        "highestBid": "0.000000913836008998"
+    },
+    "ETH_AMO": {
+        "last": "0.000001349961999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008829999",
+        "highestBid": "0.000000221452"
+    },
+    "ETH_TYPE": {
+        "last": "0.000001021078500219",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001785",
+        "highestBid": "0.000000712109"
+    },
+    "ETH_FTM": {
+        "last": "0.000086008640675106",
+        "high": "0.000091988837720967",
+        "low": "0.00007949232893",
+        "percentChange": "8.19740953",
+        "baseVolume": "8.711829529911957159",
+        "quoteVolume": "100423.939676920843711562",
+        "lowestAsk": "0.000091699925094654",
+        "highestBid": "0.000086008640675106"
+    },
+    "ETH_LQD": {
+        "last": "0.000084727062999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000084727185",
+        "highestBid": "0.000030000256000001"
+    },
+    "ETH_PSK": {
+        "last": "0.000006217711499999",
+        "high": "0.000006217711499999",
+        "low": "0.000006217711499999",
+        "percentChange": "0",
+        "baseVolume": "0.133060200744100626",
+        "quoteVolume": "21400.188919045540579671",
+        "lowestAsk": "0.000006217711499999",
+        "highestBid": "0.000005299999999999"
+    },
+    "ETH_COIN": {
+        "last": "0.000570633883179354",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0005999998",
+        "highestBid": "0.0004101076037"
+    },
+    "ETH_ZEON": {
+        "last": "0.00000006",
+        "high": "0.000000064",
+        "low": "0.000000049019",
+        "percentChange": "-6.25",
+        "baseVolume": "2.62606552906920777",
+        "quoteVolume": "44532000.618757303743852249",
+        "lowestAsk": "0.000000061089250025",
+        "highestBid": "0.00000005"
+    },
+    "ETH_HEAL": {
+        "last": "0.000079845",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000079844",
+        "highestBid": "0.00000801"
+    },
+    "ETH_AWC": {
+        "last": "0.000483700730174797",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00051353027388004",
+        "highestBid": "0.000456029512965664"
+    },
+    "ETH_FOAM": {
+        "last": "0.000131363618999888",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00012812030311309",
+        "highestBid": "0.000104686244"
+    },
+    "ETH_LPT": {
+        "last": "0.013324",
+        "high": "0.014800338229583288",
+        "low": "0.013324",
+        "percentChange": "-0.80552702",
+        "baseVolume": "2.534889086008702276",
+        "quoteVolume": "189.233733962703497863",
+        "lowestAsk": "0.014775574542009228",
+        "highestBid": "0.01312"
+    },
+    "ETH_CMCT": {
+        "last": "0.000003061337614807",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000006",
+        "highestBid": "0.00000292487569"
+    },
+    "ETH_ECHT": {
+        "last": "0.0000024904001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005030917792881",
+        "highestBid": "0.000000642855"
+    },
+    "ETH_KAT": {
+        "last": "0.000008999999999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000015209999999998",
+        "highestBid": "0.000002984556000252"
+    },
+    "ETH_UTS": {
+        "last": "0.000001206926914085",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001151132113211",
+        "highestBid": "0.0000001511"
+    },
+    "ETH_ATF": {
+        "last": "0.000013",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000025",
+        "highestBid": "0.00001"
+    },
+    "ETH_GMB": {
+        "last": "0.00000199",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000249999999993",
+        "highestBid": "0.000000476218000016"
+    },
+    "ETH_XCHF": {
+        "last": "0.006511155265769177",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.006510244143686128",
+        "highestBid": "0.006381328418068581"
+    },
+    "ETH_NKN": {
+        "last": "0.0001292",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00016016500742467",
+        "highestBid": "0.000114367246400602"
+    },
+    "ETH_COVA": {
+        "last": "0.000006878643484131",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000657881291792",
+        "highestBid": "0.000000072869"
+    },
+    "ETH_LTO": {
+        "last": "0.000150584700276524",
+        "high": "0.000168985731974905",
+        "low": "0.00014",
+        "percentChange": "-3.62626276",
+        "baseVolume": "13.228115434509980919",
+        "quoteVolume": "88069.88887506",
+        "lowestAsk": "0.00016",
+        "highestBid": "0.000149650334520918"
+    },
+    "ETH_STASH": {
+        "last": "0.000000042",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000070689499967",
+        "highestBid": "0.000000042"
+    },
+    "TUSD_WBTC": {
+        "last": "8267.6388810231",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7617.76059592065",
+        "highestBid": "7520.0695600095"
+    },
+    "USDC_WBTC": {
+        "last": "6922.99072",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7617.76088",
+        "highestBid": "7524.55592"
+    },
+    "DAI_ETH": {
+        "last": "151.770322450000002807",
+        "high": "151.770322450000002807",
+        "low": "150.3547503258",
+        "percentChange": "0.94148813",
+        "baseVolume": "696.648206957393243549",
+        "quoteVolume": "4.60590134734574063",
+        "lowestAsk": "155.473060249999997658",
+        "highestBid": "153.7832566212"
+    },
+    "DAI_WBTC": {
+        "last": "8281.7102714208",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7626.65684135215",
+        "highestBid": "7531.4232326373"
+    },
+    "ETH_BETHER": {
+        "last": "0.000001831551",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000005599599999999",
+        "highestBid": "0.000001450455"
+    },
+    "ETH_SPRING": {
+        "last": "0.000000219999999998",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000089999999949",
+        "highestBid": "0.000000179999999999"
+    },
+    "ETH_ZCC": {
+        "last": "0.0007",
+        "high": "0.0007",
+        "low": "0.0007",
+        "percentChange": "0",
+        "baseVolume": "0.63",
+        "quoteVolume": "900",
+        "lowestAsk": "0.0007",
+        "highestBid": "0.00065"
+    },
+    "ETH_WMB": {
+        "last": "0.00000055",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000141374930391",
+        "highestBid": "0.00000055"
+    },
+    "ETH_CCC": {
+        "last": "0.000070000000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000199799999999999",
+        "highestBid": "0.000048113"
+    },
+    "ETH_COT": {
+        "last": "0.0000003000001",
+        "high": "0.000000362897",
+        "low": "0.00000018",
+        "percentChange": "-17.33188756",
+        "baseVolume": "3.811588191347425001",
+        "quoteVolume": "12433313.934238543761785082",
+        "lowestAsk": "0.0000003",
+        "highestBid": "0.000000180086417502"
+    },
+    "ETH_HXRO": {
+        "last": "0.000289999999",
+        "high": "0.000289999999",
+        "low": "0.000242609104457427",
+        "percentChange": "8.86503567",
+        "baseVolume": "26.355804876867488799",
+        "quoteVolume": "96182.296414029687096484",
+        "lowestAsk": "0.000295",
+        "highestBid": "0.000260093415063389"
+    },
+    "ETH_INNBCL": {
+        "last": "0.0000000000053",
+        "high": "0.0000000000053",
+        "low": "0.0000000000053",
+        "percentChange": "0",
+        "baseVolume": "0.054999999999999999",
+        "quoteVolume": "10377358490.5660375594",
+        "lowestAsk": "0.0000000000094993",
+        "highestBid": "0.000000000003"
+    },
+    "ETH_BIRD": {
+        "last": "0.0000098002",
+        "high": "0.0000171206803",
+        "low": "0.0000098002",
+        "percentChange": "-42.56367771",
+        "baseVolume": "7.165291951717666415",
+        "quoteVolume": "568775.847784716826903572",
+        "lowestAsk": "0.000016421735793569",
+        "highestBid": "0.0000081474093"
+    },
+    "ETH_FXC": {
+        "last": "0.0000151",
+        "high": "0.0000151",
+        "low": "0.000014895561887056",
+        "percentChange": "0.66666734",
+        "baseVolume": "16.349515773564508066",
+        "quoteVolume": "1085017.974665448908557894",
+        "lowestAsk": "0.0000151",
+        "highestBid": "0.000015050637"
+    },
+    "ETH_UGAS": {
+        "last": "0.0019955998",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0019955998",
+        "highestBid": "0.0000204488"
+    },
+    "ETH_NRP": {
+        "last": "0.000000007823000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000017999999999",
+        "highestBid": "0.000000007000000001"
+    },
+    "ETH_PLA": {
+        "last": "0.000005001369949853",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008129682312243",
+        "highestBid": "0.00000423430465"
+    },
+    "ETH_IMT": {
+        "last": "0.000000506600000032",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000009546908",
+        "highestBid": "0.000000648000000639"
+    },
+    "ETH_CCN": {
+        "last": "0.000000010106626015",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000003833324417",
+        "highestBid": "0.0000000105007"
+    },
+    "ETH_FET": {
+        "last": "0.00032",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000467285399999727",
+        "highestBid": "0.00022880028"
+    },
+    "ETH_BMH": {
+        "last": "0.000003",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000007525199",
+        "highestBid": "0.0000012971"
+    },
+    "ETH_PCL": {
+        "last": "0.000005285000000018",
+        "high": "0.0000058799899",
+        "low": "0.000003977999",
+        "percentChange": "32.85573978",
+        "baseVolume": "13.672949421407402889",
+        "quoteVolume": "2703318.94285377",
+        "lowestAsk": "0.000005779947068253",
+        "highestBid": "0.000003659022510867"
+    },
+    "ETH_HUDDL": {
+        "last": "0.000016280000000121",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000035019997899978",
+        "highestBid": "0.0000162"
+    },
+    "ETH_ANKR": {
+        "last": "0.000012712437198874",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000027366975147903",
+        "highestBid": "0.000011466782810002"
+    },
+    "ETH_LED": {
+        "last": "0.00000480999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000480999",
+        "highestBid": "0.0000000112"
+    },
+    "ETH_VIDT": {
+        "last": "0.000530005300000001",
+        "high": "0.000535002",
+        "low": "0.000483986848",
+        "percentChange": "9.508203",
+        "baseVolume": "13.878076918925530161",
+        "quoteVolume": "26646.409727076497499325",
+        "lowestAsk": "0.000535136673",
+        "highestBid": "0.000503471172"
+    },
+    "ETH_MESG": {
+        "last": "0.00006917",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000123719999999999",
+        "highestBid": "0.00005698"
+    },
+    "ETH_PMNT": {
+        "last": "0.00000099",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00000139",
+        "highestBid": "0.000000370209000001"
+    },
+    "ETH_UND": {
+        "last": "0.000099083933771116",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000168180831289844",
+        "highestBid": "0.000060100810881927"
+    },
+    "ETH_CRO": {
+        "last": "0.000641990923865706",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000660015610014594",
+        "highestBid": "0.000150674015879596"
+    },
+    "ETH_BEZ": {
+        "last": "0.00002354220000031",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0001199998",
+        "highestBid": "0.0000234802"
+    },
+    "ETH_AERGO": {
+        "last": "0.0003298888",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0013732851799988",
+        "highestBid": "0.000200634477000011"
+    },
+    "TUSD_DAI": {
+        "last": "1.0020526727255016",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "1.0014536551999616",
+        "highestBid": "0.9963441177117504"
+    },
+    "USDC_DAI": {
+        "last": "1.005227024",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "1.001453652",
+        "highestBid": "0.996344114"
+    },
+    "TUSD_USDC": {
+        "last": "1.04",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "9.91",
+        "highestBid": "0.148896"
+    },
+    "ETH_BTMX": {
+        "last": "0.0004733",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0007299998",
+        "highestBid": "0.000321452460889781"
+    },
+    "TUSD_USDS": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "2",
+        "highestBid": "0.1192"
+    },
+    "USDC_USDS": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7.528",
+        "highestBid": "0.035964999300726375"
+    },
+    "DAI_USDS": {
+        "last": "0.025",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "4.995",
+        "highestBid": "0.0011"
+    },
+    "TUSD_PAX": {
+        "last": "10",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "35.81",
+        "highestBid": "0.129"
+    },
+    "USDC_PAX": {
+        "last": "9",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "10",
+        "highestBid": "0.1382499977"
+    },
+    "DAI_PAX": {
+        "last": "8.64",
+        "high": "8.64",
+        "low": "8.64",
+        "percentChange": "0",
+        "baseVolume": "280.694229156233762469",
+        "quoteVolume": "32.487758004193722508",
+        "lowestAsk": "8.6396",
+        "highestBid": "N/A"
+    },
+    "ETH_CSP": {
+        "last": "0.00002463654998",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00006756125926",
+        "highestBid": "0.00001426307288"
+    },
+    "ETH_ZAP": {
+        "last": "0.000030000000000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000094405799992741",
+        "highestBid": "0.000024055095345016"
+    },
+    "ETH_NMR": {
+        "last": "0.024216430007692958",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.051781903421970004",
+        "highestBid": "0.024159018702020002"
+    },
+    "TUSD_TGBP": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7438.512797309999999992",
+        "highestBid": "0.01010101101"
+    },
+    "USDC_TGBP": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7433.2725489118",
+        "highestBid": "N/A"
+    },
+    "DAI_TGBP": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "7438.4830371",
+        "highestBid": "N/A"
+    },
+    "ETH_NFC": {
+        "last": "0.000010767400003836",
+        "high": "0.000010767400003836",
+        "low": "0.000010767400003836",
+        "percentChange": "0",
+        "baseVolume": "1.081040000000000014",
+        "quoteVolume": "100399.353568630132819037",
+        "lowestAsk": "0.000048452171429807",
+        "highestBid": "0.000010000000000001"
+    },
+    "ETH_WHEN": {
+        "last": "0.0000222251",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000023",
+        "highestBid": "0.000008290352009015"
+    },
+    "ETH_LIT": {
+        "last": "0.000163494690607413",
+        "high": "0.000175676439121446",
+        "low": "0.0001525",
+        "percentChange": "2.60070598",
+        "baseVolume": "89.082563237339787281",
+        "quoteVolume": "564480.192434065923766462",
+        "lowestAsk": "0.000163593701170389",
+        "highestBid": "0.000156935999988"
+    },
+    "ETH_HGO": {
+        "last": "0.000008422599694772",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000004033800122138",
+        "highestBid": "0.000003"
+    },
+    "ETH_SNTVT": {
+        "last": "0.00000687",
+        "high": "0.0000074",
+        "low": "0.00000687",
+        "percentChange": "-5.24135891",
+        "baseVolume": "12.855897774573019063",
+        "quoteVolume": "1818498.156717643661568515",
+        "lowestAsk": "0.000007633245946691",
+        "highestBid": "0.000006600066"
+    },
+    "ETH_XBASE": {
+        "last": "0.000017000001",
+        "high": "0.0000182",
+        "low": "0.000017000001",
+        "percentChange": "-4.16196695",
+        "baseVolume": "9.041489345802102866",
+        "quoteVolume": "511739.588450505264734412",
+        "lowestAsk": "0.00001819999",
+        "highestBid": "0.000017000001"
+    },
+    "ETH_NOW": {
+        "last": "0.000047499525000077",
+        "high": "0.000047499525000077",
+        "low": "0.000047499525000051",
+        "percentChange": "0",
+        "baseVolume": "0.424635349999789886",
+        "quoteVolume": "8939.78097672",
+        "lowestAsk": "0.0000475",
+        "highestBid": "0.000030459894500366"
+    },
+    "ETH_CUSD": {
+        "last": "0.003324200740401121",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.495500095232863",
+        "highestBid": "0.0010010101"
+    },
+    "ETH_ORBS": {
+        "last": "0.00005",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00007471679885",
+        "highestBid": "0.0000400605"
+    },
+    "ETH_RC20": {
+        "last": "0.0000000500101111",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000098959999789",
+        "highestBid": "0.000000050089599998"
+    },
+    "ETH_AER": {
+        "last": "0.00003",
+        "high": "0.00003",
+        "low": "0.00003",
+        "percentChange": "0",
+        "baseVolume": "1.124117605",
+        "quoteVolume": "37470.586833333333333333",
+        "lowestAsk": "0.0000399999998999",
+        "highestBid": "0.00001701"
+    },
+    "ETH_ORME": {
+        "last": "0.000104709042",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00014",
+        "highestBid": "0.000089691109091257"
+    },
+    "ETH_MATIC": {
+        "last": "0.000145",
+        "high": "0.000145",
+        "low": "0.000145",
+        "percentChange": "0",
+        "baseVolume": "2.9",
+        "quoteVolume": "20000",
+        "lowestAsk": "0.000286323174934449",
+        "highestBid": "0.000114415200020001"
+    },
+    "ETH_RC": {
+        "last": "0.00001454989899998",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000143998",
+        "highestBid": "0.000000400000000001"
+    },
+    "ETH_ZNT": {
+        "last": "0.000000038599999993",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000019489999984",
+        "highestBid": "0.000000006201223045"
+    },
+    "ETH_IDEX": {
+        "last": "0.000064812",
+        "high": "0.000069315665772811",
+        "low": "0.00006481",
+        "percentChange": "-2.92082322",
+        "baseVolume": "4.223604722468486804",
+        "quoteVolume": "63530.859246167454530276",
+        "lowestAsk": "0.000069",
+        "highestBid": "0.000065014"
+    },
+    "ETH_WBTC": {
+        "last": "48.89711561505486",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "49.1879960488812",
+        "highestBid": "48.66216286324602"
+    },
+    "USDC_EURS": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "21.722957900432900433",
+        "highestBid": "0.004768999971300066"
+    },
+    "TUSD_EURS": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "220.3",
+        "highestBid": "0.00386"
+    },
+    "EURS_ETH": {
+        "last": "184.159378499999990723",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "491.139241",
+        "highestBid": "6.5"
+    },
+    "EURS_PAX": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "86.36",
+        "highestBid": "0.005"
+    },
+    "EURS_USDS": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "172.638076923076923077",
+        "highestBid": "0.005"
+    },
+    "EURS_WBTC": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "599950",
+        "highestBid": "10"
+    },
+    "EURS_TGBP": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "6581.860305",
+        "highestBid": "N/A"
+    },
+    "EURS_DAI": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "895.955417",
+        "highestBid": "0.0005"
+    },
+    "ETH_CRE": {
+        "last": "0.0000255442469595",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000077953366827517",
+        "highestBid": "0.000019737326"
+    },
+    "ETH_RSR": {
+        "last": "0.00000975",
+        "high": "0.0000102",
+        "low": "0.00000975",
+        "percentChange": "-4.12979351",
+        "baseVolume": "26.922792107604625609",
+        "quoteVolume": "2679383.530360254507487779",
+        "lowestAsk": "0.000009876552302397",
+        "highestBid": "0.00000975195"
+    },
+    "ETH_SSN": {
+        "last": "0.00000018",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000003834546",
+        "highestBid": "0.00000008002"
+    },
+    "ETH_BQQQ": {
+        "last": "0.000004999999999999",
+        "high": "0.000004999999999999",
+        "low": "0.000004999999999999",
+        "percentChange": "0",
+        "baseVolume": "0.237983013257974562",
+        "quoteVolume": "47596.602651604431728936",
+        "lowestAsk": "0.000004999999999999",
+        "highestBid": "0.000003300570000056"
+    },
+    "ETH_XNS": {
+        "last": "0.0000105340224",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000025",
+        "highestBid": "0.0000105340224"
+    },
+    "ETH_CHR": {
+        "last": "0.090049999980022658",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0011199952270129",
+        "highestBid": "0.000034364963073065"
+    },
+    "ETH_STPT": {
+        "last": "0.000048101200009999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0004429998",
+        "highestBid": "0.00001865666403"
+    },
+    "DAI_XCHF": {
+        "last": "0.520668551893126674",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "550.81",
+        "highestBid": "0.005692"
+    },
+    "ETH_VNC": {
+        "last": "0.00000308800700051",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000004299400700051",
+        "highestBid": "0.000003"
+    },
+    "ETH_JAR": {
+        "last": "0.0000180002",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00004122",
+        "highestBid": "0.0000126555239"
+    },
+    "ETH_AQU": {
+        "last": "0.000000210055000006",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000458012995155",
+        "highestBid": "0.000000210005"
+    },
+    "ETH_CHZ": {
+        "last": "0.00008605892735309",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0001035921588",
+        "highestBid": "0.000070236268000054"
+    },
+    "ETH_EQUAD": {
+        "last": "0.000008355171412137",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000119998",
+        "highestBid": "0.000007"
+    },
+    "ETH_TFB": {
+        "last": "0.000002470000001",
+        "high": "0.0000025469",
+        "low": "0.000002455438884967",
+        "percentChange": "-2.92788363",
+        "baseVolume": "27.371077693655857629",
+        "quoteVolume": "10896958.631245980662348393",
+        "lowestAsk": "0.000002486803305541",
+        "highestBid": "0.000002455438884967"
+    },
+    "ETH_COTI": {
+        "last": "0.000379999999999999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000299999999999999",
+        "highestBid": "0.0000110013"
+    },
+    "ETH_XCT": {
+        "last": "0.0000031697844",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000007979999",
+        "highestBid": "0.000002020001"
+    },
+    "ETH_URAC": {
+        "last": "0.00000156775471",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000022",
+        "highestBid": "0.000001163042"
+    },
+    "ETH_ENK": {
+        "last": "0.000001119895356443",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000001179964229807",
+        "highestBid": "0.00000021001"
+    },
+    "ETH_EUULA": {
+        "last": "0.0001647",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0001647",
+        "highestBid": "0.000025112000000001"
+    },
+    "ETH_POLL": {
+        "last": "0.000082955721",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000999999",
+        "highestBid": "0.000015000011"
+    },
+    "ETH_LGO": {
+        "last": "0.000118395319700123",
+        "high": "0.000118395319700123",
+        "low": "0.000118395319700123",
+        "percentChange": "0",
+        "baseVolume": "0.28415683248431666",
+        "quoteVolume": "2400.06812096",
+        "lowestAsk": "0.000117859999900041",
+        "highestBid": "0.000106"
+    },
+    "ETH_1UP": {
+        "last": "0.000007121127603577",
+        "high": "0.000014",
+        "low": "0.000007121127603577",
+        "percentChange": "-28.93086224",
+        "baseVolume": "14.216366165813802587",
+        "quoteVolume": "1343240.94816074219530778",
+        "lowestAsk": "0.000011131278090485",
+        "highestBid": "0.0000065351"
+    },
+    "ETH_USDQ": {
+        "last": "0.0064645292",
+        "high": "0.0068067244",
+        "low": "0.0061928714",
+        "percentChange": "0.79995148",
+        "baseVolume": "4.415240765338008631",
+        "quoteVolume": "676.339762435958706",
+        "lowestAsk": "0.007077259999900004",
+        "highestBid": "0.005824394999999999"
+    },
+    "ETH_KRWQ": {
+        "last": "0.0000043536",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0000058807999",
+        "highestBid": "0.0000048646"
+    },
+    "ETH_QDAO": {
+        "last": "0.199999982553317531",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.336599829999899548",
+        "highestBid": "0.100001010000100001"
+    },
+    "ETH_CYBR": {
+        "last": "0.0000332",
+        "high": "0.000034101000418736",
+        "low": "0.000033150524477483",
+        "percentChange": "-2.64215245",
+        "baseVolume": "3.751476066204878607",
+        "quoteVolume": "112353.25",
+        "lowestAsk": "0.00005684219627846",
+        "highestBid": "0.0000332"
+    },
+    "ETH_SWACE": {
+        "last": "0.000023286778999697",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000031631419",
+        "highestBid": "0.000002310299"
+    },
+    "ETH_DPH": {
+        "last": "0.000004",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000008",
+        "highestBid": "0.0000042"
+    },
+    "ETH_MT": {
+        "last": "0.000003036026000001",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000034999979999999",
+        "highestBid": "0.000006488420001401"
+    },
+    "ETH_XDB": {
+        "last": "0.0000842",
+        "high": "0.0000842",
+        "low": "0.000072741980576016",
+        "percentChange": "15.74347166",
+        "baseVolume": "177.60112153376342557",
+        "quoteVolume": "2252953.810652",
+        "lowestAsk": "0.00008448",
+        "highestBid": "0.0000810216210001"
+    },
+    "ETH_HUT": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "N/A",
+        "highestBid": "0.000000311"
+    },
+    "ETH_NIO": {
+        "last": "0.000008296026087437",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000013900745877588",
+        "highestBid": "0.000007967091295117"
+    },
+    "ETH_PGF7T": {
+        "last": "0.00000250004",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00006341119",
+        "highestBid": "0.000001"
+    },
+    "ETH_KBC": {
+        "last": "0.00017",
+        "high": "0.00017",
+        "low": "0.000148",
+        "percentChange": "13.33333333",
+        "baseVolume": "86.222620783599",
+        "quoteVolume": "574358.3154647",
+        "lowestAsk": "0.0001975",
+        "highestBid": "0.0001413351"
+    },
+    "ETH_MBN": {
+        "last": "0.000029379227981463",
+        "high": "0.0000314",
+        "low": "0.000026879",
+        "percentChange": "9.30178943",
+        "baseVolume": "9.974205230789098561",
+        "quoteVolume": "356674.615768566898323162",
+        "lowestAsk": "0.000029098013714358",
+        "highestBid": "0.000027151"
+    },
+    "ETH_SWM": {
+        "last": "0.000155",
+        "high": "0.000160000000001",
+        "low": "0.000155",
+        "percentChange": "-3.125",
+        "baseVolume": "1.109116503477663399",
+        "quoteVolume": "7006.817615833392325027",
+        "lowestAsk": "0.00016",
+        "highestBid": "0.000155"
+    },
+    "ETH_VID": {
+        "last": "0.000250249033024835",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.001944444",
+        "highestBid": "0.000250160679"
+    },
+    "ETH_UDOO": {
+        "last": "0.0001321",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.0001299",
+        "highestBid": "0.000021027585"
+    },
+    "ETH_NEXO": {
+        "last": "0.0005910002",
+        "high": "0.0005910002",
+        "low": "0.0005910002",
+        "percentChange": "0",
+        "baseVolume": "0.0525990178",
+        "quoteVolume": "89",
+        "lowestAsk": "0.000691063",
+        "highestBid": "0.0005910002"
+    },
+    "ETH_CHP": {
+        "last": "0.000096615653593204",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000117024519969",
+        "highestBid": "0.000003641791"
+    },
+    "ETH_SXDT": {
+        "last": "0.00146",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00165",
+        "highestBid": "0.000500000001"
+    },
+    "ETH_DGTX": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "N/A",
+        "highestBid": "0.000011211024"
+    },
+    "ETH_KICK": {
+        "last": "0.00000152202",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000009603378",
+        "highestBid": "0.000000111311111111"
+    },
+    "ETH_ESH": {
+        "last": "0.0002899998",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00028",
+        "highestBid": "0.0000353502"
+    },
+    "ETH_SXP": {
+        "last": "0.010930060451768194",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.9834",
+        "highestBid": "0.000127267211000005"
+    },
+    "ETH_XRT": {
+        "last": "0.05",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.05",
+        "highestBid": "0.00000351"
+    },
+    "ETH_ZVC": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "N/A",
+        "highestBid": "0.000001"
+    },
+    "ETH_SLVD": {
+        "last": "0.0049999",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.005",
+        "highestBid": "0.000100101"
+    },
+    "ETH_VANTA": {
+        "last": "0.000005",
+        "high": "0.0000075",
+        "low": "0.0000038",
+        "percentChange": "31.23356136",
+        "baseVolume": "20.820325749104069066",
+        "quoteVolume": "3561691.721050058918361881",
+        "lowestAsk": "0.0000055",
+        "highestBid": "0.000004272694583383"
+    },
+    "ETH_CYFM": {
+        "last": "0.000000004288",
+        "high": "0.000000004288",
+        "low": "0.0000000033502",
+        "percentChange": "25.74780059",
+        "baseVolume": "2.568022972370130978",
+        "quoteVolume": "756038454.098885998904528814",
+        "lowestAsk": "0.000000004288",
+        "highestBid": "0.000000003401199999"
+    },
+    "ETH_FRM": {
+        "last": "0.000044330570448634",
+        "high": "0.000045018480422437",
+        "low": "0.000032105544570377",
+        "percentChange": "16.60964686",
+        "baseVolume": "63.892645122492172655",
+        "quoteVolume": "1735833.556538",
+        "lowestAsk": "0.00004",
+        "highestBid": "0.000036215704331738"
+    },
+    "ETH_BAND": {
+        "last": "0.000260087434",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.010249999578000004",
+        "highestBid": "0.000250424812"
+    },
+    "ETH_TRB": {
+        "last": "0.0126",
+        "high": "0.013399",
+        "low": "0.010333818088083664",
+        "percentChange": "14.15257342",
+        "baseVolume": "43.794969361181361795",
+        "quoteVolume": "3641.095892625133526393",
+        "lowestAsk": "0.0126",
+        "highestBid": "0.0112"
+    },
+    "DAI_LBTC:1022": {
+        "last": "2226.635642328205",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "N/A",
+        "highestBid": "N/A"
+    },
+    "DAI_SBTC:1022": {
+        "last": "N/A",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "N/A",
+        "highestBid": "N/A"
+    },
+    "DAI_LETH:1030": {
+        "last": "83.709574776975",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "67582.42477185",
+        "highestBid": "0.122"
+    },
+    "DAI_SETH:1030": {
+        "last": "48.34576490562",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "35682.793621838577224919",
+        "highestBid": "35682.416574837433628205"
+    },
+    "ETH_ROOBEE": {
+        "last": "0.0000383",
+        "high": "0.0000383",
+        "low": "0.000033",
+        "percentChange": "16.06060606",
+        "baseVolume": "0.275749999999999748",
+        "quoteVolume": "7954.545454545454520445",
+        "lowestAsk": "0.00006259",
+        "highestBid": "0.000010000300099999"
+    },
+    "ETH_KAPP": {
+        "last": "0.0000000319",
+        "high": "0.000000055711994768",
+        "low": "0.000000021",
+        "percentChange": "-2.97699429",
+        "baseVolume": "91.05858129994708353",
+        "quoteVolume": "2920269309.463676970089651388",
+        "lowestAsk": "0.0000000319",
+        "highestBid": "0.000000025765622029"
+    },
+    "ETH_ANGEL": {
+        "last": "0.0000018327665522",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.00001189089",
+        "highestBid": "0.000000108327665522"
+    },
+    "ETH_S": {
+        "last": "0.000000530521048114",
+        "high": "N/A",
+        "low": "N/A",
+        "percentChange": "0",
+        "baseVolume": "0",
+        "quoteVolume": "0",
+        "lowestAsk": "0.000000964797599833",
+        "highestBid": "0.000000284428418726"
+    },
+    "ETH_ANCT": {
+        "last": "0.00523765",
+        "high": "0.0052655",
+        "low": "0.00519631",
+        "percentChange": "-0.37300799",
+        "baseVolume": "7.05357880786274486",
+        "quoteVolume": "1348.84846635",
+        "lowestAsk": "0.00526986",
+        "highestBid": "0.00519312"
+    },
+    "ETH_EBASE": {
+        "last": "0.007492230486392359",
+        "high": "0.007767902373015352",
+        "low": "0.007051959625422146",
+        "percentChange": "-3.5488588",
+        "baseVolume": "56.356477577738742149",
+        "quoteVolume": "7567.10931463747878212",
+        "lowestAsk": "0.007499979999999999",
+        "highestBid": "0.006900035"
+    },
+    "ETH_PNG": {
+        "last": "0.0000198000001",
+        "high": "0.0000279999999",
+        "low": "0.0000198000001",
+        "percentChange": "-9.50639808",
+        "baseVolume": "1.873218925085050299",
+        "quoteVolume": "80279.215064437406167625",
+        "lowestAsk": "0.000026",
+        "highestBid": "0.0000198000001"
+    }
+}
