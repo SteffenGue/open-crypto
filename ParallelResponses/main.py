@@ -48,7 +48,7 @@ async def main():
         print('Response: {}'.format(response))
         if response:
             exchange = exchanges[response[0]]
-            formatted_response = exchange.get_ticker(response)
+            formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
 
 if __name__== "__main__":

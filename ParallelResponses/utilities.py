@@ -3,7 +3,6 @@ import datetime
 import yaml
 from configparser import ConfigParser
 
-
 TYPE_CONVERSION = {
 
     """
@@ -77,7 +76,7 @@ TYPE_CONVERSION = {
     },
     ("str", "strptime"): {  # Partially tested
         "function": lambda string, *args:
-                    datetime.datetime.strptime(string, args[0]),
+        datetime.datetime.strptime(string, args[0]),
         "params": 1
     },
     ("str", "split"): {  # Tested
@@ -102,7 +101,7 @@ TYPE_CONVERSION = {
     },
     ("datetime", "strftime"): {  # Partially tested
         "function": lambda time, *args:
-                    datetime.datetime.strftime(time, args[0]),
+        datetime.datetime.strftime(time, args[0]),
         "params": 1
     },
     ("datetime", "totimestamp"): {  # Partially tested
@@ -117,7 +116,7 @@ TYPE_CONVERSION = {
         "function": lambda time: calendar.timegm(time.utctimetuple()),
         "params": 0
     },
-    ("none", "nowstrptime"):{
+    ("none", "nowstrptime"): {
         "function": lambda arg: datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d"),
         "params": 0
     },
@@ -131,8 +130,8 @@ TYPE_CONVERSION = {
     }
 }
 
-def read_config(section: str, filename='config.ini') -> dict:
 
+def read_config(section: str, filename='config.ini') -> dict:
     """
     Reads the config.ini file specified in by the filename parameter
 
@@ -157,8 +156,8 @@ def read_config(section: str, filename='config.ini') -> dict:
 
     return parameters
 
-def yaml_loader(exchange: str):
 
+def yaml_loader(exchange: str):
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 

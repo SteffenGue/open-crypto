@@ -54,7 +54,7 @@ async def main():
     formatted_tickers = []
     start = time.time()
     for response in responses:
-        formatted_tickers.append(exchanges[response[0]].get_ticker(response[1], response[2]))
+        formatted_tickers.append(exchanges[response[0]].format_ticker(response[1], response[2]))
         #formatted_tickers = exchanges[response[0]].get_ticker(response[1], response[2])
         # await database_handler.persist_tickers(formatted_tickers)
     await asyncio.gather(*(database_handler.persist_tickers(ticker) for ticker in formatted_tickers))

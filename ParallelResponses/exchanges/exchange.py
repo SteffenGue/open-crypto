@@ -1,6 +1,7 @@
 import itertools
+import json
 from datetime import datetime
-from typing import Iterator
+from typing import Iterator, Dict, List, Tuple
 
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
@@ -9,16 +10,53 @@ from Mapping import Mapping
 
 
 class Exchange:
+    """
+    Attributes:
+        Embodies the characteristics of a crypto-currency-exchange.
+        Each exchange is an Exchange-object.
+        Each 'job' is in the end a method called on every exchange.
+
+        The Attributes and mappings are all extracted from the
+        .yaml-files whose location is described in the config.ini file.
+        TODO: Location of yamls in config festhalten und nutzen.
+
+        name: str
+            Name of this exchange.
+        terms_url: str
+            Url to Terms&Conditions of this exchange.
+        scrape_permission: bool
+            Permission if scraping data from this exchange is permitted.
+        api_url: str
+            Url for the public_api of this exchange.
+        request_urls: dict[request_name: List[url, params]
+            Dictionary which contains for each request(key)
+            the given url and necessary parameters.
+            (See .yaml and def extract_request_urls() for more info)
+        response_mappings: dict
+            Dictionary which contains for each request(key)
+            the necessary mapping-objects for extracting the value.
+            (See .yaml and def extract_mappings() for more info)
+    """
     name: str
     terms_url: str
     scrape_permission: bool
     api_url: str
-    request_urls: {}
-    response_mappings: {}
-    yaml_file: dict
+    request_urls: Dict[str: List[str: Dict]]
+    response_mappings: Dict[str: List[Mapping]]
 
-    def __init__(self, yaml_file: dict):
-        self.yaml_file = yaml_file
+    def __init__(self, yaml_file: Dict):
+        """
+        Creates a new Exchange-object.
+
+        Checks the content of the .yaml if it contains certain keys.
+        If searched keys exist, the constructor sets the values for the described attributes.
+        The constructor also calls extract_request_urls() and extract_mappings()
+        to create request_urls and the necessary Mapping-Objects.
+
+        :param yaml_file: Dict
+            Content of a .yaml file as a dict-object.
+            Constructor does not check if content is viable.
+        """
         self.name = yaml_file['name']
         if yaml_file.get('terms'):
             if yaml_file['terms'].get('terms_url'):
@@ -33,9 +71,37 @@ class Exchange:
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
 
-    async def request(self, request_name: str) -> [str, datetime, dict]:
-        # Only when request url exists
-        if self.request_urls.get(request_name):
+    async def request(self, request_name: str) -> (str, datetime, dict):
+        """
+        Sends a request which is identified by the given name and returns
+        the response with the name of this exchange and the time,
+        when the response arrived.
+
+        The Method is asynchronous so that after the request is send, the program does not wait
+        until the response arrives. For asynchrony we use the library asyncio.
+        For sending and dealing with requests/responses the library aiohttp is used.
+
+        The methods gets the requests matching url out of request_urls.
+        If it does not exist None will be returned. Otherwise it sends and awaits the response(.json)
+        and tries afterwards to parse the json to a dictionary.
+        The parsed json is then returned with the name of this exchange, so
+        the response is assignable to this exchange and the time when the response arrived.
+
+        Exceptions will be caught and a suitable message is printed.
+        None will be returned in this case.
+
+        TODO: Gutes differneziertes Exception handling sowie logging.
+        TODO: Saving responses
+
+        :param request_name: str
+            Name of the request. i.e. 'ticker' for ticker-request
+
+        :return: (str, datetime, .json)
+            Tuple of the following structure:
+                (exchange_name, time of arrival, response)
+                - time of arrival is a datetime-object
+        """
+        if self.request_urls.get(request_name): # Only when request url exists
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 try:
@@ -54,39 +120,81 @@ class Exchange:
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
                 except ClientConnectorError:
                     print('{} hat nicht geantwortet.'.format(self.name))
-                return None
-        else:
             return None
 
-    def extract_request_urls(self, requests: dict) -> dict:
+    def extract_request_urls(self, requests: Dict) -> Dict[str: Dict]:
+        """
+        Helper-Method which should be only called by the constructor.
+        Extracts from the section of requests from the .yaml-file
+        the necessary attachment for the url and parameters for each request.
+
+        api_url has to be initialized already.
+
+        TODO: Possible to use pair_template
+
+        Example for one request:
+            in bibox.yaml (request ticker):
+                api_url: https://api.bibox.com/v1/
+                template: mdata
+                params:
+                    cmd:
+                        type: str
+                        default: marketAll
+
+            Result:
+                url = https://api.bibox.com/v1/mdata
+                params = {cmd: marketAll}
+
+                in result dictionary:
+                    {'ticker': [url, params], ...}
+
+        :param requests: Dict[str: Dict[param_name: value]]
+            requests-section from a exchange.yaml as dictionary.
+            Viability of dict is not checked.
+
+        :return:
+            See example above.
+        """
         urls = dict()
 
         for request in requests:
             url = self.api_url
             request_dict = requests[request]['request']
-            #
-            # TODO FIND A WAY TO PASS PAIR TEMPLATE
-            # if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
 
-            #     template_dict = request_dict['pair_template']
-            #     pair_str = '{}={}'.format(template_dict['alias'], template_dict['template'])
-            #     url += pair_str
-            #
             if 'template' in request_dict.keys() and request_dict['template']:
                 url += '{}'.format(request_dict['template'])
-            #
 
             params = dict()
             if 'params' in request_dict.keys() and request_dict['params']:
                 for param in request_dict['params']:
-                    # url += '&{}={}'.format(param, request_dict['params'][param]['default'])
                     params[param] = str(request_dict['params'][param]['default'])
 
             urls[request] = (url, params)
 
         return urls
 
-    def extract_mappings(self, requests: dict) -> dict:
+    def extract_mappings(self, requests: Dict) -> Dict[str: List[Mapping]]:
+        """
+        Helper-Method which should be only called by the constructor.
+        Extracts out of a given exchange.yaml-requests-section for each
+        request the necessary mappings so the values can be extracted from
+        the response for said request.
+
+        The key-value in the dictionary is the same as the key for the request.
+        i.e. behind 'ticker' are all the mappings stored which are necessary for
+        extracting the values out of a ticker-response.
+
+        If there is no mapping specified in the .yaml for a value which is contained
+        by the response, the value will not be extracted later on because there won't
+        be a Mapping-object for said value.
+
+        :param requests: Dict[str: List[Mapping]]
+            Requests-section from a exchange.yaml as dictionary.
+            Method does not check if dictionary contains viable information.
+        :return:
+            Dictionary with the following structure:
+                {'request_name': List[Mapping]}
+        """
         response_mappings = dict()
         for request in requests:
             request_mapping: dict = self.yaml_file['requests'][request]
@@ -101,8 +209,75 @@ class Exchange:
                 response_mappings[request] = mapping_list
 
         return response_mappings
+
     #[name, zeit, response.json]
-    def get_ticker(self, response: list) -> Iterator:
+    def format_ticker(self, response: Tuple[str, datetime, dict]) -> Iterator:
+        """
+        Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
+        the requested values and formats them to fitting tuples for persist_tickers() in db_handler.
+
+        Starts with a dictionary of empty lists where each key is the possible key-name from a mapping.
+        This is necessary because not every exchange returns every value that we try to store but a list
+        is later necessary to fill up 'empty places'.
+        i.e. Some exchanges don't return last_trade volumes for their currencies.
+
+        TODO: prevent hardcoding key_names
+
+        Each Mapping stored behind response_mappings['ticker'] is then called to extract its values.
+        i.e. The Mapping-Object with the key_name 'currency_pair_first' extracts a list which is ordered
+        from first to last line with all the symbols of the first named currency.
+        The return from extract_values() is then stored behind the key-name,
+        e.g. the empty list is now replaced with the extracted values.
+
+        The overall result of this process looks something like the following:
+            first_currency =    ['BTC', 'ETH', ...]
+            second_currency =   ['XRP', 'USDT', ...]
+            ticker_last_price = []  <--- no Mapping-Object in exchange.yaml specified
+            ticker_best_ask =   [0.123, 5.456, ...]
+            ...
+        Lists which are filled have the same length.
+        (obviously because extraction of the same number of lines in response)
+        The X-th elements from each value-list(extracted with Mapping-object) represent
+        one 'response-line' in the given json.
+
+        Because returning just the dictionary containing the lists is not intuitive
+        the last step is formatting the extracted values into fitting tuples.
+        This is done by using itertools.zip_longest() which works like the following:
+            a = itertools.repeat('a', len(b))
+            b = [1, 2, 3]
+            c = []
+            d = [1, 2]
+
+            result:
+                ('a', 1, None, 1)
+                ('a', 2, None, 2)
+                ('a', 3, None, None)
+
+        We are using the length of currency_pair_first because every entry in general ticker_data
+        has to contain a currency pair. It is always viable because the lists of extracted values
+        all need to have the same length. (TODO: Exception if not)
+
+        The formatted list of ticker-data-tuples is then returned.
+
+        AMEN
+
+        :param response: Tuple[exchnage_name, time of arrival, response from exchnage-api]
+            response is a parsed json.
+
+        :return: Tuple of the following structure:
+                (exchange-name,
+                 timestamp,
+                 first_currency_symbol,
+                 second_currency_symbol,
+                 ticker_last_price,
+                 ticker_last_trade,
+                 ticker_best_ask,
+                 ticker_best_bid,
+                 ticker_daily_volume)
+
+                Tuple might contain None if there was no Mapping-Object for a key(every x-th element of all
+                 the tuples is none or the extracted value was simply None.
+        """
         result = {'currency_pair_first': [],
                   'currency_pair_second': [],
                   'ticker_last_price': [],
