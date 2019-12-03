@@ -5,7 +5,23 @@ from configparser import ConfigParser
 
 
 TYPE_CONVERSION = {
-    ("bool", "str"): {  # Tested
+
+    """
+    Type Conversions used to convert extracted values from the API-Response into the desired type ("first", "second").
+    The values are specified in the .yaml-file of each exchange under the "mapping" of each method.
+    The function is called in the Mapping Class of utilities.py under the method convert_types().
+    
+    "first": 
+        The actual type extracted from the API-Request (.json)
+    "second": 
+        The desired type to convert
+    "function": 
+        the actual function to apply
+    "params": 
+        the number of additional parameters needed    
+    """
+
+    : {  # Tested
         "function": str,
         "params": 0
     },
@@ -116,6 +132,18 @@ TYPE_CONVERSION = {
 }
 
 def read_config(section: str, filename='config.ini') -> dict:
+
+    """
+    Reads the config.ini file specified in by the filename parameter
+
+    :param section: str
+        specifies the section to read from the config-file
+    :param filename: str
+        specifies the filename to read. Default: 'config.ini'
+    :return: parameters: dict
+        returns a dictionary of parameters
+    """
+
     parser = ConfigParser()
     parser.read(filename)
 
@@ -130,6 +158,16 @@ def read_config(section: str, filename='config.ini') -> dict:
     return parameters
 
 def yaml_loader(exchange: str):
+
+    """
+    Loads, reads and returns the data of a .yaml-file specified by the param exchange.
+
+    :param exchange: str
+        the file name to load (exchange)
+    :return: data: dict
+        returns a dict of the loaded data from the .yaml-file
+    """
+
     with open('resources/running_exchanges/' + exchange + '.yaml', 'r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
         return data

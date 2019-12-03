@@ -1,10 +1,8 @@
 import asyncio
 import os
-
 from bs4 import BeautifulSoup
 from db_handler import DatabaseHandler
 import urllib.request
-
 from exchanges.exchange import Exchange
 from tables import metadata
 from utilities import read_config, yaml_loader
@@ -34,7 +32,7 @@ async def main():
     #TODO RENABLE IF STARTING FIRST TIME
     # database_handler.persist_currencies(get_coins())
 
-    #Extracting all exchange coonfigs
+    #Extracting all exchange configs
     exchanges_list = os.listdir('resources/running_exchanges')
     exchange_names = [x.split(".")[0] for x in exchanges_list if ".yaml" in x]
     #exchange_names = ['vindax']
