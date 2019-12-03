@@ -141,7 +141,7 @@ class DatabaseHandler:
         """
         session = self.sessionFactory()
         for ticker in tickers:
-            if ticker[2] and ticker[3] and self.currency_exists(ticker[2]) and self.currency_exists(ticker[3]):
+            #if ticker[2] and ticker[3] and self.currency_exists(ticker[2]) and self.currency_exists(ticker[3]):
                 ticker_tuple = Ticker(exchange=ticker[0],
                                       time=ticker[1],
                                       first_currency=ticker[2],
@@ -152,8 +152,8 @@ class DatabaseHandler:
                                       best_bid=ticker[7],
                                       daily_volume=ticker[8])
                 session.add(ticker_tuple)
-            else:
-                print('Currency {} oder {} nicht in der Datenbank gefunden.'.format(ticker[2], ticker[3]))
+           # else:
+             #   print('Currency {} oder {} nicht in der Datenbank gefunden.'.format(ticker[2], ticker[3]))
         try:
             session.commit()
         except Exception:
