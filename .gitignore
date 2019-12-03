@@ -124,4 +124,4 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-ParallelResponses/config.ini
+/ParallelResponses/config.ini
