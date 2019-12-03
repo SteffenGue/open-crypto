@@ -1,17 +1,23 @@
 from typing import Sequence, List, Tuple, Any, Iterator
 
 from sqlalchemy import create_engine, MetaData, or_, and_
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from tables import Currency, CurrencyPair, Exchange, Ticker
 
 
 class DatabaseHandler:
+    """
+    Class which handles every interaction with the database.
+    This includes most of the time checking if values exist in
+    the database or storing/querying values.
 
-    # TODO guten Primary Key finden, die Connextions öffnen und closen, mehr struktur.
-    # def __init__(self):
-    #     self.connection_params = read_config('database')
-    #     # cursor = self.connect().cursor()
-    #     self.checkTables()
+    For querying and storing values the library sqlalchemy is used.
+
+    Attributes:
+        sessionFactory: sessionmaker
+           Factory for connections to the database.
+    """
+    sessionFactory: sessionmaker
 
     def __init__(self,
                  metadata: MetaData,
@@ -21,13 +27,41 @@ class DatabaseHandler:
                  host: str,
                  port: str,
                  db_name: str):
+        """
+        Initializes the database-handler.
 
-        self.metadata = metadata
-        self.engine = create_engine('{}://{}:{}@{}:{}/{}'.format(client, user_name, password, host, port, db_name))
+        Builds the connection-string and tries to connect to the database.
 
-        self.metadata.create_all(self.engine)
+        Creates with the given metadata tables which do not already exist.
+        Won't make a new table if the name already exists,
+        so changes to the table-structure have to be made by hand in the database
+        or the table has to be deleted.
 
-        self.sessionFactory = sessionmaker(bind=self.engine)
+        Initializes the sessionFactory with the created engine.
+        Engine variable is no attribute and currently only exists in the constructor.
+
+        :param metadata: Metadata
+            Information about the table-structure of the database.
+            See tables.py for more information.
+        :param client: str
+            Name of the Client which is used to connect to the database.
+        :param user_name: str
+            Username under which this program connects to the database.
+        :param password: str
+            Password for this username.
+        :param host: str
+            Hostname or Hostaddress from the database.
+        :param port: str
+            Connection-Port (usually 5432 for Postgres)
+        :param db_name: str
+            Name of the database.
+        """
+
+        engine = create_engine('{}://{}:{}@{}:{}/{}'.format(client, user_name, password, host, port, db_name))
+
+        metadata.create_all(engine)
+
+        self.sessionFactory = sessionmaker(bind=engine)
 
     def persist_currencies(self, currencies: Sequence[tuple]):
         class_ = Currency

@@ -1,7 +1,5 @@
 from sqlalchemy import *
-# SQLAlchemy declarative base class for tables and ORM classes
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
