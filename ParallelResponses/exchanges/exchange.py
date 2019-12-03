@@ -1,22 +1,11 @@
 import itertools
 from datetime import datetime
-from typing import Any, Tuple, List, Iterator
+from typing import Iterator
 
 import aiohttp
-import requests
 from aiohttp import ClientConnectionError, ClientConnectorError
 
 from Mapping import Mapping
-from tables import Ticker
-
-
-class RateLimit(object):
-    limit: int
-    unit: int
-
-    def __init__(self, limit: int, unit: int):
-        self.limit = limit
-        self.unit = unit
 
 
 class Exchange:
@@ -24,7 +13,6 @@ class Exchange:
     terms_url: str
     scrape_permission: bool
     api_url: str
-    rate_limit: RateLimit
     request_urls: {}
     response_mappings: {}
     yaml_file: dict
@@ -44,12 +32,6 @@ class Exchange:
         self.request_urls = self.extract_request_urls(yaml_file['requests'])
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
-
-    # async def request(self, request_name: str) -> (str, datetime, dict):
-    #     async with aiohttp.ClientSession() as session:
-    #         response = await session.get(self.api_url + self.request_urls[request_name])
-    #         result = (self.name, datetime.now(), json.loads(await response.read()))
-    #         return result
 
     async def request(self, request_name: str) -> [str, datetime, dict]:
         # Only when request url exists
