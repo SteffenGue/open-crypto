@@ -98,7 +98,7 @@ class Exchange:
         :return: (str, datetime, .json)
             Tuple of the following structure:
                 (exchange_name, time of arrival, response)
-                - time of arrival is a datetime-object
+                - time of arrival is a datetime-object in utc
         """
         if self.request_urls.get(request_name): # Only when request url exists
             async with aiohttp.ClientSession() as session:
@@ -109,7 +109,7 @@ class Exchange:
                     print('{} bekommen.'.format(request_url_and_params[0]))
                     # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                     #     json.dump(response_json, f, ensure_ascii=False, indent=4)
-                    return self.name, datetime.now(), response_json
+                    return self.name, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                 except Exception as ex:

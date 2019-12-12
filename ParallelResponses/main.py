@@ -10,7 +10,6 @@ from utilities import read_config, yaml_loader
 
 
 async def main():
-
     """
     The main() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted from the specified directory, extracted from the filenames
