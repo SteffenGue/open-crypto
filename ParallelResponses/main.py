@@ -1,5 +1,6 @@
 import asyncio
 import os
+import psycopg2
 from bs4 import BeautifulSoup
 import urllib.request
 from db_handler import DatabaseHandler

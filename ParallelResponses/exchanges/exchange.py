@@ -1,5 +1,4 @@
 import itertools
-import json
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
 
@@ -41,8 +40,8 @@ class Exchange:
     terms_url: str
     scrape_permission: bool
     api_url: str
-    request_urls: Dict[str: List[str: Dict]]
-    response_mappings: Dict[str: List[Mapping]]
+    request_urls: dict
+    response_mappings: dict
 
     def __init__(self, yaml_file: Dict):
         """
@@ -122,7 +121,7 @@ class Exchange:
                     print('{} hat nicht geantwortet.'.format(self.name))
             return None
 
-    def extract_request_urls(self, requests: Dict) -> Dict[str: Dict]:
+    def extract_request_urls(self, requests: dict) -> dict:
         """
         Helper-Method which should be only called by the constructor.
         Extracts from the section of requests from the .yaml-file
@@ -173,7 +172,7 @@ class Exchange:
 
         return urls
 
-    def extract_mappings(self, requests: Dict) -> Dict[str: List[Mapping]]:
+    def extract_mappings(self, requests: dict) -> dict:
         """
         Helper-Method which should be only called by the constructor.
         Extracts out of a given exchange.yaml-requests-section for each
@@ -197,7 +196,7 @@ class Exchange:
         """
         response_mappings = dict()
         for request in requests:
-            request_mapping: dict = self.yaml_file['requests'][request]
+            request_mapping: dict = requests[request]
 
             if 'mapping' in request_mapping.keys():
                 mapping = request_mapping['mapping']

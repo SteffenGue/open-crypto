@@ -2,7 +2,7 @@ from typing import Sequence, List, Tuple, Any, Iterator
 
 from sqlalchemy import create_engine, MetaData, or_, and_
 from sqlalchemy.orm import sessionmaker, Session
-from tables import Currency, CurrencyPair, Exchange, Ticker
+from tables import Currency, Exchange, Ticker
 
 
 class DatabaseHandler:
@@ -21,6 +21,7 @@ class DatabaseHandler:
 
     def __init__(self,
                  metadata: MetaData,
+                 sqltype: str,
                  client: str,
                  user_name: str,
                  password: str,
@@ -43,6 +44,8 @@ class DatabaseHandler:
         :param metadata: Metadata
             Information about the table-structure of the database.
             See tables.py for more information.
+        :param sqltype: atr
+            Type of the database sql-dialect. ('postgresql' for us)
         :param client: str
             Name of the Client which is used to connect to the database.
         :param user_name: str
@@ -57,7 +60,7 @@ class DatabaseHandler:
             Name of the database.
         """
 
-        engine = create_engine('{}://{}:{}@{}:{}/{}'.format(client, user_name, password, host, port, db_name))
+        engine = create_engine('{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name))
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 

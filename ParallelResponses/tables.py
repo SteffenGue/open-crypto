@@ -60,9 +60,9 @@ class ExchangeCurrencyPair(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     exchange_id = Column(Integer, ForeignKey(Exchange.id), primary_key=True, nullable=False)
     currency_first_id = Column(Integer, ForeignKey(Currency.id), primary_key=True, nullable=False)
-    currency_second_id = Column(Integer, ForeignKey(Currency.id, primary_key=True, nullable=False))
+    currency_second_id = Column(Integer, ForeignKey(Currency.id), primary_key=True, nullable=False)
 
-    __table_args__ = (CheckConstraint(currency_first_id != currency_second_id))
+    #__table_args__ = (CheckConstraint(currency_first_id != currency_second_id))
 
 
 class Ticker(Base):
