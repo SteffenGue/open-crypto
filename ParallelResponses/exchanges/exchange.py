@@ -129,7 +129,7 @@ class Exchange:
 
         api_url has to be initialized already.
 
-        TODO: Possible to use pair_template
+        TODO: Possibility to use pair_template
 
         Example for one request:
             in bibox.yaml (request ticker):
@@ -146,6 +146,7 @@ class Exchange:
 
                 in result dictionary:
                     {'ticker': [url, params], ...}
+                    '...'  Means dictionary-entry for different request i.e. 'historic rates'.
 
         :param requests: Dict[str: Dict[param_name: value]]
             requests-section from a exchange.yaml as dictionary.
@@ -190,6 +191,7 @@ class Exchange:
         :param requests: Dict[str: List[Mapping]]
             Requests-section from a exchange.yaml as dictionary.
             Method does not check if dictionary contains viable information.
+
         :return:
             Dictionary with the following structure:
                 {'request_name': List[Mapping]}
@@ -269,7 +271,7 @@ class Exchange:
         AMEN
 
         :param response: Tuple[exchnage_name, time of arrival, response from exchnage-api]
-            response is a parsed json.
+            response is a parsed json -> Dict.
 
         :return: Iterator of tuples with the following structure:
                 (exchange-name,
