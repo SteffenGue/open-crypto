@@ -70,7 +70,7 @@ class Exchange:
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
 
-    async def request(self, request_name: str) -> (str, datetime, dict):
+    async def request(self, request_name: str) -> Tuple[str, datetime, Dict]:
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -121,7 +121,7 @@ class Exchange:
                     print('{} hat nicht geantwortet.'.format(self.name))
             return None
 
-    def extract_request_urls(self, requests: dict) -> dict:
+    def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """
         Helper-Method which should be only called by the constructor.
         Extracts from the section of requests from the .yaml-file
@@ -172,7 +172,7 @@ class Exchange:
 
         return urls
 
-    def extract_mappings(self, requests: dict) -> dict:
+    def extract_mappings(self, requests: dict) -> Dict[str, List[Mapping]]:
         """
         Helper-Method which should be only called by the constructor.
         Extracts out of a given exchange.yaml-requests-section for each
@@ -210,7 +210,15 @@ class Exchange:
         return response_mappings
 
     #[name, zeit, response.json]
-    def format_ticker(self, response: Tuple[str, datetime, dict]) -> Iterator:
+    def format_ticker(self, response: Tuple[str, datetime, dict]) -> Iterator[Tuple[str,
+                                                                                    datetime,
+                                                                                    str,
+                                                                                    str,
+                                                                                    float,
+                                                                                    float,
+                                                                                    float,
+                                                                                    float,
+                                                                                    float]]:
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
         the requested values and formats them to fitting tuples for persist_tickers() in db_handler.
@@ -263,7 +271,7 @@ class Exchange:
         :param response: Tuple[exchnage_name, time of arrival, response from exchnage-api]
             response is a parsed json.
 
-        :return: Tuple of the following structure:
+        :return: Iterator of tuples with the following structure:
                 (exchange-name,
                  timestamp,
                  first_currency_symbol,
