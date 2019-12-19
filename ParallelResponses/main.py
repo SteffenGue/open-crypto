@@ -3,6 +3,7 @@ import os
 import psycopg2
 from bs4 import BeautifulSoup
 import urllib.request
+from datetime import datetime
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
@@ -34,8 +35,8 @@ async def main():
     database_handler.persist_exchanges(exchange_names)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
-
-    responses = await asyncio.gather(*(exchanges[ex].request('ticker') for ex in exchanges))
+    dt = datetime.utcnow()
+    responses = await asyncio.gather(*(exchanges[ex].request('ticker', dt) for ex in exchanges))
 
     for response in responses:
         print('Response: {}'.format(response))
