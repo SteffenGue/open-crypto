@@ -1,5 +1,8 @@
 import calendar
 import datetime
+import os
+from typing import List, Any, Dict
+
 import yaml
 from configparser import ConfigParser
 
@@ -131,7 +134,7 @@ TYPE_CONVERSION = {
 }
 
 
-def read_config(section: str, filename='config.ini') -> dict:
+def read_config(section: str, filename='config.ini') -> Dict[str, Any]:
     """
     Reads the config.ini file specified in by the filename parameter
 
@@ -167,6 +170,26 @@ def yaml_loader(exchange: str):
         returns a dict of the loaded data from the .yaml-file
     """
 
-    with open('resources/running_exchanges/' + exchange + '.yaml', 'r') as f:
+    with open(YAML_PATH + exchange + '.yaml', 'r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
         return data
+
+
+def get_exchange_names() -> List[str]:
+    """
+    Gives information about all exchanges that the program will send
+    requests to. This means if the name of a exchange is not part of the
+    list that is returned, the program will not send any request to said
+    exchange.
+
+    :return: List[str]
+        Names from all the exchanges, which have a .yaml-file in
+        the directory described in YAML_PATH.
+    """
+    exchanges_list = os.listdir(YAML_PATH)
+    exchange_names = [str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x]
+    exchange_names.sort()
+    return exchange_names
+
+#Constant that contains the path to the yaml-files of working exchanges.
+YAML_PATH = read_config('utilities')['yaml_path']

@@ -6,14 +6,13 @@ import urllib.request
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
-from utilities import read_config, yaml_loader
+from utilities import read_config, yaml_loader, get_exchange_names
 
 
 async def main():
     """
     The main() function to run the program. Loads the database, including the database_handler.
-    The exchange_names are extracted from the specified directory, extracted from the filenames
-        and further sorted from "A-Z".
+    The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
     In an asynchronous manner it is iterated over the exchanges and and the responses are awaited and collected
         by await asyncio.gather(..)
     As soon as all responses from the exchanges are returned, the values get extracted, formatted into tuples
@@ -26,11 +25,7 @@ async def main():
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['vindax']
 
-    # Extracting all file names from the directory
-    exchanges_list = os.listdir('resources/running_exchanges')
-    exchange_names = [x.split(".")[0] for x in exchanges_list if ".yaml" in x]
-    exchange_names.sort()
-
+    exchange_names = get_exchange_names()
     database_handler.persist_exchanges(exchange_names)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
