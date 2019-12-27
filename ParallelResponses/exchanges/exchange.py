@@ -70,7 +70,7 @@ class Exchange:
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
 
-    async def request(self, request_name: str, start_time) -> (str, datetime, dict):
+    async def request(self, request_name: str, start_time) -> (str, datetime, datetime, dict):
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -97,9 +97,9 @@ class Exchange:
         :param start_time : datetime
             The given datetime for the request for each request loop.
 
-        :return: (str, datetime, .json)
+        :return: (str, datetime, datetime, .json)
             Tuple of the following structure:
-                (exchange_name, time of arrival, response)
+                (exchange_name, start time, response time, response)
                 - time of arrival is a datetime-object in utc
         """
         if self.request_urls.get(request_name): # Only when request url exists
@@ -111,7 +111,7 @@ class Exchange:
                     print('{} bekommen.'.format(request_url_and_params[0]))
                     # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                     #     json.dump(response_json, f, ensure_ascii=False, indent=4)
-                    return self.name, start_time, response_json
+                    return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                 except Exception as ex:
@@ -212,7 +212,7 @@ class Exchange:
         return response_mappings
 
     #[name, zeit, response.json]
-    def format_ticker(self, response: Tuple[str, datetime, dict]) -> Iterator:
+    def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator:
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
         the requested values and formats them to fitting tuples for persist_tickers() in db_handler.
@@ -268,6 +268,7 @@ class Exchange:
         :return: Tuple of the following structure:
                 (exchange-name,
                  timestamp,
+                 timestamp,
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
@@ -289,10 +290,11 @@ class Exchange:
 
         mappings = self.response_mappings['ticker']
         for mapping in mappings:
-            result[mapping.key] = mapping.extract_value(response[2])
+            result[mapping.key] = mapping.extract_value(response[3])
             print(result)
         result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
                                             itertools.repeat(response[1], len(result['currency_pair_first'])),
+                                            itertools.repeat(response[2], len(result['currency_pair_first'])),
                                             result['currency_pair_first'],
                                             result['currency_pair_second'],
                                             result['ticker_last_price'],

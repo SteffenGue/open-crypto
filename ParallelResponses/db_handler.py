@@ -146,14 +146,15 @@ class DatabaseHandler:
         for ticker in tickers:
             #if ticker[2] and ticker[3] and self.currency_exists(ticker[2]) and self.currency_exists(ticker[3]):
                 ticker_tuple = Ticker(exchange=ticker[0],
-                                      time=ticker[1],
-                                      first_currency=ticker[2],
-                                      second_currency=ticker[3],
-                                      last_price=ticker[4],
-                                      last_trade=ticker[5],
-                                      best_ask=ticker[6],
-                                      best_bid=ticker[7],
-                                      daily_volume=ticker[8])
+                                      start_time=ticker[1],
+                                      response_time=ticker[2],
+                                      first_currency=ticker[3],
+                                      second_currency=ticker[4],
+                                      last_price=ticker[5],
+                                      last_trade=ticker[6],
+                                      best_ask=ticker[7],
+                                      best_bid=ticker[8],
+                                      daily_volume=ticker[9])
                 session.add(ticker_tuple)
            # else:
              #   print('Currency {} oder {} nicht in der Datenbank gefunden.'.format(ticker[2], ticker[3]))

@@ -75,7 +75,7 @@ class Ticker(Base):
         for existing exchange_currency_pairs. If not existing, currency_pair (incl. the currencies) are created.
     start_time: datetime
         Unified timestamp for each exchange in a request run.
-    time: datetime
+    response_time: datetime
         Timestamp of the response. Timestamps are created by the os, the delivered ones from the exchanges are not used.
         Timestamps are equal for each execution (resulting in an error of max. 5 seconds) to ease data usage later.
     last_price: float
@@ -101,7 +101,7 @@ class Ticker(Base):
     second_currency = Column(String,
                              primary_key=True)
     start_time = Column(DateTime)
-    time = Column(DateTime, primary_key=True)
+    response_time = Column(DateTime, primary_key=True)
     # last_price = Column(Float, CheckConstraint("last_price > 0"))
     # last_trade = Column(Float, CheckConstraint("last_trade > 0"))
     # best_ask = Column(Float, CheckConstraint("best_ask >= 0"))
