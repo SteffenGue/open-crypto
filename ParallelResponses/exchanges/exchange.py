@@ -70,7 +70,7 @@ class Exchange:
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
 
-    async def request(self, request_name: str, dt) -> (str, datetime, dict):
+    async def request(self, request_name: str, start_time) -> (str, datetime, dict):
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -94,7 +94,7 @@ class Exchange:
 
         :param request_name: str
             Name of the request. i.e. 'ticker' for ticker-request
-        :param dt : datetime
+        :param start_time : datetime
             The given datetime for the request for each request loop.
 
         :return: (str, datetime, .json)
@@ -111,7 +111,7 @@ class Exchange:
                     print('{} bekommen.'.format(request_url_and_params[0]))
                     # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                     #     json.dump(response_json, f, ensure_ascii=False, indent=4)
-                    return self.name, dt, response_json
+                    return self.name, start_time, response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                 except Exception as ex:

@@ -35,8 +35,8 @@ async def main():
     database_handler.persist_exchanges(exchange_names)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
-    dt = datetime.utcnow()
-    responses = await asyncio.gather(*(exchanges[ex].request('ticker', dt) for ex in exchanges))
+    start_time = datetime.utcnow()
+    responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
 
     for response in responses:
         print('Response: {}'.format(response))
