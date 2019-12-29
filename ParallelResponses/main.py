@@ -4,6 +4,7 @@ import psycopg2
 from bs4 import BeautifulSoup
 import urllib.request
 from datetime import datetime
+from datetime import timedelta
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
@@ -35,7 +36,14 @@ async def main():
     database_handler.persist_exchanges(exchange_names)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
+
     start_time = datetime.utcnow()
+    delta = start_time.microsecond
+
+    start_time = start_time - timedelta(microseconds=delta)
+    if int(str(delta)[:1]) > 5:
+        start_time = start_time + timedelta(seconds=1)
+
     responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
 
     for response in responses:
