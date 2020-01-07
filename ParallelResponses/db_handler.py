@@ -134,6 +134,7 @@ class DatabaseHandler:
             Tuple must have the following structure:
                 (exchange-name,
                  timestamp,
+                 timestamp,
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
@@ -144,6 +145,7 @@ class DatabaseHandler:
         """
         session = self.sessionFactory()
         for ticker in tickers:
+            #iterator-werte für die abfrage stimmen evtl. nicht mehr
             #if ticker[2] and ticker[3] and self.currency_exists(ticker[2]) and self.currency_exists(ticker[3]):
                 ticker_tuple = Ticker(exchange=ticker[0],
                                       start_time=ticker[1],

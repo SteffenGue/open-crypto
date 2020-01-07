@@ -211,7 +211,7 @@ class Exchange:
 
         return response_mappings
 
-    #[name, zeit, response.json]
+    #[name, zeit, zeit, response.json]
     def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator:
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,

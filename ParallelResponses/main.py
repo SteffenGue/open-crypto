@@ -37,9 +37,11 @@ async def main():
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
 
+    # start_time : datetime when request run is started
+    # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
     delta = start_time.microsecond
-
+    # rounding the given datetime on seconds
     start_time = start_time - timedelta(microseconds=delta)
     if int(str(delta)[:1]) > 5:
         start_time = start_time + timedelta(seconds=1)
