@@ -1,3 +1,5 @@
+
+
 """
 Dieses Skript demonstriert alternative Datenbankstrukturen. Die Datenbank kann entweder "in memory" oder als ".db-file" abgelegt werden. 
 Sinn und Ziel ist der Aufbau und Test verschiedenster Datenbankstrukturen und -relationen für eine möglichst tief integrierte Datenbank.
@@ -9,12 +11,22 @@ Zu Erstellung der Datenbank in Memory/db-File:
 
 Datenbankaufbau:
 
-    Relationen:
-        - Bidirektionale Many-to-Many Relationship zwischen Exchange, Currency und dem "association_table" ExchangeCurrency. 
+    Tables:
+        - Parent: Exchange, Currencies
+        - Child: ExchangeCurrencies
+        - "Grandchild": ExchangePairs
 
-    Problem: 
-        - Der doppelte ForeignKey vom "association_table" auf "currencies.id" funktioniert nicht. 
-            SqlAlchemy schmeißt hier einen "AmbiguousForeignKeysError".
+
+    Relationen:
+        - Many-to-Many Relationen werden aufgebrochen in zwei One-to-Many Relationen mit einem Association table
+          dazwischengeschaltet.
+        - Exchange und Currency (jeweils "one") können nur einmal hinterlegt sein (Unique!), allerdings kann eine
+          Exchange mehrere Currencies und eine Currency mehrere Exchanges haben (ExchangeCurrencies "Many"). Das
+          ergibt in Summe eine geordnete Many-to-Many Relation.
+        - Das gleiche Spiel mit ExchangeCurrencies und ExchangePairs. Eine ExchangeCurrency kann nur einmal hinter-
+          legt sein, allerdings kan eine in mehreren Paaren vertreten sein. Daher ExchangeCurrencies (One) und
+          ExchangePairs (Many).
+
 
     Hinweis: Zunächst etwas verwirrend sind die Relationships. Die Argumente sind folgende:
                 1. Das Table (Klasse)
@@ -31,19 +43,7 @@ from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, Check
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-
 Base = declarative_base()
-
-
-class ExchangeCurrency(Base):
-    __tablename__ = 'exchanges_currencies'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange_id = Column(Integer, ForeignKey('exchanges.id'))
-    first_id = Column(Integer, ForeignKey('currencies.id'))
-    second_id = Column(Integer, ForeignKey('currencies.id'))
-
-    __table_args__ = (CheckConstraint(first_id != second_id),)
 
 
 class Exchange(Base):
@@ -52,37 +52,53 @@ class Exchange(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=True)
 
-    currencies = relationship("Currency",
-                              secondary="exchanges_currencies",
-                              back_populates = "exchanges")
+    exchange_currencies = relationship('ExchangeCurrencies',
+                                       back_populates="exchange")
+
 
 class Currency(Base):
     __tablename__ = 'currencies'
-
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=True)
 
-    exchanges = relationship("Exchange",
-                             secondary="exchanges_currencies",
-                             back_populates= "currencies")
+    currency_exchanges = relationship('ExchangeCurrencies',
+                                      back_populates='currency')
+
+
+class ExchangeCurrencies(Base):
+    __tablename__ = 'exchanges_currencies'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    exchange_id = Column(Integer, ForeignKey('exchanges.id'))
+    currency_id = Column(Integer, ForeignKey('currencies.id'))
+
+    exchange = relationship('Exchange', back_populates="exchange_currencies")
+    currency = relationship('Currency', back_populates="currency_exchanges")
+
+
+class ExchangePairs(Base):
+    __tablename__ = 'exchanges_pairs'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    exchange_id = Column(Integer, ForeignKey('exchanges_currencies.exchange_id'))
+    first_id = Column(Integer, ForeignKey('exchanges_currencies.currency_id'))
+    second_id = Column(Integer, ForeignKey('exchanges_currencies.currency_id'))
+
+    __table_args__ = (CheckConstraint(first_id != second_id),)
+
+    first = relationship("ExchangeCurrencies", foreign_keys="ExchangePairs.first_id")
+    second = relationship("ExchangeCurrencies", foreign_keys="ExchangePairs.second_id")
+
 
 engine = create_engine('sqlite:///:memory:', echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-exchange = Exchange(name="bibox")
-exchange2 = Exchange(name="aidos")
-
-currency1 = Currency(name="Bitcoin")
-currency2 = Currency(name="Litecoin")
-
-ExCu1 = ExchangeCurrency(exchange_id=1, first_id=1, second_id=2)
-ExCu2 = ExchangeCurrency(exchange_id=2, first_id=2, second_id=1)
-
-liste = [exchange, exchange2, currency1, currency2, ExCu1, ExCu2]
+test = ExchangePairs(first=ExchangeCurrencies(exchange=Exchange(name="a"),
+                                              currency=Currency(name="b")),
+                     second=ExchangeCurrencies(exchange=Exchange(name="c"),
+                                               currency=Currency(name="b")))
 
 
-session.add_all(liste)
+session.add(test)
 session.commit()
-
