@@ -72,10 +72,17 @@ class Ticker(Base):
 
     ECP_ID: int
         Autoincremented unique Exchange_Currency_Pair identifier. The ECP_ID is used by the database_handler to check
-        for existing exchange_currency_pairs. If not existing, currency_pair (incl. the currencies) are created.
-    time: datetime
+         for existing exchange_currency_pairs. If not existing, currency_pair (incl. the currencies) are created.
+
+    start_time: DateTime
+        Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
+
+    response_time: DateTime
         Timestamp of the response. Timestamps are created by the os, the delivered ones from the exchanges are not used.
-        Timestamps are equal for each execution (resulting in an error of max. 5 seconds) to ease data usage later.
+        Timestamps are equal for each exchange for one run through (resulting in an error of approx. 5 seconds average)
+         to ease data usage later.
+        Timestamps are rounded to seconds (UTC)
+
     last_price: float
         Latest price of the currency_pair given from the exchange.
     last_trade: float
@@ -94,11 +101,15 @@ class Ticker(Base):
     __tablename__ = "tickers"
 
     exchange = Column(String, ForeignKey(Exchange.name), primary_key=True)
+    start_time = Column(DateTime, primary_key=True)
+    response_time = Column(DateTime, primary_key=False, unique=False)
+
     first_currency = Column(String,
                             primary_key=True)
     second_currency = Column(String,
                              primary_key=True)
-    time = Column(DateTime, primary_key=True)
+
+
     # last_price = Column(Float, CheckConstraint("last_price > 0"))
     # last_trade = Column(Float, CheckConstraint("last_trade > 0"))
     # best_ask = Column(Float, CheckConstraint("best_ask >= 0"))
