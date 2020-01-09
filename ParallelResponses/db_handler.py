@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Sequence, List, Tuple, Any, Iterator
 
+from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine, MetaData, or_, and_
 from sqlalchemy.orm import sessionmaker, Session
 from tables import Currency, Exchange, Ticker
@@ -62,6 +63,10 @@ class DatabaseHandler:
         """
 
         engine = create_engine('{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name))
+
+        if not database_exists(engine.url):
+            create_database(engine.url)
+            print("Database created")
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
