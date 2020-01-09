@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Sequence, List, Tuple, Any, Iterator
 
 from sqlalchemy import create_engine, MetaData, or_, and_
@@ -64,7 +65,7 @@ class DatabaseHandler:
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
-    def persist_currencies(self, currencies: Sequence[tuple]):
+    def persist_currencies(self, currencies: Sequence[Tuple]):
         """
         Persists the given Sequence of currency-tuples which should
         contain viable information.
@@ -114,7 +115,7 @@ class DatabaseHandler:
         list_ids = [value for value, in tuple_ids]
         return list_ids
 
-    def persist_tickers(self, tickers: Iterator):
+    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime, str, str, float, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
         TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
