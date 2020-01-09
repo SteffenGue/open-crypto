@@ -1,5 +1,7 @@
+from datetime import datetime
 from typing import Sequence, List, Tuple, Any, Iterator
 
+from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine, MetaData, or_, and_
 from sqlalchemy.orm import sessionmaker, Session
 from tables import Currency, Exchange, Ticker
@@ -61,10 +63,14 @@ class DatabaseHandler:
         """
 
         engine = create_engine('{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name))
+
+        if not database_exists(engine.url):
+            create_database(engine.url)
+            print("Database created")
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
-    def persist_currencies(self, currencies: Sequence[tuple]):
+    def persist_currencies(self, currencies: Sequence[Tuple]):
         """
         Persists the given Sequence of currency-tuples which should
         contain viable information.
@@ -114,7 +120,7 @@ class DatabaseHandler:
         list_ids = [value for value, in tuple_ids]
         return list_ids
 
-    def persist_tickers(self, tickers: Iterator):
+    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime, str, str, float, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
         TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
