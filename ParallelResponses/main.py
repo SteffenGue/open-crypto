@@ -38,7 +38,7 @@ async def main():
     delta = start_time.microsecond
     # rounding the given datetime on seconds
     start_time = start_time - timedelta(microseconds=delta)
-    if int(str(delta)[:1]) > 5:
+    if delta >= 500000:
         start_time = start_time + timedelta(seconds=1)
 
     responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
