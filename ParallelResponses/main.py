@@ -1,8 +1,7 @@
 import asyncio
 import os
 import psycopg2
-from bs4 import BeautifulSoup
-import urllib.request
+import time
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
@@ -26,7 +25,6 @@ async def main():
     # exchange_names = ['vindax']
 
     exchange_names = get_exchange_names()
-    database_handler.persist_exchanges(exchange_names)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
 
@@ -41,31 +39,10 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
-
-
-
-# <--------------------- Currency-Pair Methods (currently no use) --------------------->
-"""
-Method to scrape currencies from coinmarketcap.com. Method is currently not in use 
-as the condition to persist response tuples if the currency exists in the database
-is not longer activated. Moreover a new issue was created (03.12.2019) in GitLab to 
-automatically update the currencies/currency_pairs/exchange_currency_pairs tables if new
-currencies are discovered in the responses. 
-"""
-
-# def get_coins() -> list:
-#     fp = urllib.request.urlopen("https://coinmarketcap.com/all/views/all/")
-#     soup = BeautifulSoup(fp, 'html.parser')
-#     fp.close()
-#
-#     coin_rows = soup.find('table', {'id': 'currencies-all'}).find_all('tr')
-#     coin_names = list()
-#
-#     for row in coin_rows:
-#         name_tag = row.find('td', class_='no-wrap currency-name')
-#         if name_tag is not None:
-#             name = name_tag['data-sort']
-#             symbol_tag = row.find('td', class_='text-left col-symbol').string
-#             coin_names.append((name, symbol_tag))
-#     return coin_names
+    try:
+        while True:
+            asyncio.run(main())
+            print("5 Minuten Pause.")
+            time.sleep(300)
+    except Exception:
+        pass

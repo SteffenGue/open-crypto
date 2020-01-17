@@ -1,10 +1,8 @@
 import itertools
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
-
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
-
 from Mapping import Mapping
 
 

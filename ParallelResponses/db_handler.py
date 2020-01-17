@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Sequence, List, Tuple, Any, Iterator
-
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy_utils import database_exists, create_database
-from sqlalchemy import create_engine, MetaData, or_, and_
+from sqlalchemy import create_engine, MetaData, or_, and_, exists
 from sqlalchemy.orm import sessionmaker, Session
-from tables import Currency, Exchange, Ticker
-
+from tables import Currency, Exchange, ExchangeCurrencyPairs, Ticker
+import time
 
 class DatabaseHandler:
     """
@@ -70,57 +70,61 @@ class DatabaseHandler:
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
-    def persist_currencies(self, currencies: Sequence[Tuple]):
+
+
+    def get_or_create_DB_entry(self,
+                               session: Session,
+                               ticker: Tuple[str, datetime, str, str, float, float, float, float, float]):
         """
-        Persists the given Sequence of currency-tuples which should
-        contain viable information.
-        If the information is viable is not tested.
-        TODO: make more robust -> test content of tuples
-        TODO: Exception handling and logging
+        This function queries or creates the corresponding database entries. If the ExchangeCurrencyPair already
+          exists, the object is queries and appended to the ticker tuple. If one or more of the entries do not
+          exist, the single object (e.g. Currency or Exchange Object) is first created and then an
+          ExchangeCurrencyPair-Object is created. The missing entry is automatically persisted in the DB.
+        It is necessary to distinguish between existing and not existing DB-entities when creating the
+          ExchangeCurrencyPair-Object. Otherwise an Unique-Constraint Error is raised.
 
-        The method creates for each tuple a new currency-object
-        and tests if there is already an entry with the given
-        name and symbol.
-        If not the currency-object is added to the commit.
-        After all currency-objects where tested, the ones
-        who are not already stored in the database will be committed and
-        the connection will be closed.
-
-        :param currencies: Sequence[tuple]
-            List of tuples which should be persisted.
-            Tuple should must have the following structure:
-                    (Name, Symbol)
+        :param session: SQL-Alchemy Session
+            The running session from 'DatabaseHandler.persist_tickers'
+        :param ticker: Tuple
+            The ticker Tuple from 'DatabaseHandler.persist_tickers'
+        :return: ticker_update: Tuple
+            An Tuple including an ORM-Query Object (ExchangeCurrencyPairs-Object)
         """
-        session = self.sessionFactory()
-        generate_pairs = list()
 
-        for curr in currencies:
-            curr_name = curr[0]
-            curr_symbol = curr[1]
-            currency = Currency(name=curr_name, symbol=curr_symbol)
-            # ask if currency existsts in database
-            if session.query(Currency). \
-                    filter(Currency.name == currency.name). \
-                    filter(Currency.symbol == currency.symbol).first() is None:
-                session.add(currency)
-        session.commit()
-        session.close()
+        exchange = session.query(Exchange).filter(Exchange.name == ticker[0]).first()
+        first = session.query(Currency).filter(Currency.name == ticker[2]).first()
+        second = session.query(Currency).filter(Currency.name == ticker[3]).first()
 
-    def get_all_currency_ids(self) -> List[int]:
-        """
-        Queries all ids(integer) in the Currency-Table that exist in the database.
+        if exchange != None and first != None and second != None:
 
-        TODO: Exception handling and logging
+            exchange_pair = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id == exchange.id,
+                                                                        ExchangeCurrencyPairs.first_id == first.id,
+                                                                        ExchangeCurrencyPairs.second_id == second.id).first()
 
-        :return: List[int] of all ids.
-        """
-        session = self.sessionFactory()
-        tuple_ids = session.query(Currency.id).all()
-        session.close()
-        list_ids = [value for value, in tuple_ids]
-        return list_ids
+        else:
+            if exchange == None:
+                exchange = Exchange(name=ticker[0])
+            if first == None:
+                first = Currency(name=ticker[2])
+            if second == None:
+                second = Currency(name=ticker[3])
 
-    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime, str, str, float, float, float, float, float]]):
+            exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
+                                                  first=first,
+                                                  second=second)
+
+        if exchange_pair == None:
+            exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
+                                                  first=first,
+                                                  second=second)
+
+        ticker_update = list(ticker)
+        ticker_update.insert(0, exchange_pair)
+
+        return tuple(ticker_update)
+
+
+    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime,  str, str, float, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
         TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
@@ -138,8 +142,9 @@ class DatabaseHandler:
         :param tickers: Iterator
             Iterator of tuples containing ticker-data.
             Tuple must have the following structure:
-                (exchange-name,
-                 timestamp,
+                (ORM Exchange_Currency_Pair-Object,
+                 exchange-name,
+                 request_timestamp,
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
@@ -150,151 +155,26 @@ class DatabaseHandler:
         """
         session = self.sessionFactory()
         for ticker in tickers:
+            #iterator-werte für die abfrage stimmen evtl. nicht mehr
             #if ticker[2] and ticker[3] and self.currency_exists(ticker[2]) and self.currency_exists(ticker[3]):
-                ticker_tuple = Ticker(exchange=ticker[0],
-                                      time=ticker[1],
-                                      first_currency=ticker[2],
-                                      second_currency=ticker[3],
-                                      last_price=ticker[4],
-                                      last_trade=ticker[5],
-                                      best_ask=ticker[6],
-                                      best_bid=ticker[7],
-                                      daily_volume=ticker[8])
+                # exchange_pair = Ticker(exchange_pair=ExchangeCurrencyPairs(excha))
+                # print(ticker)
+                ticker_append = DatabaseHandler.get_or_create_DB_entry(self, session, ticker)
+
+                ticker_tuple = Ticker(exchange_pair=ticker_append[0],
+                                      response_time=ticker_append[2],
+                                      last_price=ticker_append[5],
+                                      last_trade=ticker_append[6],
+                                      best_ask=ticker_append[7],
+                                      best_bid=ticker_append[8],
+                                      daily_volume=ticker_append[9])
+
                 session.add(ticker_tuple)
-           # else:
-             #   print('Currency {} oder {} nicht in der Datenbank gefunden.'.format(ticker[2], ticker[3]))
+
         try:
             session.commit()
-        except Exception:
-            print('Exception beim persistieren.')
+        except Exception as e:
+            print('Exception beim persistieren.', e.__cause__)
+            session.rollback()
 
         session.close()
-
-    def get_exchange_id(self, exchange_name: str) -> int:
-        """
-        Searches in the database for the given name and returns
-        the corresponding id.
-
-        :param exchange_name: str
-            Name of the searched exchange.
-
-        :return: int
-            Id of the searched exchange.
-            Is None if no exchange with the given name was found in the database.
-        """
-        session = self.sessionFactory()
-        result = session.query(Exchange.id). \
-            filter(Exchange.name == exchange_name).first()
-        session.close()
-        return result
-
-    def persist_exchanges(self, exchanges: List[str]):
-        """
-        Persists the given names of exchanges in the database.
-
-        Method only persists exchange-names which are not already
-        stored in the database.
-
-        TODO: Exception handling and logging
-
-        :param exchanges: List[str]
-            List of exchange_names which should be persisted.
-        """
-        session = self.sessionFactory()
-        for exchange_name in exchanges:
-            if session.query(Exchange.name). \
-                    filter(Exchange.name == exchange_name). \
-                    first() is None:
-                session.add(Exchange(name=exchange_name))
-        session.commit()
-        session.close()
-
-    def currency_exists(self, curr_symbol: str) -> bool:
-        session = self.sessionFactory()
-
-        result = session.query(Currency). \
-            filter(Currency.symbol == curr_symbol.upper()). \
-            first()
-        session.close()
-        return result is not None
-
-# <--------------------- Currency-Pair Methods (currently no use) --------------------->
-# def get_currency_pair_id(self, first_currency_name: str, second_currency_name: str) -> int:
-#     session = self.sessionFactory()
-#
-#     first_currency_id = session.query(Currency.id). \
-#         filter(Currency.symbol == first_currency_name.upper()). \
-#         first()
-#
-#     second_currency_id = session.query(Currency.id). \
-#         filter(Currency.symbol == second_currency_name.upper()). \
-#         first()
-#
-#     if first_currency_id is not None and second_currency_id is not None:
-#         # Value aus Tupel holen
-#         first_currency_id = first_currency_id[0]
-#         second_currency_id = second_currency_id[0]
-#
-#         result = session.query(CurrencyPair.id). \
-#             filter(or_(and_(CurrencyPair.first_id == first_currency_id,
-#                             CurrencyPair.second_id == second_currency_id),
-#                        and_(CurrencyPair.first_id == second_currency_id,
-#                             CurrencyPair.second_id == first_currency_id))). \
-#             first()
-#     else:
-#         result = None
-#
-#     session.close()
-#
-#     # Value aus Tuple holen, der returnt wird
-#     if result is not None:
-#         result = result[0]
-#     return result
-
-# def generate_currency_pairs(self, ids: Sequence[int]):
-#     pairs = list()
-#
-#     persisted_ids = self.get_all_currency_ids()
-#     for id in ids:
-#         for p_id in persisted_ids:
-#             if not id == p_id:
-#                 pairs.append((id, p_id))
-#                 print('{}, {}'.format(id, p_id))
-#
-#     return pairs
-
-# def bulk_currency_pairs(self, pairs: Sequence[tuple]):
-#     currency_pairs = list()
-#     for p in pairs:
-#         currency_pairs.append(CurrencyPair(first_id=p[0], second_id=p[1]))
-#
-#     session = self.sessionFactory()
-#     session.bulk_save_objects(currency_pairs)
-#     session.commit()
-#     print('done')
-#     session.close()
-
-# def persist_currency_pairs(self, currency_pairs: Sequence[tuple]):
-#     '''
-#     :param currency_pairs: Sequen
-#     '''
-#     session = self.sessionFactory()
-#
-#     to_add = len(currency_pairs)
-#     counter = 0
-#
-#     for pair in currency_pairs:
-#         counter = counter + 1
-#         currency_pair = CurrencyPair(first_id=pair[0], second_id=pair[1])
-#         if session.query(CurrencyPair). \
-#                 filter(or_(and_(CurrencyPair.first_id == currency_pair.first_id,
-#                                 CurrencyPair.second_id == currency_pair.second_id),
-#                            and_(CurrencyPair.first_id == currency_pair.second_id,
-#                                 CurrencyPair.second_id == currency_pair.first_id))).first() is None:
-#             session.add(currency_pair)
-#             print('Paar: {}, {} hinzugefügt.'.format(currency_pair.first_id, currency_pair.second_id))
-#
-#         print('{} von {}'.format(counter, to_add))
-#     session.commit()
-#     print('index ist lit')
-#     session.close()
