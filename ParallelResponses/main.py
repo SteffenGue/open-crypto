@@ -42,7 +42,7 @@ if __name__ == "__main__":
     try:
         while True:
             asyncio.run(main())
-            print("5 Minuten Pause.")
+            print("5 Minuten Pause.", datetime.datetime.now())
             time.sleep(300)
     except Exception:
         pass
