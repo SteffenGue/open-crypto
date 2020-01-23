@@ -89,6 +89,7 @@ class Ticker(Base):
     exchange_pair: relationship
         The corresponding relationship table with ExchangeCurrencyPairs
 
+    TODO: Doku anpassen. Start_time und Response_time korrekt?
     start_time: DateTime
         Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
 
@@ -126,6 +127,7 @@ class Ticker(Base):
     #                         primary_key=True)
     # second = Column(String,
     #                          primary_key=True)
+    start_time = Column(DateTime)
     response_time = Column(DateTime, primary_key=True)
     # last_price = Column(Float, CheckConstraint("last_price > 0"))
     # last_trade = Column(Float, CheckConstraint("last_trade > 0"))

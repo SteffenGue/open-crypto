@@ -2,6 +2,7 @@ import asyncio
 import os
 import psycopg2
 import time
+from datetime import datetime, timedelta
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
@@ -27,8 +28,17 @@ async def main():
     exchange_names = get_exchange_names()
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
+    # start_time : datetime when request run is started
+    # delta : given microseconds for the datetime
+    start_time = datetime.utcnow()
+    delta = start_time.microsecond
+    # rounding the given datetime on seconds
+    start_time = start_time - timedelta(microseconds=delta)
+    if delta >= 500000:
+        start_time = start_time + timedelta(seconds=1)
 
-    responses = await asyncio.gather(*(exchanges[ex].request('ticker') for ex in exchanges))
+    responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
+
 
     for response in responses:
         print('Response: {}'.format(response))
@@ -42,7 +52,7 @@ if __name__ == "__main__":
     try:
         while True:
             asyncio.run(main())
-            print("5 Minuten Pause.", datetime.datetime.now())
+            print("5 Minuten Pause.")
             time.sleep(300)
     except Exception:
         pass

@@ -74,7 +74,7 @@ class DatabaseHandler:
 
     def get_or_create_DB_entry(self,
                                session: Session,
-                               ticker: Tuple[str, datetime, str, str, float, float, float, float, float]):
+                               ticker: Tuple[str, datetime, datetime, str, str, float, float, float, float, float]):
         """
         This function queries or creates the corresponding database entries. If the ExchangeCurrencyPair already
           exists, the object is queries and appended to the ticker tuple. If one or more of the entries do not
@@ -88,12 +88,12 @@ class DatabaseHandler:
         :param ticker: Tuple
             The ticker Tuple from 'DatabaseHandler.persist_tickers'
         :return: ticker_update: Tuple
-            An Tuple including an ORM-Query Object (ExchangeCurrencyPairs-Object)
+            An Tuple including an ORM-Query Object (ExchangeCurrencyPairs-Object) on indices 0
         """
 
         exchange = session.query(Exchange).filter(Exchange.name == ticker[0]).first()
-        first = session.query(Currency).filter(Currency.name == ticker[2]).first()
-        second = session.query(Currency).filter(Currency.name == ticker[3]).first()
+        first = session.query(Currency).filter(Currency.name == ticker[3]).first()
+        second = session.query(Currency).filter(Currency.name == ticker[4]).first()
 
         if exchange != None and first != None and second != None:
 
@@ -105,9 +105,9 @@ class DatabaseHandler:
             if exchange == None:
                 exchange = Exchange(name=ticker[0])
             if first == None:
-                first = Currency(name=ticker[2])
+                first = Currency(name=ticker[3])
             if second == None:
-                second = Currency(name=ticker[3])
+                second = Currency(name=ticker[4])
 
             exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
                                                   first=first,
@@ -124,7 +124,7 @@ class DatabaseHandler:
         return tuple(ticker_update)
 
 
-    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime,  str, str, float, float, float, float, float]]):
+    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime, datetime,  str, str, float, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
         TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
@@ -144,7 +144,8 @@ class DatabaseHandler:
             Tuple must have the following structure:
                 (ORM Exchange_Currency_Pair-Object,
                  exchange-name,
-                 request_timestamp,
+                 start_time,
+                 response_time,
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
@@ -155,19 +156,16 @@ class DatabaseHandler:
         """
         session = self.sessionFactory()
         for ticker in tickers:
-            #iterator-werte für die abfrage stimmen evtl. nicht mehr
-            #if ticker[2] and ticker[3] and self.currency_exists(ticker[2]) and self.currency_exists(ticker[3]):
-                # exchange_pair = Ticker(exchange_pair=ExchangeCurrencyPairs(excha))
-                # print(ticker)
                 ticker_append = DatabaseHandler.get_or_create_DB_entry(self, session, ticker)
 
                 ticker_tuple = Ticker(exchange_pair=ticker_append[0],
-                                      response_time=ticker_append[2],
-                                      last_price=ticker_append[5],
-                                      last_trade=ticker_append[6],
-                                      best_ask=ticker_append[7],
-                                      best_bid=ticker_append[8],
-                                      daily_volume=ticker_append[9])
+                                      start_time = ticker_append[2],
+                                      response_time = ticker_append[3],
+                                      last_price=ticker_append[6],
+                                      last_trade=ticker_append[7],
+                                      best_ask=ticker_append[8],
+                                      best_bid=ticker_append[9],
+                                      daily_volume=ticker_append[10])
 
                 session.add(ticker_tuple)
 
@@ -176,5 +174,5 @@ class DatabaseHandler:
         except Exception as e:
             print('Exception beim persistieren.', e.__cause__)
             session.rollback()
-
+            pass
         session.close()

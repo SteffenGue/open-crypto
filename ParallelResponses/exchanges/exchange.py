@@ -68,7 +68,7 @@ class Exchange:
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
 
-    async def request(self, request_name: str) -> Tuple[str, datetime, Dict]:
+    async def request(self, request_name: str, start_time: datetime) -> Tuple[str, datetime, datetime, Dict]:
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -92,10 +92,11 @@ class Exchange:
 
         :param request_name: str
             Name of the request. i.e. 'ticker' for ticker-request
-
-        :return: (str, datetime, .json)
+        :param start_time : datetime
+            The given datetime for the request for each request loop.
+        :return: (str, datetime, datetime, .json)
             Tuple of the following structure:
-                (exchange_name, time of arrival, response)
+                (exchange_name, start_time, response_time, response)
                 - time of arrival is a datetime-object in utc
         """
         if self.request_urls.get(request_name): # Only when request url exists
@@ -107,7 +108,7 @@ class Exchange:
                     print('{} bekommen.'.format(request_url_and_params[0]))
                     # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                     #     json.dump(response_json, f, ensure_ascii=False, indent=4)
-                    return self.name, datetime.utcnow(), response_json
+                    return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                 except Exception as ex:
@@ -210,16 +211,17 @@ class Exchange:
         return response_mappings
 
     #[name, zeit, response.json]
-    def format_ticker(self, response: Tuple[str, datetime, dict]) -> Iterator[Tuple[str,
-                                                                                    datetime,
-                                                                                    str,
-                                                                                    str,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float]]:
-        """
+    def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str,
+                                                                                        datetime,
+                                                                                        datetime,
+                                                                                        str,
+                                                                                        str,
+                                                                                        float,
+                                                                                        float,
+                                                                                        float,
+                                                                                        float,
+                                                                                        float]]:
+            """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
         the requested values and formats them to fitting tuples for persist_tickers() in db_handler.
 
@@ -274,6 +276,7 @@ class Exchange:
         :return: Iterator of tuples with the following structure:
                 (exchange-name,
                  timestamp,
+                 timestamp,
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
@@ -285,25 +288,26 @@ class Exchange:
                 Tuple might contain None if there was no Mapping-Object for a key(every x-th element of all
                  the tuples is none or the extracted value was simply None.
         """
-        result = {'currency_pair_first': [],
-                  'currency_pair_second': [],
-                  'ticker_last_price': [],
-                  'ticker_last_trade': [],
-                  'ticker_best_ask': [],
-                  'ticker_best_bid': [],
-                  'ticker_daily_volume': []}
+            result = {'currency_pair_first': [],
+                      'currency_pair_second': [],
+                      'ticker_last_price': [],
+                      'ticker_last_trade': [],
+                      'ticker_best_ask': [],
+                      'ticker_best_bid': [],
+                      'ticker_daily_volume': []}
 
-        mappings = self.response_mappings['ticker']
-        for mapping in mappings:
-            result[mapping.key] = mapping.extract_value(response[2])
-            print(result)
-        result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
-                                            itertools.repeat(response[1], len(result['currency_pair_first'])),
-                                            result['currency_pair_first'],
-                                            result['currency_pair_second'],
-                                            result['ticker_last_price'],
-                                            result['ticker_last_trade'],
-                                            result['ticker_best_ask'],
-                                            result['ticker_best_bid'],
-                                            result['ticker_daily_volume']))
-        return result
+            mappings = self.response_mappings['ticker']
+            for mapping in mappings:
+                result[mapping.key] = mapping.extract_value(response[3])
+              #  print(result)
+            result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
+                                                itertools.repeat(response[1], len(result['currency_pair_first'])),
+                                                itertools.repeat(response[2], len(result['currency_pair_first'])),
+                                                result['currency_pair_first'],
+                                                result['currency_pair_second'],
+                                                result['ticker_last_price'],
+                                                result['ticker_last_trade'],
+                                                result['ticker_best_ask'],
+                                                result['ticker_best_bid'],
+                                                result['ticker_daily_volume']))
+            return result
