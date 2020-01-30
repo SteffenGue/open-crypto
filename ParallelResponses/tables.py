@@ -1,27 +1,10 @@
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
-
-
-class Currency(Base):
-    """
-    Database ORM-Class storing all currencies.
-
-    id: int
-        Autoincremented unique identifier.
-    name: str
-        Name of the currency written out.
-    symbol: str
-        Abbreviation of the currency
-    """
-
-    __tablename__ = 'currencies'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), unique=True, nullable=False)
-    symbol = Column(String(10), nullable=False)
 
 
 class Exchange(Base):
@@ -40,29 +23,58 @@ class Exchange(Base):
     name = Column(String(50), nullable=False, unique=True)
 
 
-# TODO Macht überhaupt Sinn?
-class ExchangeCurrencyPair(Base):
+class Currency(Base):
+    """
+    Database ORM-Class storing all currencies.
+
+    id: int
+        Autoincremented unique identifier.
+    name: str
+        Name of the currency written out.
+    symbol: str
+        Abbreviation of the currency
+    """
+
+    __tablename__ = 'currencies'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), unique=True, nullable=False)
+    #symbol = Column(String(10), nullable=False)
+
+
+class ExchangeCurrencyPairs(Base):
     """
     Database ORM-Class storing the ExchangeCurrencyPairs.
 
     exchange_id: int
         The unique id of each exchange taken from the ForeignKey.
-    currency_first_id: int
+    first_id: int
         The unique id of each currency_pair taken from the table Currency.
-    currency_first_id: int
+    second_id: int
         The unique id of each currency_pair taken from the table Currency.
+
+    exchange: relationship
+        Relationship with table Exchange
+    first: relationship
+        Relationship with table Currency
+    second: relationship
+        Relationship with table Currency
     __table_args__:
         First ID must be unequal to Second ID.
     """
 
-    __tablename__ = 'exchange_currency_pairs'
+    __tablename__ = 'exchanges_currency_pairs'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange_id = Column(Integer, ForeignKey(Exchange.id), primary_key=True, nullable=False)
-    currency_first_id = Column(Integer, ForeignKey(Currency.id), primary_key=True, nullable=False)
-    currency_second_id = Column(Integer, ForeignKey(Currency.id), primary_key=True, nullable=False)
+    exchange_id = Column(Integer, ForeignKey('exchanges.id'))
+    first_id = Column(Integer, ForeignKey('currencies.id'))
+    second_id = Column(Integer, ForeignKey('currencies.id'))
 
-    #__table_args__ = (CheckConstraint(currency_first_id != currency_second_id))
+    exchange = relationship("Exchange", backref="exchanges_currency_pairs")
+    first = relationship("Currency", foreign_keys="ExchangeCurrencyPairs.first_id")
+    second = relationship("Currency", foreign_keys="ExchangeCurrencyPairs.second_id")
+
+    __table_args__ = (CheckConstraint(first_id != second_id),)
 
 
 class Ticker(Base):
@@ -70,14 +82,23 @@ class Ticker(Base):
     TODO: Update if no longer correct after database sturcture is updated (Issue #4, 03.12.2019).
     Database ORM-Class storing the ticker data.
 
-    ECP_ID: int
-        Autoincremented unique Exchange_Currency_Pair identifier. The ECP_ID is used by the database_handler to check
-        for existing exchange_currency_pairs. If not existing, currency_pair (incl. the currencies) are created.
-    start_time: datetime
-        Unified timestamp for each exchange in a request run.
-    response_time: datetime
-        Timestamp of the response. Timestamps are created by the os, the delivered ones from the exchanges are not used.
-        Timestamps are equal for each execution (resulting in an error of max. 5 seconds) to ease data usage later.
+    exchange_pair_id: int
+        Unique Exchange_Currency_Pair identifier. The exchange_pair_id is used by the database_handler to check
+         for existing exchange_currency_pairs. If not existing, the currency and/or exchange is created.
+
+    exchange_pair: relationship
+        The corresponding relationship table with ExchangeCurrencyPairs
+
+    TODO: Doku anpassen. Start_time und Response_time korrekt?
+    start_time: DateTime
+        Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
+
+    response_time: DateTime
+        Timestamp of the response. Timestamps are created by the OS, the delivered ones from the exchanges are not used.
+        Timestamps are equal for each exchange for one run (resulting in an error of approx. 5 seconds average)
+         to ease data usage later.
+        Timestamps are rounded to seconds (UTC)
+
     last_price: float
         Latest price of the currency_pair given from the exchange.
     last_trade: float
@@ -95,11 +116,17 @@ class Ticker(Base):
 
     __tablename__ = "tickers"
 
-    exchange = Column(String, ForeignKey(Exchange.name), primary_key=True)
-    first_currency = Column(String,
-                            primary_key=True)
-    second_currency = Column(String,
-                             primary_key=True)
+   # entry_id = Column(Integer, primary_key=True, autoincrement=True)
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+
+   # exchange_pair = relationship('ExchangeCurrencyPairs', foreign_keys="Ticker.exchange_pair_id")
+    exchange_pair = relationship('ExchangeCurrencyPairs', backref="tickers")
+
+    # exchange = Column(String, ForeignKey(Exchange.name), primary_key=True)
+    # first = Column(String,
+    #                         primary_key=True)
+    # second = Column(String,
+    #                          primary_key=True)
     start_time = Column(DateTime)
     response_time = Column(DateTime, primary_key=True)
     # last_price = Column(Float, CheckConstraint("last_price > 0"))
@@ -112,33 +139,8 @@ class Ticker(Base):
     best_ask = Column(Float)
     best_bid = Column(Float)
     daily_volume = Column(Float)
+
     # __table_args__ = (ForeignKeyConstraint(exchange, Exchange.id),
     #                   ForeignKeyConstraint(currency_pair_id, CurrencyPair.id))
 
 
-
-# <----------------------Currency-Pair (currently no use)-------------------------------->
-"""
-This table is no longer in use as is slows down the process significantly. 
-Information about the CurrencyPairs are only stored in ExchangeCurrencyPair.
-"""
-# class CurrencyPair(Base):
-#     """
-#     Database ORM-Class storing all currency_pairs. Currency_pairs are auto updates/created
-#     depending on the single API-responses.
-#
-#     id: int
-#         Autoincremented unique identifier
-#     first_id: int
-#         Teflecting the first currency of the pair. The ID is fetched from the table Currency.
-#         The real name of the currency is stored in the table Currency
-#     second_id: int
-#         Teflecting the second currency of the pair. The ID is fetch from the table Currency.
-#         The real name of the currency is stored in the table Currency
-#     """
-#
-#     __tablename__ = 'currency_pairs'
-#
-#     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-#     first_id = Column(Integer, ForeignKey(Currency.id), nullable=False)
-#     second_id = Column(Integer, ForeignKey(Currency.id), nullable=False)

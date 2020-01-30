@@ -1,10 +1,8 @@
 import itertools
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
-
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
-
 from Mapping import Mapping
 
 
@@ -295,26 +293,26 @@ class Exchange:
                 Tuple might contain None if there was no Mapping-Object for a key(every x-th element of all
                  the tuples is none or the extracted value was simply None.
         """
-        result = {'currency_pair_first': [],
-                  'currency_pair_second': [],
-                  'ticker_last_price': [],
-                  'ticker_last_trade': [],
-                  'ticker_best_ask': [],
-                  'ticker_best_bid': [],
-                  'ticker_daily_volume': []}
+            result = {'currency_pair_first': [],
+                      'currency_pair_second': [],
+                      'ticker_last_price': [],
+                      'ticker_last_trade': [],
+                      'ticker_best_ask': [],
+                      'ticker_best_bid': [],
+                      'ticker_daily_volume': []}
 
-        mappings = self.response_mappings['ticker']
-        for mapping in mappings:
-            result[mapping.key] = mapping.extract_value(response[3])
-            print(result)
-        result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
-                                            itertools.repeat(response[1], len(result['currency_pair_first'])),
-                                            itertools.repeat(response[2], len(result['currency_pair_first'])),
-                                            result['currency_pair_first'],
-                                            result['currency_pair_second'],
-                                            result['ticker_last_price'],
-                                            result['ticker_last_trade'],
-                                            result['ticker_best_ask'],
-                                            result['ticker_best_bid'],
-                                            result['ticker_daily_volume']))
-        return result
+            mappings = self.response_mappings['ticker']
+            for mapping in mappings:
+                result[mapping.key] = mapping.extract_value(response[3])
+              #  print(result)
+            result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
+                                                itertools.repeat(response[1], len(result['currency_pair_first'])),
+                                                itertools.repeat(response[2], len(result['currency_pair_first'])),
+                                                result['currency_pair_first'],
+                                                result['currency_pair_second'],
+                                                result['ticker_last_price'],
+                                                result['ticker_last_trade'],
+                                                result['ticker_best_ask'],
+                                                result['ticker_best_bid'],
+                                                result['ticker_daily_volume']))
+            return result

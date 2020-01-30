@@ -38,7 +38,7 @@ def get_coins() -> list:
 async def main():
     db_params = read_config('database')
     database_handler = DatabaseHandler(metadata, **db_params)
-    database_handler.persist_exchanges(exchanges.keys())
+    #database_handler.persist_exchanges(exchanges.keys())
     # TODO Reactivate
     #database_handler.persist_currencies(get_coins())
 
