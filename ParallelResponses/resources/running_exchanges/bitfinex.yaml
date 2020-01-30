@@ -1,4 +1,4 @@
-name: test_bitfinex
+name: bitfinex
 terms:
   terms_url: https://www.bitfinex.com/legal/api_terms
   permission: null
@@ -12,14 +12,11 @@ terms:
 api_url: https://api-pub.bitfinex.com/v2/
 rate_limit: null
 requests:
-  tickers:
+  ticker:
     request:
-      template: tickers # tickers?symbols=tBTCUSD,tLTCUSD,fUSD
+      template: tickers?symbols=ALL # tickers?symbols=tBTCUSD,tLTCUSD,fUSD
       pair_template: null
-      params:
-        symbols:
-          type: str
-          default: ALL
+      params: null
     response:
       type: list
       values:
@@ -75,18 +72,22 @@ requests:
       - 7
       type:
       - float
-    - key: ticker_best_ask
-      path:
-      - 3
-      type:
-      - float
-    - key: ticker_best_bid
-      path:
-      - 1
-      type:
-      - float
-    - key: ticker_daily_volume
-      path:
-      - 8
-      type:
-      - float
+#    - key: ticker_best_ask
+#      path:
+#      - []
+#      - []
+#      - 3
+#      type:
+#      - float
+#    - key: ticker_best_bid
+#      path:
+#      - []
+#      - []
+#      - 1
+#      type:
+#      - float
+#    - key: ticker_daily_volume
+#      path:
+#      - 8
+#      type:
+#      - float

@@ -1,44 +1,12 @@
 name: coinall
 terms: null
-api_url: https://www.coinall.com/api/spot/v3/instruments/ticker
+api_url: https://www.coinall.com/api/spot/v3/
 rate_limit:
   max: 6
   units: 1
 
 requests:
-#  currency_pairs:
-#    request:
-#      template: instruments
-#      pair_template: null
-#      params: null
-#    response:
-#      type: list
-#      vaues:
-#        type: dict
-#        values:
-#          base_currency:
-#            type: str
-#          instrument_id: 
-#            type: str
-#          quote_currency:
-#            type: str
-#          size_increment:
-#            type: str
-#          tick_size:
-#            type: str
-#    mapping:
-#    - key: currency_pair_first
-#      path:
-#      - base_currency
-#      type:
-#      - str
-#    - key: currency_pair_second
-#      path:
-#      - quote_currency
-#      type:
-#      - str
-      
-  tickers:
+  ticker:
     request:
       template: instruments/ticker
       pair_template: null

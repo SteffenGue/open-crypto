@@ -8,14 +8,11 @@ terms:
 api_url: https://api.bibox.com/v1/
 rate_limit: null
 requests:
-  tickers:
+  ticker:
     request:
-      template: mdata
+      template: mdata?cmd=marketAll
       pair_template: null
-      params:
-        cmd:
-          type: str
-          default: marketAll
+      params: null
     response:
       type: dict
       values:

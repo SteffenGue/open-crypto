@@ -54,5 +54,6 @@ if __name__ == "__main__":
             asyncio.run(main())
             print("5 Minuten Pause.")
             time.sleep(300)
-    except Exception:
+    except Exception as e:
+        print(e, e.__cause__)
         pass

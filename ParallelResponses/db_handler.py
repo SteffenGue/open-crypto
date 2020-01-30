@@ -155,24 +155,25 @@ class DatabaseHandler:
                  ticker_daily_volume)
         """
         session = self.sessionFactory()
-        for ticker in tickers:
-                ticker_append = DatabaseHandler.get_or_create_DB_entry(self, session, ticker)
-
-                ticker_tuple = Ticker(exchange_pair=ticker_append[0],
-                                      start_time = ticker_append[2],
-                                      response_time = ticker_append[3],
-                                      last_price=ticker_append[6],
-                                      last_trade=ticker_append[7],
-                                      best_ask=ticker_append[8],
-                                      best_bid=ticker_append[9],
-                                      daily_volume=ticker_append[10])
-
-                session.add(ticker_tuple)
-
         try:
+            for ticker in tickers:
+                        ticker_append = DatabaseHandler.get_or_create_DB_entry(self, session, ticker)
+
+                        ticker_tuple = Ticker(exchange_pair=ticker_append[0],
+                                              start_time=ticker_append[2],
+                                              response_time=ticker_append[3],
+                                              last_price=ticker_append[6],
+                                              last_trade=ticker_append[7],
+                                              best_ask=ticker_append[8],
+                                              best_bid=ticker_append[9],
+                                              daily_volume=ticker_append[10])
+
+                        session.add(ticker_tuple)
+
             session.commit()
+            session.close()
+
         except Exception as e:
-            print('Exception beim persistieren.', e.__cause__)
+            print(e, e.__cause__)
             session.rollback()
             pass
-        session.close()

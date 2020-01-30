@@ -1,31 +1,25 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib
-
-import sqlalchemy
-from sqlalchemy_utils import database_exists
 from sqlalchemy.orm import sessionmaker, session, create_session
-from sqlalchemy import create_engine, and_
+from sqlalchemy import create_engine
 from tables import Currency, Exchange, ExchangeCurrencyPairs, Ticker
 
 engine = create_engine('postgresql+psycopg2://postgres:Thw_kiel@localhost:1234/hochfrequenz_test')
-
 Session = sessionmaker(bind=engine)
-
 session = Session()
 
-
-(bitcoin,), = session.query(Currency.id).filter(Currency.name == "LTC").all()
+(bitcoin,), = session.query(Currency.id).filter(Currency.name == "BTC").all()
 (tether,),  = session.query(Currency.id).filter(Currency.name == "USDT").all()
 (dollar,), = session.query(Currency.id).filter(Currency.name == "USD").all()
 
+btc_usd = session.query(ExchangeCurrencyPairs.exchange_id).filter(ExchangeCurrencyPairs.first_id == bitcoin,
+                                                                  ExchangeCurrencyPairs.second_id == dollar).all()
+btc_usdt = session.query(ExchangeCurrencyPairs.exchange_id).filter(ExchangeCurrencyPairs.first_id == bitcoin,
+                                                                   ExchangeCurrencyPairs.second_id == tether).all()
 
-btc_usd = session.query(ExchangeCurrencyPairs.exchange_id).filter(ExchangeCurrencyPairs.first_id == bitcoin, ExchangeCurrencyPairs.second_id == dollar).all()
-btc_usdt = session.query(ExchangeCurrencyPairs.exchange_id).filter(ExchangeCurrencyPairs.first_id == bitcoin, ExchangeCurrencyPairs.second_id == tether).all()
 exchanges = [value for value, in set(btc_usd) & set(btc_usdt)]
 exchanges.sort()
-
-tickers=list()
+tickers = list()
 df = pd.DataFrame()
 
 
