@@ -1,13 +1,81 @@
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-
-
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
 
+class BaseMixin(object):
 
-class Exchange(Base):
+    @classmethod
+    def query(cls, session):
+        """
+        :param session: orm.session
+            Actual session from the SessionFactory.
+        :param kwargs: Tuple
+            Key: name, value: str
+        :return:
+        """
+        exchanges = session.query(Exchange).all()
+        return exchanges
+
+
+    @classmethod
+    def is_active(cls, session):
+        """
+        Method to check if the number of exceptions raised for one exchange exceeds 3 in a row.
+        If so, set exchange inactive.
+        :param session: orm.session
+            Actual session from the SessionFactory.
+        :return: None
+        """
+
+        exchanges = session.query(Exchange).all()
+        for exchange in exchanges:
+            if exchange.exceptions > 3:
+                exchange.active = False
+                try:
+                    session.commit()
+                    print('{} was set inactive.'.format(exchange.name))
+                except Exception as e:
+                    print(e, e.__cause__)
+                    session.rollback()
+                    print('Exception raised setting {} inactive.'.format(exchange.name))
+                    pass
+
+
+    @classmethod
+    def update_exceptions(cls, session, exceptions: dict):
+        """
+        Method to update the exception_counter. If An exception occured add 1 to the counter,
+            else set back to zero.
+        :param session: orm-session
+            Actual session from the SessionFactory.
+        :param exceptions: dict
+            Dictionary with key (Exchange) value (boolean) pair.
+        :return: None
+        """
+        exceptions = exceptions
+        exchanges = list(session.query(Exchange).all())
+
+        for exchange in exchanges:
+            if exchange.name in exceptions:
+                exchange.exceptions += 1
+                print('{}: Exception Counter +1'.format(exchange.name))
+            else:
+                exchange.exceptions = 0
+
+
+        try:
+            session.commit()
+            cls.is_active(session)
+        except Exception as e:
+            print(e, e.__cause__)
+            session.rollback()
+            pass
+
+
+
+class Exchange(BaseMixin, Base):
     """
     Database ORM-Class storing the exchanges table. ALl exchanges used to perform requests
     are listed in this table.
@@ -21,6 +89,13 @@ class Exchange(Base):
     __tablename__ = 'exchanges'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True)
+    active = Column(Boolean, default=True)
+    exceptions = Column(Integer, unique=False, nullable=True, default=0)
+
+    def __repr__(self):
+        return "#{}: {}, Active: {}".format(self.id, self.name, self.active)
+
+
 
 
 class Currency(Base):
@@ -39,7 +114,9 @@ class Currency(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), unique=True, nullable=False)
-    #symbol = Column(String(10), nullable=False)
+
+    def __repr__(self):
+        return "#{}: {}".format(self.id, self.name)
 
 
 class ExchangeCurrencyPairs(Base):
@@ -76,6 +153,11 @@ class ExchangeCurrencyPairs(Base):
 
     __table_args__ = (CheckConstraint(first_id != second_id),)
 
+    def __repr__(self):
+        return "#{}: {}({}), {}({})-{}({})".format(self.id,
+                                                  self.exchange.name, self.exchange_id,
+                                                  self.first.name, self.first_id,
+                                                  self.second.name, self.second_id)
 
 class Ticker(Base):
     """
@@ -116,31 +198,23 @@ class Ticker(Base):
 
     __tablename__ = "tickers"
 
-   # entry_id = Column(Integer, primary_key=True, autoincrement=True)
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-
-   # exchange_pair = relationship('ExchangeCurrencyPairs', foreign_keys="Ticker.exchange_pair_id")
     exchange_pair = relationship('ExchangeCurrencyPairs', backref="tickers")
 
-    # exchange = Column(String, ForeignKey(Exchange.name), primary_key=True)
-    # first = Column(String,
-    #                         primary_key=True)
-    # second = Column(String,
-    #                          primary_key=True)
     start_time = Column(DateTime)
     response_time = Column(DateTime, primary_key=True)
-    # last_price = Column(Float, CheckConstraint("last_price > 0"))
-    # last_trade = Column(Float, CheckConstraint("last_trade > 0"))
-    # best_ask = Column(Float, CheckConstraint("best_ask >= 0"))
-    # best_bid = Column(Float, CheckConstraint("best_bid >= 0"))
-    # daily_volume = Column(Float, CheckConstraint("daily_volume >= 0"))
     last_price = Column(Float)
     last_trade = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
     daily_volume = Column(Float)
 
-    # __table_args__ = (ForeignKeyConstraint(exchange, Exchange.id),
-    #                   ForeignKeyConstraint(currency_pair_id, CurrencyPair.id))
+    def __repr__(self):
+        return "#{}, {}: {}-{}, ${} at {}".format(self.exchange_pair_id,
+                                                  self.exchange_pair.exchange.name,
+                                                  self.exchange_pair.first.name,
+                                                  self.exchange_pair.second.name,
+                                                  self.last_price,
+                                                  self.start_time)
 
 
