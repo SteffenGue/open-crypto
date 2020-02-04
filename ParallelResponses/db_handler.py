@@ -177,3 +177,6 @@ class DatabaseHandler:
             print(e, e.__cause__)
             session.rollback()
             pass
+
+    def check_exceptions(self, exceptions: dict):
+        Exchange.update_exceptions(self.sessionFactory(), exceptions)
