@@ -2,6 +2,7 @@ import calendar
 import datetime
 import os
 from typing import List, Any, Dict
+from dictionary import ExceptionDict
 
 import yaml
 from configparser import ConfigParser
@@ -171,9 +172,12 @@ def yaml_loader(exchange: str):
     """
 
     with open(YAML_PATH + exchange + '.yaml', 'r') as f:
-        data = yaml.load(f, Loader=yaml.FullLoader)
-        return data
-
+        try:
+            data = yaml.load(f, Loader=yaml.FullLoader)
+            return data
+        except Exception as ex:
+            exception = ExceptionDict()
+            exception.get_dict()['{}'.format(exchange)] = 1
 
 def get_exchange_names() -> List[str]:
     """

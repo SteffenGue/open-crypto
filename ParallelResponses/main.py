@@ -22,13 +22,9 @@ async def main():
 
     db_params = read_config('database')
     database_handler = DatabaseHandler(metadata, **db_params)
-    #exception_dict = ExceptionDict()
 
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['vindax']
-
-
-    exceptions = {'bitrue': 1}
 
     exchange_names = get_exchange_names()
 
@@ -44,7 +40,6 @@ async def main():
 
     responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
 
-
     for response in responses:
         print('Response: {}'.format(response))
         if response:
@@ -52,7 +47,9 @@ async def main():
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
 
-    database_handler.check_exceptions(exceptions)
+    exceptions = ExceptionDict()
+    database_handler.check_exceptions(exceptions.get_dict())
+    exceptions.get_dict().clear()
 
 if __name__ == "__main__":
     try:

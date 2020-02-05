@@ -4,6 +4,7 @@ from typing import Iterator, Dict, List, Tuple
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
 from Mapping import Mapping
+from dictionary import ExceptionDict
 
 
 class Exchange:
@@ -111,14 +112,15 @@ class Exchange:
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                    exception = ExceptionDict()
+                    exception.get_dict()['{}'.format(self.name)] = 1
                 except Exception as ex:
                     template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     print(message)
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                except ClientConnectorError:
-                    print('{} hat nicht geantwortet.'.format(self.name))
-            return None
+                    exception = ExceptionDict()
+                    exception.get_dict()['{}'.format(self.name)] = 1
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """

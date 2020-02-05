@@ -1,13 +1,13 @@
-#class ExceptionDictionary:
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-#Python2
-class ExceptionDict:
-    exception_dict = {}
+class ExceptionDict(metaclass=Singleton):
+    pass
     def __init__(self):
         self.__x = {}
-
-    def get_x(self):
+    def get_dict(self):
         return self.__x
-
-    def set_x(self, x):
-        self.__x = x
