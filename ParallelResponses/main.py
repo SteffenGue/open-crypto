@@ -41,8 +41,8 @@ async def main():
     responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
 
     for response in responses:
-        print('Response: {}'.format(response))
         if response:
+            print('Response: {}'.format(response))
             exchange = exchanges[response[0]]
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
