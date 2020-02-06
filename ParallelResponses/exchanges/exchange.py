@@ -302,6 +302,7 @@ class Exchange:
             for mapping in mappings:
                 result[mapping.key] = mapping.extract_value(response[3])
               #  print(result)
+
             result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
                                                 itertools.repeat(response[1], len(result['currency_pair_first'])),
                                                 itertools.repeat(response[2], len(result['currency_pair_first'])),
@@ -313,3 +314,4 @@ class Exchange:
                                                 result['ticker_best_bid'],
                                                 result['ticker_daily_volume']))
             return result
+

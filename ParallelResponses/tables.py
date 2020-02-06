@@ -60,6 +60,7 @@ class BaseMixin(object):
         for exchange in exchanges:
             if exchange.name in exceptions:
                 exchange.exceptions += 1
+                exchange.total_exceptions += 1
                 print('{}: Exception Counter +1'.format(exchange.name))
             else:
                 exchange.exceptions = 0
@@ -91,6 +92,7 @@ class Exchange(BaseMixin, Base):
     name = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
     exceptions = Column(Integer, unique=False, nullable=True, default=0)
+    total_exceptions = Column(Integer, unique=False, nullable=True, default=0)
 
     def __repr__(self):
         return "#{}: {}, Active: {}".format(self.id, self.name, self.active)

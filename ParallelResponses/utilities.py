@@ -3,9 +3,9 @@ import datetime
 import os
 from typing import List, Any, Dict
 from dictionary import ExceptionDict
-
 import yaml
 from configparser import ConfigParser
+from tables import Exchange
 
 TYPE_CONVERSION = {
 
@@ -179,21 +179,29 @@ def yaml_loader(exchange: str):
             exception = ExceptionDict()
             exception.get_dict()['{}'.format(exchange)] = 1
 
-def get_exchange_names() -> List[str]:
+def get_exchange_names(session) -> List[str]:
     """
     Gives information about all exchanges that the program will send
     requests to. This means if the name of a exchange is not part of the
     list that is returned, the program will not send any request to said
     exchange.
-
+    :param: session: orm_session
+        Connection to the Database in order to query all ACTIVE exchanges.
     :return: List[str]
         Names from all the exchanges, which have a .yaml-file in
         the directory described in YAML_PATH.
     """
+
+    query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
+    inactive_exchanges = set([exchange for exchange, in query])
+
+
     exchanges_list = os.listdir(YAML_PATH)
-    exchange_names = [str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x]
-    exchange_names.sort()
-    return exchange_names
+    exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
+
+    exchanges = exchange_names - inactive_exchanges
+    # exchange_names.sort()
+    return exchanges
 
 #Constant that contains the path to the yaml-files of working exchanges.
 YAML_PATH = read_config('utilities')['yaml_path']

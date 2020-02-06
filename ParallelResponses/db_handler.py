@@ -95,28 +95,33 @@ class DatabaseHandler:
         first = session.query(Currency).filter(Currency.name == ticker[3]).first()
         second = session.query(Currency).filter(Currency.name == ticker[4]).first()
 
-        if exchange != None and first != None and second != None:
+        try:
+            if exchange != None and first != None and second != None:
 
-            exchange_pair = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id == exchange.id,
-                                                                        ExchangeCurrencyPairs.first_id == first.id,
-                                                                        ExchangeCurrencyPairs.second_id == second.id).first()
+                exchange_pair = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id == exchange.id,
+                                                                            ExchangeCurrencyPairs.first_id == first.id,
+                                                                            ExchangeCurrencyPairs.second_id == second.id).first()
 
-        else:
-            if exchange == None:
-                exchange = Exchange(name=ticker[0])
-            if first == None:
-                first = Currency(name=ticker[3])
-            if second == None:
-                second = Currency(name=ticker[4])
+            else:
+                if exchange == None:
+                    exchange = Exchange(name=ticker[0])
+                if first == None:
+                    first = Currency(name=ticker[3])
+                if second == None:
+                    second = Currency(name=ticker[4])
 
-            exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
-                                                  first=first,
-                                                  second=second)
+                exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
+                                                      first=first,
+                                                      second=second)
 
-        if exchange_pair == None:
-            exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
-                                                  first=first,
-                                                  second=second)
+            if exchange_pair == None:
+                exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
+                                                      first=first,
+                                                      second=second)
+        except Exception as e:
+            print(e, e.__cause__)
+            session.rollback()
+            pass
 
         ticker_update = list(ticker)
         ticker_update.insert(0, exchange_pair)
@@ -177,6 +182,11 @@ class DatabaseHandler:
             print(e, e.__cause__)
             session.rollback()
             pass
+
+
+    def get_session(self):
+        session = self.sessionFactory()
+        return session
 
     def check_exceptions(self, exceptions: dict):
         Exchange.update_exceptions(self.sessionFactory(), exceptions)

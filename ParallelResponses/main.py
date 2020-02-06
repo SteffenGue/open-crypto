@@ -22,11 +22,11 @@ async def main():
 
     db_params = read_config('database')
     database_handler = DatabaseHandler(metadata, **db_params)
-
+    session = database_handler.get_session()
     # run program with single exchange for debugging/testing purposes
-    # exchange_names = ['vindax']
+    # exchange_names = ['coinsbit']
 
-    exchange_names = get_exchange_names()
+    exchange_names = get_exchange_names(session)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
     # start_time : datetime when request run is started
