@@ -47,6 +47,8 @@ async def main():
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
 
+    #exceptions : instance of the dictionary of exceptions for the request run
+    #with method call to check and persist the flags with the given exceptions
     exceptions = ExceptionDict()
     database_handler.check_exceptions(exceptions.get_dict())
     exceptions.get_dict().clear()

@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from tables import Currency, Exchange, ExchangeCurrencyPairs, Ticker
 import time
 
+
 class DatabaseHandler:
     """
     Class which handles every interaction with the database.
@@ -185,8 +186,18 @@ class DatabaseHandler:
 
 
     def get_session(self):
+        """
+        Getter method for the given instance of the session.
+        :return session: the instance of the session
+        """
         session = self.sessionFactory()
         return session
 
     def check_exceptions(self, exceptions: dict):
+        """
+        This method will call a classmethod of the Exchange class to update the flags for the given exchanges.
+        :param exceptions: the dictionary which contains the explicit exchanges which have thrown an exception
+
+        self.sessionFactory gives the instance of the current session.
+        """
         Exchange.update_exceptions(self.sessionFactory(), exceptions)

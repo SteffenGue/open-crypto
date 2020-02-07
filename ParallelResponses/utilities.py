@@ -169,6 +169,7 @@ def yaml_loader(exchange: str):
         the file name to load (exchange)
     :return: data: dict
         returns a dict of the loaded data from the .yaml-file
+    :exceptions Exception: the .yaml file could not be evaluated for a given exchange
     """
 
     with open(YAML_PATH + exchange + '.yaml', 'r') as f:
@@ -176,6 +177,7 @@ def yaml_loader(exchange: str):
             data = yaml.load(f, Loader=yaml.FullLoader)
             return data
         except Exception as ex:
+            # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
             exception = ExceptionDict()
             exception.get_dict()['{}'.format(exchange)] = 1
 

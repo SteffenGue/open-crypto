@@ -99,6 +99,8 @@ class Exchange:
             Tuple of the following structure:
                 (exchange_name, start_time, response_time, response)
                 - time of arrival is a datetime-object in utc
+        :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
+                    Exception: the given response of an exchange could not be evaluated
         """
         if self.request_urls.get(request_name): # Only when request url exists
             async with aiohttp.ClientSession() as session:
@@ -112,6 +114,7 @@ class Exchange:
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                    #create an instance of the exception dictionary to safe the exchange which have thrown the exchange
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
                 except Exception as ex:
@@ -119,6 +122,7 @@ class Exchange:
                     message = template.format(type(ex).__name__, ex.args)
                     print(message)
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
+                    #create an instance of the exception dictionary to safe the exchange which have thrown the exchange
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
 
