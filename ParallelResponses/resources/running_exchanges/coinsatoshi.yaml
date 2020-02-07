@@ -6,47 +6,6 @@ api_url: https://tradesatoshi.com/api/public/
 rate_limit: null
 
 requests:
-#  currencies:
-#    request:
-#      template: getcurrencies
-#      pair_template:
-#      params:
-#    response:
-#      type: dict
-#      values:
-#        success:
-#          type: bool
-#        message:
-#          type: str
-#        result:
-#          type: list
-#          values:
-#            type: dict
-#            values:
-#              currency:
-#                type: str
-#              currencyLong:
-#                type: str
-#              minConfirmation:
-#                type: int
-#              txFee:
-#                type: int
-#              status:
-#                type: str
-#    mapping:
-#    - key: currency_symbol
-#      path:
-#      - result
-#      - currency
-#      type:
-#      - str
-#    - key: currency_name
-#      path:
-#      - result
-#      - currencyLong
-#      type:
-#      - str      
-
   ticker:
     request:
       template: getmarketsummaries

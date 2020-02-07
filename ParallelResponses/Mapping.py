@@ -165,78 +165,74 @@ class Mapping:
         """
         #print(types_queue)
         #print(self.key)
-        try:
-            if path_queue is None:
-                path_queue = deque(self.path)
+        if path_queue is None:
+            path_queue = deque(self.path)
 
-            if types_queue is None:
-                types_queue = deque(self.types)
+        if types_queue is None:
+            types_queue = deque(self.types)
 
-            if not response:
-                return None
+        if not response:
+            return None
 
-            if not path_queue:
-                return self.convert_type(None, types_queue)
+        if not path_queue:
+            return self.convert_type(None, types_queue)
 
-            while path_queue:
+        while path_queue:
 
-                if iterate and \
-                        isinstance(response, list):
-                    # Iterate through list of results
-                    result = list()
+            if iterate and \
+                    isinstance(response, list):
+                # Iterate through list of results
+                result = list()
 
-                    if len(response) == 1:
-                        response = response[0]
-                    else:
-                        for item in response:
-
-                            if is_scalar(item):
-                                return self.extract_value(response,
-                                                          path_queue,
-                                                          types_queue,
-                                                          iterate=False)
-
-                            result.append(
-                                self.extract_value(
-                                    item,
-                                    deque(path_queue),
-                                    deque(types_queue)
-                                )
-                            )
-
-
-                        return result
-
-                elif is_scalar(response):
-                    # Return converted scalar value
-                    return self.convert_type(response, types_queue)
-
+                if len(response) == 1:
+                    response = response[0]
                 else:
-                    # Traverse path
-                    response = self.traverse_path(response, path_queue)
-
-            if types_queue:
-
-                if isinstance(response, list):
-
-                    result = list()
-
                     for item in response:
+
+                        if is_scalar(item):
+                            return self.extract_value(response,
+                                                      path_queue,
+                                                      types_queue,
+                                                      iterate=False)
+
                         result.append(
-                            self.convert_type(item, deque(types_queue))
+                            self.extract_value(
+                                item,
+                                deque(path_queue),
+                                deque(types_queue)
+                            )
                         )
 
 
-                    response = result
+                    return result
 
-                else:
-                    response = self.convert_type(response, types_queue)
+            elif is_scalar(response):
+                # Return converted scalar value
+                return self.convert_type(response, types_queue)
 
-            return response
-        except Exception:
-            exception = ExceptionDict()
-            exception.get_dict()['{}'.format(exchange)] = 1
-            pass
+            else:
+                # Traverse path
+                response = self.traverse_path(response, path_queue)
+
+        if types_queue:
+
+            if isinstance(response, list):
+
+                result = list()
+
+                for item in response:
+                    result.append(
+                        self.convert_type(item, deque(types_queue))
+                    )
+
+
+                response = result
+
+            else:
+                response = self.convert_type(response, types_queue)
+
+        return response
+
 
     def __str__(self) -> str:
         """String representation of a Mapping"""
