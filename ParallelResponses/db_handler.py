@@ -72,6 +72,7 @@ class DatabaseHandler:
         self.sessionFactory = sessionmaker(bind=engine)
 
 
+    #ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
 
     def get_or_create_DB_entry(self,
                                session: Session,
@@ -148,8 +149,7 @@ class DatabaseHandler:
         :param tickers: Iterator
             Iterator of tuples containing ticker-data.
             Tuple must have the following structure:
-                (ORM Exchange_Currency_Pair-Object,
-                 exchange-name,
+                (exchange-name,
                  start_time,
                  response_time,
                  first_currency_symbol,

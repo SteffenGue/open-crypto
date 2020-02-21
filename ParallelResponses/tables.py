@@ -6,18 +6,11 @@ metadata = Base.metadata
 
 class BaseMixin(object):
 
-    @classmethod
-    def query(cls, session):
-        """
-        :param session: orm.session
-            Actual session from the SessionFactory.
-        :param kwargs: Tuple
-            Key: name, value: str
-        :return:
-        """
-        exchanges = session.query(Exchange).all()
-        return exchanges
-
+    """
+    Classmethods for the database classes. 'update_exceptions()' adds +1 to the exception counter in Exchanges()
+    whenever an exchange throws an exception. If more than x exceptions in a row occured, is_activ() sets the
+    exchange 'inactive'. The exchange can only be set 'active' again manually.
+    """
 
     @classmethod
     def is_active(cls, session):
