@@ -1,5 +1,5 @@
 from collections import deque
-
+from dictionary import ExceptionDict
 from utilities import TYPE_CONVERSION
 
 
@@ -232,6 +232,7 @@ class Mapping:
                 response = self.convert_type(response, types_queue)
 
         return response
+
 
     def __str__(self) -> str:
         """String representation of a Mapping"""

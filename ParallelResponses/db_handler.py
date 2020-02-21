@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from tables import Currency, Exchange, ExchangeCurrencyPairs, Ticker
 import time
 
+
 class DatabaseHandler:
     """
     Class which handles every interaction with the database.
@@ -71,6 +72,7 @@ class DatabaseHandler:
         self.sessionFactory = sessionmaker(bind=engine)
 
 
+    #ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
 
     def get_or_create_DB_entry(self,
                                session: Session,
@@ -95,28 +97,33 @@ class DatabaseHandler:
         first = session.query(Currency).filter(Currency.name == ticker[3]).first()
         second = session.query(Currency).filter(Currency.name == ticker[4]).first()
 
-        if exchange != None and first != None and second != None:
+        try:
+            if exchange != None and first != None and second != None:
 
-            exchange_pair = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id == exchange.id,
-                                                                        ExchangeCurrencyPairs.first_id == first.id,
-                                                                        ExchangeCurrencyPairs.second_id == second.id).first()
+                exchange_pair = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id == exchange.id,
+                                                                            ExchangeCurrencyPairs.first_id == first.id,
+                                                                            ExchangeCurrencyPairs.second_id == second.id).first()
 
-        else:
-            if exchange == None:
-                exchange = Exchange(name=ticker[0])
-            if first == None:
-                first = Currency(name=ticker[3])
-            if second == None:
-                second = Currency(name=ticker[4])
+            else:
+                if exchange == None:
+                    exchange = Exchange(name=ticker[0])
+                if first == None:
+                    first = Currency(name=ticker[3])
+                if second == None:
+                    second = Currency(name=ticker[4])
 
-            exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
-                                                  first=first,
-                                                  second=second)
+                exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
+                                                      first=first,
+                                                      second=second)
 
-        if exchange_pair == None:
-            exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
-                                                  first=first,
-                                                  second=second)
+            if exchange_pair == None:
+                exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
+                                                      first=first,
+                                                      second=second)
+        except Exception as e:
+            print(e, e.__cause__)
+            session.rollback()
+            pass
 
         ticker_update = list(ticker)
         ticker_update.insert(0, exchange_pair)
@@ -142,8 +149,7 @@ class DatabaseHandler:
         :param tickers: Iterator
             Iterator of tuples containing ticker-data.
             Tuple must have the following structure:
-                (ORM Exchange_Currency_Pair-Object,
-                 exchange-name,
+                (exchange-name,
                  start_time,
                  response_time,
                  first_currency_symbol,
@@ -177,3 +183,21 @@ class DatabaseHandler:
             print(e, e.__cause__)
             session.rollback()
             pass
+
+
+    def get_session(self):
+        """
+        Getter method for the given instance of the session.
+        :return session: the instance of the session
+        """
+        session = self.sessionFactory()
+        return session
+
+    def check_exceptions(self, exceptions: dict):
+        """
+        This method will call a classmethod of the Exchange class to update the flags for the given exchanges.
+        :param exceptions: the dictionary which contains the explicit exchanges which have thrown an exception
+
+        self.sessionFactory gives the instance of the current session.
+        """
+        Exchange.update_exceptions(self.sessionFactory(), exceptions)
