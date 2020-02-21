@@ -69,7 +69,9 @@ class Exchange:
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
 
+
     async def request(self, request_name: str, start_time: datetime) -> Tuple[str, datetime, datetime, Dict]:
+
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -95,9 +97,10 @@ class Exchange:
             Name of the request. i.e. 'ticker' for ticker-request
         :param start_time : datetime
             The given datetime for the request for each request loop.
+
         :return: (str, datetime, datetime, .json)
             Tuple of the following structure:
-                (exchange_name, start_time, response_time, response)
+                (exchange_name, start time, response time, response)
                 - time of arrival is a datetime-object in utc
         :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
@@ -216,18 +219,20 @@ class Exchange:
 
         return response_mappings
 
+
     #[name, zeit, response.json]
     def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str,
-                                                                                        datetime,
-                                                                                        datetime,
-                                                                                        str,
-                                                                                        str,
-                                                                                        float,
-                                                                                        float,
-                                                                                        float,
-                                                                                        float,
-                                                                                        float]]:
-            """
+                                                                                    datetime,
+                                                                                    datetime,
+                                                                                    str,
+                                                                                    str,
+                                                                                    float,
+                                                                                    float,
+                                                                                    float,
+                                                                                    float,
+                                                                                    float]]:
+
+        """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
         the requested values and formats them to fitting tuples for persist_tickers() in db_handler.
 
@@ -294,13 +299,13 @@ class Exchange:
                 Tuple might contain None if there was no Mapping-Object for a key(every x-th element of all
                  the tuples is none or the extracted value was simply None.
         """
-            result = {'currency_pair_first': [],
-                      'currency_pair_second': [],
-                      'ticker_last_price': [],
-                      'ticker_last_trade': [],
-                      'ticker_best_ask': [],
-                      'ticker_best_bid': [],
-                      'ticker_daily_volume': []}
+        result = {'currency_pair_first': [],
+                  'currency_pair_second': [],
+                  'ticker_last_price': [],
+                  'ticker_last_trade': [],
+                  'ticker_best_ask': [],
+                  'ticker_best_bid': [],
+                  'ticker_daily_volume': []}
 
             mappings = self.response_mappings['ticker']
             for mapping in mappings:
