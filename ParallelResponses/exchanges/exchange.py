@@ -307,20 +307,20 @@ class Exchange:
                   'ticker_best_bid': [],
                   'ticker_daily_volume': []}
 
-            mappings = self.response_mappings['ticker']
-            for mapping in mappings:
-                result[mapping.key] = mapping.extract_value(response[3])
-              #  print(result)
+        mappings = self.response_mappings['ticker']
+        for mapping in mappings:
+            result[mapping.key] = mapping.extract_value(response[3])
+          #  print(result)
 
-            result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
-                                                itertools.repeat(response[1], len(result['currency_pair_first'])),
-                                                itertools.repeat(response[2], len(result['currency_pair_first'])),
-                                                result['currency_pair_first'],
-                                                result['currency_pair_second'],
-                                                result['ticker_last_price'],
-                                                result['ticker_last_trade'],
-                                                result['ticker_best_ask'],
-                                                result['ticker_best_bid'],
-                                                result['ticker_daily_volume']))
-            return result
+        result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
+                                            itertools.repeat(response[1], len(result['currency_pair_first'])),
+                                            itertools.repeat(response[2], len(result['currency_pair_first'])),
+                                            result['currency_pair_first'],
+                                            result['currency_pair_second'],
+                                            result['ticker_last_price'],
+                                            result['ticker_last_trade'],
+                                            result['ticker_best_ask'],
+                                            result['ticker_best_bid'],
+                                            result['ticker_daily_volume']))
+        return result
 
