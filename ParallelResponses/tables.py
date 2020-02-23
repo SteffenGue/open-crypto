@@ -212,4 +212,73 @@ class Ticker(Base):
                                                   self.last_price,
                                                   self.start_time)
 
+class HistoricRates(Base, BaseMixin):
+    """
+    Table for the method historic_rates. Tables contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+
+    Primary_keys are Exchange_Pair_id and the timestamp.
+    Table contains standard OHLCV values (Open - High - Low - Close - Volume24h)
+    __repr__(self) describes the representations of the table if queried. The database will return the
+    object as normal, but print "ID, Exchange: First-Second, $ Close at time" in clear names for better
+    readability.
+
+    :param BaseMixin: classmethods
+        Classmethods defined in class BaseMixin. Methods can, if imported, be used in an HistoricRate-Objects.
+    """
+
+
+    __tablename__ = 'historic_rates'
+
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+    exchange_pair = relationship('ExchangeCurrencyPairs', backref="historic_rates")
+    timestamp = Column(DateTime, primary_key=True)
+
+    open = Column(Float)
+    high = Column(Float)
+    low = Column(Float)
+    close = Column(Float)
+    volume = Column(Float)
+
+    def __repr__(self):
+        return "ID {}, {}: {}-{}, close ${} at {}".format(self.exchange_pair_id,
+                                                          self.exchange_pair.exchange.name,
+                                                          self.exchange_pair.first.name,
+                                                          self.exchange_pair.second.name,
+                                                          self.close,
+                                                          self.timestamp)
+
+
+class Trades(Base, BaseMixin):
+    """
+    Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+    Primary_keys are Exchange_Pair_id and the timestamp.
+    Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
+
+    __repr__(self) describes the representation if queried.
+
+    :param BaseMixin: classmethods
+        Classmethods defined in class BaseMixin. Methods can, if imported, be used in an HistoricRate-Objects.
+    """
+
+    __tablename__ = 'trades'
+
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+    exchange_pair = relationship('ExchangeCurrencyPairs', backref="trades")
+    timestamp = Column(DateTime, primary_key=True)
+
+    amount = Column(Float)
+    best_bid = Column(Float)
+    best_ask = Column(Float)
+    price = Column(Float)
+    direction = Column(String)
+
+    def __repr__(self):
+        return "Last Transction: {}, {}-{}: {} for ${} at {}".format(self.exchange_pair.exchange.name,
+                                                                     self.exchange_pair.first.name,
+                                                                     self.exchange_pair.second.name,
+                                                                     self.amount,
+                                                                     self.price,
+                                                                     self.timestamp)
 
