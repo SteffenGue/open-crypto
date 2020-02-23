@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
 
+    #ToDo: Uniform nomenclature. Classnames singluar and with capital letters, __tablenames__ small and plural.
 class BaseMixin(object):
 
     """
@@ -156,7 +157,6 @@ class ExchangeCurrencyPairs(Base):
 
 class Ticker(Base):
     """
-    TODO: Update if no longer correct after database sturcture is updated (Issue #4, 03.12.2019).
     Database ORM-Class storing the ticker data.
 
     exchange_pair_id: int
@@ -166,7 +166,6 @@ class Ticker(Base):
     exchange_pair: relationship
         The corresponding relationship table with ExchangeCurrencyPairs
 
-    TODO: Doku anpassen. Start_time und Response_time korrekt?
     start_time: DateTime
         Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
 
@@ -218,7 +217,9 @@ class HistoricRates(Base, BaseMixin):
     foreign_keys.
 
     Primary_keys are Exchange_Pair_id and the timestamp.
+
     Table contains standard OHLCV values (Open - High - Low - Close - Volume24h)
+
     __repr__(self) describes the representations of the table if queried. The database will return the
     object as normal, but print "ID, Exchange: First-Second, $ Close at time" in clear names for better
     readability.
@@ -241,7 +242,7 @@ class HistoricRates(Base, BaseMixin):
     volume = Column(Float)
 
     def __repr__(self):
-        return "ID {}, {}: {}-{}, close ${} at {}".format(self.exchange_pair_id,
+        return "ID {}, {}: {}-{}, close {} at {}".format(self.exchange_pair_id,
                                                           self.exchange_pair.exchange.name,
                                                           self.exchange_pair.first.name,
                                                           self.exchange_pair.second.name,
@@ -254,6 +255,7 @@ class Trades(Base, BaseMixin):
     Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
     foreign_keys.
     Primary_keys are Exchange_Pair_id and the timestamp.
+
     Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
 
     __repr__(self) describes the representation if queried.
@@ -275,7 +277,7 @@ class Trades(Base, BaseMixin):
     direction = Column(String)
 
     def __repr__(self):
-        return "Last Transction: {}, {}-{}: {} for ${} at {}".format(self.exchange_pair.exchange.name,
+        return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
                                                                      self.exchange_pair.first.name,
                                                                      self.exchange_pair.second.name,
                                                                      self.amount,
