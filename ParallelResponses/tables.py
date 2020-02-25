@@ -156,7 +156,6 @@ class ExchangeCurrencyPairs(Base):
 
 class Ticker(Base):
     """
-    TODO: Update if no longer correct after database sturcture is updated (Issue #4, 03.12.2019).
     Database ORM-Class storing the ticker data.
 
     exchange_pair_id: int
@@ -166,7 +165,6 @@ class Ticker(Base):
     exchange_pair: relationship
         The corresponding relationship table with ExchangeCurrencyPairs
 
-    TODO: Doku anpassen. Start_time und Response_time korrekt?
     start_time: DateTime
         Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
 

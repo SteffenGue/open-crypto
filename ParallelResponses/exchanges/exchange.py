@@ -16,7 +16,6 @@ class Exchange:
 
         The Attributes and mappings are all extracted from the
         .yaml-files whose location is described in the config.ini file.
-        TODO: Location of yamls in config festhalten und nutzen.
 
         name: str
             Name of this exchange.
@@ -90,8 +89,9 @@ class Exchange:
         Exceptions will be caught and a suitable message is printed.
         None will be returned in this case.
 
-        TODO: Gutes differneziertes Exception handling sowie logging.
-        TODO: Saving responses
+        TODO: Gutes differneziertes Exception handling
+        TODO: Logging von Exceptions / option in config
+        TODO: Saving responses / option in config
 
         :param request_name: str
             Name of the request. i.e. 'ticker' for ticker-request
@@ -241,7 +241,7 @@ class Exchange:
         is later necessary to fill up 'empty places'.
         i.e. Some exchanges don't return last_trade volumes for their currencies.
 
-        TODO: prevent hardcoding key_names
+        TODO: prevent hardcoding key_names ( nice to have )
 
         Each Mapping stored behind response_mappings['ticker'] is then called to extract its values.
         i.e. The Mapping-Object with the key_name 'currency_pair_first' extracts a list which is ordered
@@ -275,7 +275,7 @@ class Exchange:
 
         We are using the length of currency_pair_first because every entry in general ticker_data
         has to contain a currency pair. It is always viable because the lists of extracted values
-        all need to have the same length. (TODO: Exception if not)
+        all need to have the same length.
 
         The formatted list of ticker-data-tuples is then returned.
 

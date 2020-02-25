@@ -72,7 +72,7 @@ class DatabaseHandler:
         self.sessionFactory = sessionmaker(bind=engine)
 
 
-    #ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
+    #TODO: Load all DB-Entries once in the beginning instead of querying every item speratly?!
 
     def get_or_create_DB_entry(self,
                                session: Session,
@@ -144,7 +144,8 @@ class DatabaseHandler:
         committed and the connection will be closed.
 
         Exceptions will be caught but not really handled.
-        TODO: Exception handling and logging
+        TODO: Exception handling and
+        TODO: Logging of Exception
 
         :param tickers: Iterator
             Iterator of tuples containing ticker-data.
