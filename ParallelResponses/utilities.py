@@ -5,8 +5,6 @@ from typing import List, Any, Dict, Set
 from dictionary import ExceptionDict
 import yaml
 from configparser import ConfigParser
-from tables import Exchange
-from db_handler import DatabaseHandler
 
 TYPE_CONVERSION = {
 
@@ -132,6 +130,25 @@ TYPE_CONVERSION = {
     ("none", "constant"): {  # Returns the first argument
         "function": lambda arg, *args: args[0],
         "params": 1
+    }
+}
+
+
+REQUEST_PARAMS = {
+    """
+    A dictionary containing lambda function calls in order to get request parameters variable. The function calls 
+    will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment, 
+    during the preparation of the API request.
+    
+        'name' : call name of the lambda function
+        'function' : the actual lambda function to execute
+        'params' : amount of additional parameters if necessary.
+        
+    """
+
+    "name": {
+        "function": lambda x: x+1,
+        "params": 0
     }
 }
 
