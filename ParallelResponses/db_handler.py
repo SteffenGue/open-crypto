@@ -1,11 +1,9 @@
 from datetime import datetime
 from typing import Sequence, List, Tuple, Any, Iterator
-from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine, MetaData, or_, and_, exists
 from sqlalchemy.orm import sessionmaker, Session
 from tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
-import time
 
 
 class DatabaseHandler:
@@ -106,18 +104,18 @@ class DatabaseHandler:
                     ExchangeCurrencyPair.second_id == second.id).first()
 
             else:
-                if exchange == None:
+                if exchange is None:
                     exchange = Exchange(name=ticker[0])
-                if first == None:
+                if first is None:
                     first = Currency(name=ticker[3])
-                if second == None:
+                if second is None:
                     second = Currency(name=ticker[4])
 
                 exchange_pair = ExchangeCurrencyPair(exchange=exchange,
                                                      first=first,
                                                      second=second)
 
-            if exchange_pair == None:
+            if exchange_pair is None:
                 exchange_pair = ExchangeCurrencyPair(exchange=exchange,
                                                      first=first,
                                                      second=second)
@@ -187,7 +185,7 @@ class DatabaseHandler:
 
     def get_active_exchanges(self):
         """
-        Query every active exchange from the database
+        Query every inactive exchange from the database
         :return: list of all inactive exchanges
         """
 
@@ -198,7 +196,7 @@ class DatabaseHandler:
 
     def update_exceptions(self, exceptions: dict):
         """
-        Method to update the exception_counter. If An exception occured add 1 to the counter,
+        Method to update the exception_counter. If An exception occurred add 1 to the counter,
             else set back to zero.
         Further exchanges with a total of 3 exceptions in a row will be set inactive.
 
