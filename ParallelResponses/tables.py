@@ -4,73 +4,19 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
 
-    #ToDo: Uniform nomenclature. Classnames singluar and with capital letters, __tablenames__ small and plural.
-class BaseMixin(object):
 
-    """
-    Classmethods for the database classes. 'update_exceptions()' adds +1 to the exception counter in Exchanges()
-    whenever an exchange throws an exception. If more than x exceptions in a row occured, is_activ() sets the
-    exchange 'inactive'. The exchange can only be set 'active' again manually.
-    """
-
-    @classmethod
-    def is_active(cls, session):
-        """
-        Method to check if the number of exceptions raised for one exchange exceeds 3 in a row.
-        If so, set exchange inactive.
-        :param session: orm.session
-            Actual session from the SessionFactory.
-        :return: None
-        """
-
-        exchanges = session.query(Exchange).all()
-        for exchange in exchanges:
-            if exchange.exceptions > 3:
-                exchange.active = False
-                try:
-                    session.commit()
-                    print('{} was set inactive.'.format(exchange.name))
-                except Exception as e:
-                    print(e, e.__cause__)
-                    session.rollback()
-                    print('Exception raised setting {} inactive.'.format(exchange.name))
-                    pass
-
-
-    @classmethod
-    def update_exceptions(cls, session, exceptions: dict):
-        """
-        Method to update the exception_counter. If An exception occured add 1 to the counter,
-            else set back to zero.
-        :param session: orm-session
-            Actual session from the SessionFactory.
-        :param exceptions: dict
-            Dictionary with key (Exchange) value (boolean) pair.
-        :return: None
-        """
-        exceptions = exceptions
-        exchanges = list(session.query(Exchange).all())
-
-        for exchange in exchanges:
-            if exchange.name in exceptions:
-                exchange.exceptions += 1
-                exchange.total_exceptions += 1
-                print('{}: Exception Counter +1'.format(exchange.name))
-            else:
-                exchange.exceptions = 0
-
-
-        try:
-            session.commit()
-            cls.is_active(session)
-        except Exception as e:
-            print(e, e.__cause__)
-            session.rollback()
-            pass
+# class BaseMixin(object):
+#     """
+#     Classmethods blueprint for the database classes. Class "BaseMixin" needs to be inherited to an Object.
+#     """
+#
+#     @classmethod
+#     def method_xyz(cls):
+#         pass
 
 
 
-class Exchange(BaseMixin, Base):
+class Exchange(Base):
     """
     Database ORM-Class storing the exchanges table. ALl exchanges used to perform requests
     are listed in this table.
@@ -90,8 +36,6 @@ class Exchange(BaseMixin, Base):
 
     def __repr__(self):
         return "#{}: {}, Active: {}".format(self.id, self.name, self.active)
-
-
 
 
 class Currency(Base):
@@ -115,9 +59,9 @@ class Currency(Base):
         return "#{}: {}".format(self.id, self.name)
 
 
-class ExchangeCurrencyPairs(Base):
+class ExchangeCurrencyPair(Base):
     """
-    Database ORM-Class storing the ExchangeCurrencyPairs.
+    Database ORM-Class storing the ExchangeCurrencyPair.
 
     exchange_id: int
         The unique id of each exchange taken from the ForeignKey.
@@ -144,8 +88,8 @@ class ExchangeCurrencyPairs(Base):
     second_id = Column(Integer, ForeignKey('currencies.id'))
 
     exchange = relationship("Exchange", backref="exchanges_currency_pairs")
-    first = relationship("Currency", foreign_keys="ExchangeCurrencyPairs.first_id")
-    second = relationship("Currency", foreign_keys="ExchangeCurrencyPairs.second_id")
+    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id")
+    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id")
 
     __table_args__ = (CheckConstraint(first_id != second_id),)
 
@@ -164,7 +108,7 @@ class Ticker(Base):
          for existing exchange_currency_pairs. If not existing, the currency and/or exchange is created.
 
     exchange_pair: relationship
-        The corresponding relationship table with ExchangeCurrencyPairs
+        The corresponding relationship table with ExchangeCurrencyPair
 
     start_time: DateTime
         Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
@@ -193,7 +137,7 @@ class Ticker(Base):
     __tablename__ = "tickers"
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPairs', backref="tickers")
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="tickers")
 
     start_time = Column(DateTime)
     response_time = Column(DateTime, primary_key=True)
@@ -211,7 +155,7 @@ class Ticker(Base):
                                                   self.last_price,
                                                   self.start_time)
 
-class HistoricRates(Base, BaseMixin):
+class HistoricRate(Base):
     """
     Table for the method historic_rates. Tables contains the exchange_currency_pair_id, gathered from the
     foreign_keys.
@@ -232,7 +176,7 @@ class HistoricRates(Base, BaseMixin):
     __tablename__ = 'historic_rates'
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPairs', backref="historic_rates")
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="historic_rates")
     timestamp = Column(DateTime, primary_key=True)
 
     open = Column(Float)
@@ -250,7 +194,7 @@ class HistoricRates(Base, BaseMixin):
                                                           self.timestamp)
 
 
-class Trades(Base, BaseMixin):
+class Trade(Base):
     """
     Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
     foreign_keys.
@@ -267,7 +211,7 @@ class Trades(Base, BaseMixin):
     __tablename__ = 'trades'
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPairs', backref="trades")
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
     timestamp = Column(DateTime, primary_key=True)
 
     amount = Column(Float)

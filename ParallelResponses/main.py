@@ -22,11 +22,10 @@ async def main():
 
     db_params = read_config('database')
     database_handler = DatabaseHandler(metadata, **db_params)
-    session = database_handler.get_session()
+    # session = database_handler.get_session()
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['coinsbit']
-
-    exchange_names = get_exchange_names(session)
+    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
     # start_time : datetime when request run is started
@@ -50,7 +49,7 @@ async def main():
     #exceptions : instance of the dictionary of exceptions for the request run
     #with method call to check and persist the flags with the given exceptions
     exceptions = ExceptionDict()
-    database_handler.check_exceptions(exceptions.get_dict())
+    database_handler.update_exceptions(exceptions.get_dict())
     exceptions.get_dict().clear()
 
 if __name__ == "__main__":
