@@ -5,6 +5,7 @@ from typing import List, Any, Dict, Set
 from dictionary import ExceptionDict
 import yaml
 from configparser import ConfigParser
+from db_handler import DatabaseHandler
 
 TYPE_CONVERSION = {
 
@@ -134,21 +135,27 @@ TYPE_CONVERSION = {
 }
 
 
-REQUEST_PARAMS = {
-    """
-    A dictionary containing lambda function calls in order to get request parameters variable. The function calls 
-    will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment, 
-    during the preparation of the API request.
-    
-        'name' : call name of the lambda function
-        'function' : the actual lambda function to execute
-        'params' : amount of additional parameters if necessary.
-        
-    """
+"""A dictionary containing lambda function calls in order to get request parameters variable. The function calls 
+will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment, 
+during the preparation of the API request.
 
-    "name": {
+'name' : call name of the lambda function
+'function' : the actual lambda function to execute
+'params' : amount of additional parameters if necessary.
+'session' : ORM-Session if necessary.
+"""
+REQUEST_PARAMS = {
+    "add": {
+        "name": 'add',
         "function": lambda x: x+1,
-        "params": 0
+        "params": 1,
+        "session": False
+    },
+    "exchanges": {
+        "name": 'exchanges',
+        "function": lambda session, x: session.query(x),
+        'params': 1,
+        "session": True
     }
 }
 

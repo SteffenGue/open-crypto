@@ -1,12 +1,12 @@
 import asyncio
-import os
 import psycopg2
+import os
 import time
 from datetime import datetime, timedelta
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
-from utilities import read_config, yaml_loader, get_exchange_names
+from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
 from dictionary import ExceptionDict
 
 
@@ -22,12 +22,13 @@ async def main():
 
     db_params = read_config('database')
     database_handler = DatabaseHandler(metadata, **db_params)
-    # session = database_handler.get_session()
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['coinsbit']
-    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
 
-    exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
+    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
+    exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
+                 for exchange_name in exchange_names}
+
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()

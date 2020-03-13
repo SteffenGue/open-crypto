@@ -231,3 +231,34 @@ class DatabaseHandler:
 
         finally:
             session.close()
+
+    def request_params(self, function, exchange, *args: list):
+        """
+        Helper-method to perform function calls from request parameters. If one needs a variable
+        request parameter (for example: the latest entry of a specific currency pair in the database),
+        a lambda function can be defined in utilities.py and is called in exchanges.py as the parameters
+        from the yaml-files are read out. The specifications when a function call takes place are described
+        in exchanges.py under the method Exchanges.extract_request_urls().
+
+        :param function: dict
+            {'function': <function>, 'params': int, 'session': boolean}
+
+        :param exchange: str
+            the actual exchange name
+
+        :param args: *args - variable number of parameters according to the function
+        """
+
+       #ToDo: Probleme mit dem Query. Der Paramter ist nicht gleich dem query Object aus tables.
+        if function['params'] == len(args):
+            session = self.sessionFactory()
+
+            func = function['function']
+
+            if function['session'] is True:
+                args = (session, *args)
+            return func(*args).first()
+
+        else:
+            raise KeyError(f'Wrong number of *args for {exchange} - {function["name"]}. '
+                           f'Expected {function["params"]} - got {len(args)}')

@@ -5,6 +5,7 @@ import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
 from Mapping import Mapping
 from dictionary import ExceptionDict
+from utilities import REQUEST_PARAMS
 
 
 class Exchange:
@@ -42,7 +43,8 @@ class Exchange:
     request_urls: dict
     response_mappings: dict
 
-    def __init__(self, yaml_file: Dict):
+
+    def __init__(self, yaml_file: Dict, database_handler_request_params):
         """
         Creates a new Exchange-object.
 
@@ -54,7 +56,14 @@ class Exchange:
         :param yaml_file: Dict
             Content of a .yaml file as a dict-object.
             Constructor does not check if content is viable.
+
+        :param database_handler_request_params: Function
+            DatabaseHandler-Function from the main() database_handler instance.
+            This is necessary to perform function calls from the request parameters which include
+            database queries. Database connections should only take place from DatabaseHandler instances.
         """
+        self.request_params = database_handler_request_params
+
         self.name = yaml_file['name']
         if yaml_file.get('terms'):
             if yaml_file['terms'].get('terms_url'):
@@ -138,7 +147,6 @@ class Exchange:
         api_url has to be initialized already.
 
         TODO: Possibility to use pair_template
-
         Example for one request:
             in bibox.yaml (request ticker):
                 api_url: https://api.bibox.com/v1/
@@ -147,7 +155,6 @@ class Exchange:
                     cmd:
                         type: str
                         default: marketAll
-
             Result:
                 url = https://api.bibox.com/v1/mdata
                 params = {cmd: marketAll}
@@ -155,6 +162,20 @@ class Exchange:
                 in result dictionary:
                     {'ticker': [url, params], ...}
                     '...'  Means dictionary-entry for different request i.e. 'historic rates'.
+
+        If 'params' contains the key-word "func", this method calls the corresponding
+        function. The functions are defined in "utilities - REQUEST_PARAMS" as a dictionary.
+        The executing method is named DatabaseHandler.request_params(dict{function, #params), params).
+        The yaml-file needs to be written the following way:
+                ....
+                   params:
+                     <parameter name>:
+                       func:
+                         <function name>
+                         <func parameter>
+                         <func parameter>
+                         ...
+
 
         :param requests: Dict[str: Dict[param_name: value]]
             requests-section from a exchange.yaml as dictionary.
@@ -175,7 +196,13 @@ class Exchange:
             params = dict()
             if 'params' in request_dict.keys() and request_dict['params']:
                 for param in request_dict['params']:
-                    params[param] = str(request_dict['params'][param]['default'])
+                    # extracts the function and assigns it to the method
+                    if 'func' in request_dict['params'][param].keys():
+                        params[param] = self.request_params(REQUEST_PARAMS[request_dict['params'][param]['func'][0]],
+                                                            self.name,
+                                                            *request_dict['params'][param]['func'][1:])
+                    else:
+                        params[param] = str(request_dict['params'][param]['default'])
 
             urls[request] = (url, params)
 
