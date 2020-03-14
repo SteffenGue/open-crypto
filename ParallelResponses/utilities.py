@@ -3,7 +3,7 @@ import datetime
 import os
 from typing import List, Any, Dict, Set
 from dictionary import ExceptionDict
-import yaml
+import yaml #install PyYaml
 from configparser import ConfigParser
 from db_handler import DatabaseHandler
 
@@ -145,7 +145,7 @@ during the preparation of the API request.
 'session' : ORM-Session if necessary.
 """
 REQUEST_PARAMS = {
-    "add": {
+    "add": {    #for debugging purposes.
         "name": 'add',
         "function": lambda x: x+1,
         "params": 1,
@@ -153,9 +153,13 @@ REQUEST_PARAMS = {
     },
     "exchanges": {
         "name": 'exchanges',
-        "function": lambda session, x: session.query(x),
+        "function": lambda session, table: session.query(table),
         'params': 1,
         "session": True
+    },
+    "last_ts": {
+        "name": 'last_ts',
+        "function": lambda session, table, exchange, pair: session.query(table).filter()
     }
 }
 

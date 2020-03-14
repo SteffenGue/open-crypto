@@ -247,16 +247,19 @@ class DatabaseHandler:
             the actual exchange name
 
         :param args: *args - variable number of parameters according to the function
+
+        :return the desired unassigned value. Can be string/float/integer.
         """
 
-       #ToDo: Probleme mit dem Query. Der Paramter ist nicht gleich dem query Object aus tables.
         if function['params'] == len(args):
             session = self.sessionFactory()
 
             func = function['function']
 
             if function['session'] is True:
-                args = (session, *args)
+                # evaluate the *args to rewrite them as the objects they should represent. NOT NICE
+                #Todo find a better way then eval()
+                args = (session, eval(*args))
             return func(*args).first()
 
         else:
