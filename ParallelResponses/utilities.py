@@ -5,7 +5,6 @@ from typing import List, Any, Dict, Set
 from dictionary import ExceptionDict
 import yaml
 from configparser import ConfigParser
-from db_handler import DatabaseHandler
 
 TYPE_CONVERSION = {
 
