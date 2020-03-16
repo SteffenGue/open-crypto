@@ -1,11 +1,10 @@
 import calendar
 import datetime
 import os
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Set
 from dictionary import ExceptionDict
-import yaml
+import yaml #install PyYaml
 from configparser import ConfigParser
-from tables import Exchange
 
 TYPE_CONVERSION = {
 
@@ -135,6 +134,37 @@ TYPE_CONVERSION = {
 }
 
 
+"""A dictionary containing lambda function calls in order to get request parameters variable. The function calls 
+will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment, 
+during the preparation of the API request.
+
+'name' : call name of the lambda function
+'function' : the actual lambda function to execute
+'params' : amount of additional parameters if necessary.
+'session' : ORM-Session if necessary.
+"""
+REQUEST_PARAMS = {
+    "add": {    #for debugging purposes.
+        "name": 'add',
+        "function": lambda x: x+1,
+        "params": 1,
+        "session": False
+    },
+    "exchanges": {
+        "name": 'exchanges',
+        "function": lambda session, table: session.query(table),
+        'params': 1,
+        "session": True
+    },
+    "last_ts": {
+        "name": 'last_ts',
+        "function": lambda session, table, exchange, pair: session.query(table).filter()
+    }
+}
+
+
+
+
 def read_config(section: str, filename='config.ini') -> Dict[str, Any]:
     """
     Reads the config.ini file specified in by the filename parameter
@@ -181,23 +211,22 @@ def yaml_loader(exchange: str):
             exception = ExceptionDict()
             exception.get_dict()['{}'.format(exchange)] = 1
 
-def get_exchange_names(session) -> List[str]:
+def get_exchange_names(get_inactive_exchanges) -> Set[str]:
     """
     Gives information about all exchanges that the program will send
     requests to. This means if the name of a exchange is not part of the
     list that is returned, the program will not send any request to said
     exchange.
-    :param: session: orm_session
-        Connection to the Database in order to query all ACTIVE exchanges.
+    :param: get_inactive_exchanges: DatabaseHandler method
+        DatabaseHandler method to query all inactive exchanges from the database.
     :return: List[str]
         Names from all the exchanges, which have a .yaml-file in
         the directory described in YAML_PATH.
     """
 
-    query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
+    query = get_inactive_exchanges()
+
     inactive_exchanges = set([exchange for exchange, in query])
-
-
     exchanges_list = os.listdir(YAML_PATH)
     exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
 
