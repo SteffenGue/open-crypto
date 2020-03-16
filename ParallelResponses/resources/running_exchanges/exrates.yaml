@@ -8,11 +8,7 @@ requests:
     request:
       template: ticker
       pair_template: null
-      params:
-        test:
-          func:
-            - exchanges
-            - 'Exchange'
+      params: null
     response:
       type: list
       values:
