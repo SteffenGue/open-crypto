@@ -66,11 +66,13 @@ class DatabaseHandler:
 
         if not database_exists(engine.url):
             create_database(engine.url)
-            print("Database created")
+            print(f"Database '{db_name}' created")
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
     # ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
+
+
 
     def get_or_create_DB_entry(self,
                                session: Session,
@@ -182,6 +184,8 @@ class DatabaseHandler:
             print(e, e.__cause__)
             session.rollback()
             pass
+        finally:
+            session.close()
 
     def get_active_exchanges(self):
         """
@@ -191,8 +195,8 @@ class DatabaseHandler:
 
         session = self.sessionFactory()
         query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
-        return query
         session.close()
+        return query
 
     def update_exceptions(self, exceptions: dict):
         """
@@ -257,11 +261,12 @@ class DatabaseHandler:
             func = function['function']
 
             if function['session'] is True:
-                # evaluate the *args to rewrite them as the objects they should represent. NOT NICE
-                #Todo find a better way then eval()
+                # evaluate the *args to rewrite them as the objects they should represent.
                 args = (session, eval(*args))
+
+            session.close()
             return func(*args).first()
 
         else:
-            raise KeyError(f'Wrong number of *args for {exchange} - {function["name"]}. '
+            raise KeyError(f'Wrong number of arguments for {exchange} - {function["name"]}. '
                            f'Expected {function["params"]} - got {len(args)}')

@@ -167,9 +167,6 @@ class HistoricRate(Base):
     __repr__(self) describes the representations of the table if queried. The database will return the
     object as normal, but print "ID, Exchange: First-Second, $ Close at time" in clear names for better
     readability.
-
-    :param BaseMixin: classmethods
-        Classmethods defined in class BaseMixin. Methods can, if imported, be used in an HistoricRate-Objects.
     """
 
 
@@ -204,8 +201,6 @@ class Trade(Base):
 
     __repr__(self) describes the representation if queried.
 
-    :param BaseMixin: classmethods
-        Classmethods defined in class BaseMixin. Methods can, if imported, be used in an HistoricRate-Objects.
     """
 
     __tablename__ = 'trades'
