@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
-from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
+from utilities import read_config, yaml_loader, get_exchange_names
 from dictionary import ExceptionDict
 
 
@@ -23,9 +23,7 @@ async def main():
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['coinsbit']
 
-    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
-    exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
-                 for exchange_name in exchange_names}
+    exchange_names = get_exchange_names()
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
 
@@ -38,7 +36,7 @@ async def main():
     if delta >= 500000:
         start_time = start_time + timedelta(seconds=1)
 
-    # responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
+    responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
     for ex in exchanges:
         currency_pairs = database_handler.get_exchange_currency_pairs(ex)
 

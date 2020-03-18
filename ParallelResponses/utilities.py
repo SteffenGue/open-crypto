@@ -182,7 +182,7 @@ def yaml_loader(exchange: str):
             exception.get_dict()['{}'.format(exchange)] = 1
 
 
-def get_exchange_names(session) -> List[str]:
+def get_exchange_names() -> List[str]:
     """
     Gives information about all exchanges that the program will send
     requests to. This means if the name of a exchange is not part of the
@@ -196,13 +196,10 @@ def get_exchange_names(session) -> List[str]:
     """
 
     # TODO diskutabel (kommt weg)
-    query = set(session.query(Exchange.name).filter(not Exchange.active).all())
-    inactive_exchanges = set([exchange for exchange, in query])
 
     exchanges_list = os.listdir(YAML_PATH)
-    exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
-
-    exchanges = exchange_names - inactive_exchanges
+    exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
+    exchanges = exchange_names
     # exchange_names.sort()
     return exchanges
 
