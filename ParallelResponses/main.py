@@ -1,12 +1,6 @@
 import asyncio
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import os
 import psycopg2
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 import time
 from datetime import datetime, timedelta
 from db_handler import DatabaseHandler
