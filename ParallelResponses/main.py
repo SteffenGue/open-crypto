@@ -27,6 +27,8 @@ async def main():
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
                  for exchange_name in exchange_names}
 
+    exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
+
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
@@ -36,7 +38,9 @@ async def main():
     if delta >= 500000:
         start_time = start_time + timedelta(seconds=1)
 
-    responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
+    # responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
+    for ex in exchanges:
+        currency_pairs = database_handler.get_exchange_currency_pairs(ex)
 
     for response in responses:
         if response:
