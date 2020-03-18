@@ -5,6 +5,7 @@ import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
 from Mapping import Mapping
 from dictionary import ExceptionDict
+from tables import ExchangeCurrencyPairs
 
 
 class Exchange:
@@ -38,8 +39,9 @@ class Exchange:
     terms_url: str
     scrape_permission: bool
     api_url: str
-    request_urls: dict
-    response_mappings: dict
+    request_urls: Dict
+    response_mappings: Dict
+    exchange_currency_pairs: List[ExchangeCurrencyPairs]
 
     def __init__(self, yaml_file: Dict):
         """
@@ -67,7 +69,7 @@ class Exchange:
         self.request_urls = self.extract_request_urls(yaml_file['requests'])
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
-
+        self.exchange_currency_pairs = list()
 
     async def request(self, request_name: str, start_time: datetime) -> Tuple[str, datetime, datetime, Dict]:
 
@@ -93,6 +95,8 @@ class Exchange:
         TODO: Logging von Exceptions / option in config
         TODO: Saving responses / option in config
 
+        TODO: Doku, dass nun dictionary bei request url verwendet wird
+
         :param request_name: str
             Name of the request. i.e. 'ticker' for ticker-request
         :param start_time : datetime
@@ -105,19 +109,19 @@ class Exchange:
         :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
         """
-        if self.request_urls.get(request_name): # Only when request url exists
+        if self.request_urls.get(request_name):  # Only when request url exists
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 try:
-                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
+                    response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
                     response_json = await response.json(content_type=None)
-                    print('{} bekommen.'.format(request_url_and_params[0]))
+                    print('{} bekommen.'.format(request_url_and_params['url']))
                     # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                     #     json.dump(response_json, f, ensure_ascii=False, indent=4)
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                    #create an instance of the exception dictionary to safe the exchange which have thrown the exchange
+                    # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
                 except Exception as ex:
@@ -125,11 +129,47 @@ class Exchange:
                     message = template.format(type(ex).__name__, ex.args)
                     print(message)
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                    #create an instance of the exception dictionary to safe the exchange which have thrown the exchange
+                    # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
 
-    def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
+    async def request_currency_pairs(self, request_name: str, currency_pairs: List[ExchangeCurrencyPairs],
+                               start_time: datetime):
+        if self.request_urls[request_name]:
+            async with aiohttp.ClientSession() as session:
+                request_url_and_params = self.request_urls[request_name]
+                try:
+                    responses = dict()
+                    for cp in currency_pairs:
+                        #Constructing Currency Pair
+                        pair_template_dict = request_url_and_params['pair_template']
+                        pair_template = pair_template_dict['template']
+                        pair_template.format(cp.first.name, cp.second.name)
+                        if pair_template_dict['lower_case']:
+                            pair_template.lower()
+
+                        response = await session.get(request_url_and_params['url'] + pair_template, params=request_url_and_params['params'])
+                        response_json = await response.json(content_type=None)
+                        print('{} bekommen.'.format(request_url_and_params['url']))
+                        responses[cp] = response
+
+                    return self.name, start_time, datetime.utcnow(), responses
+
+                except ClientConnectionError:
+                    print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                    # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
+                    exception = ExceptionDict()
+                    exception.get_dict()['{}'.format(self.name)] = 1
+                except Exception as ex:
+                    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+                    message = template.format(type(ex).__name__, ex.args)
+                    print(message)
+                    print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
+                    # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
+                    exception = ExceptionDict()
+                    exception.get_dict()['{}'.format(self.name)] = 1
+
+    def extract_request_urls(self, requests: dict) -> Dict[str, Dict[str, Dict]]:
         """
         Helper-Method which should be only called by the constructor.
         Extracts from the section of requests from the .yaml-file
@@ -138,6 +178,8 @@ class Exchange:
         api_url has to be initialized already.
 
         TODO: Possibility to use pair_template
+        TODO: doku für pair_template
+        TODO: doku für änderung, dass jetzt kein tupel mehr returnt wird sondern ein dictionary
 
         Example for one request:
             in bibox.yaml (request ticker):
@@ -164,22 +206,33 @@ class Exchange:
             See example above.
         """
         urls = dict()
-
         for request in requests:
+            request_parameters = dict()
             url = self.api_url
             request_dict = requests[request]['request']
 
             if 'template' in request_dict.keys() and request_dict['template']:
                 url += '{}'.format(request_dict['template'])
+            request_parameters['url'] = url
 
+            pair_template = dict()
+            if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
+                pair_template = request_dict['pair_template']
+            request_parameters['pair_template'] = pair_template
+
+            # TODO: Binance historical_trades fromId ??
             params = dict()
             if 'params' in request_dict.keys() and request_dict['params']:
                 for param in request_dict['params']:
-                    params[param] = str(request_dict['params'][param]['default'])
+                    if 'default' in request_dict['params'][param]:
+                        params[param] = str(request_dict['params'][param]['default'])
+            request_parameters['params'] = params
 
-            urls[request] = (url, params)
+            urls[request] = request_parameters
 
         return urls
+
+
 
     def extract_mappings(self, requests: dict) -> Dict[str, List[Mapping]]:
         """
@@ -219,18 +272,17 @@ class Exchange:
 
         return response_mappings
 
-
-    #[name, zeit, response.json]
+    # [name, zeit, response.json]
     def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str,
-                                                                                    datetime,
-                                                                                    datetime,
-                                                                                    str,
-                                                                                    str,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float]]:
+                                                                                              datetime,
+                                                                                              datetime,
+                                                                                              str,
+                                                                                              str,
+                                                                                              float,
+                                                                                              float,
+                                                                                              float,
+                                                                                              float,
+                                                                                              float]]:
 
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
@@ -310,9 +362,9 @@ class Exchange:
         mappings = self.response_mappings['ticker']
         for mapping in mappings:
             result[mapping.key] = mapping.extract_value(response[3])
-          #  print(result)
+        #  print(result)
 
-        result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
+        result = list(itertools.zip_longest(itertools.repeat(self.name, len(result['currency_pair_first'])),
                                             itertools.repeat(response[1], len(result['currency_pair_first'])),
                                             itertools.repeat(response[2], len(result['currency_pair_first'])),
                                             result['currency_pair_first'],
@@ -323,4 +375,10 @@ class Exchange:
                                             result['ticker_best_bid'],
                                             result['ticker_daily_volume']))
         return result
+
+    def add_exchange_currency_pairs(self, currency_pairs: list):
+        for cp in currency_pairs:
+            # TODO check if contains is enough to prevent duplicates of pairs
+            if not self.exchange_currency_pairs.__contains__(cp):
+                self.exchange_currency_pairs.append(cp)
 

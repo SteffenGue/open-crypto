@@ -73,9 +73,9 @@ class DatabaseHandler:
 
 
     #TODO: Load all DB-Entries once in the beginning instead of querying every item speratly?!
-
+    #TODO: session als parameter entfernt
+    #TODO: wird momentan nicht genutzt
     def get_or_create_DB_entry(self,
-                               session: Session,
                                ticker: Tuple[str, datetime, datetime, str, str, float, float, float, float, float]):
         """
         This function queries or creates the corresponding database entries. If the ExchangeCurrencyPair already
@@ -92,7 +92,7 @@ class DatabaseHandler:
         :return: ticker_update: Tuple
             An Tuple including an ORM-Query Object (ExchangeCurrencyPairs-Object) on indices 0
         """
-
+        session = self.sessionFactory()
         exchange = session.query(Exchange).filter(Exchange.name == ticker[0]).first()
         first = session.query(Currency).filter(Currency.name == ticker[3]).first()
         second = session.query(Currency).filter(Currency.name == ticker[4]).first()
@@ -120,6 +120,7 @@ class DatabaseHandler:
                 exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
                                                       first=first,
                                                       second=second)
+            session.close()
         except Exception as e:
             print(e, e.__cause__)
             session.rollback()
@@ -164,7 +165,7 @@ class DatabaseHandler:
         session = self.sessionFactory()
         try:
             for ticker in tickers:
-                        ticker_append = DatabaseHandler.get_or_create_DB_entry(self, session, ticker)
+                        ticker_append = DatabaseHandler.get_or_create_DB_entry(self, ticker)
 
                         ticker_tuple = Ticker(exchange_pair=ticker_append[0],
                                               start_time=ticker_append[2],
@@ -186,6 +187,8 @@ class DatabaseHandler:
             pass
 
 
+    #TODO diskutabel, möglichkeit für queries kann nach außen gegeben werden -> utilities
+    #Antwort: kommt weg
     def get_session(self):
         """
         Getter method for the given instance of the session.
@@ -202,3 +205,14 @@ class DatabaseHandler:
         self.sessionFactory gives the instance of the current session.
         """
         Exchange.update_exceptions(self.sessionFactory(), exceptions)
+
+    #TODO: Dokumentation
+    def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPairs]:
+        session = self.sessionFactory()
+        currency_pairs = list()
+        exchange = session.query(Exchange).filter(Exchange.name.__eq__(exchange_name)).first()
+        if exchange:
+            currency_pairs = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id.__eq__(exchange.id)).all()
+        session.close()
+        return currency_pairs
+        

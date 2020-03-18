@@ -181,6 +181,7 @@ def yaml_loader(exchange: str):
             exception = ExceptionDict()
             exception.get_dict()['{}'.format(exchange)] = 1
 
+
 def get_exchange_names(session) -> List[str]:
     """
     Gives information about all exchanges that the program will send
@@ -194,9 +195,9 @@ def get_exchange_names(session) -> List[str]:
         the directory described in YAML_PATH.
     """
 
-    query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
+    # TODO diskutabel (kommt weg)
+    query = set(session.query(Exchange.name).filter(not Exchange.active).all())
     inactive_exchanges = set([exchange for exchange, in query])
-
 
     exchanges_list = os.listdir(YAML_PATH)
     exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
@@ -205,5 +206,6 @@ def get_exchange_names(session) -> List[str]:
     # exchange_names.sort()
     return exchanges
 
-#Constant that contains the path to the yaml-files of working exchanges.
+
+# Constant that contains the path to the yaml-files of working exchanges.
 YAML_PATH = read_config('utilities')['yaml_path']
