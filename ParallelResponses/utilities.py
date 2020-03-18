@@ -6,6 +6,8 @@ from dictionary import ExceptionDict
 import yaml #install PyYaml
 from configparser import ConfigParser
 
+#bin ich in master
+
 TYPE_CONVERSION = {
 
     """
