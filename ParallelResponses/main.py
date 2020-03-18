@@ -1,7 +1,10 @@
 import asyncio
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import os
 import psycopg2
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import time
