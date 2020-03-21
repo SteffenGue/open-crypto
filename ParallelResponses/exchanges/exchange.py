@@ -142,7 +142,7 @@ class Exchange:
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
 
-    async def request_currency_pairs(self, request_name: str, currency_pairs: List[ExchangeCurrencyPairs],
+    async def request_currency_pairs(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair],
                                start_time: datetime):
         if self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:

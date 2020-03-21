@@ -1,12 +1,10 @@
 import asyncio
-import psycopg2
-import os
 import time
 from datetime import datetime, timedelta
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
-from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
+from utilities import read_config, yaml_loader, get_exchange_names
 from dictionary import ExceptionDict
 
 
@@ -22,7 +20,6 @@ async def main():
 
     db_params = read_config('database')
     database_handler = DatabaseHandler(metadata, **db_params)
-    session = database_handler.get_session()
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['coinsbit']
 

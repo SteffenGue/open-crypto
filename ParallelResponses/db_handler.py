@@ -273,12 +273,12 @@ class DatabaseHandler:
                            f'Expected {function["params"]} - got {len(args)}')
 
     #TODO: Dokumentation
-    def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPairs]:
+    def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         session = self.sessionFactory()
         currency_pairs = list()
         exchange = session.query(Exchange).filter(Exchange.name.__eq__(exchange_name)).first()
         if exchange:
-            currency_pairs = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id.__eq__(exchange.id)).all()
+            currency_pairs = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(exchange.id)).all()
         session.close()
         return currency_pairs
 
