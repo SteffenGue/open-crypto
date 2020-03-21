@@ -62,7 +62,8 @@ class DatabaseHandler:
             Name of the database.
         """
 
-        engine = create_engine('{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name))
+        engine = create_engine(
+            '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name))
 
         if not database_exists(engine.url):
             create_database(engine.url)
@@ -72,11 +73,10 @@ class DatabaseHandler:
 
     # ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
 
-
-
-    def get_or_create_DB_entry(self,
-                               ticker: Tuple[str, datetime, datetime, str, str, float, float, float, float, float]):
+    def get_or_create_db_entry(self, exchange_name: str, first_currency_name: str,
+                               second_currency_name: str) -> ExchangeCurrencyPair:
         """
+        #TODO DOKU
         This function queries or creates the corresponding database entries. If the ExchangeCurrencyPair already
           exists, the object is queries and appended to the ticker tuple. If one or more of the entries do not
           exist, the single object (e.g. Currency or Exchange Object) is first created and then an
@@ -92,47 +92,48 @@ class DatabaseHandler:
             An Tuple including an ORM-Query Object (ExchangeCurrencyPair-Object) on indices 0
         """
         session = self.sessionFactory()
-        exchange = session.query(Exchange).filter(Exchange.name == ticker[0]).first()
-        first = session.query(Currency).filter(Currency.name == ticker[3]).first()
-        second = session.query(Currency).filter(Currency.name == ticker[4]).first()
 
         try:
-            if exchange != None and first != None and second != None:
+            exchange = session.query(Exchange).filter(Exchange.name == exchange_name).first()
+            first = session.query(Currency).filter(Currency.name == first_currency_name).first()
+            second = session.query(Currency).filter(Currency.name == second_currency_name).first()
 
+            if exchange and first and second:
                 exchange_pair = session.query(ExchangeCurrencyPair).filter(
                     ExchangeCurrencyPair.exchange_id == exchange.id,
                     ExchangeCurrencyPair.first_id == first.id,
                     ExchangeCurrencyPair.second_id == second.id).first()
 
+                #Case that both currencies already exist in a pair but not in this combination
+                if exchange_pair is None:
+                    exchange_pair = ExchangeCurrencyPair(exchange=exchange,
+                                                         first=first,
+                                                         second=second)
             else:
                 if exchange is None:
-                    exchange = Exchange(name=ticker[0])
+                    exchange = Exchange(name=exchange_name)
                 if first is None:
-                    first = Currency(name=ticker[3])
+                    first = Currency(name=first_currency_name)
                 if second is None:
-                    second = Currency(name=ticker[4])
+                    second = Currency(name=second_currency_name)
 
                 exchange_pair = ExchangeCurrencyPair(exchange=exchange,
                                                      first=first,
                                                      second=second)
 
-            if exchange_pair is None:
-                exchange_pair = ExchangeCurrencyPair(exchange=exchange,
-                                                     first=first,
-                                                     second=second)
+                session.add(exchange_pair)
+                session.commit()
+
             session.close()
+
+            return exchange_pair
         except Exception as e:
             print(e, e.__cause__)
             session.rollback()
-            pass
+            return None
 
-        ticker_update = list(ticker)
-        ticker_update.insert(0, exchange_pair)
-
-        return tuple(ticker_update)
-
-
-    def persist_tickers(self, tickers: Iterator[Tuple[str, datetime, datetime,  str, str, float, float, float, float, float]]):
+    def persist_tickers(self,
+                        tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
         TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
@@ -165,19 +166,20 @@ class DatabaseHandler:
         session = self.sessionFactory()
         try:
             for ticker in tickers:
-                ticker_append = DatabaseHandler.get_or_create_DB_entry(self, ticker)
+                exchange_currency_pair = self.get_or_create_db_entry(ticker[0], ticker[3], ticker[4])
 
-                ticker_tuple = Ticker(exchange_pair=ticker_append[0],
-                                      start_time=ticker_append[2],
-                                      response_time=ticker_append[3],
-                                      last_price=ticker_append[6],
-                                      last_trade=ticker_append[7],
-                                      best_ask=ticker_append[8],
-                                      best_bid=ticker_append[9],
-                                      daily_volume=ticker_append[10])
+                ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
+                                      exchange_pair=exchange_currency_pair,
+                                      start_time=ticker[1],
+                                      response_time=ticker[2],
+                                      last_price=ticker[5],
+                                      last_trade=ticker[6],
+                                      best_ask=ticker[7],
+                                      best_bid=ticker[8],
+                                      daily_volume=ticker[9])
 
                 session.add(ticker_tuple)
-
+                
             session.commit()
             session.close()
 
@@ -272,13 +274,13 @@ class DatabaseHandler:
             raise KeyError(f'Wrong number of arguments for {exchange} - {function["name"]}. '
                            f'Expected {function["params"]} - got {len(args)}')
 
-    #TODO: Dokumentation
+    # TODO: Dokumentation
     def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         session = self.sessionFactory()
         currency_pairs = list()
         exchange = session.query(Exchange).filter(Exchange.name.__eq__(exchange_name)).first()
         if exchange:
-            currency_pairs = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(exchange.id)).all()
+            currency_pairs = session.query(ExchangeCurrencyPair).filter(
+                ExchangeCurrencyPair.exchange_id.__eq__(exchange.id)).all()
         session.close()
         return currency_pairs
-
