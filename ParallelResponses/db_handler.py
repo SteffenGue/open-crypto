@@ -4,8 +4,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import create_engine, MetaData, or_, and_, exists
 from sqlalchemy.orm import sessionmaker, Session
-from tables import Currency, Exchange, ExchangeCurrencyPairs, Ticker
-import time
+from tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
 
 
 class DatabaseHandler:
@@ -67,14 +66,14 @@ class DatabaseHandler:
 
         if not database_exists(engine.url):
             create_database(engine.url)
-            print("Database created")
+            print(f"Database '{db_name}' created")
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
+    # ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
 
-    #TODO: Load all DB-Entries once in the beginning instead of querying every item speratly?!
-    #TODO: session als parameter entfernt
-    #TODO: wird momentan nicht genutzt
+
+
     def get_or_create_DB_entry(self,
                                ticker: Tuple[str, datetime, datetime, str, str, float, float, float, float, float]):
         """
@@ -90,7 +89,7 @@ class DatabaseHandler:
         :param ticker: Tuple
             The ticker Tuple from 'DatabaseHandler.persist_tickers'
         :return: ticker_update: Tuple
-            An Tuple including an ORM-Query Object (ExchangeCurrencyPairs-Object) on indices 0
+            An Tuple including an ORM-Query Object (ExchangeCurrencyPair-Object) on indices 0
         """
         session = self.sessionFactory()
         exchange = session.query(Exchange).filter(Exchange.name == ticker[0]).first()
@@ -100,26 +99,27 @@ class DatabaseHandler:
         try:
             if exchange != None and first != None and second != None:
 
-                exchange_pair = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id == exchange.id,
-                                                                            ExchangeCurrencyPairs.first_id == first.id,
-                                                                            ExchangeCurrencyPairs.second_id == second.id).first()
+                exchange_pair = session.query(ExchangeCurrencyPair).filter(
+                    ExchangeCurrencyPair.exchange_id == exchange.id,
+                    ExchangeCurrencyPair.first_id == first.id,
+                    ExchangeCurrencyPair.second_id == second.id).first()
 
             else:
-                if exchange == None:
+                if exchange is None:
                     exchange = Exchange(name=ticker[0])
-                if first == None:
+                if first is None:
                     first = Currency(name=ticker[3])
-                if second == None:
+                if second is None:
                     second = Currency(name=ticker[4])
 
-                exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
-                                                      first=first,
-                                                      second=second)
+                exchange_pair = ExchangeCurrencyPair(exchange=exchange,
+                                                     first=first,
+                                                     second=second)
 
-            if exchange_pair == None:
-                exchange_pair = ExchangeCurrencyPairs(exchange=exchange,
-                                                      first=first,
-                                                      second=second)
+            if exchange_pair is None:
+                exchange_pair = ExchangeCurrencyPair(exchange=exchange,
+                                                     first=first,
+                                                     second=second)
             session.close()
         except Exception as e:
             print(e, e.__cause__)
@@ -165,18 +165,18 @@ class DatabaseHandler:
         session = self.sessionFactory()
         try:
             for ticker in tickers:
-                        ticker_append = DatabaseHandler.get_or_create_DB_entry(self, ticker)
+                ticker_append = DatabaseHandler.get_or_create_DB_entry(self, ticker)
 
-                        ticker_tuple = Ticker(exchange_pair=ticker_append[0],
-                                              start_time=ticker_append[2],
-                                              response_time=ticker_append[3],
-                                              last_price=ticker_append[6],
-                                              last_trade=ticker_append[7],
-                                              best_ask=ticker_append[8],
-                                              best_bid=ticker_append[9],
-                                              daily_volume=ticker_append[10])
+                ticker_tuple = Ticker(exchange_pair=ticker_append[0],
+                                      start_time=ticker_append[2],
+                                      response_time=ticker_append[3],
+                                      last_price=ticker_append[6],
+                                      last_trade=ticker_append[7],
+                                      best_ask=ticker_append[8],
+                                      best_bid=ticker_append[9],
+                                      daily_volume=ticker_append[10])
 
-                        session.add(ticker_tuple)
+                session.add(ticker_tuple)
 
             session.commit()
             session.close()
@@ -185,26 +185,92 @@ class DatabaseHandler:
             print(e, e.__cause__)
             session.rollback()
             pass
+        finally:
+            session.close()
 
+    def get_active_exchanges(self):
+        """
+        Query every inactive exchange from the database
+        :return: list of all inactive exchanges
+        """
 
-    #TODO diskutabel, möglichkeit für queries kann nach außen gegeben werden -> utilities
-    #Antwort: kommt weg
-    def get_session(self):
-        """
-        Getter method for the given instance of the session.
-        :return session: the instance of the session
-        """
         session = self.sessionFactory()
-        return session
+        query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
+        session.close()
+        return query
 
-    def check_exceptions(self, exceptions: dict):
+    def update_exceptions(self, exceptions: dict):
         """
-        This method will call a classmethod of the Exchange class to update the flags for the given exchanges.
-        :param exceptions: the dictionary which contains the explicit exchanges which have thrown an exception
+        Method to update the exception_counter. If An exception occurred add 1 to the counter,
+            else set back to zero.
+        Further exchanges with a total of 3 exceptions in a row will be set inactive.
 
-        self.sessionFactory gives the instance of the current session.
+        :param exceptions: dict
+            Dictionary with key (Exchange) value (boolean) pair.
+        :return: None
         """
-        Exchange.update_exceptions(self.sessionFactory(), exceptions)
+
+        session = self.sessionFactory()
+        exchanges = list(session.query(Exchange).all())
+
+        for exchange in exchanges:
+
+            if exchange.name in exceptions:
+                exchange.exceptions += 1
+                exchange.total_exceptions += 1
+                print('{}: Exception Counter +1'.format(exchange.name))
+
+                if exchange.exceptions > 3:
+                    exchange.active = False
+                    print('{} was set inactive.'.format(exchange.name))
+            else:
+                exchange.exceptions = 0
+
+        try:
+            session.commit()
+
+        except Exception as e:
+            print(e, e.__cause__)
+            session.rollback()
+            pass
+
+        finally:
+            session.close()
+
+    def request_params(self, function, exchange, *args: list):
+        """
+        Helper-method to perform function calls from request parameters. If one needs a variable
+        request parameter (for example: the latest entry of a specific currency pair in the database),
+        a lambda function can be defined in utilities.py and is called in exchanges.py as the parameters
+        from the yaml-files are read out. The specifications when a function call takes place are described
+        in exchanges.py under the method Exchanges.extract_request_urls().
+
+        :param function: dict
+            {'function': <function>, 'params': int, 'session': boolean}
+
+        :param exchange: str
+            the actual exchange name
+
+        :param args: *args - variable number of parameters according to the function
+
+        :return the desired unassigned value. Can be string/float/integer.
+        """
+
+        if function['params'] == len(args):
+            session = self.sessionFactory()
+
+            func = function['function']
+
+            if function['session'] is True:
+                # evaluate the *args to rewrite them as the objects they should represent.
+                args = (session, eval(*args))
+
+            session.close()
+            return func(*args).first()
+
+        else:
+            raise KeyError(f'Wrong number of arguments for {exchange} - {function["name"]}. '
+                           f'Expected {function["params"]} - got {len(args)}')
 
     #TODO: Dokumentation
     def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPairs]:
@@ -215,4 +281,4 @@ class DatabaseHandler:
             currency_pairs = session.query(ExchangeCurrencyPairs).filter(ExchangeCurrencyPairs.exchange_id.__eq__(exchange.id)).all()
         session.close()
         return currency_pairs
-        
+

@@ -9,7 +9,6 @@ requests:
       template: ticker
       pair_template: null
       params: null
-      
     response:
       type: list
       values:

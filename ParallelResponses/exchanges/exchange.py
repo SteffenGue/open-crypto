@@ -5,7 +5,8 @@ import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
 from Mapping import Mapping
 from dictionary import ExceptionDict
-from tables import ExchangeCurrencyPairs
+from utilities import REQUEST_PARAMS
+from tables import ExchangeCurrencyPair
 
 
 class Exchange:
@@ -41,9 +42,10 @@ class Exchange:
     api_url: str
     request_urls: Dict
     response_mappings: Dict
-    exchange_currency_pairs: List[ExchangeCurrencyPairs]
+    exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict):
+
+    def __init__(self, yaml_file: Dict, database_handler_request_params):
         """
         Creates a new Exchange-object.
 
@@ -55,7 +57,14 @@ class Exchange:
         :param yaml_file: Dict
             Content of a .yaml file as a dict-object.
             Constructor does not check if content is viable.
+
+        :param database_handler_request_params: Function
+            DatabaseHandler-Function from the main() database_handler instance.
+            This is necessary to perform function calls from the request parameters which include
+            database queries. Database connections should only take place from DatabaseHandler instances.
         """
+        self.request_params = database_handler_request_params
+
         self.name = yaml_file['name']
         if yaml_file.get('terms'):
             if yaml_file['terms'].get('terms_url'):
@@ -198,6 +207,20 @@ class Exchange:
                     {'ticker': [url, params], ...}
                     '...'  Means dictionary-entry for different request i.e. 'historic rates'.
 
+        If 'params' contains the key-word "func", this method calls the corresponding
+        function. The functions are defined in "utilities - REQUEST_PARAMS" as a dictionary.
+        The executing method is named DatabaseHandler.request_params(dict{function, #params), params).
+        The yaml-file needs to be written the following way:
+                ....
+                   params:
+                     <parameter name>:
+                       func:
+                         <function name>
+                         <func parameter>
+                         <func parameter>
+                         ...
+
+
         :param requests: Dict[str: Dict[param_name: value]]
             requests-section from a exchange.yaml as dictionary.
             Viability of dict is not checked.
@@ -206,6 +229,7 @@ class Exchange:
             See example above.
         """
         urls = dict()
+
         for request in requests:
             request_parameters = dict()
             url = self.api_url
