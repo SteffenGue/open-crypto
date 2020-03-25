@@ -2,7 +2,6 @@ import calendar
 import datetime
 import os
 from typing import List, Any, Dict, Set
-from dictionary import ExceptionDict
 import yaml #install PyYaml
 from configparser import ConfigParser
 
@@ -209,9 +208,11 @@ def yaml_loader(exchange: str):
             data = yaml.load(f, Loader=yaml.FullLoader)
             return data
         except Exception as ex:
-            # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
-            exception = ExceptionDict()
-            exception.get_dict()['{}'.format(exchange)] = 1
+            print("error of loading yaml")
+            #todo: insert new exception handling
+
+            #exception = ExceptionDict()
+            #exception.get_dict()['{}'.format(exchange)] = 1
 
 def get_exchange_names(get_inactive_exchanges) -> Set[str]:
     """

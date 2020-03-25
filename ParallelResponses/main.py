@@ -7,7 +7,6 @@ from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
 from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
-from dictionary import ExceptionDict
 
 
 async def main():
@@ -49,9 +48,11 @@ async def main():
 
     #exceptions : instance of the dictionary of exceptions for the request run
     #with method call to check and persist the flags with the given exceptions
-    exceptions = ExceptionDict()
-    database_handler.update_exceptions(exceptions.get_dict())
-    exceptions.get_dict().clear()
+
+    #exceptions = ExceptionDict()
+    #database_handler.update_exceptions(exceptions.get_dict())
+    #todo: new exchange update
+    #exceptions.get_dict().clear()
 
 if __name__ == "__main__":
     try:

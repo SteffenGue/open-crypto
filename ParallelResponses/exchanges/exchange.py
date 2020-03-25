@@ -4,7 +4,6 @@ from typing import Iterator, Dict, List, Tuple
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
 from Mapping import Mapping
-from dictionary import ExceptionDict
 from utilities import REQUEST_PARAMS
 
 
@@ -41,6 +40,8 @@ class Exchange:
     api_url: str
     request_urls: dict
     response_mappings: dict
+    exception_counter: int
+    active_flag: bool
 
 
     def __init__(self, yaml_file: Dict, database_handler_request_params):
@@ -69,7 +70,8 @@ class Exchange:
                 self.terms_url = yaml_file['terms']['terms_url']
             if yaml_file['terms'].get('permission'):
                 self.scrape_permission = yaml_file['terms']['permission']
-
+        self.exception_counter = 0
+        self.active_flag = True
         self.api_url = yaml_file['api_url']
         if yaml_file.get('rate_limit'):
             self.rate_limit = yaml_file['rate_limit']
@@ -126,17 +128,19 @@ class Exchange:
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                    #create an instance of the exception dictionary to safe the exchange which have thrown the exchange
-                    exception = ExceptionDict()
-                    exception.get_dict()['{}'.format(self.name)] = 1
+                    #todo: insert new exception handling
+
+                    #exception = ExceptionDict()
+                    #exception.get_dict()['{}'.format(self.name)] = 1
                 except Exception as ex:
                     template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     print(message)
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                    #create an instance of the exception dictionary to safe the exchange which have thrown the exchange
-                    exception = ExceptionDict()
-                    exception.get_dict()['{}'.format(self.name)] = 1
+                    #todo: insert new exception handling
+
+                    #exception = ExceptionDict()
+                    #exception.get_dict()['{}'.format(self.name)] = 1
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """

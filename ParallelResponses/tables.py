@@ -31,7 +31,7 @@ class Exchange(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
-    exceptions = Column(Integer, unique=False, nullable=True, default=0)
+    #exceptions = Column(Integer, unique=False, nullable=True, default=0)
     total_exceptions = Column(Integer, unique=False, nullable=True, default=0)
 
     def __repr__(self):

@@ -1,5 +1,4 @@
 from collections import deque
-from dictionary import ExceptionDict
 from utilities import TYPE_CONVERSION
 
 
