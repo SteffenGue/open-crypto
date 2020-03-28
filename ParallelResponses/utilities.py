@@ -210,9 +210,8 @@ def yaml_loader(exchange: str):
         except Exception as ex:
             print("error of loading yaml")
             #todo: insert new exception handling
+            #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
-            #exception = ExceptionDict()
-            #exception.get_dict()['{}'.format(exchange)] = 1
 
 def get_exchange_names(get_inactive_exchanges) -> Set[str]:
     """

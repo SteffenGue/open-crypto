@@ -188,6 +188,7 @@ class DatabaseHandler:
         finally:
             session.close()
 
+    #todo: methode in utilities ändern auf abghängigkeit der flag variable und nicht database eintrag
     def get_active_exchanges(self):
         """
         Query every inactive exchange from the database
@@ -199,32 +200,28 @@ class DatabaseHandler:
         session.close()
         return query
 
-    def update_exceptions(self, exceptions: dict):
+    #todo: teilweises auslagern in utilities
+    #es bleibt nur die funktion den wert active zu setzen
+    def update_exceptions(self, exchanges_r):
         """
         Method to update the exception_counter. If An exception occurred add 1 to the counter,
             else set back to zero.
         Further exchanges with a total of 3 exceptions in a row will be set inactive.
 
-        :param exceptions: dict
-            Dictionary with key (Exchange) value (boolean) pair.
+        :param exchanges_r: list
+            List of the real instances of the exchanges.
         :return: None
         """
-
         session = self.sessionFactory()
-        exchanges = list(session.query(Exchange).all())
-
-        for exchange in exchanges:
-
+        exchanges_db = list(session.query(Exchange).all())
+        exceptions = {}
+        for exchange in exchanges_r:
+            if not exchange.active_flag:
+                exceptions['{}'.format(exchange.name)] = 1
+        for exchange in exchanges_db:
             if exchange.name in exceptions:
-                exchange.exceptions += 1
-                exchange.total_exceptions += 1
-                print('{}: Exception Counter +1'.format(exchange.name))
-
-                if exchange.exceptions > 3:
-                    exchange.active = False
-                    print('{} was set inactive.'.format(exchange.name))
-            else:
-                exchange.exceptions = 0
+                exchange.active = False
+                print('{} was set inactive in the db.'.format(exchange.name))
 
         try:
             session.commit()

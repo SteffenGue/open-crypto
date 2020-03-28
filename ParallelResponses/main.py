@@ -9,7 +9,7 @@ from tables import metadata
 from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
 
 
-async def main():
+async def main(exchange_names):
     """
     The main() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
@@ -19,12 +19,9 @@ async def main():
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     """
 
-    db_params = read_config('database')
-    database_handler = DatabaseHandler(metadata, **db_params)
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['coinsbit']
 
-    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
                  for exchange_name in exchange_names}
 
@@ -46,18 +43,25 @@ async def main():
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
 
-    #exceptions : instance of the dictionary of exceptions for the request run
-    #with method call to check and persist the flags with the given exceptions
+    # variables of flag will be updated
+    for exchange in exchanges:
+        exchange.update_exception()
+    # variables in database will be updated because of information purpose
+    database_handler.update_exceptions(exchanges)
+    # variables of exception counter will be updated
+    for exchange in exchanges:
+        exchange.update_consecutive_exception()
 
-    #exceptions = ExceptionDict()
-    #database_handler.update_exceptions(exceptions.get_dict())
-    #todo: new exchange update
-    #exceptions.get_dict().clear()
+    #todo: to update the list of the exchanges which will be send requests
 
 if __name__ == "__main__":
     try:
+
+        db_params = read_config('database')
+        database_handler = DatabaseHandler(metadata, **db_params)
         while True:
-            asyncio.run(main())
+
+            asyncio.run(main(get_exchange_names(database_handler.get_active_exchanges)))
             print("5 Minuten Pause.")
             time.sleep(300)
     except Exception as e:

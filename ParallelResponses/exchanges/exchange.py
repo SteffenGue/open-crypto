@@ -41,6 +41,7 @@ class Exchange:
     request_urls: dict
     response_mappings: dict
     exception_counter: int
+    consecutive_exception: bool
     active_flag: bool
 
 
@@ -70,14 +71,15 @@ class Exchange:
                 self.terms_url = yaml_file['terms']['terms_url']
             if yaml_file['terms'].get('permission'):
                 self.scrape_permission = yaml_file['terms']['permission']
-        self.exception_counter = 0
-        self.active_flag = True
         self.api_url = yaml_file['api_url']
         if yaml_file.get('rate_limit'):
             self.rate_limit = yaml_file['rate_limit']
         self.request_urls = self.extract_request_urls(yaml_file['requests'])
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
+        self.exception_counter = 0
+        self.active_flag = True
+        self.consecutive_exception = False
 
 
     async def request(self, request_name: str, start_time: datetime) -> Tuple[str, datetime, datetime, Dict]:
@@ -125,22 +127,21 @@ class Exchange:
                     print('{} bekommen.'.format(request_url_and_params[0]))
                     # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                     #     json.dump(response_json, f, ensure_ascii=False, indent=4)
+                    self.consecutive_exception = False
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                     #todo: insert new exception handling
-
-                    #exception = ExceptionDict()
-                    #exception.get_dict()['{}'.format(self.name)] = 1
+                    self.exception_counter += 1
+                    self.consecutive_exception = True
                 except Exception as ex:
                     template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
                     print(message)
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
                     #todo: insert new exception handling
-
-                    #exception = ExceptionDict()
-                    #exception.get_dict()['{}'.format(self.name)] = 1
+                    self.exception_counter += 1
+                    self.consecutive_exception = True
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """
@@ -355,3 +356,23 @@ class Exchange:
                                             result['ticker_daily_volume']))
         return result
 
+    def update_exception_counter(self):
+        """
+        This method updates the given parameter of the exception counter and the flag which represents the activity of
+        the exchange.
+        If the exception counter is greater than 3 the exchange will be set to passive.
+        :return None
+        """
+        if self.exception_counter > 3:
+            self.active_flag = False
+            print('{} was set inactive.'.format(self.name))
+
+    def update_consecutive_exception(self):
+        """
+        This method updates the given parameter of the consecutive exception bool which represents if an exchange throws
+        consecutive exceptions.
+        If the exceptions have not been thrown consecutive the counter will be reset to 0.
+        :return None
+        """
+        if self.consecutive_exception:
+            self.exception_counter = 0
