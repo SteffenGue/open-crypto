@@ -216,7 +216,7 @@ class DatabaseHandler:
         exchanges_db = list(session.query(Exchange).all())
         exceptions = {}
         for exchange in exchanges_r:
-            if not exchange.active_flag:
+            if not exchanges_r[exchange].active_flag:
                 exceptions['{}'.format(exchange.name)] = 1
         for exchange in exchanges_db:
             if exchange.name in exceptions:

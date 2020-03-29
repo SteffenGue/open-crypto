@@ -17,10 +17,9 @@ async def main(exchange_names):
         by await asyncio.gather(..)
     As soon as all responses from the exchanges are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
+    :param exchange_names list
+        The list of names of the exchanges which will be requested
     """
-
-    # run program with single exchange for debugging/testing purposes
-    # exchange_names = ['coinsbit']
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
                  for exchange_name in exchange_names}
@@ -45,12 +44,12 @@ async def main(exchange_names):
 
     # variables of flag will be updated
     for exchange in exchanges:
-        exchange.update_exception()
+        exchanges[exchange].update_exception_counter()
     # variables in database will be updated because of information purpose
     database_handler.update_exceptions(exchanges)
     # variables of exception counter will be updated
     for exchange in exchanges:
-        exchange.update_consecutive_exception()
+        exchanges[exchange].update_consecutive_exception()
 
     #todo: to update the list of the exchanges which will be send requests
 
@@ -60,8 +59,11 @@ if __name__ == "__main__":
         db_params = read_config('database')
         database_handler = DatabaseHandler(metadata, **db_params)
         while True:
+            #todo: secondary list of exchanges ( passive exchanges )
 
-            asyncio.run(main(get_exchange_names(database_handler.get_active_exchanges)))
+            # run program with single exchange for debugging/testing purposes
+            asyncio.run(main(['coinsbit']))
+            #asyncio.run(main(get_exchange_names(database_handler.get_active_exchanges)))
             print("5 Minuten Pause.")
             time.sleep(300)
     except Exception as e:
