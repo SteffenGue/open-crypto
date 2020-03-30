@@ -46,12 +46,11 @@ async def main(exchange_names):
     for exchange in exchanges:
         exchanges[exchange].update_exception_counter()
     # variables in database will be updated because of information purpose
-    database_handler.update_exceptions(exchanges)
+    database_handler.update_active_flag(exchanges)
     # variables of exception counter will be updated
     for exchange in exchanges:
         exchanges[exchange].update_consecutive_exception()
 
-    #todo: to update the list of the exchanges which will be send requests
 
 if __name__ == "__main__":
     try:
@@ -62,8 +61,12 @@ if __name__ == "__main__":
             #todo: secondary list of exchanges ( passive exchanges )
 
             # run program with single exchange for debugging/testing purposes
-            asyncio.run(main(['coinsbit']))
-            #asyncio.run(main(get_exchange_names(database_handler.get_active_exchanges)))
+            # exchanges_names = ['coinsbit']
+            exchange_names = get_exchange_names(database_handler.get_active_exchanges)
+            asyncio.run(main(exchange_names))
+
+            # todo: to update the list of the exchanges which will be send requests
+
             print("5 Minuten Pause.")
             time.sleep(300)
     except Exception as e:

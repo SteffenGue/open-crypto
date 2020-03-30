@@ -200,9 +200,8 @@ class DatabaseHandler:
         session.close()
         return query
 
-    #todo: teilweises auslagern in utilities
-    #es bleibt nur die funktion den wert active zu setzen
-    def update_exceptions(self, exchanges_r):
+
+    def update_active_flag(self, exchanges_r):
         """
         Method to update the exception_counter. If An exception occurred add 1 to the counter,
             else set back to zero.
