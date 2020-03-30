@@ -91,6 +91,46 @@ class DatabaseHandler:
         :return: ticker_update: Tuple
             An Tuple including an ORM-Query Object (ExchangeCurrencyPair-Object) on indices 0
         """
+
+        # try:
+        #     exchange = session.query(Exchange).filter(Exchange.name == exchange_name).first()
+        #     first = session.query(Currency).filter(Currency.name == first_currency_name).first()
+        #     second = session.query(Currency).filter(Currency.name == second_currency_name).first()
+        #
+        #     if exchange and first and second:
+        #         exchange_pair = session.query(ExchangeCurrencyPair).filter(
+        #             ExchangeCurrencyPair.exchange_id == exchange.id,
+        #             ExchangeCurrencyPair.first_id == first.id,
+        #             ExchangeCurrencyPair.second_id == second.id).first()
+        #
+        #         #Case that both currencies already exist in a pair but not in this combination
+        #         if exchange_pair is None:
+        #             exchange_pair = ExchangeCurrencyPair(exchange=exchange,
+        #                                                  first=first,
+        #                                                  second=second)
+        #     else:
+        #         if exchange is None:
+        #             exchange = Exchange(name=exchange_name)
+        #         if first is None:
+        #             first = Currency(name=first_currency_name)
+        #         if second is None:
+        #             second = Currency(name=second_currency_name)
+        #
+        #         exchange_pair = ExchangeCurrencyPair(exchange=exchange,
+        #                                              first=first,
+        #                                              second=second)
+        #
+        #         session.add(exchange_pair)
+        #         session.commit()
+        #
+        #     session.close()
+        #
+        #     return exchange_pair
+        # except Exception as e:
+        #     print(e, e.__cause__)
+        #     session.rollback()
+        #     return None
+
         session = self.sessionFactory()
 
         try:
@@ -98,17 +138,13 @@ class DatabaseHandler:
             first = session.query(Currency).filter(Currency.name == first_currency_name).first()
             second = session.query(Currency).filter(Currency.name == second_currency_name).first()
 
-            if exchange and first and second:
+            if exchange is not None and first is not None and second is not None:
+
                 exchange_pair = session.query(ExchangeCurrencyPair).filter(
                     ExchangeCurrencyPair.exchange_id == exchange.id,
                     ExchangeCurrencyPair.first_id == first.id,
                     ExchangeCurrencyPair.second_id == second.id).first()
 
-                #Case that both currencies already exist in a pair but not in this combination
-                if exchange_pair is None:
-                    exchange_pair = ExchangeCurrencyPair(exchange=exchange,
-                                                         first=first,
-                                                         second=second)
             else:
                 if exchange is None:
                     exchange = Exchange(name=exchange_name)
@@ -121,16 +157,18 @@ class DatabaseHandler:
                                                      first=first,
                                                      second=second)
 
-                session.add(exchange_pair)
-                session.commit()
+            if exchange_pair is None:
+                exchange_pair = ExchangeCurrencyPair(exchange=exchange,
+                                                     first=first,
+                                                     second=second)
 
             session.close()
-
             return exchange_pair
         except Exception as e:
             print(e, e.__cause__)
             session.rollback()
-            return None
+            pass
+
 
     def persist_tickers(self,
                         tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float, float]]):
@@ -179,8 +217,8 @@ class DatabaseHandler:
                                       daily_volume=ticker[9])
 
                 session.add(ticker_tuple)
-                
-            session.commit()
+                session.commit()
+
             session.close()
 
         except Exception as e:
