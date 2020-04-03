@@ -164,8 +164,6 @@ REQUEST_PARAMS = {
 }
 
 
-
-
 def read_config(section: str, filename='config.ini') -> Dict[str, Any]:
     """
     Reads the config.ini file specified in by the filename parameter
@@ -213,7 +211,7 @@ def yaml_loader(exchange: str):
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
 
-def get_exchange_names(get_inactive_exchanges) -> Set[str]:
+def get_exchange_names() -> Set[str]:
     """
     Gives information about all exchanges that the program will send
     requests to. This means if the name of a exchange is not part of the
@@ -225,16 +223,11 @@ def get_exchange_names(get_inactive_exchanges) -> Set[str]:
         Names from all the exchanges, which have a .yaml-file in
         the directory described in YAML_PATH.
     """
-
-    query = get_inactive_exchanges()
-
-    inactive_exchanges = set([exchange for exchange in query])
     exchanges_list = os.listdir(YAML_PATH)
     exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
-
-    exchanges = exchange_names - inactive_exchanges
-    # exchange_names.sort()
+    exchanges = exchange_names
     return exchanges
 
-#Constant that contains the path to the yaml-files of working exchanges.
+
+# Constant that contains the path to the yaml-files of working exchanges.
 YAML_PATH = read_config('utilities')['yaml_path']

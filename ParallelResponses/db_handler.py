@@ -188,19 +188,6 @@ class DatabaseHandler:
         finally:
             session.close()
 
-    #todo: methode in utilities ändern auf abghängigkeit der flag variable und nicht database eintrag
-    def get_active_exchanges(self):
-        """
-        Query every inactive exchange from the database
-        :return: list of all inactive exchanges
-        """
-
-        session = self.sessionFactory()
-        query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
-        session.close()
-        return query
-
-
     def update_active_flag(self, exchanges_r):
         """
         Method to update the exception_counter. If An exception occurred add 1 to the counter,

@@ -9,7 +9,7 @@ from tables import metadata
 from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
 
 
-async def main():
+async def main(exchanges, database_handler):
     """
     The main() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
@@ -17,20 +17,10 @@ async def main():
         by await asyncio.gather(..)
     As soon as all responses from the exchanges are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
-    :param exchange_names list
-        The list of names of the exchanges which will be requested
+    :param database_handler DatabaseHandler
+    :param exchanges dict
+        The dictionary of all given exchanges.
     """
-    db_params = read_config('database')
-    database_handler = DatabaseHandler(metadata, **db_params)
-    # run program with single exchange for debugging/testing purposes
-    # exchanges_names = ['coinsbit']
-    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
-
-    for name in exchange_names:
-        if
-
-    exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
-                 for exchange_name in exchange_names}
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
@@ -40,36 +30,43 @@ async def main():
     if delta >= 500000:
         start_time = start_time + timedelta(seconds=1)
 
-    responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
+    primary_exchanges = {}
+    secondary_exchanges = {}
+    for exchange in exchanges:
+        if exchanges[exchange].active_flag:
+            primary_exchanges[exchanges[exchange].name] = exchanges[exchange]
+        else:
+            secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
 
+    responses = await asyncio.gather(*(primary_exchanges[ex].request('ticker', start_time) for ex in primary_exchanges))
     for response in responses:
         if response:
             print('Response: {}'.format(response))
-            exchange = exchanges[response[0]]
+            exchange = primary_exchanges[response[0]]
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
 
     # variables of flag will be updated
-    for exchange in exchanges:
-        exchanges[exchange].update_exception_counter()
+    for exchange in primary_exchanges:
+        primary_exchanges[exchange].update_exception_counter()
     # variables in database will be updated because of information purpose
-    database_handler.update_active_flag(exchanges)
+    database_handler.update_active_flag(primary_exchanges)
     # variables of exception counter will be updated
-    for exchange in exchanges:
-        exchanges[exchange].update_consecutive_exception()
+    for exchange in primary_exchanges:
+        primary_exchanges[exchange].update_consecutive_exception()
 
 
 if __name__ == "__main__":
     try:
-
-
-
+        db_params = read_config('database')
+        databaseHandler = DatabaseHandler(metadata, **db_params)
+        # run program with single exchange for debugging/testing purposes
+        exchange_names = ['coinsbit']
+        # exchange_names = get_exchange_names()
+        all_exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), databaseHandler.request_params)
+                         for exchange_name in exchange_names}
         while True:
-            #todo: secondary list of exchanges ( passive exchanges )
-            asyncio.run(main())
-
-            # todo: to update the list of the exchanges which will be send requests
-
+            asyncio.run(main(all_exchanges, databaseHandler))
             print("5 Minuten Pause.")
             time.sleep(300)
     except Exception as e:
