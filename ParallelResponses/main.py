@@ -9,7 +9,7 @@ from tables import metadata
 from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
 
 
-async def main(exchange_names):
+async def main():
     """
     The main() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
@@ -20,10 +20,17 @@ async def main(exchange_names):
     :param exchange_names list
         The list of names of the exchanges which will be requested
     """
+    db_params = read_config('database')
+    database_handler = DatabaseHandler(metadata, **db_params)
+    # run program with single exchange for debugging/testing purposes
+    # exchanges_names = ['coinsbit']
+    exchange_names = get_exchange_names(database_handler.get_active_exchanges)
+
+    for name in exchange_names:
+        if
 
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
                  for exchange_name in exchange_names}
-
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
@@ -55,15 +62,11 @@ async def main(exchange_names):
 if __name__ == "__main__":
     try:
 
-        db_params = read_config('database')
-        database_handler = DatabaseHandler(metadata, **db_params)
+
+
         while True:
             #todo: secondary list of exchanges ( passive exchanges )
-
-            # run program with single exchange for debugging/testing purposes
-            # exchanges_names = ['coinsbit']
-            exchange_names = get_exchange_names(database_handler.get_active_exchanges)
-            asyncio.run(main(exchange_names))
+            asyncio.run(main())
 
             # todo: to update the list of the exchanges which will be send requests
 

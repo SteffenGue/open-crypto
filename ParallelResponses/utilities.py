@@ -228,7 +228,7 @@ def get_exchange_names(get_inactive_exchanges) -> Set[str]:
 
     query = get_inactive_exchanges()
 
-    inactive_exchanges = set([exchange for exchange, in query])
+    inactive_exchanges = set([exchange for exchange in query])
     exchanges_list = os.listdir(YAML_PATH)
     exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
 
