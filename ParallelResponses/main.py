@@ -9,7 +9,7 @@ from tables import metadata
 from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
 
 
-async def main(exchanges, database_handler):
+async def main(all_exchanges, database_handler):
     """
     The main() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
@@ -32,11 +32,12 @@ async def main(exchanges, database_handler):
 
     primary_exchanges = {}
     secondary_exchanges = {}
-    for exchange in exchanges:
+    for exchange in all_exchanges:
         if exchanges[exchange].active_flag:
             primary_exchanges[exchanges[exchange].name] = exchanges[exchange]
         else:
             secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
+    # todo: exception handling, falls keine exchange abgefragt wird ( primary_exchanges leer ist )
 
     responses = await asyncio.gather(*(primary_exchanges[ex].request('ticker', start_time) for ex in primary_exchanges))
     for response in responses:
@@ -46,11 +47,14 @@ async def main(exchanges, database_handler):
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
 
+    # todo: ping test for exchanges in secondary list, possible changing of the active flag back to active at successful
+    #  ping test, secondary execution right for tasks for the secondary list
+
     # variables of flag will be updated
     for exchange in primary_exchanges:
         primary_exchanges[exchange].update_exception_counter()
     # variables in database will be updated because of information purpose
-    database_handler.update_active_flag(primary_exchanges)
+    database_handler.update_exchanges(primary_exchanges)
     # variables of exception counter will be updated
     for exchange in primary_exchanges:
         primary_exchanges[exchange].update_consecutive_exception()
@@ -60,13 +64,13 @@ if __name__ == "__main__":
     try:
         db_params = read_config('database')
         databaseHandler = DatabaseHandler(metadata, **db_params)
-        # run program with single exchange for debugging/testing purposes
-        exchange_names = ['coinsbit']
-        # exchange_names = get_exchange_names()
-        all_exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), databaseHandler.request_params)
-                         for exchange_name in exchange_names}
+        # run program with single exchange or selected list of exchanges for debugging/testing purposes
+        # exchange_names = ['coinsbit', 'bibox']
+        exchange_names = get_exchange_names()
+        exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), databaseHandler.request_params)
+                     for exchange_name in exchange_names}
         while True:
-            asyncio.run(main(all_exchanges, databaseHandler))
+            asyncio.run(main(exchanges, databaseHandler))
             print("5 Minuten Pause.")
             time.sleep(300)
     except Exception as e:

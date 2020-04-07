@@ -44,7 +44,6 @@ class Exchange:
     consecutive_exception: bool
     active_flag: bool
 
-
     def __init__(self, yaml_file: Dict, database_handler_request_params):
         """
         Creates a new Exchange-object.
@@ -81,9 +80,7 @@ class Exchange:
         self.active_flag = True
         self.consecutive_exception = False
 
-
     async def request(self, request_name: str, start_time: datetime) -> Tuple[str, datetime, datetime, Dict]:
-
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -374,5 +371,5 @@ class Exchange:
         If the exceptions have not been thrown consecutive the counter will be reset to 0.
         :return None
         """
-        if self.consecutive_exception:
+        if not self.consecutive_exception:
             self.exception_counter = 0

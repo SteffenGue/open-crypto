@@ -188,7 +188,7 @@ class DatabaseHandler:
         finally:
             session.close()
 
-    def update_active_flag(self, exchanges_r):
+    def update_exchanges(self, exchanges_r):
         """
         Method to update the exception_counter. If An exception occurred add 1 to the counter,
             else set back to zero.
@@ -200,14 +200,13 @@ class DatabaseHandler:
         """
         session = self.sessionFactory()
         exchanges_db = list(session.query(Exchange).all())
-        exceptions = {}
-        for exchange in exchanges_r:
-            if not exchanges_r[exchange].active_flag:
-                exceptions['{}'.format(exchange.name)] = 1
+
         for exchange in exchanges_db:
-            if exchange.name in exceptions:
-                exchange.active = False
-                print('{} was set inactive in the db.'.format(exchange.name))
+            if exchange.name in exchanges_r:
+                exchange.active = exchanges_r[exchange.name].active_flag
+                exchange.total_exceptions += exchanges_r[exchange.name].exception_counter
+                if not exchanges_r[exchange.name].active_flag:
+                    print('{} was set inactive in the database.'.format(exchange.name))
 
         try:
             session.commit()
