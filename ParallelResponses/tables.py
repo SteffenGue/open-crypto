@@ -87,9 +87,9 @@ class ExchangeCurrencyPair(Base):
     first_id = Column(Integer, ForeignKey('currencies.id'))
     second_id = Column(Integer, ForeignKey('currencies.id'))
 
-    exchange = relationship("Exchange", backref="exchanges_currency_pairs")
-    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id")
-    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id")
+    exchange = relationship("Exchange", backref="exchanges_currency_pairs", lazy='joined')
+    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id", lazy='joined')
+    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id", lazy='joined')
 
     __table_args__ = (CheckConstraint(first_id != second_id),)
 

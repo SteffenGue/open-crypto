@@ -1,6 +1,9 @@
 import asyncio
+import json
 import time
 from datetime import datetime, timedelta
+
+import db_handler
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
@@ -27,9 +30,6 @@ async def main():
     exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
                  for exchange_name in exchange_names}
 
-    #meine änderung ohne exceptions in der datenbank
-    # exchanges = {exchange_name: Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names}
-
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
@@ -39,18 +39,30 @@ async def main():
     if delta >= 500000:
         start_time = start_time + timedelta(seconds=1)
 
+    for ex in exchanges:
+        database_handler.persist_exchange(exchanges[ex].name)
+        response = await exchanges[ex].request_currency_pairs('currency_pairs', start_time)
+        if response is not None:
+            currency_pairs = exchanges[ex].format_currency_pairs(response)
+            database_handler.persist_exchange_currency_pairs(currency_pairs)
+
+    #TODO: reactivate
     responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
 
-    #meine änderung für pairs
-    for ex in exchanges:
-        currency_pairs = database_handler.get_exchange_currency_pairs(ex)
 
     for response in responses:
         if response:
-            print('Response: {}'.format(response))
+            # print('Response: {}'.format(response))
             exchange = exchanges[response[0]]
             formatted_response = exchange.format_ticker(response)
             database_handler.persist_tickers(formatted_response)
+
+    # whitebit_json = open('responses/whitebit.json')
+    # whitebit_json = json.load(whitebit_json)
+    # whitebit_tuple = ('whitebit', start_time, datetime.utcnow(), whitebit_json)
+    # formatted_response = exchanges['whitebit'].format_ticker(whitebit_tuple)
+    # database_handler.persist_tickers(formatted_response)
+
 
     #exceptions : instance of the dictionary of exceptions for the request run
     #with method call to check and persist the flags with the given exceptions

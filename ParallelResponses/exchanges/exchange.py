@@ -1,4 +1,5 @@
 import itertools
+import json
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
 import aiohttp
@@ -43,7 +44,6 @@ class Exchange:
     request_urls: Dict
     response_mappings: Dict
     exchange_currency_pairs: List[ExchangeCurrencyPair]
-
 
     def __init__(self, yaml_file: Dict, database_handler_request_params):
         """
@@ -125,8 +125,8 @@ class Exchange:
                     response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
                     response_json = await response.json(content_type=None)
                     print('{} bekommen.'.format(request_url_and_params['url']))
-                    # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
-                    #     json.dump(response_json, f, ensure_ascii=False, indent=4)
+                    with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
+                        json.dump(response_json, f, ensure_ascii=False, indent=4)
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
@@ -142,22 +142,23 @@ class Exchange:
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
 
-    async def request_currency_pairs(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair],
-                               start_time: datetime):
+    async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair],
+                                     start_time: datetime):
         if self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 try:
                     responses = dict()
                     for cp in currency_pairs:
-                        #Constructing Currency Pair
+                        # Constructing Currency Pair
                         pair_template_dict = request_url_and_params['pair_template']
                         pair_template = pair_template_dict['template']
                         pair_template.format(cp.first.name, cp.second.name)
                         if pair_template_dict['lower_case']:
                             pair_template.lower()
 
-                        response = await session.get(request_url_and_params['url'] + pair_template, params=request_url_and_params['params'])
+                        response = await session.get(request_url_and_params['url'] + pair_template,
+                                                     params=request_url_and_params['params'])
                         response_json = await response.json(content_type=None)
                         print('{} bekommen.'.format(request_url_and_params['url']))
                         responses[cp] = response
@@ -177,6 +178,18 @@ class Exchange:
                     # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
+
+    async def request_currency_pairs(self, request_name: str, start_time: datetime) -> Tuple[
+        str, datetime, datetime, Dict]:
+        if request_name in self.request_urls.keys() and self.request_urls[request_name]:
+            async with aiohttp.ClientSession() as session:
+                request_url_and_params = self.request_urls[request_name]
+                response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
+                response_json = await response.json(content_type=None)
+                print('{} bekommen.'.format(request_url_and_params['url']))
+
+                return self.name, start_time, datetime.utcnow(), response_json
+        return None
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Dict[str, Dict]]:
         """
@@ -255,8 +268,6 @@ class Exchange:
             urls[request] = request_parameters
 
         return urls
-
-
 
     def extract_mappings(self, requests: dict) -> Dict[str, List[Mapping]]:
         """
@@ -388,17 +399,16 @@ class Exchange:
             result[mapping.key] = mapping.extract_value(response[3])
         #  print(result)
 
-        result = list(itertools.zip_longest(itertools.repeat(self.name, len(result['currency_pair_first'])),
-                                            itertools.repeat(response[1], len(result['currency_pair_first'])),
-                                            itertools.repeat(response[2], len(result['currency_pair_first'])),
-                                            result['currency_pair_first'],
-                                            result['currency_pair_second'],
-                                            result['ticker_last_price'],
-                                            result['ticker_last_trade'],
-                                            result['ticker_best_ask'],
-                                            result['ticker_best_bid'],
-                                            result['ticker_daily_volume']))
-        return result
+        return list(itertools.zip_longest(itertools.repeat(self.name, len(result['currency_pair_first'])),
+                                          itertools.repeat(response[1], len(result['currency_pair_first'])),
+                                          itertools.repeat(response[2], len(result['currency_pair_first'])),
+                                          result['currency_pair_first'],
+                                          result['currency_pair_second'],
+                                          result['ticker_last_price'],
+                                          result['ticker_last_trade'],
+                                          result['ticker_best_ask'],
+                                          result['ticker_best_bid'],
+                                          result['ticker_daily_volume']))
 
     def add_exchange_currency_pairs(self, currency_pairs: list):
         for cp in currency_pairs:
@@ -406,3 +416,16 @@ class Exchange:
             if not self.exchange_currency_pairs.__contains__(cp):
                 self.exchange_currency_pairs.append(cp)
 
+    def format_currency_pairs(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str, str, str]]:
+        results = {'currency_pair_first': [],
+                   'currency_pair_second': []}
+
+        mappings = self.response_mappings['currency_pairs']
+        for mapping in mappings:
+            results[mapping.key] = mapping.extract_value(response[3])
+
+        assert (len(results[0]) == len(result) for result in results)
+
+        return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
+                                          results['currency_pair_first'],
+                                          results['currency_pair_second']))

@@ -1,0 +1,80 @@
+{
+    "status": 0,
+    "desc": "success",
+    "template": "",
+    "params": null,
+    "data": {
+        "tickers": [
+            {
+                "marketId": "ETH-USDT",
+                "price": "157.07",
+                "volume": "749.6951",
+                "bid": "156.74",
+                "ask": "157.43",
+                "low": "157.43",
+                "high": "158.6",
+                "updateAt": 1586847650301
+            },
+            {
+                "marketId": "ETH-USDC",
+                "price": "158.29",
+                "volume": "400.9887",
+                "bid": "157.44",
+                "ask": "158.29",
+                "low": "158.29",
+                "high": "158.77",
+                "updateAt": 1586844388259
+            },
+            {
+                "marketId": "ETH-DAI",
+                "price": "151.28",
+                "volume": "0.0101",
+                "bid": "147",
+                "ask": "151.28",
+                "low": "151.28",
+                "high": "151.28",
+                "updateAt": 1586789312210
+            },
+            {
+                "marketId": "WBTC-USDT",
+                "price": "6889.75",
+                "volume": "42.5688",
+                "bid": "6891.43",
+                "ask": "6906.14",
+                "low": "6906.14",
+                "high": "6891.52",
+                "updateAt": 1586837032948
+            },
+            {
+                "marketId": "HBTC-USDT",
+                "price": "6849.45",
+                "volume": "0.001",
+                "bid": "6778.35",
+                "ask": "6849.45",
+                "low": "6849.45",
+                "high": "6849.45",
+                "updateAt": 1585884376000
+            },
+            {
+                "marketId": "ETH-SAI",
+                "price": "145.48",
+                "volume": "3.6783",
+                "bid": "145.48",
+                "ask": "149.41",
+                "low": "149.41",
+                "high": "149.35",
+                "updateAt": 1575188948775
+            },
+            {
+                "marketId": "iETH-ETH",
+                "price": "0.95",
+                "volume": "0.0494",
+                "bid": "1",
+                "ask": "0",
+                "low": "0",
+                "high": "0.95",
+                "updateAt": 1582710980972
+            }
+        ]
+    }
+}
