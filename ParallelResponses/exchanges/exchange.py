@@ -33,6 +33,13 @@ class Exchange:
             Dictionary which contains for each request(key)
             the necessary mapping-objects for extracting the value.
             (See .yaml and def extract_mappings() for more info)
+        exception_counter: int
+            Integer which counts the exceptions thrown by this exchange.
+        consecutive_exception: bool
+            Boolean which represents if the exceptions has been thrown consecutive.
+        active_flag: bool
+            Boolean which represents if this exchange is active or passive. If an exchange will throw three exception
+            consecutive, it will be set to passive and will no longer be requested.
     """
     name: str
     terms_url: str
