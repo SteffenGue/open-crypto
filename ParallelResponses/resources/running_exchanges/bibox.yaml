@@ -8,6 +8,16 @@ terms:
 api_url: https://api.bibox.com/v1/
 rate_limit: null
 requests:
+  test_connection:
+    request:
+      template: mdata?cmd=ping
+    response:
+      type: dict
+      values:
+        result:
+          type: list
+        cmd:
+          type: str
   ticker:
     request:
       template: mdata?cmd=marketAll

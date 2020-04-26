@@ -122,7 +122,7 @@ class Exchange:
         :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
         """
-        if self.request_urls.get(request_name): # Only when request url exists
+        if self.request_urls.get(request_name):  # Only when request url exists
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 try:
@@ -135,7 +135,6 @@ class Exchange:
                     return self.name, start_time, datetime.utcnow(), response_json
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                    #todo: insert new exception handling
                     self.exception_counter += 1
                     self.consecutive_exception = True
                 except Exception as ex:
@@ -143,9 +142,22 @@ class Exchange:
                     message = template.format(type(ex).__name__, ex.args)
                     print(message)
                     print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                    #todo: insert new exception handling
                     self.exception_counter += 1
                     self.consecutive_exception = True
+
+    def test_connection(self) -> bool:
+        if self.request_urls.get('test_connection'):
+            async with aiohttp.ClientSession() as session:
+                request_url_and_params = self.request_urls['test_connection']
+                try:
+                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
+                    response_json = await response.json(content_type=None)
+                    print('{} bekommen.'.format(request_url_and_params[0]))
+                    return True
+                except ClientConnectionError:
+                    return False
+                except Exception as ex:
+                    return False
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """
@@ -215,6 +227,8 @@ class Exchange:
 
             urls[request] = (url, params)
 
+        urls['test_connection'] = (self.api_url, {})
+
         return urls
 
     def extract_mappings(self, requests: dict) -> Dict[str, List[Mapping]]:
@@ -255,18 +269,17 @@ class Exchange:
 
         return response_mappings
 
-
-    #[name, zeit, response.json]
+    # [name, zeit, response.json]
     def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str,
-                                                                                    datetime,
-                                                                                    datetime,
-                                                                                    str,
-                                                                                    str,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float,
-                                                                                    float]]:
+                                                                                              datetime,
+                                                                                              datetime,
+                                                                                              str,
+                                                                                              str,
+                                                                                              float,
+                                                                                              float,
+                                                                                              float,
+                                                                                              float,
+                                                                                              float]]:
 
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
@@ -346,9 +359,9 @@ class Exchange:
         mappings = self.response_mappings['ticker']
         for mapping in mappings:
             result[mapping.key] = mapping.extract_value(response[3])
-          #  print(result)
+        #  print(result)
 
-        result = list(itertools.zip_longest(itertools.repeat(self.name,  len(result['currency_pair_first'])),
+        result = list(itertools.zip_longest(itertools.repeat(self.name, len(result['currency_pair_first'])),
                                             itertools.repeat(response[1], len(result['currency_pair_first'])),
                                             itertools.repeat(response[2], len(result['currency_pair_first'])),
                                             result['currency_pair_first'],

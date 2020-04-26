@@ -51,6 +51,11 @@ async def main(all_exchanges, database_handler):
     else:
         print('There are currently no exchanges to request.')
 
+    if not len(secondary_exchanges) == 0:
+        print('yes')
+    else:
+        print('There are currently no exchanges to test.')
+
     # todo: ping test for exchanges in secondary list, possible changing of the active flag back to active at successful
     #  ping test, secondary execution right for tasks for the secondary list
 
@@ -71,7 +76,8 @@ if __name__ == "__main__":
         databaseHandler = DatabaseHandler(metadata, **db_params)
         # run program with single exchange or selected list of exchanges for debugging/testing purposes
         # exchange_names = ['coinsbit', 'bibox']
-        exchange_names = get_exchange_names()
+        #exchange_names = get_exchange_names()
+        exchange_names = ['bibox']
         exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), databaseHandler.request_params)
                      for exchange_name in exchange_names}
         # run one request run every five minutes / 300 seconds
