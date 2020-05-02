@@ -39,10 +39,11 @@ async def main(all_exchanges, database_handler):
         else:
             secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
 
-    # if there are exchanges to request, one request per exchanges will be sent
+    # if there are exchanges to request, one request per exchange will be sent
     if not len(primary_exchanges) == 0:
-        responses = await asyncio.gather(*(primary_exchanges[ex].request('ticker', start_time) for ex in primary_exchanges))
-        for response in responses:
+        ticker_responses = await asyncio.gather(*(primary_exchanges[exchange].request('ticker', start_time)
+                                                  for exchange in primary_exchanges))
+        for response in ticker_responses:
             if response:
                 print('Response: {}'.format(response))
                 exchange = primary_exchanges[response[0]]
@@ -51,8 +52,10 @@ async def main(all_exchanges, database_handler):
     else:
         print('There are currently no exchanges to request.')
 
+    # if there are exchanges to test the connection, one test per exchange will be sent
     if not len(secondary_exchanges) == 0:
-        print('yes')
+        test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
+                                                for exchange in secondary_exchanges))
     else:
         print('There are currently no exchanges to test.')
 
