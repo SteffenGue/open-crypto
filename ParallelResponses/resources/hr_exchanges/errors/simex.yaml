@@ -1,0 +1,208 @@
+name: simex
+terms:
+  terms_url: https://simex.global/en/contracts  # PDF: https://cdn.simex.global/985b19ce-6ccf-4e3c-b030-1c619c7ae154/-/inline/yes/
+  permission: null
+  search_targets:
+  - tag: div
+    class: col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4
+api_url: https://simex.global/api/
+rate_limit:
+  max: 60
+  unit: 60
+requests:
+  currencies:
+    request:
+      template: currencies/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          name: # e.g. USD
+            type: str
+          description: # e.g. Dollar
+            type: str
+    mapping:
+    - key: currency_symbol
+      path:
+      - name
+      type:
+      - str
+    - key: currency_name
+      path:
+      - description
+      type:
+      - str
+
+  currency_pairs:
+    request:
+      template: pairs/
+      values: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          base:
+            type: dict
+            values:
+              id:
+                type: int
+              name: # e.g. BTC
+                type: str
+              description: # e.g. Bitcoin
+                type: str
+          quote:
+            type: dict
+            values:
+              id:
+                type: int
+              name: # e.g. USD
+                type: str
+              description: # e.g. Dollar
+                type: str
+          high_price:
+            type:
+            - str
+            - float
+          low_price:
+            type:
+            - str
+            - float
+          buy_price:
+            type:
+            - str
+            - float
+          sell_price:
+            type:
+            - str
+            - float
+          last_price:
+            type:
+            - str
+            - float
+          change_amount:
+            type:
+            - str
+            - float
+          change_percent:
+            type:
+            - str
+            - float
+          base_volume:
+            type:
+            - str
+            - float
+          quote_volume:
+            type:
+            - str
+            - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - base
+      - name
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - quote
+      - name
+      type:
+      - str
+
+  orders: # not required
+    request:
+      template: orders
+      pair_template: null
+      params:
+        pair_id: # the id of the method "currency_pairs"
+          required: true
+          type: int
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          side:
+            type: str
+          price:
+            type:
+            - str
+            - float
+          size:
+            type:
+            - str
+            - float
+          amount:
+            type:
+            - str
+            - float
+          status:
+            type: str
+    mapping: null
+
+  trades:
+    request:
+      template: trades
+      pair_template: null
+      params:
+        pair_id: # the id of the method "currency_pairs"
+          type: int
+          required: true
+        page:
+          type: int
+          required: false
+        per_page:
+          type: int
+          min: 10
+          max: 100
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          side:
+            type: str
+          price:
+            type:
+            - str
+            - float
+          size:
+            type:
+            - str
+            - float
+          amount:
+            type:
+            - str
+            - float
+          created_at:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%d %H:%M:%S"
+    mapping:
+    - key: trade_side
+      path:
+      - side
+    - key: trade_last_price
+      path:
+      - price
+    - key: trade_amount
+      path:
+      - amount
+    - key: trade_time
+      path:
+      - created_at

@@ -206,6 +206,7 @@ def yaml_loader(exchange: str):
     with open(YAML_PATH + exchange + '.yaml', 'r') as f:
         try:
             data = yaml.load(f, Loader=yaml.FullLoader)
+            print(exchange)
             return data
         except Exception as ex:
             # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
@@ -231,7 +232,7 @@ def get_exchange_names() -> List[str]:
     exchanges_list = os.listdir(YAML_PATH)
     exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
     exchanges = exchange_names
-    # exchange_names.sort()
+    exchange_names.sort()
     return exchanges
 
 

@@ -1,0 +1,300 @@
+name: gatecoin
+terms:
+  terms_url: https://gatecoin.com/termsofuse
+  permission: null
+  search_targets:
+  - tag: div
+    id: main-body
+  - tag: article
+api_url: https://api.gatecoin.com/v1/
+rate_limit:
+  max: 150
+  unit: 60
+requests:
+  currency_pairs:
+    request:
+      template: Reference/CurrencyPairs/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currencyPairs:
+          type: list
+          values:
+            type: dict
+            values:
+              tradingCode: # i.e. "BTCUSD"
+                type: str
+              baseCurrency: # i.e. "BTC"
+                type: str
+              quoteCurrency: # i.e. "USD"
+                type: str
+              displayName: # i.e. "BTC / USD"
+                type: str
+              priceDecimalPlaces:
+                type: int
+              name: # i.e. "BTC / USD"
+                type: str
+        responseStatus:
+          type: dict
+          values:
+            message: # i.e. "OK"
+              type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - currencyPairs
+      - baseCurrency
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - currencyPairs
+      - quoteCurrency
+      type:
+      - str
+
+  currencies:
+    request:
+      template: Reference/Currencies/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currencies:
+          type: list
+          values:
+            type: dict
+            values:
+              code: # e.g. BTC
+                type: str
+              visible:
+                type: boolean
+              displayName: # e.g. BTC
+                type: str
+              displayFullName: # e.g. Bitcoin
+                type: str
+              symbol:
+                type: str
+              isDigital:
+                type: boolean
+              displayDecimalPlace:
+                type: int
+              withdrawalDecimalPlaces:
+                type: int
+              withdrawalsEnabled:
+                type: boolean
+              depositsEnabled:
+                type: boolean
+              withdrawalFee:
+                type: int
+              isToken:
+                type: boolean
+    mapping:
+    - key: currency_symbol
+      path:
+      - currencies
+      - displayName
+      type:
+      - str
+    - key: currency_name
+      path:
+      - currencies
+      - displayFullName
+      type:
+      - str
+
+  order_book:
+    request:
+      template: "{currency_pair}/OrderBook/"
+      pair_template: # e.g. BTCUSD
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # volume
+                type: float
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # volume
+                type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 1
+      type:
+      - float
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 1
+      type:
+      - float
+
+  trades:
+    request:
+      template: "{currency_pair}/Trades"
+      pair_template: # e.g. BTCUSD
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        since: # Get trades from specific tid.
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        response:
+          type: list
+          values:
+            type: dict
+            values:
+              tid:
+                type: int
+              price:
+                type: int
+              amount:
+                type: float
+              date:
+                type:
+                - str
+                - int
+                - fromtimestamp
+    mapping:
+    - key: trade_last_price
+      path:
+      - response
+      - price
+      type:
+      - int
+    - key: trade_amount
+      path:
+      - response
+      - amount
+      type:
+      - int
+    - key: trade_time
+      path:
+      - response
+      - date
+      type:
+      - str
+      - int
+      - fromtimestamp
+
+  ticker:
+    request:
+      template: Public/LiveTicker/{currency_pair}/
+      pair_template: # e.g. BTCUSD
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        ticker:
+          type: dict
+          values:
+            currencyPair:
+              type: str
+            open:
+              type: float
+            last:
+              type: int
+            lastQ:
+              type: float
+            high:
+              type: float
+            low:
+              type: float
+            volume:
+              type: float
+            volumn:
+              type: float
+            bid:
+              type: int
+            bidQ:
+              type: float
+            ask:
+              type: int
+            askQ:
+              type: float
+            vwap:
+              type: float
+            createDateTime:
+              type:
+              - str
+              - int
+              - fromtimestamp
+        responseStatus:
+          type: dict
+          values:
+            message: # i.e. "OK"
+              type: str
+    mapping:
+    - key: ticker_last_price
+      path:
+      - ticker
+      - last
+      type:
+      - int
+    - key: ticker_daily_volume
+      path:
+      - ticker
+      - volume
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - ticker
+      - bid
+      type:
+      - int
+    - key: ticker_best_ask
+      path:
+      - ticker
+      - ask
+      type:
+      - int
+    - key: ticker_time
+      path:
+      - ticker
+      - createDateTime
+      type:
+      - str
+      - int
+      - fromtimestamp

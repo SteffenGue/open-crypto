@@ -1,0 +1,213 @@
+name: coincheck
+terms:
+  # terms_url: https://assets-coincheck.s3.amazonaws.com/uploads/agreement/document/japanese_file/__04_Coincheck______20181029.pdf
+  permission: null
+  search_targets:
+  - tag: div
+    class: page
+  - tag: div
+    class: textLayer
+api_url: https://coincheck.com/api/
+rate_limit: null
+requests:
+  ticker:
+    request:
+      template: ticker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        last:
+          type: int
+        bid:
+          type: int
+        ask:
+          type: int
+        high:
+          type: int
+        low:
+          type: int
+        volume:
+          type:
+          - str
+          - float
+        timestamp:
+          type:
+          - int
+    mapping:
+    - key: currency_pair_first
+      path: []
+      type:
+      - none
+      - constant
+      - "BTC"
+    - key: currency_pair_second
+      path: []
+      type:
+      - none
+      - constant
+      - "JPY"
+    - key: ticker_last_price
+      path:
+      - last
+      type:
+      - int
+    - key: ticker_best_bid
+      path:
+      - bid
+      type:
+      - int
+    - key: ticker_best_ask
+      path:
+      - ask
+      type:
+      - int
+    - key: ticker_daily_volume
+      path:
+      - volume
+      type:
+      - str
+      - float
+    - key: ticker_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+
+  trades:
+    request:
+      template: trades
+      pair_template: # btc_jpy
+        template: "{first}_{second}"
+        lower_case: true
+        alias: pair
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: boolean
+        pagination:
+          type: dict
+          values:
+            limit:
+              type: int
+            order:
+              type: str
+            starting_after:
+              type: int
+            ending_before:
+              type: int
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              id:
+                type: int
+              amount:
+                type:
+                - str
+                - float
+              rate:
+                type: int
+              pair:
+                type: str
+              order_type:
+                type: str
+              created_at:
+                type:
+                - str
+    mapping:
+    - key: trade_last_price
+      path:
+      - data
+      - rate
+      type:
+      - int
+    - key: trade_amount
+      path:
+      - data
+      - amount
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - data
+      - order_type
+      type:
+      - str
+    - key: trade_time
+      path:
+      - data
+      - created_at
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+
+#  order_book:
+#    request:
+#      template: order_books
+#      pair_template: null
+#      params: null
+#    response:
+#      type: dict
+#      values:
+#        asks:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0:
+#                type: int
+#              1:
+#                type:
+#                - str
+#                - float
+#        bids:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0: # price
+#                type: int
+#              1: # amount
+#                type:
+#                - str
+#                - float
+#    mapping:
+#    - key: order_book_time
+#      path: []
+#      type:
+#      - none
+#      - now
+#    - key: order_book_asks_price
+#      path:
+#      - asks
+#      - 0
+#      type:
+#      - int
+#    - key: order_book_asks_size
+#      path:
+#      - asks
+#      - 1
+#      type:
+#      - str
+#      - float
+#    - key: order_book_bids_price
+#      path:
+#      - bids
+#      - 0
+#      type:
+#      - int
+#    - key: order_book_bids_size
+#      path:
+#      - bids
+ #     - 1
+#      type:
+#      - str
+#      - float

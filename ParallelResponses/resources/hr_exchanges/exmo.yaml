@@ -1,0 +1,333 @@
+name: exmo
+terms:
+  terms_url: https://exmo.com/de/docs/agreement/
+  permission: null
+  search_targets:
+  - tag: div
+    class: content_black
+  - tag: div
+    class: info_agree
+api_url: https://api.exmo.com/v1/
+rate_limit: null
+requests:
+#  trades:
+#    request:
+#      template: trades
+#      pair_template: # e.g. BTC_USD
+#        template: "{first}_{second}"
+#        lower_case: false
+#        alias: pair
+#      params: null
+#    response:
+#      type: dict
+#      values:
+#        currency_pair: # variable key, requested currency pair, i.e. "BTC_USD"
+#          type: list
+#          values:
+#            type: dict
+#            values:
+#              trade_id: # deal identifier
+#                type: int
+#              type: # type of the deal, i.e. "sell"
+#                type: str
+#              price: # deal price
+#                type:
+#                - str
+#                - int
+#              quantity: # currency quantity
+#                type:
+#                - str
+#                - int
+#              amount: # total sum of the deal
+#                type:
+#                - str
+#                - int
+#              date: # date and time of the deal (Unix)
+#                type:
+#                - int
+#    mapping:
+#    - key: trade_side
+#      path:
+#      - dict_values
+#      - type
+#      type:
+#      - str
+#    - key: trade_last_price
+#      path:
+#      - dict_values
+#      - price
+#      type:
+#      - str
+#      - int
+#    - key: trade_amount
+#      path:
+#      - dict_values
+#      - amount
+#      type:
+#      - str
+#      - int
+#    - key: trade_time
+#      path:
+#      - dict_values
+#      - date
+#      type:
+#      - int
+#      - fromtimestamp
+
+#  order_book:
+#    request:
+#      template: order_book
+#      pair_template: # e.g. BTC_USD
+#        template: "{first}_{second}"
+#        lower_case: false
+#        alias: pair
+#      params:
+#        limit: # the number of displayed positions (default: 100, max: 1000)
+#          type: int
+#          max: 1000
+#          default: 100
+#    response:
+#      type: dict
+#      values:
+#        currency_pair: # variable key, requested currency pair, i.e. "BTC_USD"
+#          type: dict
+#          values:
+#            ask_quantity: # the sum of all quantity values in sell orders
+#              type:
+#              - str
+#              - int
+#            ask_amount: # the sum of all total sum values in sell orders
+#              type:
+#              - str
+#              - int
+#            ask_top: # minimum sell price
+#              type:
+#              - str
+#              - int
+#            bid_quantity: # the sum of all quantity values in buy orders
+#              type:
+#              - str
+#              - int
+#            bid_amount: # the sum of all total sum values in buy orders
+#              type:
+#              - str
+#              - int
+#            bid_top: # maximum buy price
+#              type:
+#              - str
+#              - int
+#            ask: # the list of sell orders where every field is: price, quantity and amount
+#              type: list
+#              values:
+#                type: list
+#                values:
+#                  0: # price
+#                    type: int
+#                  1: # quantity
+#                    type: int
+#                  2: # amount
+#                    type: int
+#            bid: # the list of buy orders where every field is: price, quantity and amount
+#              type: list
+#              values:
+#                type: list
+#                values:
+#                  0: # price
+#                    type: int
+#                  1: # quantity
+#                    type: int
+#                  2: # amount
+#                    type: int
+#    mapping:
+#    - key: order_book_time
+#      path: []
+#      type:
+#      - none
+#      - now
+#    - key: order_book_asks_price
+#      path:
+#      - dict_values
+#      - ask
+#      - 0
+#      type:
+#      - int
+#    - key: order_book_asks_size
+#      path:
+#      - dict_values
+#      - ask
+#      - 1
+#      type:
+#      - int
+#    - key: order_book_bids_price
+#      path:
+#      - dict_values
+#      - bid
+#      - 0
+#      type:
+#      - int
+#    - key: order_book_bids_size
+#      path:
+#      - dict_values
+#      - bid
+#      - 1
+#      type:
+#      - int
+#
+  ticker:
+    request:
+      template: ticker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair: # variable key, each available currency pair
+          type: dict
+          values:
+            buy_price: # current maximum buy price
+              type:
+              - str
+            sell_price: # current minimum sell price
+              type:
+              - str
+            last_trade: # last deal price
+              type:
+              - str
+            high: # maximum deal price within the last 24 hours
+              type:
+              - str
+            low: # minimum deal price within the last 24 hours
+              type:
+              - str
+            avg: # average deal price within the last 24 hours
+              type:
+              - str
+            vol: # the volume of deals within the last 24 hours
+              type:
+              - str
+            vol_curr: # the total value of all deals within the last 24 hours
+              type:
+              - str
+            updated: # date and time of data update
+              type:
+              - int
+    mapping:
+    - key: ticker_time
+      path:
+      - dict_values
+      - updated
+      type:
+      - int
+      - fromtimestamp
+    - key: currency_pair_first
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1    
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - buy_price
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - sell_price
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last_trade
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - dict_values
+      - vol
+      type:
+      - str
+      - float
+
+#  currency_pairs:
+#    request:
+#      template: pair_settings/
+#      pair_template: null
+#      params: null
+#    response:
+#      type: dict
+#      values:
+#        currency_pair: # variable key, each available currency pair, i.e. "BTC_USD"
+#          type: dict
+#          values:
+#            min_quantity: # minimum quantity for the order
+#              type:
+#              - str
+#              - float
+#            max_quantity: # maximum quantity for the order
+#              type:
+#              - str
+#              - int
+#            min_price: # minimum price for the order
+#              type:
+#              - str
+#              - int
+#            max_price: # maximum price for the order
+#              type:
+#              - str
+#              - int
+#            max_amount: # maximum total sum for the order
+#              type:
+#              - str
+#              - int
+#            min_amount: # minimum total sum for the order
+#              type:
+#              - str
+#              - int
+#    mapping:
+#    - key: currency_pair_first
+#      path:
+#      - dict_key
+#      type:
+#      - str
+#      - split
+#      - "_"
+#      - 0
+#    - key: currency_pair_second
+#      path:
+#      - dict_key
+
+#      type:
+#      - str
+#      - split
+#      - "_"
+#      - 1
+#  currencies:
+#    request:
+#      template: currency/
+#      pair_template: null
+#      params: null
+#    response:
+#      type: list
+#      values: # e.g. "USD","EUR"
+#        type: str
+#    mapping:
+#    - key: currency_symbol
+#      path: []
+#      type:
+#      - str

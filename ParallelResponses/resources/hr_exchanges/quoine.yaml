@@ -1,0 +1,208 @@
+name: quoine
+terms:
+  # terms_url: https://quoine-prod.s3.amazonaws.com/uploads/policy_document/term_document/11/Terms_and_Conditions_QUOINE_PTE_LTD.pdf
+  permission: true
+  search_targets:
+  - tag: div
+    class: canvasWrapper
+  - tag: div
+    class: textLayer
+api_url: https://api.liquid.com/
+rate_limit:
+  max: 300
+  unit: 300
+requests:
+  ticker:
+    request:
+      template: products/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          product_type:
+            type: str
+          code:
+            type: str
+          name:
+            type: str
+          market_ask:
+            type:
+            - str
+            - float
+          market_bid:
+            type:
+            - str
+            - float
+          indicator:
+            type: int
+          currency:
+            type: str
+          currency_pair_code:
+            type: str
+          symbol:
+            type: str
+          fiat_minimum_withdraw:
+            type:
+            - str
+            - float
+          pusher_channel:
+            type: str
+          taker_fee:
+            type:
+            - str
+            - float
+          maker_fee:
+            type:
+            - str
+            - float
+          low_market_bid:
+            type:
+            - str
+            - float
+          high_market_ask:
+            type:
+            - str
+            - float
+          volume_24h:
+            type:
+            - str
+            - float
+          last_price_24h:
+            type:
+            - str
+            - float
+          last_traded_price:
+            type:
+            - str
+            - float
+          last_traded_quantity:
+            type:
+            - str
+            - float
+          quoted_currency:
+            type: str
+          base_currency:
+            type: str
+          exchange_rate:
+            type:
+            - str
+            - float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_bid
+      path:
+      - low_market_bid
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - low_market_ask
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - volume_24h
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - last_traded_price
+      type:
+      - str
+      - float
+    - key: currency_pair_first
+      path:
+      - base_currency
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - quoted_currency
+      type:
+      - str
+
+  order_book:
+    request:
+      template: products/{id}/price_levels
+      pair_template: null
+      params:
+        id: # the id of the currency pair
+          type: int
+        full: # 1 to get all price levels
+          type: int
+          default: 20
+    response:
+      type: dict
+      values:
+        buy_price_levels:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+                - float
+              1: # amount
+                type:
+                - str
+                - float
+        sell_price_levels:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+                - float
+              1: # amount
+                type:
+                - str
+                - float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - buy_price_levels
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - buy_price_levels
+      - 1
+      type:
+      - str
+      - float
+    - key: order_book_asks_price
+      path:
+      - sell_price_levels
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - sell_price_levels
+      - 1
+      type:
+      - str
+      - float

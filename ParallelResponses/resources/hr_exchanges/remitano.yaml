@@ -1,0 +1,171 @@
+name: remitano
+terms:
+  terms_url: null
+api_url: https://api.remitano.com/api/v1/
+rate_limit: null
+requests:
+  ticker:
+    request:
+      template: volumes/market_summaries/
+      values: null
+      params: null
+    response:
+      type: dict
+      keys:
+        type:
+        - str
+      values:
+        currency_pair: # variable keys, each available currency pair e.g. BTCGHS
+          type: dict
+          values:
+            last:
+              type: float
+            lowest_ask:
+              type: float
+            highest_bid:
+              type: float
+            volume24h:
+              type: float
+            low_price:
+              type: float
+            high_price:
+              type: float
+    mapping:
+    - key: ticker_last_price
+      path:
+      - dict_key
+      - last
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_key
+      - lowest_ask
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - dict_key
+      - highest_bid
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - dict_key
+      - volume24h
+      type:
+      - float
+
+  trades:
+    request:
+      template: markets/{currency_pair}/trades
+      values:
+        currency_pair: # e.g. BTCVND
+          template: "{first}{second}"
+          lower_case: false
+      params:
+        since: # maximum 24h ago
+          required: false
+          type:
+          - datetime
+          - totimestamp
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          timestamp:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%d %H:%M:%Z UTC"
+          price:
+            type: int
+          fiat_amount:
+            type: int
+          coin_amount:
+            type: int
+          coin_currency:
+            type: str
+          currency:
+            type: str
+          type:
+            type: str
+    mapping:
+    - key: trade_time
+      path:
+      - timestamp
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%d %H:%M:%Z UTC"
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - int
+    - key: trade_amount
+      path:
+      - coin_amount
+      type:
+      - int
+    - key: trade_side
+      path:
+      - type
+      type:
+      - str
+
+  order_book:
+    request:
+      template: markets/{currency_pair}/order_book/
+      values:
+        currency_pair: # e.g. BTCVND
+          template: "{first}{second}"
+          lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+    mapping:
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 1
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 1
+      type:
+      - float

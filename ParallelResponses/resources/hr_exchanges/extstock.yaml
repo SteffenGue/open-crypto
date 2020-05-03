@@ -1,0 +1,341 @@
+name: extstock
+terms:
+  terms_url: null
+api_url: https://extstock.com/api/v1/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: markets.json/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id: # i.e. "btc_usd"
+            type: str
+          name: # i.e. "BTC/USD"
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - id
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - id
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+
+  ticker:
+    request:
+      template: tickers.json/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair: # e.g. btc_usd, variable key, each available currency pair
+          type: dict
+          values:
+            at:
+              type:
+              - int
+              - fromtimestamp
+            ticker:
+              type: dict
+              values:
+                buy:
+                  type:
+                  - str
+                  - float
+                sell:
+                  type:
+                  - str
+                  - float
+                low:
+                  type:
+                  - str
+                  - float
+                high:
+                  type:
+                  - str
+                  - float
+                last:
+                  type:
+                  - str
+                  - float
+                vol:
+                  type:
+                  - str
+                  - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - dict_key
+      - 0
+      type:
+      - str
+      - split
+      - "_"
+    - key: currency_pair_second
+      path:
+      - dict_key
+      - 1
+      type:
+      - str
+      - split
+      - "_"
+    - key: ticker_time
+      path:
+      - dict_values
+      - at
+      type:
+      - int
+      - fromtimestamp
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - buy
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - sell
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - dict_values
+      - vol
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: depth.json
+      pair_template: # btc_usd
+        template: "{first}_{second}"
+        lower_case: false
+        alias: market
+      params:
+        limit:
+          type: int
+          default: 300
+    response:
+      type: dict
+      values:
+        timestamp:
+          type:
+          - int
+          - fromtimestamp
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0:
+                type: float
+              1:
+                type: float
+    mapping:
+    - key: order_book_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 1
+      type:
+      - float
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 1
+      type:
+      - float
+
+  trades:
+    request:
+      template: trades.json
+      pair_template: # btc_usd
+        template: "{first}_{second}"
+        lower_case: false
+        alias: market
+      params:
+        limit: # Limit the number of returned trades.
+          type: int
+          default: 50
+        timestamp:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+        from: # Trade id. If set, only trades created after the trade will be returned.
+          type: int
+          required: false
+        to: # Trade id. If set, only trades created before the trade will be returned.
+          type: int
+          required: false
+        order_by: # If set, returned trades will be sorted in specific order, default to 'desc'.
+          type: str
+          allowed:
+          - asc  # ascending order
+          - desc # descending order
+          default: desc
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          price:
+            type:
+            - str
+            - float
+          volume:
+            type:
+            - str
+            - float
+          funds:
+            type:
+            - str
+            - float
+          market:
+            type: str
+          created_at:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%dT%H:%M:%S-%fZ"
+          side:
+            type: str
+    mapping:
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - volume
+      type:
+      - str
+      - float
+    - key: trade_time
+      path:
+      - created_at
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S-%fZ"
+    - key: trade_side
+      path:
+      - side
+      type:
+      - str
+
+  historic_rates:
+    request:
+      template: k.json
+      pair_template: # btc_usd
+        template: "{first}_{second}"
+        lower_case: false
+        alias: market
+      params:
+        limit: # Limit the number of returned data points, default to 30.
+          type: int
+          default: 30
+        period: # Time period of K line, default to 1 (minutes).
+          type: int
+          allowed:
+          - 1     # 1 minute
+          - 5     # 5 minutes
+          - 15    # 15 minutes
+          - 30    # 30 minutes
+          - 60    # 1 hour
+          - 120   # 2 hours
+          - 240   # 4 hours
+          - 360   # 6 hours
+          - 720   # 12 hours
+          - 1440  # 1 day
+          - 4320  # 3 days
+          - 10080 # 1 week
+          default: 1
+        timestamp:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+    response: # bad documentation; no mapping possible
+      type: list
+      values:
+        type: list
+        values:
+          0: # datetime
+            type:
+            - int
+            - fromtimestamp
+          1:
+            type: float
+          2:
+            type: float
+          3:
+            type: float
+          4:
+            type: float
+          5:
+            type: float
+    mapping:
+    - key: historic_rates_time
+      path:
+      - 0
+      type:
+      - int
+      - fromtimestamp

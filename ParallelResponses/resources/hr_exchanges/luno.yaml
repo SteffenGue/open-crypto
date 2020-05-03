@@ -1,0 +1,234 @@
+name: luno
+terms:
+  terms_url: https://www.luno.com/en/legal/terms
+  permission: true
+  search_targets:
+  - tag: div
+    class: terms-conditions
+api_url: https://api.mybitx.com/api/1/
+rate_limit:
+  max: 1
+  unit: 1
+requests:
+  ticker:
+    request:
+      template: tickers/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        tickers:
+          type: list
+          values:
+            type: dict
+            values:
+              pair:
+                type: str
+              timestamp:
+                type:
+                - int
+                - fromtimestamp
+              bid:
+                type:
+                - str
+                - float
+              ask:
+                type:
+                - str
+                - float
+              last_trade:
+                type:
+                - str
+                - float
+              rolling_24_hour_volume:
+                type:
+                - str
+                - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - tickers
+      - pair
+      - 0
+      type:
+      - str
+      - split
+      - ""
+    - key: currency_pair_second
+      path:
+      - tickers
+      - pair
+      - 1
+      type:
+      - str
+      - split
+      - ""
+    - key: ticker_time
+      path:
+      - tickers
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: ticker_best_bid
+      path:
+      - tickers
+      - bid
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - tickers
+      - ask
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - tickers
+      - last_trade
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - tickers
+      - rolling_24_hour_volume
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: orderbook
+      pair_template: # e.g. XBTZAR
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        timestamp:
+          type:
+          - int
+          - fromtimestamp
+        asks:
+          type: list
+          values:
+            type: dict
+            values:
+              price:
+                type:
+                - str
+                - float
+              volume:
+                type:
+                - str
+                - float
+        bids:
+          type: list
+          values:
+            type: dict
+            values:
+              price:
+                type:
+                - str
+                - float
+              volume:
+                type:
+                - str
+                - float
+    mapping:
+    - key: order_book_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: order_book_asks_price
+      path:
+      - asks
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - bids
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - price
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: trades
+      pair_template: # e.g. XBTZAR
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        since:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+    response:
+      type: dict
+      values:
+        trades:
+          type: list
+          values:
+            type: dict
+            values:
+              timestamp:
+                type:
+                - int
+                - fromtimestamp
+              price:
+                type:
+                - str
+                - float
+              volume:
+                type:
+                - str
+                - float
+              is_buy:
+                type: bool
+    mapping:
+    - key: trade_time
+      path:
+      - trades
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_last_price
+      path:
+      - trades
+      - price
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - trades
+      - volume
+      type:
+      - str
+      - float

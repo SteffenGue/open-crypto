@@ -1,0 +1,252 @@
+name: oex
+terms:
+  terms_url: null
+  permission: null 
+  search_targets: null
+
+api_url: https://openapi.oex.com/open/api/
+rate_limit: null
+
+requests:
+  currency_pairs:
+    request:
+      template: common/symbols
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        code:
+          type: str
+        msg:
+          type: str
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              symbol:
+                type: str
+              count_coin:
+                type: str
+              amount_precision:
+                type: int
+              base_coin:
+                type: str
+              price_precision:
+                type: int
+    mapping:
+      - key: currency_pair_first
+        path:
+        - data
+        - base_coin
+        type:
+        - str
+      - key: currency_pair_second
+        path: 
+        - data
+        - count_coin
+        type:
+        - str
+        
+  histric_rates: 
+    request:
+      template: get_records
+      pair_template: 
+        template: "{first}{second}"
+        lower_case: true
+        alias: symbol
+      params:
+        period:
+          default: 1440 #one day     
+    response:
+      type: dict
+      values:
+        code:
+          type: str
+        msg: 
+          type: str
+        data:
+          type: list
+          values:
+          type: list
+          values:
+            0: #timestamp
+              type: int
+            1: #open
+              type: float
+            2: #high
+              type: float
+            3: #low
+              type: float
+            4: #close
+              type: float
+            5: #volumne
+              type: float
+                 
+    mapping:
+      - key: historic_rates_time
+        path:
+        - data
+        - 0
+        type:
+        - int
+        - fromtimestamp
+      - key: historic_rates_open
+        path:
+        - data
+        - 1
+        type:
+        - float
+      - key: historic_rates_high
+        path:
+        - data
+        - 2
+        type:
+        - float
+      - key: historic_rates_low
+        path:
+        - data
+        - 3
+        type:
+        - float
+      - key: historic_rates_close
+        path:
+        - data
+        - 4
+        type:
+        - float
+      - key: historic_rates_volume
+        path: 
+        - data
+        - 5
+        type:
+        - float
+  
+  ticker:
+    request:
+      template: get_ticker
+      pair_template:
+        template: "{first}{second}"
+        lower_case: true
+        alias: symbol
+      params: null
+    
+    response:
+      type: dict
+      values:
+        code:
+          type: str
+        msg: 
+          type: str
+        data:
+          type: dict
+          values:
+            high:
+              type: str
+            vol:
+              type: str
+            last:
+              type: str            
+            low:
+              type: str
+            sell:
+              type: str
+            rose:
+              type: str
+            time:
+              type: int
+    mapping:
+      - key: ticker_time
+        path:
+        - data
+        - time
+        type:
+        - int
+        - fromtimestampms
+      - key: ticker_last_price
+        path:
+        - data
+        - last
+        type:
+        - str
+        - float
+      - key: ticker_best_ask
+        path:
+        - data
+        - sell
+        type:
+        - str
+        - float
+      - key: ticker_best_bid
+        path:
+        - data
+        - buy
+        type:
+        - str
+        - float
+      - key: ticker_volume
+        path:
+        - data
+        - vol
+        type:
+        - str
+        - float
+        
+  trades:
+    request:
+      template: get_trades
+      pair_template: 
+        template: "{first}{second}"
+        lower_case: true
+        alias: symbol
+      params: null
+    response:
+      type: dict
+      values:
+        code:
+          type: str
+        msg: 
+          type: str
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type: float
+              price:
+                type: float
+              ctime:
+                type: int
+              id:
+                type: int
+              type:
+                type: str
+                  
+    mapping:
+      - key: trade_time
+        path:
+        - data
+        - ctime
+        type:
+        - int 
+        - fromtimestampms
+      - key: trade_amount
+        path:
+        - data
+        - amount
+        type:
+        - float
+      - key: trade_last_price
+        path:
+        - data
+        - price
+        type:
+        - float
+      - key: trade_side
+        path:
+        - data
+        - type
+        type:
+        - str       

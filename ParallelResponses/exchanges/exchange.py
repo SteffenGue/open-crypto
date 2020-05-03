@@ -142,28 +142,30 @@ class Exchange:
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
 
-    async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair],
-                                     start_time: datetime):
-        if self.request_urls[request_name]:
+    async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]):
+        #TODO Doku
+        if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 try:
                     responses = dict()
+                    # Constructing Currency Pair
+                    params = request_url_and_params['params']
+                    pair_template_dict = request_url_and_params['pair_template']
+                    pair_template = pair_template_dict['template']
+                    pair_alias = pair_template_dict['alias']
+
                     for cp in currency_pairs:
-                        # Constructing Currency Pair
-                        pair_template_dict = request_url_and_params['pair_template']
-                        pair_template = pair_template_dict['template']
-                        pair_template.format(cp.first.name, cp.second.name)
+                        pair_formatted = pair_template.format(first=cp.first.name, second=cp.second.name)
                         if pair_template_dict['lower_case']:
                             pair_template.lower()
-
-                        response = await session.get(request_url_and_params['url'] + pair_template,
-                                                     params=request_url_and_params['params'])
+                        params[pair_alias] = pair_formatted
+                        response = await session.get(request_url_and_params['url'], params=params)
                         response_json = await response.json(content_type=None)
                         print('{} bekommen.'.format(request_url_and_params['url']))
-                        responses[cp] = response
+                        responses[cp] = response_json
 
-                    return self.name, start_time, datetime.utcnow(), responses
+                    return self.name, responses
 
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
@@ -178,18 +180,37 @@ class Exchange:
                     # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
                     exception = ExceptionDict()
                     exception.get_dict()['{}'.format(self.name)] = 1
+        else:
+            print('{} hat keine Historic Rates'.format(self.name))
 
-    async def request_currency_pairs(self, request_name: str, start_time: datetime) -> Tuple[
-        str, datetime, datetime, Dict]:
+
+    async def request_currency_pairs(self, request_name: str, start_time: datetime) -> Tuple[str, Dict]:
+        response_json = None
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
-            async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls[request_name]
-                response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
-                response_json = await response.json(content_type=None)
-                print('{} bekommen.'.format(request_url_and_params['url']))
+            try:
 
-                return self.name, start_time, datetime.utcnow(), response_json
-        return None
+                async with aiohttp.ClientSession() as session:
+                    request_url_and_params = self.request_urls[request_name]
+                    response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
+                    response_json = await response.json(content_type=None)
+                    print('{} bekommen.'.format(request_url_and_params['url']))
+
+            except ClientConnectionError:
+                print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
+                exception = ExceptionDict()
+                exception.get_dict()['{}'.format(self.name)] = 1
+
+            except Exception as ex:
+                template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+                message = template.format(type(ex).__name__, ex.args)
+                print(message)
+                print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
+                # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
+                exception = ExceptionDict()
+                exception.get_dict()['{}'.format(self.name)] = 1
+
+        return self.name, response_json
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Dict[str, Dict]]:
         """
@@ -416,16 +437,53 @@ class Exchange:
             if not self.exchange_currency_pairs.__contains__(cp):
                 self.exchange_currency_pairs.append(cp)
 
-    def format_currency_pairs(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str, str, str]]:
-        results = {'currency_pair_first': [],
-                   'currency_pair_second': []}
+    def format_currency_pairs(self, response: Tuple[str, Dict]) -> Iterator[Tuple[str, str, str]]:
+        #TODO Doku
+        try:
+            results = {'currency_pair_first': [],
+                       'currency_pair_second': []}
 
-        mappings = self.response_mappings['currency_pairs']
-        for mapping in mappings:
-            results[mapping.key] = mapping.extract_value(response[3])
+            mappings = self.response_mappings['currency_pairs']
+            for mapping in mappings:
+                results[mapping.key] = mapping.extract_value(response[1])
 
-        assert (len(results[0]) == len(result) for result in results)
+            assert (len(results[0]) == len(result) for result in results)
 
-        return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
-                                          results['currency_pair_first'],
-                                          results['currency_pair_second']))
+            return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
+                                              results['currency_pair_first'],
+                                              results['currency_pair_second']))
+        except Exception as e:
+            print('{}: cp exception'.format(response[0]))
+            return None
+
+
+    def format_historic_rates(self, response: Tuple[str, Dict]):
+        temp_results = {'historic_rates_time': [],
+                   'historic_rates_open': [],
+                   'historic_rates_high': [],
+                   'historic_rates_low': [],
+                   'historic_rates_close': [],
+                   'historic_rates_volume': []}
+
+        results = list()
+
+        mappings = self.response_mappings['historic_rates']
+        responses = response[1]
+
+        for currency_pair in responses.keys():
+            current_response = responses[currency_pair]
+
+            for mapping in mappings:
+                temp_results[mapping.key] = mapping.extract_value(current_response)
+
+            assert (len(results[0]) == len(result) for result in results)
+            result = list(itertools.zip_longest(itertools.repeat(currency_pair.id, len(temp_results['historic_rates_time'])),
+                                                temp_results['historic_rates_time'],
+                                                temp_results['historic_rates_open'],
+                                                temp_results['historic_rates_high'],
+                                                temp_results['historic_rates_low'],
+                                                temp_results['historic_rates_close'],
+                                                temp_results['historic_rates_volume']))
+            results.extend(result)
+
+        return results

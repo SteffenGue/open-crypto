@@ -1,0 +1,267 @@
+name: btc_turk
+terms:
+  terms_url: https://www.btcturk.com/kullanim_sozlesmesi
+  permission: null
+  search_targets:
+  - tag: div
+    class: container
+    id: printable
+api_url: https://www.btcturk.com/api/
+rate_limit:
+  max: 10
+  #unit in seconds
+  unit: 1
+  # IMPORTANT: If you make more than 50 consequent unauthorized requests your IP address will be blocked
+requests:
+  ticker:
+    rate_limit:
+      max: 100
+      unit: 1
+    request:
+      template: ticker/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          pair: # e.g. BTCTRY
+            type: str
+          high:
+            type: int
+          last:
+            type: float
+          timestamp:
+            type:
+            - int
+            - fromtimestamp
+          bid:
+            type: float
+          volume:
+            type: float
+          low:
+            type: int
+          ask:
+            type: float
+          open:
+            type: int
+          average:
+            type: float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - pair
+      - 0
+      type:
+      - str
+      - split
+      - ""
+    - key: currency_pair_second
+      path:
+      - pair
+      - 1
+      type:
+      - str
+      - split
+      - ""
+    - key: ticker_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: ticker_best_bid
+      path:
+      - bid
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - volume
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - ask
+      type:
+      - float
+
+  order_book:
+    request:
+      template: orderbook
+      pair_template: # e.g. BTCTRY
+        template: "{first}{second}"
+        lower_case: false
+        alias: pairSymbol
+      params: null
+    response:
+      type: dict
+      values:
+        timestamp:
+          type:
+          - int
+          - fromtimestamp
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+    mapping:
+    - key: order_book_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 1
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 1
+      type:
+      - float
+
+  trades:
+    request:
+      template: trades
+      pair_template: # e.g. BTCTRY
+        template: "{first}{second}"
+        lower_case: false
+        alias: pairSymbol
+      params:
+        last:
+          type: int
+          max: 50
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          date:
+            type:
+            - int
+            - fromtimestamp
+          tid:
+            type: str
+          price:
+            type: float
+          amount:
+            type: float
+    mapping:
+    - key: trade_time
+      path:
+      - date
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - float
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - float
+
+  historic_rates: # no hint which currency pair is meant
+    request:
+      template: ohlcdata
+      pair_template: null
+      params:
+        last:
+          type: int
+          max: 50
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          Time:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%dT%H:%M:%S"
+          Open:
+            type: float
+          High:
+            type: float
+          Low:
+            type: float
+          Close:
+            type: float
+          Volume:
+            type: float
+          Average:
+            type: float
+          DailyChangeAmount:
+            type: float
+          DailyChangePercentage:
+            type: float
+    mapping:
+    - key: historic_rates_time
+      path:
+      - Time
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S"
+    - key: historic_rates_open
+      path:
+      - Open
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - High
+      type:
+      - float
+    - key: historic_rates_low
+      path:
+      - Low
+      type:
+      - float
+    - key: historic_rates_close
+      path:
+      - Close
+      type:
+      - float
+    - key: historic_rates_volume
+      path:
+      - Volume
+      type:
+      - float

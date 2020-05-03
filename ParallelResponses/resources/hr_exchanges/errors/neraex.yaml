@@ -1,0 +1,352 @@
+name: neraex
+terms:
+  terms_url: null
+api_url: https://neraex.com/api/v2/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: markets/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id: # e.g. btccny
+            type: str
+          name: # e.g. BTC/CNY
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - name
+      - 0
+      type:
+      - str
+      - split
+      - "/"
+    - key: currency_pair_second
+      path:
+      - name
+      - 1
+      type:
+      - str
+      - split
+      - "/"
+
+  order_book:
+    request:
+      template: order_book
+      pair_template: # e.g. btccny
+        template: "{first}{second}"
+        lower_case: true
+        alias: market
+      params:
+        asks_limit:
+          type: int
+          required: false
+        bids_limit:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        asks:
+          type: list
+          values:
+            type: dict
+            values:
+              id:
+                type: int
+              side:
+                type: str
+              ord_type:
+                type: str
+              price:
+                type:
+                - str
+                - float
+              avg_price:
+                type:
+                - str
+                - float
+              state:
+                type: str
+              market:
+                type: str
+              created_at:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%SZ"
+              volume:
+                type:
+                - str
+                - float
+              remaining_volume:
+                type:
+                - str
+                - float
+              executed_volume:
+                type:
+                - str
+                - float
+              trades_count:
+                type: int
+        bids:
+          type: list
+          values:
+            type: dict
+            values:
+              id:
+                type: int
+              side:
+                type: str
+              ord_type:
+                type: str
+              price:
+                type:
+                - str
+                - float
+              avg_price:
+                type:
+                - str
+                - float
+              state:
+                type: str
+              market:
+                type: str
+              created_at:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%SZ"
+              volume:
+                type:
+                - str
+                - float
+              remaining_volume:
+                type:
+                - str
+                - float
+              executed_volume:
+                type:
+                - str
+                - float
+              trades_count:
+                type: int
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - asks
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - volume
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - bids
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - volume
+      type:
+      - str
+      - float
+
+  ticker:
+    request:
+      template: tickers/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair: # variable key, each available currency pair e.g. btccny
+          type: dict
+          values:
+            at:
+              type:
+              - int
+              - fromtimestamp
+            ticker:
+              type: dict
+              values:
+                buy:
+                  type:
+                  - str
+                  - float
+                sell:
+                  type:
+                  - str
+                  - float
+                low:
+                  type:
+                  - str
+                  - float
+                high:
+                  type:
+                  - str
+                  - float
+                last:
+                  type:
+                  - str
+                  - float
+                vol:
+                  type:
+                  - str
+                  - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - dict_key
+      - 0
+      type:
+      - str
+      - split
+      - ""
+    - key: currency_pair_second
+      path:
+      - dict_key
+      - 1
+      type:
+      - str
+      - split
+      - ""
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - ticker
+      - buy
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - ticker
+      - sell
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - ticker
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - dict_values
+      - ticker
+      - vol
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: trades
+      pair_template: # e.g. btccny
+        template: "{first}{second}"
+        lower_case: true
+        alias: market
+      params:
+        limit:
+          type: int
+          required: false
+        timestamp:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+        from:
+          type: int
+          required: false
+        to:
+          type: int
+          required: false
+        order_by:
+          type: str
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          price:
+            type:
+            - str
+            - float
+          volume:
+            type:
+            - str
+            - float
+          funds:
+            type:
+            - str
+            - float
+          market:
+            type: str
+          created_at:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%dT%H:%M:%SZ"
+          at:
+            type:
+            - int
+            - fromtimestamp
+          side:
+            type: str
+    mapping:
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - volume
+      type:
+      - str
+      - float
+    - key: trade_time
+      path:
+      - at
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_side
+      path:
+      - side
+      type:
+      - str

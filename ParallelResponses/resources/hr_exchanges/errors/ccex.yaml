@@ -1,0 +1,342 @@
+name: ccex
+terms:
+  terms_url: https://c-cex.com/?id=terms
+  permission: true
+  search_targets:
+  - tag: div
+    class: mblockm
+  - tag: div
+    class: block2
+api_url: https://c-cex.com/api_pub.html
+rate_limit:
+  max: 100
+  unit: 60
+requests:
+  currency_pairs:
+    request:
+      template: ""
+      pair_template: null
+      params:
+        a:
+          type: str
+          allowed:
+          - getmarkets
+          default: getmarkets
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              MarketCurrency: # i.e. "USD"
+                type: str
+              BaseCurrency: # i.e. "BTC"
+                type: str
+              MarketCurrencyLong: # i.e. "USD"
+                type: str
+              BaseCurrencyLong: # i.e. "Bitcoin"
+                type: str
+              MinTradeSize:
+                type: float
+              MarketName: # i.e. "USD-BTC"
+                type: str
+              IsActive:
+                type: bool
+              Created:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%S"
+    mapping:
+    - key: currency_pair_first
+      path:
+      - result
+      - MarketCurrency
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - result
+      - BaseCurrency
+      type:
+      - str
+
+  order_book:
+    request:
+      template: ""
+      pair_template: # btc-usd
+        template: "{first}-{second}"
+        lower_case: true
+        alias: market
+      params:
+        a:
+          type: str
+          allowed:
+          - getorderbook
+          default: getorderbook
+        depth:
+          type: int
+          max: 100
+          default: 50
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: dict
+          values:
+            buy:
+              type: list
+              values:
+                type: dict
+                values:
+                  Quantity:
+                    type: float
+                  Rate:
+                    type: float
+            sell:
+              type: list
+              values:
+                type: dict
+                values:
+                  Quantity:
+                    type: float
+                  Rate:
+                    type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - result
+      - buy
+      - Rate
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - result
+      - buy
+      - Quantity
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - result
+      - sell
+      - Rate
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - result
+      - sell
+      - Quantity
+      type:
+      - float
+
+  ticker:
+    request:
+      template: ""
+      pair_template: null
+      params:
+        a:
+          type: str
+          allowed:
+          - getmarketsummaries
+          default: getmarketsummaries
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              MarketName: # i.e. "USD-BTC"
+                type: str
+              High:
+                type: float
+              Low:
+                type: float
+              Volume:
+                type: float
+              Last:
+                type: float
+              BaseVolume:
+                type: float
+              TimeStamp:
+                type:
+                - str
+                - int
+                - fromtimestamp
+              Bid:
+                type: float
+              Ask:
+                type: float
+              OpenBuyOrders:
+                type: int
+              OpenSellOrders:
+                type: int
+              PrevDay:
+                type: float
+              Created:
+                type:
+                - str
+                - int
+                - fromtimestamp
+              DisplayMarketName:
+                type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - result
+      - MarketName
+      - 0
+      type:
+      - str
+      - split
+      - "-"
+    - key: currency_pair_second
+      path:
+      - result
+      - MarketName
+      - 1
+      type:
+      - str
+      - split
+      - "-"
+    - key: ticker_daily_volume
+      path:
+      - result
+      - Volume
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - result
+      - Last
+      type:
+      - float
+    - key: ticker_time
+      path:
+      - result
+      - TimeStamp
+      type:
+      - str
+      - int
+      - fromtimestamp
+    - key: ticker_best_bid
+      path:
+      - result
+      - Bid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - result
+      - Ask
+      type:
+      - float
+
+  trades:
+    request:
+      template: ""
+      pair_template: null
+      params:
+        a:
+          type: str
+          allowed:
+          - getfullmarkethistory
+          default: getfullmarkethistory
+        count:
+          type: int
+          min: 1
+          max: 100
+          default: 50
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              Market: # i.e. "usd-yog"
+                type: str
+              Id:
+                type: int
+              TimeStamp:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%S"
+              Quantity:
+                type: float
+              Price:
+                type: float
+              Total:
+                type: float
+              FillType: # i.e. "FILL"
+                type: str
+              OrderType: # i.e. "BUY"
+                type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - result
+      - Market
+      - 0
+      type:
+      - str
+      - split
+      - "-"
+    - key: currency_pair_second
+      path:
+      - result
+      - Market
+      - 1
+      type:
+      - str
+      - split
+      - "-"
+    - key: trade_time
+      path:
+      - result
+      - TimeStamp
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S"
+    - key: trade_amount
+      path:
+      - result
+      - Quantity
+      type:
+      - float
+    - key: trade_side
+      path:
+      - result
+      - OrderType
+      type:
+      - str

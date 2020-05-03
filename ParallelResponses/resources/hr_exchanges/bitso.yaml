@@ -1,0 +1,342 @@
+name: bitso
+terms:
+  terms_url: https://bitso.com/terms
+  permission: true
+  search_targets:
+  - tag: div
+    class: static smaller
+api_url: https://api.bitso.com/v3/
+rate_limit:
+  max: 60
+  # 1 minute
+  unit: 60
+requests:
+  currency_pairs:
+    request:
+      template: available_books/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        payload:
+          type: list
+          values:
+            type: dict
+            values:
+              book: # e.g. btc_mxn
+                type: str
+              minimum_amount:
+                type:
+                - str
+                - float
+              maximum_amount:
+                type:
+                - str
+                - float
+              minimum_price:
+                type:
+                - str
+                - float
+              maximum_price:
+                type:
+                - str
+                - float
+              minimum_value:
+                type:
+                - str
+                - float
+              maximum_value:
+                type:
+                - str
+                - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - payload
+      - book
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - payload
+      - book
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+
+  ticker:
+    request:
+      template: ticker
+      pair_template: # e.g. btc_mxn
+        template: "{first}_{second}"
+        lower_case: true
+        alias: book
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        payload:
+          type: dict
+          values:
+            book:
+              type: str
+            volume:
+              type:
+              - str
+              - float
+            high:
+              type:
+              - str
+              - float
+            last:
+              type:
+              - str
+              - float
+            low:
+              type:
+              - str
+              - float
+            vwap:
+              type:
+              - str
+              - float
+            ask:
+              type:
+              - str
+              - float
+            bid:
+              type:
+              - str
+              - float
+            created_at:
+              type:
+              - str
+              - strptime
+              - "%Y-%m-%dT%H:%M:%S.%fZ"
+    mapping:
+    - key: ticker_daily_volume
+      path:
+      - payload
+      - volume
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - payload
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - payload
+      - ask
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - payload
+      - bid
+      type:
+      - str
+      - float
+    - key: ticker_time
+      path:
+      - payload
+      - created_at
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+
+  order_book:
+    request:
+      template: order_book
+      pair_template: # e.g. btc_mxn
+        template: "{first}_{second}"
+        lower_case: true
+        alias: book
+      params:
+        aggregate:
+          type: bool
+          default: true
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        payload:
+          type: dict
+          values:
+            asks:
+              type: list
+              values:
+                type: dict
+                values:
+                  book:
+                    type: str
+                  price:
+                    type:
+                    - str
+                    - float
+                  amount:
+                    type:
+                    - str
+                    - float
+            bids:
+              type: list
+              values:
+                type: dict
+                values:
+                  book:
+                    type: str
+                  price:
+                    type:
+                    - str
+                    - float
+                  amount:
+                    type:
+                    - str
+                    - float
+            updated_at:
+              type:
+              - str
+              - strptime
+              - "%Y-%m-%dT%H:%M:%S.%fZ"
+            sequence:
+              type:
+              - str
+              - int
+    mapping:
+    - key: order_book_asks_price
+      path:
+      - payload
+      - asks
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - payload
+      - asks
+      - amount
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - payload
+      - bids
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - payload
+      - bids
+      - amount
+      type:
+      - str
+      - float
+    - key: order_book_time
+      path:
+      - payload
+      - updated_at
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+
+  trades:
+    request:
+      template: trades
+      pair_template: # e.g. btc_mxn
+        template: "{first}_{second}"
+        lower_case: true
+        alias: book
+      params:
+        marker: # Returns objects that are older or newer (depending on 'sort’) than the object with this ID
+          type: int
+          required: false
+        sort:
+          type: str
+          allowed:
+          - asc
+          - desc
+          default: desc
+        limit:
+          type: int
+          max: 100
+          default: 25
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        payload:
+          type: list
+          values:
+            type: dict
+            values:
+              book:
+                type: str
+              created_at:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%S.%fZ"
+              amount:
+                type:
+                - str
+                - float
+              maker_side:
+                type: str
+              price:
+                type:
+                - str
+                - float
+              tid:
+                type: int
+    mapping:
+    - key: trade_time
+      path:
+      - payload
+      - created_at
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+    - key: trade_amount
+      path:
+      - payload
+      - amount
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - payload
+      - maker_side
+      type:
+      - str
+    - key: trade_last_price
+      path:
+      - payload
+      - price
+      type:
+      - str
+      - float

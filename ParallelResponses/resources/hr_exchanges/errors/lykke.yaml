@@ -1,0 +1,239 @@
+name: lykke
+terms:
+  terms_url: https://www.lykke.com/cp/terms_of_use
+  permission: null
+  search_targets:
+  - tag: div
+    class: col-sm-8 automargin
+api_url: https://public-api.lykke.com/api/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: Candles/history/Spot/available/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values: # each available currency pairs, e.g. AEBTC
+        type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - 0
+      type:
+      - str
+      - split
+      - ""
+    - key: currency_pair_second
+      path:
+      - 1
+      type:
+      - str
+      - split
+      - ""
+
+  historic_rates:
+    request:
+      template: Candles/history/Spot/{currency_pair}/{period}/{type}/{from}/{to}/
+      pair_template: # e.g. AEBTC
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        period:
+          type: str
+          allowed:
+          - Sec
+          - Minute
+          - Min5
+          - Min15
+          - Min30
+          - Hour
+          - Hour4
+          - Hour6
+          - Hour12
+          - Day
+          - Week
+          - Month
+          required: true
+        type:
+          type: str
+          allowed:
+          - Bid
+          - Ask
+          - Mid
+          - Trades
+          required: true
+        from: # e.g. 2018-09-01T07:41:47.895Z
+          type:
+          - datetime
+          - strftime
+          - "%Y-%m-%dT%H:%M:%SZ"
+          required: true
+        to:
+          type:
+          - datetime
+          - strftime
+          - "%Y-%m-%dT%H:%M:%SZ"
+          required: true
+    response:
+      type: dict
+      values:
+        assetPair:
+          type: str
+        period:
+          type: str
+        dateFrom:
+          type:
+          - str
+          - strptime
+          - "%Y-%m-%dT%H:%M:%SZ"
+        dateTo:
+          type:
+          - str
+          - strptime
+          - "%Y-%m-%dT%H:%M:%SZ"
+        type:
+          type: str
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              dateTime:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%SZ"
+              open:
+                type: float
+              close:
+                type: float
+              high:
+                type: float
+              low:
+                type: float
+              volume:
+                type: float
+              oppositeVolume:
+                type: float
+    mapping:
+    - key: historic_rates_time
+      path:
+      - data
+      - dateTime
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%SZ"
+    - key: historic_rates_open
+      path:
+      - data
+      - open
+      type:
+      - float
+    - key: historic_rates_close
+      path:
+      - data
+      - close
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - data
+      - high
+      type:
+      - float
+    - key: historic_rates_low
+      path:
+      - data
+      - low
+      type:
+      - float
+    - key: historic_rates_volume
+      path:
+      - data
+      - volume
+      type:
+      - float
+
+  order_book:
+    request:
+      template: OrderBook/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          assetPair:
+            type: str
+          isBuy:
+            type: bool
+          timestamp:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%dT%H:%M:%SZ"
+          prices:
+            type: list
+            values:
+              type: dict
+              values:
+                volume:
+                  type: float
+                price:
+                  type: float
+    mapping: null  # TODO, no segmentation between asks and bids
+
+  trades:
+    request:
+      template: Trades/Last/{currency_pair}/{amount}/
+      pair_template: # e.g. AEBTC
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        amount:
+          type: int
+          required: true
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          dt:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%dT%H:%M:%SZ"
+          baseAssetId:
+            type: str
+          quotingAssetId:
+            type: str
+          assetPair:
+            type: str
+          price:
+            type: float
+          amount:
+            type: int
+    mapping:
+    - key: trade_time
+      path:
+      - dt
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%SZ"
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - float
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - int

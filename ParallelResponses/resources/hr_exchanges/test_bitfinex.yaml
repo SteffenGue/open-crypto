@@ -1,0 +1,300 @@
+name: test_bitfinex
+terms:
+  terms_url: https://www.bitfinex.com/legal/api_terms
+  permission: null
+  search_targets:
+  - tag: div
+    class: pub-wrapper
+  - tag: div
+    class: row container
+  - tag: div
+    class: pad-for-content policy-pages max-width
+api_url: https://api.bitfinex.com/v2/
+rate_limit: null
+requests:
+  tickers:
+    request:
+      template: tickers/ # tickers?symbols=tBTCUSD,tLTCUSD,fUSD
+      pair_template: null
+      params:
+        symbols:
+          type: str
+          default: ALL
+    response:
+      type: list
+      values:
+        type: list
+        values:
+          # template on trading pairs (ex. tBTCUSD)
+          0: # SYMBOL: The currency symbol
+            type: str
+          1: # BID: Price of last highest bid
+            type: float
+          2: # BID_SIZE: Size of the last highest bid
+            type: float
+          3: # ASK: Price of last lowest ask
+            type: float
+          4: # ASK_SIZE: Size of the last lowest ask
+            type: float
+          5: # DAILY_CHANGE: Amount that the last price has changed since yesterday
+            type: float
+          6: # DAILY_CHANGE_PERC: Amount that the price has changed expressed in percentage terms
+            type: float
+          7: # LAST_PRICE: Price of the last trade
+            type: float
+          8: # VOLUME: Daily volume
+            type: float
+          9: # HIGH: Daily high
+            type: float
+          10: # LOW: Daily low
+            type: float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path:
+      - 0
+      type:
+      - str
+      - slice
+      - 1
+      - 4
+    - key: currency_pair_second
+      path:
+      - 0
+      type:
+      - str
+      - slice
+      - 4
+      - 7
+    - key: ticker_last_price
+      path:
+      - 7
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - 3
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - 1
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - 8
+      type:
+      - float
+
+  ticker:
+    request:
+      template: ticker/{currency_pair}/
+      pair_template:
+        template: "t{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: list
+      values:
+      # template on trading pairs (ex. tBTCUSD)
+        0: # Price of last highest bid
+          type: float
+        1: # BID_SIZE: Size of the last highest bid
+          type: float
+        2: # ASK: Price of last lowest ask
+          type: float
+        3: # ASK_SIZE: Size of the last lowest ask
+          type: float
+        4: # DAILY_CHANGE: Amount that the last price has changed since yesterday
+          type: float
+        5: # DAILY_CHANGE_PERC: Amount that the price has changed expressed in percentage terms
+          type: float
+        6: # LAST_PRICE: Price of the last trade
+          type: float
+        7: # VOLUME: Daily volume
+          type: float
+        8: # HIGH: Daily high
+          type: float
+        9: # LOW: Daily low
+          type: float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_last_price
+      path:
+      - 6
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - 2
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - 0
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - 7
+      type:
+      - float
+
+  trades:
+    request:
+      template: trades/{currency_pair}/hist/
+      pair_template:
+        template: "t{first}{second}"
+        lower_case: false
+      params:
+        limit: # Number of records
+          type: int
+          default: 120
+        start: # Millisecond start time
+          type:
+          - datetime
+          - totimestampms
+          - int
+        end: # Millisecond end time
+          type:
+          - datetime
+          - totimestampms
+          - int
+        sort: # if = 1 it sorts results returned with old > new
+          type: int
+          allowed:
+          - 1
+          - -1
+          default: -1
+    response:
+      type: list
+      values:
+        type: list
+        values:
+        # template on trading pairs (ex. tBTCUSD)
+          0: # ID
+            type: int
+          1: # MTS: millisecond time stamp
+            type:
+            - int
+            - fromtimestampms
+          2: # AMOUNT: How much was bought (positive) or sold (negative).
+            type: float
+          3: # PRICE: Price at which the trade was executed
+            type: float
+    mapping:
+    - key: trade_time
+      path:
+      - 1
+      type:
+      - int
+      - fromtimestampms
+    - key: trade_last_price
+      path:
+      - 3
+      type:
+      - float
+    - key: trade_amount
+      path:
+      - 2
+      type:
+      - float
+
+  candles:
+    request:
+      template: candles/trade:{timeframe}:{currency_pair}/{section}/
+      pair_template:
+        template: "t{first}{second}"
+        lower_case: false
+      params:
+        timeframe:
+          type: str
+          allowed:
+          - "1m"
+          - "5m"
+          - "15m"
+          - "30m"
+          - "1h"
+          - "3h"
+          - "6h"
+          - "12h"
+          - "1D"
+          - "7D"
+          - "14D"
+          - "1M"
+          default: "1D"
+        section:
+          type: str
+          allowed:
+          - "last"
+          - "hist"
+          default: "last"
+        limit: # Number of candles requested
+          type: int
+        start: # Filter start (ms)
+          type: str
+        end: # Filter end (ms)
+          type: str
+        sort: # if = 1 it sorts results returned with old > new
+          type: int
+    response:
+      type: list
+      values:
+      # response with Section = "hist"
+        type: list
+        values:
+          0: # MTS: millisecond time stamp
+            type:
+            - int
+            - fromtimestampms
+          1: # OPEN: First execution during the time frame
+            type: float
+          2: # CLOSE: Last execution during the time frame
+            type: float
+          3: # HIGH: Highest execution during the time frame
+            type: float
+          4: # LOW: Lowest execution during the timeframe
+            type: float
+          5: # VOLUME: Quantity of symbol traded within the timeframe
+            type: float
+    mapping:
+    - key: historic_rates_time
+      path:
+      - 0
+      type:
+      - int
+      - fromtimestampms
+    - key: historic_rates_low
+      path:
+      - 4
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - 3
+      type:
+      - float
+    - key: historic_rates_open
+      path:
+      - 1
+      type:
+      - float
+    - key: historic_rates_close
+      path:
+      - 2
+      type:
+      - float
+    - key: historic_rates_volume
+      path:
+      - 5
+      type:
+      - float

@@ -1,59 +1,4403 @@
 {
     "status": 0,
     "desc": "success",
-    "template": "",
-    "params": null,
     "data": {
         "tickers": [
             {
+                "marketId": "0xBTC-WETH",
+                "price": "0.005",
+                "volume": "24.22652141",
+                "bid": "0.005",
+                "ask": "0.007",
+                "low": "0.005",
+                "high": "0.007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "0xBUTT-WETH",
+                "price": "5e-8",
+                "volume": "1400000",
+                "bid": "1e-8",
+                "ask": "4.6e-7",
+                "low": "0",
+                "high": "5e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ABT-WETH",
+                "price": "0.0015045",
+                "volume": "228",
+                "bid": "0.0015045",
+                "ask": "0.001535",
+                "low": "0.0015045",
+                "high": "0.0015453",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ABX-WETH",
+                "price": "0.0011762",
+                "volume": "8.70032715",
+                "bid": "0.0011762",
+                "ask": "0.00123",
+                "low": "0",
+                "high": "0.0011762",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ABYSS-WETH",
+                "price": "0.00025",
+                "volume": "700",
+                "bid": "0.00000104",
+                "ask": "0.00025",
+                "low": "0",
+                "high": "0.00025",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ADI-WETH",
+                "price": "0.00002928",
+                "volume": "196769.42034863",
+                "bid": "0.00003139",
+                "ask": "0.00003271",
+                "low": "0.00002649",
+                "high": "0.00006691",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AETH-WETH",
+                "price": "7e-8",
+                "volume": "83500",
+                "bid": "7e-8",
+                "ask": "0.00000188",
+                "low": "0",
+                "high": "7e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AE-WETH",
+                "price": "0.0025",
+                "volume": "236.8",
+                "bid": "0.000288",
+                "ask": null,
+                "low": "0",
+                "high": "0.0025",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AFCASH-WETH",
+                "price": "0.0048",
+                "volume": "10005",
+                "bid": null,
+                "ask": "0.0048",
+                "low": "0.000006",
+                "high": "0.0048",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AGI-WETH",
+                "price": "0.002859",
+                "volume": "204",
+                "bid": "0.0000433",
+                "ask": "0.002859",
+                "low": "0",
+                "high": "0.002859",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AIMS-WETH",
+                "price": "0.00001",
+                "volume": "1000",
+                "bid": null,
+                "ask": "0.005",
+                "low": "0",
+                "high": "0.00001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AIRDROP-WETH",
+                "price": "1.5e-7",
+                "volume": "1000",
+                "bid": "1.4e-7",
+                "ask": "1.5e-7",
+                "low": "0",
+                "high": "1.5e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ALGOR-WETH",
+                "price": "0.00000434",
+                "volume": "26876.55095452",
+                "bid": "0.00000432",
+                "ask": "0.00000434",
+                "low": "0.00000432",
+                "high": "0.00000434",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ALPHA-WETH",
+                "price": "1e-7",
+                "volume": "100000",
+                "bid": "1e-7",
+                "ask": "0.0000101",
+                "low": "0",
+                "high": "1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AMGO-WETH",
+                "price": "0.00000999",
+                "volume": "28795",
+                "bid": "0.00000125",
+                "ask": "0.00000999",
+                "low": "0.0000025",
+                "high": "0.00000999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ANAR-WETH",
+                "price": "0.00495",
+                "volume": "16",
+                "bid": "0.00499",
+                "ask": "0.005",
+                "low": "0",
+                "high": "0.00495",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ARN-WETH",
+                "price": "0.0014",
+                "volume": "550",
+                "bid": "0.0011",
+                "ask": "0.001255",
+                "low": "0.00118",
+                "high": "0.0014",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ARPA-WETH",
+                "price": "0.0001",
+                "volume": "1050",
+                "bid": "0.0001",
+                "ask": "0.00014",
+                "low": "0",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ASTOR-WETH",
+                "price": "0.0009",
+                "volume": "44",
+                "bid": null,
+                "ask": "0.0009",
+                "low": "0",
+                "high": "0.0009",
+                "updatedAt": null
+            },
+            {
+                "marketId": "AST-WETH",
+                "price": "2.8e-7",
+                "volume": "9257",
+                "bid": "3e-8",
+                "ask": "2.8e-7",
+                "low": "0",
+                "high": "2.8e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ATE-WETH",
+                "price": "0.000095",
+                "volume": "11314.6374",
+                "bid": "0.000095",
+                "ask": "0.000105",
+                "low": "0.000095",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BAGS-WETH",
+                "price": "0.00003",
+                "volume": "12740",
+                "bid": "1e-8",
+                "ask": "0.000074",
+                "low": "0.00001",
+                "high": "0.00003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BANCA-WETH",
+                "price": "0.00000399",
+                "volume": "453",
+                "bid": "9.6e-7",
+                "ask": "0.00000399",
+                "low": "0",
+                "high": "0.00000399",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BANG-WETH",
+                "price": "4e-7",
+                "volume": "223082.24",
+                "bid": "1e-7",
+                "ask": "0.00000894",
+                "low": "0",
+                "high": "4e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BASE-WETH",
+                "price": "0.00005",
+                "volume": "100",
+                "bid": "0.00000268",
+                "ask": "0.00005",
+                "low": "0",
+                "high": "0.00005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BAT-USDT",
+                "price": "0.2325",
+                "volume": "367.63",
+                "bid": "0.2325",
+                "ask": "0.2343",
+                "low": "0",
+                "high": "0.2325",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BAT-WETH",
+                "price": "0.0012",
+                "volume": "349.11",
+                "bid": "0.00082828",
+                "ask": "0.0038448",
+                "low": "0",
+                "high": "0.0012",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BAX-WETH",
+                "price": "8.9e-7",
+                "volume": "49999",
+                "bid": "1e-8",
+                "ask": "0.00000526",
+                "low": "0",
+                "high": "8.9e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BAZ-WETH",
+                "price": "0.001",
+                "volume": "20",
+                "bid": "2e-8",
+                "ask": "0.001",
+                "low": "0",
+                "high": "0.001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BBOMB-WETH",
+                "price": "2e-8",
+                "volume": "397697.25",
+                "bid": "2e-8",
+                "ask": "0.000002",
+                "low": "2e-8",
+                "high": "5e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BCHAT-WETH",
+                "price": "0.008826",
+                "volume": "422",
+                "bid": null,
+                "ask": "0.00885",
+                "low": "0.0072",
+                "high": "0.008826",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BCIO-WETH",
+                "price": "0.00029",
+                "volume": "160",
+                "bid": "1e-8",
+                "ask": "0.0003416",
+                "low": "0",
+                "high": "0.00029",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BCO-WETH",
+                "price": "0.00009999",
+                "volume": "800",
+                "bid": "0.00005591",
+                "ask": "0.00009999",
+                "low": "0",
+                "high": "0.00009999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BCZERO-TUSD",
+                "price": "0.017873",
+                "volume": "2204",
+                "bid": null,
+                "ask": "0.02",
+                "low": "0",
+                "high": "0.017873",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BCZERO-WETH",
+                "price": "0.00008048",
+                "volume": "861731",
+                "bid": null,
+                "ask": "0.00008049",
+                "low": "0.0000725",
+                "high": "0.00008048",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BEB-WETH",
+                "price": "0.000181",
+                "volume": "5900",
+                "bid": "0.000092",
+                "ask": "0.000181",
+                "low": "0.000142",
+                "high": "0.000181",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BELA-WETH",
+                "price": "0.00000985",
+                "volume": "97180.5",
+                "bid": null,
+                "ask": "0.00000985",
+                "low": "0.00000985",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BERRY-WETH",
+                "price": "0.00001",
+                "volume": "5937.5",
+                "bid": "0.00001499",
+                "ask": "0.0006155",
+                "low": "0",
+                "high": "0.00001499",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BITCAR-WETH",
+                "price": "0.00000172",
+                "volume": "5634",
+                "bid": "0.00000172",
+                "ask": "0.00001985",
+                "low": "0",
+                "high": "0.00000172",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BITOX-WETH",
+                "price": "6.2e-7",
+                "volume": "120646",
+                "bid": "2.1e-7",
+                "ask": "0.00000439",
+                "low": "6.2e-7",
+                "high": "6.4e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BITS-WETH",
+                "price": "0.00001",
+                "volume": "1480",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "0.00001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BKC-WETH",
+                "price": "0.0000018",
+                "volume": "1000000",
+                "bid": null,
+                "ask": "0.0000032",
+                "low": "0.0000011",
+                "high": "0.0000018",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BKX-WETH",
+                "price": "0.00012889",
+                "volume": "4444",
+                "bid": "0.00012889",
+                "ask": "0.00096995",
+                "low": "0.00012889",
+                "high": "0.00012889",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BLAST-WETH",
+                "price": "0.00029",
+                "volume": "15",
+                "bid": "2e-8",
+                "ask": "0.00029",
+                "low": "0",
+                "high": "0.00029",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BLAZE-WETH",
+                "price": "5.1e-7",
+                "volume": "31858",
+                "bid": "5.1e-7",
+                "ask": "0.00002088",
+                "low": "0",
+                "high": "5.1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BLOC-WETH",
+                "price": "0.00000351",
+                "volume": "22847.08539884",
+                "bid": "0.00000351",
+                "ask": "0.00003375",
+                "low": "0.00000351",
+                "high": "0.00003398",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BLZ-WETH",
+                "price": "0.0002404",
+                "volume": "10242.67",
+                "bid": "0.0002404",
+                "ask": "0.0002459",
+                "low": "0.0002404",
+                "high": "0.0002449",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BMX-WETH",
+                "price": "0.00001403",
+                "volume": "300",
+                "bid": "0.00001403",
+                "ask": "0.0007",
+                "low": "0",
+                "high": "0.00001403",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BNB-WETH",
+                "price": "0.1",
+                "volume": "5",
+                "bid": "0.02",
+                "ask": null,
+                "low": "0",
+                "high": "0.1",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BNTY-WETH",
+                "price": "0.00006",
+                "volume": "12045.45868194",
+                "bid": "0.00001616",
+                "ask": "0.00006",
+                "low": "0",
+                "high": "0.00006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BOLT-WETH",
+                "price": "0.00025",
+                "volume": "1609",
+                "bid": "0.00000185",
+                "ask": "0.00025",
+                "low": "0.00025",
+                "high": "0.00025",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BOMB-SAI",
+                "price": "0.07",
+                "volume": "9",
+                "bid": "0.07",
+                "ask": "1.5",
+                "low": "0",
+                "high": "0.07",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BOMB-WETH",
+                "price": "0.00361",
+                "volume": "115",
+                "bid": "0.00361",
+                "ask": "0.0042682",
+                "low": "0",
+                "high": "0.0036101",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BOOM1-WETH",
+                "price": "0.00000109",
+                "volume": "13303.89",
+                "bid": "4e-8",
+                "ask": "0.00001184",
+                "low": "0",
+                "high": "0.00000111",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BOOM-WETH",
+                "price": "0.000006",
+                "volume": "47788",
+                "bid": "0.000006",
+                "ask": "0.00000984",
+                "low": "0.00000561",
+                "high": "0.000006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BOX-WETH",
+                "price": "0.00013829",
+                "volume": "1791",
+                "bid": "0.00013829",
+                "ask": "0.00014086",
+                "low": "0.00013829",
+                "high": "0.00014622",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BPRO-WETH",
+                "price": "0.0000371",
+                "volume": "2527",
+                "bid": "0.0000371",
+                "ask": "0.00003951",
+                "low": "0.0000371",
+                "high": "0.00003951",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BRAP-WETH",
+                "price": "1e-8",
+                "volume": "4812601",
+                "bid": null,
+                "ask": "1e-8",
+                "low": "1e-8",
+                "high": "1e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BRM-WETH",
+                "price": "4e-8",
+                "volume": "1130000",
+                "bid": "3e-8",
+                "ask": "4e-8",
+                "low": "4e-8",
+                "high": "1.3e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BRN-WETH",
+                "price": "2e-8",
+                "volume": "651111",
+                "bid": "2e-8",
+                "ask": "0.000001",
+                "low": "0",
+                "high": "2e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BSOV-WETH",
+                "price": "0.0000201",
+                "volume": "3733",
+                "bid": "0.0000201",
+                "ask": "0.0000886",
+                "low": "0.0000201",
+                "high": "0.000067",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BTB-WETH",
+                "price": "0.000011",
+                "volume": "272222",
+                "bid": "0.00000102",
+                "ask": "0.005",
+                "low": "0.0000011",
+                "high": "0.000011",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BTK-WETH",
+                "price": "1.91e-7",
+                "volume": "600000",
+                "bid": "2.6e-8",
+                "ask": "1.89e-7",
+                "low": "0",
+                "high": "1.91e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BTRS-WETH",
+                "price": "0.000001",
+                "volume": "238581",
+                "bid": null,
+                "ask": "0.000001",
+                "low": "0",
+                "high": "0.000001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BTR-WETH",
+                "price": "0.00000134",
+                "volume": "13486",
+                "bid": "0.00000134",
+                "ask": "0.0003",
+                "low": "0",
+                "high": "0.00000134",
+                "updatedAt": null
+            },
+            {
+                "marketId": "BURN-WETH",
+                "price": "0.00013333",
+                "volume": "39",
+                "bid": "0.00013333",
+                "ask": "0.099",
+                "low": "0",
+                "high": "0.00013333",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CAF-WETH",
+                "price": "0.00015",
+                "volume": "3579",
+                "bid": "0.00000101",
+                "ask": "0.00015",
+                "low": "0",
+                "high": "0.00015",
+                "updatedAt": null
+            },
+            {
+                "marketId": "cBAT-SAI",
+                "price": "0.33",
+                "volume": "5",
+                "bid": null,
+                "ask": "0.33",
+                "low": "0",
+                "high": "0.33",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CBR-WETH",
+                "price": "0.000035",
+                "volume": "483.61855643",
+                "bid": "0.0000101",
+                "ask": "0.000035",
+                "low": "0",
+                "high": "0.000035",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CELR-WETH",
+                "price": "0.00004325",
+                "volume": "1755",
+                "bid": "0.00004325",
+                "ask": "0.00004366",
+                "low": "0",
+                "high": "0.00004325",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CHP-WETH",
+                "price": "0.00000487",
+                "volume": "18000",
+                "bid": "0.00000487",
+                "ask": "0.00026852",
+                "low": "0",
+                "high": "0.00000487",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CHR-WETH",
+                "price": "0.0001",
+                "volume": "973.79",
+                "bid": "0.00001",
+                "ask": "0.0001",
+                "low": "0",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CHT-TUSD",
+                "price": "0.0005",
+                "volume": "1300",
+                "bid": "0.0005",
+                "ask": "0.0999",
+                "low": "0",
+                "high": "0.0005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CHT-WETH",
+                "price": "0.000001",
+                "volume": "20372.88",
+                "bid": null,
+                "ask": "0.003999",
+                "low": "0",
+                "high": "0.000002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CHX-WETH",
+                "price": "0.01",
+                "volume": "30",
+                "bid": "0.000001",
+                "ask": null,
+                "low": "0",
+                "high": "0.01",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CLM-WETH",
+                "price": "1e-8",
+                "volume": "1865465.87103021",
+                "bid": "1e-8",
+                "ask": "5e-8",
+                "low": "0",
+                "high": "1e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CLN-WETH",
+                "price": "0.000125",
+                "volume": "600",
+                "bid": "9e-7",
+                "ask": "0.000125",
+                "low": "0",
+                "high": "0.000125",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CNCT-WETH",
+                "price": "0.000002",
+                "volume": "1000000",
+                "bid": "2e-8",
+                "ask": "0.00001",
+                "low": "0.000002",
+                "high": "0.000002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CNN-WETH",
+                "price": "0.0000010001",
+                "volume": "96565.93",
+                "bid": "0.0000010001",
+                "ask": "0.00000648",
+                "low": "0.0000010001",
+                "high": "0.000002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CNT-WETH",
+                "price": "0.0000044",
+                "volume": "66514.77",
+                "bid": null,
+                "ask": "0.0000044",
+                "low": "0.0000044",
+                "high": "0.0000044",
+                "updatedAt": null
+            },
+            {
+                "marketId": "COI-WETH",
+                "price": "4.8e-7",
+                "volume": "122216.66666666",
+                "bid": "4.8e-7",
+                "ask": "0.000001",
+                "low": "4.8e-7",
+                "high": "6e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "COMET-WETH",
+                "price": "0.00003",
+                "volume": "2041.78",
+                "bid": "0.00002002",
+                "ask": "0.00099792",
+                "low": "0",
+                "high": "0.00003003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "COU-WETH",
+                "price": "5.5e-7",
+                "volume": "120000",
+                "bid": "5.5e-7",
+                "ask": "0.0000069",
+                "low": "0",
+                "high": "5.5e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CPR-WETH",
+                "price": "0.000007",
+                "volume": "1200",
+                "bid": "0.00000101",
+                "ask": "0.000007",
+                "low": "0",
+                "high": "0.000007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CPY-WETH",
+                "price": "0.0000401",
+                "volume": "197.95119842",
+                "bid": "0.0000401",
+                "ask": "0.0003331",
+                "low": "0",
+                "high": "0.0000401",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CR7-WETH",
+                "price": "0.00000715",
+                "volume": "610",
+                "bid": "0.00000715",
+                "ask": "0.000059",
+                "low": "0",
+                "high": "0.00000715",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CREDO-WETH",
+                "price": "0.00004025",
+                "volume": "0.42768506",
+                "bid": "1e-8",
+                "ask": "0.00004025",
+                "low": "0",
+                "high": "0.00004025",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CRO-WETH",
+                "price": "0.00021918",
+                "volume": "52",
+                "bid": "0.00021918",
+                "ask": "0.00045",
+                "low": "0",
+                "high": "0.00021918",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CRPT-WETH",
+                "price": "0.0022",
+                "volume": "22",
+                "bid": "0.001605",
+                "ask": null,
+                "low": "0",
+                "high": "0.0022",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CS-WETH",
+                "price": "0.000525",
+                "volume": "1660.59114",
+                "bid": "0.000703",
+                "ask": "0.0010899",
+                "low": "0",
+                "high": "0.000703",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CTC-WETH",
+                "price": "0.00045",
+                "volume": "400",
+                "bid": null,
+                "ask": "0.00045",
+                "low": "0.00042",
+                "high": "0.00045",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CTIN-WETH",
+                "price": "5e-8",
+                "volume": "10000",
+                "bid": null,
+                "ask": "5e-8",
+                "low": "0",
+                "high": "5e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CTXC-WETH",
+                "price": "0.00055352",
+                "volume": "156.64",
+                "bid": "0.00005934",
+                "ask": "0.00055352",
+                "low": "0.00054806",
+                "high": "0.00055784",
+                "updatedAt": null
+            },
+            {
+                "marketId": "cUSDC-SAI",
+                "price": "0.94",
+                "volume": "1",
+                "bid": "0.02",
+                "ask": "0.94",
+                "low": "0",
+                "high": "0.94",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CVC-WETH",
+                "price": "0.0004483",
+                "volume": "2020",
+                "bid": "0.0004425",
+                "ask": "0.0004483",
+                "low": "0",
+                "high": "0.0004483",
+                "updatedAt": null
+            },
+            {
+                "marketId": "CYFM-WETH",
+                "price": "1.1e-7",
+                "volume": "150000",
+                "bid": null,
+                "ask": "1.6e-7",
+                "low": "0",
+                "high": "1.1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "Cyg-WETH",
+                "price": "0.000005",
+                "volume": "150",
+                "bid": "5e-8",
+                "ask": "0.000005",
+                "low": "0",
+                "high": "0.000005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DACC-WETH",
+                "price": "1.3e-7",
+                "volume": "1064958",
+                "bid": "3e-8",
+                "ask": "1.3e-7",
+                "low": "0",
+                "high": "1.3e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DAG-WETH",
+                "price": "0.00005501",
+                "volume": "7830",
+                "bid": "0.00000462",
+                "ask": "0.00015388",
+                "low": "0",
+                "high": "0.00005501",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DAN-WETH",
+                "price": "0.00000878",
+                "volume": "300",
+                "bid": "0.00000878",
+                "ask": null,
+                "low": "0",
+                "high": "0.00000878",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DCC-WETH",
+                "price": "0.0000012",
+                "volume": "6616",
+                "bid": "0.0000012",
+                "ask": null,
+                "low": "0",
+                "high": "0.0000012",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DDCT-WETH",
+                "price": "0.0004",
+                "volume": "80",
+                "bid": null,
+                "ask": "0.00042",
+                "low": "0",
+                "high": "0.0004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DEB-WETH",
+                "price": "0.00001",
+                "volume": "3050",
+                "bid": "0.00001",
+                "ask": "0.000099",
+                "low": "0.00001",
+                "high": "0.0000101",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DEFL-WETH",
+                "price": "0.00001011",
+                "volume": "3700",
+                "bid": "0.000005",
+                "ask": "0.00001",
+                "low": "0",
+                "high": "0.00001505",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DEF-WETH",
+                "price": "0.00011012",
+                "volume": "50",
+                "bid": "1e-8",
+                "ask": "0.000949",
+                "low": "0",
+                "high": "0.00011012",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DENT-WETH",
+                "price": "0.00000253",
+                "volume": "5000",
+                "bid": null,
+                "ask": "0.00000253",
+                "low": "0",
+                "high": "0.00000253",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DF-USDx",
+                "price": "0.51",
+                "volume": "10",
+                "bid": null,
+                "ask": "0.51",
+                "low": "0",
+                "high": "0.51",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DML-WETH",
+                "price": "0.00008",
+                "volume": "1089.17253157",
+                "bid": "0.00008",
+                "ask": "0.00022",
+                "low": "0.00008",
+                "high": "0.000085",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DMT-WETH",
+                "price": "0.0005",
+                "volume": "1100.1",
+                "bid": "0.0005",
+                "ask": null,
+                "low": "0",
+                "high": "0.0005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DOOH-WETH",
+                "price": "3e-8",
+                "volume": "3079750",
+                "bid": "3e-8",
+                "ask": "2e-7",
+                "low": "0",
+                "high": "4e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DOS-WETH",
+                "price": "0.00005005",
+                "volume": "5226",
+                "bid": null,
+                "ask": "0.00007275",
+                "low": "0",
+                "high": "0.00005005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DRGN-WETH",
+                "price": "0.00037",
+                "volume": "4984.2",
+                "bid": null,
+                "ask": "0.00645",
+                "low": "0.00037",
+                "high": "0.00037",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DST-WETH",
+                "price": "0.00000303",
+                "volume": "1000",
+                "bid": "0.00000303",
+                "ask": "0.00000425",
+                "low": "0",
+                "high": "0.00000303",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DTA-WETH",
+                "price": "0.00000987",
+                "volume": "17183",
+                "bid": "0.00000987",
+                "ask": "0.0000198",
+                "low": "0",
+                "high": "0.00000987",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DUO-WETH",
+                "price": "0.00017519",
+                "volume": "40459",
+                "bid": "3e-8",
+                "ask": "0.00016173",
+                "low": "0.00016173",
+                "high": "0.00038466",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DX-WETH",
+                "price": "0.00000123",
+                "volume": "2450",
+                "bid": "1.1e-7",
+                "ask": "0.00001249",
+                "low": "0",
+                "high": "0.00000123",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DYNMT-WETH",
+                "price": "0.003",
+                "volume": "60",
+                "bid": "0.0019214",
+                "ask": "0.004",
+                "low": "0.0025",
+                "high": "0.003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "DYT-WETH",
+                "price": "0.00002525",
+                "volume": "1400",
+                "bid": "0.00002506",
+                "ask": "0.000075",
+                "low": "0",
+                "high": "0.00002525",
+                "updatedAt": null
+            },
+            {
+                "marketId": "E10-WETH",
+                "price": "0.0075",
+                "volume": "5",
+                "bid": "0.007",
+                "ask": "0.0075",
+                "low": "0",
+                "high": "0.0075",
+                "updatedAt": null
+            },
+            {
+                "marketId": "eBTCS-WETH",
+                "price": "0.000003",
+                "volume": "30.47752247",
+                "bid": null,
+                "ask": "0.000003",
+                "low": "0",
+                "high": "0.000003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EBTC-WETH",
+                "price": "0.00029333",
+                "volume": "100",
+                "bid": "0.00002198",
+                "ask": "0.00029333",
+                "low": "0",
+                "high": "0.00029333",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EBT-WETH",
+                "price": "0.00006",
+                "volume": "50",
+                "bid": "1e-8",
+                "ask": "0.00006",
+                "low": "0",
+                "high": "0.00006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ECOREAL-TUSD",
+                "price": "0.21",
+                "volume": "9041",
+                "bid": "0.02501",
+                "ask": "0.21",
+                "low": "0.095",
+                "high": "0.21",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ECOREAL-WETH",
+                "price": "0.000999",
+                "volume": "738.35",
+                "bid": "0.000999",
+                "ask": "0.0013",
+                "low": "0.00057",
+                "high": "0.000999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EDR-WETH",
+                "price": "0.00032",
+                "volume": "4435",
+                "bid": "0.00003881",
+                "ask": "0.0042784",
+                "low": "0.0003",
+                "high": "0.0004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EDU-WETH",
+                "price": "0.000045",
+                "volume": "172.33546063",
+                "bid": "0.000001",
+                "ask": "0.000045",
+                "low": "0",
+                "high": "0.000045",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EGOLD-USDT",
+                "price": "0.0031",
+                "volume": "132426",
+                "bid": "0.002",
+                "ask": "0.003",
+                "low": "0.0031",
+                "high": "0.0035",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EGOLD-WETH",
+                "price": "0.00004",
+                "volume": "24583",
+                "bid": null,
+                "ask": "0.00005",
+                "low": "0",
+                "high": "0.00004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ELD-WETH",
+                "price": "0.00011",
+                "volume": "10000",
+                "bid": null,
+                "ask": "0.00011",
+                "low": "0.0001",
+                "high": "0.00011",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ELEC-WETH",
+                "price": "0.00000229",
+                "volume": "3678",
+                "bid": "0.00000229",
+                "ask": null,
+                "low": "0",
+                "high": "0.00000229",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ELEM-WETH",
+                "price": "0.000005",
+                "volume": "14000",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "0.000005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ELF-WETH",
+                "price": "0.43",
+                "volume": "169.63",
+                "bid": "0.00005",
+                "ask": "0.43",
+                "low": "0.00005",
+                "high": "0.43",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EMPRB-WETH",
+                "price": "1e-7",
+                "volume": "618755.98205752",
+                "bid": null,
+                "ask": "1e-7",
+                "low": "0",
+                "high": "1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EMPRG-WETH",
+                "price": "1e-11",
+                "volume": "100000000",
+                "bid": null,
+                "ask": "1e-11",
+                "low": "0",
+                "high": "1e-11",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EMPRO-WETH",
+                "price": "1e-13",
+                "volume": "89734289932",
+                "bid": null,
+                "ask": "1e-13",
+                "low": "0",
+                "high": "1e-13",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EMPR-WETH",
+                "price": "1.4e-11",
+                "volume": "500000000",
+                "bid": "8.7e-12",
+                "ask": "1.4e-11",
+                "low": "0",
+                "high": "1.4e-11",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ENU-WETH",
+                "price": "0.00015",
+                "volume": "0.57237932",
+                "bid": "0.00002017",
+                "ask": "0.00015",
+                "low": "0",
+                "high": "0.00015",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EON-WETH",
+                "price": "0.00001018",
+                "volume": "1572.62392504",
+                "bid": "0.00001018",
+                "ask": "0.00013412",
+                "low": "0",
+                "high": "0.00001018",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EOSDAC-WETH",
+                "price": "0.00022",
+                "volume": "27458.39247857",
+                "bid": "0.0002221",
+                "ask": "0.0003315",
+                "low": "0.00022",
+                "high": "0.0002743",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EOS-WETH",
+                "price": "0.0363",
+                "volume": "6",
+                "bid": "0.017002",
+                "ask": "0.0363",
+                "low": "0.0224",
+                "high": "0.0363",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EQL-WETH",
+                "price": "0.000051",
+                "volume": "3464",
+                "bid": "4.9e-7",
+                "ask": "0.000051",
+                "low": "0",
+                "high": "0.000051",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ERAZ-WETH",
+                "price": "0.4",
+                "volume": "0.1",
+                "bid": "0.001001",
+                "ask": "0.4",
+                "low": "0",
+                "high": "0.4",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ERC20-WETH",
+                "price": "0.00013496",
+                "volume": "1000",
+                "bid": "0.00006",
+                "ask": "0.00037",
+                "low": "0.00013496",
+                "high": "0.00013496",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EROS-WETH",
+                "price": "0.000005",
+                "volume": "14559",
+                "bid": null,
+                "ask": "0.00007",
+                "low": "0.000005",
+                "high": "0.000006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ETE-WETH",
+                "price": "0.00004001",
+                "volume": "700",
+                "bid": "0.00001",
+                "ask": "0.00006001",
+                "low": "0.00004001",
+                "high": "0.00008001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ETHLOVOL-SAI",
+                "price": "104.12",
+                "volume": "15.1",
+                "bid": "104.12",
+                "ask": "104.71",
+                "low": "97.1",
+                "high": "104.12",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ETHPLO-WETH",
+                "price": "0.00000291",
+                "volume": "1000",
+                "bid": "0.0000023",
+                "ask": "0.00000291",
+                "low": "0",
+                "high": "0.00000291",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ETW-WETH",
+                "price": "2e-7",
+                "volume": "347373.1",
+                "bid": null,
+                "ask": "0.000001",
+                "low": "2e-7",
+                "high": "2.2e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EURS-WETH",
+                "price": "0.008017",
+                "volume": "17",
+                "bid": "0.008017",
+                "ask": "0.008217",
+                "low": "0",
+                "high": "0.008017",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EVE-WETH",
+                "price": "0.0000052",
+                "volume": "16714",
+                "bid": "0.0000052",
+                "ask": null,
+                "low": "0.0000052",
+                "high": "0.00007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "EXC-WETH",
+                "price": "0.00146",
+                "volume": "0.34852493",
+                "bid": "0.00146",
+                "ask": "0.0038522",
+                "low": "0",
+                "high": "0.00146",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FAITH-WETH",
+                "price": "0.000006",
+                "volume": "104040.72095997",
+                "bid": "0.000006",
+                "ask": "0.0000075",
+                "low": "0.000006",
+                "high": "0.000006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FDZ-WETH",
+                "price": "0.00006",
+                "volume": "100",
+                "bid": "0.00003145",
+                "ask": "0.00006",
+                "low": "0",
+                "high": "0.00006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FET-WETH",
+                "price": "0.00011002",
+                "volume": "45",
+                "bid": "0.00011002",
+                "ask": "0.012",
+                "low": "0",
+                "high": "0.00011002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FHT-WETH",
+                "price": "0.00004",
+                "volume": "672.01",
+                "bid": "0.00004",
+                "ask": "0.000082",
+                "low": "0",
+                "high": "0.00004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FIRE-WETH",
+                "price": "0.00001666",
+                "volume": "3000",
+                "bid": "0.00000202",
+                "ask": "0.00001666",
+                "low": "0",
+                "high": "0.00001666",
+                "updatedAt": null
+            },
+            {
+                "marketId": "Fluz-WETH",
+                "price": "0.0002",
+                "volume": "1393.23951305",
+                "bid": "0.0002",
+                "ask": "0.1",
+                "low": "0.0002",
+                "high": "0.00022",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FLUZ-WETH",
+                "price": "0.00013",
+                "volume": "1000",
+                "bid": null,
+                "ask": "0.00013",
+                "low": "0",
+                "high": "0.00013",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FLX-WETH",
+                "price": "0.00018",
+                "volume": "10",
+                "bid": null,
+                "ask": "0.00018",
+                "low": "0",
+                "high": "0.00018",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FORCE-WETH",
+                "price": "0.0001",
+                "volume": "200",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FOT-WETH",
+                "price": "0.00000366",
+                "volume": "2000",
+                "bid": null,
+                "ask": "0.00000366",
+                "low": "0",
+                "high": "0.00000366",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FRAS-WETH",
+                "price": "0.00026",
+                "volume": "38.93710395",
+                "bid": "0.00004",
+                "ask": "0.00026375",
+                "low": "0.00025",
+                "high": "0.00026",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FREC-WETH",
+                "price": "0.00002",
+                "volume": "252",
+                "bid": "0.00002",
+                "ask": "0.000024",
+                "low": "0",
+                "high": "0.00002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FREE-WETH",
+                "price": "3e-9",
+                "volume": "100000",
+                "bid": "1e-10",
+                "ask": "3e-9",
+                "low": "0",
+                "high": "3e-9",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FTM-WETH",
+                "price": "0.00007",
+                "volume": "36",
+                "bid": "0.00005",
+                "ask": "0.00007",
+                "low": "0",
+                "high": "0.00007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "FUZE-WETH",
+                "price": "0.41",
+                "volume": "0.8358",
+                "bid": "0.17001",
+                "ask": "0.41",
+                "low": "0.4",
+                "high": "0.41",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GBC-WETH",
+                "price": "0.00013",
+                "volume": "100.1",
+                "bid": "0.00001503",
+                "ask": "0.00013",
+                "low": "0",
+                "high": "0.00013",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GENE-WETH",
+                "price": "0.000036",
+                "volume": "10000",
+                "bid": "0.000028",
+                "ask": "0.00003699",
+                "low": "0",
+                "high": "0.000036",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GEN-WETH",
+                "price": "0.00007428",
+                "volume": "5097",
+                "bid": "0.00007428",
+                "ask": "0.00079992",
+                "low": "0",
+                "high": "0.00007428",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GET-WETH",
+                "price": "0.0012482",
+                "volume": "302.46",
+                "bid": "0.0001303",
+                "ask": null,
+                "low": "0.0012482",
+                "high": "0.0014482",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GETX-WETH",
+                "price": "0.00000201",
+                "volume": "2500",
+                "bid": "0.00000201",
+                "ask": "0.00002999",
+                "low": "0",
+                "high": "0.00000201",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GEX-WETH",
+                "price": "0.0015",
+                "volume": "60.24392675",
+                "bid": "0.0015",
+                "ask": "0.002",
+                "low": "0.0004",
+                "high": "0.0015",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GOLD-WETH",
+                "price": "0.00007467",
+                "volume": "990",
+                "bid": "3e-8",
+                "ask": "0.00029",
+                "low": "0",
+                "high": "0.00007467",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GPN-WETH",
+                "price": "4e-7",
+                "volume": "558330.83",
+                "bid": "4e-7",
+                "ask": "0.000001898",
+                "low": "4e-7",
+                "high": "4e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GPT-WETH",
+                "price": "0.0000034",
+                "volume": "23109",
+                "bid": null,
+                "ask": "0.000019",
+                "low": "0",
+                "high": "0.0000034",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GREN-WETH",
+                "price": "0.00001759",
+                "volume": "660",
+                "bid": "4e-8",
+                "ask": "0.00001759",
+                "low": "0",
+                "high": "0.00001759",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GRND-WETH",
+                "price": "0.011845",
+                "volume": "6.13",
+                "bid": "0.003",
+                "ask": "0.011845",
+                "low": "0.00271",
+                "high": "0.011845",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GTO-WETH",
+                "price": "0.00014538",
+                "volume": "28334.4",
+                "bid": "0.00014538",
+                "ask": "0.00014691",
+                "low": "0.00013668",
+                "high": "0.00014772",
+                "updatedAt": null
+            },
+            {
+                "marketId": "GVT-WETH",
+                "price": "0.004461",
+                "volume": "5.49",
+                "bid": "0.004461",
+                "ask": null,
+                "low": "0",
+                "high": "0.004461",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HADE-WETH",
+                "price": "0.00019",
+                "volume": "50",
+                "bid": "0.00000198",
+                "ask": "0.00019",
+                "low": "0",
+                "high": "0.00019",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HAV-WETH",
+                "price": "0.0005",
+                "volume": "18",
+                "bid": "0.0005",
+                "ask": "0.0011256",
+                "low": "0",
+                "high": "0.0005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HBT-WETH",
+                "price": "0.001",
+                "volume": "386.75",
+                "bid": "0.0000955",
+                "ask": "0.001",
+                "low": "0",
+                "high": "0.001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HER-WETH",
+                "price": "0.00005123",
+                "volume": "1000",
+                "bid": "0.00005123",
+                "ask": "0.0001012",
+                "low": "0.00005123",
+                "high": "0.00005123",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HOLE-WETH",
+                "price": "0.00001558",
+                "volume": "3035",
+                "bid": "0.00001558",
+                "ask": "0.00007499",
+                "low": "0",
+                "high": "0.00001558",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HOLO-WETH",
+                "price": "0.00000303",
+                "volume": "22500",
+                "bid": "0.0000026",
+                "ask": "0.00000989",
+                "low": "0",
+                "high": "0.00000303",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HOT-WETH",
+                "price": "0.000007",
+                "volume": "6709",
+                "bid": "0.000007",
+                "ask": "0.00001534",
+                "low": "0",
+                "high": "0.000007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HT-WETH",
+                "price": "0.025461",
+                "volume": "1.45",
+                "bid": "0.025323",
+                "ask": "0.025461",
+                "low": "0",
+                "high": "0.025461",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HXB-WETH",
+                "price": "0.00001356",
+                "volume": "1220",
+                "bid": "0.000012",
+                "ask": "0.00002689",
+                "low": "0",
+                "high": "0.00001356",
+                "updatedAt": null
+            },
+            {
+                "marketId": "HYPE-WETH",
+                "price": "4e-8",
+                "volume": "200000",
+                "bid": null,
+                "ask": "0.00000112",
+                "low": "0",
+                "high": "4e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IBT-WETH",
+                "price": "0.00000423",
+                "volume": "1311",
+                "bid": null,
+                "ask": "0.00000423",
+                "low": "0",
+                "high": "0.00000423",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ICH-WETH",
+                "price": "0.00045",
+                "volume": "666.23",
+                "bid": null,
+                "ask": "0.00045",
+                "low": "0.00039",
+                "high": "0.00046",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ICHX-WETH",
+                "price": "1e-8",
+                "volume": "1000000",
+                "bid": null,
+                "ask": "1e-8",
+                "low": "0",
+                "high": "1e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IDRT-USDT",
+                "price": "0.000293",
+                "volume": "2479469",
+                "bid": "0.000029",
+                "ask": "0.000293",
+                "low": "0.000293",
+                "high": "0.0003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IFTC-WETH",
+                "price": "0.0002976",
+                "volume": "200",
+                "bid": null,
+                "ask": "0.0002976",
+                "low": "0",
+                "high": "0.0002976",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IGNX-WETH",
+                "price": "0.000023",
+                "volume": "200",
+                "bid": "0.00000251",
+                "ask": "0.000023",
+                "low": "0",
+                "high": "0.000023",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IHT-WETH",
+                "price": "0.00003779",
+                "volume": "186630",
+                "bid": "0.00000785",
+                "ask": null,
+                "low": "0.00003779",
+                "high": "0.00004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IMP-WETH",
+                "price": "0.00001",
+                "volume": "1700",
+                "bid": "2e-7",
+                "ask": null,
+                "low": "0",
+                "high": "0.00001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IMVR-WETH",
+                "price": "0.000001",
+                "volume": "1955.68",
+                "bid": null,
+                "ask": "0.000001",
+                "low": "0",
+                "high": "0.000001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "INC8-WETH",
+                "price": "0.00003003",
+                "volume": "1422",
+                "bid": "0.00001",
+                "ask": "0.00008888",
+                "low": "0.000024",
+                "high": "0.00003003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IND-WETH",
+                "price": "0.00005",
+                "volume": "2211",
+                "bid": "0.00001",
+                "ask": "0.00005",
+                "low": "0",
+                "high": "0.00005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IOST-WETH",
+                "price": "0.00005678",
+                "volume": "803",
+                "bid": "0.000056091",
+                "ask": "0.00005678",
+                "low": "0.000056158",
+                "high": "0.00005678",
+                "updatedAt": null
+            },
+            {
+                "marketId": "IOTX-WETH",
+                "price": "0.00004549",
+                "volume": "344",
+                "bid": "0.00001114",
+                "ask": "0.00004549",
+                "low": "0",
+                "high": "0.00004549",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ITC-WETH",
+                "price": "0.00095147",
+                "volume": "212.81",
+                "bid": "0.000011",
+                "ask": null,
+                "low": "0",
+                "high": "0.00095147",
+                "updatedAt": null
+            },
+            {
+                "marketId": "JNB-WETH",
+                "price": "0.2",
+                "volume": "0.45",
+                "bid": "0.2",
+                "ask": null,
+                "low": "0",
+                "high": "0.2",
+                "updatedAt": null
+            },
+            {
+                "marketId": "JOB-WETH",
+                "price": "0.0000038",
+                "volume": "61200",
+                "bid": "1e-8",
+                "ask": "0.0000098",
+                "low": "0.0000037",
+                "high": "0.0000038",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KAYA-WETH",
+                "price": "5e-8",
+                "volume": "300000",
+                "bid": "4e-8",
+                "ask": "5e-8",
+                "low": "0",
+                "high": "5e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KGC-WETH",
+                "price": "0.00000908",
+                "volume": "9213",
+                "bid": "0.0000089",
+                "ask": "0.00000908",
+                "low": "0",
+                "high": "0.00000908",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KIN-WETH",
+                "price": "0.0000012",
+                "volume": "146974",
+                "bid": "2.7e-8",
+                "ask": null,
+                "low": "0.0000012",
+                "high": "0.0000012",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KNC-WETH",
+                "price": "0.000967",
+                "volume": "1760",
+                "bid": "0.000959",
+                "ask": "0.000967",
+                "low": "0",
+                "high": "0.000967",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KPW-WETH",
+                "price": "0.00001199",
+                "volume": "1000",
+                "bid": "1.1e-7",
+                "ask": "0.00001199",
+                "low": "0",
+                "high": "0.00001199",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KRL-WETH",
+                "price": "0.00020305",
+                "volume": "65",
+                "bid": "0.00020305",
+                "ask": "0.00272608",
+                "low": "0",
+                "high": "0.00020305",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KSS-WETH",
+                "price": "0.00018",
+                "volume": "80",
+                "bid": null,
+                "ask": "0.00018",
+                "low": "0",
+                "high": "0.00018",
+                "updatedAt": null
+            },
+            {
+                "marketId": "KTC-WETH",
+                "price": "0.0002",
+                "volume": "18600",
+                "bid": "2e-9",
+                "ask": "0.0002",
+                "low": "0.0001",
+                "high": "0.0002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LALA-WETH",
+                "price": "0.0001",
+                "volume": "254.9141983",
+                "bid": "0.0001",
+                "ask": "0.0005",
+                "low": "0",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LAO-WETH",
+                "price": "0.00295",
+                "volume": "100",
+                "bid": null,
+                "ask": "0.003",
+                "low": "0.00295",
+                "high": "0.00295",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LBA-WETH",
+                "price": "0.0001806",
+                "volume": "2579.0069825",
+                "bid": "0.00004856",
+                "ask": "0.0001806",
+                "low": "0",
+                "high": "0.0001806",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LBTC_20190719-DAI",
+                "price": "3437.5",
+                "volume": "0.002",
+                "bid": "3437.5",
+                "ask": "3699.4",
+                "low": "3437.5",
+                "high": "3686.5",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LBTC_20190816-DAI",
+                "price": "4000",
+                "volume": "0.1",
+                "bid": "3742.7",
+                "ask": "3987.8",
+                "low": "0",
+                "high": "4000",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LBTC_20190913-DAI",
+                "price": "2161.5",
+                "volume": "0.9",
+                "bid": "2161.5",
+                "ask": "2216.8",
+                "low": "1951.3",
+                "high": "2183.2",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LBTC_20191011-DAI",
+                "price": "0.8",
+                "volume": "4.125",
+                "bid": null,
+                "ask": "900",
+                "low": "0.7",
+                "high": "227.2",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LBTC_20191022-DAI",
+                "price": "2197.1",
+                "volume": "0.04751",
+                "bid": "2146.4",
+                "ask": "2197.1",
+                "low": "0",
+                "high": "2197.1",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LED-WETH",
+                "price": "0.00001",
+                "volume": "408.05221631",
+                "bid": null,
+                "ask": "0.019997",
+                "low": "0",
+                "high": "0.00001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LEO-WETH",
+                "price": "0.007499",
+                "volume": "193",
+                "bid": "0.00005505",
+                "ask": "0.02499",
+                "low": "0",
+                "high": "0.007499",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LESS-WETH",
+                "price": "2.3e-7",
+                "volume": "831691",
+                "bid": "1e-8",
+                "ask": "2.3e-7",
+                "low": "1e-7",
+                "high": "2.3e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LETH_1_30-DAI",
+                "price": "62.09",
+                "volume": "1.1",
+                "bid": "60.85",
+                "ask": "62.1",
+                "low": "0",
+                "high": "62.09",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LETH_2_28-DAI",
+                "price": "84.06",
+                "volume": "4.5",
+                "bid": "83.97",
+                "ask": "84.06",
+                "low": "0",
+                "high": "84.06",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LETH_3_30-DAI",
+                "price": "64.5",
+                "volume": "127.67",
+                "bid": "64.5",
+                "ask": "65.06",
+                "low": "64.47",
+                "high": "65.88",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LETH_4_30-DAI",
+                "price": "85.71",
+                "volume": "0.91",
+                "bid": "85.71",
+                "ask": "88.34",
+                "low": "0",
+                "high": "85.71",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LGR-WETH",
+                "price": "0.00099",
+                "volume": "4060",
+                "bid": null,
+                "ask": "0.00099",
+                "low": "0.000012",
+                "high": "0.00099",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LINK-USDT",
+                "price": "2.3126",
+                "volume": "8.19",
+                "bid": "2.2926",
+                "ask": "2.3126",
+                "low": "0",
+                "high": "2.3126",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LINK-WETH",
+                "price": "0.019",
+                "volume": "4.56",
+                "bid": "0.005",
+                "ask": null,
+                "low": "0",
+                "high": "0.019",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LIVE-WETH",
+                "price": "0.000105",
+                "volume": "400",
+                "bid": "0.000105",
+                "ask": "0.000125",
+                "low": "0",
+                "high": "0.000105",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LNC-WETH",
+                "price": "0.000019",
+                "volume": "1000",
+                "bid": "3.6e-7",
+                "ask": "0.00003",
+                "low": "0",
+                "high": "0.000019",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LND-WETH",
+                "price": "0.0000351",
+                "volume": "1000.00391713",
+                "bid": "0.00000393",
+                "ask": "0.0000351",
+                "low": "0",
+                "high": "0.0000351",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LOOM-WETH",
+                "price": "0.00011222",
+                "volume": "3674",
+                "bid": "1e-8",
+                "ask": null,
+                "low": "0",
+                "high": "0.00011222",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LPT-WETH",
+                "price": "0.007",
+                "volume": "100",
+                "bid": "1e-7",
+                "ask": "0.007",
+                "low": "0.007",
+                "high": "0.007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LSTR-WETH",
+                "price": "1e-8",
+                "volume": "77573056",
+                "bid": "1e-8",
+                "ask": "1.5e-7",
+                "low": "0",
+                "high": "1e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "LTB-WETH",
+                "price": "0.00000101",
+                "volume": "8095",
+                "bid": "0.00000101",
+                "ask": "0.00000592",
+                "low": "0",
+                "high": "0.00000101",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MAD-WETH",
+                "price": "0.00002222",
+                "volume": "10000",
+                "bid": "0.00000101",
+                "ask": "0.000028",
+                "low": "0",
+                "high": "0.00002222",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MANA-WETH",
+                "price": "0.00013001",
+                "volume": "78",
+                "bid": "0.00013001",
+                "ask": "0.0015",
+                "low": "0",
+                "high": "0.00013001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MAN-WETH",
+                "price": "0.00057001",
+                "volume": "20",
+                "bid": "0.00057006",
+                "ask": "0.00984",
+                "low": "0.00057",
+                "high": "0.00057001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MATIC-WETH",
+                "price": "0.00007777",
+                "volume": "1000",
+                "bid": "0.00006063",
+                "ask": "0.00007777",
+                "low": "0",
+                "high": "0.00007777",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MCO-WETH",
+                "price": "0.021232",
+                "volume": "27.78",
+                "bid": "0.021491",
+                "ask": "0.021678",
+                "low": "0",
+                "high": "0.021232",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MCW-WETH",
+                "price": "0.00002",
+                "volume": "10200",
+                "bid": "0.00001002",
+                "ask": "0.0001001",
+                "low": "0.00002",
+                "high": "0.0001001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MDX-WETH",
+                "price": "0.000889",
+                "volume": "10",
+                "bid": null,
+                "ask": "0.000889",
+                "low": "0",
+                "high": "0.000889",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MELT-WETH",
+                "price": "0.0001096",
+                "volume": "396.2",
+                "bid": "1e-8",
+                "ask": "0.0001096",
+                "low": "0.0001",
+                "high": "0.0001096",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MESSE-WETH",
+                "price": "0.000012",
+                "volume": "505",
+                "bid": null,
+                "ask": "0.000012",
+                "low": "0",
+                "high": "0.000012",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MET-WETH",
+                "price": "0.003",
+                "volume": "80249",
+                "bid": "0.003",
+                "ask": null,
+                "low": "0.003",
+                "high": "0.003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MFTU-WETH",
+                "price": "0.00000167",
+                "volume": "500000",
+                "bid": null,
+                "ask": "0.0000022",
+                "low": "0",
+                "high": "0.00000167",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MITx-WETH",
+                "price": "0.0000599",
+                "volume": "2000",
+                "bid": "0.0000599",
+                "ask": "0.0001719",
+                "low": "0",
+                "high": "0.0000599",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MKR-SAI",
+                "price": "468.09",
+                "volume": "4.47",
+                "bid": "469.29",
+                "ask": "491.71",
+                "low": "468.09",
+                "high": "468.09",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MKR-WETH",
+                "price": "2.4414",
+                "volume": "18",
+                "bid": "2",
+                "ask": "3.7",
+                "low": "0",
+                "high": "2.4414",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MOAB-WETH",
+                "price": "6.3e-7",
+                "volume": "75000",
+                "bid": "6.2e-7",
+                "ask": "0.000004",
+                "low": "6.3e-7",
+                "high": "6.4e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MOGX-WETH",
+                "price": "0.005",
+                "volume": "50",
+                "bid": null,
+                "ask": null,
+                "low": "0.005",
+                "high": "0.035",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MORPH-WETH",
+                "price": "0.0000075",
+                "volume": "10076003.61997434",
+                "bid": "0.000001",
+                "ask": "0.0000075",
+                "low": "0.0000075",
+                "high": "0.00000999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MOT-WETH",
+                "price": "0.000063",
+                "volume": "819.81",
+                "bid": "0.000063",
+                "ask": "0.00053",
+                "low": "0.000063",
+                "high": "0.00046",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MRO-WETH",
+                "price": "0.00000133",
+                "volume": "17602.58",
+                "bid": "0.00000133",
+                "ask": "0.00000696",
+                "low": "0",
+                "high": "0.00000133",
+                "updatedAt": null
+            },
+            {
+                "marketId": "MVP-WETH",
+                "price": "0.00001897",
+                "volume": "121.5841125",
+                "bid": "0.00001897",
+                "ask": "0.0001899",
+                "low": "0",
+                "high": "0.00001897",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NAVI-WETH",
+                "price": "0.00003881",
+                "volume": "2492823.7",
+                "bid": "0.00003881",
+                "ask": "0.00004185",
+                "low": "0.0000383",
+                "high": "0.00003986",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NAVY-WETH",
+                "price": "0.00002247",
+                "volume": "24.61953",
+                "bid": null,
+                "ask": "0.00002247",
+                "low": "0",
+                "high": "0.00002247",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NBAI-WETH",
+                "price": "4.4e-7",
+                "volume": "124001",
+                "bid": "4.4e-7",
+                "ask": null,
+                "low": "0",
+                "high": "4.4e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NB-WETH",
+                "price": "0.0002602",
+                "volume": "9",
+                "bid": "0.0002602",
+                "ask": "0.00050008",
+                "low": "0",
+                "high": "0.0002602",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NCASH-WETH",
+                "price": "0.00000681",
+                "volume": "8333.29",
+                "bid": "0.00000671",
+                "ask": "0.00000681",
+                "low": "0",
+                "high": "0.00000681",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NCA-WETH",
+                "price": "0.000005",
+                "volume": "1000",
+                "bid": null,
+                "ask": "0.00001",
+                "low": "0",
+                "high": "0.000005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NCT-WETH",
+                "price": "0.0000021",
+                "volume": "14415.2",
+                "bid": "0.0000021",
+                "ask": "0.00004",
+                "low": "0",
+                "high": "0.0000021",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NEP-WETH",
+                "price": "0.000002",
+                "volume": "6887.342726",
+                "bid": "0.000002",
+                "ask": "0.0000067",
+                "low": "0",
+                "high": "0.000002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NEXO-WETH",
+                "price": "0.00048",
+                "volume": "405",
+                "bid": "0.00042",
+                "ask": "0.00048",
+                "low": "0",
+                "high": "0.00048",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NMR-WETH",
+                "price": "0.033",
+                "volume": "23.89",
+                "bid": "0.00359667",
+                "ask": "0.17096507",
+                "low": "0",
+                "high": "0.033",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NOAH-WETH",
+                "price": "0.0000025",
+                "volume": "297130",
+                "bid": "2.9e-7",
+                "ask": "0.0000025",
+                "low": "0",
+                "high": "0.0000025",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NOKU-WETH",
+                "price": "0.000982",
+                "volume": "1898",
+                "bid": "1e-7",
+                "ask": null,
+                "low": "0.00098",
+                "high": "0.000982",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NPER-WETH",
+                "price": "0.0002062",
+                "volume": "732.3876104",
+                "bid": "0.00011975",
+                "ask": "0.00021691",
+                "low": "0",
+                "high": "0.0002062",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NPXS-WETH",
+                "price": "7e-7",
+                "volume": "343372.15",
+                "bid": "6.6e-7",
+                "ask": "0.00000698",
+                "low": "0",
+                "high": "7.3e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NTK-WETH",
+                "price": "0.0000046",
+                "volume": "4862280.72",
+                "bid": "3.5e-9",
+                "ask": "0.0000048",
+                "low": "3.5e-9",
+                "high": "0.0000046",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NUKE-WETH",
+                "price": "0.00015999",
+                "volume": "91.29",
+                "bid": "0.00004",
+                "ask": "0.00015999",
+                "low": "0",
+                "high": "0.00015999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "NUSD-USDT",
+                "price": "0.9844",
+                "volume": "1091.58",
+                "bid": "0.9844",
+                "ask": "0.9947",
+                "low": "0.9844",
+                "high": "0.999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OBR-WETH",
+                "price": "3.5e-7",
+                "volume": "20000",
+                "bid": "3.5e-7",
+                "ask": "0.0000016",
+                "low": "0",
+                "high": "3.5e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OCC-WETH",
+                "price": "2e-8",
+                "volume": "2400000",
+                "bid": "2e-8",
+                "ask": "3e-8",
+                "low": "2e-8",
+                "high": "2e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OGO-USDT",
+                "price": "0.1109",
+                "volume": "3748.42",
+                "bid": "0.1096",
+                "ask": "0.1109",
+                "low": "0.1109",
+                "high": "0.1962",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OGO-WETH",
+                "price": "0.00054",
+                "volume": "30516",
+                "bid": "0.00054",
+                "ask": "0.00058",
+                "low": "0.0005",
+                "high": "0.00054",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OMG-SAI",
+                "price": "1.1189",
+                "volume": "17.8",
+                "bid": "1.017",
+                "ask": "1.1189",
+                "low": "0",
+                "high": "1.1189",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OMG-WETH",
+                "price": "0.00737",
+                "volume": "1.31",
+                "bid": "0.0020006",
+                "ask": "0.00737",
+                "low": "0.00737",
+                "high": "0.00737",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OMX-WETH",
+                "price": "0.00000101",
+                "volume": "15200",
+                "bid": "0.00000101",
+                "ask": null,
+                "low": "0",
+                "high": "0.00000101",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ONEP-WETH",
+                "price": "0.0009",
+                "volume": "14.11066966",
+                "bid": null,
+                "ask": "0.0009",
+                "low": "0.0009",
+                "high": "0.0009",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ONE-WETH",
+                "price": "0.00009",
+                "volume": "20000",
+                "bid": "0.00001",
+                "ask": "0.000091",
+                "low": "0.00009",
+                "high": "0.00009",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ORI-WETH",
+                "price": "0.00046",
+                "volume": "237.43994466",
+                "bid": "0.00046",
+                "ask": "0.0013",
+                "low": "0",
+                "high": "0.00046",
+                "updatedAt": null
+            },
+            {
+                "marketId": "OXY-WETH",
+                "price": "0.000001",
+                "volume": "106000",
+                "bid": null,
+                "ask": "0.000001",
+                "low": "1e-7",
+                "high": "0.000001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "P2PX-WETH",
+                "price": "0.0000087",
+                "volume": "10250",
+                "bid": "1e-8",
+                "ask": "0.00025",
+                "low": "0",
+                "high": "0.0000087",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PAI-WETH",
+                "price": "0.0000723",
+                "volume": "1805",
+                "bid": "0.00000663",
+                "ask": "0.00045",
+                "low": "0",
+                "high": "0.0000723",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PAL-WETH",
+                "price": "0.0000049",
+                "volume": "1928",
+                "bid": "0.0000049",
+                "ask": "0.0000498",
+                "low": "0",
+                "high": "0.0000049",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PARETO-USDC",
+                "price": "0.0005",
+                "volume": "10000",
+                "bid": "0.0005",
+                "ask": "0.009",
+                "low": "0",
+                "high": "0.0005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PARETO-WETH",
+                "price": "0.000016",
+                "volume": "42340",
+                "bid": "0.00001446",
+                "ask": "0.00002502",
+                "low": "0",
+                "high": "0.00001681",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PAX-NUSD",
+                "price": "1",
+                "volume": "1000",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "1",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PAX-TUSD",
+                "price": "0.9931",
+                "volume": "20",
+                "bid": "0.9931",
+                "ask": "1.0069",
+                "low": "0.9931",
+                "high": "1.0069",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PDI-WETH",
+                "price": "0.00007",
+                "volume": "347",
+                "bid": "0.00007",
+                "ask": null,
+                "low": "0",
+                "high": "0.00007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PEAK-WETH",
+                "price": "1e-7",
+                "volume": "50000",
+                "bid": null,
+                "ask": "0.00009",
+                "low": "0",
+                "high": "1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PETC-WETH",
+                "price": "0.000005",
+                "volume": "10000",
+                "bid": null,
+                "ask": "0.00005",
+                "low": "0.000005",
+                "high": "0.000005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PFR-WETH",
+                "price": "0.000175",
+                "volume": "10",
+                "bid": "0.000175",
+                "ask": "0.00025",
+                "low": "0",
+                "high": "0.000175",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PMC-WETH",
+                "price": "1.1e-7",
+                "volume": "3776",
+                "bid": "1e-7",
+                "ask": "3e-7",
+                "low": "0",
+                "high": "1.1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PMZ-WETH",
+                "price": "0.0006",
+                "volume": "10",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "0.0006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "POE-WETH",
+                "price": "0.0001",
+                "volume": "300",
+                "bid": "0.00001",
+                "ask": null,
+                "low": "0.0001",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "POLY-WETH",
+                "price": "0.00020676",
+                "volume": "582.73",
+                "bid": "0.0000011",
+                "ask": "0.0017891",
+                "low": "0",
+                "high": "0.00020676",
+                "updatedAt": null
+            },
+            {
+                "marketId": "POWR-WETH",
+                "price": "0.0004144",
+                "volume": "2462.45",
+                "bid": "0.0004228",
+                "ask": "0.000442",
+                "low": "0.0004144",
+                "high": "0.0004216",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PPC-WETH",
+                "price": "0.00018",
+                "volume": "1904.8431727",
+                "bid": "0.0000428",
+                "ask": "0.0001792",
+                "low": "0.0001792",
+                "high": "0.00018",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PPI-WETH",
+                "price": "4e-7",
+                "volume": "37440",
+                "bid": "4e-7",
+                "ask": "0.00000124",
+                "low": "0",
+                "high": "4e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PPN-WETH",
+                "price": "0.015",
+                "volume": "5033",
+                "bid": "1.8e-7",
+                "ask": "0.015",
+                "low": "0.00000118",
+                "high": "0.015",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PPP-WETH",
+                "price": "0.006",
+                "volume": "146.5",
+                "bid": "0.00010745",
+                "ask": "0.006",
+                "low": "0.006",
+                "high": "0.006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PPT-WETH",
+                "price": "0.003226",
+                "volume": "58.03",
+                "bid": "0.003226",
+                "ask": "0.003282",
+                "low": "0",
+                "high": "0.003226",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PTT-WETH",
+                "price": "0.000015529",
+                "volume": "13806.81",
+                "bid": "2.431e-7",
+                "ask": "0.0012345",
+                "low": "0.00001",
+                "high": "0.000015529",
+                "updatedAt": null
+            },
+            {
+                "marketId": "PVT-WETH",
+                "price": "0.0141",
+                "volume": "594.57419945",
+                "bid": null,
+                "ask": "0.0142",
+                "low": "0.00812",
+                "high": "0.0141",
+                "updatedAt": null
+            },
+            {
+                "marketId": "QASH-WETH",
+                "price": "0.0004759",
+                "volume": "740",
+                "bid": "0.0004641",
+                "ask": "0.0004759",
+                "low": "0",
+                "high": "0.0004759",
+                "updatedAt": null
+            },
+            {
+                "marketId": "QBIT-WETH",
+                "price": "0.167",
+                "volume": "1.1",
+                "bid": "0.167",
+                "ask": "0.173",
+                "low": "0",
+                "high": "0.167",
+                "updatedAt": null
+            },
+            {
+                "marketId": "QCH-WETH",
+                "price": "0.000133",
+                "volume": "27",
+                "bid": "0.000133",
+                "ask": "0.000161",
+                "low": "0",
+                "high": "0.000133",
+                "updatedAt": null
+            },
+            {
+                "marketId": "QKC-WETH",
+                "price": "0.000368",
+                "volume": "100086",
+                "bid": null,
+                "ask": "0.000369",
+                "low": "0.00001059",
+                "high": "0.000368",
+                "updatedAt": null
+            },
+            {
+                "marketId": "QSP-WETH",
+                "price": "0.00001775",
+                "volume": "133",
+                "bid": "0.00001775",
+                "ask": "0.0019131",
+                "low": "0",
+                "high": "0.00001775",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RDN-WETH",
+                "price": "0.001",
+                "volume": "2978",
+                "bid": "3e-8",
+                "ask": null,
+                "low": "0.001",
+                "high": "0.001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RED-WETH",
+                "price": "0.0004",
+                "volume": "85.47098892",
+                "bid": "0.0004",
+                "ask": "0.0005",
+                "low": "0.0004",
+                "high": "0.0005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "REKT-WETH",
+                "price": "0.00000701",
+                "volume": "2000",
+                "bid": "2e-7",
+                "ask": "0.002",
+                "low": "0",
+                "high": "0.00000701",
+                "updatedAt": null
+            },
+            {
+                "marketId": "REN-WETH",
+                "price": "0.00006256",
+                "volume": "712",
+                "bid": "0.00006256",
+                "ask": null,
+                "low": "0",
+                "high": "0.00006256",
+                "updatedAt": null
+            },
+            {
+                "marketId": "REP-WETH",
+                "price": "0.055",
+                "volume": "10",
+                "bid": "0.05",
+                "ask": "1",
+                "low": "0",
+                "high": "0.055",
+                "updatedAt": null
+            },
+            {
+                "marketId": "REQ-WETH",
+                "price": "0.000062",
+                "volume": "703",
+                "bid": "0.00005999",
+                "ask": "0.00006163",
+                "low": "0",
+                "high": "0.000062",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RFR-WETH",
+                "price": "0.000007",
+                "volume": "546",
+                "bid": "0.000007",
+                "ask": "0.00001",
+                "low": "0",
+                "high": "0.000007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RHOC-WETH",
+                "price": "0.0000987",
+                "volume": "737448.19",
+                "bid": "0.000057",
+                "ask": "0.0000987",
+                "low": "0.00004",
+                "high": "0.00013",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RING-WETH",
+                "price": "0.00002236",
+                "volume": "9269",
+                "bid": "0.00001622",
+                "ask": "0.00002236",
+                "low": "0",
+                "high": "0.00002236",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RLC-WETH",
+                "price": "0.000751",
+                "volume": "100",
+                "bid": "0.00075",
+                "ask": null,
+                "low": "0.000751",
+                "high": "0.0054",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RTE-WETH",
+                "price": "0.00000139",
+                "volume": "2000",
+                "bid": "0.00000139",
+                "ask": "0.00001536",
+                "low": "0",
+                "high": "0.00000139",
+                "updatedAt": null
+            },
+            {
+                "marketId": "RXE-WETH",
+                "price": "0.006913",
+                "volume": "458.87",
+                "bid": "0.0012",
+                "ask": "0.006913",
+                "low": "0.0067",
+                "high": "0.006913",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SAG-WETH",
+                "price": "0.00000962",
+                "volume": "1500",
+                "bid": "0.00000262",
+                "ask": "0.00005962",
+                "low": "0",
+                "high": "0.00000962",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SAI-NUSD",
+                "price": "1.0282",
+                "volume": "1944.91",
+                "bid": "1.0145",
+                "ask": null,
+                "low": "1.0004",
+                "high": "1.0282",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SAI-USDx",
+                "price": "1.0008",
+                "volume": "549",
+                "bid": "0.9992",
+                "ask": "1.0022",
+                "low": "0",
+                "high": "1.0008",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SAI-WETH",
+                "price": "0.00221",
+                "volume": "8",
+                "bid": "0.00221",
+                "ask": "0.019984",
+                "low": "0",
+                "high": "0.00221",
+                "updatedAt": null
+            },
+            {
+                "marketId": "Sat-WETH",
+                "price": "0.000002",
+                "volume": "3458.64",
+                "bid": "0.000002",
+                "ask": "0.00003",
+                "low": "0",
+                "high": "0.000002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SBTC_20190719-DAI",
+                "price": "3235.3",
+                "volume": "0.004",
+                "bid": "3235.3",
+                "ask": "3510.1",
+                "low": "3235.3",
+                "high": "3505.2",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SBTC_20190816-DAI",
+                "price": "3100.2",
+                "volume": "0.135",
+                "bid": "3116.8",
+                "ask": "3321.2",
+                "low": "2500",
+                "high": "3100.2",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SBTC_20190913-DAI",
+                "price": "3487.2",
+                "volume": "0.125",
+                "bid": "3462.4",
+                "ask": "3546.5",
+                "low": "0",
+                "high": "3487.2",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SBTC_20191011-DAI",
+                "price": "3744.2",
+                "volume": "0.875",
+                "bid": "3729.8",
+                "ask": "3812",
+                "low": "3605.4",
+                "high": "3763.6",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SBTC-TUSD",
+                "price": "3379.5",
+                "volume": "0.0295",
+                "bid": "3379.4",
+                "ask": "3396",
+                "low": "3379.5",
+                "high": "3395",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SCAR-WETH",
+                "price": "0.02",
+                "volume": "0.84",
+                "bid": "0.00025001",
+                "ask": "0.099",
+                "low": "0",
+                "high": "0.02",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SCC-WETH",
+                "price": "0.0000182",
+                "volume": "5000",
+                "bid": "0.0000182",
+                "ask": "0.0001728",
+                "low": "0",
+                "high": "0.0000182",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SCOI-WETH",
+                "price": "0.00003",
+                "volume": "4343.76",
+                "bid": null,
+                "ask": "0.00003",
+                "low": "0",
+                "high": "0.00003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SEELE-WETH",
+                "price": "0.00006002",
+                "volume": "38368.17138648",
+                "bid": "0.00006002",
+                "ask": "0.000228",
+                "low": "0",
+                "high": "0.000081",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SENT-WETH",
+                "price": "0.00000227",
+                "volume": "2836.22418765",
+                "bid": "0.00000227",
+                "ask": "0.00001999",
+                "low": "0",
+                "high": "0.00000227",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SEN-WETH",
+                "price": "0.00004",
+                "volume": "3482.7650215",
+                "bid": "0.00004",
+                "ask": "1",
+                "low": "0.00004",
+                "high": "0.00037",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SER-WETH",
+                "price": "0.0003",
+                "volume": "27",
+                "bid": "0.0003",
+                "ask": null,
+                "low": "0",
+                "high": "0.0003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SETH_1_30-DAI",
+                "price": "80.63",
+                "volume": "0.6",
+                "bid": "80.63",
+                "ask": "82.08",
+                "low": "0",
+                "high": "80.63",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SETH_2_28-DAI",
+                "price": "34.52",
+                "volume": "31.1",
+                "bid": "34.52",
+                "ask": "34.89",
+                "low": "34.52",
+                "high": "36.87",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SETH_3_30-DAI",
+                "price": "58.95",
+                "volume": "0.06",
+                "bid": "58.96",
+                "ask": "61.67",
+                "low": "0",
+                "high": "58.95",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SEV-WETH",
+                "price": "0.003",
+                "volume": "18.58",
+                "bid": null,
+                "ask": "0.003",
+                "low": "0.0029",
+                "high": "0.003",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SGN-WETH",
+                "price": "0.000039",
+                "volume": "54477.33",
+                "bid": "0.00000585",
+                "ask": "0.000039",
+                "low": "0.000039",
+                "high": "0.000042",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SHOCK-WETH",
+                "price": "0.000135",
+                "volume": "2036.37",
+                "bid": "0.000135",
+                "ask": "0.0004487",
+                "low": "0.000135",
+                "high": "0.000135",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SHP-WETH",
+                "price": "0.00045",
+                "volume": "55",
+                "bid": "0.000325",
+                "ask": "0.00045",
+                "low": "0.00045",
+                "high": "0.00045",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SHRINK-WETH",
+                "price": "0.00000792",
+                "volume": "582",
+                "bid": "0.00000203",
+                "ask": "0.00000792",
+                "low": "0",
+                "high": "0.00000792",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SHUF-WETH",
+                "price": "0.00023",
+                "volume": "125",
+                "bid": "0.00016",
+                "ask": "0.00037",
+                "low": "0",
+                "high": "0.00023",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SKM-WETH",
+                "price": "0.0000425",
+                "volume": "5044.17696532",
+                "bid": "0.0000425",
+                "ask": "0.000139",
+                "low": "0.0000425",
+                "high": "0.0000625",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SLCR-WETH",
+                "price": "0.00008",
+                "volume": "2308",
+                "bid": "1e-8",
+                "ask": "0.00008",
+                "low": "0.00008",
+                "high": "0.00008",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SNAP-WETH",
+                "price": "2e-8",
+                "volume": "1250000",
+                "bid": "1e-8",
+                "ask": "0.0000099",
+                "low": "0",
+                "high": "2e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SNTR-WETH",
+                "price": "4e-8",
+                "volume": "2044816",
+                "bid": null,
+                "ask": "0.0000211",
+                "low": "0",
+                "high": "4e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SNT-WETH",
+                "price": "0.00015767",
+                "volume": "600",
+                "bid": "0.00000985",
+                "ask": "0.00015767",
+                "low": "0",
+                "high": "0.00015767",
+                "updatedAt": null
+            },
+            {
+                "marketId": "Spark-WETH",
+                "price": "4.1e-7",
+                "volume": "50000",
+                "bid": "1e-8",
+                "ask": "4.1e-7",
+                "low": "0",
+                "high": "4.1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SPEC-WETH",
+                "price": "0.000001",
+                "volume": "5",
+                "bid": null,
+                "ask": "0.000001",
+                "low": "0",
+                "high": "0.000001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SPK-WETH",
+                "price": "0.00063",
+                "volume": "20",
+                "bid": "0.0000652",
+                "ask": "0.001",
+                "low": "0",
+                "high": "0.00063",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SS-WETH",
+                "price": "0.00001216",
+                "volume": "5550",
+                "bid": "0.00000213",
+                "ask": "0.00001675",
+                "low": "0.00001216",
+                "high": "0.00001675",
+                "updatedAt": null
+            },
+            {
+                "marketId": "STF-WETH",
+                "price": "0.000032",
+                "volume": "1354",
+                "bid": "1.1e-7",
+                "ask": "0.0000335",
+                "low": "0",
+                "high": "0.000032",
+                "updatedAt": null
+            },
+            {
+                "marketId": "STORJ-WETH",
+                "price": "0.000244",
+                "volume": "196.2",
+                "bid": "0.000224",
+                "ask": "0.0223",
+                "low": "0",
+                "high": "0.000244",
+                "updatedAt": null
+            },
+            {
+                "marketId": "STORM-WETH",
+                "price": "0.00000195",
+                "volume": "1825.16",
+                "bid": "0.00000195",
+                "ask": "0.00002",
+                "low": "0",
+                "high": "0.00000195",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SVCS-WETH",
+                "price": "0.000017",
+                "volume": "30288",
+                "bid": null,
+                "ask": "0.000017",
+                "low": "0.00001304",
+                "high": "0.000017",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SWETH-DAI",
+                "price": "250",
+                "volume": "0.07753585",
+                "bid": "4.5",
+                "ask": null,
+                "low": "0",
+                "high": "250",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SXDT-WETH",
+                "price": "0.00042003",
+                "volume": "2154.47",
+                "bid": "0.00042003",
+                "ask": "0.0011998",
+                "low": "0",
+                "high": "0.00042004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "SXP-WETH",
+                "price": "0.0019288",
+                "volume": "911",
+                "bid": "0.0017823",
+                "ask": "0.0020419",
+                "low": "0.0018712",
+                "high": "0.0019288",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TAU-WETH",
+                "price": "0.00004208",
+                "volume": "1007.04999999",
+                "bid": "0.00004208",
+                "ask": "0.0004",
+                "low": "0.00004208",
+                "high": "0.0004",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TFD-WETH",
+                "price": "0.0032",
+                "volume": "315",
+                "bid": "0.00000232",
+                "ask": "0.0032",
+                "low": "0.0032",
+                "high": "0.0032",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TFiat-WETH",
+                "price": "0.0010001",
+                "volume": "3.98",
+                "bid": "0.0010001",
+                "ask": null,
+                "low": "0",
+                "high": "0.0010001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TGBP-TUSD",
+                "price": "1.24",
+                "volume": "10",
+                "bid": "1.22",
+                "ask": null,
+                "low": "1.23",
+                "high": "1.24",
+                "updatedAt": null
+            },
+            {
+                "marketId": "Thar-WETH",
+                "price": "0.0035",
+                "volume": "10",
+                "bid": "0.00002002",
+                "ask": "0.0035",
+                "low": "0",
+                "high": "0.0035",
+                "updatedAt": null
+            },
+            {
+                "marketId": "THETA-WETH",
+                "price": "0.0061",
+                "volume": "5536",
+                "bid": "0.00015295",
+                "ask": "0.0061",
+                "low": "0",
+                "high": "0.0061",
+                "updatedAt": null
+            },
+            {
+                "marketId": "THUG-WETH",
+                "price": "1.1e-7",
+                "volume": "47267.5150936",
+                "bid": null,
+                "ask": "1.1e-7",
+                "low": "0",
+                "high": "1.1e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "THUR-WETH",
+                "price": "8e-8",
+                "volume": "33657.129",
+                "bid": "8e-8",
+                "ask": "0.00001",
+                "low": "0",
+                "high": "8e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TIE-WETH",
+                "price": "0.0002",
+                "volume": "1000",
+                "bid": "0.0002",
+                "ask": "0.00046512",
+                "low": "0.0002",
+                "high": "0.00021",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TOMO-WETH",
+                "price": "0.001",
+                "volume": "493.6157",
+                "bid": "0.001",
+                "ask": "0.0068081",
+                "low": "0",
+                "high": "0.001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TOTO-WETH",
+                "price": "1.5e-7",
+                "volume": "179678",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "1.5e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TRB-WETH",
+                "price": "0.0002",
+                "volume": "2290",
+                "bid": null,
+                "ask": null,
+                "low": "0.0002",
+                "high": "0.0002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TRIO-WETH",
+                "price": "0.00001516",
+                "volume": "985224.124",
+                "bid": "0.00001518",
+                "ask": "0.00002102",
+                "low": "0.00001516",
+                "high": "0.00001841",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TRON-WETH",
+                "price": "1e-12",
+                "volume": "13512805121",
+                "bid": null,
+                "ask": "1e-12",
+                "low": "1e-12",
+                "high": "1e-12",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TRST-WETH",
+                "price": "0.00000357",
+                "volume": "3960",
+                "bid": "0.00000357",
+                "ask": null,
+                "low": "0",
+                "high": "0.00000357",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TRX-WETH",
+                "price": "0.001",
+                "volume": "70.8",
+                "bid": "3e-10",
+                "ask": "0.001",
+                "low": "0",
+                "high": "0.001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TUSD-NUSD",
+                "price": "1",
+                "volume": "1000",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "1",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TUSD-SAI",
+                "price": "0.998",
+                "volume": "42.99",
+                "bid": "0.1",
+                "ask": "0.998",
+                "low": "0",
+                "high": "0.998",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TUSD-USDC",
+                "price": "1.0002",
+                "volume": "498.07",
+                "bid": "0.9998",
+                "ask": "1.0002",
+                "low": "0",
+                "high": "1.0002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TUSD-USDT",
+                "price": "1.005",
+                "volume": "1562.72",
+                "bid": "1.005",
+                "ask": null,
+                "low": "1.004",
+                "high": "1.005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "TUSD-WETH",
+                "price": "0.03",
+                "volume": "8.99",
+                "bid": "0.000011",
+                "ask": null,
+                "low": "0.03",
+                "high": "0.03",
+                "updatedAt": null
+            },
+            {
+                "marketId": "UKG-WETH",
+                "price": "0.00045",
+                "volume": "1741.8247895",
+                "bid": "0.0000412",
+                "ask": null,
+                "low": "0.00045",
+                "high": "0.00045",
+                "updatedAt": null
+            },
+            {
+                "marketId": "UPI-WETH",
+                "price": "1e-8",
+                "volume": "20000000",
+                "bid": null,
+                "ask": "1e-8",
+                "low": "0",
+                "high": "1e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "UPP-WETH",
+                "price": "0.00001449",
+                "volume": "827.0377843",
+                "bid": "0.00001449",
+                "ask": "0.0002",
+                "low": "0",
+                "high": "0.00001449",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDC-NUSD",
+                "price": "1",
+                "volume": "1000",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "1",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDC-SAI",
+                "price": "1.0093",
+                "volume": "5650.97",
+                "bid": "1.0015",
+                "ask": "1.0098",
+                "low": "1.009",
+                "high": "1.0098",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDC-USDT",
+                "price": "0.999",
+                "volume": "0.5",
+                "bid": "0.999",
+                "ask": "1.001",
+                "low": "0",
+                "high": "0.999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDC-USDx",
+                "price": "1.0007",
+                "volume": "10",
+                "bid": "1",
+                "ask": "1.0007",
+                "low": "0",
+                "high": "1.0007",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDC-WETH",
+                "price": "0.01",
+                "volume": "118.71",
+                "bid": null,
+                "ask": "116",
+                "low": "0.01",
+                "high": "0.01",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDT-NUSD",
+                "price": "1.005",
+                "volume": "518.01",
+                "bid": "1.005",
+                "ask": "1.0173",
+                "low": "1.005",
+                "high": "1.0114",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDT-USDx",
+                "price": "1.0005",
+                "volume": "19.39",
+                "bid": "0.9995",
+                "ask": "1.0005",
+                "low": "0",
+                "high": "1.0005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USDx-USDT",
+                "price": "1.0002",
+                "volume": "13.25",
+                "bid": null,
+                "ask": "1.0002",
+                "low": "1.0002",
+                "high": "1.0002",
+                "updatedAt": null
+            },
+            {
+                "marketId": "USStocks-DAI",
+                "price": "2819.49",
+                "volume": "0.021",
+                "bid": "2819.49",
+                "ask": "2824.01",
+                "low": "2810.75",
+                "high": "2820.74",
+                "updatedAt": null
+            },
+            {
+                "marketId": "UUU-WETH",
+                "price": "0.000013",
+                "volume": "185",
+                "bid": "6.5e-7",
+                "ask": null,
+                "low": "0",
+                "high": "0.000013",
+                "updatedAt": null
+            },
+            {
+                "marketId": "VD-WETH",
+                "price": "5e-8",
+                "volume": "46520",
+                "bid": null,
+                "ask": "5e-8",
+                "low": "0",
+                "high": "5e-8",
+                "updatedAt": null
+            },
+            {
+                "marketId": "VERI-WETH",
+                "price": "0.0655",
+                "volume": "6.49",
+                "bid": "0.0655",
+                "ask": "0.54",
+                "low": "0",
+                "high": "0.066",
+                "updatedAt": null
+            },
+            {
+                "marketId": "VOID-WETH",
+                "price": "0.000005",
+                "volume": "1700.33",
+                "bid": "0.00000105",
+                "ask": "0.00002002",
+                "low": "0",
+                "high": "0.000005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "VOLC-WETH",
+                "price": "0.009",
+                "volume": "3.93",
+                "bid": "0.000014",
+                "ask": "0.009",
+                "low": "0",
+                "high": "0.009",
+                "updatedAt": null
+            },
+            {
+                "marketId": "VRX-WETH",
+                "price": "8.8e-7",
+                "volume": "26999",
+                "bid": null,
+                "ask": "0.0005",
+                "low": "0",
+                "high": "0.000001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WBTC-SAI",
+                "price": "8129",
+                "volume": "0.37828222",
+                "bid": "8129",
+                "ask": "8240",
+                "low": "8129",
+                "high": "8131",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WBTC-USDC",
+                "price": "10336",
+                "volume": "0.01",
+                "bid": "10131",
+                "ask": "10335",
+                "low": "0",
+                "high": "10336",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WBTC-WETH",
+                "price": "43.643",
+                "volume": "0.0001",
+                "bid": "43.352",
+                "ask": "43.643",
+                "low": "0",
+                "high": "43.643",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-NUSD",
+                "price": "174.05",
+                "volume": "0.05",
+                "bid": "174.05",
+                "ask": null,
+                "low": "0",
+                "high": "174.05",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-PAX",
+                "price": "186.55",
+                "volume": "0.1",
+                "bid": "186.55",
+                "ask": "188.68",
+                "low": "0",
+                "high": "186.55",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-SAI",
+                "price": "126.52",
+                "volume": "0.41",
+                "bid": "1",
+                "ask": "126.48",
+                "low": "0",
+                "high": "126.52",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-TUSD",
+                "price": "168.32",
+                "volume": "0.16",
+                "bid": "168.32",
+                "ask": "170.22",
+                "low": "0",
+                "high": "168.32",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-USDC",
+                "price": "135.15",
+                "volume": "0.1099",
+                "bid": "135.15",
+                "ask": "136.3",
+                "low": "0",
+                "high": "135.15",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-USDT",
+                "price": "195.24",
+                "volume": "3.97",
+                "bid": "1.2",
+                "ask": null,
+                "low": "1.2",
+                "high": "195.24",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WETH-USDx",
+                "price": "215",
+                "volume": "0.04",
+                "bid": null,
+                "ask": null,
+                "low": "0",
+                "high": "215",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WILD-WETH",
+                "price": "0.000006",
+                "volume": "530",
+                "bid": null,
+                "ask": "0.000006",
+                "low": "0",
+                "high": "0.000006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WIX-WETH",
+                "price": "0.00028",
+                "volume": "3651.62",
+                "bid": "0.0001722",
+                "ask": "0.00028",
+                "low": "0.0002118",
+                "high": "0.00028",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WPR-WETH",
+                "price": "0.00005",
+                "volume": "10491",
+                "bid": "0.000012917",
+                "ask": "0.00091299",
+                "low": "0",
+                "high": "0.00005",
+                "updatedAt": null
+            },
+            {
+                "marketId": "WTC-WETH",
+                "price": "0.000999",
+                "volume": "17.99",
+                "bid": "0.000999",
+                "ask": null,
+                "low": "0",
+                "high": "0.000999",
+                "updatedAt": null
+            },
+            {
+                "marketId": "XBASE-WETH",
+                "price": "0.000009",
+                "volume": "4034",
+                "bid": "0.000009",
+                "ask": "0.00002698",
+                "low": "0",
+                "high": "0.000009",
+                "updatedAt": null
+            },
+            {
+                "marketId": "XHT-WETH",
+                "price": "0.00007",
+                "volume": "90",
+                "bid": "8e-7",
+                "ask": "0.0001",
+                "low": "0",
+                "high": "0.00008",
+                "updatedAt": null
+            },
+            {
+                "marketId": "XIO-WETH",
+                "price": "0.00006",
+                "volume": "1405",
+                "bid": "0.00004265",
+                "ask": "0.00008584",
+                "low": "0",
+                "high": "0.00006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "XMX-WETH",
+                "price": "0.000016295",
+                "volume": "171663",
+                "bid": "0.000015747",
+                "ask": "0.000016295",
+                "low": "0",
+                "high": "0.000016295",
+                "updatedAt": null
+            },
+            {
+                "marketId": "XPST-WETH",
+                "price": "6e-7",
+                "volume": "250000",
+                "bid": "6e-7",
+                "ask": "0.0000018",
+                "low": "0",
+                "high": "6e-7",
+                "updatedAt": null
+            },
+            {
+                "marketId": "XYO-WETH",
+                "price": "0.00000237",
+                "volume": "88000",
+                "bid": "0.00000202",
+                "ask": "0.0000075",
+                "low": "0",
+                "high": "0.00000237",
+                "updatedAt": null
+            },
+            {
+                "marketId": "YOO-WETH",
+                "price": "0.000006",
+                "volume": "20612",
+                "bid": null,
+                "ask": "0.0001",
+                "low": "0",
+                "high": "0.000006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZALX-WETH",
+                "price": "0.0006",
+                "volume": "31",
+                "bid": "0.0006",
+                "ask": "0.0008",
+                "low": "0",
+                "high": "0.0006",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZBUX-WETH",
+                "price": "0.0001",
+                "volume": "300",
+                "bid": "4.7e-7",
+                "ask": "0.0001899",
+                "low": "0",
+                "high": "0.0001",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZCO-WETH",
+                "price": "0.000013",
+                "volume": "36257",
+                "bid": "0.0000058",
+                "ask": "0.000026",
+                "low": "0.000013",
+                "high": "0.00001301",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZIL-WETH",
+                "price": "0.00008434",
+                "volume": "43278",
+                "bid": "0.0000829",
+                "ask": null,
+                "low": "0.00008425",
+                "high": "0.00008434",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZIP-WETH",
+                "price": "0.00055473",
+                "volume": "100",
+                "bid": "8.1e-7",
+                "ask": "0.00055473",
+                "low": "0",
+                "high": "0.00055473",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZOM-WETH",
+                "price": "0.00019",
+                "volume": "539",
+                "bid": "5.2e-7",
+                "ask": "0.00019",
+                "low": "0",
+                "high": "0.00019",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZRX-SAI",
+                "price": "0.2147",
+                "volume": "90.22",
+                "bid": "0.0214",
+                "ask": "0.2145",
+                "low": "0.2145",
+                "high": "0.2147",
+                "updatedAt": null
+            },
+            {
+                "marketId": "ZRX-WETH",
+                "price": "0.0019",
+                "volume": "20",
+                "bid": "0.0009",
+                "ask": "0.0019",
+                "low": "0",
+                "high": "0.0019",
+                "updatedAt": null
+            },
+            {
                 "marketId": "ETH-USDT",
-                "price": "157.07",
-                "volume": "749.6951",
-                "bid": "156.74",
-                "ask": "157.43",
-                "low": "157.43",
-                "high": "158.6",
-                "updateAt": 1586847650301
+                "price": "210.85",
+                "volume": "1137.3413",
+                "bid": "210.51",
+                "ask": "211.17",
+                "low": "211.17",
+                "high": "216.78"
             },
             {
                 "marketId": "ETH-USDC",
-                "price": "158.29",
-                "volume": "400.9887",
-                "bid": "157.44",
-                "ask": "158.29",
-                "low": "158.29",
-                "high": "158.77",
-                "updateAt": 1586844388259
+                "price": "212.98",
+                "volume": "55.4103",
+                "bid": "211.7",
+                "ask": "212.98",
+                "low": "212.98",
+                "high": "214.35"
             },
             {
                 "marketId": "ETH-DAI",
-                "price": "151.28",
-                "volume": "0.0101",
-                "bid": "147",
-                "ask": "151.28",
-                "low": "151.28",
-                "high": "151.28",
-                "updateAt": 1586789312210
+                "price": "208.31",
+                "volume": "3.1237",
+                "bid": "205.8",
+                "ask": "208.75",
+                "low": "208.75",
+                "high": "221.07"
             },
             {
                 "marketId": "WBTC-USDT",
-                "price": "6889.75",
-                "volume": "42.5688",
-                "bid": "6891.43",
-                "ask": "6906.14",
-                "low": "6906.14",
-                "high": "6891.52",
-                "updateAt": 1586837032948
-            },
-            {
-                "marketId": "HBTC-USDT",
-                "price": "6849.45",
-                "volume": "0.001",
-                "bid": "6778.35",
-                "ask": "6849.45",
-                "low": "6849.45",
-                "high": "6849.45",
-                "updateAt": 1585884376000
+                "price": "8784.22",
+                "volume": "10.3451",
+                "bid": "8758.35",
+                "ask": "8784.22",
+                "low": "8784.22",
+                "high": "8925"
             },
             {
                 "marketId": "ETH-SAI",
@@ -62,18 +4406,16 @@
                 "bid": "145.48",
                 "ask": "149.41",
                 "low": "149.41",
-                "high": "149.35",
-                "updateAt": 1575188948775
+                "high": "149.35"
             },
             {
-                "marketId": "iETH-ETH",
-                "price": "0.95",
-                "volume": "0.0494",
-                "bid": "1",
+                "marketId": "ETH-BUSD",
+                "price": "184.2",
+                "volume": "185.619",
+                "bid": "185",
                 "ask": "0",
                 "low": "0",
-                "high": "0.95",
-                "updateAt": 1582710980972
+                "high": "184.2"
             }
         ]
     }

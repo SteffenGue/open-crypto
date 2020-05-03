@@ -1,0 +1,334 @@
+name: bitgrail
+terms:
+  terms_url: null
+api_url: https://api.bitgrail.com/v1/
+rate_limit:
+  max: 60
+  unit: 60
+requests:
+  tickers:
+    request:
+      template: "markets"
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: int
+        response:
+          type: dict
+          values:
+            BTC: # dict_key
+              type: dict
+              values:
+                markets:
+                  type: dict
+                  values:
+                    currency_pair: # variable key, each available currency pair
+                      type: dict
+                      values:
+                        last:
+                          type:
+                          - str
+                          - float
+                        high:
+                          type:
+                          - str
+                          - float
+                        low:
+                          type:
+                          - str
+                          - float
+                        volume:
+                          type:
+                          - str
+                          - float
+                        coinVolume:
+                          type:
+                          - str
+                          - float
+                        bid:
+                          type:
+                          - str
+                          - float
+                        ask:
+                          type:
+                          - str
+                          - float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path:
+      - response
+      - BTC
+      - markets
+      - dict_key
+      type:
+      - str
+      - split
+      - "/"
+      - 1
+    - key: currency_pair_second
+      path:
+      - response
+      - BTC
+      - markets
+      - dict_key
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: ticker_last_price
+      path:
+      - response
+      - BTC
+      - markets
+      - dict_values
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - response
+      - BTC
+      - markets
+      - dict_values
+      - volume
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - response
+      - BTC
+      - markets
+      - dict_values
+      - bid
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - response
+      - BTC
+      - markets
+      - dict_values
+      - ask
+      type:
+      - str
+      - float
+
+  ticker:
+    request:
+      template: "{currency_pair}/ticker"
+      pair_template: # e.g. BTC-LTC
+        template: "{first}-{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: int
+        response:
+          type: dict
+          values:
+            last:
+              type:
+              - str
+              - float
+            high:
+              type:
+              - str
+              - float
+            low:
+              type:
+              - str
+              - float
+            volume:
+              type:
+              - str
+              - float
+            coinVolume:
+              type:
+              - str
+              - float
+            bid:
+              type:
+              - str
+              - float
+            ask:
+              type:
+              - str
+              - float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_last_price
+      path:
+      - response
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - response
+      - volume
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - response
+      - bid
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - response
+      - ask
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: "{currency_pair}/orderbook"
+      pair_template: # e.g. BTC-LTC
+        template: "{first}-{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: int
+        response:
+          type: dict
+          values:
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type: float
+                  1: # amount
+                    type: float
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type: float
+                  1: # amount
+                    type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - response
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - response
+      - bids
+      - 1
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - response
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - response
+      - asks
+      - 1
+      type:
+      - float
+
+  trades:
+    request:
+      template: "{currency_pair}/tradehistory"
+      pair_template: # e.g. BTC-LTC
+        template: "{first}-{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: int
+        response:
+          type: list
+          values:
+            type: dict
+            values:
+              date:
+                type:
+                - str
+                - int
+                - fromtimestamp
+              price:
+                type:
+                - str
+                - float
+              amount:
+                type:
+                - str
+                - float
+              type:
+                type: str
+    mapping:
+    - key: trade_time
+      path:
+      - response
+      - date
+      type:
+      - str
+      - int
+      - fromtimestamp
+    - key: trade_last_price
+      path:
+      - response
+      - price
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - response
+      - amount
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - response
+      - type
+      type:
+      - str

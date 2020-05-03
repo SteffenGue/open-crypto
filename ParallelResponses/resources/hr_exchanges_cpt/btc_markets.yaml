@@ -1,0 +1,384 @@
+name: btc_markets
+terms:
+  terms_url: https://www.btcmarkets.net/terms-of-service
+  permission: null
+  search_targets:
+  - tag: section
+    id: TermsOfServicePage
+api_url: https://api.btcmarkets.net/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: v2/market/active/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: boolean
+        errorCode:
+          type: str
+        errorMessage:
+          type: str
+        markets:
+          type: list
+          values:
+            type: dict
+            values:
+              instrument:
+                type: str
+              currency:
+                type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - markets
+      - instrument
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - markets
+      - currency
+      type:
+      - str
+
+  ticker:
+    request:
+      template: market/{currency_pair}/tick
+      pair_template:
+        template: "{first}/{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        bestBid:
+          type: float
+        bestAsk:
+          type: float
+        lastPrice:
+          type: float
+        currency:
+          type: str
+        instrument:
+          type: str
+        timestamp:
+          type:
+          - int
+          - fromtimestamp
+        volume24h:
+          type: float
+    mapping:
+    - key: ticker_best_bid
+      path:
+      - bestBid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - bestAsk
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - lastPrice
+      type:
+      - float
+    - key: ticker_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+
+  # order_book:
+    # request:
+      # template: market/{currency_pair}/orderbook
+      # pair_template:
+        # template: "{first}/{second}"
+        # lower_case: false
+      # params: null
+    # response:
+      # type: dict
+      # values:
+        # currency:
+          # type: str
+        # instrument:
+          # type: str
+        # timestamp:
+          # type:
+          # - int
+        # asks:
+          # type: list
+          # values:
+            # type: list
+            # values:
+              # 0: # price
+                # type: float
+              # 1: # size
+                # type: float
+        # bids:
+          # type: list
+          # values:
+            # type: list
+            # values:
+              # 0: # price
+                # type: float
+              # 1: # size
+                # type: float
+    # mapping:
+    # - key: order_book_time
+      # path:
+      # - timestamp
+      # type:
+      # - int
+      # - fromtimestampms
+    # - key: order_book_asks_price
+      # path:
+      # - asks
+      # - 0
+      # type:
+      # - float
+    # - key: order_book_asks_size
+      # path:
+      # - asks
+      # - 1
+      # type:
+      # - float
+    # - key: order_book_bids_price
+      # path:
+      # - bids
+      # - 0
+      # type:
+      # - float
+    # - key: order_book_bids_size
+      # path:
+      # - bids
+      # - 1
+      # type:
+      # - float
+
+#  trades:
+#    request:
+#      template: v2/market/{currency_pair}/trades
+#      pair_template:
+#        template: "{first}/{second}"
+#        lower_case: false
+#      params:
+#        indexForward: # Set to true to see trades more recent in time, if a since parameter is used.
+#          type: boolean
+#          default: false
+#        limit: # Number of results to return per "page".
+#          type: int
+#          default: 200
+#        since: # a trade id.
+#          type: int
+#          required: false
+#    response:
+#      type: dict
+#      values:
+#        success:
+#          type: boolean
+#        errorCode:
+#          type: int
+#        errorMessage:
+#          type: str
+#        trades:
+#          type: list
+#          values:
+#            type: dict
+#            values:
+#              id:
+#                type: int
+#              price:
+#                type: int
+#              volume:
+#                type: int
+#              creationTime:
+#                type: int
+#        paging:
+#          type: dict
+#          values:
+#            newer:
+#              type: str
+#            older:
+#              type: str
+#    mapping:
+#    - key: trade_last_price
+#      path:
+#      - trades
+#      - price
+#      type:
+#      - int
+#    - key: trade_amount
+#      path:
+#      - trades
+#      - volume
+#      type:
+#      - int
+#    - key: trade_time
+#      path:
+#      - trades
+#      - creationTime
+#      type:
+#      - int
+#      - fromtimestampms
+#
+  historic_rates:
+    request:
+      template: v2/market/{currency_pair}/tickByTime/{time}
+      pair_template:
+        template: "{first}/{second}"
+        lower_case: false
+      params:
+        time:
+          type: str
+          allowed:
+          - minute
+          - hour
+          - day
+          default: day
+        limit:
+          type: int
+          default: 6000
+        since:
+          type:
+          - datetime
+          - totimestampms
+          - int
+          required: false
+          default: 1595248344000
+        indexForward:
+          type: boolean
+          default: false
+        sortForward:
+          type: boolean
+          default: false
+    response:
+      type: dict
+      values:
+        success:
+          type: boolean
+        paging:
+          type: dict
+          values:
+            newer:
+              type: str
+            older:
+              type: str
+        ticks:
+          type: list
+          values:
+            type: dict
+            values:
+              timestamp:
+                type: int
+              open:
+                type: int
+              high:
+                type: int
+              low:
+                type: int
+              close:
+                type: int
+              volume:
+                type: int
+    mapping:
+    - key: historic_rates_time
+      path:
+      - ticks
+      - timestamp
+      type:
+      - int
+      - fromtimestampms
+    - key: historic_rates_open
+      path:
+      - ticks
+      - open
+      type:
+      - int
+    - key: historic_rates_high
+      path:
+      - ticks
+      - high
+      type:
+      - int
+    - key: historic_rates_low
+      path:
+      - ticks
+      - low
+      type:
+      - int
+    - key: historic_rates_close
+      path:
+      - ticks
+      - close
+      type:
+      - int
+    - key: historic_rates_volume
+      path:
+      - ticks
+      - volume
+      type:
+      - int
+#
+#  trade_history: # not public anymore
+#    request:
+#      template: v2/order/trade/history/{instrument}/{currency}
+#      values:
+#        instrument:
+#          template: null
+#          lower_case: false
+#        currency:
+#          template: null
+#          lower_case: false
+#      params:
+#        indexForward: # Set to true to see trades more recent in time, if a since parameter is used.
+#          type: bool
+#          default: false
+#        limit: # Number of results to return per "page".
+#          type: int
+#          default: 200
+#        since: # a trade id.
+#          type: int
+#    response:
+#      type: dict
+#      values:
+#        success:
+#          type: bool
+#        errorCode:
+#          type: int
+#        errorMessage:
+#          type: str
+#        trades:
+#          type: list
+#          values:
+#            type: dict
+#            values:
+#              id:
+#                type: int
+#              creationTime:
+#                type: int
+#              description:
+#                type: str
+#              price:
+#                type: int
+#              volume:
+#                type: int
+#              side:
+#                type: str
+#              fee:
+#                type: int
+#              orderId:
+#                type: int
+#        paging:
+#          type: dict
+#          values:
+#            newer:
+#              type: str
+#            older:
+#              type: str
+#    mapping: null

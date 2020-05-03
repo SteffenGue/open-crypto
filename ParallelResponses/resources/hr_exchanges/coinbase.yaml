@@ -1,0 +1,339 @@
+name: coinbase
+terms:
+  terms_url: https://www.coinbase.com/legal/user_agreement
+  permission: null
+  search_targets:
+  - tag: div
+    class: legal
+api_url: https://api.pro.coinbase.com/
+rate_limit:
+  max: 3
+  unit: 1
+requests:
+  currency_pairs:
+    request:
+      template: products/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id: # i.e. "BTC-USD"
+            type: str
+          base_currency: # i.e. "BTC"
+            type: str
+          quote_currency: # i.e. "USD"
+            type: str
+          base_min_size:
+            type:
+            - str
+            - float
+          base_max_size:
+            type:
+            - str
+            - float
+          quote_increment:
+            type:
+            - str
+            - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - base_currency
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - quote_currency
+      type:
+      - str
+
+  order_book:
+    request:
+      template: products/{currency_pair}/book
+      pair_template:  # e.g. BTC-USD
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        level:
+          type: int
+          allowed:
+          - 1 # Only the best bid and ask
+          - 2 # Top 50 bids and asks (aggregated)
+          - 3 # Full order book (non aggregated), Abuse of Level 3 via polling will cause your access to be limited or blocked.
+          default: 1
+    response:
+      type: dict
+      values:
+        sequence:
+          type:
+          - str
+          - int
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+                - float
+              1: # size
+                type:
+                - str
+                - float
+              2: # num-orders
+                type: int
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+                - float
+              1: # size
+                type:
+                - str
+                - float
+              2: # num-orders
+                type: int
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 1
+      type:
+      - str
+      - float
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 1
+      type:
+      - str
+      - float
+
+  ticker:
+    request:
+      template: products/{currency_pair}/ticker/
+      pair_template:  # e.g. BTC-USD
+        template: "{first}-{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        trade_id:
+          type: int
+        price:
+          type:
+          - str
+          - float
+        size:
+          type:
+          - str
+          - float
+        bid:
+          type:
+          - str
+          - float
+        ask:
+          type:
+          - str
+          - float
+        volume:
+          type:
+          - str
+          - float
+        time:
+          type:
+          - str
+    mapping:
+    - key: ticker_last_price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - bid
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - ask
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - volume
+      type:
+      - str
+      - float
+    - key: ticker_time
+      path:
+      - time
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+
+  trades:
+    request:
+      template: products/{currency_pair}/trades/
+      pair_template:  # e.g. BTC-USD
+        template: "{first}-{second}"
+        lower_case: false
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          time:
+            type:
+            - str
+          trade_id:
+            type: int
+          price:
+            type:
+            - str
+            - float
+          size:
+            type:
+            - str
+            - float
+          side:
+            type: str
+    mapping:
+    - key: trade_time
+      path:
+      - time
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - size
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - side
+      type:
+      - str
+
+  historic_rates: # Historical rates should not be polled frequently. If you need real-time information, use the trade and book endpoints along with the websocket feed.
+    request:
+      template: products/{currency_pair}/candles
+      pair_template:  # e.g. BTC-USD
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        start: # Start time in ISO 8601
+          type:
+          - datetime
+          - strftime
+          - "%Y-%m-%dT%H:%M:%S.%fZ"
+          required: false
+        end: # End time in ISO 8601
+          type:
+          - datetime
+          - strftime
+          - "%Y-%m-%dT%H:%M:%S.%fZ"
+          required: false
+        granularity: # Desired timeslice in seconds
+          type: int
+          allowed:
+          - 60    # 1m
+          - 300   # 5m
+          - 900   # 15m
+          - 3600  # 1h
+          - 21600 # 6h
+          - 86400 # 1d
+          required: false
+          default: 86400
+    response:
+      type: list # TODO: Header Entry?
+      values:
+        type: list
+        values:
+          0: # time
+            type:
+            - int
+          1: # low
+            type: float
+          2: # high
+            type: float
+          3: # open
+            type: float
+          4: # close
+            type: float
+          5: # volume
+            type: float
+    mapping:
+    - key: historic_rates_time
+      path:
+      - 0
+      type:
+      - int
+      - fromtimestamp
+    - key: historic_rates_low
+      path:
+      - 1
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - 2
+      type:
+      - float
+    - key: historic_rates_open
+      path:
+      - 3
+      type:
+      - float
+    - key: historic_rates_close
+      path:
+      - 4
+      type:
+      - float
+    - key: historic_rates_volume
+      path:
+      - 5
+      type:
+      - float

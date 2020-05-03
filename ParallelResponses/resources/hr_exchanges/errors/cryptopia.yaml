@@ -1,0 +1,403 @@
+name: cryptopia
+terms:
+  terms_url: https://www.cryptopia.co.nz/Home/Terms
+  permission: null
+  search_targets:
+  - tag: div
+    class: terms-and-conditions
+api_url: https://www.cryptopia.co.nz/api/
+rate_limit: null
+requests:
+  currencies:
+    request:
+      template: GetCurrencies/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        Success:
+          type: bool
+        Message:
+          type: str
+        Data:
+          type: list
+          values:
+            type: dict
+            values:
+              Id:
+                type: int
+              Name: # e.g. Bitcoin
+                type: str
+              Symbol: # e.g. BTC
+                type: str
+              Algorithm:
+                type: str
+              WithdrawFee:
+                type: float
+              MinWithdraw:
+                type: float
+              MinBaseTrade:
+                type: float
+              IsTipEnabled:
+                type: boolean
+              MinTip:
+                type: float
+              DepositConfirmations:
+                type: int
+              Status:
+                type: str
+              StatusMessage:
+                type: str
+              ListingStatus:
+                type: str
+    mapping:
+    - key: currency_name
+      path:
+      - Data
+      - Name
+      type:
+      - str
+    - key: currency_symbol
+      path:
+      - Data
+      - Symbol
+      type:
+      - str
+
+  currency_pairs:
+    request:
+      template: GetTradePairs/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        Success:
+          type: bool
+        Message:
+          type: str
+        Data:
+          type: list
+          values:
+            type: dict
+            values:
+              Id:
+                type: int
+              Label: # LTC/BTC
+                type: str
+              Currency: # Litecoin
+                type: str
+              Symbol: # LTC
+                type: str
+              BaseCurrency: # Bitcoin
+                type: str
+              BaseSymbol: # BTC
+                type: str
+              Status:
+                type: str
+              StatusMessage:
+                type: str
+              TradeFee:
+                type:
+                - str
+                - float
+              MinimumTrade:
+                type:
+                - str
+                - float
+              MaximumTrade:
+                type:
+                - str
+                - float
+              MinimumBaseTrade:
+                type:
+                - str
+                - float
+              MaximumBaseTrade:
+                type:
+                - str
+                - float
+              MinimumPrice:
+                type:
+                - str
+                - float
+              MaximumPrice:
+                type:
+                - str
+                - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - Data
+      - Symbol
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - Data
+      - BaseSymbol
+      type:
+      - str
+
+  historic_rates:
+    request:
+      template: GetMarket/{currency_pair}
+      pair_template: # e.g. DOT_BTC
+        template: "{first}_{second}"
+        lower_case: false
+      params:
+        hours:
+          type: int
+          default: 24
+    response:
+      type: dict
+      values:
+        Success:
+          type: bool
+        Message:
+          type: str
+        Data:
+          type: dict
+          values:
+            TradePairId:
+              type: int
+            Label:
+              type: str
+            AskPrice:
+              type: float
+            BidPrice:
+              type: float
+            Low:
+              type: float
+            High:
+              type: float
+            Volume:
+              type: float
+            LastPrice:
+              type: float
+            BuyVolume:
+              type: float
+            SellVolume:
+              type: float
+            Change:
+              type: float
+            Open:
+              type: float
+            Close:
+              type: float
+            BaseVolume:
+              type: float
+            BaseBuyVolume:
+              type: float
+            BaseSellVolume:
+              type: float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_ask
+      path:
+      - Data
+      - AskPrice
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - Data
+      - BidPrice
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - Data
+      - LastPrice
+      type:
+      - float
+    - key: historic_rates_time
+      path: []
+      type:
+      - none
+      - now
+    - key: historic_rates_low
+      path:
+      - Data
+      - Low
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - Data
+      - High
+      type:
+      - float
+    - key: historic_rates_volume
+      path:
+      - Data
+      - Volume
+      type:
+      - float
+    - key: historic_rates_open
+      path:
+      - Data
+      - Open
+      type:
+      - float
+    - key: historic_rates_close
+      path:
+      - Data
+      - Close
+      type:
+      - float
+
+  trades:
+    request:
+      template: GetMarketHistory/{currency_pair}
+      pair_template: # e.g. DOT_BTC
+        template: "{first}_{second}"
+        lower_case: false
+      params:
+        hours:
+          type: int
+          default: 24
+    response:
+      type: dict
+      values:
+        Success:
+          type: bool
+        Message:
+          type: str
+        Data:
+          type: list
+          values:
+            type: dict
+            values:
+              TradePairId:
+                type: int
+              Label:
+                type: str
+              Type:
+                type: str
+              Price:
+                type: float
+              Amount:
+                type: float
+              Total:
+                type: float
+              Timestamp:
+                type:
+                - int
+                - fromtimestamp
+    mapping:
+    - key: trade_side
+      path:
+      - Data
+      - Type
+      type:
+      - str
+    - key: trade_last_price
+      path:
+      - Data
+      - Price
+      type:
+      - float
+    - key: trade_amount
+      path:
+      - Data
+      - Amount
+      type:
+      - float
+    - key: trade_time
+      path:
+      - Data
+      - Timestamp
+      type:
+      - int
+      - fromtimestamp
+
+  order_book:
+    request:
+      template: GetMarketOrders/{currency_pair}
+      pair_template: # e.g. DOT_BTC
+        template: "{first}_{second}"
+        lower_case: false
+      params:
+        orderCount:
+          type: int
+          default: 100
+    response:
+      type: dict
+      values:
+        Success:
+          type: bool
+        Message:
+          type: str
+        Data:
+          type: dict
+          values:
+            Buy:
+              type: list
+              values:
+                type: dict
+                values:
+                  TradePairId:
+                    type: int
+                  Label:
+                    type: str
+                  Price:
+                    type: float
+                  Volume:
+                    type: float
+                  Total:
+                    type: float
+            Sell:
+              type: list
+              values:
+                type: dict
+                values:
+                  TradePairId:
+                    type: int
+                  Label:
+                    type: str
+                  Price:
+                    type: float
+                  Volume:
+                    type: float
+                  Total:
+                    type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - Data
+      - Buy
+      - Price
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - Data
+      - Buy
+      - Volume
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - Data
+      - Sell
+      - Price
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - Data
+      - Sell
+      - Volume
+      type:
+      - float

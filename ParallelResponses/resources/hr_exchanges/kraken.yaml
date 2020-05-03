@@ -1,0 +1,561 @@
+name: kraken
+terms:
+  terms_url: https://www.kraken.com/en-us/legal
+  permission: null
+  search_targets:
+  - tag: div
+    class: body
+api_url: https://api.kraken.com/0/public/
+rate_limit:
+  max: 1
+  unit: 3
+requests:
+  currency_pairs:
+    request:
+      template: AssetPairs
+      pair_template: # e.g. BCHEUR
+        template: "{first}{second}"
+        lower_case: false
+        alias: pair
+      params:
+        info:
+          type: str
+          allowed:
+          - info
+          - leverage
+          - fees
+          - margin
+          default: info
+    response:
+      type: dict
+      values:
+        error:
+          type: list
+        result:
+          type: dict
+          values:
+            currency_pair: # variable key, each available currency pair, e.g. ADACAD
+              type: dict
+              values:
+                altname:
+                  type: str
+                aclass_base:
+                  type: str
+                base: # ADA
+                  type: str
+                aclass_quote:
+                  type: str
+                quote: # ZCAD
+                  type: str
+                lot:
+                  type: str
+                pair_decimals:
+                  type: int
+                lot_decimals:
+                  type: int
+                lot_multiplier:
+                  type: int
+                leverage_buy:
+                  type: list
+                  values:
+                    type: int
+                leverage_sell:
+                  type: list
+                  values:
+                    type: int
+                fees:
+                  type: list
+                  values:
+                    type: list
+                    values:
+                      0: # volume
+                        type: int
+                      1: # percent fee
+                        type: int
+                fees_maker:
+                  type: list
+                  values:
+                    type: list
+                    values:
+                      0: # volume
+                        type: int
+                      1: # percent fee
+                        type: int
+                fee_volume_currency:
+                  type: str
+                margin_call:
+                  type: int
+                margin_stop:
+                  type: int
+    mapping:
+    - key: currency_pair_first
+      path:
+      - result
+      - dict_values
+      - base
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - result
+      - dict_values
+      - quote
+      type:
+      - str
+
+  ticker:
+    request:
+      template: Ticker
+      pair_template: # e.g. BCHEUR
+        template: "{first}{second}"
+        lower_case: false
+        alias: pair
+      params: null
+    response:
+      type: dict
+      values:
+        error:
+          type: list
+        result:
+          type: dict
+          values:
+            currency_pair: # variable key, requested currency pair
+              type: dict
+              values:
+                a: # ask array
+                  type: list
+                  values:
+                    0: # price
+                      type:
+                      - str
+                      - float
+                    1: # whole lot volume
+                      type:
+                      - str
+                      - int
+                    2: # lot volume
+                      type:
+                      - str
+                      - float
+                b: # bid array
+                  type: list
+                  values:
+                    0: # price
+                      type:
+                      - str
+                      - float
+                    1: # whole lot volume
+                      type:
+                      - str
+                      - int
+                    2: # lot volume
+                      type:
+                      - str
+                      - float
+                c: # last trade closed array
+                  type: list
+                  values:
+                    0: # price
+                      type:
+                      - str
+                      - float
+                    1: # lot volume
+                      type:
+                      - str
+                      - float
+                v: # volume array
+                  type: list
+                  values:
+                    0: # today
+                      type:
+                      - str
+                      - float
+                    1: # last 24 hours
+                      type:
+                      - str
+                      - float
+                p: # volume weighted average price array
+                  type: list
+                  values:
+                    0: # today
+                      type:
+                      - str
+                      - float
+                    1: # last 24 hours
+                      type:
+                      - str
+                      - float
+                t: # number of trades array
+                  type: list
+                  values:
+                    0: # today
+                      type:
+                      - str
+                      - int
+                    1: # last 24 hours
+                      type:
+                      - str
+                      - int
+                l: # low array
+                  type: list
+                  values:
+                    0: # today
+                      type:
+                      - str
+                      - float
+                    1: # last 24 hours
+                      type:
+                      - str
+                      - float
+                h: # high array
+                  type: list
+                  values:
+                    0: # today
+                      type:
+                      - str
+                      - float
+                    1: # last 24 hours
+                      type:
+                      - str
+                      - float
+                o: # today's opening price
+                  type:
+                  - str
+                  - float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_last_price
+      path:
+      - result
+      - dict_values
+      - c
+      - 0
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - result
+      - dict_values
+      - a
+      - 0
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - result
+      - dict_values
+      - b
+      - 0
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - result
+      - dict_values
+      - v
+      - 1
+      type:
+      - str
+      - float
+
+  historic_rates:
+    request:
+      template: OHLC
+      pair_template: # e.g. BCHEUR
+        template: "{first}{second}"
+        lower_case: false
+        alias: pair
+      params:
+        interval:
+          type: int
+          allowed:
+          - 1
+          - 5
+          - 15
+          - 30
+          - 60
+          - 240
+          - 1440
+          - 10080
+          - 21600
+          default: 1
+        since: # return committed OHLC data since given id (optional.  exclusive)
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        error:
+          type: list
+        result:
+          type: dict
+          values:
+            currency_pair: # variable key, requested currency pair
+              type: list
+              values:
+                type: list
+                values:
+                  0: # time
+                    type:
+                    - int
+                    - fromtimestamp
+                  1: # open
+                    type:
+                    - str
+                    - float
+                  2: # high
+                    type:
+                    - str
+                    - float
+                  3: # low
+                    type:
+                    - str
+                    - float
+                  4: # close
+                    type:
+                    - str
+                    - float
+                  5: # vwap
+                    type:
+                    - str
+                    - float
+                  6: # volume
+                    type:
+                    - str
+                    - float
+                  7: # count
+                    type: int
+        last:
+          type: int
+    mapping:
+    - key: historic_rates_time
+      path:
+      - result
+      - dict_values
+      - 0
+      type:
+      - int
+      - fromtimestamp
+    - key: historic_rates_open
+      path:
+      - result
+      - dict_values
+      - 1
+      type:
+      - str
+      - float
+    - key: historic_rates_high
+      path:
+      - result
+      - dict_values
+      - 2
+      type:
+      - str
+      - float
+    - key: historic_rates_low
+      path:
+      - result
+      - dict_values
+      - 3
+      type:
+      - str
+      - float
+    - key: historic_rates_close
+      path:
+      - result
+      - dict_values
+      - 4
+      type:
+      - str
+      - float
+    - key: historic_rates_volume
+      path:
+      - result
+      - dict_values
+      - 6
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: Depth
+      pair_template: # e.g. BCHEUR
+        template: "{first}{second}"
+        lower_case: false
+        alias: pair
+      params:
+        count:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        error:
+          type: list
+        result:
+          type: dict
+          values:
+            currency_pair: # variable key, requested currency pair
+              type: dict
+              values:
+                asks:
+                  type: list
+                  values:
+                    type: list
+                    values:
+                      0: # price
+                        type:
+                          - str
+                          - float
+                      1: # volume
+                        type:
+                          - str
+                          - float
+                      2: # timestamp
+                        type:
+                        - int
+                        - fromtimestamp
+                bids:
+                  type: list
+                  values:
+                    type: list
+                    values:
+                      0: # price
+                        type:
+                          - str
+                          - float
+                      1: # volume
+                        type:
+                          - str
+                          - float
+                      2: # timestamp
+                        type:
+                        - int
+                        - fromtimestamp
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - result
+      - dict_values
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - result
+      - dict_values
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - result
+      - dict_values
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - result
+      - dict_values
+      - bids
+      - 1
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: Trades
+      pair_template: # e.g. BCHEUR
+        template: "{first}{second}"
+        lower_case: false
+        alias: pair
+      params:
+        since:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        error:
+          type: list
+        result:
+          type: dict
+          values:
+            currency_pair: # variable key, requested currency pair
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type:
+                    - str
+                    - float
+                  1: # volume
+                    type:
+                    - str
+                    - float
+                  2: # time
+                    type:
+                    - int
+                    - fromtimestamp
+                  3: # buy/sell
+                    type: str
+                  4: # market/limit
+                    type: str
+                  5: # miscellaneous
+                    type: str
+        last:
+          type: int
+    mapping:
+    - key: trade_last_price
+      path:
+      - result
+      - dict_values
+      - 0
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - result
+      - dict_values
+      - 1
+      type:
+      - str
+      - float
+    - key: trade_time
+      path:
+      - result
+      - dict_values
+      - 2
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_side
+      path:
+      - result
+      - dict_values
+      - 3
+      type:
+      - str

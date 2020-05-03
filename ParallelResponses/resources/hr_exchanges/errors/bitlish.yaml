@@ -1,0 +1,466 @@
+name: bitlish
+terms:
+  terms_url: https://bitlish.com/terms/
+  permission: true
+  search_targets:
+  - tag: div
+    class: wiki-content
+api_url: https://bitlish.com/api/v1/
+rate_limit: null
+requests:
+  order_book:
+    request:
+      template: trades_depth
+      pair_template: # e.g. btcusd
+        template: "{first}{second}"
+        alias: pair_id
+      params: null
+    response:
+      type: dict
+      values:
+        ask:
+          type: list
+          values:
+            type: dict
+            values:
+              price:
+                type:
+                - str
+                - float
+              volume:
+                type:
+                - str
+                - float
+        ask_end:
+          type:
+          - str
+          - int
+        bid:
+          type: list
+          values:
+            type: dict
+            values:
+              price:
+                type:
+                - str
+                - float
+              volume:
+                type:
+                - str
+                - float
+        bid_end:
+          type:
+          - str
+          - int
+        last:
+          type:
+          - str
+        pair_id:
+          type: str
+    mapping:
+    - key: order_book_asks_price
+      path:
+      - ask
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - ask
+      - volume
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - bid
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - bid
+      - volume
+      type:
+      - str
+      - float
+    - key: order_book_time
+      path:
+      - last
+      type:
+      - str
+      - int
+      - fromtimestampns
+
+  ticker:
+    request:
+      template: tickers
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair: # e.g. bchbtc, variable key
+          type: dict
+          values:
+            ask:
+              type:
+              - str
+            bid:
+              type:
+              - str
+              - float
+            first:
+              type:
+              - str
+              - float
+            last:
+              type:
+              - str
+              - float
+            max:
+              type:
+              - str
+              - float
+            min:
+              type:
+              - str
+              - float
+            prc:
+              type:
+              - str
+              - float
+            sum:
+              type:
+              - str
+              - int
+            updated:
+              type:
+              - str
+    mapping: # TO DO: split Methode anpassen
+    - key: currency_pair_first
+      path:
+      - dict_key
+      - 0
+      type:
+      - str
+      - sliceupper
+      - 0
+      - 3
+    - key: currency_pair_second
+      path:
+      - dict_key
+      - 1
+      type:
+      - str
+      - sliceupper
+      - 3
+      - 6
+    - key: ticker_time
+      path:
+      - dict_values
+      - updated
+      type:
+      - str
+      - int
+      - fromtimestampns
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - ask
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - bid
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - float
+
+  historic_rates:
+    request:
+      template: ohlcv
+      pair_template: null
+      params:
+        time_range: # [from, to] (Array of micro timestamps)
+          type: list
+          values:
+            0: # from
+              type:
+              - datetime
+              - totimestamp
+              - str
+            1: # to
+              type:
+              - datetime
+              - totimestamp
+              - str
+              default: null
+          required: false
+    response:
+      type: dict
+      values:
+        list:
+          type: list
+          values:
+            type: dict
+            values:
+              data:
+                type: dict
+                values:
+                  currency_pair: # variable key, each currency pair
+                    type: dict
+                    values:
+                      close:
+                        type:
+                        - str
+                      close_ts:
+                        type:
+                        - str
+                      high:
+                        type:
+                        - str
+                        - float
+                      low:
+                        type:
+                        - str
+                        - float
+                      open:
+                        type:
+                        - str
+                        - float
+                      open_ts:
+                        type:
+                        - str
+                      volume:
+                        type:
+                        - str
+                        - float
+                from:
+                  type:
+                  - str
+                  - int
+                  - fromtimestamp
+                to:
+                  type:
+                  - str
+                  - int
+                  - fromtimestamp
+    mapping:
+    - key: currency_pair_first
+      path: 
+      - list
+      - data
+      - dict_key
+      - 0
+      type:
+      - str
+      - sliceupper
+      - 0
+      - 3
+    - key: currency_pair_second
+      path: 
+      - list
+      - data
+      - dict_key
+      - 1
+      type:
+      - str
+      - sliceupper
+      - 3
+      - 6
+    - key: historic_rates_close
+      path:
+      - data
+      - dict_values
+      - close
+      type:
+      - str
+      - float     
+    - key: historic_rates_time
+      path:
+      - list
+      - data
+      - dict_values
+      - close_ts
+      type:
+      - str
+      - int
+      - fromtimestampns
+    - key: historic_rates_high
+      path:
+      - list
+      - data
+      - dict_values
+      - high
+      type:
+      - str
+      - float
+    - key: historic_rates_low
+      path:
+      - list
+      - data
+      - dict_values
+      - low
+      type:
+      - str
+      - float
+    - key: historic_rates_open
+      path:
+      - list
+      - data
+      - dict_values
+      - open
+      type:
+      - str
+      - float
+    - key: historic_rates_volume
+      path:
+      - list
+      - data
+      - dict_values
+      - volume
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: trades_history
+      pair_template: # e.g. btcusd
+        template: "{first}{second}"
+        lower_case: true
+        alias: pair_id
+      params: null
+    response:
+      type: dict
+      values:
+        list:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type: float
+              created:
+                type: 
+                - int
+              dir:
+                type: str
+              price:
+                type: float
+        pair_id:
+          type: str
+    mapping:
+    - key: trade_time
+      path:
+      - list
+      - created
+      type:
+      - int
+      - fromtimestampns
+    - key: trade_amount
+      path:
+      - list
+      - amount
+      type:
+      - float
+    - key: trade_last_price
+      path:
+      - list
+      - price
+      type:
+      - float
+    - key: trade_side
+      path:
+      - list
+      - dir
+      type:
+      - str
+
+#
+  currencies:
+    request:
+      template: instruments
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency: # variable key, each symbol
+          type: dict
+          values:
+            full_name: # e.g. Bitcoin Cash
+              type: str
+            icon:
+              type: str
+            id: # e.g. bch
+              type: str
+            is_cryptocurrency:
+              type: int
+            is_internal:
+              type: int
+            name: # e.g. BCH
+              type: str
+            prec:
+              type: int
+            symbol:
+              type: str
+    mapping:
+    - key: currency_name
+      path:
+      - dict_values
+      - full_name
+      type:
+      - str
+      - upper
+    - key: currency_symbol
+      path:
+      - dict_values
+      - name
+      type:
+      - str
+      - upper
+
+  currency_pairs:
+    request:
+      template: pairs
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        pair_id: # variable key, each currency pair
+          type: dict
+          values:
+            currency_id:
+              type: str
+            id:
+              type: str
+            item_id:
+              type: str
+            name:
+              type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - dict_values
+      - item_id
+      type:
+      - str
+      - upper
+    - key: currency_pair_second
+      path:
+      - dict_values
+      - currency_id
+      type:
+      - str
+      - upper
