@@ -4,6 +4,13 @@ rate_limit: null
 api_url: https://api.hotbit.io/api/v1/
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+      #method: server.ping
+      #params: null
+    response:
+      type: dict
   ticker:
     request:
       template: allticker

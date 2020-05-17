@@ -2,6 +2,11 @@ name: whitebit
 api_url: https://whitebit.com/api/v2/public/
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: ticker

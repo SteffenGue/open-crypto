@@ -8,6 +8,12 @@ rate_limit:
   unit: 60
 
 requests:
+  test_connection:
+    request:
+      url: https://www.zbg.com/exchange/api/v1/common/timestamp
+      template: n/a
+    response:
+      type: dict
   ticker:
     request: 
       template: tickers

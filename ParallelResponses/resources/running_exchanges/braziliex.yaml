@@ -9,8 +9,15 @@ terms:
     class: mdl-card mdl-cell mdl-cell--8-col mc_background_card mdl-shadow--4dp
 
 api_url: https://braziliex.com/api/v1/
-rate_limit: null
+rate_limit:
+  max: 1
+  units: 1
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: public/ticker

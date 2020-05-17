@@ -3,9 +3,15 @@ terms: null
 api_url: https://api3.stex.com/public/
 
 rate_limit:
+  max: 180
+  units: 60
 
 requests:
-      
+  test_connection:
+    request:
+      template: ping
+    response:
+      type: dict
   ticker:
     request:
       template: ticker

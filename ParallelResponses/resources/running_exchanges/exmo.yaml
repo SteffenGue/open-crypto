@@ -10,6 +10,11 @@ terms:
 api_url: https://api.exmo.com/v1/
 rate_limit: null
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: ticker

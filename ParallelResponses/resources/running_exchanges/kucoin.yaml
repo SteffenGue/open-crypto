@@ -9,15 +9,20 @@ terms:
     class: post-216 page type-page status-publish hentry entry
   - tag: div
     class: post-content
-api_url: https://api.kucoin.com/api/v1/market/
+api_url: https://api.kucoin.com/api/v1/
 rate_limit:
   max: 50000
   unit: 300
 
 requests:
+  test_connection:
+    request:
+      template: status
+    response:
+      type: dict
   ticker:
     request:
-      template: allTickers
+      template: market/allTickers
       pair_template: null
       params: null
     response:

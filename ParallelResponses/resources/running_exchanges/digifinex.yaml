@@ -3,12 +3,18 @@ terms: null
 rate_limit: null
 api_url: https://openapi.digifinex.vip/v3/
 requests:
+  test_connection:
+    request:
+      template: n/a
+      #method: server.ping
+      #params: null
+    response:
+      type: dict
   ticker:
     request:
       template: ticker
       pair_template: null
       params: null
-    
     response:
       type: dict
       values:

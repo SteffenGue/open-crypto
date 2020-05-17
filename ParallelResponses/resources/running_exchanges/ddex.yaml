@@ -3,6 +3,11 @@ terms: null
 api_url: https://api.ddex.io/v4/
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: markets/tickers

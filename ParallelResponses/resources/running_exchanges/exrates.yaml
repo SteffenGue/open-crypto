@@ -4,6 +4,11 @@ api_url: https://api.exrates.me/openapi/v1/public/
 rate_limit: null
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: ticker

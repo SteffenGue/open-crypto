@@ -39,15 +39,16 @@ async def main(all_exchanges, database_handler):
         else:
             secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
 
+# Ticker [
     # if there are exchanges to request, one request per exchange will be sent
     if not len(primary_exchanges) == 0:
         ticker_responses = await asyncio.gather(*(primary_exchanges[exchange].request('ticker', start_time)
                                                   for exchange in primary_exchanges))
-        for response in ticker_responses:
-            if response:
-                print('Response: {}'.format(response))
-                exchange = primary_exchanges[response[0]]
-                formatted_response = exchange.format_ticker(response)
+        for ticker_response in ticker_responses:
+            if ticker_response:
+                print('Ticker response: {}'.format(ticker_response))
+                exchange = primary_exchanges[ticker_response[0]]
+                formatted_response = exchange.format_ticker(ticker_response)
                 database_handler.persist_tickers(formatted_response)
     else:
         print('There are currently no exchanges to request.')
@@ -56,11 +57,15 @@ async def main(all_exchanges, database_handler):
     if not len(secondary_exchanges) == 0:
         test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
                                                 for exchange in secondary_exchanges))
+        for test_response in test_responses:
+            if test_response:
+                print('Test response: {}'.format(test_response))
+                exchange = secondary_exchanges[test_response[0]]
+                exchange.update_flag(test_response)
     else:
         print('There are currently no exchanges to test.')
 
-    # todo: ping test for exchanges in secondary list, possible changing of the active flag back to active at successful
-    #  ping test, secondary execution right for tasks for the secondary list
+# Ticker ]
 
     # variables of flag will be updated
     for exchange in primary_exchanges:

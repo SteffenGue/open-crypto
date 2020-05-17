@@ -152,7 +152,7 @@ class Exchange:
                 try:
                     response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
                     response_json = await response.json(content_type=None)
-                    print('{} bekommen.'.format(request_url_and_params[0]))
+                    print('{} bekommen:'.format(request_url_and_params[0]) + '{} .'.format(response_json))
                     return True
                 except ClientConnectionError:
                     return False
@@ -226,8 +226,6 @@ class Exchange:
                         params[param] = str(request_dict['params'][param]['default'])
 
             urls[request] = (url, params)
-
-        urls['test_connection'] = (self.api_url, {})
 
         return urls
 
@@ -393,3 +391,9 @@ class Exchange:
         """
         if not self.consecutive_exception:
             self.exception_counter = 0
+
+    def update_flag(self, response):
+        if response:
+            self.active_flag = True
+        else:
+            self.active_flag = False

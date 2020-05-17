@@ -5,6 +5,11 @@ rate_limit: null
 api_url: https://stats.openledger.info/api/
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: asset/pairs

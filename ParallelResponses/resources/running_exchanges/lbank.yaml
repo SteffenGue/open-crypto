@@ -13,6 +13,12 @@ api_url: https://api.lbkex.com/v1/
 rate_limit: null
 
 requests:
+  test_connection:
+    request:
+      template: ping
+      # ?
+    response:
+      type: dict
   ticker:
     request:
       template: ticker.do

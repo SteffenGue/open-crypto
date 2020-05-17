@@ -9,6 +9,11 @@ api_url: https://api.idex.market/
 rate_limit: null
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: returnTicker

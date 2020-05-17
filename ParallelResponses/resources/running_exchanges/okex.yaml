@@ -1,9 +1,16 @@
 name: okex
 terms: null
 api_url: https://www.okex.com/api/spot/v3/
-rate_limit: null #20 requests per second
+rate_limit:
+  max: 20
+  units: 1
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: instruments/ticker

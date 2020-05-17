@@ -1,8 +1,14 @@
 name: bitz
 terms: null
 api_url: https://apiv2.bitz.com/
+rate_limit: null
 
 requests:
+  test_connection:
+    request:
+      template: Market/getServerTime
+    response:
+        type: dict
   ticker:
     request:
       template: Market/tickerall

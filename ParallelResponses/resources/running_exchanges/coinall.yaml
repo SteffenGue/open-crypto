@@ -6,6 +6,11 @@ rate_limit:
   units: 1
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: instruments/ticker

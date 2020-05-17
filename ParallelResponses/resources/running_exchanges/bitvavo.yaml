@@ -3,6 +3,11 @@ api_url: https://api.bitvavo.com/v2/
 rate_limit: null
 
 requests:
+  test_connection:
+    request:
+      template: time
+    response:
+      type: dict
   ticker:
     request:
       template: ticker/price

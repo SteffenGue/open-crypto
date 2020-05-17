@@ -4,6 +4,11 @@ api_url: https://openapi.idax.pro/api/v2/
 rate_limit: null
 
 requests:
+  test_connection:
+    request:
+      template: time
+    response:
+      type: dict
   ticker:
     request:
       template: ticker

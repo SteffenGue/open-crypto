@@ -4,6 +4,11 @@ terms: null
 api_url: https://www.mxc.com/
 
 requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
   ticker:
     request:
       template: open/api/v1/data/ticker
