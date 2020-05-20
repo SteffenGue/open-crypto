@@ -145,19 +145,19 @@ class Exchange:
                     self.exception_counter += 1
                     self.consecutive_exception = True
 
-    def test_connection(self) -> bool:
-        if self.request_urls.get('test_connection'):
-            async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls['test_connection']
-                try:
-                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
-                    response_json = await response.json(content_type=None)
-                    print('{} bekommen:'.format(request_url_and_params[0]) + '{} .'.format(response_json))
-                    return True
-                except ClientConnectionError:
-                    return False
-                except Exception as ex:
-                    return False
+#    def test_connection(self) -> bool:
+#        if self.request_urls.get('test_connection'):
+#            async with aiohttp.ClientSession() as session:
+#                request_url_and_params = self.request_urls['test_connection']
+#                try:
+#                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
+#                    response_json = await response.json(content_type=None)
+#                    print('{} bekommen:'.format(request_url_and_params[0]) + '{} .'.format(response_json))
+#                    return True
+#                except ClientConnectionError:
+#                    return False
+#                except Exception as ex:
+#                    return False
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """
@@ -207,25 +207,32 @@ class Exchange:
         """
         urls = dict()
 
-        for request in requests:
-            url = self.api_url
-            request_dict = requests[request]['request']
+        ticker_url = self.api_url
+        ticker_dict = requests['ticker']['request']
+        if 'template' in ticker_dict.keys() and ticker_dict['template']:
+            ticker_url += '{}'.format(ticker_dict['template'])
 
-            if 'template' in request_dict.keys() and request_dict['template']:
-                url += '{}'.format(request_dict['template'])
+        ticker_params = dict()
+        if 'params' in ticker_dict.keys() and ticker_dict['params']:
+            for param in ticker_dict['params']:
+                # extracts the function and assigns it to the method
+                if 'func' in ticker_dict['params'][param].keys():
+                    ticker_params[param] = self.request_params(REQUEST_PARAMS[ticker_dict['params'][param]['func'][0]],
+                                                        self.name,
+                                                        *ticker_dict['params'][param]['func'][1:])
+                else:
+                    ticker_params[param] = str(ticker_dict['params'][param]['default'])
+        urls['ticker'] = (ticker_url, ticker_params)
 
-            params = dict()
-            if 'params' in request_dict.keys() and request_dict['params']:
-                for param in request_dict['params']:
-                    # extracts the function and assigns it to the method
-                    if 'func' in request_dict['params'][param].keys():
-                        params[param] = self.request_params(REQUEST_PARAMS[request_dict['params'][param]['func'][0]],
-                                                            self.name,
-                                                            *request_dict['params'][param]['func'][1:])
-                    else:
-                        params[param] = str(request_dict['params'][param]['default'])
-
-            urls[request] = (url, params)
+        test_url = self.api_url
+        test_dict = requests['test_connection']['request']
+        if 'template' in test_dict.keys() and test_dict['template']:
+            if test_dict['template'] == 'n/a':
+                test_url = ticker_url
+                urls['test_connection'] = (test_url, ticker_params)
+            else:
+                test_url += '{}'.format(test_dict['template'])
+                urls['test_connection'] = (test_url, {})
 
         return urls
 

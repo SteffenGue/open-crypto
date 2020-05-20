@@ -18,7 +18,7 @@ async def main(all_exchanges, database_handler):
     As soon as all responses from the exchanges are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     :param database_handler DatabaseHandler
-    :param exchanges dict
+    :param all_exchanges dict
         The dictionary of all given exchanges.
     """
     # start_time : datetime when request run is started
@@ -54,16 +54,16 @@ async def main(all_exchanges, database_handler):
         print('There are currently no exchanges to request.')
 
     # if there are exchanges to test the connection, one test per exchange will be sent
-    if not len(secondary_exchanges) == 0:
-        test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
-                                                for exchange in secondary_exchanges))
-        for test_response in test_responses:
-            if test_response:
-                print('Test response: {}'.format(test_response))
-                exchange = secondary_exchanges[test_response[0]]
-                exchange.update_flag(test_response)
-    else:
-        print('There are currently no exchanges to test.')
+    #if not len(secondary_exchanges) == 0:
+        #test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
+        #                                        for exchange in secondary_exchanges))
+        #for test_response in test_responses:
+        #    if test_response:
+        #        print('Test response: {}'.format(test_response))
+        #        exchange = secondary_exchanges[test_response[0]]
+        #        exchange.update_flag(test_response)
+    #else:
+        #print('There are currently no exchanges to test.')
 
 # Ticker ]
 
@@ -84,8 +84,7 @@ if __name__ == "__main__":
         databaseHandler = DatabaseHandler(metadata, **db_params)
         # run program with single exchange or selected list of exchanges for debugging/testing purposes
         # exchange_names = ['coinsbit', 'bibox']
-        #exchange_names = get_exchange_names()
-        exchange_names = ['bibox']
+        exchange_names = get_exchange_names()
         exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), databaseHandler.request_params)
                      for exchange_name in exchange_names}
         # run one request run every five minutes / 300 seconds
