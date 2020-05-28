@@ -145,19 +145,38 @@ class Exchange:
                     self.exception_counter += 1
                     self.consecutive_exception = True
 
-#    def test_connection(self) -> bool:
-#        if self.request_urls.get('test_connection'):
-#            async with aiohttp.ClientSession() as session:
-#                request_url_and_params = self.request_urls['test_connection']
-#                try:
-#                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
-#                    response_json = await response.json(content_type=None)
-#                    print('{} bekommen:'.format(request_url_and_params[0]) + '{} .'.format(response_json))
-#                    return True
-#                except ClientConnectionError:
-#                    return False
-#                except Exception as ex:
-#                    return False
+    async def test_connection(self) -> Tuple[str, bool, Dict]:
+        """
+        This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
+        or, if no calls like this are available or exist in the public web api, a ticker request will be send.
+        Exceptions will be caught and in this case the connectivity test failed.
+
+        The Method is asynchronous so that after the request is send, the program does not wait
+        until the response arrives. For asynchrony we use the library asyncio.
+        For sending and dealing with requests/responses the library aiohttp is used.
+
+        The methods gets the requests matching url out of request_urls.
+        If it does not exist None will be returned. Otherwise it sends and awaits the response(.json).
+
+        :return: (str, bool)
+            Tuple of the following structure:
+                (exchange_name, response)
+                response represents the result of the connectivity test
+        :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
+                    Exception: the given response of an exchange could not be evaluated
+        """
+        if self.request_urls.get('test_connection'):
+            async with aiohttp.ClientSession() as session:
+                request_url_and_params = self.request_urls['test_connection']
+                try:
+                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
+                    response_json = await response.json(content_type=None)
+                    # print('{} bekommen:'.format(request_url_and_params[0]) + '{} .'.format(response_json))
+                    return self.name, True, response_json
+                except ClientConnectionError:
+                    return self.name, False, {}
+                except Exception as ex:
+                    return self.name, False, {}
 
     def extract_request_urls(self, requests: dict) -> Dict[str, Tuple[str, Dict]]:
         """
@@ -171,18 +190,21 @@ class Exchange:
         Example for one request:
             in bibox.yaml (request ticker):
                 api_url: https://api.bibox.com/v1/
-                template: mdata
-                params:
-                    cmd:
-                        type: str
-                        default: marketAll
-            Result:
-                url = https://api.bibox.com/v1/mdata
-                params = {cmd: marketAll}
+                requests:
+                    test_connection:
+                        request:
+                            template: mdata?cmd=ping
+                        ...
+                    ticker:
+                        request:
+                            template: mdata?cmd=marketAll
+                            pair_template: null
+                            params: null
 
-                in result dictionary:
-                    {'ticker': [url, params], ...}
-                    '...'  Means dictionary-entry for different request i.e. 'historic rates'.
+            Result:
+                request_urls = { 'ticker': ('https://api.bibox.com/v1/mdata?cmd=marketAll', {}) ,
+                                 'test_connection': ('https://api.bibox.com/v1/mdata?cmd=ping', {})
+                                }
 
         If 'params' contains the key-word "func", this method calls the corresponding
         function. The functions are defined in "utilities - REQUEST_PARAMS" as a dictionary.
@@ -393,13 +415,22 @@ class Exchange:
         """
         This method updates the given parameter of the consecutive exception bool which represents if an exchange throws
         consecutive exceptions.
-        If the exceptions have not been thrown consecutive the counter will be reset to 0.
+        If the exceptions have not been thrown consecutive the exception counter will be reset to 0.
         :return None
         """
         if not self.consecutive_exception:
             self.exception_counter = 0
 
     def update_flag(self, response):
+        """
+        This method updates the given parameter of the activity flag which represents the activity / availability of an
+        exchange.
+        This method is purposed to update the activity flag after the connectivity of an exchange is tested.
+        If the connectivity test was successful the flag will be set to true otherwise it will be set to false.
+        :param response: bool
+            represents the result of a connectivity test of an exchange
+        :return None
+        """
         if response:
             self.active_flag = True
         else:

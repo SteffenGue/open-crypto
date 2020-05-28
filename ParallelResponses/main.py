@@ -13,10 +13,13 @@ async def main(all_exchanges, database_handler):
     """
     The main() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
-    In an asynchronous manner it is iterated over the exchanges and and the responses are awaited and collected
+    In an asynchronous manner it is iterated over the exchanges and the responses are awaited and collected
         by await asyncio.gather(..)
     As soon as all responses from the exchanges are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
+    All exchanges will be managed in two lists ( a primary and a secondary list ). Every exchange will be separated
+    each request-run depending of its activity flag ( look exchange.py class description ). All exchanges in the
+    primary list will send ticker requests. All exchanges in the secondary list will their connection.
     :param database_handler DatabaseHandler
     :param all_exchanges dict
         The dictionary of all given exchanges.
@@ -54,17 +57,16 @@ async def main(all_exchanges, database_handler):
         print('There are currently no exchanges to request.')
 
     # if there are exchanges to test the connection, one test per exchange will be sent
-    #if not len(secondary_exchanges) == 0:
-        #test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
-        #                                        for exchange in secondary_exchanges))
-        #for test_response in test_responses:
-        #    if test_response:
-        #        print('Test response: {}'.format(test_response))
-        #        exchange = secondary_exchanges[test_response[0]]
-        #        exchange.update_flag(test_response)
-    #else:
-        #print('There are currently no exchanges to test.')
-
+    if not len(secondary_exchanges) == 0:
+        test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
+                                                for exchange in secondary_exchanges))
+        for test_response in test_responses:
+            if test_response:
+                print('Test result: {}'.format(test_response))
+                exchange = secondary_exchanges[test_response[0]]
+                exchange.update_flag(test_response[1])
+    else:
+        print('There are currently no exchanges to test its connection.')
 # Ticker ]
 
     # variables of flag will be updated
