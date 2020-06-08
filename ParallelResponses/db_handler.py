@@ -218,22 +218,23 @@ class DatabaseHandler:
                            f'Expected {function["params"]} - got {len(args)}')
 
     # TODO: Dokumentation, Möglichkeit nur einzelne currency_pairs zu bekommen
+    # TODO: HOLT ALLE RIcHTUNGEN?
     def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         session = self.sessionFactory()
         currency_pairs = list()
-        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name)).first()
+        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is not None:
             currency_pairs = session.query(ExchangeCurrencyPair).filter(
-                # ExchangeCurrencyPair.exchange_id.__eq__(exchange.id)).all()
+                # ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
                 ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
-                ExchangeCurrencyPair.first_id.__eq__(1)).all()
+                ExchangeCurrencyPair.second_id.__eq__(6)).all() #WICHTIG DEN FILTER RAUSZUNEHMEN
         session.close()
         return currency_pairs
 
     # TODO: Dokumentation
     def persist_exchange(self, exchange_name: str):
         session = self.sessionFactory()
-        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name)).first()
+        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is None:
             exchange = Exchange(name=exchange_name)
             session.add(exchange)
@@ -251,9 +252,12 @@ class DatabaseHandler:
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
 
-                    exchange = session.query(Exchange).filter(Exchange.name == exchange_name).first()
-                    first = session.query(Currency).filter(Currency.name == first_currency_name).first()
-                    second = session.query(Currency).filter(Currency.name == second_currency_name).first()
+                    if exchange_name is None or first_currency_name is None or second_currency_name is None:
+                        continue
+
+                    exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+                    first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+                    second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
 
                     if exchange is None:
                         exchange = Exchange(name=exchange_name)
@@ -274,7 +278,7 @@ class DatabaseHandler:
 
                 session.commit()
                 (session.refresh(pair) for pair in ex_currency_pairs)
-                print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), cp[0]))
+                print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
             except Exception as e:
                 print(e, e.__cause__)
                 session.rollback()
@@ -303,9 +307,9 @@ class DatabaseHandler:
         session = self.sessionFactory()
         # print(exchange_name)
         try:
-            exchange = session.query(Exchange).filter(Exchange.name == exchange_name).first()
-            first = session.query(Currency).filter(Currency.name == first_currency_name).first()
-            second = session.query(Currency).filter(Currency.name == second_currency_name).first()
+            exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+            first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+            second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
 
             if exchange is None:
                 exchange = Exchange(name=exchange_name)
@@ -356,7 +360,7 @@ class DatabaseHandler:
                     session.add(hr_tuple)
             session.commit()
             session.close()
-            print('{} tupel eingefügt ins historic rates.'.format(i))
+            print('{} tupel eingefügt in historic rates.'.format(i))
         except Exception as e:
             print(e, e.__cause__)
             session.rollback()

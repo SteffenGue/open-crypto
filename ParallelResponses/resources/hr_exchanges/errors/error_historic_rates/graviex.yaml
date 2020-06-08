@@ -1,0 +1,351 @@
+#Rate Limit sorgt dafür, dass irgendwann nur noch kacke kommt.
+name: graviex
+terms:
+  terms_url: https://graviex.net/documents/user-agreement
+  permission: true
+  search_targets:
+  - tag: div
+    class: fr-element fr-view fr-disabled
+api_url: https://graviex.net/api/v2/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: markets.json/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id: # i.e. "giobtc"
+            type: str
+          name: # i.e. "GIO/BTC"
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - name
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: currency_pair_second
+      path:
+      - name
+      type:
+      - str
+      - split
+      - "/"
+      - 1
+
+  ticker:
+    request:
+      template: tickers/{currency_pair}.json/
+      pair_template: # e.g. btcusd
+        template: "{first}{second}"
+        lower_case: true
+      params: null
+    response:
+      type: dict
+      values:
+        at:
+          type:
+          - int
+          - fromtimestamp
+        ticker:
+          type: dict
+          values:
+            buy:
+              type:
+              - str
+              - float
+            sell:
+              type:
+              - str
+              - float
+            low:
+              type:
+              - str
+              - float
+            high:
+              type:
+              - str
+              - float
+            last:
+              type:
+              - str
+              - float
+            vol:
+              type:
+              - str
+              - float
+            volbtc:
+              type:
+              - str
+              - float
+            change:
+              type:
+              - str
+              - float
+    mapping:
+    - key: ticker_time
+      path:
+      - at
+      type:
+      - int
+      - fromtimestamp
+    - key: ticker_best_bid
+      path:
+      - ticker
+      - buy
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - ticker
+      - sell
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - ticker
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - ticker
+      - vol
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: depth.json
+      pair_template: # e.g. btcusd
+        template: "{first}{second}"
+        lower_case: true
+        alias: market
+      params:
+        limit:
+          type: int
+          default: 300
+    response:
+      type: dict
+      values:
+        timestamp:
+          type:
+          - int
+          - fromtimestamp
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # amount
+                type:
+                - str
+                - float
+              1: # price
+                type:
+                - str
+                - float
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # amount
+                type:
+                - str
+                - float
+              1: # price
+                type:
+                - str
+                - float
+    mapping:
+    - key: order_book_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 1
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: trades.json
+      pair_template: # e.g. btcusd
+        template: "{first}{second}"
+        lower_case: true
+        alias: market
+      params:
+        limit: # Limit the number of returned trades. Default to 50.
+          type: int
+          default: 50
+        timestamp: # An integer represents the seconds elapsed since Unix epoch. If set, only trades executed before the time will be returned.
+          type:
+          - datetime
+          - totimestamp
+          required: false
+        from: # Trade id. If set, only trades created after the trade will be returned.
+          type: int
+          required: false
+        to: # Trade id. If set, only trades created before the trade will be returned.
+          type: int
+          required: false
+        order_by: # If set, returned trades will be sorted in specific order, default to 'desc'.
+          type: str
+          allowed:
+          - asc  # ascending order
+          - desc # descending order
+          default: desc
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          at:
+            type:
+            - int
+            - fromtimestamp
+          price:
+            type:
+            - str
+            - float
+          volume:
+            type:
+            - str
+            - float
+          funds:
+            type:
+            - str
+            - float
+          market:
+            type: str
+          created_at:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%dT%H:%M:%SZ"
+          side:
+            type: str
+    mapping:
+    - key: trade_time
+      path:
+      - at
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: trade_amount
+      path:
+      - volume
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - side
+      type:
+      - str
+
+  historic_rates:
+    request:
+      template: k.json
+      pair_template: # e.g. btcusd
+        template: "{first}{second}"
+        lower_case: true
+        alias: market
+      params:
+        limit: # Limit the number of returned data points, default to 30.
+          type: int
+          default: 30
+        period: # Time period of K line, default to 1. (minutes)
+          type: int
+          allowed:
+          - 1     # 1 minute
+          - 5     # 5 minutes
+          - 15    # 15 minutes
+          - 30    # 30 minutes
+          - 60    # 1 hour
+          - 120   # 2 hours
+          - 240   # 4 hours
+          - 360   # 6 hours
+          - 720   # 12 hours
+          - 1440  # 1 day
+          - 4320  # 3 days
+          - 10080 # 1 week
+          default: 1
+        timestamp: # An integer represents the seconds elapsed since Unix epoch. If set, only k-line data after that time will be returned.
+          type:
+          - datetime
+          - totimestamp
+          required: false
+    response:
+      type: list
+      values:
+        type: list
+        values:
+          0: # timestamp
+            type:
+            - int
+            - fromtimestamp
+          1: # ?
+            type: float
+          2: # ?
+            type: float
+          3: # ?
+            type: float
+          4: # ?
+            type: float
+          5: # ?
+            type: float
+    mapping: # TODO
+    - key: historic_rates_time
+      path:
+      - 0
+      type:
+      - int
+      - fromtimestamp

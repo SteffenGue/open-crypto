@@ -131,7 +131,7 @@ TYPE_CONVERSION = {
     ("none", "constant"): {  # Returns the first argument
         "function": lambda arg, *args: args[0],
         "params": 1
-    }
+    },
 }
 
 

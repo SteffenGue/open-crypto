@@ -2,11 +2,12 @@ import asyncio
 import json
 import time
 from datetime import datetime, timedelta
+from typing import Dict
 
 import db_handler
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
-from tables import metadata
+from tables import metadata, ExchangeCurrencyPair
 from utilities import read_config, yaml_loader, get_exchange_names
 from dictionary import ExceptionDict
 
@@ -55,16 +56,24 @@ async def main():
         if response[1] is not None:
             currency_pairs = current_exchange.format_currency_pairs(response)
             database_handler.persist_exchange_currency_pairs(currency_pairs)
-            all_currency_pairs = database_handler.get_exchange_currency_pairs(current_exchange.name)
-            current_exchange.add_exchange_currency_pairs(all_currency_pairs)
+        all_currency_pairs = database_handler.get_exchange_currency_pairs(current_exchange.name)
+        current_exchange.add_exchange_currency_pairs(all_currency_pairs)
 
     print('currency pairs done')
 
     print('historic rates')
-    hr_responses = await current_exchange.request_historic_rates('historic_rates', all_currency_pairs)
-                # for hr_response in hr_responses:
-                #     formatted_response = current_exchange.format_historic_rates(hr_response)
-                #     database_handler.persist_historic_rates(formatted_response)
+    for ex in exchanges:
+        curr_exchange: Exchange = exchanges[ex]
+
+        #Setting Currency-Pairs
+        all_currency_pairs: [ExchangeCurrencyPair]= database_handler.get_exchange_currency_pairs(curr_exchange.name)
+        curr_exchange.exchange_currency_pairs = all_currency_pairs
+
+        #Getting Historic Rates
+        hr_response = await curr_exchange.request_historic_rates('historic_rates', curr_exchange.exchange_currency_pairs)
+        if hr_response is not None:
+            formatted_hr_response = curr_exchange.format_historic_rates(hr_response)
+            database_handler.persist_historic_rates(formatted_hr_response)
 
     print('historic rates done')
 

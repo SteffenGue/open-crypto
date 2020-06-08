@@ -1,5 +1,6 @@
 import itertools
 import json
+import traceback
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
 import aiohttp
@@ -146,23 +147,30 @@ class Exchange:
         #TODO Doku
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls[request_name]
+                request_url_and_params: Dict = self.request_urls[request_name]
                 try:
                     responses = dict()
                     # Constructing Currency Pair
                     params = request_url_and_params['params']
                     pair_template_dict = request_url_and_params['pair_template']
-                    pair_template = pair_template_dict['template']
-                    pair_alias = pair_template_dict['alias']
+                    # pair_template = pair_template_dict['template']
 
                     for cp in currency_pairs:
-                        pair_formatted = pair_template.format(first=cp.first.name, second=cp.second.name)
-                        if pair_template_dict['lower_case']:
-                            pair_template.lower()
-                        params[pair_alias] = pair_formatted
-                        response = await session.get(request_url_and_params['url'], params=params)
+                        url: str = request_url_and_params['url']
+
+                        pair_formatted: str = self.apply_currency_pair_format(request_name, cp)
+                        # pair_formatted: str = pair_template.format(first=cp.first.name, second=cp.second.name)
+                        # if pair_template_dict['lower_case']:
+                        #     pair_formatted = pair_formatted.lower()
+                        if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
+                            params[pair_template_dict['alias']] = pair_formatted
+                        else:
+                            url = url.format(currency_pair=pair_formatted)
+                            print(url)
+                        response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
-                        print('{} bekommen.'.format(request_url_and_params['url']))
+                        # print(response_json)
+                        print('{} bekommen.'.format(url))
                         responses[cp] = response_json
 
                     return self.name, responses
@@ -182,7 +190,19 @@ class Exchange:
                     exception.get_dict()['{}'.format(self.name)] = 1
         else:
             print('{} hat keine Historic Rates'.format(self.name))
+            return None
 
+    def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
+        request_url_and_params: Dict = self.request_urls[request_name]
+        pair_template_dict = request_url_and_params['pair_template']
+        pair_template = pair_template_dict['template']
+
+        formatted_string: str = pair_template.format(first=currency_pair.first.name , second=currency_pair.second.name)
+
+        if pair_template_dict['lower_case']:
+            formatted_string = formatted_string.lower()
+
+        return formatted_string
 
     async def request_currency_pairs(self, request_name: str, start_time: datetime) -> Tuple[str, Dict]:
         response_json = None
@@ -458,32 +478,42 @@ class Exchange:
 
 
     def format_historic_rates(self, response: Tuple[str, Dict]):
-        temp_results = {'historic_rates_time': [],
-                   'historic_rates_open': [],
-                   'historic_rates_high': [],
-                   'historic_rates_low': [],
-                   'historic_rates_close': [],
-                   'historic_rates_volume': []}
-
         results = list()
 
         mappings = self.response_mappings['historic_rates']
         responses = response[1]
 
+        currency_pair: ExchangeCurrencyPair
         for currency_pair in responses.keys():
+
+            temp_results = {'historic_rates_time': [],
+                            'historic_rates_open': [],
+                            'historic_rates_high': [],
+                            'historic_rates_low': [],
+                            'historic_rates_close': [],
+                            'historic_rates_volume': []}
+
             current_response = responses[currency_pair]
-
-            for mapping in mappings:
-                temp_results[mapping.key] = mapping.extract_value(current_response)
-
-            assert (len(results[0]) == len(result) for result in results)
-            result = list(itertools.zip_longest(itertools.repeat(currency_pair.id, len(temp_results['historic_rates_time'])),
-                                                temp_results['historic_rates_time'],
-                                                temp_results['historic_rates_open'],
-                                                temp_results['historic_rates_high'],
-                                                temp_results['historic_rates_low'],
-                                                temp_results['historic_rates_close'],
-                                                temp_results['historic_rates_volume']))
-            results.extend(result)
+            curr_pair_string_formatted: str = self.apply_currency_pair_format('historic_rates', currency_pair)
+            if current_response: #response might be empty
+                try:
+                    print(currency_pair.id)
+                    for mapping in mappings:
+                        temp_results[mapping.key] = mapping.extract_value(current_response, currency_pair=curr_pair_string_formatted)
+                except Exception as exc:
+                    print("Error while formatting historic rates: {}".format(currency_pair))
+                    traceback.print_exc()
+                    # print("Response that caused the error: {}".format(current_response))
+                    pass
+                else:
+                    assert (len(results[0]) == len(result) for result in results)
+                    result = list(itertools.zip_longest(itertools.repeat(currency_pair.id, len(temp_results['historic_rates_time'])),
+                                                        temp_results['historic_rates_time'],
+                                                        temp_results['historic_rates_open'],
+                                                        temp_results['historic_rates_high'],
+                                                        temp_results['historic_rates_low'],
+                                                        temp_results['historic_rates_close'],
+                                                        temp_results['historic_rates_volume']))
+                    results.extend(result)
 
         return results

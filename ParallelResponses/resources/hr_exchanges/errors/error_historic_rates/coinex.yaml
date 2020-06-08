@@ -1,0 +1,385 @@
+#Error: No Method to get Currency-Pairs
+name: coinex
+terms:
+  terms_url: https://www.coinex.com/service
+  permission: false
+  search_targets:
+  - tag: div
+    class: article-body-inner
+api_url: https://api.coinex.com/v1/
+# limit only for private endpoints
+rate_limit: null # 20 times per second per IP (for Trading and Account API); no limit on Market API
+requests:
+  ticker:
+    request:
+      template: market/ticker
+      pair_template: 
+        template: "{first}{second}"
+        lower_case: false
+        alias: market
+      params: null
+    response:
+      type: dict
+      values:
+        code:
+          type: int
+        data:
+          type: dict
+          values:
+            date:
+              type:
+              - int
+            ticker:
+              type: dict
+              values:
+                vol:
+                  type: str
+                low:
+                  type: str
+                open: 
+                  type: str
+                high:
+                  type: str
+                last:
+                  type: str
+                buy: 
+                  type: str
+                buy_amount:
+                  type: str
+                sell:
+                  type: str
+                sell_amount:
+                  type: str
+        message:
+          type: str
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_bid
+      path:
+      - data
+      - ticker
+      - buy
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - data
+      - ticker
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - data
+      - ticker
+      - sell
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - data
+      - ticker
+      - vol
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: market/depth
+      pair_template: # e.g. BTCBCH
+        template: "{first}{second}"
+        lower_case: false
+        alias: market
+      params:
+        merge:
+          type: float
+          allowed:
+          - 0
+          - 0.1
+          - 0.01
+          - 0.001
+          - 0.0001
+          - 0.00001
+          - 0.000001
+          - 0.0000001
+          - 0.00000001
+          required: true
+        limit:
+          type: int
+          allowed:
+          - 5
+          - 10
+          - 20
+          default: 20
+    response:
+      type: dict
+      values:
+        code:
+          type: int
+        data:
+          type: dict
+          values:
+            last:
+              type:
+              - str
+              - float
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # Order price
+                    type:
+                    - str
+                    - float
+                  1: # Order amount
+                    type:
+                    - str
+                    - float
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # Order price
+                    type:
+                    - str
+                    - float
+                  1: # Order amount
+                    type:
+                    - str
+                    - float
+        message:
+          type: str
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - data
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - data
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - data
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - data
+      - bids
+      - 1
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: market/deals
+      pair_template: # e.g. BTCBCH
+        template: "{first}{second}"
+        lower_case: false
+        alias: market
+      params:
+        last_id: # Transaction history id, send 0 to draw from the latest record.
+          type: int
+          default: 0
+    response:
+      type: dict
+      values:
+        code:
+          type: int
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type:
+                - str
+                - float
+              date:
+                type:
+                - int
+              date_ms:
+                type:
+                - int
+              id:
+                type: int
+              price:
+                type:
+                - str
+                - float
+              type:
+                type: str
+        message:
+          type: str
+    mapping:
+    - key: trade_amount
+      path:
+      - data
+      - amount
+      type:
+      - str
+      - float
+    - key: trade_time
+      path:
+      - data
+      - date
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_last_price
+      path:
+      - data
+      - price
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - data
+      - type
+      type:
+      - str
+
+  historic_rates:
+    request:
+      template: market/kline
+      pair_template: # e.g. BTCBCH
+        template: "{first}{second}"
+        lower_case: false
+        alias: market
+      params:
+        type:
+          type: str
+          allowed:
+          - 1min
+          - 3min
+          - 5min
+          - 15min
+          - 30min
+          - 1hour
+          - 2hour
+          - 4hour
+          - 6hour
+          - 12hour
+          - 1day
+          - 3day
+          - 1week
+          default: 1day
+        limit: # Less than or equal to 1000
+          type: int
+          max: 1000
+          required: false
+          default: 1000
+    response:
+      type: dict
+      values:
+        code:
+          type: int
+        data:
+          type: list
+          values:
+            type: list
+            values:
+              0: # Time
+                type:
+                - int
+                - fromtimestamp
+              1: # open
+                type:
+                - str
+                - float
+              2: # close
+                type:
+                - str
+                - float
+              3: # highest
+                type:
+                - str
+                - float
+              4: # lowest
+                type:
+                - str
+                - float
+              5: # volume
+                type:
+                - str
+                - int
+              6: # amount
+                type:
+                - str
+                - int
+              7: # market
+                type: str
+        message:
+          type: str
+    mapping:
+    - key: historic_rates_time
+      path:
+      - data
+      - 0
+      type:
+      - int
+      - fromtimestamp
+    - key: historic_rates_open
+      path:
+      - data
+      - 1
+      type:
+      - str
+      - float
+    - key: historic_rates_close
+      path:
+      - data
+      - 2
+      type:
+      - str
+      - float
+    - key: historic_rates_high
+      path:
+      - data
+      - 3
+      type:
+      - str
+      - float
+    - key: historic_rates_low
+      path:
+      - data
+      - 4
+      type:
+      - str
+      - float
+    - key: historic_rates_volume
+      path:
+      - data
+      - 5
+      type:
+      - str
+      - float

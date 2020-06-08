@@ -1,0 +1,310 @@
+#no currency pair request
+name: chbtc
+terms:
+  terms_url: https://www.chbtc.com/i/document  # Timeout?
+  permission: null
+  search_targets:
+  - tag: article
+    class: page-content clearfix
+api_url: http://api.chbtc.com/data/v1/
+rate_limit: # IP limit
+  max: 1000
+  # 1 minute
+  unit: 60
+requests:
+  ticker:
+    request:
+      template: ticker
+      pair_template: # btc_cny, ltc_cny, eth_cny, etc_cny, bts_cny, bcc_cny, qtum_cny, hsr_cny, trx_cny
+        template: "{first}_{second}"
+        lower_case: true
+        alias: currency
+      params: null
+    response:
+      type: dict
+      values:
+        ticker:
+          type: dict
+          values:
+            high:
+              type:
+              - str
+              - float
+            low:
+              type:
+              - str
+              - float
+            buy:
+              type:
+              - str
+              - float
+            sell:
+              type:
+              - str
+              - float
+            last:
+              type:
+              - str
+              - float
+            vol:
+              type:
+              - str
+              - float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_bid
+      path:
+      - ticker
+      - buy
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - ticker
+      - sell
+      type:
+      - str
+      - float
+    - key: ticker_last_price
+      path:
+      - ticker
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - ticker
+      - vol
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: depth
+      pair_template: # i.e. btc_cny
+        template: "{first}_{second}"
+        lower_case: true
+        alias: currency
+      params:
+        size: # i.e. 3
+          type: int
+          min: 1
+          max: 50
+          default: 50
+        merge: # i.e. 0.1
+          type: float
+          required: false
+    response:
+      type: dict
+      values:
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # amount
+                type: float
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # amount
+                type: float
+        timestamp: # TODO: Chinese Letters?
+          type:
+          - int
+          - fromtimestamp
+    mapping:
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 1
+      type:
+      - float
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 1
+      type:
+      - float
+    - key: order_book_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+
+  trades:
+    request:
+      template: trades
+      pair_template: # i.e. btc_cny
+        template: "{first}_{second}"
+        lower_case: true
+        alias: currency
+      params:
+        since: # 50 Daten von der angegebenen Transaktions-ID
+          type: int
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          amount:
+            type: float
+          date:
+            type:
+            - int
+            - fromtimestamp
+          price:
+            type: float
+          tid: # ID
+            type: int
+          trade_type: # ask / bid
+            type: str
+          type: # buy / sell
+            type: str
+    mapping:
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - float
+    - key: trade_time
+      path:
+      - date
+      type:
+      - int
+      - fromtimestamp
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - float
+    - key: trade_side
+      path:
+      - type
+      type:
+      - str
+
+  historic_rates:
+    request:
+      template: kline
+      pair_template: # i.e. btc_cny
+        template: "{first}_{second}"
+        lower_case: true
+        alias: currency
+      params:
+        type:
+          type: str
+          allowed:
+          - 1min
+          - 3min
+          - 5min
+          - 15min
+          - 30min
+          - 1day
+          - 3day
+          - 1week
+          - 1hour
+          - 2hour
+          - 4hour
+          - 6hour
+          - 12hour
+          default: 1day
+        since:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+        size:
+          type: int
+          default: 1000
+    response:
+      type: dict
+      values:
+        data:
+          type: list
+          values:
+            type: list
+            values:
+              0: # timestamp
+                type:
+                - int
+                - fromtimestamp
+              1: # open
+                type: float
+              2: # high
+                type: float
+              3: # low
+                type: float
+              4: # close
+                type: float
+              5: # volume
+                type: float
+        moneyType:
+          type: str
+        symbol:
+          type: str
+    mapping:
+    - key: historic_rates_time
+      path:
+      - data
+      - 0
+      type:
+      - int
+      - fromtimestamp
+    - key: historic_rates_open
+      path:
+      - data
+      - 1
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - data
+      - 2
+      type:
+      - float
+    - key: historic_rates_low
+      path:
+      - data
+      - 3
+      type:
+      - float
+    - key: historic_rates_close
+      path:
+      - data
+      - 4
+      type:
+      - float
+    - key: historic_rates_volume
+      path:
+      - data
+      - 5
+      type:
+      - float
