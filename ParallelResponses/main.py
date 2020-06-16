@@ -48,7 +48,7 @@ async def main():
         database_handler.persist_exchange(current_exchange.name)
 
     print("currency pairs")
-    responses = await asyncio.gather(*(exchanges[ex].request_currency_pairs('currency_pairs', start_time) for ex in exchanges))
+    responses = await asyncio.gather(*(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
     print('got em')
 
     for response in responses:
@@ -56,7 +56,7 @@ async def main():
         if response[1] is not None:
             currency_pairs = current_exchange.format_currency_pairs(response)
             database_handler.persist_exchange_currency_pairs(currency_pairs)
-        all_currency_pairs = database_handler.get_exchange_currency_pairs(current_exchange.name)
+        all_currency_pairs = database_handler.get_all_exchange_currency_pairs(current_exchange.name)
         current_exchange.add_exchange_currency_pairs(all_currency_pairs)
 
     print('currency pairs done')
@@ -66,7 +66,7 @@ async def main():
         curr_exchange: Exchange = exchanges[ex]
 
         #Setting Currency-Pairs
-        all_currency_pairs: [ExchangeCurrencyPair]= database_handler.get_exchange_currency_pairs(curr_exchange.name)
+        all_currency_pairs: [ExchangeCurrencyPair]= database_handler.get_all_exchange_currency_pairs(curr_exchange.name)
         curr_exchange.exchange_currency_pairs = all_currency_pairs
 
         #Getting Historic Rates

@@ -218,8 +218,13 @@ class DatabaseHandler:
                            f'Expected {function["params"]} - got {len(args)}')
 
     # TODO: Dokumentation, Möglichkeit nur einzelne currency_pairs zu bekommen
-    # TODO: HOLT ALLE RIcHTUNGEN?
-    def get_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
+    def get_all_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
+        """
+        @param exchange_name:
+            Name of the exchange that the currency-pairs should be queried for.
+        @return:
+            List of all currency-pairs for the given exchange.
+        """
         session = self.sessionFactory()
         currency_pairs = list()
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
@@ -231,8 +236,13 @@ class DatabaseHandler:
         session.close()
         return currency_pairs
 
-    # TODO: Dokumentation
     def persist_exchange(self, exchange_name: str):
+        """
+        Persists the given exchange-name if it's not already in the database.
+
+        @param exchange_name:
+            Name that should is to persist.
+        """
         session = self.sessionFactory()
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is None:
@@ -242,6 +252,16 @@ class DatabaseHandler:
         session.close()
 
     def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]]):
+        """
+        Persists the given already formatted ExchangeCurrencyPair-tuple if they not already exist.
+        The formatting ist done in @see{Exchange.format_currency_pairs()}.
+
+        Tuple needs to have the following structure:
+            (exchange-name, first currency-name, second currency-name)
+
+        @param currency_pairs:
+            Iterator of currency-pair tuple that are to persist.
+        """
         if currency_pairs is not None:
             session = self.sessionFactory()
             ex_currency_pairs: List[ExchangeCurrencyPair] = list()
@@ -255,29 +275,26 @@ class DatabaseHandler:
                     if exchange_name is None or first_currency_name is None or second_currency_name is None:
                         continue
 
-                    exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
-                    first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
-                    second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
+                    existing_exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+                    exchange = existing_exchange if existing_exchange is not None else Exchange(name=exchange_name)
 
-                    if exchange is None:
-                        exchange = Exchange(name=exchange_name)
-                    if first is None:
-                        first = Currency(name=first_currency_name)
-                    if second is None:
-                        second = Currency(name=second_currency_name)
+                    existing_first_cp = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+                    first = existing_first_cp if existing_first_cp is not None else Currency(name=first_currency_name)
 
-                    exchange_pair = session.query(ExchangeCurrencyPair).filter(
+                    existing_second_cp = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
+                    second = existing_second_cp if existing_second_cp is not None else Currency(name=second_currency_name)
+
+                    existing_exchange_pair = session.query(ExchangeCurrencyPair).filter(
                         ExchangeCurrencyPair.exchange_id == exchange.id,
                         ExchangeCurrencyPair.first_id == first.id,
                         ExchangeCurrencyPair.second_id == second.id).first()
 
-                    if exchange_pair is None:
+                    if existing_exchange_pair is None:
                         exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
                         ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
 
                 session.commit()
-                (session.refresh(pair) for pair in ex_currency_pairs)
                 print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
             except Exception as e:
                 print(e, e.__cause__)
@@ -289,55 +306,25 @@ class DatabaseHandler:
     def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
                                        second_currency_name: str) -> ExchangeCurrencyPair:
         """
-        #TODO DOKU
-        This function queries or creates the corresponding database entries. If the ExchangeCurrencyPair already
-          exists, the object is queries and appended to the ticker tuple. If one or more of the entries do not
-          exist, the single object (e.g. Currency or Exchange Object) is first created and then an
-          ExchangeCurrencyPair-Object is created. The missing entry is automatically persisted in the DB.
-        It is necessary to distinguish between existing and not existing DB-entities when creating the
-          ExchangeCurrencyPair-Object. Otherwise an Unique-Constraint Error is raised.
+        Adds a single ExchangeCurrencyPair to the database is it does not already exist.
 
-        :param session: SQL-Alchemy Session
-            The running session from 'DatabaseHandler.persist_tickers'
-        :param ticker: Tuple
-            The ticker Tuple from 'DatabaseHandler.persist_tickers'
-        :return: ticker_update: Tuple
-            An Tuple including an ORM-Query Object (ExchangeCurrencyPair-Object) on indices 0
+        @param exchange_name:
+            Name of the exchange.
+        @param first_currency_name:
+            Name of the first currency.
+        @param second_currency_name:
+            Name of the second currency.
         """
-        session = self.sessionFactory()
-        # print(exchange_name)
-        try:
-            exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
-            first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
-            second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
-
-            if exchange is None:
-                exchange = Exchange(name=exchange_name)
-            if first is None:
-                first = Currency(name=first_currency_name)
-            if second is None:
-                second = Currency(name=second_currency_name)
-
-            exchange_pair = session.query(ExchangeCurrencyPair).filter(
-                ExchangeCurrencyPair.exchange_id == exchange.id,
-                ExchangeCurrencyPair.first_id == first.id,
-                ExchangeCurrencyPair.second_id == second.id).first()
-
-            if exchange_pair is None:
-                exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
-                session.add(exchange_pair)
-                session.commit()
-                session.refresh(exchange_pair)
-
-            return exchange_pair
-        except Exception as e:
-            print(e, e.__cause__)
-            session.rollback()
-            pass
-        finally:
-            session.close()
+        self.persist_exchange_currency_pairs((exchange_name, first_currency_name, second_currency_name))
 
     def persist_historic_rates(self, historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
+        """
+        Persists the given already formatted historic-rates-tuple if they not already exist.
+        The formatting ist done in @see{Exchange.format_historic_rates()}.
+
+        @param historic_rates:
+            Iterator containing the already formatted historic-rates-tuple.
+        """
         session = self.sessionFactory()
         try:
             i = 0

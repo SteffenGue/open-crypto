@@ -226,9 +226,6 @@ def get_exchange_names() -> List[str]:
         Names from all the exchanges, which have a .yaml-file in
         the directory described in YAML_PATH.
     """
-
-    # TODO diskutabel (kommt weg)
-
     exchanges_list = os.listdir(YAML_PATH)
     exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
     exchanges = exchange_names
