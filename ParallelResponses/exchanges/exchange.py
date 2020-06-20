@@ -553,7 +553,6 @@ class Exchange:
 
         currency_pair: ExchangeCurrencyPair
         for currency_pair in responses.keys():
-
             temp_results = {'historic_rates_time': [],
                             'historic_rates_open': [],
                             'historic_rates_high': [],
@@ -573,6 +572,17 @@ class Exchange:
                     traceback.print_exc()
                     pass
                 else:
+
+                    extracted_data_is_valid: bool = True
+                    for extracted_field in temp_results.keys():
+                        if temp_results[extracted_field] is None:
+                            print("{} has no valid data in {}.".format(currency_pair, extracted_field))
+                            extracted_data_is_valid = False
+                            break
+
+                    if not extracted_data_is_valid:
+                        continue
+
                     assert (len(results[0]) == len(result) for result in results)
                     result = list(itertools.zip_longest(
                         itertools.repeat(currency_pair.id, len(temp_results['historic_rates_time'])),
@@ -583,5 +593,4 @@ class Exchange:
                         temp_results['historic_rates_close'],
                         temp_results['historic_rates_volume']))
                     results.extend(result)
-
         return results
