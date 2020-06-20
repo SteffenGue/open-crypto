@@ -7,6 +7,8 @@ import yaml #install PyYaml
 from configparser import ConfigParser
 from tables import Exchange
 
+#bin ich in master
+
 TYPE_CONVERSION = {
 
     """
