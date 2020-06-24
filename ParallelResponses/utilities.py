@@ -167,7 +167,8 @@ REQUEST_PARAMS = {
 
 
 def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
-    #todo: doc
+    #todo: doku
+
     config_yaml = open(filename)
     config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
 
