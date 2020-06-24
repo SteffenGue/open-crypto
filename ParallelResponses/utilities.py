@@ -166,32 +166,20 @@ REQUEST_PARAMS = {
 }
 
 
+def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
+    #todo: doc
+    config_yaml = open(filename)
+    config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
 
+    for general_section in config_dict.keys():
+        if section == general_section:
+            return config_dict[general_section]
 
-def read_config(section: str, filename='config.ini') -> Dict[str, Any]:
-    """
-    Reads the config.ini file specified in by the filename parameter
+        for nested_section in config_dict[general_section].keys():
+            if section == nested_section:
+                return config_dict[general_section][nested_section]
 
-    :param section: str
-        specifies the section to read from the config-file
-    :param filename: str
-        specifies the filename to read. Default: 'config.ini'
-    :return: parameters: dict
-        returns a dictionary of parameters
-    """
-
-    parser = ConfigParser()
-    parser.read(filename)
-
-    parameters = {}
-    if parser.has_section(section):
-        params = parser.items(section)
-        for param in params:
-            parameters[param[0]] = param[1]
-    else:
-        raise Exception('Section {} not found in file {}'.format(section, filename))
-
-    return parameters
+    Exception()
 
 
 def yaml_loader(exchange: str):
