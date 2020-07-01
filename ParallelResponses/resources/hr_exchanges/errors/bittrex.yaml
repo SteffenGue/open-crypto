@@ -1,0 +1,352 @@
+name: bittrex
+terms:
+  terms_url: https://bittrex.zendesk.com/hc/en-us/articles/360001411486-Bittrex-International-Terms-of-Service-Version-1-3-1
+  permission: null
+  search_targets:
+  - tag: article
+    class: article clearfix
+api_url: https://bittrex.com/api/v1.1/public/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: getmarkets
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              MarketCurrency: # e.g. LTC
+                type: str
+              BaseCurrency: # e.g. BTC
+                type: str
+              MarketCurrencyLong: # e.g. Litecoin
+                type: str
+              BaseCurrencyLong: # e.g. Bitcoin
+                type: str
+              MinTradeSize:
+                type: float
+              MarketName: # e.g. BTC-LTC
+                type: str
+              IsActive:
+                type: bool
+              Created:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%SZ"
+    mapping:
+    - key: currency_pair_first
+      path:
+      - result
+      - BaseCurrency
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - result
+      - MarketCurrency
+      type:
+      - str
+
+  currencies:
+    request:
+      template: getcurrencies/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              Currency: # e.g. BTC
+                type: str
+              CurrencyLong: # e.g. Bitcoin
+                type: str
+              MinConfirmation:
+                type: int
+              TaxFee:
+                type: float
+              IsActive:
+                type: bool
+              IsRestriced:
+                type: bool
+              CoinType:
+                type: str
+              BaseAddress:
+                type: str
+              Notice:
+                type: int
+    mapping:
+    - key: currency_symbol
+      path:
+      - result
+      - Currency
+      type:
+      - str
+    - key: currency_name
+      path:
+      - result
+      - CurrencyLong
+      type:
+      - str
+
+  ticker:
+    request:
+      template: getticker
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+        alias: market
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: dict
+          values:
+            Bid:
+              type: float
+            Ask:
+              type: float
+            Last:
+              type: float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_bid
+      path:
+      - result
+      - Bid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - result
+      - Ask
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - result
+      - Last
+      type:
+      - float
+
+  market_summaries: # not required
+    request:
+      template: getmarketsummaries/
+      values: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              MarketName:
+                type: str
+              High:
+                type: float
+              Low:
+                type: float
+              Volume:
+                type: float
+              Last:
+                type: float
+              BaseVolume:
+                type: float
+              Timestamp:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%SZ"
+              Bid:
+                type: float
+              Ask:
+                type: float
+              OpenBuyOrders:
+                type: int
+              OpenSellOrders:
+                type: int
+              PrevDay:
+                type: float
+              Created:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%SZ"
+              DisplayMarketName:
+                type: str
+    mapping: null
+
+  order_book:
+    request:
+      template: getorderbook
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+        alias: market
+      params:
+        type:
+          type: str
+          allowed:
+          - buy
+          - sell
+          - both
+          default: both
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: dict
+          values:
+            buy:
+              type: list
+              values:
+                type: dict
+                values:
+                  Quantity:
+                    type: float
+                  Rate:
+                    type: float
+            sell:
+              type: list
+              values:
+                type: dict
+                values:
+                  Quantity:
+                    type: float
+                  Rate:
+                    type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - result
+      - buy
+      - Rate
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - result
+      - buy
+      - Quantity
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - result
+      - sell
+      - Rate
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - result
+      - sell
+      - Quantity
+      type:
+      - float
+
+  trades:
+    request:
+      template: getmarkethistory
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+        alias: market
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              Id:
+                type: int
+              Timestamp:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%dT%H:%M:%S.%f"
+              Quantity:
+                type: float
+              Price:
+                type: float
+              Total:
+                type: float
+              FillType:
+                type: str
+              OrderType:
+                type: str
+    mapping:
+    - key: trade_time
+      path:
+      - result
+      - Timestamp
+      type:
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%f"
+    - key: trade_amount
+      path:
+      - result
+      - Quantity
+      type:
+      - float
+    - key: trade_last_price
+      path:
+      - result
+      - Price
+      type:
+      - float
+    - key: trade_side
+      path:
+      - result
+      - OrderType
+      type:
+      - str

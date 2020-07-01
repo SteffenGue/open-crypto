@@ -1,1742 +1,1874 @@
 [
     {
+        "symbol": "qnut_usdt",
+        "ticker": {
+            "high": 0.088698,
+            "vol": 603780.6,
+            "low": 0.085748,
+            "change": 0.66,
+            "turnover": 52239.3568,
+            "latest": 0.086953
+        },
+        "timestamp": 1586847848497
+    },
+    {
+        "symbol": "ge_usdt",
+        "ticker": {
+            "high": 0.011,
+            "vol": 21964613.69,
+            "low": 0.0044,
+            "change": 95.45,
+            "turnover": 119362.6104,
+            "latest": 0.0086
+        },
+        "timestamp": 1586847848498
+    },
+    {
         "symbol": "eth_btc",
         "ticker": {
-            "high": 0.02049906,
-            "vol": 272258.3212,
-            "low": 0.02,
-            "change": 1.16,
-            "turnover": 5520.6345,
-            "latest": 0.02040334
+            "high": 0.02312654,
+            "vol": 158357.4057,
+            "low": 0.02259617,
+            "change": 0.67,
+            "turnover": 3620.7668,
+            "latest": 0.02291095
         },
-        "timestamp": 1575023145158
+        "timestamp": 1586847848547
+    },
+    {
+        "symbol": "gleec_btc",
+        "ticker": {
+            "high": 0.00019389,
+            "vol": 195789.7599,
+            "low": 1.449e-05,
+            "change": -20.29,
+            "turnover": 17.4311,
+            "latest": 9.02e-05
+        },
+        "timestamp": 1586847758031
     },
     {
         "symbol": "tac_eth",
         "ticker": {
-            "high": 2.29e-05,
-            "vol": 4140745.6845,
-            "low": 1.7e-05,
-            "change": -16.57,
-            "turnover": 78.6654,
-            "latest": 1.702e-05
+            "high": 8.3e-06,
+            "vol": 3986790.8143,
+            "low": 5.85e-06,
+            "change": 1.13,
+            "turnover": 26.5972,
+            "latest": 6.24e-06
         },
-        "timestamp": 1575023145209
+        "timestamp": 1586847848583
+    },
+    {
+        "symbol": "etc_eth",
+        "ticker": {
+            "high": 0.034332,
+            "vol": 2214979.21,
+            "low": 0.03269,
+            "change": -1.51,
+            "turnover": 73670.1664,
+            "latest": 0.032926
+        },
+        "timestamp": 1586847848570
     },
     {
         "symbol": "ocn_eth",
         "ticker": {
-            "high": 3.98e-06,
-            "vol": 236300094.89,
-            "low": 3.56e-06,
-            "change": -2.7,
-            "turnover": 884.6499,
-            "latest": 3.6e-06
+            "high": 1.85e-06,
+            "vol": 245986342.284,
+            "low": 1.56e-06,
+            "change": -8.09,
+            "turnover": 408.1096,
+            "latest": 1.59e-06
         },
-        "timestamp": 1575023144794
+        "timestamp": 1586847758045
     },
     {
         "symbol": "vet_usdt",
         "ticker": {
-            "high": 0.006669,
-            "vol": 106274228.0,
-            "low": 0.006136,
-            "change": -1.2,
-            "turnover": 682521.9494,
-            "latest": 0.006314
+            "high": 0.003751,
+            "vol": 29852251.0,
+            "low": 0.003401,
+            "change": 2.62,
+            "turnover": 105861.8128,
+            "latest": 0.003606
         },
-        "timestamp": 1575023145150
-    },
-    {
-        "symbol": "ubex_usdt",
-        "ticker": {
-            "high": 0.000337,
-            "vol": 0.0,
-            "low": 0.000337,
-            "change": -0.89,
-            "turnover": 0.0,
-            "latest": 0.000334
-        },
-        "timestamp": 1575023145146
+        "timestamp": 1586847848528
     },
     {
         "symbol": "nas_eth",
         "ticker": {
-            "high": 0.00299078,
-            "vol": 334861.4015,
-            "low": 0.00287211,
-            "change": -0.48,
-            "turnover": 977.7756,
-            "latest": 0.00291641
+            "high": 0.00175796,
+            "vol": 648926.0337,
+            "low": 0.00157436,
+            "change": -1.82,
+            "turnover": 1070.8007,
+            "latest": 0.00165269
         },
-        "timestamp": 1575023144784
-    },
-    {
-        "symbol": "abbc_usdt",
-        "ticker": {
-            "high": 0.1831,
-            "vol": 5067605.0,
-            "low": 0.1621,
-            "change": 2.38,
-            "turnover": 900282.2221,
-            "latest": 0.1809
-        },
-        "timestamp": 1575023144732
+        "timestamp": 1586847758039
     },
     {
         "symbol": "arpa_usdt",
         "ticker": {
-            "high": 0.0123,
-            "vol": 4170115.0,
-            "low": 0.0116,
-            "change": 0.86,
-            "turnover": 49766.5197,
-            "latest": 0.0117
+            "high": 0.0073,
+            "vol": 4174817.0,
+            "low": 0.0065,
+            "change": 2.9,
+            "turnover": 28996.9554,
+            "latest": 0.0071
         },
-        "timestamp": 1575023144764
+        "timestamp": 1586847758023
+    },
+    {
+        "symbol": "abbc_usdt",
+        "ticker": {
+            "high": 0.0987,
+            "vol": 44364177.0,
+            "low": 0.092,
+            "change": 3.95,
+            "turnover": 4190397.9234,
+            "latest": 0.0974
+        },
+        "timestamp": 1586847758000
     },
     {
         "symbol": "seer_eth",
         "ticker": {
-            "high": 3.99e-06,
-            "vol": 36763409.5068,
-            "low": 3.76e-06,
-            "change": -1.02,
-            "turnover": 142.3625,
-            "latest": 3.88e-06
+            "high": 1.9e-06,
+            "vol": 33926528.0002,
+            "low": 1.59e-06,
+            "change": 1.23,
+            "turnover": 57.7387,
+            "latest": 1.64e-06
         },
-        "timestamp": 1575023144808
+        "timestamp": 1586847758053
     },
     {
         "symbol": "idhub_eth",
         "ticker": {
-            "high": 1.956e-05,
-            "vol": 54101426.0,
-            "low": 1.655e-05,
-            "change": -4.3,
-            "turnover": 982.0231,
-            "latest": 1.736e-05
+            "high": 1.592e-05,
+            "vol": 63269868.0,
+            "low": 7.84e-06,
+            "change": 6.12,
+            "turnover": 665.6764,
+            "latest": 1.109e-05
         },
-        "timestamp": 1575023145210
-    },
-    {
-        "symbol": "ioex_usdt",
-        "ticker": {
-            "high": 0.0322,
-            "vol": 695031.67,
-            "low": 0.0241,
-            "change": 23.97,
-            "turnover": 19401.8656,
-            "latest": 0.03
-        },
-        "timestamp": 1575023145128
+        "timestamp": 1586847848584
     },
     {
         "symbol": "ssc_eth",
         "ticker": {
-            "high": 1.018e-05,
-            "vol": 0.0,
-            "low": 1.018e-05,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 1.018e-05
+            "high": 1.19e-06,
+            "vol": 28361762.0,
+            "low": 4.5e-07,
+            "change": 34.78,
+            "turnover": 17.7995,
+            "latest": 6.2e-07
         },
-        "timestamp": 1575023145211
+        "timestamp": 1586847848584
     },
     {
-        "symbol": "bch_usdt",
+        "symbol": "ioex_usdt",
         "ticker": {
-            "high": 229.63,
-            "vol": 358051.5561,
-            "low": 208.09,
-            "change": 0.46,
-            "turnover": 79051135.8292,
-            "latest": 224.08
+            "high": 0.0129,
+            "vol": 501584.32,
+            "low": 0.0081,
+            "change": 5.41,
+            "turnover": 5140.7711,
+            "latest": 0.0117
         },
-        "timestamp": 1575023145151
+        "timestamp": 1586847848512
     },
     {
         "symbol": "phv_usdt",
         "ticker": {
-            "high": 0.01593,
-            "vol": 0.0,
-            "low": 0.01593,
-            "change": -1.49,
-            "turnover": 0.0,
-            "latest": 0.0157
+            "high": 0.01398,
+            "vol": 7310689.0,
+            "low": 0.01303,
+            "change": -2.75,
+            "turnover": 98268.7926,
+            "latest": 0.01342
         },
-        "timestamp": 1575023144743
+        "timestamp": 1586847758009
+    },
+    {
+        "symbol": "bch_usdt",
+        "ticker": {
+            "high": 228.5,
+            "vol": 249351.1889,
+            "low": 215.44,
+            "change": -0.63,
+            "turnover": 55358280.6364,
+            "latest": 224.72
+        },
+        "timestamp": 1586847848529
     },
     {
         "symbol": "bfc_usdt",
         "ticker": {
-            "high": 0.08036,
+            "high": 0.07941,
             "vol": 0.0,
-            "low": 0.08036,
+            "low": 0.07941,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 0.08036
+            "latest": 0.07941
         },
-        "timestamp": 1575023144759
+        "timestamp": 1586847758018
     },
     {
         "symbol": "pai_btc",
         "ticker": {
-            "high": 2.01e-06,
-            "vol": 13349831.0121,
-            "low": 1.75e-06,
-            "change": 2.14,
-            "turnover": 25.3921,
-            "latest": 1.91e-06
+            "high": 1.98e-06,
+            "vol": 12343019.4535,
+            "low": 1.79e-06,
+            "change": -3.72,
+            "turnover": 22.9094,
+            "latest": 1.81e-06
         },
-        "timestamp": 1575023145172
+        "timestamp": 1586847848556
     },
     {
         "symbol": "cctc_usdt",
         "ticker": {
-            "high": 0.0295,
-            "vol": 13180256.0,
-            "low": 0.0236,
-            "change": 5.47,
-            "turnover": 347108.5977,
-            "latest": 0.027
+            "high": 0.005425,
+            "vol": 2373265.0,
+            "low": 0.005367,
+            "change": -0.3,
+            "turnover": 12807.9442,
+            "latest": 0.005387
         },
-        "timestamp": 1575023144737
+        "timestamp": 1586847758004
     },
     {
-        "symbol": "utk_usdt",
+        "symbol": "jus_usdt",
         "ticker": {
-            "high": 0.0154,
-            "vol": 7834176.0,
-            "low": 0.0152,
-            "change": 0.0,
-            "turnover": 119819.3237,
-            "latest": 0.0153
+            "high": 0.043575,
+            "vol": 658989.1044,
+            "low": 0.043001,
+            "change": 0.9,
+            "turnover": 28485.7959,
+            "latest": 0.043508
         },
-        "timestamp": 1575023144730
+        "timestamp": 1586847848495
     },
     {
         "symbol": "atp_usdt",
         "ticker": {
-            "high": 0.00507,
-            "vol": 0.0,
-            "low": 0.00507,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 0.00507
+            "high": 0.001759,
+            "vol": 150545.0,
+            "low": 0.001694,
+            "change": -0.29,
+            "turnover": 259.7956,
+            "latest": 0.00171
         },
-        "timestamp": 1575023145136
+        "timestamp": 1586847848518
+    },
+    {
+        "symbol": "utk_usdt",
+        "ticker": {
+            "high": 0.0086,
+            "vol": 2428335.0,
+            "low": 0.0082,
+            "change": 0.0,
+            "turnover": 20278.4132,
+            "latest": 0.0084
+        },
+        "timestamp": 1586847757999
     },
     {
         "symbol": "ckb_usdt",
         "ticker": {
-            "high": 0.0082,
-            "vol": 13034958.0,
-            "low": 0.0065,
-            "change": 17.39,
-            "turnover": 98702.591,
-            "latest": 0.0081
+            "high": 0.006,
+            "vol": 28728900.0,
+            "low": 0.0054,
+            "change": -1.75,
+            "turnover": 160496.0133,
+            "latest": 0.0056
         },
-        "timestamp": 1575023144763
+        "timestamp": 1586847758022
     },
     {
         "symbol": "sero_usdt",
         "ticker": {
-            "high": 0.0521,
-            "vol": 825663.5,
-            "low": 0.0464,
-            "change": 7.2,
-            "turnover": 39017.2416,
-            "latest": 0.0506
+            "high": 0.0742,
+            "vol": 376494.6004,
+            "low": 0.0676,
+            "change": 5.25,
+            "turnover": 26748.0202,
+            "latest": 0.0722
         },
-        "timestamp": 1575023144761
+        "timestamp": 1586847758020
     },
     {
         "symbol": "bts_eth",
         "ticker": {
-            "high": 0.00014781,
-            "vol": 79629.9427,
-            "low": 0.00013536,
-            "change": -3.08,
-            "turnover": 11.1726,
-            "latest": 0.00013761
+            "high": 0.000115,
+            "vol": 120055.0825,
+            "low": 0.0001039,
+            "change": 1.66,
+            "turnover": 13.0279,
+            "latest": 0.00011022
         },
-        "timestamp": 1575023144780
+        "timestamp": 1586847758037
+    },
+    {
+        "symbol": "dcn_eth",
+        "ticker": {
+            "high": 2e-08,
+            "vol": 14599799.0,
+            "low": 1e-08,
+            "change": 0.0,
+            "turnover": 0.1484,
+            "latest": 2e-08
+        },
+        "timestamp": 1586847848571
     },
     {
         "symbol": "fil6_eth",
         "ticker": {
-            "high": 0.02778934,
-            "vol": 162726.2934,
-            "low": 0.02600095,
-            "change": -0.39,
-            "turnover": 4339.0646,
-            "latest": 0.02641411
+            "high": 0.0299286,
+            "vol": 323662.6646,
+            "low": 0.02500243,
+            "change": -0.46,
+            "turnover": 8815.5638,
+            "latest": 0.02809894
         },
-        "timestamp": 1575023144803
+        "timestamp": 1586847758050
+    },
+    {
+        "symbol": "xrp_usdt",
+        "ticker": {
+            "high": 0.19591,
+            "vol": 63367171.99,
+            "low": 0.17969,
+            "change": 0.28,
+            "turnover": 11760861.8668,
+            "latest": 0.18685
+        },
+        "timestamp": 1586847848500
+    },
+    {
+        "symbol": "eth3s_usdt",
+        "ticker": {
+            "high": 0.997,
+            "vol": 4893055.6194,
+            "low": 0.845,
+            "change": -7.98,
+            "turnover": 4506756.3226,
+            "latest": 0.876
+        },
+        "timestamp": 1586847757995
     },
     {
         "symbol": "dbc_eth",
         "ticker": {
-            "high": 7.83e-06,
-            "vol": 2183843.1612,
-            "low": 7.4e-06,
-            "change": 0.66,
-            "turnover": 16.4594,
-            "latest": 7.67e-06
+            "high": 2.98e-06,
+            "vol": 7735012.4536,
+            "low": 2.66e-06,
+            "change": -5.23,
+            "turnover": 21.5265,
+            "latest": 2.72e-06
         },
-        "timestamp": 1575023144786
-    },
-    {
-        "symbol": "pnt_btc",
-        "ticker": {
-            "high": 2e-08,
-            "vol": 64902609.0822,
-            "low": 1e-08,
-            "change": -50.0,
-            "turnover": 0.848,
-            "latest": 1e-08
-        },
-        "timestamp": 1575023145173
-    },
-    {
-        "symbol": "trx_eth",
-        "ticker": {
-            "high": 9.979e-05,
-            "vol": 5279069.5132,
-            "low": 6.963e-05,
-            "change": 19.67,
-            "turnover": 442.519,
-            "latest": 8.735e-05
-        },
-        "timestamp": 1575023145219
+        "timestamp": 1586847758041
     },
     {
         "symbol": "fil12_btc",
         "ticker": {
-            "high": 0.00046403,
-            "vol": 1019895.8662,
-            "low": 0.000375,
-            "change": 15.89,
-            "turnover": 410.8852,
-            "latest": 0.00044692
+            "high": 0.00044838,
+            "vol": 2021793.3057,
+            "low": 0.00035556,
+            "change": 11.42,
+            "turnover": 795.0531,
+            "latest": 0.0004331
         },
-        "timestamp": 1575023145190
+        "timestamp": 1586847848567
     },
     {
-        "symbol": "her_eth",
+        "symbol": "trx_eth",
         "ticker": {
-            "high": 6.5e-07,
-            "vol": 37555769.669,
-            "low": 5.6e-07,
-            "change": -3.28,
-            "turnover": 23.3693,
-            "latest": 5.9e-07
+            "high": 8.279e-05,
+            "vol": 9921804.7791,
+            "low": 7.89e-05,
+            "change": -0.16,
+            "turnover": 797.1044,
+            "latest": 8.019e-05
         },
-        "timestamp": 1575023145207
-    },
-    {
-        "symbol": "cs_eth",
-        "ticker": {
-            "high": 0.00052184,
-            "vol": 8310058.9132,
-            "low": 0.00043326,
-            "change": 16.1,
-            "turnover": 3699.429,
-            "latest": 0.00052184
-        },
-        "timestamp": 1575023144791
+        "timestamp": 1586847848590
     },
     {
         "symbol": "btc_usdt",
         "ticker": {
-            "high": 7637.71,
-            "vol": 46381.6402,
-            "low": 7365.14,
-            "change": 1.45,
-            "turnover": 348392315.6627,
-            "latest": 7561.37
+            "high": 6918.94,
+            "vol": 165641.3968,
+            "low": 6609.03,
+            "change": 2.32,
+            "turnover": 1120049663.7323,
+            "latest": 6875.4
         },
-        "timestamp": 1575023145132
+        "timestamp": 1586847848516
     },
     {
-        "symbol": "mtv_usdt",
+        "symbol": "her_eth",
         "ticker": {
-            "high": 0.000129,
-            "vol": 0.0,
-            "low": 0.000129,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 0.000129
+            "high": 8.3e-07,
+            "vol": 943176.0,
+            "low": 7.3e-07,
+            "change": 1.22,
+            "turnover": 0.7723,
+            "latest": 8.3e-07
         },
-        "timestamp": 1575023144762
-    },
-    {
-        "symbol": "seal_usdt",
-        "ticker": {
-            "high": 0.0099,
-            "vol": 6610578.29,
-            "low": 0.0081,
-            "change": -7.69,
-            "turnover": 60565.7154,
-            "latest": 0.0084
-        },
-        "timestamp": 1575023144753
+        "timestamp": 1586847848581
     },
     {
         "symbol": "lm_usdt",
         "ticker": {
-            "high": 0.00046,
-            "vol": 32687452.0,
-            "low": 0.000316,
-            "change": 25.07,
-            "turnover": 11941.4304,
-            "latest": 0.000439
+            "high": 0.000126,
+            "vol": 20402.0,
+            "low": 9.4e-05,
+            "change": -25.4,
+            "turnover": 1.9177,
+            "latest": 9.4e-05
         },
-        "timestamp": 1575023144728
+        "timestamp": 1586847757998
+    },
+    {
+        "symbol": "seal_usdt",
+        "ticker": {
+            "high": 0.0079,
+            "vol": 12110706.77,
+            "low": 0.0076,
+            "change": -1.28,
+            "turnover": 94019.126,
+            "latest": 0.0077
+        },
+        "timestamp": 1586847758014
+    },
+    {
+        "symbol": "mtv_usdt",
+        "ticker": {
+            "high": 0.000148,
+            "vol": 179560.5494,
+            "low": 0.000148,
+            "change": 0.0,
+            "turnover": 26.5749,
+            "latest": 0.000148
+        },
+        "timestamp": 1586847758021
     },
     {
         "symbol": "sc_btc",
         "ticker": {
-            "high": 2.3e-07,
-            "vol": 11182268.0438,
-            "low": 2e-07,
+            "high": 1.9e-07,
+            "vol": 0.0,
+            "low": 1.9e-07,
             "change": 0.0,
-            "turnover": 2.455,
-            "latest": 2e-07
+            "turnover": 0.0,
+            "latest": 1.9e-07
         },
-        "timestamp": 1575023145183
-    },
-    {
-        "symbol": "brc_usdt",
-        "ticker": {
-            "high": 1.3699,
-            "vol": 25011.1603,
-            "low": 1.2004,
-            "change": -2.57,
-            "turnover": 32719.8867,
-            "latest": 1.3158
-        },
-        "timestamp": 1575023144750
+        "timestamp": 1586847848563
     },
     {
         "symbol": "skm_eth",
         "ticker": {
-            "high": 2.264e-05,
-            "vol": 63495259.5196,
-            "low": 1.182e-05,
-            "change": -14.24,
-            "turnover": 888.0838,
-            "latest": 1.506e-05
+            "high": 9.37e-06,
+            "vol": 98190252.3843,
+            "low": 8.7e-06,
+            "change": 1.57,
+            "turnover": 876.9651,
+            "latest": 9.03e-06
         },
-        "timestamp": 1575023145213
+        "timestamp": 1586847848585
+    },
+    {
+        "symbol": "brc_usdt",
+        "ticker": {
+            "high": 0.5999,
+            "vol": 85861.2049,
+            "low": 0.5995,
+            "change": 0.0,
+            "turnover": 51490.9242,
+            "latest": 0.5997
+        },
+        "timestamp": 1586847758011
     },
     {
         "symbol": "vtho_eth",
         "ticker": {
-            "high": 4.41e-06,
-            "vol": 6000506.1298,
-            "low": 3.86e-06,
-            "change": -4.9,
-            "turnover": 24.2607,
-            "latest": 3.88e-06
+            "high": 1.94e-06,
+            "vol": 5737181.9611,
+            "low": 1.89e-06,
+            "change": 0.0,
+            "turnover": 11.012,
+            "latest": 1.9e-06
         },
-        "timestamp": 1575023145203
+        "timestamp": 1586847848579
     },
     {
         "symbol": "etc_btc",
         "ticker": {
-            "high": 0.00053705,
-            "vol": 2367.2529,
-            "low": 0.00052122,
-            "change": 1.43,
-            "turnover": 1.2507,
-            "latest": 0.000534
+            "high": 0.00076636,
+            "vol": 70684.237,
+            "low": 0.00075244,
+            "change": -1.04,
+            "turnover": 53.6046,
+            "latest": 0.00075686
         },
-        "timestamp": 1575023145179
+        "timestamp": 1586847848560
     },
     {
         "symbol": "rnt_usdt",
         "ticker": {
-            "high": 0.0076,
+            "high": 0.0053,
             "vol": 0.0,
-            "low": 0.0076,
+            "low": 0.0053,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 0.0076
+            "latest": 0.0053
         },
-        "timestamp": 1575023145139
+        "timestamp": 1586847848520
     },
     {
         "symbol": "zip_usdt",
         "ticker": {
-            "high": 0.00012,
+            "high": 0.000438,
             "vol": 0.0,
-            "low": 0.00012,
+            "low": 0.000438,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 0.00012
+            "latest": 0.000438
         },
-        "timestamp": 1575023144766
+        "timestamp": 1586847758024
     },
     {
         "symbol": "duo_usdt",
         "ticker": {
-            "high": 0.1801,
+            "high": 0.0106,
             "vol": 0.0,
-            "low": 0.1801,
+            "low": 0.0106,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 0.1801
+            "latest": 0.0106
         },
-        "timestamp": 1575023144770
+        "timestamp": 1586847758027
     },
     {
         "symbol": "pai_eth",
         "ticker": {
-            "high": 9.849e-05,
-            "vol": 20076020.6353,
-            "low": 8.814e-05,
-            "change": -1.77,
-            "turnover": 1882.6972,
-            "latest": 9.171e-05
+            "high": 8.697e-05,
+            "vol": 18860148.1746,
+            "low": 7.729e-05,
+            "change": 0.1,
+            "turnover": 1541.7317,
+            "latest": 8.238e-05
         },
-        "timestamp": 1575023145204
+        "timestamp": 1586847848580
     },
     {
         "symbol": "xwc_btc",
         "ticker": {
-            "high": 5.5e-07,
-            "vol": 5769814.4825,
-            "low": 2.1e-07,
-            "change": 104.76,
-            "turnover": 1.8287,
-            "latest": 4.3e-07
+            "high": 7.2e-07,
+            "vol": 0.0,
+            "low": 7.2e-07,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 7.2e-07
         },
-        "timestamp": 1575023145187
+        "timestamp": 1586847848565
     },
     {
         "symbol": "sait_eth",
         "ticker": {
-            "high": 5.875e-05,
-            "vol": 11994997.0,
-            "low": 5.702e-05,
-            "change": -0.61,
-            "turnover": 689.0434,
-            "latest": 5.704e-05
+            "high": 5.053e-05,
+            "vol": 24122725.0,
+            "low": 4.754e-05,
+            "change": 1.99,
+            "turnover": 1173.926,
+            "latest": 4.868e-05
         },
-        "timestamp": 1575023145197
+        "timestamp": 1586847848575
+    },
+    {
+        "symbol": "doge_usdt",
+        "ticker": {
+            "high": 0.002009,
+            "vol": 18819609.0,
+            "low": 0.001886,
+            "change": 1.9,
+            "turnover": 36571.3628,
+            "latest": 0.001929
+        },
+        "timestamp": 1586847848501
+    },
+    {
+        "symbol": "fog_usdt",
+        "ticker": {
+            "high": 0.8399,
+            "vol": 79122.9,
+            "low": 0.8359,
+            "change": -0.35,
+            "turnover": 66370.4549,
+            "latest": 0.8368
+        },
+        "timestamp": 1586847757996
     },
     {
         "symbol": "ext_eth",
         "ticker": {
-            "high": 6.9e-07,
-            "vol": 187279388.0,
-            "low": 2.7e-07,
-            "change": -46.55,
-            "turnover": 99.6637,
-            "latest": 3.1e-07
+            "high": 1.7e-07,
+            "vol": 175311516.0,
+            "low": 1.3e-07,
+            "change": 23.08,
+            "turnover": 24.1325,
+            "latest": 1.6e-07
         },
-        "timestamp": 1575023145216
-    },
-    {
-        "symbol": "cpx_btc",
-        "ticker": {
-            "high": 4e-07,
-            "vol": 43170.5911,
-            "low": 3.9e-07,
-            "change": -2.5,
-            "turnover": 0.0168,
-            "latest": 3.9e-07
-        },
-        "timestamp": 1575023145186
+        "timestamp": 1586847848588
     },
     {
         "symbol": "fil36_btc",
         "ticker": {
-            "high": 0.00047094,
-            "vol": 608841.676,
-            "low": 0.00028011,
-            "change": 13.99,
-            "turnover": 208.9346,
-            "latest": 0.0003219
+            "high": 0.00032998,
+            "vol": 1211130.2804,
+            "low": 0.0002475,
+            "change": -20.25,
+            "turnover": 332.4691,
+            "latest": 0.00025424
         },
-        "timestamp": 1575023145191
+        "timestamp": 1586847848568
     },
     {
-        "symbol": "yoyow_eth",
+        "symbol": "atom_btc",
         "ticker": {
-            "high": 8.847e-05,
-            "vol": 5770368.3348,
-            "low": 7.743e-05,
-            "change": 3.96,
-            "turnover": 483.0874,
-            "latest": 8.303e-05
+            "high": 0.00034568,
+            "vol": 124425.658,
+            "low": 0.00033007,
+            "change": -0.01,
+            "turnover": 41.4062,
+            "latest": 0.00033189
         },
-        "timestamp": 1575023145218
+        "timestamp": 1586847848541
     },
     {
-        "symbol": "eko_eth",
+        "symbol": "sla_usdt",
         "ticker": {
-            "high": 3.001e-05,
-            "vol": 0.0,
-            "low": 3.001e-05,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 3.001e-05
+            "high": 1.415,
+            "vol": 147964.87,
+            "low": 1.401669,
+            "change": 0.57,
+            "turnover": 208969.4589,
+            "latest": 1.411029
         },
-        "timestamp": 1575023144796
+        "timestamp": 1586847848503
     },
     {
         "symbol": "grams_eth",
         "ticker": {
-            "high": 0.00239,
-            "vol": 624065.0838,
-            "low": 0.00200201,
-            "change": 4.73,
-            "turnover": 1370.526,
-            "latest": 0.0021029
+            "high": 0.00205,
+            "vol": 1229791.6506,
+            "low": 0.00190004,
+            "change": -1.02,
+            "turnover": 2397.8786,
+            "latest": 0.00190268
         },
-        "timestamp": 1575023144811
+        "timestamp": 1586847758056
+    },
+    {
+        "symbol": "xrp_eth",
+        "ticker": {
+            "high": 0.00127426,
+            "vol": 10228266.0,
+            "low": 0.00116685,
+            "change": -1.37,
+            "turnover": 12286.4855,
+            "latest": 0.00119599
+        },
+        "timestamp": 1586847848569
     },
     {
         "symbol": "grin_usdt",
         "ticker": {
-            "high": 1.4322,
-            "vol": 25742.8128,
-            "low": 0.9001,
-            "change": -19.48,
-            "turnover": 25233.5383,
-            "latest": 0.9112
+            "high": 0.6997,
+            "vol": 51168.4032,
+            "low": 0.3603,
+            "change": -7.07,
+            "turnover": 27249.6686,
+            "latest": 0.455
         },
-        "timestamp": 1575023145141
+        "timestamp": 1586847848522
     },
     {
         "symbol": "ltc_btc",
         "ticker": {
-            "high": 0.00659833,
-            "vol": 81616.6131,
-            "low": 0.00616723,
-            "change": -1.11,
-            "turnover": 513.9649,
-            "latest": 0.00629953
+            "high": 0.00626261,
+            "vol": 25556.0214,
+            "low": 0.00589597,
+            "change": -0.12,
+            "turnover": 153.7497,
+            "latest": 0.00595276
         },
-        "timestamp": 1575023145177
+        "timestamp": 1586847848559
     },
     {
         "symbol": "kisc_eth",
         "ticker": {
-            "high": 1.195e-05,
-            "vol": 25288925.0,
-            "low": 7.2e-06,
-            "change": -16.6,
-            "turnover": 251.7606,
-            "latest": 8.84e-06
+            "high": 4.28e-06,
+            "vol": 571.0,
+            "low": 3.06e-06,
+            "change": -28.04,
+            "turnover": 0.0017,
+            "latest": 3.08e-06
         },
-        "timestamp": 1575023145194
+        "timestamp": 1586847848572
     },
     {
         "symbol": "bch_btc",
         "ticker": {
-            "high": 0.03085448,
-            "vol": 69503.4948,
-            "low": 0.02771879,
-            "change": 5.87,
-            "turnover": 2032.2522,
-            "latest": 0.02965302
+            "high": 0.03473958,
+            "vol": 179698.4704,
+            "low": 0.03198256,
+            "change": -3.69,
+            "turnover": 5915.7629,
+            "latest": 0.0325729
         },
-        "timestamp": 1575023145168
+        "timestamp": 1586847848554
+    },
+    {
+        "symbol": "bbcnp_usdt",
+        "ticker": {
+            "high": 0.55,
+            "vol": 4671.33,
+            "low": 0.45,
+            "change": -6.73,
+            "turnover": 2332.2024,
+            "latest": 0.513
+        },
+        "timestamp": 1586847757992
     },
     {
         "symbol": "kbc_btc",
         "ticker": {
-            "high": 3.6e-06,
-            "vol": 8122034.6,
-            "low": 2.54e-06,
-            "change": 16.14,
-            "turnover": 24.7183,
-            "latest": 2.95e-06
+            "high": 6e-07,
+            "vol": 0.0,
+            "low": 6e-07,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 6e-07
         },
-        "timestamp": 1575023144775
+        "timestamp": 1586847758032
     },
     {
         "symbol": "vena_usdt",
         "ticker": {
-            "high": 0.001697,
-            "vol": 3393727.0,
-            "low": 0.001621,
-            "change": -1.39,
-            "turnover": 5617.3592,
-            "latest": 0.001628
+            "high": 0.00132,
+            "vol": 0.0,
+            "low": 0.00132,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 0.00132
         },
-        "timestamp": 1575023145140
+        "timestamp": 1586847848521
     },
     {
         "symbol": "btc_ausd",
         "ticker": {
-            "high": 7627.48,
-            "vol": 0.6991,
-            "low": 7406.53,
-            "change": 1.1,
-            "turnover": 5250.6187,
-            "latest": 7585.09
+            "high": 6799.7,
+            "vol": 0.0,
+            "low": 6799.7,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 6799.7
         },
-        "timestamp": 1575023144817
+        "timestamp": 1586847758059
     },
     {
         "symbol": "win_usdt",
         "ticker": {
-            "high": 0.00019,
-            "vol": 7007165.0,
-            "low": 0.000121,
-            "change": 0.66,
-            "turnover": 1090.8069,
-            "latest": 0.000153
+            "high": 9.6e-05,
+            "vol": 7575938.0,
+            "low": 9.2e-05,
+            "change": 0.0,
+            "turnover": 706.9259,
+            "latest": 9.3e-05
         },
-        "timestamp": 1575023144735
+        "timestamp": 1586847758003
     },
     {
         "symbol": "dash_btc",
         "ticker": {
-            "high": 0.00750139,
-            "vol": 3332.1493,
-            "low": 0.00665732,
-            "change": 6.67,
-            "turnover": 23.4897,
-            "latest": 0.00722551
+            "high": 0.01117633,
+            "vol": 6399.8502,
+            "low": 0.01056087,
+            "change": -1.84,
+            "turnover": 68.8528,
+            "latest": 0.01060255
         },
-        "timestamp": 1575023145176
+        "timestamp": 1586847848559
     },
     {
         "symbol": "suter_usdt",
         "ticker": {
-            "high": 0.054056,
-            "vol": 13884239.2302,
-            "low": 0.028954,
-            "change": 19.33,
-            "turnover": 559184.0256,
-            "latest": 0.035782
+            "high": 0.007843,
+            "vol": 24384574.62,
+            "low": 0.006697,
+            "change": -8.54,
+            "turnover": 178607.1693,
+            "latest": 0.007099
         },
-        "timestamp": 1575023145118
+        "timestamp": 1586847848504
     },
     {
         "symbol": "zec_usdt",
         "ticker": {
-            "high": 29.44,
-            "vol": 700304.4732,
-            "low": 28.22,
-            "change": 2.01,
-            "turnover": 20192130.1309,
-            "latest": 29.1
+            "high": 37.43,
+            "vol": 103644.7586,
+            "low": 34.3,
+            "change": -0.31,
+            "turnover": 3678617.0999,
+            "latest": 35.6
         },
-        "timestamp": 1575023145155
-    },
-    {
-        "symbol": "bsb_eth",
-        "ticker": {
-            "high": 1.9e-07,
-            "vol": 0.0,
-            "low": 1.9e-07,
-            "change": 6.38,
-            "turnover": 0.0,
-            "latest": 2e-07
-        },
-        "timestamp": 1575023144809
+        "timestamp": 1586847848531
     },
     {
         "symbol": "bnb_usdt",
         "ticker": {
-            "high": 16.5932,
-            "vol": 261247.2192,
-            "low": 14.7911,
-            "change": 4.17,
-            "turnover": 4072678.995,
-            "latest": 15.8602
+            "high": 16.0573,
+            "vol": 1272847.7347,
+            "low": 13.6366,
+            "change": 10.47,
+            "turnover": 18904790.6046,
+            "latest": 15.3963
         },
-        "timestamp": 1575023144739
+        "timestamp": 1586847758006
+    },
+    {
+        "symbol": "bsb_eth",
+        "ticker": {
+            "high": 3e-08,
+            "vol": 0.0,
+            "low": 3e-08,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 3e-08
+        },
+        "timestamp": 1586847758054
     },
     {
         "symbol": "eos_usdt",
         "ticker": {
-            "high": 2.7751,
-            "vol": 47584663.5058,
-            "low": 2.5833,
-            "change": 3.73,
-            "turnover": 126920739.647,
-            "latest": 2.748
+            "high": 2.4765,
+            "vol": 12080244.5071,
+            "low": 2.3619,
+            "change": 2.23,
+            "turnover": 29205263.2185,
+            "latest": 2.452
         },
-        "timestamp": 1575023145156
+        "timestamp": 1586847848532
     },
     {
         "symbol": "kbc_usdt",
         "ticker": {
-            "high": 0.0255,
-            "vol": 6195734.9,
-            "low": 0.0166,
-            "change": 1.65,
-            "turnover": 142483.387,
-            "latest": 0.0185
+            "high": 0.0048,
+            "vol": 2.0,
+            "low": 0.0046,
+            "change": -4.17,
+            "turnover": 0.0093,
+            "latest": 0.0046
         },
-        "timestamp": 1575023144741
+        "timestamp": 1586847758007
     },
     {
         "symbol": "lt_usdt",
         "ticker": {
-            "high": 1.2998,
-            "vol": 488485.92,
-            "low": 1.2901,
-            "change": 0.53,
-            "turnover": 632153.9994,
-            "latest": 1.2975
+            "high": 0.8,
+            "vol": 0.1,
+            "low": 0.35,
+            "change": 128.57,
+            "turnover": 0.08,
+            "latest": 0.8
         },
-        "timestamp": 1575023144727
-    },
-    {
-        "symbol": "btt_usdt",
-        "ticker": {
-            "high": 0.00039,
-            "vol": 0.0,
-            "low": 0.00039,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 0.00039
-        },
-        "timestamp": 1575023144734
+        "timestamp": 1586847757997
     },
     {
         "symbol": "xwc_eth",
         "ticker": {
-            "high": 4.796e-05,
-            "vol": 1266757.8438,
-            "low": 2.3e-05,
-            "change": -31.82,
-            "turnover": 37.8799,
-            "latest": 2.415e-05
+            "high": 3.768e-05,
+            "vol": 1172574.4905,
+            "low": 2.95e-05,
+            "change": 0.19,
+            "turnover": 37.7814,
+            "latest": 3.654e-05
         },
-        "timestamp": 1575023144799
+        "timestamp": 1586847758047
+    },
+    {
+        "symbol": "btt_usdt",
+        "ticker": {
+            "high": 0.00019,
+            "vol": 0.0,
+            "low": 0.00019,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 0.00019
+        },
+        "timestamp": 1586847758002
+    },
+    {
+        "symbol": "xrp_btc",
+        "ticker": {
+            "high": 2.852e-05,
+            "vol": 7083241.0,
+            "low": 2.695e-05,
+            "change": 0.73,
+            "turnover": 194.1775,
+            "latest": 2.745e-05
+        },
+        "timestamp": 1586847848533
     },
     {
         "symbol": "qtum_btc",
         "ticker": {
-            "high": 0.00025093,
-            "vol": 13361479.2887,
-            "low": 0.00022911,
-            "change": 4.97,
-            "turnover": 3244.9798,
-            "latest": 0.00024491
+            "high": 0.00020211,
+            "vol": 24737886.3152,
+            "low": 0.00019265,
+            "change": -0.29,
+            "turnover": 4842.7317,
+            "latest": 0.00019598
         },
-        "timestamp": 1575023145181
-    },
-    {
-        "symbol": "eth_usdt",
-        "ticker": {
-            "high": 155.26,
-            "vol": 499847.9255,
-            "low": 149.07,
-            "change": 2.55,
-            "turnover": 76140002.0864,
-            "latest": 154.38
-        },
-        "timestamp": 1575023145133
+        "timestamp": 1586847848561
     },
     {
         "symbol": "neo_usdt",
         "ticker": {
-            "high": 9.71,
-            "vol": 318711.3668,
-            "low": 9.19,
-            "change": 2.03,
-            "turnover": 3014524.6858,
-            "latest": 9.57
+            "high": 7.6,
+            "vol": 883693.6484,
+            "low": 6.96,
+            "change": -0.95,
+            "turnover": 6401825.3047,
+            "latest": 7.33
         },
-        "timestamp": 1575023145153
+        "timestamp": 1586847848529
     },
     {
-        "symbol": "ddmx_eth",
+        "symbol": "eth_usdt",
         "ticker": {
-            "high": 0.00018999,
-            "vol": 1362978.0,
-            "low": 0.00011784,
-            "change": 31.3,
-            "turnover": 192.7485,
-            "latest": 0.00015933
+            "high": 159.0,
+            "vol": 2296475.601,
+            "low": 150.56,
+            "change": 2.88,
+            "turnover": 354540405.9292,
+            "latest": 157.41
         },
-        "timestamp": 1575023144812
+        "timestamp": 1586847848517
     },
     {
         "symbol": "vtho_btc",
         "ticker": {
-            "high": 9e-08,
-            "vol": 211441.0,
-            "low": 8e-08,
+            "high": 4e-08,
+            "vol": 416065.0,
+            "low": 4e-08,
             "change": 0.0,
-            "turnover": 0.0169,
-            "latest": 8e-08
+            "turnover": 0.0166,
+            "latest": 4e-08
         },
-        "timestamp": 1575023145161
+        "timestamp": 1586847848549
     },
     {
         "symbol": "ply_eth",
         "ticker": {
-            "high": 1.759e-05,
-            "vol": 55092828.075,
-            "low": 1.229e-05,
-            "change": -18.69,
-            "turnover": 751.4168,
-            "latest": 1.27e-05
+            "high": 2.762e-05,
+            "vol": 53783624.2873,
+            "low": 1.123e-05,
+            "change": 20.77,
+            "turnover": 1191.0767,
+            "latest": 2.396e-05
         },
-        "timestamp": 1575023145215
-    },
-    {
-        "symbol": "gst_eth",
-        "ticker": {
-            "high": 0.00343434,
-            "vol": 0.01,
-            "low": 0.003434,
-            "change": -0.01,
-            "turnover": 0.0,
-            "latest": 0.003434
-        },
-        "timestamp": 1575023145192
-    },
-    {
-        "symbol": "voken_usdt",
-        "ticker": {
-            "high": 0.000994,
-            "vol": 1061534.0,
-            "low": 0.000181,
-            "change": -13.43,
-            "turnover": 468.6716,
-            "latest": 0.000664
-        },
-        "timestamp": 1575023144747
+        "timestamp": 1586847848587
     },
     {
         "symbol": "fil12_eth",
         "ticker": {
-            "high": 0.02158886,
-            "vol": 161594.8371,
-            "low": 0.01737202,
-            "change": 13.92,
-            "turnover": 3058.3561,
-            "latest": 0.01981448
+            "high": 0.01926956,
+            "vol": 318861.2213,
+            "low": 0.0163924,
+            "change": 16.91,
+            "turnover": 5399.0456,
+            "latest": 0.01917619
         },
-        "timestamp": 1575023144805
+        "timestamp": 1586847758051
     },
     {
         "symbol": "cye_usdt",
         "ticker": {
-            "high": 9.3e-05,
+            "high": 3e-05,
             "vol": 0.0,
-            "low": 9.3e-05,
+            "low": 3e-05,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 9.3e-05
+            "latest": 3e-05
         },
-        "timestamp": 1575023144748
+        "timestamp": 1586847758011
     },
     {
         "symbol": "dax_btc",
         "ticker": {
-            "high": 4.3e-07,
-            "vol": 65910220.22,
-            "low": 3.1e-07,
-            "change": 6.06,
-            "turnover": 23.4872,
-            "latest": 3.5e-07
+            "high": 6.1e-07,
+            "vol": 129280593.58,
+            "low": 4e-07,
+            "change": 0.0,
+            "turnover": 60.5017,
+            "latest": 4.1e-07
         },
-        "timestamp": 1575023145167
+        "timestamp": 1586847848553
     },
     {
         "symbol": "dns_usdt",
         "ticker": {
-            "high": 0.00034,
-            "vol": 1400261.0,
-            "low": 0.00014,
-            "change": 62.5,
-            "turnover": 346.3095,
-            "latest": 0.00026
+            "high": 1e-05,
+            "vol": 851.0,
+            "low": 1e-05,
+            "change": 0.0,
+            "turnover": 0.0085,
+            "latest": 1e-05
         },
-        "timestamp": 1575023145122
+        "timestamp": 1586847848507
     },
     {
         "symbol": "ddmx_usdt",
         "ticker": {
-            "high": 0.024,
-            "vol": 0.0,
-            "low": 0.024,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 0.024
+            "high": 0.005905,
+            "vol": 1.0,
+            "low": 0.005903,
+            "change": 0.03,
+            "turnover": 0.0059,
+            "latest": 0.005905
         },
-        "timestamp": 1575023144752
+        "timestamp": 1586847758013
+    },
+    {
+        "symbol": "gl_usdt",
+        "ticker": {
+            "high": 0.019958,
+            "vol": 190829359.8008,
+            "low": 0.018726,
+            "change": 1.82,
+            "turnover": 3689139.2192,
+            "latest": 0.019726
+        },
+        "timestamp": 1586847848499
     },
     {
         "symbol": "amo_eth",
         "ticker": {
-            "high": 1.59e-06,
-            "vol": 6665473.0,
-            "low": 9.5e-07,
-            "change": 2.04,
-            "turnover": 9.2885,
-            "latest": 1.5e-06
+            "high": 1.08e-06,
+            "vol": 0.0,
+            "low": 1.08e-06,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 1.08e-06
         },
-        "timestamp": 1575023145195
+        "timestamp": 1586847848573
     },
     {
         "symbol": "put_eth",
         "ticker": {
-            "high": 9.53e-06,
-            "vol": 318569.0153,
-            "low": 8.97e-06,
-            "change": -1.08,
-            "turnover": 2.8987,
-            "latest": 9.15e-06
+            "high": 1.117e-05,
+            "vol": 607999.128,
+            "low": 8.41e-06,
+            "change": -4.12,
+            "turnover": 5.6585,
+            "latest": 8.84e-06
         },
-        "timestamp": 1575023144800
+        "timestamp": 1586847758048
     },
     {
         "symbol": "qtum_usdt",
         "ticker": {
-            "high": 1.8916,
-            "vol": 6841850.4172,
-            "low": 1.7332,
-            "change": 7.53,
-            "turnover": 12535715.3367,
-            "latest": 1.8723
+            "high": 1.3581,
+            "vol": 2895841.0658,
+            "low": 1.2935,
+            "change": 0.49,
+            "turnover": 3848800.7541,
+            "latest": 1.3467
         },
-        "timestamp": 1575023145154
+        "timestamp": 1586847848530
     },
     {
         "symbol": "at_usdt",
         "ticker": {
-            "high": 0.0012,
-            "vol": 11128300.7875,
-            "low": 0.0008,
-            "change": -18.18,
-            "turnover": 10441.1073,
-            "latest": 0.0009
+            "high": 0.0005,
+            "vol": 7000.0,
+            "low": 0.0005,
+            "change": 0.0,
+            "turnover": 3.5,
+            "latest": 0.0005
         },
-        "timestamp": 1575023144767
+        "timestamp": 1586847758024
     },
     {
         "symbol": "zec_btc",
         "ticker": {
-            "high": 0.00393433,
-            "vol": 474581.1969,
-            "low": 0.00379331,
-            "change": 1.54,
-            "turnover": 1825.1275,
-            "latest": 0.00385817
+            "high": 0.00541606,
+            "vol": 103796.4619,
+            "low": 0.00509706,
+            "change": -1.21,
+            "turnover": 543.8538,
+            "latest": 0.00520728
         },
-        "timestamp": 1575023145182
+        "timestamp": 1586847848562
+    },
+    {
+        "symbol": "bks_usdt",
+        "ticker": {
+            "high": 1.8052,
+            "vol": 913267.38,
+            "low": 1.733,
+            "change": 2.08,
+            "turnover": 1619484.7785,
+            "latest": 1.7951
+        },
+        "timestamp": 1586847848496
     },
     {
         "symbol": "tep_usdt",
         "ticker": {
-            "high": 0.8176,
-            "vol": 1513.9,
-            "low": 0.6754,
-            "change": -7.71,
-            "turnover": 1113.1464,
-            "latest": 0.7546
+            "high": 0.0174,
+            "vol": 10521.2,
+            "low": 0.0172,
+            "change": 0.0,
+            "turnover": 182.5342,
+            "latest": 0.0174
         },
-        "timestamp": 1575023144772
+        "timestamp": 1586847758028
     },
     {
         "symbol": "eos_eth",
         "ticker": {
-            "high": 0.01786408,
-            "vol": 1445473.1391,
-            "low": 0.01726667,
-            "change": 1.29,
-            "turnover": 25265.7537,
-            "latest": 0.01778578
+            "high": 0.01597926,
+            "vol": 180236.44,
+            "low": 0.01549521,
+            "change": -0.22,
+            "turnover": 2814.6612,
+            "latest": 0.01561537
         },
-        "timestamp": 1575023145217
-    },
-    {
-        "symbol": "opx_usdt",
-        "ticker": {
-            "high": 6.3e-05,
-            "vol": 0.0,
-            "low": 6.3e-05,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 6.3e-05
-        },
-        "timestamp": 1575023145145
+        "timestamp": 1586847848588
     },
     {
         "symbol": "neo_btc",
         "ticker": {
-            "high": 0.00132158,
-            "vol": 336933.5547,
-            "low": 0.00127134,
-            "change": -0.11,
-            "turnover": 431.5728,
-            "latest": 0.00127243
+            "high": 0.00110658,
+            "vol": 14475.4179,
+            "low": 0.00104706,
+            "change": -0.44,
+            "turnover": 15.4367,
+            "latest": 0.00106167
         },
-        "timestamp": 1575023145174
+        "timestamp": 1586847848558
     },
     {
         "symbol": "mat_usdt",
         "ticker": {
-            "high": 0.0306,
-            "vol": 3219896.1015,
-            "low": 0.0285,
-            "change": -3.81,
-            "turnover": 96829.4378,
-            "latest": 0.0294
+            "high": 0.0091,
+            "vol": 1108933.0,
+            "low": 0.0075,
+            "change": -6.9,
+            "turnover": 9068.1792,
+            "latest": 0.0081
         },
-        "timestamp": 1575023145138
+        "timestamp": 1586847848519
     },
     {
         "symbol": "biki_usdt",
         "ticker": {
-            "high": 0.036892,
+            "high": 0.039879,
             "vol": 0.0,
-            "low": 0.036892,
+            "low": 0.039879,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 0.036892
+            "latest": 0.039879
         },
-        "timestamp": 1575023144773
+        "timestamp": 1586847758029
     },
     {
         "symbol": "seos_btc",
         "ticker": {
-            "high": 2.192e-05,
-            "vol": 1131155.2452,
-            "low": 2.071e-05,
-            "change": 2.5,
-            "turnover": 23.9927,
-            "latest": 2.174e-05
+            "high": 9.32e-06,
+            "vol": 713565.84,
+            "low": 8.77e-06,
+            "change": 2.21,
+            "turnover": 6.5013,
+            "latest": 9.23e-06
         },
-        "timestamp": 1575023144777
+        "timestamp": 1586847758034
     },
     {
         "symbol": "cdc_eth",
         "ticker": {
-            "high": 2.5e-07,
-            "vol": 65305439.0495,
-            "low": 2e-07,
-            "change": 0.05,
-            "turnover": 13.7911,
-            "latest": 2.1e-07
+            "high": 1.2e-07,
+            "vol": 36471044.9225,
+            "low": 1.1e-07,
+            "change": 0.0,
+            "turnover": 4.1204,
+            "latest": 1.1e-07
         },
-        "timestamp": 1575023144810
+        "timestamp": 1586847758055
     },
     {
-        "symbol": "bxa_usdt",
+        "symbol": "foin_btc",
         "ticker": {
-            "high": 0.0027,
-            "vol": 19998580.0,
-            "low": 0.0017,
-            "change": -20.83,
-            "turnover": 40375.9635,
-            "latest": 0.0019
+            "high": 0.00028399,
+            "vol": 5584463.8098,
+            "low": 0.00018105,
+            "change": -1.06,
+            "turnover": 1084.1718,
+            "latest": 0.00019533
         },
-        "timestamp": 1575023145135
+        "timestamp": 1586847758030
     },
     {
         "symbol": "galt_usdt",
         "ticker": {
-            "high": 0.2169,
-            "vol": 320217.0,
-            "low": 0.198,
-            "change": -2.03,
-            "turnover": 65748.5539,
-            "latest": 0.2032
+            "high": 0.022798,
+            "vol": 19167.0,
+            "low": 0.009195,
+            "change": -43.17,
+            "turnover": 285.5001,
+            "latest": 0.012913
         },
-        "timestamp": 1575023145126
+        "timestamp": 1586847848511
+    },
+    {
+        "symbol": "bxa_usdt",
+        "ticker": {
+            "high": 0.0064,
+            "vol": 10770646.4081,
+            "low": 0.0027,
+            "change": -16.39,
+            "turnover": 46808.8824,
+            "latest": 0.0051
+        },
+        "timestamp": 1586847848517
+    },
+    {
+        "symbol": "btc3s_usdt",
+        "ticker": {
+            "high": 1.054,
+            "vol": 2273557.8408,
+            "low": 0.923,
+            "change": -6.55,
+            "turnover": 2238301.0369,
+            "latest": 0.942
+        },
+        "timestamp": 1586847757993
     },
     {
         "symbol": "oath_usdt",
         "ticker": {
-            "high": 0.000137,
-            "vol": 2535922.0,
-            "low": 0.000132,
-            "change": 2.26,
-            "turnover": 344.1334,
-            "latest": 0.000136
+            "high": 5e-06,
+            "vol": 1469.8,
+            "low": 4e-06,
+            "change": 25.0,
+            "turnover": 0.0073,
+            "latest": 5e-06
         },
-        "timestamp": 1575023145131
+        "timestamp": 1586847848514
     },
     {
         "symbol": "vet_btc",
         "ticker": {
-            "high": 8.8e-07,
-            "vol": 36199301.0,
-            "low": 8.3e-07,
-            "change": -2.68,
-            "turnover": 30.9899,
-            "latest": 8.4e-07
+            "high": 5.4e-07,
+            "vol": 6903375.0,
+            "low": 5e-07,
+            "change": -1.14,
+            "turnover": 3.615,
+            "latest": 5.2e-07
         },
-        "timestamp": 1575023145170
-    },
-    {
-        "symbol": "ubex_btc",
-        "ticker": {
-            "high": 5e-08,
-            "vol": 0.0,
-            "low": 5e-08,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 5e-08
-        },
-        "timestamp": 1575023145164
+        "timestamp": 1586847848555
     },
     {
         "symbol": "tns_btc",
         "ticker": {
             "high": 2.3e-07,
-            "vol": 29480511.0,
-            "low": 1.7e-07,
-            "change": 35.29,
-            "turnover": 5.0139,
-            "latest": 2.3e-07
+            "vol": 28407120.0,
+            "low": 1.8e-07,
+            "change": -21.74,
+            "turnover": 5.1132,
+            "latest": 1.8e-07
         },
-        "timestamp": 1575023145166
+        "timestamp": 1586847848552
     },
     {
         "symbol": "zec_eth",
         "ticker": {
-            "high": 0.19703715,
-            "vol": 464396.3682,
-            "low": 0.1848579,
-            "change": -0.23,
-            "turnover": 88098.9548,
-            "latest": 0.18760902
+            "high": 0.24025055,
+            "vol": 106205.3916,
+            "low": 0.22229825,
+            "change": -2.59,
+            "turnover": 24363.7176,
+            "latest": 0.2267649
         },
-        "timestamp": 1575023144779
-    },
-    {
-        "symbol": "pnt_usdt",
-        "ticker": {
-            "high": 0.000198,
-            "vol": 26140.0,
-            "low": 8.9e-05,
-            "change": -55.05,
-            "turnover": 2.3264,
-            "latest": 8.9e-05
-        },
-        "timestamp": 1575023145143
+        "timestamp": 1586847758036
     },
     {
         "symbol": "gt_usdt",
         "ticker": {
-            "high": 0.4498,
-            "vol": 329902.693,
-            "low": 0.3146,
-            "change": 29.87,
-            "turnover": 118387.8561,
-            "latest": 0.4122
+            "high": 0.4299,
+            "vol": 579326.392,
+            "low": 0.3801,
+            "change": 4.97,
+            "turnover": 234501.3262,
+            "latest": 0.4052
         },
-        "timestamp": 1575023144745
-    },
-    {
-        "symbol": "bpx_usdt",
-        "ticker": {
-            "high": 0.007588,
-            "vol": 46199717.07,
-            "low": 0.0071,
-            "change": -3.97,
-            "turnover": 341878.4685,
-            "latest": 0.007169
-        },
-        "timestamp": 1575023145120
+        "timestamp": 1586847758010
     },
     {
         "symbol": "fil6_btc",
         "ticker": {
-            "high": 0.00057408,
-            "vol": 637822.6332,
-            "low": 0.00049001,
-            "change": -4.65,
-            "turnover": 330.2107,
-            "latest": 0.00052487
+            "high": 0.00066268,
+            "vol": 1285860.8155,
+            "low": 0.00048114,
+            "change": 0.89,
+            "turnover": 766.4965,
+            "latest": 0.0006201
         },
-        "timestamp": 1575023145188
-    },
-    {
-        "symbol": "bloc_usdt",
-        "ticker": {
-            "high": 0.000503,
-            "vol": 0.0,
-            "low": 0.000503,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 0.000503
-        },
-        "timestamp": 1575023145131
-    },
-    {
-        "symbol": "dax_eth",
-        "ticker": {
-            "high": 2.099e-05,
-            "vol": 65648488.74,
-            "low": 1.572e-05,
-            "change": 2.75,
-            "turnover": 1226.952,
-            "latest": 1.793e-05
-        },
-        "timestamp": 1575023145198
+        "timestamp": 1586847848566
     },
     {
         "symbol": "dot_usdt",
         "ticker": {
-            "high": 88.9989,
-            "vol": 38639.0918,
-            "low": 88.3484,
-            "change": 0.51,
-            "turnover": 3420807.7509,
-            "latest": 88.8073
+            "high": 89.9968,
+            "vol": 46324.7524,
+            "low": 80.1,
+            "change": -4.82,
+            "turnover": 3941790.1311,
+            "latest": 82.9759
         },
-        "timestamp": 1575023144768
+        "timestamp": 1586847758025
+    },
+    {
+        "symbol": "dax_eth",
+        "ticker": {
+            "high": 2.218e-05,
+            "vol": 125401593.7342,
+            "low": 1.719e-05,
+            "change": 4.23,
+            "turnover": 2365.4657,
+            "latest": 1.8e-05
+        },
+        "timestamp": 1586847848576
+    },
+    {
+        "symbol": "bloc_usdt",
+        "ticker": {
+            "high": 0.000222,
+            "vol": 0.0,
+            "low": 0.000222,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 0.000222
+        },
+        "timestamp": 1586847848515
+    },
+    {
+        "symbol": "eth3l_usdt",
+        "ticker": {
+            "high": 0.06,
+            "vol": 14660786.22,
+            "low": 0.051,
+            "change": 9.43,
+            "turnover": 805758.4989,
+            "latest": 0.058
+        },
+        "timestamp": 1586847757994
     },
     {
         "symbol": "mith_eth",
         "ticker": {
-            "high": 6.504e-05,
-            "vol": 11168199.0359,
-            "low": 6.108e-05,
-            "change": -2.25,
-            "turnover": 699.8491,
-            "latest": 6.165e-05
+            "high": 2.562e-05,
+            "vol": 9960500.6113,
+            "low": 2.168e-05,
+            "change": 1.77,
+            "turnover": 232.0686,
+            "latest": 2.361e-05
         },
-        "timestamp": 1575023144783
+        "timestamp": 1586847758038
     },
     {
         "symbol": "okb_usdt",
         "ticker": {
-            "high": 2.2296,
+            "high": 2.5,
             "vol": 0.0,
-            "low": 2.2296,
+            "low": 2.5,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 2.2296
+            "latest": 2.5
         },
-        "timestamp": 1575023145123
+        "timestamp": 1586847848508
     },
     {
         "symbol": "ut_eth",
         "ticker": {
-            "high": 7.967e-05,
-            "vol": 3622656.6245,
-            "low": 6.767e-05,
-            "change": 2.1,
-            "turnover": 261.2602,
-            "latest": 7.378e-05
+            "high": 2.909e-05,
+            "vol": 3269801.6701,
+            "low": 2.399e-05,
+            "change": -14.12,
+            "turnover": 83.3256,
+            "latest": 2.421e-05
         },
-        "timestamp": 1575023145199
-    },
-    {
-        "symbol": "ela_eth",
-        "ticker": {
-            "high": 0.01190791,
-            "vol": 1289627.3918,
-            "low": 0.01101472,
-            "change": -5.24,
-            "turnover": 14399.5064,
-            "latest": 0.01104655
-        },
-        "timestamp": 1575023145201
+        "timestamp": 1586847848577
     },
     {
         "symbol": "dlx_usdt",
         "ticker": {
-            "high": 0.0006,
-            "vol": 485851.89,
-            "low": 0.000552,
-            "change": 6.45,
-            "turnover": 278.9146,
-            "latest": 0.000594
+            "high": 4e-05,
+            "vol": 0.0,
+            "low": 4e-05,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 4e-05
         },
-        "timestamp": 1575023144757
+        "timestamp": 1586847758017
+    },
+    {
+        "symbol": "ela_eth",
+        "ticker": {
+            "high": 0.00782209,
+            "vol": 1188240.4691,
+            "low": 0.00672629,
+            "change": 1.08,
+            "turnover": 8576.763,
+            "latest": 0.00714514
+        },
+        "timestamp": 1586847848577
     },
     {
         "symbol": "lbk_usdt",
         "ticker": {
-            "high": 0.0392,
-            "vol": 61702066.5736,
-            "low": 0.0368,
-            "change": 2.97,
-            "turnover": 2348251.8226,
-            "latest": 0.0381
+            "high": 0.0135,
+            "vol": 105728058.3358,
+            "low": 0.0129,
+            "change": 0.0,
+            "turnover": 1398174.5549,
+            "latest": 0.0132
         },
-        "timestamp": 1575023144760
+        "timestamp": 1586847758019
     },
     {
         "symbol": "grs_btc",
         "ticker": {
-            "high": 2.713e-05,
-            "vol": 578074.0,
-            "low": 2.628e-05,
-            "change": 1.66,
-            "turnover": 15.4584,
-            "latest": 2.689e-05
+            "high": 2.567e-05,
+            "vol": 393863.0,
+            "low": 2.033e-05,
+            "change": 2.83,
+            "turnover": 8.7181,
+            "latest": 2.104e-05
         },
-        "timestamp": 1575023145157
+        "timestamp": 1586847848546
+    },
+    {
+        "symbol": "cnex_btc",
+        "ticker": {
+            "high": 4.55e-06,
+            "vol": 1452.0,
+            "low": 3.86e-06,
+            "change": 17.88,
+            "turnover": 0.0066,
+            "latest": 4.55e-06
+        },
+        "timestamp": 1586847848545
+    },
+    {
+        "symbol": "hex_usdt",
+        "ticker": {
+            "high": 0.000556,
+            "vol": 18802550.1478,
+            "low": 0.000515,
+            "change": -5.09,
+            "turnover": 9964.7758,
+            "latest": 0.000522
+        },
+        "timestamp": 1586847848495
     },
     {
         "symbol": "trx_usdt",
         "ticker": {
-            "high": 0.0132,
-            "vol": 362.0,
-            "low": 0.013194,
-            "change": 0.05,
-            "turnover": 4.7784,
-            "latest": 0.0132
+            "high": 0.013074,
+            "vol": 279726597.5059,
+            "low": 0.012014,
+            "change": 2.66,
+            "turnover": 3473751.4652,
+            "latest": 0.012816
         },
-        "timestamp": 1575023144733
+        "timestamp": 1586847758001
     },
     {
-        "symbol": "gki_usdt",
+        "symbol": "kmt_usdt",
         "ticker": {
-            "high": 0.4345,
-            "vol": 3099613.16,
-            "low": 0.4319,
-            "change": -0.51,
-            "turnover": 1343198.8734,
-            "latest": 0.4323
+            "high": 0.0003,
+            "vol": 65720.42,
+            "low": 0.0002,
+            "change": 0.0,
+            "turnover": 14.3228,
+            "latest": 0.0003
         },
-        "timestamp": 1575023144729
+        "timestamp": 1586847757999
     },
     {
         "symbol": "eos_btc",
         "ticker": {
-            "high": 0.00036653,
-            "vol": 1708310.8827,
-            "low": 0.00033949,
-            "change": 2.49,
-            "turnover": 606.4455,
-            "latest": 0.00036316
+            "high": 0.00036894,
+            "vol": 739393.8143,
+            "low": 0.00035284,
+            "change": -0.02,
+            "turnover": 263.7368,
+            "latest": 0.00035676
         },
-        "timestamp": 1575023145165
+        "timestamp": 1586847848552
     },
     {
         "symbol": "dili_usdt",
         "ticker": {
-            "high": 0.000329,
-            "vol": 273359432.0,
-            "low": 0.000259,
-            "change": -0.72,
-            "turnover": 75527.5829,
-            "latest": 0.000275
+            "high": 0.000133,
+            "vol": 0.0,
+            "low": 0.000133,
+            "change": 0.0,
+            "turnover": 0.0,
+            "latest": 0.000133
         },
-        "timestamp": 1575023144769
+        "timestamp": 1586847758026
     },
     {
         "symbol": "qtum_eth",
         "ticker": {
-            "high": 0.01272786,
-            "vol": 4548496.9346,
-            "low": 0.01138852,
-            "change": 5.34,
-            "turnover": 54740.1229,
-            "latest": 0.01216984
+            "high": 0.00889843,
+            "vol": 1256634.0098,
+            "low": 0.00840996,
+            "change": -0.34,
+            "turnover": 10816.1649,
+            "latest": 0.00856291
         },
-        "timestamp": 1575023144778
+        "timestamp": 1586847758035
     },
     {
         "symbol": "dali_usdt",
         "ticker": {
-            "high": 0.0581,
-            "vol": 2207153.87,
-            "low": 0.0424,
-            "change": -23.26,
-            "turnover": 106554.7846,
-            "latest": 0.0429
+            "high": 0.0214,
+            "vol": 2413734.89,
+            "low": 0.021,
+            "change": 0.47,
+            "turnover": 51103.9934,
+            "latest": 0.0212
         },
-        "timestamp": 1575023145149
+        "timestamp": 1586847848527
     },
     {
         "symbol": "fldt_usdt",
         "ticker": {
-            "high": 0.000415,
-            "vol": 8694769.0,
-            "low": 0.000334,
-            "change": -4.03,
-            "turnover": 3116.9489,
-            "latest": 0.000357
+            "high": 0.000185,
+            "vol": 10410818.0,
+            "low": 0.000181,
+            "change": 1.09,
+            "turnover": 1915.6279,
+            "latest": 0.000185
         },
-        "timestamp": 1575023144738
+        "timestamp": 1586847758005
     },
     {
         "symbol": "mai_usdt",
         "ticker": {
-            "high": 0.00045,
-            "vol": 5164.0,
-            "low": 0.00031,
-            "change": -31.11,
-            "turnover": 2.2627,
-            "latest": 0.00031
+            "high": 2e-05,
+            "vol": 2258.0,
+            "low": 2e-05,
+            "change": 0.0,
+            "turnover": 0.0451,
+            "latest": 2e-05
         },
-        "timestamp": 1575023144742
-    },
-    {
-        "symbol": "ida_usdt",
-        "ticker": {
-            "high": 0.00064,
-            "vol": 32012.0,
-            "low": 0.000638,
-            "change": -0.36,
-            "turnover": 20.4357,
-            "latest": 0.000638
-        },
-        "timestamp": 1575023145142
+        "timestamp": 1586847758008
     },
     {
         "symbol": "bts_btc",
         "ticker": {
-            "high": 2.94e-06,
-            "vol": 691720.6082,
-            "low": 2.8e-06,
-            "change": -2.1,
-            "turnover": 1.9611,
-            "latest": 2.8e-06
+            "high": 2.56e-06,
+            "vol": 1141036.3361,
+            "low": 2.43e-06,
+            "change": -1.61,
+            "turnover": 2.8377,
+            "latest": 2.45e-06
         },
-        "timestamp": 1575023145184
+        "timestamp": 1586847848564
+    },
+    {
+        "symbol": "ida_usdt",
+        "ticker": {
+            "high": 6.1e-05,
+            "vol": 223.0,
+            "low": 6.1e-05,
+            "change": 0.0,
+            "turnover": 0.0136,
+            "latest": 6.1e-05
+        },
+        "timestamp": 1586847848522
+    },
+    {
+        "symbol": "atom_usdt",
+        "ticker": {
+            "high": 2.3804,
+            "vol": 441874.96,
+            "low": 2.1632,
+            "change": 1.42,
+            "turnover": 995240.0216,
+            "latest": 2.2792
+        },
+        "timestamp": 1586847848502
     },
     {
         "symbol": "eai_eth",
         "ticker": {
-            "high": 2.579e-05,
-            "vol": 49881965.1008,
-            "low": 1.001e-05,
-            "change": 44.48,
-            "turnover": 774.6903,
-            "latest": 1.676e-05
+            "high": 1.702e-05,
+            "vol": 45343258.5567,
+            "low": 1.401e-05,
+            "change": -3.68,
+            "turnover": 740.4598,
+            "latest": 1.545e-05
         },
-        "timestamp": 1575023144814
-    },
-    {
-        "symbol": "bto_eth",
-        "ticker": {
-            "high": 3.6e-05,
-            "vol": 3329.7246,
-            "low": 3e-05,
-            "change": -3.0,
-            "turnover": 0.1073,
-            "latest": 3.041e-05
-        },
-        "timestamp": 1575023144787
+        "timestamp": 1586847758058
     },
     {
         "symbol": "ht_usdt",
         "ticker": {
-            "high": 2.7783,
-            "vol": 476546.754,
-            "low": 2.586,
-            "change": 3.27,
-            "turnover": 1272658.1405,
-            "latest": 2.71
+            "high": 3.8996,
+            "vol": 6355137.3942,
+            "low": 3.6021,
+            "change": -1.69,
+            "turnover": 23511140.4173,
+            "latest": 3.7072
         },
-        "timestamp": 1575023144740
+        "timestamp": 1586847758006
     },
     {
         "symbol": "cpx_eth",
         "ticker": {
-            "high": 2.18e-05,
-            "vol": 1680696.2958,
-            "low": 1.462e-05,
-            "change": -23.58,
-            "turnover": 32.9896,
-            "latest": 1.462e-05
+            "high": 9.17e-06,
+            "vol": 2237694.3042,
+            "low": 5.42e-06,
+            "change": 25.91,
+            "turnover": 15.5944,
+            "latest": 8.65e-06
         },
-        "timestamp": 1575023144790
-    },
-    {
-        "symbol": "sky_btc",
-        "ticker": {
-            "high": 7.384e-05,
-            "vol": 36174.4356,
-            "low": 7.379e-05,
-            "change": -0.03,
-            "turnover": 2.6698,
-            "latest": 7.381e-05
-        },
-        "timestamp": 1575023145160
+        "timestamp": 1586847758044
     },
     {
         "symbol": "fil36_eth",
         "ticker": {
-            "high": 0.01933602,
-            "vol": 36073.967,
-            "low": 0.01025065,
-            "change": 71.56,
-            "turnover": 484.5453,
-            "latest": 0.01921076
+            "high": 0.01521663,
+            "vol": 71413.2807,
+            "low": 0.01251101,
+            "change": 0.93,
+            "turnover": 1068.3028,
+            "latest": 0.01516261
         },
-        "timestamp": 1575023144806
+        "timestamp": 1586847758052
+    },
+    {
+        "symbol": "sky_btc",
+        "ticker": {
+            "high": 5.726e-05,
+            "vol": 9752.0,
+            "low": 5.477e-05,
+            "change": -0.76,
+            "turnover": 0.5422,
+            "latest": 5.505e-05
+        },
+        "timestamp": 1586847848548
     },
     {
         "symbol": "gst_usdt",
         "ticker": {
-            "high": 0.3889,
-            "vol": 17464.1752,
-            "low": 0.35,
-            "change": -0.03,
-            "turnover": 6330.9868,
-            "latest": 0.3599
+            "high": 0.3186,
+            "vol": 37166.79,
+            "low": 0.29,
+            "change": -8.07,
+            "turnover": 11524.3843,
+            "latest": 0.2929
         },
-        "timestamp": 1575023145121
+        "timestamp": 1586847848507
+    },
+    {
+        "symbol": "btc3l_usdt",
+        "ticker": {
+            "high": 0.126,
+            "vol": 12363689.87,
+            "low": 0.109,
+            "change": 5.17,
+            "turnover": 1463225.1924,
+            "latest": 0.122
+        },
+        "timestamp": 1586847757993
     },
     {
         "symbol": "pnt_eth",
         "ticker": {
-            "high": 6.4e-07,
-            "vol": 65696597.2762,
-            "low": 5.1e-07,
-            "change": -15.63,
-            "turnover": 36.4605,
-            "latest": 5.4e-07
+            "high": 4.3e-07,
+            "vol": 70905793.1046,
+            "low": 3.9e-07,
+            "change": -9.3,
+            "turnover": 28.1006,
+            "latest": 3.9e-07
         },
-        "timestamp": 1575023144801
+        "timestamp": 1586847758049
     },
     {
         "symbol": "ptt_eth",
         "ticker": {
-            "high": 2.4e-06,
-            "vol": 77057804.4735,
-            "low": 1.03e-06,
-            "change": 69.16,
-            "turnover": 131.2218,
-            "latest": 1.81e-06
+            "high": 5.8e-07,
+            "vol": 75415333.4036,
+            "low": 5.4e-07,
+            "change": -1.75,
+            "turnover": 41.9529,
+            "latest": 5.6e-07
         },
-        "timestamp": 1575023145208
+        "timestamp": 1586847848582
+    },
+    {
+        "symbol": "etc_usdt",
+        "ticker": {
+            "high": 5.3214,
+            "vol": 1657723.405,
+            "low": 5.0372,
+            "change": 0.95,
+            "turnover": 8523161.4293,
+            "latest": 5.2082
+        },
+        "timestamp": 1586847848500
     },
     {
         "symbol": "fo_usdt",
         "ticker": {
-            "high": 0.01122,
-            "vol": 525924.0287,
-            "low": 0.009358,
-            "change": -10.99,
-            "turnover": 5404.6407,
-            "latest": 0.009358
+            "high": 0.011599,
+            "vol": 4462577.0,
+            "low": 0.0109,
+            "change": 0.49,
+            "turnover": 49687.4629,
+            "latest": 0.011589
         },
-        "timestamp": 1575023144756
+        "timestamp": 1586847758016
     },
     {
         "symbol": "bty_usdt",
         "ticker": {
-            "high": 0.3468,
-            "vol": 1138583.69,
-            "low": 0.2899,
-            "change": 11.66,
-            "turnover": 360968.8248,
-            "latest": 0.3293
+            "high": 0.1511,
+            "vol": 1199144.02,
+            "low": 0.1439,
+            "change": 0.88,
+            "turnover": 177256.5229,
+            "latest": 0.1483
         },
-        "timestamp": 1575023144754
-    },
-    {
-        "symbol": "btm_eth",
-        "ticker": {
-            "high": 0.000351,
-            "vol": 0.0,
-            "low": 0.000351,
-            "change": 0.06,
-            "turnover": 0.0,
-            "latest": 0.00035122
-        },
-        "timestamp": 1575023144782
+        "timestamp": 1586847758015
     },
     {
         "symbol": "vet_eth",
         "ticker": {
-            "high": 4.37e-05,
-            "vol": 15889051.0,
-            "low": 4.061e-05,
-            "change": -3.95,
-            "turnover": 672.6635,
-            "latest": 4.076e-05
+            "high": 2.375e-05,
+            "vol": 5304901.0,
+            "low": 2.28e-05,
+            "change": -0.53,
+            "turnover": 121.6517,
+            "latest": 2.291e-05
         },
-        "timestamp": 1575023145202
+        "timestamp": 1586847848578
     },
     {
-        "symbol": "iht_eth",
+        "symbol": "htdf_usdt",
         "ticker": {
-            "high": 1.1e-05,
-            "vol": 0.0,
-            "low": 1.1e-05,
-            "change": 0.0,
-            "turnover": 0.0,
-            "latest": 1.1e-05
+            "high": 0.2444,
+            "vol": 4602.777,
+            "low": 0.1989,
+            "change": 3.92,
+            "turnover": 1059.683,
+            "latest": 0.2411
         },
-        "timestamp": 1575023144792
+        "timestamp": 1586847848504
     },
     {
         "symbol": "abbc_btc",
         "ticker": {
-            "high": 2.411e-05,
-            "vol": 4434745.0,
-            "low": 2.312e-05,
-            "change": 4.11,
-            "turnover": 104.7032,
-            "latest": 2.407e-05
+            "high": 1.429e-05,
+            "vol": 40536120.0,
+            "low": 1.365e-05,
+            "change": 2.89,
+            "turnover": 564.2897,
+            "latest": 1.423e-05
         },
-        "timestamp": 1575023145159
-    },
-    {
-        "symbol": "man_eth",
-        "ticker": {
-            "high": 0.00060923,
-            "vol": 5434044.3641,
-            "low": 0.00054313,
-            "change": -0.35,
-            "turnover": 3071.1725,
-            "latest": 0.00054457
-        },
-        "timestamp": 1575023144785
+        "timestamp": 1586847848548
     },
     {
         "symbol": "mx_usdt",
         "ticker": {
-            "high": 0.06,
+            "high": 0.0984,
             "vol": 0.0,
-            "low": 0.06,
+            "low": 0.0984,
             "change": 0.0,
             "turnover": 0.0,
-            "latest": 0.06
+            "latest": 0.0984
         },
-        "timestamp": 1575023144774
+        "timestamp": 1586847758030
+    },
+    {
+        "symbol": "man_eth",
+        "ticker": {
+            "high": 9.04e-05,
+            "vol": 5172464.7348,
+            "low": 7.143e-05,
+            "change": -1.6,
+            "turnover": 405.9499,
+            "latest": 7.806e-05
+        },
+        "timestamp": 1586847758039
+    },
+    {
+        "symbol": "bbc_usdt",
+        "ticker": {
+            "high": 5.3,
+            "vol": 7185.84,
+            "low": 0.5401,
+            "change": -16.96,
+            "turnover": 4816.8439,
+            "latest": 0.5813
+        },
+        "timestamp": 1586847757991
     },
     {
         "symbol": "fbc_usdt",
         "ticker": {
-            "high": 2.885e-05,
-            "vol": 6815427.0,
-            "low": 1.658e-05,
-            "change": -16.3,
-            "turnover": 145.9341,
-            "latest": 1.725e-05
+            "high": 7.69e-06,
+            "vol": 82425.0,
+            "low": 3.7e-06,
+            "change": -51.82,
+            "turnover": 0.3091,
+            "latest": 3.7e-06
         },
-        "timestamp": 1575023145124
-    },
-    {
-        "symbol": "aac_eth",
-        "ticker": {
-            "high": 1.045e-05,
-            "vol": 5355233.0397,
-            "low": 6.98e-06,
-            "change": -9.09,
-            "turnover": 42.4849,
-            "latest": 7.2e-06
-        },
-        "timestamp": 1575023144802
+        "timestamp": 1586847848509
     },
     {
         "symbol": "ddd_eth",
         "ticker": {
-            "high": 5.498e-05,
-            "vol": 16482902.126,
-            "low": 3.001e-05,
-            "change": 7.19,
-            "turnover": 601.9346,
-            "latest": 3.788e-05
+            "high": 2.38e-05,
+            "vol": 21136500.0048,
+            "low": 2.006e-05,
+            "change": -15.0,
+            "turnover": 447.1011,
+            "latest": 2.012e-05
         },
-        "timestamp": 1575023144788
+        "timestamp": 1586847758043
+    },
+    {
+        "symbol": "aac_eth",
+        "ticker": {
+            "high": 1.091e-05,
+            "vol": 1306924.2582,
+            "low": 9.53e-06,
+            "change": -2.58,
+            "turnover": 13.2793,
+            "latest": 9.82e-06
+        },
+        "timestamp": 1586847758050
     }
 ]

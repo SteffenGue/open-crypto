@@ -1,0 +1,183 @@
+name: cryptox
+terms:
+  # terms_url: https://cryptox.pl/#
+  permission: true
+  # search_targets:
+  # - tag: div
+  #   class: overflow
+api_url: https://cryptox.pl/api/
+rate_limit: null
+requests:
+  ticker:
+    request:
+      template: "{currency_pair}/ticker.json"
+      pair_template: # allowed: LTCBTC, DASHBTC, XMRBTC, GBYTEBTC, BCHBTC, ZECBTC, GBYTEBCH, BTCUNITC
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        bid:
+          type: float
+        ask:
+          type: float
+        high:
+          type: float
+        low:
+          type: float
+        last:
+          type: float
+        volume1:
+          type: float
+        volume2:
+          type: float
+        average:
+          type: float
+        vwap:
+          type: float
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_best_bid
+      path:
+      - bid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - ask
+      type:
+      - float
+    - key: historic_rates_high
+      path:
+      - high
+      type:
+      - float
+    - key: historic_rates_low
+      path:
+      - low
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - last
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - volume1
+      type:
+      - float
+
+  order_book:
+    request:
+      template: "{currency_pair}/depthSimple.json"
+      pair_template: # allowed: LTCBTC, DASHBTC, XMRBTC, GBYTEBTC, BCHBTC, ZECBTC, GBYTEBCH, BTCUNITC
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # size
+                type: float
+              1: # price
+                type: float
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # size
+                type: float
+              1: # price
+                type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_price
+      path:
+      - bids
+      - 1
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - asks
+      - 1
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - asks
+      - 0
+      type:
+      - float
+
+  trades:
+    request:
+      template: "{currency_pair}/transactions.json"
+      pair_template: # allowed: LTCBTC, DASHBTC, XMRBTC, GBYTEBTC, BCHBTC, ZECBTC, GBYTEBCH, BTCUNITC
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          tid:
+            type: int
+          type: # 1 or 2; ask or bid
+            type:
+            - int
+            - str
+          amount:
+            type: float
+          price:
+            type: float
+          date:
+            type:
+            - int
+            - fromtimestamp
+    mapping:
+    - key: trade_side
+      path:
+      - type
+      type:
+      - int
+      - str
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - float
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - float
+    - key: trade_time
+      path:
+      - date
+      type:
+      - int
+      - fromtimestamp

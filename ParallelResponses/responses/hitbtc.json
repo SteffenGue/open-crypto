@@ -1,0 +1,7 @@
+{
+    "error": {
+        "code": 2001,
+        "message": "Symbol not found: {CURRENCY_PAIR}",
+        "description": "Try get /public/symbol, to get list of all available symbols."
+    }
+}

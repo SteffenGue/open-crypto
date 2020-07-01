@@ -1,0 +1,365 @@
+name: kucoin
+terms:
+  terms_url: https://news.kucoin.com/en/terms-of-use/
+  permission: null
+  search_targets:
+  - tag: div
+    class: loop-container
+  - tag: div
+    class: post-216 page type-page status-publish hentry entry
+  - tag: div
+    class: post-content
+api_url: https://api.kucoin.com/api/v1/market/
+rate_limit:
+  max: 50000
+  unit: 300
+requests:
+#  currency_pairs:
+#    request: 
+#      template: symbols
+#      pair_template: null
+#      params: null
+#    response:
+#      type: list
+#      values:
+#        type: dict
+#        values:
+#          symbol:
+#            type: str
+#          name:
+#            type: str
+#          baseCurrency:
+#            type: str
+#          quoteCurrency:
+#            type: str
+#          baseMinSize:
+#            type: float  
+#          quoteMinSize:
+#            type: int
+#          baseMaxSize:
+#            type: int
+#          quoteMaxSize:
+#            type: float
+#          baseIncrement:
+#            type: float     
+#          quoteIncrement:
+#            type: float
+#          priceIncrement:
+#            type: float
+#          feeCurrency:
+#            type: str
+#          enableTrading:
+#            type: bool       
+#    mapping:
+#    - key: currency_pair_first
+#      path:
+#      - symbol
+#      type:
+#      - str
+#      - split
+#      - "-"
+#      - 0
+#    - key: currency_pair_second
+#      path:
+#      - symbol
+#      type:
+#      - str
+#      - split
+#      - "-"
+#      - 1    
+            
+  ticker:
+    request:
+      template: allTickers
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        code:
+          type: int
+        data:
+          type: dict
+          values:
+            ticker:
+              type: list
+              values:
+                type: dict
+                values:
+                  symbol: # e.g. KCS
+                    type: str
+                  high:
+                    type: float
+                  vol:
+                    type: float
+                  last:
+                    type: float
+                  low:
+                    type: float
+                  buy:
+                    type: float
+                  sell:
+                    type: float
+                  changePrice: 
+                    type: float
+                  averagePrice:
+                    type: float
+                  changeRate:
+                    type: float
+                  volValue:
+                    type: float
+            time:
+              type: int
+    mapping:
+    - key: ticker_time
+      path:
+      - data
+      - time
+      type:
+      - int
+      - fromtimestampms
+    - key: currency_pair_first
+      path:
+      - data
+      - ticker
+      - symbol
+      type:
+      - str
+      - split
+      - "-"
+      - 0
+    - key: currency_pair_second
+      path:
+      - data
+      - ticker
+      - symbol
+      type:
+      - str
+      - split
+      - "-"
+      - 1
+    - key: ticker_last_price
+      path:
+      - data
+      - ticker
+      - last
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - data
+      - ticker
+      - buy
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - data
+      - ticker
+      - sell
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - data
+      - ticker
+      - volValue
+      type:
+      - float
+
+#  order_book:
+#    request:
+#      template: orders
+#      pair_template: # e.g. KCS-BTC
+#        template: "{first}-{second}"
+#        lower_case: false
+#        alias: symbol
+#      params:
+#        group:
+#          type: int
+#          required: false
+#        limit:
+#          type: int
+#          required: false
+#        direction:
+#          type: str
+#          allowed:
+#          - buy
+#          - sell
+#          required: false
+#    response:
+#      type: dict
+#      values:
+#        success:
+#          type: bool
+#        code:
+#          type: str
+#        msg:
+#          type: str
+#        timestamp:
+#          type:
+#          - int
+#          - fromtimestamp
+#        data:
+#          type: dict
+#          values:
+#            SELL:
+#              type: list
+#              values:
+#                type: list
+#                values:
+#                  0: # price
+#                    type: float
+#                  1: # amont
+#                    type: float
+#                  2: # volume
+#                    type: float
+#            BUY:
+#              type: list
+#              values:
+#                type: list
+#                values:
+#                  0: # price
+#                    type: float
+#                  1: # amont
+#                    type: float
+#                  2: # volume
+#                    type: float
+#            timestamp:
+#              type:
+#              - int
+#              - fromtimestamp
+#    mapping:
+#    - key: order_book_asks_price
+#      path:
+#      - data
+#      - SELL
+#      - 0
+#      type:
+#      - float
+#    - key: order_book_asks_size
+#      path:
+#      - data
+#      - SELL
+#      - 2
+#      type:
+#      - float
+#    - key: order_book_bids_price
+#      path:
+#      - data
+#      - BUY
+#      - 0
+#      type:
+#      - float
+#    - key: order_book_bids_size
+#      path:
+#      - data
+#      - BUY
+#      - 2
+#      type:
+#      - float
+#    - key: order_book_time
+#      path:
+#      - data
+#      - timestamp
+#      type:
+#      - int
+#      - fromtimestamp
+
+#  historic_rates:
+#    request:
+#      template: candles
+#      pair_template: # e.g. KCS-BTC
+#        template: "{first}-{second}"
+#        lower_case: false
+#        alias: symbol
+#      params:
+#        startAt:
+#          type: int
+#          default: 1357031727
+#            
+#        endAt:
+#          type: int
+#          default: 1568880927 # 18.09.2019 HIER VARIABLER WERT!!
+#        type:
+#          type: 
+#          allowed:
+#          - 1min
+#          - 5min
+#          - 15min
+#          - 30min
+#          - 1hour
+#          - 8hour
+#          - 1day
+#          - 1week
+#          default: 1day
+#
+#    response:
+#      type: dict
+#      values:
+#        code:
+#          type: str
+#        data:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0: # timestamp
+#                type:
+#                - str
+#              1: # open
+#                type: str
+#              2: # close
+#                type: str
+#              3: # high
+#                type: str
+#              4: # low
+#                type: str
+#              5: # volume
+#                type: str
+#              6: # amount
+#                type: str
+#    mapping:
+#    - key: historic_rates_time
+#      path:
+#      - data
+#      - 0
+#      type:
+#      - str
+#      - int
+#      - fromtimestamp
+#    - key: historic_rates_open
+#      path:
+#      - data
+#      - 1
+#      type:
+#      - str
+#      - float
+#    - key: historic_rates_close
+#      path:
+#      - data
+#      - 2
+#      type:
+#      - str
+#      - float
+#    - key: historic_rates_high
+#      path:
+#      - data
+#      - 3
+#      type:
+#      - str
+#      - float
+#    - key: historic_rates_low
+#      path:
+#      - data
+#      - 4
+#      type:
+#      - str
+#      - float
+#    - key: historic_rates_volume
+#      path:
+#      - data
+#      - 5
+#      type:
+#      - str
+#      - float

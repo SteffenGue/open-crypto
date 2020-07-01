@@ -1,0 +1,252 @@
+name: novaexchange
+terms:
+  terms_url: https://novaexchange.com/terms_and_conditions/
+  permission: null
+  search_targets:
+  - tag: div
+    class: panel-body
+api_url: https://novaexchange.com/remote/v2/
+rate_limit: null
+requests:
+  tickers:
+    request:
+      template:
+      pair_template:
+      params:
+    response:
+      type: dict
+      values:
+        status:
+          type: str
+        message:
+          type: str
+        markets:
+          type: list
+          values:
+            type: dict
+            values:
+              currency:
+                type: str
+              low24h:
+                type: float
+              marketname:
+                type: str
+              high24h:
+                type: float
+              ask:
+                type: float
+              bid:
+                type: float
+              change24h:
+                type: float
+              last_price:
+                type: float
+              volume24h:
+                type: float
+              basecurrency:
+                type: str
+              marketid:
+                type: int
+              disabled:
+                type: bool
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path: 
+      - markets
+      - marketname
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path: 
+      - markets
+      - marketname
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - markets
+      - last_price
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - markets
+      - bid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - markets
+      - ask
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - markets
+      - volum24h
+      type:
+      - float     
+
+  trades:
+    request:
+      template: market/orderhistory/{currency_pair}/
+      pair_template: # e.g. BTC_XZC
+        template: "{first}_{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        status:
+          type: str
+        message:
+          type: str
+        items:
+          type: list
+          values:
+            type: dict
+            values:
+              tradetype:
+                type: str
+              baseamount:
+                type: float
+              price:
+                type: float
+              currency:
+                type: str
+              amount:
+                type: float
+              datestamp:
+                type:
+                - str
+                - strptime
+                - "%Y-%m-%d %H:%M"
+              basecurrency:
+                type: str
+    mapping:
+    - key: trade_side
+      path:
+      - items
+      - tradetype
+      type:
+      - str
+    - key: trade_last_price
+      path:
+      - items
+      - price
+      type:
+      - float
+    - key: trade_amount
+      path:
+      - items
+      - amount
+      type:
+      - float
+    - key: trade_time
+      path:
+      - items
+      - datestamp
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%d %H:%M"
+
+  order_book:
+    request:
+      template: market/openorders/{currency_pair}/BOTH/
+      pair_template: # e.g. BTC_XZC
+        template: "{first}_{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        status:
+          type: str
+        buyorders:
+          type: list
+          values:
+            type: dict
+            values:
+              currency:
+                type: str
+              amount:
+                type:
+                - str
+                - float
+              price:
+                type:
+                - str
+                - float
+              basecurrency:
+                type: str
+              baseamount:
+                type:
+                - str
+                - float
+        sellorders:
+          type: list
+          values:
+            type: dict
+            values:
+              currency:
+                type: str
+              amount:
+                type:
+                - str
+                - float
+              price:
+                type:
+                - str
+                - float
+              basecurrency:
+                type: str
+              baseamount:
+                type:
+                - str
+                - float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_size
+      path:
+      - buyorders
+      - amount
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - buyorders
+      - price
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - sellorders
+      - amount
+      type:
+      - str
+      - float
+    - key: order_book_asks_price
+      path:
+      - sellorders
+      - price
+      type:
+      - str
+      - float

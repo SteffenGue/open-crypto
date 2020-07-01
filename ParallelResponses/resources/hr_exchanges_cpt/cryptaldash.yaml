@@ -1,0 +1,131 @@
+name: cryptaldash
+terms:
+api_url: https://api.cryptaldash.com/v1/
+rate_limit:
+
+requests:
+  currency_pairs:
+    request:
+      template: symbols
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          symbol:
+            type: str
+          base_asset:
+            type: str
+          quote_asset:
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - base_asset
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - quote_asset
+      type:
+      - str
+      
+  tickers:
+    request: 
+      template: pubticker/all
+      pair_template: null
+      params: null
+    response: 
+      type: dict
+      values:
+        status:
+          type: int
+        message:
+          type: str
+        market_summary:
+          type: list
+          values:
+            type: dict
+            values:
+              symbol:
+                type: str
+              base_asset:
+                type: str
+              quote_asset:
+                type: str
+              open24h: 
+                type: float
+              high24h:
+                type: float
+              low24h:
+                type: float
+              ask:
+                type: float
+              bid:
+                type: float
+              spread:
+                type: float
+              last_price:
+                type: float
+              last_price_usd:
+                type: float
+              price_change24h:
+                type: float
+              price_change24h_usd:
+                type: float
+              volume24h:
+                type: float
+              value24h:
+                type: float
+              volume24_usd:
+                type: float
+              timestamp:
+                type: int
+    mapping:
+    - key: ticker_time
+      path:
+      - market_summary
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: currency_pair_first
+      path:
+      - market_summary
+      - base_asset
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - market_summary
+      - quote_asset
+      type:
+      - str
+    - key: ticker_last_price
+      path:
+      - market_summary
+      - last_price
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - market_summary
+      - last_price
+      type:
+      - float    
+    - key: ticker_best_ask
+      path:
+      - market_summary
+      - last_price
+      type:
+      - float      
+    - key: ticker_daily_volume
+      path:
+      - market_summary
+      - volume24h
+      type:
+      - float          
+    
+      

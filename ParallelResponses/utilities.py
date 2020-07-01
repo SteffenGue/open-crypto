@@ -4,6 +4,7 @@ import os
 from typing import List, Any, Dict, Set
 import yaml #install PyYaml
 from configparser import ConfigParser
+from tables import Exchange
 
 #bin ich in master
 
@@ -164,6 +165,8 @@ REQUEST_PARAMS = {
 }
 
 
+
+
 def read_config(section: str, filename='config.ini') -> Dict[str, Any]:
     """
     Reads the config.ini file specified in by the filename parameter
@@ -211,21 +214,22 @@ def yaml_loader(exchange: str):
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
 
-def get_exchange_names() -> Set[str]:
+def get_exchange_names() -> List[str]:
     """
     Gives information about all exchanges that the program will send
     requests to. This means if the name of a exchange is not part of the
     list that is returned, the program will not send any request to said
     exchange.
-    :param: get_inactive_exchanges: DatabaseHandler method
-        DatabaseHandler method to query all inactive exchanges from the database.
+    :param: session: orm_session
+        Connection to the Database in order to query all ACTIVE exchanges.
     :return: List[str]
         Names from all the exchanges, which have a .yaml-file in
         the directory described in YAML_PATH.
     """
     exchanges_list = os.listdir(YAML_PATH)
-    exchange_names = set([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
+    exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
     exchanges = exchange_names
+    exchange_names.sort()
     return exchanges
 
 

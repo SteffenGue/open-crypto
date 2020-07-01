@@ -97,7 +97,7 @@ class Mapping:
 
         return result
 
-    def traverse_path(self, response: dict, path_queue: deque) -> dict:
+    def traverse_path(self, response: dict, path_queue: deque, currency_pair: str = None) -> dict:
         """Traverses the path on a response.
 
         Helper method for traversing the path on the given
@@ -108,6 +108,10 @@ class Mapping:
                 The response dict (subset).
             path_queue:
                 The queue of path traversal instructions.
+
+            currency_pair:
+                The formatted String of a currency pair.
+                For special case that the key of a dictionary is the formatted currency pair string.
 
         Returns:
             The traversed response dict.
@@ -129,18 +133,26 @@ class Mapping:
         elif path_element == []:
             # Special case to extract multiple values from a single list ["USD","BTC",...]
             traversed = response
+        elif path_element == "currency_pair" and currency_pair is not None:
+            traversed = response[currency_pair]
         elif is_scalar(response):
             return None
-        else:
-            traversed = response[path_element]
-
+        else: #Hier editiert für Kraken sonderfall
+            if isinstance(response, dict):
+                if path_element in response.keys():
+                    traversed = response[path_element]
+                else:
+                    return None
+            else:
+                traversed = response[path_element]
         return traversed
 
     def extract_value(self,
                       response: dict,
                       path_queue: deque = None,
                       types_queue=None,
-                      iterate=True):
+                      iterate=True,
+                      currency_pair: str = None):  # TODO DOKU
         """Extracts the value specfied by "self.path".
 
         Extracts the value specified by the path sequence and converts it
@@ -183,27 +195,31 @@ class Mapping:
                 # Iterate through list of results
                 result = list()
 
-                if len(response) == 1:
-                    response = response[0]
-                else:
-                    for item in response:
+                #TODO: HIER HAST DU WAS GEÄNDERT
+                # if len(response) == 1:
+                #     response = response[0]
+                # else:
+                for item in response:
 
-                        if is_scalar(item):
-                            return self.extract_value(response,
-                                                      path_queue,
-                                                      types_queue,
-                                                      iterate=False)
+                    if is_scalar(item):
+                        return self.extract_value(response,
+                                                  path_queue,
+                                                  types_queue,
+                                                  iterate=False)
 
-                        result.append(
-                            self.extract_value(
-                                item,
-                                deque(path_queue),
-                                deque(types_queue)
-                            )
+                    result.append(
+                        self.extract_value(
+                            item,
+                            deque(path_queue),
+                            deque(types_queue)
                         )
+                    )
 
-
-                    return result
+                # print(result)
+                # print("")
+                # print("")
+                return result
+                #bis hier war in else
 
             elif is_scalar(response):
                 # Return converted scalar value
@@ -211,9 +227,9 @@ class Mapping:
 
             else:
                 # Traverse path
-                response = self.traverse_path(response, path_queue)
+                response = self.traverse_path(response, path_queue, currency_pair=currency_pair)
 
-        if types_queue:
+        if types_queue and response:
 
             if isinstance(response, list):
 

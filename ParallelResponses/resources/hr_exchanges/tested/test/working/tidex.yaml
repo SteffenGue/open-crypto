@@ -1,0 +1,255 @@
+name: tidex
+terms:
+  terms_url: https://tidex.com/exchange/terms-of-use
+  permission: null
+  search_targets:
+  - tag: div
+    class: container page-container generic-content static-content
+  - tag: div
+    class: row
+  - tag: div
+    class: col-md-8 col-xs-12 col-md-offset-2
+api_url: https://api.tidex.com/api/3/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: info/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        server_time:
+          type:
+          - int
+          - fromtimestamp
+        pairs:
+          type: dict
+          values:
+            currency_pair: # each available currency pair e.g. eth_btc
+              type: dict
+              values:
+                decimal_places:
+                  type: int
+                min_price:
+                  type: float
+                max_price:
+                  type: float
+                min_amount:
+                  type: float
+                hidden:
+                  type: int
+                fee:
+                  type: float
+    mapping:
+    - key: currency_pair_first
+      path: # key not values!
+      - pairs
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path: # key not values!
+      - pairs
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+
+  ticker:
+    request:
+      template: ticker/{currency_pair}/
+      pair_template: # e.g. eth_btc
+        template: "{first}_{second}"
+        lower_case: true
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair: # variable key, requested currency pair
+          type: dict
+          values:
+            high:
+              type: float
+            low:
+              type: float
+            avg:
+              type: float
+            vol: # trade volume
+              type: float
+            vol_cur: # trade volume in currency
+              type: float
+            last: # price of last trade
+              type: float
+            buy:
+              type: float
+            sell:
+              type: float
+            updated:
+              type:
+              - int
+              - fromtimestamp
+    mapping:
+    - key: ticker_daily_volume
+      path:
+      - dict_values
+      - vol
+      type:
+      - float
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - buy
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - sell
+      type:
+      - float
+    - key: ticker_time
+      path:
+      - dict_values
+      - updated
+      type:
+      - int
+      - fromtimestamp
+
+  order_book:
+    request:
+      template: depth/{currency_pair}
+      pair_template: # e.g. eth_btc
+        template: "{first}_{second}"
+        lower_case: true
+      params:
+        limit:
+          type: int
+          default: 150
+    response:
+      type: dict
+      values:
+        currency_pair: # requested currency pair
+          type: dict
+          values:
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type: float
+                  1: # size
+                    type: float
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type: float
+                  1: # size
+                    type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - dict_values
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - dict_values
+      - asks
+      - 1
+      type:
+      - float
+    - key: order_book_bids_price
+      path:
+      - dict_values
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - dict_values
+      - bids
+      - 1
+      type:
+      - float
+
+  trades:
+    request:
+      template: trades/{currency_pair}
+      pair_template: # e.g. eth_btc
+        template: "{first}_{second}"
+        lower_case: true
+      params:
+        limit:
+          type: int
+          default: 150
+    response:
+      type: dict
+      values:
+        currency_pair: # requested currency pair
+          type: list
+          values:
+            type: dict
+            values:
+              type:
+                type: str
+              price:
+                type: float
+              amount:
+                type: float
+              tid:
+                type: int
+              timestamp:
+                type:
+                - int
+                - fromtimestamp
+    mapping:
+    - key: trade_side
+      path:
+      - dict_values
+      - type
+      type:
+      - str
+    - key: trade_last_price
+      path:
+      - dict_values
+      - price
+      type:
+      - float
+    - key: trade_amount
+      path:
+      - dict_values
+      - amount
+      type:
+      - float
+    - key: trade_time
+      path:
+      - dict_values
+      - timestamp
+      type:
+      - int
+      - fromtimestamp

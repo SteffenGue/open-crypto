@@ -1,8 +1,10 @@
 import asyncio
-import psycopg2
-import os
+import json
 import time
 from datetime import datetime, timedelta
+from typing import Dict
+
+import db_handler
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
 from tables import metadata
@@ -24,6 +26,7 @@ async def main(all_exchanges, database_handler):
     :param all_exchanges dict
         The dictionary of all given exchanges.
     """
+# Ticker [
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
@@ -42,7 +45,6 @@ async def main(all_exchanges, database_handler):
         else:
             secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
 
-# Ticker [
     # if there are exchanges to request, one request per exchange will be sent
     if not len(primary_exchanges) == 0:
         ticker_responses = await asyncio.gather(*(primary_exchanges[exchange].request('ticker', start_time)
@@ -67,7 +69,6 @@ async def main(all_exchanges, database_handler):
                 exchange.update_flag(test_response[1])
     else:
         print('There are currently no exchanges to test its connection.')
-# Ticker ]
 
     # variables of flag will be updated
     for exchange in primary_exchanges:
@@ -77,6 +78,62 @@ async def main(all_exchanges, database_handler):
     # variables of exception counter will be updated
     for exchange in primary_exchanges:
         primary_exchanges[exchange].update_consecutive_exception()
+# Ticker ]
+
+# CurrencyPairs[
+    for ex in all_exchanges:
+        current_exchange: Exchange = exchanges[ex]
+        database_handler.persist_exchange(current_exchange.name)
+
+    print("currency pairs")
+    responses = await asyncio.gather(*(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
+    print('got em')
+
+    for response in responses:
+        current_exchange = exchanges[response[0]]
+        if response[1] is not None:
+            currency_pairs = current_exchange.format_currency_pairs(response)
+            database_handler.persist_exchange_currency_pairs(currency_pairs)
+        all_currency_pairs = database_handler.get_all_exchange_currency_pairs(current_exchange.name)
+        current_exchange.add_exchange_currency_pairs(all_currency_pairs)
+
+    print('currency pairs done')
+# CurrencyPairs]
+# HistoricRates[
+# currency pairs are also needed for historic rates
+    print('historic rates')
+    for ex in exchanges:
+        curr_exchange: Exchange = exchanges[ex]
+
+        #Setting Currency-Pairs
+        all_currency_pairs: [ExchangeCurrencyPair]= database_handler.get_all_exchange_currency_pairs(curr_exchange.name)
+        curr_exchange.exchange_currency_pairs = all_currency_pairs
+
+        #Getting Historic Rates
+        hr_response = await curr_exchange.request_historic_rates('historic_rates', curr_exchange.exchange_currency_pairs)
+        if hr_response is not None:
+            formatted_hr_response = curr_exchange.format_historic_rates(hr_response)
+            database_handler.persist_historic_rates(formatted_hr_response)
+
+    print('historic rates done')
+
+    #TODO: reactivate
+    # responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
+
+
+    # for response in responses:
+    #     if response:
+    #         # print('Response: {}'.format(response))
+    #         exchange = exchanges[response[0]]
+    #         formatted_response = exchange.format_ticker(response)
+    #         database_handler.persist_tickers(formatted_response)
+
+    # whitebit_json = open('responses/whitebit.json')
+    # whitebit_json = json.load(whitebit_json)
+    # whitebit_tuple = ('whitebit', start_time, datetime.utcnow(), whitebit_json)
+    # formatted_response = exchanges['whitebit'].format_ticker(whitebit_tuple)
+    # database_handler.persist_tickers(formatted_response)
+
 
 
 if __name__ == "__main__":

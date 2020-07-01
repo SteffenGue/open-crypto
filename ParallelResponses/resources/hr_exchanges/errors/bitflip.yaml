@@ -1,0 +1,285 @@
+name: bitflip
+terms:
+  terms_url: https://bitflip.li/terms
+  permission: true
+  search_targets:
+  - tag: div
+    id: page
+  - tag: div
+    class: terms
+api_url: https://api.bitflip.cc/method/
+rate_limit: null
+requests:
+  symbols:
+    request:
+      template: market.getSymbols
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values: # list of all available currencies
+        type: str
+    mapping:
+    - key: currency_symbol
+      path: []
+      type:
+      - str
+
+  currency_pairs:
+    request:
+      template: market.getPairs
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          pair: # e.g. BTC:USD
+            type: str
+          enabled:
+            type: boolean
+          fee:
+            type: dict
+            values:
+              maker:
+                type: float
+              taker:
+                type: float
+          amount:
+            type: dict
+            values:
+              min:
+                type: float
+              max:
+                type: int
+              step:
+                type: int
+          rate:
+            type: dict
+            values:
+              min:
+                type: float
+              max:
+                type: int
+              step:
+                type: int
+          price:
+            type: dict
+            values:
+              min:
+                type: float
+              max:
+                type: int
+              step:
+                type: int
+    mapping:
+    - key: currency_pair_first
+      path:
+      - pair
+      - 0
+      type:
+      - str
+      - split
+      - ":"
+    - key: currency_pair_second
+      path:
+      - pair
+      - 1
+      type:
+      - str
+      - split
+      - ":"
+
+  trades:
+    request:
+      template: market.getTrades
+      pair_template:
+        template: "{first}:{second}"
+        lower_case: true
+        alias: pair
+      params:
+        limit:
+          type: int
+          min: 1
+          max: 500
+          default: 50
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          type:
+            type: str
+          amount:
+            type: float
+          rate:
+            type: int
+          price:
+            type: int
+          timestamp:
+            type:
+            - int
+            - fromtimestamp
+    mapping:
+    - key: trade_side
+      path:
+      - type
+      type:
+      - str
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - float
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - int
+    - key: trade_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+
+  order_book:
+    request:
+      template: market.getOrderBook
+      pair_template:
+        template: "{first}:{second}"
+        lower_case: true
+        alias: pair
+      params:
+        type: # buy or sell
+          type: str
+          allowed:
+          - buy
+          - sell
+          # type: list # Possible, but only used by default values
+          default: [buy, sell]
+        limit:
+          type: int
+          min: 1
+          max: 500
+          default: 50
+    response:
+      type: dict
+      values:
+        buy:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type: float
+              rate:
+                type: int
+              price: # amount*rate
+                type: float
+        sell:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type: float
+              rate:
+                type: int
+              price: # amount*rate
+                type: float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_bids_size
+      path:
+      - buy
+      - amount
+      type:
+      - float
+    - key: order_book_bids_price
+      path:
+      - buy
+      - price
+      type:
+      - float
+    - key: order_book_asks_size
+      path:
+      - sell
+      - amount
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - sell
+      - price
+      type:
+      - float
+
+  historic_rates:
+    request:
+      template: market.getOHLC
+      pair_template:
+        template: "{first}:{second}"
+        lower_case: true
+        alias: pair
+      params:
+        period:
+          type: int
+          min: 1
+          max: 24
+          default: 24
+    response:
+      type: dict
+      values:
+        volume:
+          type: int
+        high:
+          type: int
+        low:
+          type: int
+        open:
+          type: int
+        close:
+          type: int
+        ohcl_avg:
+          type: int
+        hlc_avg:
+          type: int
+    mapping:
+    - key: historic_rates_time
+      path: []
+      type:
+      - none
+      - now
+    - key: historic_rates_volume
+      path:
+      - volume
+      type:
+      - int
+    - key: historic_rates_high
+      path:
+      - high
+      type:
+      - int
+    - key: historic_rates_low
+      path:
+      - low
+      type:
+      - int
+    - key: historic_rates_open
+      path:
+      - open
+      type:
+      - int
+    - key: historic_rates_close
+      path:
+      - close
+      type:
+      - int

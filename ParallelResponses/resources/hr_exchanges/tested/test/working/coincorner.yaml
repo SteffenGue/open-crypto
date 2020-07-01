@@ -1,0 +1,151 @@
+name: coincorner
+terms:
+  terms_url: https://www.coincorner.com/Terms
+  permission: true
+  search_targets:
+  - tag: section
+    id: terms
+api_url: https://api.coincorner.com/api/
+rate_limit:
+  max: 60
+  unit: 60
+requests:
+  ticker:
+    request:
+      template: Ticker
+      pair_template: null
+      params:
+        Coin:
+          type: template
+          template: "{first}"
+          lower_case: false
+          required: true
+        Currency:
+          type: template
+          template: "{second}"
+          lower_case: false
+          required: true
+    response:
+      type: dict
+      values:
+        LastPrice:
+          type: float
+        AvgPrice:
+          type: float
+        LastHigh:
+          type: float
+        LastLow:
+          type: float
+        Volume:
+          type: float
+        BidHigh:
+          type: float
+        BidLow:
+          type: float
+        Coin:
+          type: str
+        CreateDate:
+          type:
+          - str
+          - strptime
+          - "%Y-%m-%dT%H:%M:%S.%fZ" # i.e. "2018-09-24T09:54:10.1375669+01:00"
+    mapping:
+    - key: ticker_last_price
+      path:
+      - LastPrice
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - Volume
+      type:
+      - float
+    - key: ticker_time
+      path:
+      - CreateDate
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+
+  currency_pairs:
+    request:
+      template: Products/
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          fromSymbol:
+            type: str
+          toSymbol:
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - fromSymbol
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - toSymbol
+      type:
+      - str
+
+  trades:
+    request:
+      template: TransactionsV2
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+        alias: pair
+      params:
+        fromId:
+          type: int
+          required: false
+        limit:
+          type: int
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          amount:
+            type: float
+          price:
+            type: float
+          type:
+            type: str
+          timestamp:
+            type:
+            - int
+            - fromtimestamp
+    mapping:
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - float
+    - key: trade_last_price
+      path:
+      - price
+      type:
+      - float
+    - key: trade_side
+      path:
+      - type
+      type:
+      - str
+    - key: trade_time
+      path:
+      - timestamp
+      type:
+      - int
+      - fromtimestamp

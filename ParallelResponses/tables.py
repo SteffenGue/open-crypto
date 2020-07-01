@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
+
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
 
@@ -13,7 +14,6 @@ metadata = Base.metadata
 #     @classmethod
 #     def method_xyz(cls):
 #         pass
-
 
 
 class Exchange(Base):
@@ -29,12 +29,16 @@ class Exchange(Base):
 
     __tablename__ = 'exchanges'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False, unique=True)
+    name = Column(String(50), nullable=False, unique=True, )
     active = Column(Boolean, default=True)
     total_exceptions = Column(Integer, unique=False, nullable=True, default=0)
 
     def __repr__(self):
         return "#{}: {}, Active: {}".format(self.id, self.name, self.active)
+
+    @validates('name')
+    def convert_upper(self, key, value):
+        return value.upper()
 
 
 class Currency(Base):
@@ -56,6 +60,10 @@ class Currency(Base):
 
     def __repr__(self):
         return "#{}: {}".format(self.id, self.name)
+
+    @validates('name')
+    def convert_upper(self, key, value):
+        return value.upper()
 
 
 class ExchangeCurrencyPair(Base):
@@ -86,17 +94,18 @@ class ExchangeCurrencyPair(Base):
     first_id = Column(Integer, ForeignKey('currencies.id'))
     second_id = Column(Integer, ForeignKey('currencies.id'))
 
-    exchange = relationship("Exchange", backref="exchanges_currency_pairs")
-    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id")
-    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id")
+    exchange = relationship("Exchange", backref="exchanges_currency_pairs", lazy='joined')
+    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id", lazy='joined')
+    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id", lazy='joined')
 
     __table_args__ = (CheckConstraint(first_id != second_id),)
 
     def __repr__(self):
         return "#{}: {}({}), {}({})-{}({})".format(self.id,
-                                                  self.exchange.name, self.exchange_id,
-                                                  self.first.name, self.first_id,
-                                                  self.second.name, self.second_id)
+                                                   self.exchange.name, self.exchange_id,
+                                                   self.first.name, self.first_id,
+                                                   self.second.name, self.second_id)
+
 
 class Ticker(Base):
     """
@@ -154,6 +163,7 @@ class Ticker(Base):
                                                   self.last_price,
                                                   self.start_time)
 
+
 class HistoricRate(Base):
     """
     Table for the method historic_rates. Tables contains the exchange_currency_pair_id, gathered from the
@@ -167,7 +177,6 @@ class HistoricRate(Base):
     object as normal, but print "ID, Exchange: First-Second, $ Close at time" in clear names for better
     readability.
     """
-
 
     __tablename__ = 'historic_rates'
 
@@ -183,11 +192,11 @@ class HistoricRate(Base):
 
     def __repr__(self):
         return "ID {}, {}: {}-{}, close {} at {}".format(self.exchange_pair_id,
-                                                          self.exchange_pair.exchange.name,
-                                                          self.exchange_pair.first.name,
-                                                          self.exchange_pair.second.name,
-                                                          self.close,
-                                                          self.timestamp)
+                                                         self.exchange_pair.exchange.name,
+                                                         self.exchange_pair.first.name,
+                                                         self.exchange_pair.second.name,
+                                                         self.close,
+                                                         self.timestamp)
 
 
 class Trade(Base):
@@ -216,9 +225,14 @@ class Trade(Base):
 
     def __repr__(self):
         return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
-                                                                     self.exchange_pair.first.name,
-                                                                     self.exchange_pair.second.name,
-                                                                     self.amount,
-                                                                     self.price,
-                                                                     self.timestamp)
+                                                                    self.exchange_pair.first.name,
+                                                                    self.exchange_pair.second.name,
+                                                                    self.amount,
+                                                                    self.price,
+                                                                    self.timestamp)
+
+    @validates('direction')
+    def convert_upper(self, key, value):
+        return value.upper()
+
 

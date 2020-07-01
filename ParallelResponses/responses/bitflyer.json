@@ -1,0 +1,14 @@
+{
+    "product_code": "BTC_JPY",
+    "timestamp": "2020-04-16T11:15:17.067",
+    "tick_id": 2895349,
+    "best_bid": 752790.0,
+    "best_ask": 752833.0,
+    "best_bid_size": 1.07,
+    "best_ask_size": 0.04563684,
+    "total_bid_depth": 1881.73164741,
+    "total_ask_depth": 1388.79155049,
+    "ltp": 752833.0,
+    "volume": 178606.07011687,
+    "volume_by_product": 9572.46951866
+}

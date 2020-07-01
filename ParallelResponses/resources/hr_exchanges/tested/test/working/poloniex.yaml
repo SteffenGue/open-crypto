@@ -1,0 +1,259 @@
+name: poloniex
+terms:
+  terms_url: https://poloniex.com/terms/
+  permission: true
+  search_targets:
+  - tag: div
+    class: main
+api_url: https://poloniex.com/
+rate_limit:
+  max: 6
+  unit: 1
+requests:
+  ticker:
+    request:
+      template: public
+      pair_template: null
+      params:
+        command:
+          type: str
+          allowed:
+          - returnTicker
+          default: returnTicker
+    response:
+      type: dict
+      values:
+        currency_pair: # variable key, each available currency pair e.g. BTC_LTC
+          type: dict
+          values:
+            last:
+              type:
+              - str
+              - float
+            lowestAsk:
+              type:
+              - str
+              - float
+            highestBid:
+              type:
+              - str
+              - float
+            percentChange:
+              type:
+              - str
+              - float
+            baseVolume:
+              type:
+              - str
+              - float
+            quoteVolume:
+              type:
+              - str
+              - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - dict_key
+      - 0
+      type:
+      - str
+      - split
+      - "_"
+    - key: currency_pair_second
+      path:
+      - dict_key
+      - 1
+      type:
+      - str
+      - split
+      - "_"
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_last_price
+      path:
+      - currency_pair
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - currency_pair
+      - lowestAsk
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - currency_pair
+      - highestBid
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: public
+      pair_template: null
+      params:
+        command:
+          type: str
+          allowed:
+          - returnOrderBook
+          default: returnOrderBook
+        currencyPair:
+          type: str
+          allowed:
+          - all
+          default: all
+        depth:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        currency_pair: # variable key, each available currency pair
+          type: dict
+          values:
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # size
+                    type: float
+                  1: # price
+                    type: int
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # size
+                    type: float
+                  1: # price
+                    type: int
+            isFrozen:
+              type: int
+            seq:
+              type: int
+    mapping:
+    - key: currency_pair_second
+      path:
+      - dict_key
+      - 0
+      type:
+      - str
+      - split
+      - "_"
+    - key: currency_pair_second
+      path:
+      - dict_key
+      - 1
+      type:
+      - str
+      - split
+      - "_"
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_size
+      path:
+      - dict_values
+      - asks
+      - 0
+      type:
+      - float
+    - key: order_book_asks_price
+      path:
+      - dict_values
+      - asks
+      - 1
+      type:
+      - float
+    - key: order_book_bids_size
+      path:
+      - dict_values
+      - bids
+      - 0
+      type:
+      - float
+    - key: order_book_bids_price
+      path:
+      - dict_values
+      - bids
+      - 1
+      type:
+      - float
+
+  trades:
+    request:
+      template: public
+      pair_template:
+        template: "{first}_{second}"
+        lower_case: false
+        alias: currencyPair
+      params:
+        command:
+          type: str
+          allowed:
+          - returnTradeHistory
+          default: returnTradeHistory
+        start:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+        end:
+          type:
+          - datetime
+          - totimestamp
+          required: false
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          date:
+            type:
+            - str
+            - strptime
+            - "%Y-%m-%d %H:%M:%SZ"
+          type:
+            type: str
+          rate:
+            type:
+            - str
+            - float
+          amount:
+            type:
+            - str
+            - float
+          total:
+            type:
+            - str
+            - float
+    mapping:
+    - key: trade_time
+      path:
+      - date
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%d %H:%M:%SZ"
+    - key: trade_side
+      path:
+      - type
+      type:
+      - str
+    - key: trade_amount
+      path:
+      - amount
+      type:
+      - str
+      - float

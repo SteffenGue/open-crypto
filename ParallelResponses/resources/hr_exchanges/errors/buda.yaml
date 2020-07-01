@@ -1,0 +1,318 @@
+# DEAD
+name: buda
+terms:
+  terms_url: https://www.buda.com/terminos-y-condiciones
+  permission: false
+  search_targets:
+  - tag: div
+    class: buda-page__content
+api_url: https://www.buda.com/api/v2/
+rate_limit: null
+requests:
+  currency_pairs:
+    request:
+      template: markets/
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        markets:
+          type: list
+          values:
+            type: dict
+            values:
+              id: # e.g. BTC-CLP
+                type: str
+              name: # e.g. btc-clp
+                type: str
+              base_currency: # i.e. "BTC"
+                type: str
+              quote_currency: # i.e. "CLP"
+                type: str
+              minimum_order_amount:
+                type: list
+                values:
+                  0: # amount
+                    type:
+                    - str
+                    - float
+                  1: # currency
+                    type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - markets
+      - base_currency
+      type:
+      - str
+    - key: currency_pair_second
+      path:
+      - markets
+      - quote_currency
+      type:
+      - str
+
+  ticker:
+    request:
+      template: markets/{currency_pair}/ticker/
+      pair_template: # e.g. btc-clp
+        template: "{first}-{second}"
+        lower_case: true
+      params: null
+    response:
+      type: dict
+      values:
+        ticker:
+          type: dict
+          values:
+            last_price:
+              type: list
+              values:
+                0: # amount
+                  type:
+                  - str
+                  - float
+                1: # currency
+                  type: str
+            market_id: # i.e. "BTC-CLP"
+              type: str
+            max_bid:
+              type: list
+              values:
+                0: # amount
+                  type:
+                  - str
+                  - float
+                1: # currency
+                  type: str
+            min_ask:
+              type: list
+              values:
+                0: # amount
+                  type:
+                  - str
+                  - float
+                1: # currency
+                  type: str
+            price_variation_24h:
+              type:
+              - str
+              - float
+            price_variation_7d:
+              type:
+              - str
+              - float
+            volume:
+              type: list
+              values:
+                0: # amount
+                  type:
+                  - str
+                  - float
+                1: # currency
+                  type: str
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: ticker_last_price
+      path:
+      - ticker
+      - last_price
+      - 0
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - ticker
+      - max_bid
+      - 0
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - ticker
+      - min_ask
+      - 0
+      type:
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - ticker
+      - volume
+      - 0
+      type:
+      - str
+      - float
+
+  order_book:
+    request:
+      template: markets/{currency_pair}/order_book/
+      pair_template: # e.g. btc-clp
+        template: "{first}-{second}"
+        lower_case: true
+      params: null
+    response:
+      type: dict
+      values:
+        order_book:
+          type: dict
+          values:
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type:
+                    - str
+                    - float
+                  1: # amount
+                    type:
+                    - str
+                    - float
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type:
+                    - str
+                    - float
+                  1: # amount
+                    type:
+                    - str
+                    - float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - order_book
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_asks_size
+      path:
+      - order_book
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: order_book_bids_price
+      path:
+      - order_book
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: order_book_bids_size
+      path:
+      - order_book
+      - bids
+      - 1
+      type:
+      - str
+      - float
+
+  trades:
+    request:
+      template: markets/{currency_pair}/trades
+      pair_template: # e.g. btc-clp
+        template: "{first}-{second}"
+        lower_case: true
+      params:
+        timestamp: # Unix Timestamp (int)
+          type:
+          - datetime
+          - totimestamp
+          required: false
+        limit:
+          type: int
+          max: 100
+          default: 50
+    response:
+      type: dict
+      values:
+        trades:
+          type: dict
+          values:
+            timestamp:
+              type:
+              - str
+              - int
+              - fromtimestamp
+            last_timestamp:
+              type:
+              - str
+              - int
+              - fromtimestamp
+            market_id:
+              type: str
+            entries:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # timestamp
+                    type:
+                    - str
+                    - int
+                    - fromtimestamp
+                  1: # amount
+                    type:
+                    - str
+                    - float
+                  2: # price
+                    type:
+                    - str
+                    - float
+                  3: # direction, i.e. "buy"
+                    type: str
+    mapping:
+    - key: trade_time
+      path:
+      - trades
+      - entries
+      - 0
+      type:
+      - str
+      - int
+      - fromtimestamp
+    - key: trade_amount
+      path:
+      - trades
+      - entries
+      - 1
+      type:
+      - str
+      - float
+    - key: trade_last_price
+      path:
+      - trades
+      - entries
+      - 2
+      type:
+      - str
+      - float
+    - key: trade_side
+      path:
+      - trades
+      - entries
+      - 3
+      type:
+      - str
