@@ -183,6 +183,7 @@ def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
     Exception()
 
 
+
 def yaml_loader(exchange: str):
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.

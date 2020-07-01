@@ -1,7 +1,11 @@
 {
+    "timestamp": "2020-07-01T04:30:47.985+00:00",
+    "path": "/api/2/public/ticker/%7Bcurrency_pair%7D/",
+    "status": 400,
     "error": {
         "code": 2001,
-        "message": "Symbol not found: {CURRENCY_PAIR}",
-        "description": "Try get /public/symbol, to get list of all available symbols."
-    }
+        "description": "Try get /public/symbol, to get list of all available symbols.",
+        "message": "Symbol not found"
+    },
+    "requestId": "47a19d12-644842177"
 }

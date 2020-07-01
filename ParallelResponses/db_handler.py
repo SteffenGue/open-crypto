@@ -1,10 +1,10 @@
 from datetime import datetime
-from typing import Sequence, List, Tuple, Any, Iterator, Iterable
-from sqlalchemy.dialects.postgresql import insert
+from typing import List, Tuple, Iterator, Iterable, Dict
+from contextlib import contextmanager
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy_utils import database_exists, create_database
-from sqlalchemy import create_engine, MetaData, or_, and_, exists
-from sqlalchemy.orm import sessionmaker, Session, Load, joinedload, raiseload, selectinload, subqueryload, eagerload, \
-    defer
+
 from tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate
 
 
@@ -72,7 +72,18 @@ class DatabaseHandler:
         metadata.create_all(engine)
         self.sessionFactory = sessionmaker(bind=engine)
 
-    # ToDo: Load all DB-Entries once in the beginning instead of querying every item speratly?!
+    @contextmanager
+    def session_scope(self):
+        """Provide a transactional scope around a series of operations."""
+        session = self.sessionFactory()
+        try:
+            yield session
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
     def persist_tickers(self,
                         tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float, float]]):
@@ -105,33 +116,25 @@ class DatabaseHandler:
                  ticker_best_bid,
                  ticker_daily_volume)
         """
-        session = self.sessionFactory()
-
-        try:
+        with self.session_scope() as session:
+            tickers_to_add = list()
             for ticker in tickers:
-                exchange_currency_pair = self.persist_exchange_currency_pair(ticker[0], ticker[3], ticker[4])
+                exchange_currency_pair = self.get_exchange_currency_pair(session, ticker[0], ticker[3], ticker[4])
 
-                ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
-                                      exchange_pair=exchange_currency_pair,
-                                      start_time=ticker[1],
-                                      response_time=ticker[2],
-                                      last_price=ticker[5],
-                                      last_trade=ticker[6],
-                                      best_ask=ticker[7],
-                                      best_bid=ticker[8],
-                                      daily_volume=ticker[9])
-
-                session.add(ticker_tuple)
-            # TODO: if error commit wieder einrücken
-            session.commit()
-            session.close()
-
-        except Exception as e:
-            print(e, e.__cause__)
-            session.rollback()
-            pass
-        finally:
-            session.close()
+                if exchange_currency_pair is not None:
+                    ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
+                                          exchange_pair=exchange_currency_pair,
+                                          start_time=ticker[1],
+                                          response_time=ticker[2],
+                                          last_price=ticker[5],
+                                          last_trade=ticker[6],
+                                          best_ask=ticker[7],
+                                          best_bid=ticker[8],
+                                          daily_volume=ticker[9])
+                    tickers_to_add.append(ticker_tuple)
+                    # session.add(ticker_tuple)
+            session.add_all(tickers_to_add)
+            print('{} ticker added for {}'.format(len(tickers_to_add), ticker[0]))
 
     def get_active_exchanges(self):
         """
@@ -217,8 +220,7 @@ class DatabaseHandler:
             raise KeyError(f'Wrong number of arguments for {exchange} - {function["name"]}. '
                            f'Expected {function["params"]} - got {len(args)}')
 
-    # TODO: Dokumentation, Möglichkeit nur einzelne currency_pairs zu bekommen
-    def get_all_exchange_currency_pairs(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
+    def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         """
         @param exchange_name:
             Name of the exchange that the currency-pairs should be queried for.
@@ -230,11 +232,62 @@ class DatabaseHandler:
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is not None:
             currency_pairs = session.query(ExchangeCurrencyPair).filter(
-                # ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
-                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
-                ExchangeCurrencyPair.second_id.__eq__(6)).all() #WICHTIG DEN FILTER RAUSZUNEHMEN
+                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
+            # ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
+            # ExchangeCurrencyPair.second_id.__eq__(6)).all() #WICHTIG DEN FILTER RAUSZUNEHMEN
         session.close()
         return currency_pairs
+
+    def get_currency_pairs_with_first_currency(self, exchange_name: str, first_currency_name: str) -> List[
+        ExchangeCurrencyPair]:
+        # todo: doku
+        with self.session_scope() as session:
+            exchange_id: int = self.get_exchange_id(exchange_name)
+            first_id: int = self.get_currency_id(first_currency_name)
+
+            found_currency_pairs = session.query(ExchangeCurrencyPair).filter(
+                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
+                ExchangeCurrencyPair.first_id.__eq__(first_id)).all()
+
+            return found_currency_pairs
+
+    def get_currency_pairs_with_second_currency(self, exchange_name: str, second_currency_name: str) \
+            -> List[ExchangeCurrencyPair]:
+        # todo: doku
+        with self.session_scope() as session:
+            exchange_id: int = self.get_exchange_id(exchange_name)
+            second_id: int = self.get_currency_id(second_currency_name)
+
+            found_currency_pairs = session.query(ExchangeCurrencyPair).filter(
+                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
+                ExchangeCurrencyPair.second_id.__eq__(second_id)).all()
+
+            return found_currency_pairs
+
+    def get_currency_pairs(self, exchange_name: str, currency_pairs: List[Dict[str, str]]) \
+            -> List[ExchangeCurrencyPair]:
+        found_currency_pairs = list()
+        exchange_id: int = self.get_exchange_id(exchange_name)
+        with self.session_scope() as session:
+            for currency_pair in currency_pairs:
+                first_id: int = self.get_exchange_id(currency_pair['first'])
+                second_id: int = self.get_exchange_id(currency_pair['second'])
+
+                found_currency_pair = session.query(ExchangeCurrencyPair).filter(
+                    ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
+                    ExchangeCurrencyPair.first_id.__eq__(first_id),
+                    ExchangeCurrencyPair.second_id.__eq__(second_id)).first()
+
+                found_currency_pairs.append(found_currency_pair)
+        return found_currency_pairs
+
+    def get_exchange_id(self, exchange_name: str) -> int:
+        with self.session_scope() as session:
+            return session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
+
+    def get_currency_id(self, currency_name: str):
+        with self.session_scope() as session:
+            return session.query(Currency.id).filter(Currency.name.__eq__(currency_name.upper()))
 
     def persist_exchange(self, exchange_name: str):
         """
@@ -276,13 +329,18 @@ class DatabaseHandler:
                         continue
 
                     existing_exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
-                    exchange = existing_exchange if existing_exchange is not None else Exchange(name=exchange_name)
+                    exchange: Exchange = existing_exchange if existing_exchange is not None else Exchange(
+                        name=exchange_name)
 
-                    existing_first_cp = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
-                    first = existing_first_cp if existing_first_cp is not None else Currency(name=first_currency_name)
+                    existing_first_cp = session.query(Currency).filter(
+                        Currency.name == first_currency_name.upper()).first()
+                    first: Currency = existing_first_cp if existing_first_cp is not None else Currency(
+                        name=first_currency_name)
 
-                    existing_second_cp = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
-                    second = existing_second_cp if existing_second_cp is not None else Currency(name=second_currency_name)
+                    existing_second_cp = session.query(Currency).filter(
+                        Currency.name == second_currency_name.upper()).first()
+                    second: Currency = existing_second_cp if existing_second_cp is not None else Currency(
+                        name=second_currency_name)
 
                     existing_exchange_pair = session.query(ExchangeCurrencyPair).filter(
                         ExchangeCurrencyPair.exchange_id == exchange.id,
@@ -295,7 +353,8 @@ class DatabaseHandler:
                         session.add(exchange_pair)
 
                 session.commit()
-                print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
+                # TODO: Reactivate
+                # print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
             except Exception as e:
                 print(e, e.__cause__)
                 session.rollback()
@@ -315,7 +374,25 @@ class DatabaseHandler:
         @param second_currency_name:
             Name of the second currency.
         """
-        self.persist_exchange_currency_pairs((exchange_name, first_currency_name, second_currency_name))
+        self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)])
+
+    def get_exchange_currency_pair(self, session: Session, exchange_name: str, first_currency_name: str,
+                                   second_currency_name: str):
+        # todo: doku
+        # todo: sollte so nicht final sein
+
+        if exchange_name is None or first_currency_name is None or second_currency_name is None:
+            return None
+        # sollte raus in der actual Implementierung
+        self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name)
+        ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+        first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+        second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
+
+        cp = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange.__eq__(ex),
+                                                        ExchangeCurrencyPair.first.__eq__(first),
+                                                        ExchangeCurrencyPair.second.__eq__(second)).first()
+        return cp
 
     def persist_historic_rates(self, historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
         """
