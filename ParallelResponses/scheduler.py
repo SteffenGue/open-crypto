@@ -24,7 +24,7 @@ class Scheduler:
         for job in self.job_list:
             exchanges: [Exchange] = job.exchanges
             request = self.determine_task(job.request_name)
-            schedule.every(job.frequency).minute.do(request, exchanges=exchanges)
+            schedule.every(job.frequency).minutes.do(request, exchanges=exchanges)
 
         loop = asyncio.get_event_loop()
         while True:
