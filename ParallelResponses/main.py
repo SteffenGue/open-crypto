@@ -7,7 +7,7 @@ from typing import Dict
 import db_handler
 from db_handler import DatabaseHandler
 from exchanges.exchange import Exchange
-from tables import metadata
+from tables import metadata, ExchangeCurrencyPair
 from utilities import read_config, yaml_loader, get_exchange_names, REQUEST_PARAMS
 
 
@@ -26,7 +26,24 @@ async def main(all_exchanges, database_handler):
     :param all_exchanges dict
         The dictionary of all given exchanges.
     """
-# Ticker [
+    # CurrencyPairs[
+    print("currency pairs")
+    responses = await asyncio.gather(
+        *(all_exchanges[ex].request_currency_pairs('currency_pairs') for ex in all_exchanges))
+    print('got em')
+
+    for response in responses:
+        current_exchange = all_exchanges[response[0]]
+        if response[1] is not None:
+            currency_pairs = current_exchange.format_currency_pairs(response)
+            database_handler.persist_exchange_currency_pairs(currency_pairs)
+        all_currency_pairs = database_handler.get_all_exchange_currency_pairs(current_exchange.name)
+        current_exchange.add_exchange_currency_pairs(all_currency_pairs)
+
+    print('currency pairs done')
+    # CurrencyPairs]
+
+    # Ticker [
     # start_time : datetime when request run is started
     # delta : given microseconds for the datetime
     start_time = datetime.utcnow()
@@ -78,44 +95,27 @@ async def main(all_exchanges, database_handler):
     # variables of exception counter will be updated
     for exchange in primary_exchanges:
         primary_exchanges[exchange].update_consecutive_exception()
-# Ticker ]
+    # Ticker ]
 
-# CurrencyPairs[
-    for ex in all_exchanges:
-        current_exchange: Exchange = exchanges[ex]
-        database_handler.persist_exchange(current_exchange.name)
-
-    print("currency pairs")
-    responses = await asyncio.gather(*(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
-    print('got em')
-
-    for response in responses:
-        current_exchange = exchanges[response[0]]
-        if response[1] is not None:
-            currency_pairs = current_exchange.format_currency_pairs(response)
-            database_handler.persist_exchange_currency_pairs(currency_pairs)
-        all_currency_pairs = database_handler.get_all_exchange_currency_pairs(current_exchange.name)
-        current_exchange.add_exchange_currency_pairs(all_currency_pairs)
-
-    print('currency pairs done')
-# CurrencyPairs]
-# HistoricRates[
-# currency pairs are also needed for historic rates
+    # HistoricRates[
     print('historic rates')
-    for ex in exchanges:
-        curr_exchange: Exchange = exchanges[ex]
+    for ex in all_exchanges:
+        curr_exchange: Exchange = all_exchanges[ex]
 
-        #Setting Currency-Pairs
-        all_currency_pairs: [ExchangeCurrencyPair]= database_handler.get_all_exchange_currency_pairs(curr_exchange.name)
+        # Setting Currency-Pairs
+        all_currency_pairs: [ExchangeCurrencyPair] = database_handler.get_all_exchange_currency_pairs(
+            curr_exchange.name)
         curr_exchange.exchange_currency_pairs = all_currency_pairs
 
-        #Getting Historic Rates
-        hr_response = await curr_exchange.request_historic_rates('historic_rates', curr_exchange.exchange_currency_pairs)
+        # Getting Historic Rates
+        hr_response = await curr_exchange.request_historic_rates('historic_rates',
+                                                                 curr_exchange.exchange_currency_pairs)
         if hr_response is not None:
             formatted_hr_response = curr_exchange.format_historic_rates(hr_response)
             database_handler.persist_historic_rates(formatted_hr_response)
 
     print('historic rates done')
+    # HistoricRates]
 
     #TODO: reactivate
     # responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
@@ -142,10 +142,13 @@ if __name__ == "__main__":
         db_params = read_config('database')
         databaseHandler = DatabaseHandler(metadata, **db_params)
         # run program with single exchange or selected list of exchanges for debugging/testing purposes
-        # exchange_names = ['coinsbit', 'bibox']
-        exchange_names = get_exchange_names()
+        exchange_names = ['bibox']
+        #exchange_names = get_exchange_names()
         exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), databaseHandler.request_params)
                      for exchange_name in exchange_names}
+        for ex in exchanges:
+            current_exchange: Exchange = exchanges[ex]
+            databaseHandler.persist_exchange(current_exchange.name)
         # run one request run every five minutes / 300 seconds
         while True:
             asyncio.run(main(exchanges, databaseHandler))

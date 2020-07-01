@@ -1,4 +1,5 @@
 from datetime import datetime
+import itertools
 from typing import Sequence, List, Tuple, Any, Iterator, Iterable
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy_utils import database_exists, create_database
@@ -109,8 +110,9 @@ class DatabaseHandler:
 
         try:
             for ticker in tickers:
-                exchange_currency_pair = self.persist_exchange_currency_pair(ticker[0], ticker[3], ticker[4])
-
+                self.persist_exchange_currency_pair(ticker[0].upper(), ticker[3], ticker[4])
+                exchange_currency_pair = self.get_exchange_currency_pair(ticker[0], ticker[3], ticker[4])
+                #exchange_currency_pair_id = exchange_currency_pair.id
                 ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                       exchange_pair=exchange_currency_pair,
                                       start_time=ticker[1],
@@ -212,11 +214,26 @@ class DatabaseHandler:
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is not None:
             currency_pairs = session.query(ExchangeCurrencyPair).filter(
-                # ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
-                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
-                ExchangeCurrencyPair.second_id.__eq__(6)).all() #WICHTIG DEN FILTER RAUSZUNEHMEN
+                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
+                #ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
+                #ExchangeCurrencyPair.second_id.__eq__(6)).all()  # WICHTIG DEN FILTER RAUSZUNEHMEN
         session.close()
         return currency_pairs
+
+    def get_exchange_currency_pair(self, exchange_name: str, first_name: str, second_name: str) -> ExchangeCurrencyPair:
+        session = self.sessionFactory()
+        currency_pair = None
+        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
+        first_id = session.query(Currency.id).filter(Currency.name.__eq__(first_name.upper())).first()
+        second_id = session.query(Currency.id).filter(Currency.name.__eq__(second_name.upper())).first()
+        if exchange_id is not None:
+            currency_pair = session.query(ExchangeCurrencyPair).filter(
+                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
+                ExchangeCurrencyPair.first_id.__eq__(first_id),
+                ExchangeCurrencyPair.second_id.__eq__(second_id)
+            ).first()
+        session.close()
+        return currency_pair
 
     def persist_exchange(self, exchange_name: str):
         """
@@ -260,11 +277,14 @@ class DatabaseHandler:
                     existing_exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
                     exchange = existing_exchange if existing_exchange is not None else Exchange(name=exchange_name)
 
-                    existing_first_cp = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+                    existing_first_cp = session.query(Currency).filter(
+                        Currency.name == first_currency_name.upper()).first()
                     first = existing_first_cp if existing_first_cp is not None else Currency(name=first_currency_name)
 
-                    existing_second_cp = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
-                    second = existing_second_cp if existing_second_cp is not None else Currency(name=second_currency_name)
+                    existing_second_cp = session.query(Currency).filter(
+                        Currency.name == second_currency_name.upper()).first()
+                    second = existing_second_cp if existing_second_cp is not None else Currency(
+                        name=second_currency_name)
 
                     existing_exchange_pair = session.query(ExchangeCurrencyPair).filter(
                         ExchangeCurrencyPair.exchange_id == exchange.id,
@@ -277,6 +297,7 @@ class DatabaseHandler:
                         session.add(exchange_pair)
 
                 session.commit()
+                exchange_name = currency_pairs[0][0]
                 print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
             except Exception as e:
                 print(e, e.__cause__)
@@ -297,7 +318,7 @@ class DatabaseHandler:
         @param second_currency_name:
             Name of the second currency.
         """
-        self.persist_exchange_currency_pairs((exchange_name, first_currency_name, second_currency_name))
+        self.persist_exchange_currency_pairs(list(itertools.zip_longest(exchange_name, first_currency_name, second_currency_name)))
 
     def persist_historic_rates(self, historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
         """

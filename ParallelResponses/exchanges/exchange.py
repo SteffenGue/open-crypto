@@ -7,7 +7,6 @@ import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorError
 from Mapping import Mapping
 from utilities import REQUEST_PARAMS
-from dictionary import ExceptionDict
 from tables import ExchangeCurrencyPair
 
 
@@ -49,8 +48,8 @@ class Exchange:
     terms_url: str
     scrape_permission: bool
     api_url: str
-    request_urls: Dict
-    response_mappings: Dict
+    request_urls: dict
+    response_mappings: dict
     exception_counter: int
     consecutive_exception: bool
     active_flag: bool
@@ -230,6 +229,7 @@ class Exchange:
                         response_json = await response.json(content_type=None)
                         # print(response_json)
                         responses[cp] = response_json
+                        self.consecutive_exception = False
 
                     except ClientConnectionError:
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
@@ -239,9 +239,9 @@ class Exchange:
                         message = template.format(type(ex).__name__, ex.args)
                         print(message)
                         print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                        # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
-                        exception = ExceptionDict()
-                        exception.get_dict()['{}'.format(self.name)] = 1
+                        # add one unit to the exception to the exchange
+                        self.exception_counter += 1
+                        self.consecutive_exception = True
                         pass
 
                 print("Completed collecting historic rates for {}.".format(self.name))
