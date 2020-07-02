@@ -111,8 +111,7 @@ class DatabaseHandler:
         try:
             for ticker in tickers:
                 self.persist_exchange_currency_pair(ticker[0].upper(), ticker[3], ticker[4])
-                exchange_currency_pair = self.get_exchange_currency_pair(ticker[0], ticker[3], ticker[4])
-                #exchange_currency_pair_id = exchange_currency_pair.id
+                exchange_currency_pair = self.get_exchange_currency_pair(session, ticker[0], ticker[3], ticker[4])
                 ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                       exchange_pair=exchange_currency_pair,
                                       start_time=ticker[1],
@@ -122,10 +121,8 @@ class DatabaseHandler:
                                       best_ask=ticker[7],
                                       best_bid=ticker[8],
                                       daily_volume=ticker[9])
-
                 session.add(ticker_tuple)
-            # TODO: if error commit wieder einrücken
-            session.commit()
+                session.commit()
             session.close()
 
         except Exception as e:
@@ -220,8 +217,8 @@ class DatabaseHandler:
         session.close()
         return currency_pairs
 
-    def get_exchange_currency_pair(self, exchange_name: str, first_name: str, second_name: str) -> ExchangeCurrencyPair:
-        session = self.sessionFactory()
+    def get_exchange_currency_pair(self, session, exchange_name: str, first_name: str, second_name: str) -> ExchangeCurrencyPair:
+        session = session
         currency_pair = None
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         first_id = session.query(Currency.id).filter(Currency.name.__eq__(first_name.upper())).first()
@@ -298,7 +295,7 @@ class DatabaseHandler:
 
                 session.commit()
                 exchange_name = currency_pairs[0][0]
-                print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
+                #print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
             except Exception as e:
                 print(e, e.__cause__)
                 session.rollback()
@@ -318,7 +315,7 @@ class DatabaseHandler:
         @param second_currency_name:
             Name of the second currency.
         """
-        self.persist_exchange_currency_pairs(list(itertools.zip_longest(exchange_name, first_currency_name, second_currency_name)))
+        self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)])
 
     def persist_historic_rates(self, historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
         """
