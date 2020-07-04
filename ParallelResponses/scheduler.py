@@ -1,7 +1,7 @@
 import asyncio
 import time
 from datetime import datetime
-from typing import List, Callable
+from typing import List, Callable, Dict
 
 from Job import Job
 
@@ -39,22 +39,20 @@ class Scheduler:
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
-    async def get_tickers(self, exchanges: [Exchange]):
+    async def get_tickers(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         print('Starting to collect ticker.')
         start_time = datetime.utcnow()
-        responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
-
-        # todo: remove
-        for ex in exchanges:
-            self.database_handler.get_currency_pairs_with_first_currency(exchanges[ex].name, 'btc')
-            self.database_handler.get_currency_pairs_with_second_currency(exchanges[ex].name, 'btc')
+        responses = await asyncio.gather(*(ex.request('ticker', start_time) for ex in exchanges_with_pairs.keys()))
 
         for response in responses:
             if response:
                 # print('Response: {}'.format(response))
-                exchange = exchanges[response[0]]
+                exchange_name = response[0]
+                for exchange in exchanges_with_pairs.keys():
+                    if exchange.name.upper() == exchange_name.upper():
+                        break
                 formatted_response = exchange.format_ticker(response)
-                self.database_handler.persist_tickers(formatted_response)
+                self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
         print('Done collecting ticker.')
 
     async def get_historic_rates(self, exchanges: [Exchange]):

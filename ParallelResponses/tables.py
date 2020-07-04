@@ -107,6 +107,11 @@ class ExchangeCurrencyPair(Base):
                                                    self.first.name, self.first_id,
                                                    self.second.name, self.second_id)
 
+    def __str__(self):
+        return "#{}: {}({}), {}({})-{}({})".format(self.id,
+                                                   self.exchange.name, self.exchange_id,
+                                                   self.first.name, self.first_id,
+                                                   self.second.name, self.second_id)
 
 class Ticker(Base):
     """
