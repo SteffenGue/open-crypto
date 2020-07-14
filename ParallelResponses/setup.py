@@ -1,18 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Setup module for installing dependencies of crypto_apis.
+Setup module for installing dependencies of Crypto Data Collector.
 
-Authors:
-    Martin Schorfmann,
-    Fabian Peter,
-    Steffen Günther
-
-Since:
-    24.07.2018
-
-Version:
-    13.07.2020
 """
 
 try:
@@ -29,5 +19,8 @@ CONFIG = {
 }
 
 setup(**CONFIG, install_requires=['sqlalchemy',
+                                  'sqlalchemy_utils',
                                   'PyYAML',
+                                  'aiohttp',
+                                  'psycopg2',
                                   'aioschedule'])
