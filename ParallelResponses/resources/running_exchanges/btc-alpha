@@ -7,7 +7,7 @@ api_url: https://btc-alpha.com/api/v1/
 requests:
   ticker:
     request:
-      template: exchanges/
+      template: self/
       pair_template: null
       params: null
     response:

@@ -1,8 +1,8 @@
 {
     "BTCAED": {
-        "last": 28699.6569,
+        "last": 34079.803499999995,
         "lowest_ask": null,
-        "highest_bid": 32202.661942,
+        "highest_bid": 33259.882194,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
@@ -10,9 +10,9 @@
         "volume24h": 0.0
     },
     "BTCAUD": {
-        "last": 16707.495,
-        "lowest_ask": 17010.63008,
-        "highest_bid": 13599.398835,
+        "last": 18781.539,
+        "lowest_ask": 18469.745535,
+        "highest_bid": null,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
@@ -21,48 +21,38 @@
     },
     "BTCUSD": {
         "last": 10148.952,
-        "lowest_ask": 12981.79664,
-        "highest_bid": 8785.880488,
+        "lowest_ask": 13410.77798,
+        "highest_bid": null,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
         "currency2": "USD",
-        "volume24h": 0.23973975
+        "volume24h": 0.062761
     },
     "BTCCAD": {
-        "last": 12260.552000000001,
-        "lowest_ask": 11728.381792,
-        "highest_bid": 8775.6768,
+        "last": 9218.395,
+        "lowest_ask": 12099.074719,
+        "highest_bid": 11364.548303,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
         "currency2": "CAD",
         "volume24h": 0.0
     },
-    "BTCXAF": {
-        "last": 3861730.3179,
+    "BTCCDF": {
+        "last": 16634339.876255,
         "lowest_ask": null,
-        "highest_bid": 5089892.544,
+        "highest_bid": 16634339.876255,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
-        "currency2": "XAF",
+        "currency2": "CDF",
         "volume24h": 0.0
     },
-    "BTCCNY": {
-        "last": 62004.43080000001,
-        "lowest_ask": null,
-        "highest_bid": 61605.251136,
-        "low_price": 62004.43080000001,
-        "high_price": 62004.43080000001,
-        "currency1": "BTC",
-        "currency2": "CNY",
-        "volume24h": 0.055
-    },
     "BTCGBP": {
-        "last": 4612.769,
+        "last": 5283.428800000001,
         "lowest_ask": null,
-        "highest_bid": 5092.241022,
+        "highest_bid": 5258.087208,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
@@ -70,29 +60,39 @@
         "volume24h": 0.0
     },
     "BTCGHS": {
-        "last": 53797.729999999996,
-        "lowest_ask": 55508.37184,
-        "highest_bid": 49038.481958,
-        "low_price": 46790.8704,
-        "high_price": 56172.1635,
+        "last": 47524.776,
+        "lowest_ask": 54752.969408,
+        "highest_bid": 47730.739914,
+        "low_price": 47524.776,
+        "high_price": 54265.443199999994,
         "currency1": "BTC",
         "currency2": "GHS",
-        "volume24h": 1.13271919
+        "volume24h": 1.10832714
+    },
+    "BTCIDR": {
+        "last": 144697200.0,
+        "lowest_ask": 136070011.2,
+        "highest_bid": 128022860.0,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "BTC",
+        "currency2": "IDR",
+        "volume24h": 0.0
     },
     "BTCINR": {
-        "last": 704804.0292999999,
-        "lowest_ask": 705343.07884,
-        "highest_bid": 695762.79201,
-        "low_price": 654777.16,
-        "high_price": 718993.8158000001,
+        "last": 725487.6888,
+        "lowest_ask": 726895.5101,
+        "highest_bid": 705986.57504,
+        "low_price": 685287.5,
+        "high_price": 741993.766,
         "currency1": "BTC",
         "currency2": "INR",
-        "volume24h": 1.02402157
+        "volume24h": 1.60463027
     },
     "BTCJPY": {
-        "last": 873314.5224,
+        "last": 1039650.4,
         "lowest_ask": null,
-        "highest_bid": 944324.707491,
+        "highest_bid": 976218.964096,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
@@ -100,99 +100,119 @@
         "volume24h": 0.0
     },
     "BTCKES": {
-        "last": 948765.975,
-        "lowest_ask": 1065402.6208,
-        "highest_bid": 938797.2099,
-        "low_price": 916166.2342,
-        "high_price": 1048995.984,
+        "last": 942867.7116999999,
+        "lowest_ask": 1062535.39644,
+        "highest_bid": 906566.76,
+        "low_price": 942867.7116999999,
+        "high_price": 1096513.2000000002,
         "currency1": "BTC",
         "currency2": "KES",
-        "volume24h": 0.75789008
+        "volume24h": 0.79176202
+    },
+    "BTCKRW": {
+        "last": 10039584.467500001,
+        "lowest_ask": null,
+        "highest_bid": 10890000.0,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "BTC",
+        "currency2": "KRW",
+        "volume24h": 0.0
+    },
+    "BTCMMK": {
+        "last": 12636433.014245,
+        "lowest_ask": null,
+        "highest_bid": 12636433.014245,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "BTC",
+        "currency2": "MMK",
+        "volume24h": 0.0
     },
     "BTCMYR": {
-        "last": 38472.364,
-        "lowest_ask": 38758.065119,
-        "highest_bid": 38090.600066,
-        "low_price": 33400.21400000001,
-        "high_price": 42943.968,
+        "last": 39436.97410000001,
+        "lowest_ask": 39760.644508,
+        "highest_bid": 38670.511715,
+        "low_price": 35457.612799999995,
+        "high_price": 40225.02,
         "currency1": "BTC",
         "currency2": "MYR",
-        "volume24h": 27.60741832
-    },
-    "BTCNAD": {
-        "last": 72746.562,
-        "lowest_ask": null,
-        "highest_bid": 157258.101075,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "BTC",
-        "currency2": "NAD",
-        "volume24h": 0.0
+        "volume24h": 30.02095107
     },
     "BTCNGN": {
-        "last": 5297640.0,
-        "lowest_ask": 3408669.785197,
-        "highest_bid": 3488067.0,
-        "low_price": 2988579.6000000006,
-        "high_price": 6272833.000000001,
+        "last": 4111600.76,
+        "lowest_ask": 4156150.0,
+        "highest_bid": 4053259.98396,
+        "low_price": 3100983.6000000006,
+        "high_price": 6421814.0,
         "currency1": "BTC",
         "currency2": "NGN",
-        "volume24h": 199.16248975
+        "volume24h": 236.67052978
     },
-    "BTCPKR": {
-        "last": 1467132.912,
-        "lowest_ask": 1465600.07584,
-        "highest_bid": 1382169.096,
-        "low_price": 1349354.32,
-        "high_price": 1475251.68,
-        "currency1": "BTC",
-        "currency2": "PKR",
-        "volume24h": 1.25633774
-    },
-    "BTCSGD": {
-        "last": 11961.0,
-        "lowest_ask": 13250.385536,
-        "highest_bid": 12196.467304,
+    "BTCNPR": {
+        "last": 943910.6859999999,
+        "lowest_ask": null,
+        "highest_bid": 1106918.01396,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
-        "currency2": "SGD",
+        "currency2": "NPR",
         "volume24h": 0.0
+    },
+    "BTCPKR": {
+        "last": 1581747.986,
+        "lowest_ask": 1634760.4773,
+        "highest_bid": 1514700.0,
+        "low_price": 1465527.105,
+        "high_price": 1631629.88,
+        "currency1": "BTC",
+        "currency2": "PKR",
+        "volume24h": 0.72531871
+    },
+    "BTCSGD": {
+        "last": 18328.06,
+        "lowest_ask": 23362.2797,
+        "highest_bid": 12402.671787,
+        "low_price": 12495.77,
+        "high_price": 18328.06,
+        "currency1": "BTC",
+        "currency2": "SGD",
+        "volume24h": 0.57813937
     },
     "BTCTHB": {
         "last": 248835.6,
-        "lowest_ask": 313353.712,
-        "highest_bid": null,
+        "lowest_ask": 326438.868,
+        "highest_bid": 272785.40982,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
         "currency2": "THB",
         "volume24h": 0.0
     },
-    "BTCTZS": {
-        "last": 22525820.45,
-        "lowest_ask": 22780433.1935,
-        "highest_bid": 19724512.5,
-        "low_price": 19443808.799999997,
-        "high_price": 22836017.700000003,
-        "currency1": "BTC",
-        "currency2": "TZS",
-        "volume24h": 0.70681345
-    },
-    "BTCUGX": {
-        "last": 28039035.8,
-        "lowest_ask": null,
-        "highest_bid": 31761176.634,
+    "BTCTRY": {
+        "last": 63266.154065,
+        "lowest_ask": 63266.154065,
+        "highest_bid": null,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
-        "currency2": "UGX",
+        "currency2": "TRY",
         "volume24h": 0.0
     },
+    "BTCTZS": {
+        "last": 22255835.400000002,
+        "lowest_ask": 22443321.807,
+        "highest_bid": 20589037.68636,
+        "low_price": 20433454.74,
+        "high_price": 24094210.406400003,
+        "currency1": "BTC",
+        "currency2": "TZS",
+        "volume24h": 0.18954863
+    },
     "BTCVES": {
-        "last": 782741300.0,
+        "last": 1245644999.9999998,
         "lowest_ask": null,
-        "highest_bid": 989999999.01,
+        "highest_bid": 1211262525.0,
         "low_price": null,
         "high_price": null,
         "currency1": "BTC",
@@ -200,24 +220,34 @@
         "volume24h": 0.0
     },
     "BTCVND": {
-        "last": 207641077.1617,
-        "lowest_ask": 209320404.8055,
-        "highest_bid": 205833481.722,
-        "low_price": 180683515.0,
-        "high_price": 238690260.6,
+        "last": 215217971.03700003,
+        "lowest_ask": 216518120.344588,
+        "highest_bid": 212608036.5552,
+        "low_price": 200981220.0,
+        "high_price": 220182179.00000003,
         "currency1": "BTC",
         "currency2": "VND",
-        "volume24h": 77.99808627
+        "volume24h": 63.10580338
     },
     "BTCZAR": {
-        "last": 169948.992,
+        "last": 164439.54,
         "lowest_ask": null,
-        "highest_bid": 168071.021989,
-        "low_price": 151660.425,
-        "high_price": 170137.6342,
+        "highest_bid": 165030.641622,
+        "low_price": 155306.9542,
+        "high_price": 167343.92250000002,
         "currency1": "BTC",
         "currency2": "ZAR",
-        "volume24h": 4.8567758
+        "volume24h": 13.5329368
+    },
+    "ETHAED": {
+        "last": 467.4112,
+        "lowest_ask": null,
+        "highest_bid": 820.253808,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "ETH",
+        "currency2": "AED",
+        "volume24h": 0.0
     },
     "ETHCAD": {
         "last": 216.9024,
@@ -232,7 +262,7 @@
     "ETHCNY": {
         "last": 1088.868,
         "lowest_ask": null,
-        "highest_bid": 1476.4365,
+        "highest_bid": 1542.16656,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
@@ -242,7 +272,7 @@
     "ETHGBP": {
         "last": 89.5724,
         "lowest_ask": null,
-        "highest_bid": 128.660895,
+        "highest_bid": 136.203606,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
@@ -250,29 +280,49 @@
         "volume24h": 0.0
     },
     "ETHGHS": {
-        "last": 1163.621,
-        "lowest_ask": 1353.91914,
-        "highest_bid": 1115.40726,
+        "last": 1127.25,
+        "lowest_ask": 1391.09219,
+        "highest_bid": 1119.796623,
+        "low_price": 1127.25,
+        "high_price": 1127.25,
+        "currency1": "ETH",
+        "currency2": "GHS",
+        "volume24h": 0.10482549
+    },
+    "ETHIDR": {
+        "last": 2837738.88,
+        "lowest_ask": 3492507.2,
+        "highest_bid": 3045466.62,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
-        "currency2": "GHS",
+        "currency2": "IDR",
         "volume24h": 0.0
     },
     "ETHINR": {
-        "last": 16914.9556,
-        "lowest_ask": 17129.228724,
-        "highest_bid": 16525.542825,
-        "low_price": 16166.4,
-        "high_price": 17163.276,
+        "last": 17208.6292,
+        "lowest_ask": 18199.0,
+        "highest_bid": 17416.1988,
+        "low_price": 17114.89,
+        "high_price": 22463.1,
         "currency1": "ETH",
         "currency2": "INR",
-        "volume24h": 6.17161535
+        "volume24h": 5.94531797
+    },
+    "ETHJPY": {
+        "last": 23846.79528,
+        "lowest_ask": null,
+        "highest_bid": 23846.79528,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "ETH",
+        "currency2": "JPY",
+        "volume24h": 0.0
     },
     "ETHKES": {
-        "last": 20535.3407,
-        "lowest_ask": 31517.186582,
-        "highest_bid": 20003.60538,
+        "last": 23171.986,
+        "lowest_ask": 29715.682135,
+        "highest_bid": 23334.68412,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
@@ -280,69 +330,59 @@
         "volume24h": 0.0
     },
     "ETHUSD": {
-        "last": 173.83,
+        "last": 212.6919,
         "lowest_ask": null,
-        "highest_bid": 203.524873,
+        "highest_bid": 215.02307,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
         "currency2": "USD",
         "volume24h": 0.0
     },
-    "ETHKRW": {
-        "last": 1159258.6,
-        "lowest_ask": null,
-        "highest_bid": 256210.315948,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "ETH",
-        "currency2": "KRW",
-        "volume24h": 0.0
-    },
     "ETHMYR": {
-        "last": 926.115,
-        "lowest_ask": 936.035175,
-        "highest_bid": 915.39063,
-        "low_price": 830.9277,
-        "high_price": 1166.66,
+        "last": 985.9594,
+        "lowest_ask": 984.745619,
+        "highest_bid": 933.753869,
+        "low_price": 909.4444,
+        "high_price": 998.286,
         "currency1": "ETH",
         "currency2": "MYR",
-        "volume24h": 103.43708977
+        "volume24h": 249.01967247
     },
-    "ETHNAD": {
-        "last": 3898.105777,
+    "ETHNGN": {
+        "last": 100205.1,
+        "lowest_ask": 103191.3162,
+        "highest_bid": 100129.0752,
+        "low_price": 65638.6,
+        "high_price": 109302.4532,
+        "currency1": "ETH",
+        "currency2": "NGN",
+        "volume24h": 95.19887823
+    },
+    "ETHOMR": {
+        "last": 84.824301,
         "lowest_ask": null,
-        "highest_bid": 3898.105777,
+        "highest_bid": 84.824301,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
-        "currency2": "NAD",
+        "currency2": "OMR",
         "volume24h": 0.0
     },
-    "ETHNGN": {
-        "last": 85896.45,
-        "lowest_ask": 87148.1025,
-        "highest_bid": 82532.80035,
-        "low_price": 74021.5,
-        "high_price": 88308.48,
-        "currency1": "ETH",
-        "currency2": "NGN",
-        "volume24h": 65.30528322
-    },
     "ETHPKR": {
-        "last": 33151.242,
-        "lowest_ask": 38194.53875,
-        "highest_bid": 33135.45345,
-        "low_price": 33151.242,
-        "high_price": 37742.25,
+        "last": 36695.265,
+        "lowest_ask": 40905.0,
+        "highest_bid": 36205.59789,
+        "low_price": 36695.265,
+        "high_price": 36695.265,
         "currency1": "ETH",
         "currency2": "PKR",
-        "volume24h": 1.01928525
+        "volume24h": 0.6055885
     },
     "ETHSGD": {
-        "last": 380.831,
-        "lowest_ask": 316.530515,
-        "highest_bid": 293.853047,
+        "last": 327.9236,
+        "lowest_ask": 337.364987,
+        "highest_bid": 305.899902,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
@@ -351,8 +391,8 @@
     },
     "ETHTHB": {
         "last": 5882.25,
-        "lowest_ask": 7100.9565,
-        "highest_bid": null,
+        "lowest_ask": 8892.6864,
+        "highest_bid": 6475.2534,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
@@ -360,29 +400,19 @@
         "volume24h": 0.0
     },
     "ETHTZS": {
-        "last": 552292.0,
-        "lowest_ask": 559469.3,
-        "highest_bid": 463021.02,
-        "low_price": 552292.0,
-        "high_price": 552292.0,
+        "last": 699982.7496,
+        "lowest_ask": 701154.12,
+        "highest_bid": 493458.966,
+        "low_price": 694827.0,
+        "high_price": 699982.7496,
         "currency1": "ETH",
         "currency2": "TZS",
-        "volume24h": 0.0166
-    },
-    "ETHUGX": {
-        "last": 822958.8,
-        "lowest_ask": null,
-        "highest_bid": 665066.556,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "ETH",
-        "currency2": "UGX",
-        "volume24h": 0.0
+        "volume24h": 0.45
     },
     "ETHVES": {
-        "last": 4333746.1376,
-        "lowest_ask": 4333746.1376,
-        "highest_bid": 19800000.0,
+        "last": 5590530.0224,
+        "lowest_ask": 5590530.0224,
+        "highest_bid": null,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
@@ -390,29 +420,49 @@
         "volume24h": 0.0
     },
     "ETHVND": {
-        "last": 4969999.1747,
-        "lowest_ask": 5030561.573896,
-        "highest_bid": 4942403.8983,
-        "low_price": 4660700.0,
-        "high_price": 5243955.35,
+        "last": 5288298.4,
+        "lowest_ask": 5337892.016,
+        "highest_bid": 5242472.2944,
+        "low_price": 4548000.0,
+        "high_price": 5654750.0,
         "currency1": "ETH",
         "currency2": "VND",
-        "volume24h": 2106.89880236
+        "volume24h": 1619.55191425
     },
     "ETHZAR": {
-        "last": 2624.3995,
+        "last": 3506.975,
         "lowest_ask": null,
-        "highest_bid": 3079.4247,
+        "highest_bid": 3371.59746,
         "low_price": null,
         "high_price": null,
         "currency1": "ETH",
         "currency2": "ZAR",
         "volume24h": 0.0
     },
+    "USDTAUD": {
+        "last": 1.49,
+        "lowest_ask": null,
+        "highest_bid": 1.4355,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "USDT",
+        "currency2": "AUD",
+        "volume24h": 0.0
+    },
+    "USDTCHF": {
+        "last": 0.9797,
+        "lowest_ask": 0.9797,
+        "highest_bid": null,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "USDT",
+        "currency2": "CHF",
+        "volume24h": 0.0
+    },
     "USDTCNY": {
         "last": 7.1,
-        "lowest_ask": 7.6255,
-        "highest_bid": 6.93,
+        "lowest_ask": 7.1508,
+        "highest_bid": 6.831,
         "low_price": null,
         "high_price": null,
         "currency1": "USDT",
@@ -430,149 +480,169 @@
         "volume24h": 0.0
     },
     "USDTGHS": {
-        "last": 5.46,
+        "last": 5.3,
         "lowest_ask": null,
-        "highest_bid": 4.95,
+        "highest_bid": 5.247,
         "low_price": null,
         "high_price": null,
         "currency1": "USDT",
         "currency2": "GHS",
         "volume24h": 0.0
     },
+    "USDTIDR": {
+        "last": 14035.0,
+        "lowest_ask": 14999.0,
+        "highest_bid": 14000.0,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "USDT",
+        "currency2": "IDR",
+        "volume24h": 0.0
+    },
     "USDTINR": {
-        "last": 77.72,
-        "lowest_ask": 81.608,
-        "highest_bid": 77.022,
-        "low_price": 77.5,
-        "high_price": 78.45,
+        "last": 77.35,
+        "lowest_ask": 79.0,
+        "highest_bid": 77.3,
+        "low_price": 77.35,
+        "high_price": 79.5,
         "currency1": "USDT",
         "currency2": "INR",
-        "volume24h": 2528.946646
-    },
-    "USDTJPY": {
-        "last": 107.47,
-        "lowest_ask": null,
-        "highest_bid": 105.7914,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "USDT",
-        "currency2": "JPY",
-        "volume24h": 0.0
+        "volume24h": 2400.0
     },
     "USDTKES": {
-        "last": 100.4,
+        "last": 100.99,
         "lowest_ask": null,
-        "highest_bid": 98.406,
-        "low_price": null,
-        "high_price": null,
+        "highest_bid": 100.321155,
+        "low_price": 100.99,
+        "high_price": 100.99,
         "currency1": "USDT",
         "currency2": "KES",
-        "volume24h": 0.0
+        "volume24h": 8.12964415
     },
     "USDTUSD": {
-        "last": 1.04,
-        "lowest_ask": 1.0302,
-        "highest_bid": 0.9504,
+        "last": 0.97,
+        "lowest_ask": 1.0605,
+        "highest_bid": 0.95238,
         "low_price": null,
         "high_price": null,
         "currency1": "USDT",
         "currency2": "USD",
         "volume24h": 0.0
     },
-    "USDTMYR": {
-        "last": 4.37,
-        "lowest_ask": 4.405014,
-        "highest_bid": 4.3164,
-        "low_price": 4.11,
-        "high_price": 4.52,
-        "currency1": "USDT",
-        "currency2": "MYR",
-        "volume24h": 129643.86792964
-    },
-    "USDTNGN": {
-        "last": 391.0,
-        "lowest_ask": 423.19,
-        "highest_bid": 388.08,
-        "low_price": 361.0,
-        "high_price": 430.0,
-        "currency1": "USDT",
-        "currency2": "NGN",
-        "volume24h": 10224.47095561
-    },
-    "USDTNZD": {
-        "last": 1.6434,
+    "USDTKRW": {
+        "last": 1199.88,
         "lowest_ask": null,
-        "highest_bid": 1.6434,
+        "highest_bid": 1199.88,
         "low_price": null,
         "high_price": null,
         "currency1": "USDT",
-        "currency2": "NZD",
+        "currency2": "KRW",
         "volume24h": 0.0
     },
+    "USDTMYR": {
+        "last": 4.3,
+        "lowest_ask": 4.358756,
+        "highest_bid": 4.2471,
+        "low_price": 4.01,
+        "high_price": 4.45,
+        "currency1": "USDT",
+        "currency2": "MYR",
+        "volume24h": 191204.48388386
+    },
+    "USDTNGN": {
+        "last": 446.2,
+        "lowest_ask": 469.65,
+        "highest_bid": 441.738,
+        "low_price": 416.0,
+        "high_price": 500.0,
+        "currency1": "USDT",
+        "currency2": "NGN",
+        "volume24h": 22923.45814434
+    },
     "USDTPKR": {
-        "last": 156.6,
-        "lowest_ask": 169.68,
-        "highest_bid": 158.400099,
-        "low_price": 156.6,
-        "high_price": 164.0,
+        "last": 168.0,
+        "lowest_ask": 175.74,
+        "highest_bid": 161.469,
+        "low_price": 164.4,
+        "high_price": 168.2,
         "currency1": "USDT",
         "currency2": "PKR",
-        "volume24h": 657.91918548
+        "volume24h": 388.58553187
+    },
+    "USDTPLN": {
+        "last": 4.0097,
+        "lowest_ask": 4.0097,
+        "highest_bid": null,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "USDT",
+        "currency2": "PLN",
+        "volume24h": 0.0
     },
     "USDTSGD": {
-        "last": 1.4,
-        "lowest_ask": 1.4645,
-        "highest_bid": 1.382832,
-        "low_price": 1.4,
-        "high_price": 1.44,
+        "last": 1.37,
+        "lowest_ask": 1.47561,
+        "highest_bid": 1.3563,
+        "low_price": 1.37,
+        "high_price": 1.37,
         "currency1": "USDT",
         "currency2": "SGD",
-        "volume24h": 10800.0
+        "volume24h": 13532.894348
+    },
+    "USDTTHB": {
+        "last": 30.44,
+        "lowest_ask": null,
+        "highest_bid": 28.71,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "USDT",
+        "currency2": "THB",
+        "volume24h": 0.0
     },
     "USDTTZS": {
         "last": 2180.0,
         "lowest_ask": null,
-        "highest_bid": 2158.2,
+        "highest_bid": 2326.5,
         "low_price": null,
         "high_price": null,
         "currency1": "USDT",
         "currency2": "TZS",
         "volume24h": 0.0
     },
-    "USDTUGX": {
-        "last": 2900.0,
-        "lowest_ask": null,
-        "highest_bid": 2871.0,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "USDT",
-        "currency2": "UGX",
-        "volume24h": 0.0
-    },
     "USDTVND": {
-        "last": 23455.0,
-        "lowest_ask": 23689.55,
-        "highest_bid": 23314.5,
+        "last": 23385.0,
+        "lowest_ask": 23582.49,
+        "highest_bid": 23222.43,
         "low_price": 22000.0,
         "high_price": 25000.0,
         "currency1": "USDT",
         "currency2": "VND",
-        "volume24h": 358060.87899291
+        "volume24h": 392164.88955872
     },
     "USDTZAR": {
-        "last": 12.22,
+        "last": 13.0,
         "lowest_ask": null,
-        "highest_bid": 16.0875,
+        "highest_bid": 15.345,
         "low_price": null,
         "high_price": null,
         "currency1": "USDT",
         "currency2": "ZAR",
         "volume24h": 0.0
     },
+    "BCHCNY": {
+        "last": 1527.07005,
+        "lowest_ask": null,
+        "highest_bid": 1527.07005,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "BCH",
+        "currency2": "CNY",
+        "volume24h": 0.0
+    },
     "BCHGBP": {
         "last": 574.3441,
         "lowest_ask": null,
-        "highest_bid": 140.246608,
+        "highest_bid": 123.050862,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
@@ -580,29 +650,39 @@
         "volume24h": 0.0
     },
     "BCHGHS": {
-        "last": 1195.8828,
+        "last": 1261.2124,
         "lowest_ask": null,
-        "highest_bid": 1377.241866,
+        "highest_bid": 1177.39314,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
         "currency2": "GHS",
         "volume24h": 0.0
     },
+    "BCHIDR": {
+        "last": 3018595.65,
+        "lowest_ask": null,
+        "highest_bid": 3018595.65,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "BCH",
+        "currency2": "IDR",
+        "volume24h": 0.0
+    },
     "BCHINR": {
-        "last": 24140.45,
-        "lowest_ask": 21456.834102,
-        "highest_bid": 19422.6417,
-        "low_price": 24140.45,
-        "high_price": 24140.45,
+        "last": 16956.06,
+        "lowest_ask": 18331.1,
+        "highest_bid": 17005.4485,
+        "low_price": 16956.06,
+        "high_price": 16956.06,
         "currency1": "BCH",
         "currency2": "INR",
-        "volume24h": 0.01
+        "volume24h": 0.1249
     },
     "BCHKES": {
-        "last": 39901.686,
-        "lowest_ask": 46554.773546,
-        "highest_bid": 24270.734862,
+        "last": 41477.359,
+        "lowest_ask": null,
+        "highest_bid": 21987.595575,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
@@ -610,99 +690,109 @@
         "volume24h": 0.0
     },
     "BCHUSD": {
-        "last": 256.9036,
-        "lowest_ask": 259.911279,
-        "highest_bid": 243.413626,
-        "low_price": 256.035,
-        "high_price": 256.9036,
-        "currency1": "BCH",
-        "currency2": "USD",
-        "volume24h": 0.33
-    },
-    "BCHMYR": {
-        "last": 1038.858,
-        "lowest_ask": 1141.550924,
-        "highest_bid": 1095.991924,
-        "low_price": 1038.858,
-        "high_price": 1134.2868,
-        "currency1": "BCH",
-        "currency2": "MYR",
-        "volume24h": 12.59746968
-    },
-    "BCHNGN": {
-        "last": 113706.0,
-        "lowest_ask": 115802.055,
-        "highest_bid": 98878.9032,
-        "low_price": 97725.0,
-        "high_price": 115032.5,
-        "currency1": "BCH",
-        "currency2": "NGN",
-        "volume24h": 1.87264274
-    },
-    "BCHPKR": {
-        "last": 35466.6,
+        "last": 231.3708,
         "lowest_ask": null,
-        "highest_bid": 39349.7676,
+        "highest_bid": 213.125863,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
-        "currency2": "PKR",
+        "currency2": "USD",
         "volume24h": 0.0
     },
+    "BCHMYR": {
+        "last": 955.8952,
+        "lowest_ask": 1079.25469,
+        "highest_bid": 918.455175,
+        "low_price": 903.344,
+        "high_price": 958.7628,
+        "currency1": "BCH",
+        "currency2": "MYR",
+        "volume24h": 16.02985679
+    },
+    "BCHNGN": {
+        "last": 98763.3,
+        "lowest_ask": 104990.2575,
+        "highest_bid": 94050.0,
+        "low_price": 97755.372,
+        "high_price": 99121.2849,
+        "currency1": "BCH",
+        "currency2": "NGN",
+        "volume24h": 4.71802376
+    },
+    "BCHPKR": {
+        "last": 35038.1045,
+        "lowest_ask": 42447.674,
+        "highest_bid": 35476.71435,
+        "low_price": 35038.1045,
+        "high_price": 35038.1045,
+        "currency1": "BCH",
+        "currency2": "PKR",
+        "volume24h": 0.2249
+    },
     "BCHSGD": {
-        "last": 421.6,
+        "last": 317.928,
         "lowest_ask": null,
-        "highest_bid": 348.094098,
+        "highest_bid": 301.806584,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
         "currency2": "SGD",
         "volume24h": 0.0
     },
+    "BCHTHB": {
+        "last": 6639.435,
+        "lowest_ask": null,
+        "highest_bid": 6639.435,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "BCH",
+        "currency2": "THB",
+        "volume24h": 0.0
+    },
     "BCHTZS": {
         "last": 986937.55,
         "lowest_ask": null,
-        "highest_bid": 592768.935,
+        "highest_bid": 490211.6175,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
         "currency2": "TZS",
         "volume24h": 0.0
     },
-    "BCHUGX": {
-        "last": 756726.3,
-        "lowest_ask": null,
-        "highest_bid": 756726.3,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "BCH",
-        "currency2": "UGX",
-        "volume24h": 0.0
-    },
     "BCHVND": {
-        "last": 5958891.72,
-        "lowest_ask": 6048212.6637,
-        "highest_bid": 5920374.3291,
-        "low_price": 5892685.659,
-        "high_price": 6106545.55,
+        "last": 5233283.145,
+        "lowest_ask": 5293541.0475,
+        "highest_bid": 5191152.912,
+        "low_price": 5195151.79,
+        "high_price": 5259074.5,
         "currency1": "BCH",
         "currency2": "VND",
-        "volume24h": 427.22223044
+        "volume24h": 225.10743657
     },
     "BCHZAR": {
         "last": 2321.48,
         "lowest_ask": null,
-        "highest_bid": 3834.07992,
+        "highest_bid": 3363.9804,
         "low_price": null,
         "high_price": null,
         "currency1": "BCH",
         "currency2": "ZAR",
         "volume24h": 0.0
     },
-    "LTCGBP": {
-        "last": 26.118378,
+    "LTCCNY": {
+        "last": 282.53016,
         "lowest_ask": null,
-        "highest_bid": 26.118378,
+        "highest_bid": 282.53016,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "LTC",
+        "currency2": "CNY",
+        "volume24h": 0.0
+    },
+    "LTCGBP": {
+        "last": 22.766198,
+        "lowest_ask": null,
+        "highest_bid": 22.766198,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
@@ -710,29 +800,39 @@
         "volume24h": 0.0
     },
     "LTCGHS": {
-        "last": 253.4532,
+        "last": 239.08,
         "lowest_ask": null,
-        "highest_bid": 256.48623,
+        "highest_bid": 216.606456,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
         "currency2": "GHS",
         "volume24h": 0.0
     },
+    "LTCIDR": {
+        "last": 558484.08,
+        "lowest_ask": null,
+        "highest_bid": 558484.08,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "LTC",
+        "currency2": "IDR",
+        "volume24h": 0.0
+    },
     "LTCINR": {
-        "last": 3452.17,
-        "lowest_ask": 3939.0,
-        "highest_bid": 3643.41978,
-        "low_price": 3447.5322,
-        "high_price": 3705.0,
+        "last": 3914.0,
+        "lowest_ask": 3515.6,
+        "highest_bid": 3186.788,
+        "low_price": 2995.19,
+        "high_price": 3914.0,
         "currency1": "LTC",
         "currency2": "INR",
-        "volume24h": 1.65993359
+        "volume24h": 1.22321881
     },
     "LTCKES": {
-        "last": 3433.68,
-        "lowest_ask": null,
-        "highest_bid": 4462.6725,
+        "last": 4227.272,
+        "lowest_ask": 6474.908,
+        "highest_bid": 3889.908,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
@@ -742,7 +842,7 @@
     "LTCUSD": {
         "last": 46.8264,
         "lowest_ask": null,
-        "highest_bid": 45.09648,
+        "highest_bid": 39.431383,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
@@ -750,89 +850,79 @@
         "volume24h": 0.0
     },
     "LTCMYR": {
-        "last": 211.2969,
-        "lowest_ask": 214.17459,
-        "highest_bid": 203.87367,
-        "low_price": 201.3702,
-        "high_price": 216.936,
+        "last": 180.237,
+        "lowest_ask": 182.1333,
+        "highest_bid": 169.92756,
+        "low_price": 168.305,
+        "high_price": 180.9558,
         "currency1": "LTC",
         "currency2": "MYR",
-        "volume24h": 98.35375352
+        "volume24h": 111.20212979
     },
     "LTCNGN": {
-        "last": 19853.4,
-        "lowest_ask": 21086.78,
-        "highest_bid": 18367.4205,
-        "low_price": 16662.94,
-        "high_price": 19853.4,
+        "last": 19024.0,
+        "lowest_ask": 19466.4976,
+        "highest_bid": 16665.1848,
+        "low_price": 17657.584,
+        "high_price": 19024.0,
         "currency1": "LTC",
         "currency2": "NGN",
-        "volume24h": 8.22699252
+        "volume24h": 1.75165334
     },
     "LTCPKR": {
-        "last": 7818.84,
-        "lowest_ask": 8794.14575,
-        "highest_bid": 7422.129,
-        "low_price": 7818.84,
-        "high_price": 7818.84,
+        "last": 8013.493,
+        "lowest_ask": 7979.0,
+        "highest_bid": 6481.81512,
+        "low_price": null,
+        "high_price": null,
         "currency1": "LTC",
         "currency2": "PKR",
-        "volume24h": 7.46566358
+        "volume24h": 0.0
     },
     "LTCSGD": {
         "last": 94.8156,
         "lowest_ask": null,
-        "highest_bid": 64.82619,
+        "highest_bid": 55.838606,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
         "currency2": "SGD",
         "volume24h": 0.0
     },
-    "LTCTZS": {
-        "last": 99612.45,
+    "LTCTHB": {
+        "last": 1105.5528,
         "lowest_ask": null,
-        "highest_bid": 112741.2,
+        "highest_bid": 1105.5528,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "LTC",
+        "currency2": "THB",
+        "volume24h": 0.0
+    },
+    "LTCTZS": {
+        "last": 90420.0,
+        "lowest_ask": null,
+        "highest_bid": 90082.08,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
         "currency2": "TZS",
         "volume24h": 0.0
     },
-    "LTCUGX": {
-        "last": 126833.85,
-        "lowest_ask": null,
-        "highest_bid": 126833.85,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "LTC",
-        "currency2": "UGX",
-        "volume24h": 0.0
-    },
-    "LTCVES": {
-        "last": 3979800.0,
-        "lowest_ask": null,
-        "highest_bid": 3979800.0,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "LTC",
-        "currency2": "VES",
-        "volume24h": 0.0
-    },
     "LTCVND": {
-        "last": 1106840.0,
-        "lowest_ask": 1123440.98305,
-        "highest_bid": 1100873.4561,
-        "low_price": 1096196.4,
-        "high_price": 1132241.47,
+        "last": 970498.83,
+        "lowest_ask": 979382.052,
+        "highest_bid": 960193.08,
+        "low_price": 955933.02,
+        "high_price": 1001802.417,
         "currency1": "LTC",
         "currency2": "VND",
-        "volume24h": 446.15474244
+        "volume24h": 457.94440347
     },
     "LTCZAR": {
-        "last": 704.6325,
+        "last": 573.2496,
         "lowest_ask": null,
-        "highest_bid": 704.6325,
+        "highest_bid": 573.2496,
         "low_price": null,
         "high_price": null,
         "currency1": "LTC",
@@ -840,9 +930,9 @@
         "volume24h": 0.0
     },
     "XRPCNY": {
-        "last": 1.511433,
+        "last": 1.54,
         "lowest_ask": null,
-        "highest_bid": 1.511433,
+        "highest_bid": 1.19884,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
@@ -850,8 +940,8 @@
         "volume24h": 0.0
     },
     "XRPCOP": {
-        "last": 881.124,
-        "lowest_ask": 881.124,
+        "last": 567.216,
+        "lowest_ask": 567.216,
         "highest_bid": null,
         "low_price": null,
         "high_price": null,
@@ -860,9 +950,9 @@
         "volume24h": 0.0
     },
     "XRPGBP": {
-        "last": 0.118755,
+        "last": 0.09556,
         "lowest_ask": null,
-        "highest_bid": 0.118755,
+        "highest_bid": 0.09556,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
@@ -870,29 +960,39 @@
         "volume24h": 0.0
     },
     "XRPGHS": {
-        "last": 1.43,
+        "last": 1.0374,
         "lowest_ask": null,
-        "highest_bid": 1.178918,
+        "highest_bid": 0.8722,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
         "currency2": "GHS",
         "volume24h": 0.0
     },
+    "XRPIDR": {
+        "last": 2369.7765,
+        "lowest_ask": null,
+        "highest_bid": 2369.7765,
+        "low_price": null,
+        "high_price": null,
+        "currency1": "XRP",
+        "currency2": "IDR",
+        "volume24h": 0.0
+    },
     "XRPINR": {
-        "last": 16.984,
-        "lowest_ask": 17.662131,
-        "highest_bid": 16.880547,
-        "low_price": 15.62,
-        "high_price": 17.996,
+        "last": 14.796,
+        "lowest_ask": 14.742,
+        "highest_bid": 13.55211,
+        "low_price": 13.073,
+        "high_price": 19.44,
         "currency1": "XRP",
         "currency2": "INR",
-        "volume24h": 3634.06615175
+        "volume24h": 11035.30069
     },
     "XRPKES": {
-        "last": 22.198,
-        "lowest_ask": null,
-        "highest_bid": 20.749816,
+        "last": 18.522,
+        "lowest_ask": 25.52472,
+        "highest_bid": 15.63705,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
@@ -900,9 +1000,9 @@
         "volume24h": 0.0
     },
     "XRPUSD": {
-        "last": 0.192,
+        "last": 0.19,
         "lowest_ask": null,
-        "highest_bid": 0.207282,
+        "highest_bid": 0.167586,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
@@ -910,8 +1010,8 @@
         "volume24h": 0.0
     },
     "XRPKRW": {
-        "last": 262.795233,
-        "lowest_ask": 262.795233,
+        "last": 211.465215,
+        "lowest_ask": 211.465215,
         "highest_bid": null,
         "low_price": null,
         "high_price": null,
@@ -920,39 +1020,39 @@
         "volume24h": 0.0
     },
     "XRPMYR": {
-        "last": 0.968,
-        "lowest_ask": 0.968869,
-        "highest_bid": 0.937358,
-        "low_price": 0.869,
-        "high_price": 1.0164,
+        "last": 0.783,
+        "lowest_ask": 0.7979,
+        "highest_bid": 0.743629,
+        "low_price": 0.7259,
+        "high_price": 0.828,
         "currency1": "XRP",
         "currency2": "MYR",
-        "volume24h": 31354.40926682
+        "volume24h": 34994.6550955
     },
     "XRPNGN": {
-        "last": 94.6,
-        "lowest_ask": 94.72083,
-        "highest_bid": 84.20841,
-        "low_price": 76.02,
-        "high_price": 94.6,
+        "last": 80.28,
+        "lowest_ask": 81.5373,
+        "highest_bid": 73.841625,
+        "low_price": 76.5,
+        "high_price": 117.6246,
         "currency1": "XRP",
         "currency2": "NGN",
-        "volume24h": 4488.58403361
+        "volume24h": 3152.12220079
     },
     "XRPPKR": {
-        "last": 38.6144,
-        "lowest_ask": 38.663721,
-        "highest_bid": 33.467445,
-        "low_price": 38.6144,
-        "high_price": 38.6144,
+        "last": 29.88,
+        "lowest_ask": 34.441,
+        "highest_bid": 27.7992,
+        "low_price": null,
+        "high_price": null,
         "currency1": "XRP",
         "currency2": "PKR",
-        "volume24h": 800.0
+        "volume24h": 0.0
     },
     "XRPSGD": {
         "last": 0.2397,
-        "lowest_ask": 0.332624,
-        "highest_bid": 0.297968,
+        "lowest_ask": 0.267534,
+        "highest_bid": 0.236936,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
@@ -960,54 +1060,24 @@
         "volume24h": 0.0
     },
     "XRPTZS": {
-        "last": 446.4,
-        "lowest_ask": 605.77275,
-        "highest_bid": 507.40965,
+        "last": 401.76,
+        "lowest_ask": 487.45125,
+        "highest_bid": 387.79884,
         "low_price": null,
         "high_price": null,
         "currency1": "XRP",
         "currency2": "TZS",
         "volume24h": 0.0
     },
-    "XRPUGX": {
-        "last": 609.0,
-        "lowest_ask": null,
-        "highest_bid": 626.1651,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "XRP",
-        "currency2": "UGX",
-        "volume24h": 0.0
-    },
-    "XRPVES": {
-        "last": 23688.72,
-        "lowest_ask": null,
-        "highest_bid": 23688.72,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "XRP",
-        "currency2": "VES",
-        "volume24h": 0.0
-    },
     "XRPVND": {
-        "last": 5155.48,
-        "lowest_ask": 5167.79226,
-        "highest_bid": 5060.2761,
-        "low_price": 4938.15,
-        "high_price": 5253.6,
+        "last": 4223.16,
+        "lowest_ask": 4158.934065,
+        "highest_bid": 4080.11868,
+        "low_price": 3910.0,
+        "high_price": 4356.0,
         "currency1": "XRP",
         "currency2": "VND",
-        "volume24h": 182090.99665383
-    },
-    "XRPZAR": {
-        "last": 2.806947,
-        "lowest_ask": null,
-        "highest_bid": 2.806947,
-        "low_price": null,
-        "high_price": null,
-        "currency1": "XRP",
-        "currency2": "ZAR",
-        "volume24h": 0.0
+        "volume24h": 266607.5593284
     },
     "BTCUSDT": {
         "last": 9736.94,

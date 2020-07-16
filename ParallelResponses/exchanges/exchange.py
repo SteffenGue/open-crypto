@@ -55,7 +55,7 @@ class Exchange:
     active_flag: bool
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, database_handler_request_params):
+    def __init__(self, yaml_file: Dict):
         """
         Creates a new Exchange-object.
 
@@ -73,8 +73,6 @@ class Exchange:
             This is necessary to perform function calls from the request parameters which include
             database queries. Database connections should only take place from DatabaseHandler instances.
         """
-        self.request_params = database_handler_request_params
-
         self.name = yaml_file['name']
         if yaml_file.get('terms'):
             if yaml_file['terms'].get('terms_url'):
