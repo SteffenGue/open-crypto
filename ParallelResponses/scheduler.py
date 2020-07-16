@@ -60,12 +60,12 @@ class Scheduler:
         # checking every exchange for its flag
         primary_exchanges = {}
         secondary_exchanges = {}
-        #todo: anpassen an neues dict
-        for exchange in all_exchanges:
-            if exchanges[exchange].active_flag:
-                primary_exchanges[exchanges[exchange].name] = exchanges[exchange]
+        #todo: loop wieder einfügen für hochfrequente daten
+        for exchange in exchanges_with_pairs.keys():
+            if exchange.active_flag:
+                primary_exchanges[exchange.name] = exchanges_with_pairs[exchange]
             else:
-                secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
+                secondary_exchanges[exchange.name] = exchanges_with_pairs[exchange]
 
         # if there are exchanges to request, one request per exchange will be sent
         if not len(primary_exchanges) == 0:
@@ -81,7 +81,7 @@ class Scheduler:
                     formatted_response = exchange.format_ticker(response)
                     self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
         else:
-            print('There are currently np exchanges to request')
+            print('There are currently no exchanges to request')
 
         # if there are exchanges to test the connection, one test per exchange will be sent
         if not len(secondary_exchanges) == 0:
