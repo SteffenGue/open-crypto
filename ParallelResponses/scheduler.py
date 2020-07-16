@@ -1,6 +1,6 @@
 import asyncio
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Callable, Dict
 
 from Job import Job
@@ -40,19 +40,61 @@ class Scheduler:
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
     async def get_tickers(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+        """
+        All exchanges will be managed in two lists ( a primary and a secondary list ). Every exchange will be separated
+        each request-run depending of its activity flag ( look exchange.py class description ). All exchanges in the
+        primary list will send ticker requests. All exchanges in the secondary list will their connection.
+        :param exchanges_with_pairs: The dictionary of all given exchanges with the given exchange currency pairs
+        :return: None
+        """
         print('Starting to collect ticker.')
+        # start_time : datetime when request run is started
+        # delta : given microseconds for the datetime
         start_time = datetime.utcnow()
-        responses = await asyncio.gather(*(ex.request('ticker', start_time) for ex in exchanges_with_pairs.keys()))
+        delta = start_time.microsecond
+        # rounding the given datetime on seconds
+        start_time = start_time - timedelta(microseconds=delta)
+        if delta >= 500000:
+            start_time = start_time + timedelta(seconds=1)
 
-        for response in responses:
-            if response:
-                # print('Response: {}'.format(response))
-                exchange_name = response[0]
-                for exchange in exchanges_with_pairs.keys():
-                    if exchange.name.upper() == exchange_name.upper():
-                        break
-                formatted_response = exchange.format_ticker(response)
-                self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
+        # checking every exchange for its flag
+        primary_exchanges = {}
+        secondary_exchanges = {}
+        #todo: anpassen an neues dict
+        for exchange in all_exchanges:
+            if exchanges[exchange].active_flag:
+                primary_exchanges[exchanges[exchange].name] = exchanges[exchange]
+            else:
+                secondary_exchanges[exchanges[exchange].name] = exchanges[exchange]
+
+        # if there are exchanges to request, one request per exchange will be sent
+        if not len(primary_exchanges) == 0:
+            responses = await asyncio.gather(*(ex.request('ticker', start_time) for ex in exchanges_with_pairs.keys()))
+
+            for response in responses:
+                if response:
+                    # print('Response: {}'.format(response))
+                    exchange_name = response[0]
+                    for exchange in exchanges_with_pairs.keys():
+                        if exchange.name.upper() == exchange_name.upper():
+                            break
+                    formatted_response = exchange.format_ticker(response)
+                    self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
+        else:
+            print('There are currently np exchanges to request')
+
+        # if there are exchanges to test the connection, one test per exchange will be sent
+        if not len(secondary_exchanges) == 0:
+            test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
+                                                    for exchange in secondary_exchanges))
+            for test_response in test_responses:
+                if test_response:
+                    print('Test result: {}'.format(test_response))
+                    exchange = secondary_exchanges[test_response[0]]
+                    exchange.update_flag(test_response[1])
+        else:
+            print('There are currently no exchanges to test its connection.')
+
         print('Done collecting ticker.')
 
     async def get_historic_rates(self, exchanges: [Exchange]):
