@@ -1,4 +1,5 @@
 import itertools
+import time
 import json
 import traceback
 from datetime import datetime
@@ -48,6 +49,7 @@ class Exchange:
     terms_url: str
     scrape_permission: bool
     api_url: str
+    rate_limit: float
     request_urls: dict
     response_mappings: dict
     exception_counter: int
@@ -81,8 +83,10 @@ class Exchange:
                 self.scrape_permission = yaml_file['terms']['permission']
 
         self.api_url = yaml_file['api_url']
-        if yaml_file.get('rate_limit'):
-            self.rate_limit = yaml_file['rate_limit']
+        if yaml_file.get('rate_limit') and not None:
+            self.rate_limit = yaml_file['rate_limit']['units'] / yaml_file['rate_limit']['max']
+        else:
+            self.rate_limit = 0
         self.request_urls = self.extract_request_urls(yaml_file['requests'])
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
@@ -241,6 +245,8 @@ class Exchange:
                         self.exception_counter += 1
                         self.consecutive_exception = True
                         pass
+                    finally:
+                        time.sleep(self.rate_limit)
 
                 print("Completed collecting historic rates for {}.".format(self.name))
                 return self.name, responses

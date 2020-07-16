@@ -48,6 +48,16 @@ class Scheduler:
         :return: None
         """
         print('Starting to collect ticker.')
+        # checking every exchange for its flag
+        primary_exchanges = {}
+        secondary_exchanges = {}
+        #todo: loop wieder einfügen für hochfrequente daten
+        for exchange in exchanges_with_pairs.keys():
+            if exchange.active_flag:
+                primary_exchanges[exchange] = exchanges_with_pairs[exchange]
+            else:
+                secondary_exchanges[exchange] = exchanges_with_pairs[exchange]
+
         # start_time : datetime when request run is started
         # delta : given microseconds for the datetime
         start_time = datetime.utcnow()
@@ -57,40 +67,29 @@ class Scheduler:
         if delta >= 500000:
             start_time = start_time + timedelta(seconds=1)
 
-        # checking every exchange for its flag
-        primary_exchanges = {}
-        secondary_exchanges = {}
-        #todo: loop wieder einfügen für hochfrequente daten
-        for exchange in exchanges_with_pairs.keys():
-            if exchange.active_flag:
-                primary_exchanges[exchange.name] = exchanges_with_pairs[exchange]
-            else:
-                secondary_exchanges[exchange.name] = exchanges_with_pairs[exchange]
-
         # if there are exchanges to request, one request per exchange will be sent
         if not len(primary_exchanges) == 0:
-            responses = await asyncio.gather(*(ex.request('ticker', start_time) for ex in exchanges_with_pairs.keys()))
+            responses = await asyncio.gather(*(ex.request('ticker', start_time) for ex in primary_exchanges.keys()))
 
             for response in responses:
                 if response:
                     # print('Response: {}'.format(response))
                     exchange_name = response[0]
-                    for exchange in exchanges_with_pairs.keys():
+                    for exchange in primary_exchanges.keys():
                         if exchange.name.upper() == exchange_name.upper():
                             break
                     formatted_response = exchange.format_ticker(response)
-                    self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
+                    self.database_handler.persist_tickers(primary_exchanges[exchange], formatted_response)
         else:
             print('There are currently no exchanges to request')
 
         # if there are exchanges to test the connection, one test per exchange will be sent
         if not len(secondary_exchanges) == 0:
-            test_responses = await asyncio.gather(*(secondary_exchanges[exchange].test_connection()
-                                                    for exchange in secondary_exchanges))
+            test_responses = await asyncio.gather(*(ex.test_connection() for ex in secondary_exchanges.keys()))
             for test_response in test_responses:
                 if test_response:
-                    print('Test result: {}'.format(test_response))
-                    exchange = secondary_exchanges[test_response[0]]
+                    # print('Test result: {}'.format(test_response))
+                    exchange = test_response[0]
                     exchange.update_flag(test_response[1])
         else:
             print('There are currently no exchanges to test its connection.')
