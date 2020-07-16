@@ -83,8 +83,12 @@ class Exchange:
                 self.scrape_permission = yaml_file['terms']['permission']
 
         self.api_url = yaml_file['api_url']
-        if yaml_file.get('rate_limit') and not None:
-            self.rate_limit = yaml_file['rate_limit']['units'] / yaml_file['rate_limit']['max']
+        if yaml_file.get('rate_limit') and yaml_file.get('units') and yaml_file.get('max'):
+            #if (yaml_file['rate_limit'] is None or yaml_file['rate_limit']['units'] is None or yaml_file['rate_limit']['max'] is None):
+            if yaml_file['rate_limit']['max'] <= 0:
+                self.rate_limit = 0
+            else:
+                self.rate_limit = yaml_file['rate_limit']['units'] / yaml_file['rate_limit']['max']
         else:
             self.rate_limit = 0
         self.request_urls = self.extract_request_urls(yaml_file['requests'])
@@ -548,7 +552,6 @@ class Exchange:
                                             result['ticker_daily_volume']))
         return result
 
-
     def add_exchange_currency_pairs(self, currency_pairs: list):
         """
         Method that adds the given currency-pairs to exchange-currency-pairs.
@@ -665,7 +668,6 @@ class Exchange:
                     results.extend(result)
         return results
 
-        
     def update_exception_counter(self):
         """
         This method updates the given parameter of the exception counter and the flag which represents the activity of
