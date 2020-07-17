@@ -1,5 +1,0 @@
-{
-    "message": "Pair {CURRENCY_PAIR} is not found",
-    "status": "FAILURE",
-    "error": "BAD_REQUEST"
-}

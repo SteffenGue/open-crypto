@@ -4,7 +4,7 @@ terms:
   permission: null
   search_targets:
   - tag: div
-    id: main
+    id: model
   - tag: div
     class: terms_content
 api_url: https://api.bitzapi.com/
@@ -300,6 +300,22 @@ requests:
         source:
           type: str
     mapping:
+    - key: currency_pair_second
+      path:
+        - symbol
+      type:
+        - str
+        - split
+        - '_'
+        - 0
+    - key: currency_pair_first
+      path:
+        - symbol
+      type:
+        - str
+        - split
+        - '_'
+        - 0
     - key: ticker_best_ask
       path:
       - data

@@ -3,137 +3,137 @@
     "message": "",
     "result": [
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_BTC",
-            "lastPrice": "0.024998",
-            "lowestAsk": "0.025015",
-            "highestBid": "0.024981",
-            "baseVolume24h": "21644.369",
-            "quoteVolume24h": "535.755072603",
+            "lastPrice": "0.024929",
+            "lowestAsk": "0.024936",
+            "highestBid": "0.024922",
+            "baseVolume24h": "13326.127",
+            "quoteVolume24h": "331.965326094",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_USD",
-            "lastPrice": "9279.35",
-            "lowestAsk": "9286.3",
-            "highestBid": "9273.11",
-            "baseVolume24h": "910.615918",
-            "quoteVolume24h": "8353120.65357786",
+            "lastPrice": "9070.52",
+            "lowestAsk": "9073.31",
+            "highestBid": "9067.73",
+            "baseVolume24h": "531.555255",
+            "quoteVolume24h": "4827342.49567211",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_USD",
-            "lastPrice": "231.96",
-            "lowestAsk": "232.23",
-            "highestBid": "231.73",
-            "baseVolume24h": "12466.44539",
-            "quoteVolume24h": "2829387.0572535",
+            "lastPrice": "226.1",
+            "lowestAsk": "226.18",
+            "highestBid": "226.03",
+            "baseVolume24h": "7652.73074",
+            "quoteVolume24h": "1732009.3814383",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LTC_BTC",
-            "lastPrice": "0.004515",
-            "lowestAsk": "0.004525",
-            "highestBid": "0.004504",
-            "baseVolume24h": "6584.02",
-            "quoteVolume24h": "29.74493147",
+            "lastPrice": "0.004579",
+            "lowestAsk": "0.00459",
+            "highestBid": "0.004568",
+            "baseVolume24h": "6057.05",
+            "quoteVolume24h": "27.61362839",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LTC_ETH",
-            "lastPrice": "0.18066",
-            "lowestAsk": "0.18135",
-            "highestBid": "0.17976",
-            "baseVolume24h": "3380.475",
-            "quoteVolume24h": "617.51464101",
+            "lastPrice": "0.18373",
+            "lowestAsk": "0.18455",
+            "highestBid": "0.18276",
+            "baseVolume24h": "3545.628",
+            "quoteVolume24h": "648.69267885",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LTC_USD",
-            "lastPrice": "41.89",
-            "lowestAsk": "41.95",
-            "highestBid": "41.81",
-            "baseVolume24h": "2606.23773",
-            "quoteVolume24h": "107898.6938533",
+            "lastPrice": "41.53",
+            "lowestAsk": "41.58",
+            "highestBid": "41.47",
+            "baseVolume24h": "2314.96987",
+            "quoteVolume24h": "95856.252451",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLM_BTC",
-            "lastPrice": "0.00000741",
-            "lowestAsk": "0.00000743",
-            "highestBid": "0.0000074",
-            "baseVolume24h": "5084464",
-            "quoteVolume24h": "37.27944111",
+            "lastPrice": "0.00000739",
+            "lowestAsk": "0.0000074",
+            "highestBid": "0.00000738",
+            "baseVolume24h": "7515104",
+            "quoteVolume24h": "55.73227972",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLM_ETH",
-            "lastPrice": "0.00029654",
-            "lowestAsk": "0.00029713",
-            "highestBid": "0.00029627",
-            "baseVolume24h": "844027",
-            "quoteVolume24h": "250.0579873",
+            "lastPrice": "0.00029624",
+            "lowestAsk": "0.00029714",
+            "highestBid": "0.000296",
+            "baseVolume24h": "1638324",
+            "quoteVolume24h": "487.65068802",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLM_USD",
-            "lastPrice": "0.06878",
-            "lowestAsk": "0.06885",
-            "highestBid": "0.06867",
-            "baseVolume24h": "3567627.7",
-            "quoteVolume24h": "239662.019401",
+            "lastPrice": "0.06702",
+            "lowestAsk": "0.06717",
+            "highestBid": "0.06691",
+            "baseVolume24h": "6151441.5",
+            "quoteVolume24h": "414255.0947",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DASH_BTC",
-            "lastPrice": "0.007428",
-            "lowestAsk": "0.007445",
-            "highestBid": "0.007413",
-            "baseVolume24h": "1691.072",
-            "quoteVolume24h": "12.548161139",
+            "lastPrice": "0.007393",
+            "lowestAsk": "0.007408",
+            "highestBid": "0.007374",
+            "baseVolume24h": "1404.56",
+            "quoteVolume24h": "10.326132455",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DASH_ETH",
-            "lastPrice": "0.29792",
-            "lowestAsk": "0.29878",
-            "highestBid": "0.29566",
-            "baseVolume24h": "718.531",
-            "quoteVolume24h": "215.26741262",
+            "lastPrice": "0.29656",
+            "lowestAsk": "0.29789",
+            "highestBid": "0.29495",
+            "baseVolume24h": "701.288",
+            "quoteVolume24h": "207.13681461",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DASH_USD",
-            "lastPrice": "68.93",
-            "lowestAsk": "68.96",
-            "highestBid": "68.87",
-            "baseVolume24h": "3551.13955",
-            "quoteVolume24h": "241596.589667",
+            "lastPrice": "67.06",
+            "lowestAsk": "67.09",
+            "highestBid": "66.99",
+            "baseVolume24h": "2976.33866",
+            "quoteVolume24h": "198669.3355119",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCH_BTC",
-            "lastPrice": "0.024371",
-            "lowestAsk": "0.024398",
-            "highestBid": "0.024353",
-            "baseVolume24h": "747.392",
-            "quoteVolume24h": "18.227444506",
+            "lastPrice": "0.024542",
+            "lowestAsk": "0.024567",
+            "highestBid": "0.024516",
+            "baseVolume24h": "351.702",
+            "quoteVolume24h": "8.599889133",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCH_ETH",
             "lastPrice": "1.6646",
             "lowestAsk": "0",
@@ -143,17 +143,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCH_USD",
-            "lastPrice": "226.13",
-            "lowestAsk": "226.28",
-            "highestBid": "226.03",
-            "baseVolume24h": "226.46749",
-            "quoteVolume24h": "50522.243414",
+            "lastPrice": "222.61",
+            "lowestAsk": "222.71",
+            "highestBid": "222.51",
+            "baseVolume24h": "136.48573",
+            "quoteVolume24h": "30304.6257825",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GAS_BTC",
             "lastPrice": "0.000717",
             "lowestAsk": "0",
@@ -163,97 +163,97 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NEO_BTC",
-            "lastPrice": "0.001099",
-            "lowestAsk": "0.0011",
-            "highestBid": "0.001096",
-            "baseVolume24h": "33949.82",
-            "quoteVolume24h": "37.2363091",
+            "lastPrice": "0.001088",
+            "lowestAsk": "0.00109",
+            "highestBid": "0.001087",
+            "baseVolume24h": "33769.94",
+            "quoteVolume24h": "36.786116",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NEO_ETH",
-            "lastPrice": "0.044",
-            "lowestAsk": "0.044128",
-            "highestBid": "0.043806",
-            "baseVolume24h": "8947.14",
-            "quoteVolume24h": "396.74224672",
+            "lastPrice": "0.043589",
+            "lowestAsk": "0.043795",
+            "highestBid": "0.04355",
+            "baseVolume24h": "5591.12",
+            "quoteVolume24h": "244.23855793",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NEO_USD",
-            "lastPrice": "10.191",
-            "lowestAsk": "10.199",
-            "highestBid": "10.187",
-            "baseVolume24h": "59427.262",
-            "quoteVolume24h": "594996.788876",
+            "lastPrice": "9.865",
+            "lowestAsk": "9.879",
+            "highestBid": "9.864",
+            "baseVolume24h": "59824.236",
+            "quoteVolume24h": "591900.888876",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETC_BTC",
-            "lastPrice": "0.0006202",
-            "lowestAsk": "0.0006209",
-            "highestBid": "0.0006198",
-            "baseVolume24h": "22617.96",
-            "quoteVolume24h": "14.102491516",
+            "lastPrice": "0.0006257",
+            "lowestAsk": "0.0006263",
+            "highestBid": "0.0006252",
+            "baseVolume24h": "17206.53",
+            "quoteVolume24h": "10.765501022",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETC_ETH",
-            "lastPrice": "0.024796",
-            "lowestAsk": "0.024861",
-            "highestBid": "0.024776",
-            "baseVolume24h": "6202.18",
-            "quoteVolume24h": "156.33542162",
+            "lastPrice": "0.025124",
+            "lowestAsk": "0.025145",
+            "highestBid": "0.025071",
+            "baseVolume24h": "3503.31",
+            "quoteVolume24h": "87.92041997",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETC_USD",
-            "lastPrice": "5.7553",
-            "lowestAsk": "5.7588",
-            "highestBid": "5.7525",
-            "baseVolume24h": "12373.02",
-            "quoteVolume24h": "70677.907307",
+            "lastPrice": "5.6757",
+            "lowestAsk": "5.6788",
+            "highestBid": "5.6721",
+            "baseVolume24h": "9085.68",
+            "quoteVolume24h": "51625.216529",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "OMG_BTC",
-            "lastPrice": "0.0001598",
-            "lowestAsk": "0.0001608",
-            "highestBid": "0.0001589",
-            "baseVolume24h": "66407.35",
-            "quoteVolume24h": "10.652398965",
+            "lastPrice": "0.0001671",
+            "lowestAsk": "0.0001683",
+            "highestBid": "0.0001662",
+            "baseVolume24h": "194384.29",
+            "quoteVolume24h": "31.910985105",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "OMG_ETH",
-            "lastPrice": "0.0064",
-            "lowestAsk": "0.006417",
-            "highestBid": "0.006365",
-            "baseVolume24h": "46189.39",
-            "quoteVolume24h": "298.8403424",
+            "lastPrice": "0.006744",
+            "lowestAsk": "0.006743",
+            "highestBid": "0.006687",
+            "baseVolume24h": "83984.39",
+            "quoteVolume24h": "550.99605886",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "OMG_USD",
-            "lastPrice": "1.4823",
-            "lowestAsk": "1.4839",
-            "highestBid": "1.4808",
-            "baseVolume24h": "42888.54",
-            "quoteVolume24h": "62907.924014",
+            "lastPrice": "1.5183",
+            "lowestAsk": "1.5202",
+            "highestBid": "1.5152",
+            "baseVolume24h": "136332.36",
+            "quoteVolume24h": "202499.460065",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PPT_BTC",
             "lastPrice": "0.0000565",
             "lowestAsk": "0",
@@ -263,7 +263,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PPT_ETH",
             "lastPrice": "0.00258",
             "lowestAsk": "0",
@@ -273,7 +273,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PPT_USD",
             "lastPrice": "0.6408",
             "lowestAsk": "0",
@@ -283,17 +283,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_BTC",
-            "lastPrice": "0.0017037",
-            "lowestAsk": "0.0017065",
-            "highestBid": "0.001701",
-            "baseVolume24h": "1227.67",
-            "quoteVolume24h": "2.078448883",
+            "lastPrice": "0.0016947",
+            "lowestAsk": "0.0016974",
+            "highestBid": "0.0016921",
+            "baseVolume24h": "1337.05",
+            "quoteVolume24h": "2.261763986",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_ETH",
             "lastPrice": "0.141841",
             "lowestAsk": "0",
@@ -303,17 +303,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_USD",
-            "lastPrice": "15.8063",
-            "lowestAsk": "15.8458",
-            "highestBid": "15.7637",
-            "baseVolume24h": "1421.31",
-            "quoteVolume24h": "22087.394738",
+            "lastPrice": "15.3778",
+            "lowestAsk": "15.4168",
+            "highestBid": "15.3351",
+            "baseVolume24h": "1062.36",
+            "quoteVolume24h": "16312.804093",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SNT_BTC",
             "lastPrice": "0.00000153",
             "lowestAsk": "0",
@@ -323,7 +323,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SNT_ETH",
             "lastPrice": "0.0000702",
             "lowestAsk": "0",
@@ -333,7 +333,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SNT_USD",
             "lastPrice": "0.0224",
             "lowestAsk": "0",
@@ -343,7 +343,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MKR_BTC",
             "lastPrice": "0.06",
             "lowestAsk": "0",
@@ -353,7 +353,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MKR_ETH",
             "lastPrice": "2.3",
             "lowestAsk": "0",
@@ -363,7 +363,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MKR_USD",
             "lastPrice": "622.1",
             "lowestAsk": "0",
@@ -373,7 +373,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DGD_BTC",
             "lastPrice": "0.001605",
             "lowestAsk": "0",
@@ -383,7 +383,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DGD_ETH",
             "lastPrice": "0.07044",
             "lowestAsk": "0",
@@ -393,7 +393,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DGD_USD",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -403,7 +403,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AE_BTC",
             "lastPrice": "0.0000181",
             "lowestAsk": "0",
@@ -413,7 +413,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AE_ETH",
             "lastPrice": "0.000909",
             "lowestAsk": "0",
@@ -423,7 +423,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AE_USD",
             "lastPrice": "0.6515",
             "lowestAsk": "0",
@@ -433,7 +433,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WTC_BTC",
             "lastPrice": "0.0000872",
             "lowestAsk": "0",
@@ -443,7 +443,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WTC_ETH",
             "lastPrice": "0.004071",
             "lowestAsk": "0",
@@ -453,7 +453,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WTC_USD",
             "lastPrice": "3.5034",
             "lowestAsk": "0",
@@ -463,7 +463,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VERI_BTC",
             "lastPrice": "0.001564",
             "lowestAsk": "0",
@@ -473,7 +473,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VERI_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -483,7 +483,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VERI_USD",
             "lastPrice": "23.9999",
             "lowestAsk": "0",
@@ -493,7 +493,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZRX_BTC",
             "lastPrice": "0.00002353",
             "lowestAsk": "0",
@@ -503,7 +503,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZRX_ETH",
             "lastPrice": "0.00117639",
             "lowestAsk": "0",
@@ -513,7 +513,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZRX_USD",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -523,7 +523,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "R_BTC",
             "lastPrice": "0.0000038",
             "lowestAsk": "0",
@@ -533,7 +533,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "R_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -543,7 +543,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "R_USD",
             "lastPrice": "0.0347",
             "lowestAsk": "0",
@@ -553,7 +553,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZIL_BTC",
             "lastPrice": "0.00000062",
             "lowestAsk": "0",
@@ -563,7 +563,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZIL_ETH",
             "lastPrice": "0.00002898",
             "lowestAsk": "0",
@@ -573,7 +573,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZIL_USD",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -583,27 +583,27 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BAT_BTC",
-            "lastPrice": "0.00002831",
-            "lowestAsk": "0.00002838",
-            "highestBid": "0.00002822",
-            "baseVolume24h": "1648607",
-            "quoteVolume24h": "45.64671341",
+            "lastPrice": "0.00002783",
+            "lowestAsk": "0.0000279",
+            "highestBid": "0.00002774",
+            "baseVolume24h": "2325933",
+            "quoteVolume24h": "63.11936942",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BAT_ETH",
-            "lastPrice": "0.00113147",
-            "lowestAsk": "0.00113842",
-            "highestBid": "0.0011285",
-            "baseVolume24h": "51454",
-            "quoteVolume24h": "57.53616703",
+            "lastPrice": "0.00111828",
+            "lowestAsk": "0.00112155",
+            "highestBid": "0.00111219",
+            "baseVolume24h": "54772",
+            "quoteVolume24h": "59.5982257",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BAT_USD",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -613,17 +613,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_USDT",
-            "lastPrice": "15.7921",
-            "lowestAsk": "15.83",
-            "highestBid": "15.7782",
-            "baseVolume24h": "7276.44",
-            "quoteVolume24h": "112926.354784",
+            "lastPrice": "15.3741",
+            "lowestAsk": "15.3996",
+            "highestBid": "15.3511",
+            "baseVolume24h": "6697.67",
+            "quoteVolume24h": "102902.320169",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZRX_USDT",
             "lastPrice": "0.1981",
             "lowestAsk": "0",
@@ -633,7 +633,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZIL_USDT",
             "lastPrice": "0.00499",
             "lowestAsk": "0",
@@ -643,17 +643,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BAT_USDT",
-            "lastPrice": "0.2626",
-            "lowestAsk": "0.2634",
-            "highestBid": "0.2618",
-            "baseVolume24h": "1668167.6",
-            "quoteVolume24h": "423758.842129",
+            "lastPrice": "0.2523",
+            "lowestAsk": "0.2531",
+            "highestBid": "0.2513",
+            "baseVolume24h": "2103047.96",
+            "quoteVolume24h": "517749.482665",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LOT_USDT",
             "lastPrice": "0.0057",
             "lowestAsk": "0",
@@ -663,7 +663,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LOT_BTC",
             "lastPrice": "0.00000015",
             "lowestAsk": "0",
@@ -673,7 +673,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LOT_ETH",
             "lastPrice": "0.000035",
             "lowestAsk": "0",
@@ -683,7 +683,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "KEY_BTC",
             "lastPrice": "0.00000022",
             "lowestAsk": "0.00000045",
@@ -693,7 +693,7 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "KEY_ETH",
             "lastPrice": "0.00000797",
             "lowestAsk": "0",
@@ -703,7 +703,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "KEY_USD",
             "lastPrice": "0.002159",
             "lowestAsk": "0",
@@ -713,17 +713,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRC_BTC",
-            "lastPrice": "0.00044933",
-            "lowestAsk": "0.00037993",
-            "highestBid": "0.00030419",
-            "baseVolume24h": "323.522",
-            "quoteVolume24h": "0.14536814026",
+            "lastPrice": "0.00040498",
+            "lowestAsk": "0.00040249",
+            "highestBid": "0.00035",
+            "baseVolume24h": "1620.612",
+            "quoteVolume24h": "0.66190771044",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRC_ETH",
             "lastPrice": "0.0299997",
             "lowestAsk": "0",
@@ -733,7 +733,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRC_USD",
             "lastPrice": "4.84",
             "lowestAsk": "0",
@@ -743,7 +743,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCCN_BTC",
             "lastPrice": "0.00000019",
             "lowestAsk": "0",
@@ -753,7 +753,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCCN_ETH",
             "lastPrice": "0.00003",
             "lowestAsk": "0",
@@ -763,7 +763,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCCN_USDT",
             "lastPrice": "0.01",
             "lowestAsk": "0",
@@ -773,37 +773,37 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "QBIT_BTC",
-            "lastPrice": "0.003327",
-            "lowestAsk": "0.0033542",
-            "highestBid": "0.0032982",
-            "baseVolume24h": "771.17",
-            "quoteVolume24h": "2.53350595",
+            "lastPrice": "0.0032902",
+            "lowestAsk": "0.003319",
+            "highestBid": "0.00326",
+            "baseVolume24h": "783.39",
+            "quoteVolume24h": "2.565999856",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "QBIT_ETH",
-            "lastPrice": "0.13302",
-            "lowestAsk": "0.13431",
-            "highestBid": "0.13198",
-            "baseVolume24h": "1141.62",
-            "quoteVolume24h": "151.5982748",
+            "lastPrice": "0.13212",
+            "lowestAsk": "0.13311",
+            "highestBid": "0.13089",
+            "baseVolume24h": "1100.99",
+            "quoteVolume24h": "144.7178279",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "QBIT_USDT",
-            "lastPrice": "30.8",
-            "lowestAsk": "31.5",
-            "highestBid": "30.22",
-            "baseVolume24h": "9.76",
-            "quoteVolume24h": "293.401",
+            "lastPrice": "29.9",
+            "lowestAsk": "30.44",
+            "highestBid": "29.3",
+            "baseVolume24h": "8.85",
+            "quoteVolume24h": "263.5381",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DGB_BTC",
             "lastPrice": "0.00000109",
             "lowestAsk": "0",
@@ -813,7 +813,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DGB_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -823,7 +823,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DGB_USDT",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -833,17 +833,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WAVES_BTC",
-            "lastPrice": "0.0001252",
-            "lowestAsk": "0.0001258",
-            "highestBid": "0.0001248",
-            "baseVolume24h": "23549.56",
-            "quoteVolume24h": "2.9134362752",
+            "lastPrice": "0.0001239",
+            "lowestAsk": "0.00012426",
+            "highestBid": "0.00012301",
+            "baseVolume24h": "17232.87",
+            "quoteVolume24h": "2.139546643",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WAVES_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -853,17 +853,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WAVES_USDT",
-            "lastPrice": "1.1625",
-            "lowestAsk": "1.1634",
-            "highestBid": "1.1603",
-            "baseVolume24h": "6108.09",
-            "quoteVolume24h": "6929.706975",
+            "lastPrice": "1.1239",
+            "lowestAsk": "1.1244",
+            "highestBid": "1.121",
+            "baseVolume24h": "4554.15",
+            "quoteVolume24h": "5133.912826",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "REM_BTC",
             "lastPrice": "0.00000014",
             "lowestAsk": "0.00000019",
@@ -873,7 +873,7 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SON_BTC",
             "lastPrice": "0.006615",
             "lowestAsk": "0",
@@ -883,7 +883,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SON_ETH",
             "lastPrice": "0.37026",
             "lowestAsk": "0",
@@ -893,27 +893,27 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SON_USD",
-            "lastPrice": "142.99",
-            "lowestAsk": "142.99",
-            "highestBid": "141.99",
-            "baseVolume24h": "46.351",
-            "quoteVolume24h": "6624.6801",
+            "lastPrice": "147.2",
+            "lowestAsk": "147.2",
+            "highestBid": "143.2",
+            "baseVolume24h": "23.179",
+            "quoteVolume24h": "3413.54964",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MB8_BTC",
-            "lastPrice": "0.0000007",
-            "lowestAsk": "0.00000069",
-            "highestBid": "0.0000004",
-            "baseVolume24h": "1144044.09",
-            "quoteVolume24h": "0.8005232448",
+            "lastPrice": "0.0000006",
+            "lowestAsk": "0.0000006",
+            "highestBid": "0.00000041",
+            "baseVolume24h": "0",
+            "quoteVolume24h": "0",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MB8_ETH",
             "lastPrice": "0.00012",
             "lowestAsk": "0",
@@ -923,7 +923,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MB8_USD",
             "lastPrice": "0.03",
             "lowestAsk": "0",
@@ -933,17 +933,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ILC_BTC",
-            "lastPrice": "0.00000286",
-            "lowestAsk": "0.00000296",
-            "highestBid": "0.00000201",
-            "baseVolume24h": "987026",
-            "quoteVolume24h": "2.80635638",
+            "lastPrice": "0.00000436",
+            "lowestAsk": "0.0000045",
+            "highestBid": "0.00000301",
+            "baseVolume24h": "620339",
+            "quoteVolume24h": "2.60718376",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ILC_ETH",
             "lastPrice": "0.00041",
             "lowestAsk": "0",
@@ -953,7 +953,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ILC_USDT",
             "lastPrice": "0.04",
             "lowestAsk": "0",
@@ -963,17 +963,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CCOH_BTC",
-            "lastPrice": "0.00000125",
-            "lowestAsk": "0.00000125",
+            "lastPrice": "0.00000122",
+            "lowestAsk": "0.00000123",
             "highestBid": "0.0000012",
-            "baseVolume24h": "28819.097",
-            "quoteVolume24h": "0.03567544227",
+            "baseVolume24h": "39047.411",
+            "quoteVolume24h": "0.04758331576",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CCOH_ETH",
             "lastPrice": "0.000048",
             "lowestAsk": "0",
@@ -983,7 +983,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CCOH_USDT",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -993,67 +993,67 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_USDT",
-            "lastPrice": "9279.22",
-            "lowestAsk": "9282.55",
-            "highestBid": "9276.88",
-            "baseVolume24h": "6688.860713",
-            "quoteVolume24h": "61337207.57305435",
+            "lastPrice": "9070.57",
+            "lowestAsk": "9072.2",
+            "highestBid": "9069.04",
+            "baseVolume24h": "16188.709547",
+            "quoteVolume24h": "147084989.46999021",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_USDT",
-            "lastPrice": "231.97",
-            "lowestAsk": "231.97",
-            "highestBid": "231.9",
-            "baseVolume24h": "61139.80995",
-            "quoteVolume24h": "13876586.7419112",
+            "lastPrice": "226.04",
+            "lowestAsk": "226.05",
+            "highestBid": "226.01",
+            "baseVolume24h": "72789.69827",
+            "quoteVolume24h": "16472787.767072",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MEXC_BTC",
-            "lastPrice": "0.00000006",
-            "lowestAsk": "0.00000007",
-            "highestBid": "0.00000006",
-            "baseVolume24h": "2290971.5634",
-            "quoteVolume24h": "0.14597152486",
+            "lastPrice": "0.00000004",
+            "lowestAsk": "0.00000006",
+            "highestBid": "0.00000004",
+            "baseVolume24h": "224962.3425",
+            "quoteVolume24h": "0.0089984937",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MEXC_ETH",
-            "lastPrice": "0.0000025",
-            "lowestAsk": "0.00000468",
-            "highestBid": "0.00000242",
-            "baseVolume24h": "148941.914",
-            "quoteVolume24h": "0.6669215722",
+            "lastPrice": "0.00000386",
+            "lowestAsk": "0.00000387",
+            "highestBid": "0.00000087",
+            "baseVolume24h": "236792.92",
+            "quoteVolume24h": "0.9175470496",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_UAH",
-            "lastPrice": "254471.1",
-            "lowestAsk": "255170.53",
-            "highestBid": "254200.45",
-            "baseVolume24h": "2.838472",
-            "quoteVolume24h": "715320.50310949",
+            "lastPrice": "248558.82",
+            "lowestAsk": "249035.31",
+            "highestBid": "248035.21",
+            "baseVolume24h": "1.614186",
+            "quoteVolume24h": "401570.63570366",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_UAH",
-            "lastPrice": "6364.28",
-            "lowestAsk": "6387.34",
-            "highestBid": "6348.08",
-            "baseVolume24h": "172.042313",
-            "quoteVolume24h": "1072801.40711326",
+            "lastPrice": "6195.68",
+            "lowestAsk": "6214.04",
+            "highestBid": "6176.5",
+            "baseVolume24h": "110.021349",
+            "quoteVolume24h": "682287.06651894",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PANDA_BTC",
             "lastPrice": "0.00000058",
             "lowestAsk": "0",
@@ -1063,7 +1063,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PANDA_ETH",
             "lastPrice": "0.000012",
             "lowestAsk": "0",
@@ -1073,7 +1073,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PANDA_USDT",
             "lastPrice": "0.01",
             "lowestAsk": "0",
@@ -1083,7 +1083,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GBC_BTC",
             "lastPrice": "0.0000066",
             "lowestAsk": "0",
@@ -1093,7 +1093,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GBC_ETH",
             "lastPrice": "0.00012923",
             "lowestAsk": "0",
@@ -1103,7 +1103,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GBC_USDT",
             "lastPrice": "0.04",
             "lowestAsk": "0",
@@ -1113,7 +1113,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VITAE_BTC",
             "lastPrice": "0.00005101",
             "lowestAsk": "0",
@@ -1123,7 +1123,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VITAE_ETH",
             "lastPrice": "0.005",
             "lowestAsk": "0",
@@ -1133,7 +1133,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VITAE_USD",
             "lastPrice": "1.85",
             "lowestAsk": "0",
@@ -1143,7 +1143,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TELOS_BTC",
             "lastPrice": "0.00000065",
             "lowestAsk": "0",
@@ -1153,7 +1153,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TELOS_USDT",
             "lastPrice": "0.0105",
             "lowestAsk": "0",
@@ -1163,7 +1163,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "STREAM_BTC",
             "lastPrice": "0.00000033",
             "lowestAsk": "0.00000064",
@@ -1173,7 +1173,7 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "STREAM_USD",
             "lastPrice": "0.01",
             "lowestAsk": "0",
@@ -1183,17 +1183,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_UAH",
-            "lastPrice": "433.43",
-            "lowestAsk": "434.8",
-            "highestBid": "432.61",
-            "baseVolume24h": "875.1841",
-            "quoteVolume24h": "373446.333199",
+            "lastPrice": "421.13",
+            "lowestAsk": "422.23",
+            "highestBid": "420.04",
+            "baseVolume24h": "670.2954",
+            "quoteVolume24h": "281985.536734",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MB8_EUR",
             "lastPrice": "0.01",
             "lowestAsk": "0",
@@ -1203,17 +1203,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XST_BTC",
-            "lastPrice": "0.00000493",
+            "lastPrice": "0.00000491",
             "lowestAsk": "0.00000652",
             "highestBid": "0.00000477",
-            "baseVolume24h": "22677",
-            "quoteVolume24h": "0.11222111",
+            "baseVolume24h": "59917",
+            "quoteVolume24h": "0.29608775",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XST_ETH",
             "lastPrice": "0.00000212",
             "lowestAsk": "0",
@@ -1223,7 +1223,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XST_USD",
             "lastPrice": "0.00041",
             "lowestAsk": "0",
@@ -1233,7 +1233,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MPC_BTC",
             "lastPrice": "0.00000005",
             "lowestAsk": "0",
@@ -1243,7 +1243,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MPC_ETH",
             "lastPrice": "0.000013",
             "lowestAsk": "0",
@@ -1253,7 +1253,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_BTC",
             "lastPrice": "0.00009477",
             "lowestAsk": "0.00009476",
@@ -1263,7 +1263,7 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1273,17 +1273,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_USDT",
-            "lastPrice": "0.659999",
-            "lowestAsk": "0.66",
+            "lastPrice": "0.662493",
+            "lowestAsk": "0.699",
             "highestBid": "0.63",
-            "baseVolume24h": "621.89",
-            "quoteVolume24h": "409.78887022",
+            "baseVolume24h": "1416.14",
+            "quoteVolume24h": "935.27128621",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CSC_BTC",
             "lastPrice": "0.00000004",
             "lowestAsk": "0",
@@ -1293,7 +1293,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CSC_USD",
             "lastPrice": "0.0011",
             "lowestAsk": "0",
@@ -1303,7 +1303,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GFG_BTC",
             "lastPrice": "0.0000013",
             "lowestAsk": "0",
@@ -1313,7 +1313,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GFG_USD",
             "lastPrice": "0.020285",
             "lowestAsk": "0",
@@ -1323,37 +1323,37 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TRX_BTC",
-            "lastPrice": "0.00000182",
-            "lowestAsk": "0.00000183",
-            "highestBid": "0.00000181",
-            "baseVolume24h": "68369005",
-            "quoteVolume24h": "122.77960031",
+            "lastPrice": "0.00000184",
+            "lowestAsk": "0.00000185",
+            "highestBid": "0.00000183",
+            "baseVolume24h": "63746917",
+            "quoteVolume24h": "117.42973873",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TRX_ETH",
-            "lastPrice": "0.00007256",
-            "lowestAsk": "0.00007277",
-            "highestBid": "0.00007247",
-            "baseVolume24h": "26694099",
-            "quoteVolume24h": "1939.59477044",
+            "lastPrice": "0.00007405",
+            "lowestAsk": "0.00007416",
+            "highestBid": "0.00007394",
+            "baseVolume24h": "19803685",
+            "quoteVolume24h": "1464.29359755",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TRX_USDT",
-            "lastPrice": "0.01685",
-            "lowestAsk": "0.01687",
-            "highestBid": "0.01682",
-            "baseVolume24h": "53551291",
-            "quoteVolume24h": "882496.2976256",
+            "lastPrice": "0.01674",
+            "lowestAsk": "0.01676",
+            "highestBid": "0.01671",
+            "baseVolume24h": "50090304.9",
+            "quoteVolume24h": "837930.0754909",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DEXR_BTC",
             "lastPrice": "0.0000008",
             "lowestAsk": "0",
@@ -1363,7 +1363,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DEXR_ETH",
             "lastPrice": "0.000138",
             "lowestAsk": "0",
@@ -1373,7 +1373,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DEXR_USDT",
             "lastPrice": "0.0071",
             "lowestAsk": "0",
@@ -1383,37 +1383,37 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_RUB",
-            "lastPrice": "660722.47",
-            "lowestAsk": "661685.8",
-            "highestBid": "659693.63",
-            "baseVolume24h": "8.407007",
-            "quoteVolume24h": "5510417.9498165",
+            "lastPrice": "651326.06",
+            "lowestAsk": "652288.88",
+            "highestBid": "650256.25",
+            "baseVolume24h": "4.796669",
+            "quoteVolume24h": "3122967.21446227",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_RUB",
-            "lastPrice": "16509.14",
-            "lowestAsk": "16566.81",
-            "highestBid": "16464.28",
-            "baseVolume24h": "198.121419",
-            "quoteVolume24h": "3214574.09635111",
+            "lastPrice": "16233.75",
+            "lowestAsk": "16283.29",
+            "highestBid": "16184.93",
+            "baseVolume24h": "122.704796",
+            "quoteVolume24h": "1991313.57798462",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AYA_BTC",
-            "lastPrice": "0.0000011",
+            "lastPrice": "0.00000141",
             "lowestAsk": "0.000002",
-            "highestBid": "0.00000091",
-            "baseVolume24h": "562259.719",
-            "quoteVolume24h": "0.62912343736",
+            "highestBid": "0.0000014",
+            "baseVolume24h": "1036651.29",
+            "quoteVolume24h": "1.19061155496",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AYA_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1423,7 +1423,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AYA_USDT",
             "lastPrice": "0.00264",
             "lowestAsk": "0",
@@ -1433,27 +1433,27 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_EUR",
-            "lastPrice": "0.56914064",
+            "lastPrice": "0.56541813",
             "lowestAsk": "0.59048",
             "highestBid": "0.56",
-            "baseVolume24h": "5835.59",
-            "quoteVolume24h": "3330.6151788376",
+            "baseVolume24h": "6141.32",
+            "quoteVolume24h": "3505.6278490283",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ROX_ETH",
             "lastPrice": "0.000076",
-            "lowestAsk": "0.000077",
+            "lowestAsk": "0.000075",
             "highestBid": "0.000046",
             "baseVolume24h": "0",
             "quoteVolume24h": "0",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ROX_USDT",
             "lastPrice": "0.017",
             "lowestAsk": "0",
@@ -1463,7 +1463,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PLA_EUR",
             "lastPrice": "0.4",
             "lowestAsk": "0",
@@ -1473,7 +1473,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PLA_RUB",
             "lastPrice": "20",
             "lowestAsk": "0",
@@ -1483,7 +1483,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CSC_EUR",
             "lastPrice": "0.00001",
             "lowestAsk": "0",
@@ -1493,7 +1493,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GFG_EUR",
             "lastPrice": "0.023008",
             "lowestAsk": "0",
@@ -1503,7 +1503,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SGC_BTC",
             "lastPrice": "0.00000003",
             "lowestAsk": "0",
@@ -1513,7 +1513,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SGC_ETH",
             "lastPrice": "0.000012",
             "lowestAsk": "0",
@@ -1523,7 +1523,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BBC_BTC",
             "lastPrice": "0.00010953",
             "lowestAsk": "0",
@@ -1533,37 +1533,37 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTG_USDT",
-            "lastPrice": "10.72",
-            "lowestAsk": "10.72",
-            "highestBid": "10.67",
-            "baseVolume24h": "6074.24",
-            "quoteVolume24h": "63986.639285",
+            "lastPrice": "9.18",
+            "lowestAsk": "9.2",
+            "highestBid": "9.16",
+            "baseVolume24h": "15274.51",
+            "quoteVolume24h": "142218.076859",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTG_UAH",
-            "lastPrice": "294.5385",
-            "lowestAsk": "295.362",
-            "highestBid": "292.068",
-            "baseVolume24h": "3017.75",
-            "quoteVolume24h": "871901.150892",
+            "lastPrice": "251.806",
+            "lowestAsk": "252.902",
+            "highestBid": "250.162",
+            "baseVolume24h": "3396.32",
+            "quoteVolume24h": "866274.583911",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTG_EUR",
-            "lastPrice": "9.5892",
-            "lowestAsk": "9.6428",
-            "highestBid": "9.4732",
-            "baseVolume24h": "7361.93",
-            "quoteVolume24h": "69281.701816",
+            "lastPrice": "8.1891",
+            "lowestAsk": "8.2604",
+            "highestBid": "8.1088",
+            "baseVolume24h": "11649.06",
+            "quoteVolume24h": "96702.004653",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTG_RUB",
             "lastPrice": "609.0078",
             "lowestAsk": "0",
@@ -1573,57 +1573,57 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_EUR",
-            "lastPrice": "8285.35",
-            "lowestAsk": "8285.82",
-            "highestBid": "8284.83",
-            "baseVolume24h": "170.85907446",
-            "quoteVolume24h": "1398635.0489131849",
+            "lastPrice": "8091.45",
+            "lowestAsk": "8098.09",
+            "highestBid": "8085.01",
+            "baseVolume24h": "325.03778395",
+            "quoteVolume24h": "2631199.118035378",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_EUR",
-            "lastPrice": "207.04",
-            "lowestAsk": "207.94",
-            "highestBid": "206.26",
-            "baseVolume24h": "71.39872",
-            "quoteVolume24h": "14479.2162994",
+            "lastPrice": "201.69",
+            "lowestAsk": "202.52",
+            "highestBid": "200.88",
+            "baseVolume24h": "45.71968",
+            "quoteVolume24h": "9222.210221",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_EUR",
-            "lastPrice": "14.1",
-            "lowestAsk": "14.1339",
-            "highestBid": "14.0876",
-            "baseVolume24h": "1217.37",
-            "quoteVolume24h": "16898.798097",
+            "lastPrice": "13.7147",
+            "lowestAsk": "13.7374",
+            "highestBid": "13.6941",
+            "baseVolume24h": "1004.63",
+            "quoteVolume24h": "13749.909608",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BNB_RUB",
-            "lastPrice": "1125.14",
-            "lowestAsk": "1128.51",
-            "highestBid": "1122.9",
-            "baseVolume24h": "606.45",
-            "quoteVolume24h": "674098.6317",
+            "lastPrice": "1102.14",
+            "lowestAsk": "1106.16",
+            "highestBid": "1100.67",
+            "baseVolume24h": "454.6",
+            "quoteVolume24h": "501287.139",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRP_BTC",
-            "lastPrice": "0.00001915",
-            "lowestAsk": "0.00001918",
-            "highestBid": "0.00001914",
-            "baseVolume24h": "765328",
-            "quoteVolume24h": "14.67637154",
+            "lastPrice": "0.0000196",
+            "lowestAsk": "0.00001962",
+            "highestBid": "0.00001958",
+            "baseVolume24h": "684583",
+            "quoteVolume24h": "13.34546471",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRP_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1633,17 +1633,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRP_USDT",
-            "lastPrice": "0.1777",
-            "lowestAsk": "0.1779",
-            "highestBid": "0.17753",
-            "baseVolume24h": "989373.4",
-            "quoteVolume24h": "173673.503528",
+            "lastPrice": "0.17771",
+            "lowestAsk": "0.17795",
+            "highestBid": "0.17756",
+            "baseVolume24h": "905575.6",
+            "quoteVolume24h": "160330.21543",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRP_UAH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1653,7 +1653,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XRP_EUR",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1663,7 +1663,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BLOCS_BTC",
             "lastPrice": "0.000002",
             "lowestAsk": "0",
@@ -1673,7 +1673,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BLOCS_ETH",
             "lastPrice": "0.47",
             "lowestAsk": "0",
@@ -1683,7 +1683,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BLOCS_USD",
             "lastPrice": "80",
             "lowestAsk": "0",
@@ -1693,7 +1693,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SCAP_BTC",
             "lastPrice": "0.0002669",
             "lowestAsk": "0",
@@ -1703,37 +1703,37 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MATIC_BTC",
-            "lastPrice": "0.00000206",
-            "lowestAsk": "0.00000207",
-            "highestBid": "0.00000205",
-            "baseVolume24h": "6633668.96",
-            "quoteVolume24h": "13.8038462681",
+            "lastPrice": "0.00000214",
+            "lowestAsk": "0.00000215",
+            "highestBid": "0.00000213",
+            "baseVolume24h": "7519663.2",
+            "quoteVolume24h": "15.9068446103",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MATIC_USD",
-            "lastPrice": "0.0191",
-            "lowestAsk": "0.01913",
-            "highestBid": "0.01905",
-            "baseVolume24h": "5690668.25",
-            "quoteVolume24h": "108656.01815766",
+            "lastPrice": "0.01939",
+            "lowestAsk": "0.01945",
+            "highestBid": "0.01935",
+            "baseVolume24h": "5262780.92",
+            "quoteVolume24h": "101136.42110341",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MATIC_USDT",
-            "lastPrice": "0.0191",
-            "lowestAsk": "0.01912",
-            "highestBid": "0.01906",
-            "baseVolume24h": "4573127.11",
-            "quoteVolume24h": "87245.0098802",
+            "lastPrice": "0.01939",
+            "lowestAsk": "0.01944",
+            "highestBid": "0.01936",
+            "baseVolume24h": "4340514.05",
+            "quoteVolume24h": "83426.00961388",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CVA_BTC",
             "lastPrice": "0.0000299",
             "lowestAsk": "0",
@@ -1743,7 +1743,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CVA_ETH",
             "lastPrice": "0.001499",
             "lowestAsk": "0",
@@ -1753,7 +1753,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CVA_USDT",
             "lastPrice": "0.2799",
             "lowestAsk": "0",
@@ -1763,7 +1763,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SHARK_BTC",
             "lastPrice": "0.00000499",
             "lowestAsk": "0",
@@ -1773,7 +1773,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SHARK_USD",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1783,17 +1783,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CDL_BTC",
             "lastPrice": "0.00000316",
             "lowestAsk": "0.00000316",
             "highestBid": "0.00000312",
-            "baseVolume24h": "18561.78",
-            "quoteVolume24h": "0.0584583198",
+            "baseVolume24h": "42306.6",
+            "quoteVolume24h": "0.1335181963",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CDL_USD",
             "lastPrice": "0.02121",
             "lowestAsk": "0",
@@ -1803,47 +1803,47 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MEXC_USDT",
-            "lastPrice": "0.000355",
-            "lowestAsk": "0.000791",
-            "highestBid": "0.000358",
-            "baseVolume24h": "252581.27",
-            "quoteVolume24h": "185.37512045",
+            "lastPrice": "0.000776",
+            "lowestAsk": "0.0007",
+            "highestBid": "0.00023",
+            "baseVolume24h": "385225.27",
+            "quoteVolume24h": "124.31438515",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "POLIS_BTC",
             "lastPrice": "0.00002224",
-            "lowestAsk": "0.00022988",
-            "highestBid": "0.00001213",
+            "lowestAsk": "0.0002298",
+            "highestBid": "0.00001221",
             "baseVolume24h": "0",
             "quoteVolume24h": "0",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NRG_BTC",
-            "lastPrice": "0.00022498",
-            "lowestAsk": "0.00022497",
-            "highestBid": "0.00021501",
-            "baseVolume24h": "67301.709",
-            "quoteVolume24h": "15.14153849082",
+            "lastPrice": "0.00021501",
+            "lowestAsk": "0.00021999",
+            "highestBid": "0.000215",
+            "baseVolume24h": "69785.4624",
+            "quoteVolume24h": "15.004572270624",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "KIM_BTC",
-            "lastPrice": "0.02954888",
+            "lastPrice": "0.02986716",
             "lowestAsk": "0",
-            "highestBid": "0.02954888",
-            "baseVolume24h": "161.55",
-            "quoteVolume24h": "4.8007451933",
+            "highestBid": "0.004",
+            "baseVolume24h": "160.17",
+            "quoteVolume24h": "4.7764068615",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "KIM_USD",
             "lastPrice": "260",
             "lowestAsk": "0",
@@ -1853,27 +1853,27 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "KIM_EUR",
-            "lastPrice": "245.0835",
-            "lowestAsk": "244.3493",
+            "lastPrice": "242.3698",
+            "lowestAsk": "241.6438",
             "highestBid": "1",
-            "baseVolume24h": "161.83",
-            "quoteVolume24h": "39470.170302",
+            "baseVolume24h": "160.54",
+            "quoteVolume24h": "38946.336474",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CICX_BTC",
-            "lastPrice": "0.0000053",
-            "lowestAsk": "0.0000051",
-            "highestBid": "0.0000048",
-            "baseVolume24h": "5550.738",
-            "quoteVolume24h": "0.0284011713",
+            "lastPrice": "0.0000048",
+            "lowestAsk": "0.0000048",
+            "highestBid": "0.0000041",
+            "baseVolume24h": "24110.664",
+            "quoteVolume24h": "0.1034707849",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CICX_ETH",
             "lastPrice": "0.000259",
             "lowestAsk": "0",
@@ -1883,7 +1883,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CICX_USDT",
             "lastPrice": "0.04",
             "lowestAsk": "0",
@@ -1893,7 +1893,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PGPAY_BTC",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1903,7 +1903,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PGPAY_ETH",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -1913,7 +1913,7 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PGPAY_USD",
             "lastPrice": "0.0128",
             "lowestAsk": "0",
@@ -1923,17 +1923,17 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "AGRS_BTC",
-            "lastPrice": "0.0000181",
-            "lowestAsk": "0.00001994",
+            "lastPrice": "0.00001718",
+            "lowestAsk": "0.00001801",
             "highestBid": "0.0000162",
-            "baseVolume24h": "27339",
-            "quoteVolume24h": "0.4940538",
+            "baseVolume24h": "27255",
+            "quoteVolume24h": "0.49237051",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "PAC_BTC",
             "lastPrice": "0",
             "lowestAsk": "0.00000004",
@@ -1943,7 +1943,7 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "FLT_BTC",
             "lastPrice": "0.00000001",
             "lowestAsk": "0",
@@ -1953,207 +1953,207 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TERN_ETH",
-            "lastPrice": "0.000039",
-            "lowestAsk": "0.00004",
+            "lastPrice": "0.000038",
+            "lowestAsk": "0.000039",
             "highestBid": "0.00002",
-            "baseVolume24h": "3006907",
-            "quoteVolume24h": "117.269373",
+            "baseVolume24h": "3009253",
+            "quoteVolume24h": "114.505006",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TERN_BTC",
-            "lastPrice": "0.00000088",
-            "lowestAsk": "0.00000089",
-            "highestBid": "0.00000061",
-            "baseVolume24h": "8970477",
-            "quoteVolume24h": "8.21642932",
+            "lastPrice": "0.00000075",
+            "lowestAsk": "0.00000075",
+            "highestBid": "0.00000074",
+            "baseVolume24h": "9446204",
+            "quoteVolume24h": "7.64428284",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "IEOS_BTC",
-            "lastPrice": "0.00000025",
-            "lowestAsk": "0.00000021",
-            "highestBid": "0.00000013",
-            "baseVolume24h": "0",
-            "quoteVolume24h": "0",
+            "lastPrice": "0.00000018",
+            "lowestAsk": "0.00000022",
+            "highestBid": "0.00000017",
+            "baseVolume24h": "15010.31",
+            "quoteVolume24h": "0.0028805941",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETC_USDT",
-            "lastPrice": "5.7568",
-            "lowestAsk": "5.7708",
-            "highestBid": "5.7413",
-            "baseVolume24h": "45958.34",
-            "quoteVolume24h": "262674.998734",
+            "lastPrice": "5.6757",
+            "lowestAsk": "5.6904",
+            "highestBid": "5.6607",
+            "baseVolume24h": "34522.98",
+            "quoteVolume24h": "196160.329152",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETC_RUB",
-            "lastPrice": "409.8841",
-            "lowestAsk": "411.9489",
-            "highestBid": "407.7054",
-            "baseVolume24h": "2438.73",
-            "quoteVolume24h": "996772.061124",
+            "lastPrice": "407.6316",
+            "lowestAsk": "409.6563",
+            "highestBid": "405.413",
+            "baseVolume24h": "1469.09",
+            "quoteVolume24h": "598415.993317",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETC_UAH",
-            "lastPrice": "158.0131",
-            "lowestAsk": "158.6719",
-            "highestBid": "157.3571",
-            "baseVolume24h": "1893.51",
-            "quoteVolume24h": "297506.867846",
+            "lastPrice": "155.6073",
+            "lowestAsk": "156.1772",
+            "highestBid": "154.8675",
+            "baseVolume24h": "1639.66",
+            "quoteVolume24h": "255277.041066",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NEO_USDT",
-            "lastPrice": "10.191",
-            "lowestAsk": "10.217",
-            "highestBid": "10.169",
-            "baseVolume24h": "139299.933",
-            "quoteVolume24h": "1395097.553221",
+            "lastPrice": "9.883",
+            "lowestAsk": "9.893",
+            "highestBid": "9.848",
+            "baseVolume24h": "212504.611",
+            "quoteVolume24h": "2102584.648778",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NEO_RUB",
-            "lastPrice": "725.884",
-            "lowestAsk": "728.162",
-            "highestBid": "723.392",
-            "baseVolume24h": "5228.904",
-            "quoteVolume24h": "3746580.195524",
+            "lastPrice": "709.589",
+            "lowestAsk": "710.881",
+            "highestBid": "706.097",
+            "baseVolume24h": "3022.763",
+            "quoteVolume24h": "2144265.301066",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "NEO_UAH",
-            "lastPrice": "279.742",
-            "lowestAsk": "281.444",
-            "highestBid": "278.315",
-            "baseVolume24h": "3770.357",
-            "quoteVolume24h": "1037556.741433",
+            "lastPrice": "270.794",
+            "lowestAsk": "271.862",
+            "highestBid": "269.013",
+            "baseVolume24h": "5377.071",
+            "quoteVolume24h": "1457564.357795",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LTC_USDT",
-            "lastPrice": "41.89",
-            "lowestAsk": "41.93",
-            "highestBid": "41.82",
-            "baseVolume24h": "32322.23496",
-            "quoteVolume24h": "1337729.5140699",
+            "lastPrice": "41.53",
+            "lowestAsk": "41.58",
+            "highestBid": "41.47",
+            "baseVolume24h": "27913.67826",
+            "quoteVolume24h": "1155516.1252285",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LTC_RUB",
-            "lastPrice": "2981.14",
-            "lowestAsk": "2991.11",
-            "highestBid": "2971.88",
-            "baseVolume24h": "302.04878",
-            "quoteVolume24h": "893365.1103493",
+            "lastPrice": "2981.09",
+            "lowestAsk": "2991.86",
+            "highestBid": "2971.76",
+            "baseVolume24h": "276.86812",
+            "quoteVolume24h": "821957.4361205",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LTC_UAH",
-            "lastPrice": "1149.33",
-            "lowestAsk": "1153.44",
-            "highestBid": "1145.76",
-            "baseVolume24h": "595.3968",
-            "quoteVolume24h": "677531.2048662",
+            "lastPrice": "1138.74",
+            "lowestAsk": "1141.75",
+            "highestBid": "1134.08",
+            "baseVolume24h": "457.951",
+            "quoteVolume24h": "519579.1939135",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLM_USDT",
-            "lastPrice": "0.06877",
-            "lowestAsk": "0.06883",
-            "highestBid": "0.0687",
-            "baseVolume24h": "18842560.9",
-            "quoteVolume24h": "1265636.276433",
+            "lastPrice": "0.06702",
+            "lowestAsk": "0.06717",
+            "highestBid": "0.06691",
+            "baseVolume24h": "30060985.9",
+            "quoteVolume24h": "2024866.261161",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLM_UAH",
-            "lastPrice": "1.88773",
-            "lowestAsk": "1.89789",
-            "highestBid": "1.87785",
-            "baseVolume24h": "166661",
-            "quoteVolume24h": "307238.545731",
+            "lastPrice": "1.83634",
+            "lowestAsk": "1.84703",
+            "highestBid": "1.82675",
+            "baseVolume24h": "169698.9",
+            "quoteVolume24h": "313126.238297",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLM_RUB",
-            "lastPrice": "4.895",
-            "lowestAsk": "4.9128",
-            "highestBid": "4.88076",
-            "baseVolume24h": "81821.1",
-            "quoteVolume24h": "392887.491279",
+            "lastPrice": "4.81412",
+            "lowestAsk": "4.82991",
+            "highestBid": "4.79689",
+            "baseVolume24h": "99896.2",
+            "quoteVolume24h": "482722.332931",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WAVES_UAH",
-            "lastPrice": "31.9216",
-            "lowestAsk": "32.0094",
-            "highestBid": "31.7733",
-            "baseVolume24h": "5332.97",
-            "quoteVolume24h": "166190.808444",
+            "lastPrice": "30.7948",
+            "lowestAsk": "30.9017",
+            "highestBid": "30.6386",
+            "baseVolume24h": "4514.06",
+            "quoteVolume24h": "139404.147263",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "WAVES_RUB",
-            "lastPrice": "82.7934",
-            "lowestAsk": "82.7935",
-            "highestBid": "82.414",
-            "baseVolume24h": "2645.61",
-            "quoteVolume24h": "214303.703632",
+            "lastPrice": "80.6948",
+            "lowestAsk": "80.943",
+            "highestBid": "80.2856",
+            "baseVolume24h": "2009.6",
+            "quoteVolume24h": "162566.100081",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCH_USDT",
-            "lastPrice": "226.18",
-            "lowestAsk": "226.32",
-            "highestBid": "225.99",
-            "baseVolume24h": "6239.19798",
-            "quoteVolume24h": "1392507.6359837",
+            "lastPrice": "222.6",
+            "lowestAsk": "222.84",
+            "highestBid": "222.37",
+            "baseVolume24h": "4050.1595",
+            "quoteVolume24h": "899411.4642057",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCH_UAH",
-            "lastPrice": "6207.26",
-            "lowestAsk": "6233.89",
-            "highestBid": "6182.56",
-            "baseVolume24h": "65.23204",
-            "quoteVolume24h": "400164.4263039",
+            "lastPrice": "6099.51",
+            "lowestAsk": "6125.81",
+            "highestBid": "6074.03",
+            "baseVolume24h": "46.73577",
+            "quoteVolume24h": "284314.5803159",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BCH_RUB",
-            "lastPrice": "16099.74",
-            "lowestAsk": "16220.07",
-            "highestBid": "15984.4",
-            "baseVolume24h": "49.07369",
-            "quoteVolume24h": "783448.3762676",
+            "lastPrice": "15983.17",
+            "lowestAsk": "16095.89",
+            "highestBid": "15870.45",
+            "baseVolume24h": "38.56107",
+            "quoteVolume24h": "613993.5565803",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "USDT_RUB",
             "lastPrice": "71.03",
             "lowestAsk": "0",
@@ -2163,107 +2163,107 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "USDT_UAH",
-            "lastPrice": "27.4417",
-            "lowestAsk": "27.5186",
-            "highestBid": "27.3649",
-            "baseVolume24h": "30917.45",
-            "quoteVolume24h": "848782.767207",
+            "lastPrice": "27.3945",
+            "lowestAsk": "27.4685",
+            "highestBid": "27.326",
+            "baseVolume24h": "224144.86",
+            "quoteVolume24h": "6141714.402605",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "USDT_USD",
-            "lastPrice": "0.992",
+            "lastPrice": "1.015",
             "lowestAsk": "1.02",
             "highestBid": "0.979",
-            "baseVolume24h": "15122.103",
-            "quoteVolume24h": "15814.725984",
+            "baseVolume24h": "4222.242",
+            "quoteVolume24h": "4257.10827",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "USDT_EUR",
             "lastPrice": "0",
-            "lowestAsk": "30",
-            "highestBid": "0.02",
+            "lowestAsk": "29",
+            "highestBid": "0.04",
             "baseVolume24h": "0",
             "quoteVolume24h": "0",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_TUSD",
-            "lastPrice": "9272.54",
-            "lowestAsk": "9291.58",
-            "highestBid": "9272.75",
-            "baseVolume24h": "6.4139",
-            "quoteVolume24h": "58811.74189701",
+            "lastPrice": "9070.25",
+            "lowestAsk": "9079.31",
+            "highestBid": "9064.92",
+            "baseVolume24h": "4.146032",
+            "quoteVolume24h": "37656.97257348",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_TUSD",
-            "lastPrice": "232.04",
-            "lowestAsk": "232.19",
-            "highestBid": "231.76",
-            "baseVolume24h": "84.99672",
-            "quoteVolume24h": "19325.7955447",
+            "lastPrice": "226.32",
+            "lowestAsk": "226.33",
+            "highestBid": "225.93",
+            "baseVolume24h": "55.57753",
+            "quoteVolume24h": "12580.0113464",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_PAX",
-            "lastPrice": "9270.61",
-            "lowestAsk": "9290.06",
-            "highestBid": "9272.75",
-            "baseVolume24h": "6.299067",
-            "quoteVolume24h": "57737.39844459",
+            "lastPrice": "9074.85",
+            "lowestAsk": "9083.51",
+            "highestBid": "9064.18",
+            "baseVolume24h": "3.416726",
+            "quoteVolume24h": "31039.17329704",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_PAX",
-            "lastPrice": "231.85",
-            "lowestAsk": "232.33",
-            "highestBid": "231.66",
-            "baseVolume24h": "190.74487",
-            "quoteVolume24h": "43265.4561879",
+            "lastPrice": "226.26",
+            "lowestAsk": "226.44",
+            "highestBid": "225.82",
+            "baseVolume24h": "138.88405",
+            "quoteVolume24h": "31432.9330835",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTC_USDC",
-            "lastPrice": "9275.49",
-            "lowestAsk": "9289.55",
-            "highestBid": "9273.78",
-            "baseVolume24h": "7.579593",
-            "quoteVolume24h": "69434.32666148",
+            "lastPrice": "9071",
+            "lowestAsk": "9081.3",
+            "highestBid": "9062.73",
+            "baseVolume24h": "6.41406",
+            "quoteVolume24h": "58258.797917",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_USDC",
-            "lastPrice": "231.91",
-            "lowestAsk": "232.21",
-            "highestBid": "231.7",
-            "baseVolume24h": "75.76546",
-            "quoteVolume24h": "17197.8092762",
+            "lastPrice": "226.11",
+            "lowestAsk": "226.45",
+            "highestBid": "225.91",
+            "baseVolume24h": "46.07604",
+            "quoteVolume24h": "10426.968527",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CCXX_USDT",
             "lastPrice": "20.4",
             "lowestAsk": "20.41",
             "highestBid": "20",
-            "baseVolume24h": "41199.94948",
-            "quoteVolume24h": "840478.969392",
+            "baseVolume24h": "22609.78773",
+            "quoteVolume24h": "461239.669692",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CCXX_EUR",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -2273,107 +2273,107 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BEER_BTC",
             "lastPrice": "0.00000081",
-            "lowestAsk": "0.00000084",
+            "lowestAsk": "0.00000083",
             "highestBid": "0.0000008",
-            "baseVolume24h": "1026051",
-            "quoteVolume24h": "0.8903794",
+            "baseVolume24h": "1373366",
+            "quoteVolume24h": "1.12828812",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "GLEEC_BTC",
-            "lastPrice": "0.0000249",
-            "lowestAsk": "0.0000249",
+            "lastPrice": "0.00003299",
+            "lowestAsk": "0.0000279",
             "highestBid": "0.00000881",
-            "baseVolume24h": "0",
-            "quoteVolume24h": "0",
+            "baseVolume24h": "453.05",
+            "quoteVolume24h": "0.011647345",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LINK_BTC",
-            "lastPrice": "0.00050676",
-            "lowestAsk": "0.00050683",
-            "highestBid": "0.00050621",
-            "baseVolume24h": "17331.34",
-            "quoteVolume24h": "8.6900367039",
+            "lastPrice": "0.00052292",
+            "lowestAsk": "0.00052342",
+            "highestBid": "0.00052246",
+            "baseVolume24h": "24206.45",
+            "quoteVolume24h": "12.8141838509",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "LINK_USDT",
-            "lastPrice": "4.6987",
-            "lowestAsk": "4.7018",
-            "highestBid": "4.696",
-            "baseVolume24h": "13099.65",
-            "quoteVolume24h": "60180.493518",
+            "lastPrice": "4.7443",
+            "lowestAsk": "4.7473",
+            "highestBid": "4.7414",
+            "baseVolume24h": "15709.42",
+            "quoteVolume24h": "75492.088806",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SOLO_USDT",
-            "lastPrice": "0.2149",
-            "lowestAsk": "0.2428",
-            "highestBid": "0.16",
-            "baseVolume24h": "0",
-            "quoteVolume24h": "0",
+            "lastPrice": "0.2159",
+            "lowestAsk": "0.2593",
+            "highestBid": "0.201",
+            "baseVolume24h": "30.2",
+            "quoteVolume24h": "5.93065",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BTT_USDT",
-            "lastPrice": "0.0003093",
-            "lowestAsk": "0.0003108",
-            "highestBid": "0.0003092",
-            "baseVolume24h": "109830595",
-            "quoteVolume24h": "32953.5068886",
+            "lastPrice": "0.0003267",
+            "lowestAsk": "0.0003274",
+            "highestBid": "0.0003259",
+            "baseVolume24h": "190448808",
+            "quoteVolume24h": "61643.9730771",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BSV_USDT",
-            "lastPrice": "158.66",
-            "lowestAsk": "158.85",
-            "highestBid": "158.49",
-            "baseVolume24h": "180.6451",
-            "quoteVolume24h": "28313.82351",
+            "lastPrice": "155.34",
+            "lowestAsk": "155.52",
+            "highestBid": "155.18",
+            "baseVolume24h": "152.633",
+            "quoteVolume24h": "23824.706193",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BSV_USD",
-            "lastPrice": "158.66",
-            "lowestAsk": "159.25",
-            "highestBid": "158.69",
-            "baseVolume24h": "30.785",
-            "quoteVolume24h": "4814.136639",
+            "lastPrice": "155.32",
+            "lowestAsk": "155.51",
+            "highestBid": "155.19",
+            "baseVolume24h": "28.7644",
+            "quoteVolume24h": "4488.939603",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BSV_RUB",
-            "lastPrice": "11296.59",
-            "lowestAsk": "11346.51",
-            "highestBid": "11182.5",
-            "baseVolume24h": "117.4287",
-            "quoteVolume24h": "1314914.918512",
+            "lastPrice": "11111.49",
+            "lowestAsk": "11111.5",
+            "highestBid": "10951.04",
+            "baseVolume24h": "110.9679",
+            "quoteVolume24h": "1237579.746182",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BSV_EUR",
-            "lastPrice": "141.66",
-            "lowestAsk": "141.77",
-            "highestBid": "141.58",
-            "baseVolume24h": "21.4185",
-            "quoteVolume24h": "3000.499176",
+            "lastPrice": "138.56",
+            "lowestAsk": "138.66",
+            "highestBid": "138.51",
+            "baseVolume24h": "19.0139",
+            "quoteVolume24h": "2643.617857",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "SNB_BTC",
             "lastPrice": "0.00002945",
             "lowestAsk": "0",
@@ -2383,47 +2383,47 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_USD",
-            "lastPrice": "0.6605",
+            "lastPrice": "0.6721",
             "lowestAsk": "0.6892",
-            "highestBid": "0.6571",
-            "baseVolume24h": "2336.87",
-            "quoteVolume24h": "1542.345398",
+            "highestBid": "0.672",
+            "baseVolume24h": "2071.52",
+            "quoteVolume24h": "1392.268592",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_RUB",
-            "lastPrice": "48.07",
+            "lastPrice": "47.93",
             "lowestAsk": "49.85",
             "highestBid": "0",
-            "baseVolume24h": "2201.14",
-            "quoteVolume24h": "105537.8699",
+            "baseVolume24h": "2361.87",
+            "quoteVolume24h": "113209.3213",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZEC_BTC",
-            "lastPrice": "0.005653",
-            "lowestAsk": "0.005661",
-            "highestBid": "0.005642",
-            "baseVolume24h": "1222.811",
-            "quoteVolume24h": "6.911271916",
+            "lastPrice": "0.005632",
+            "lowestAsk": "0.005638",
+            "highestBid": "0.00562",
+            "baseVolume24h": "1102.942",
+            "quoteVolume24h": "6.223017434",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ZEC_EUR",
-            "lastPrice": "46.78",
-            "lowestAsk": "46.93",
-            "highestBid": "46.66",
-            "baseVolume24h": "926.06736",
-            "quoteVolume24h": "42797.4327474",
+            "lastPrice": "45.54",
+            "lowestAsk": "45.67",
+            "highestBid": "45.42",
+            "baseVolume24h": "833.30022",
+            "quoteVolume24h": "38062.7800064",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "USDT_VNDC",
             "lastPrice": "23960",
             "lowestAsk": "23960",
@@ -2433,7 +2433,7 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ETH_VNDC",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -2443,47 +2443,47 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "VC_UAH",
             "lastPrice": "17.45",
             "lowestAsk": "17.56",
             "highestBid": "17.37",
-            "baseVolume24h": "4754.58",
-            "quoteVolume24h": "82991.5307",
+            "baseVolume24h": "4596.08",
+            "quoteVolume24h": "80240.9299",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CAP_BTC",
-            "lastPrice": "0.00001367",
-            "lowestAsk": "0.0000137",
-            "highestBid": "0.00001362",
-            "baseVolume24h": "755335.78",
-            "quoteVolume24h": "10.3006679205",
+            "lastPrice": "0.0000137",
+            "lowestAsk": "0.00001375",
+            "highestBid": "0.00001366",
+            "baseVolume24h": "929468.56",
+            "quoteVolume24h": "12.7869394094",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "DBTC_DUSDT",
-            "lastPrice": "9272.5",
-            "lowestAsk": "9280",
-            "highestBid": "9276.88",
-            "baseVolume24h": "41.308151",
-            "quoteVolume24h": "378861.06310751",
+            "lastPrice": "9071.55",
+            "lowestAsk": "9073.25",
+            "highestBid": "9069.4",
+            "baseVolume24h": "8.8747",
+            "quoteVolume24h": "80636.82764308",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TLW_BTC",
-            "lastPrice": "0.000365",
+            "lastPrice": "0.000374",
             "lowestAsk": "0.0005",
             "highestBid": "0.0002",
-            "baseVolume24h": "2578.73",
-            "quoteVolume24h": "1.03527035",
+            "baseVolume24h": "4315.55",
+            "quoteVolume24h": "1.36847659",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TLW_USDT",
             "lastPrice": "0",
             "lowestAsk": "0",
@@ -2493,27 +2493,27 @@
             "tradesEnabled": false
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TNC_BTC",
-            "lastPrice": "0.00000988",
-            "lowestAsk": "0.00001031",
-            "highestBid": "0.00000575",
-            "baseVolume24h": "161363",
-            "quoteVolume24h": "1.58363082",
+            "lastPrice": "0.00001072",
+            "lowestAsk": "0.00001499",
+            "highestBid": "0.00000942",
+            "baseVolume24h": "4244498",
+            "quoteVolume24h": "47.43075812",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "TNC_USDT",
-            "lastPrice": "0.09258",
-            "lowestAsk": "0.1759",
-            "highestBid": "0.0589",
-            "baseVolume24h": "3698926",
-            "quoteVolume24h": "343248.89763",
+            "lastPrice": "0.0965",
+            "lowestAsk": "0.15",
+            "highestBid": "0.08",
+            "baseVolume24h": "2349198.7",
+            "quoteVolume24h": "245282.513871",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "CBUCKS_USDT",
             "lastPrice": "0.00874",
             "lowestAsk": "0.015",
@@ -2523,57 +2523,57 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MARTK_USDT",
             "lastPrice": "0.023",
-            "lowestAsk": "0.042",
+            "lowestAsk": "0.026",
             "highestBid": "0.023",
-            "baseVolume24h": "83.59",
-            "quoteVolume24h": "2.22196",
+            "baseVolume24h": "0",
+            "quoteVolume24h": "0",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MARTK_BTC",
             "lastPrice": "0.0000022",
             "lowestAsk": "0.00000397",
             "highestBid": "0.0000022",
-            "baseVolume24h": "12247",
-            "quoteVolume24h": "0.0269434",
+            "baseVolume24h": "47118",
+            "quoteVolume24h": "0.1036596",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "MWC_BTC",
-            "lastPrice": "0.0017",
-            "lowestAsk": "0.001999",
-            "highestBid": "0.00161",
-            "baseVolume24h": "146.4",
-            "quoteVolume24h": "0.24912956",
+            "lastPrice": "0.001949",
+            "lowestAsk": "0.001949",
+            "highestBid": "0.001801",
+            "baseVolume24h": "25.3",
+            "quoteVolume24h": "0.04608471",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "FNT_ETH",
-            "lastPrice": "0.00000051",
-            "lowestAsk": "0.0000005",
-            "highestBid": "0.00000037",
-            "baseVolume24h": "1748464",
-            "quoteVolume24h": "0.77690567",
+            "lastPrice": "0.00000105",
+            "lowestAsk": "0.000001",
+            "highestBid": "0.0000009",
+            "baseVolume24h": "18555677",
+            "quoteVolume24h": "17.09601388",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ADK_BTC",
-            "lastPrice": "0.00008139",
-            "lowestAsk": "0.01",
-            "highestBid": "0.00001261",
-            "baseVolume24h": "60252.77",
-            "quoteVolume24h": "4.9541476298",
+            "lastPrice": "0.00007668",
+            "lowestAsk": "0.00007702",
+            "highestBid": "0.00007624",
+            "baseVolume24h": "97611.29",
+            "quoteVolume24h": "7.4581462675",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "RPZX_BTC",
             "lastPrice": "0.0000001",
             "lowestAsk": "0.0000001",
@@ -2583,48 +2583,68 @@
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ADK_USD",
-            "lastPrice": "0.7563",
-            "lowestAsk": "0.7713",
-            "highestBid": "0.7444",
-            "baseVolume24h": "41542.62",
-            "quoteVolume24h": "31383.341833",
+            "lastPrice": "0.6897",
+            "lowestAsk": "0.6868",
+            "highestBid": "0.6794",
+            "baseVolume24h": "76504.43",
+            "quoteVolume24h": "53049.094963",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XMR_USDT",
-            "lastPrice": "64.4",
-            "lowestAsk": "64.51",
-            "highestBid": "64.36",
-            "baseVolume24h": "1106.04313",
-            "quoteVolume24h": "70619.7169817",
+            "lastPrice": "63.13",
+            "lowestAsk": "63.2",
+            "highestBid": "63.05",
+            "baseVolume24h": "1943.36896",
+            "quoteVolume24h": "123632.4672067",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "XLA_USDT",
-            "lastPrice": "0.00571",
-            "lowestAsk": "0.00573",
-            "highestBid": "0.0057",
-            "baseVolume24h": "18244619.5",
-            "quoteVolume24h": "134144.125982",
+            "lastPrice": "0.00381",
+            "lowestAsk": "0.0039",
+            "highestBid": "0.00365",
+            "baseVolume24h": "6685985.9",
+            "quoteVolume24h": "24334.608149",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "ADK_EUR",
-            "lastPrice": "0.6579",
-            "lowestAsk": "0.6694",
-            "highestBid": "0.6469",
-            "baseVolume24h": "45075.71",
-            "quoteVolume24h": "30188.845732",
+            "lastPrice": "0.6089",
+            "lowestAsk": "0.6088",
+            "highestBid": "0.6033",
+            "baseVolume24h": "85472.67",
+            "quoteVolume24h": "52892.665258",
             "tradesEnabled": true
         },
         {
-            "lastUpdateTimestamp": "2020-07-01T17:35:35.000Z",
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
             "tradingPairs": "BUBO_BTC",
+            "lastPrice": "0",
+            "lowestAsk": "0",
+            "highestBid": "0",
+            "baseVolume24h": "0",
+            "quoteVolume24h": "0",
+            "tradesEnabled": false
+        },
+        {
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
+            "tradingPairs": "GAME_ETH",
+            "lastPrice": "0",
+            "lowestAsk": "0.00046",
+            "highestBid": "0.000003",
+            "baseVolume24h": "0",
+            "quoteVolume24h": "0",
+            "tradesEnabled": true
+        },
+        {
+            "lastUpdateTimestamp": "2020-07-04T09:25:27.000Z",
+            "tradingPairs": "FME_USDT",
             "lastPrice": "0",
             "lowestAsk": "0",
             "highestBid": "0",

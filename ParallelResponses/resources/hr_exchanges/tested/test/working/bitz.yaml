@@ -4,7 +4,7 @@ terms:
   permission: null
   search_targets:
   - tag: div
-    id: main
+    id: model
   - tag: div
     class: terms_content
 api_url: https://apiv2.bitz.com/
