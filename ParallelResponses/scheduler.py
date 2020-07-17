@@ -115,9 +115,9 @@ class Scheduler:
 
         print('Done collecting historic rates.')
 
-    async def get_currency_pairs(self, exchanges: [Exchange]):
+    async def get_currency_pairs(self, exchanges):
         print('Starting to collect currency pairs.')
-        responses = await asyncio.gather(*(ex.request_currency_pairs('currency_pairs') for ex in exchanges))
+        responses = await asyncio.gather(*(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
 
         for response in responses:
             current_exchange = exchanges[response[0]]#todo list or dict, wenn list umbauen.

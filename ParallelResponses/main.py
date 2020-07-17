@@ -16,7 +16,7 @@ def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -> List
         job_params: Dict = job_config[job]
 
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
-        exchanges: [Exchange] = list()
+        exchanges = {}
         for exchange_name in job_params['exchanges']:
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
             exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.collect_exchanges_currency_pairs(
@@ -25,7 +25,7 @@ def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -> List
                 job_params['first_currency'],
                 job_params['second_currency'])
             exchanges_with_pairs[exchange] = exchange_currency_pairs
-            exchanges.append(exchange)
+            exchanges[exchange.name] = exchange
 
         new_job: Job = Job(job,
                            job_params['yaml_request_name'],
