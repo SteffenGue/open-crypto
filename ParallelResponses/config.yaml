@@ -7,40 +7,29 @@ general:
     host: localhost
     port: 5432
     db_name: hochfrequenz
-
+  export:
+    export_data_to_csv: false
+    csv_dir: /Users/bjarne/Desktop/
   utilities:
-    yaml_path: resources/running_exchanges/ #muss noch geändert werden
-
+    yaml_path: resources/running_exchanges/testing/working/
 
 jobs:
   collecting_ticker:
     yaml_request_name: ticker
     frequency: 1
     exchanges:
-      - binance
-      - bibox
-      - hotbit
-      - coinall
-      - exx
-      - okex
-      - vindax
-      - whitebit
+      - all
     currency_pairs:
-      - first: eth
-        second: btc
-      - first: bix
-        second: btc
-
     first_currency:
-      - btc
     second_currency:
-      - btc
+      - usdt
+      - usd
 
 
 #  ticker:
 #    yaml_request_name: ticker
 #    frequency: 3
-#    exchanges:
+#    exchange:
 #      - binance
 #      - bibox
 #    currency_pairs:

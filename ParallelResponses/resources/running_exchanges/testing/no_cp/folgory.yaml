@@ -1,0 +1,92 @@
+name: folgory
+
+api_url: https://folgory.com/api/v1
+
+requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
+  ticker:
+    request:
+      template: null
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          cur:
+            type: str
+          symbol:
+            type: str
+          last:
+            type: str
+          high:
+            type: str
+          low:
+            type: str
+          volume:
+            type: str
+          vwap:
+            type: str
+          max_bid:
+            type: str
+          best_ask:
+            type: str
+          best_bid:
+            type: str
+    mapping:
+#      - key: ticker_time
+#        path: []
+#        type:
+#          - none
+#          - now
+      - key: currency_pair_first
+        path:
+          - []
+          - symbol
+        type:
+          - str
+          - split
+          - /
+          - 0
+      - key: currency_pair_second
+        path:
+          - []
+          - symbol
+        type:
+          - str
+          - split
+          - /
+          - 1
+      - key: ticker_last_price
+        path:
+          - []
+          - last
+        type:
+          - str
+          - float
+      - key: ticker_best_bid
+        path:
+          - []
+          - max_bid
+        type:
+          - str
+          - float
+      - key: ticker_best_ask
+        path:
+          - []
+          - best_ask
+        type:
+          - str
+          - float
+      - key: ticker_daily_volume
+        path:
+          - []
+          - volume
+        type:
+          - str
+          - float

@@ -3,7 +3,7 @@ terms:
   terms_url: https://bitbay.net/en/terms-of-use-malta
   permission: null
   search_targets:
-  - tag: main
+  - tag: model
     class: privacy-policy
 api_url: https://bitbay.net/
 rate_limit: null

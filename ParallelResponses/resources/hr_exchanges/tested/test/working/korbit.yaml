@@ -4,11 +4,11 @@ terms:
   permission: true
   search_targets:
   - tag: div
-    class: main-content
+    class: model-content
   - tag: div
     class: container no-border
   - tag: div
-    class: main-content-area no-submenus
+    class: model-content-area no-submenus
   - tag: div
     class: row
   - tag: div

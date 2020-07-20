@@ -1,0 +1,94 @@
+name: okex
+terms: null
+api_url: https://www.okex.com/api/spot/v3/
+rate_limit:
+  max: 20
+  units: 1
+
+requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
+  ticker:
+    request:
+      template: instruments/ticker
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          best_ask:
+            type: float
+          best_bid:
+            type: float
+          instrument_id:
+            type: str
+          product_id:
+            type: str
+          last:
+            type: float
+          last_qty:
+            type: float
+          bid:
+            type: float
+          best_bid_size:
+            type: float
+          open_24h:
+            type: float
+          high_24h:
+            type: float
+          low_24h:
+            type: float
+          base_volume_24h:
+            type: float
+          timestamp:
+            type: str
+          quote_volume_24h:
+            type: float
+
+    mapping:
+    - key: ticker_time
+      path:
+      - timestamp
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fz"
+    - key: currency_pair_first
+      path:
+      - instrument_id
+      type:
+      - str
+      - split
+      - "-"
+      - 0
+    - key: currency_pair_second
+      path:
+      - instrument_id
+      type:
+      - str
+      - split
+      - "-"
+      - 1
+    - key: ticker_last_price
+      path:
+      - last
+      type:
+      - str
+      - float
+    - key: ticker_best_bid
+      path:
+      - best_bid
+      type:
+      - str
+      - float
+    - key: ticker_best_ask
+      path:
+      - best_ask
+      type:
+      - str
+      - float

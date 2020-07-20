@@ -3,7 +3,7 @@ terms:
   terms_url: https://bitflyer.com/en-jp/UsePolicy
   permission: true
   search_targets:
-  - tag: main
+  - tag: model
     class: use-policy
 api_url: https://api.bitflyer.com/v1/
 rate_limit: null

@@ -1,0 +1,102 @@
+name: zbg
+terms: null
+
+api_url: https://kline.zbg.com/api/data/v1/
+
+rate_limit: 
+  max: 1000
+  unit: 60
+
+requests:
+  test_connection:
+    request:
+      url: https://www.zbg.com/exchange/api/v1/common/timestamp
+      template: n/a
+    response:
+      type: dict
+  ticker:
+    request: 
+      template: tickers
+      pair_template: null
+      params: 
+        isUseMarketName:
+          type: str
+          default: true
+    response:
+      type: dict
+      values:
+        resMsg:
+          type: dict
+          values:
+            code:
+              type: str
+            method:
+              type: bool
+            message:
+              type: str
+      datas:
+        type: dict
+        values:
+          currency_pair:
+            type: list
+            values:
+              0: #marketId
+                type: str
+              1: #last price
+                type: str
+              2: #highest price
+                type: str        
+              3: #lowest
+                type: str              
+              4: #24h volume
+                type: str
+              5: #24h change
+                type: str             
+              6: #
+                type: str             
+              7: #top buying price
+                type: str             
+              8: #top selling price
+                type: str             
+              9:  #24h volume in unit of buyers currency
+                type: str             
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path: 
+      - datas
+      - list_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - datas
+      - list_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - datas
+      - list_values
+      - 1
+      type: 
+      - str
+      - float
+    - key: ticker_daily_volume
+      path:
+      - datas
+      - list_values
+      - 4
+      type: 
+      - str
+      - float
