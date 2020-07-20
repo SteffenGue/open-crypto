@@ -1,24 +1,12 @@
 import itertools
-<<<<<<< HEAD:ParallelResponses/exchanges/exchange.py
 import time
-import json
-=======
->>>>>>> config:ParallelResponses/model/exchange/exchange.py
 import traceback
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
 import aiohttp
-<<<<<<< HEAD:ParallelResponses/exchanges/exchange.py
-from aiohttp import ClientConnectionError, ClientConnectorError
-from Mapping import Mapping
-from utilities import REQUEST_PARAMS
-from tables import ExchangeCurrencyPair
-=======
 from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
 from model.database.tables import ExchangeCurrencyPair
->>>>>>> config:ParallelResponses/model/exchange/exchange.py
-
 
 class Exchange:
     """
@@ -108,13 +96,9 @@ class Exchange:
         self.consecutive_exception = False
         self.exchange_currency_pairs = list()
 
-<<<<<<< HEAD:ParallelResponses/exchanges/exchange.py
-    async def request(self, request_name: str, start_time: datetime) -> Tuple[str, datetime, datetime, Dict]:
-=======
+
     async def request(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
     Tuple[str, datetime, datetime, Dict]:
-
->>>>>>> config:ParallelResponses/model/exchange/exchange.py
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -155,26 +139,49 @@ class Exchange:
         if self.request_urls.get(request_name):  # Only when request url exists
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
-<<<<<<< HEAD:ParallelResponses/exchanges/exchange.py
-                try:
-                    response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
-                    response_json = await response.json(content_type=None)
-                    print('{} bekommen.'.format(request_url_and_params['url']))
-                    # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
-                    #     json.dump(response_json, f, ensure_ascii=False, indent=4)
-                    self.consecutive_exception = False
-                    return self.name, start_time, datetime.utcnow(), response_json
-                except ClientConnectionError:
-                    print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                    self.exception_counter += 1
-                    self.consecutive_exception = True
-                except Exception as ex:
-                    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    print(message)
-                    print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                    self.exception_counter += 1
-                    self.consecutive_exception = True
+                responses = dict()
+                params = request_url_and_params['params']
+                pair_template_dict = request_url_and_params['pair_template']
+                pair_formatting_needed = pair_template_dict
+
+                for cp in currency_pairs:
+                    url: str = request_url_and_params['url']
+
+                    if pair_formatting_needed:
+                        pair_formatted: str = self.apply_currency_pair_format(request_name, cp)
+
+                        # if formatted currency pair needs to be a parameter
+                        if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
+                            params[pair_template_dict['alias']] = pair_formatted
+                        else:
+                            url = url.format(currency_pair=pair_formatted)
+
+                    try:
+                        response = await session.get(url=url, params=params)
+                        response_json = await response.json(content_type=None)
+                        print('{} bekommen.'.format(request_url_and_params['url']))
+                        if pair_formatting_needed:
+                            responses[cp] = response_json
+                        else:
+                            responses[None] = response_json
+                            break
+
+                        # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
+                        #     json.dump(response_json, f, ensure_ascii=False, indent=4)
+                    except ClientConnectionError:
+                        print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                        self.exception_counter += 1
+                        self.consecutive_exception = True
+                    except Exception as ex:
+                        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+                        message = template.format(type(ex).__name__, ex.args)
+                        print(message)
+                        print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
+                        self.exception_counter += 1
+                        self.consecutive_exception = True
+
+            return self.name, start_time, datetime.utcnow(), responses
+
 
     async def test_connection(self) -> Tuple[str, bool, Dict]:
         """
@@ -208,46 +215,7 @@ class Exchange:
                     return self.name, False, {}
                 except Exception as ex:
                     return self.name, False, {}
-=======
-                responses = dict()
-                params = request_url_and_params['params']
-                pair_template_dict = request_url_and_params['pair_template']
-                pair_formatting_needed = pair_template_dict
 
-                for cp in currency_pairs:
-                    url: str = request_url_and_params['url']
-
-                    if pair_formatting_needed:
-                        pair_formatted: str = self.apply_currency_pair_format(request_name, cp)
-
-                        # if formatted currency pair needs to be a parameter
-                        if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
-                            params[pair_template_dict['alias']] = pair_formatted
-                        else:
-                            url = url.format(currency_pair=pair_formatted)
-
-                    try:
-                        response = await session.get(url=url, params=params)
-                        response_json = await response.json(content_type=None)
-                        print('{} bekommen.'.format(request_url_and_params['url']))
-                        if pair_formatting_needed:
-                            responses[cp] = response_json
-                        else:
-                            responses[None] = response_json
-                            break
-
-                        # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
-                        #     json.dump(response_json, f, ensure_ascii=False, indent=4)
-                    except ClientConnectionError:
-                        print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                    except Exception as ex:
-                        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        print(message)
-                        print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-
-            return self.name, start_time, datetime.utcnow(), responses
->>>>>>> config:ParallelResponses/model/exchange/exchange.py
 
     async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
             -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
@@ -303,13 +271,9 @@ class Exchange:
                         message = template.format(type(ex).__name__, ex.args)
                         print(message)
                         print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-<<<<<<< HEAD:ParallelResponses/exchanges/exchange.py
                         # add one unit to the exception to the exchange
                         self.exception_counter += 1
                         self.consecutive_exception = True
-=======
->>>>>>> config:ParallelResponses/model/exchange/exchange.py
-                        pass
                     finally:
                         time.sleep(self.rate_limit)
 
@@ -592,22 +556,6 @@ class Exchange:
         results = list()
 
         mappings = self.response_mappings['ticker']
-<<<<<<< HEAD:ParallelResponses/exchanges/exchange.py
-        for mapping in mappings:
-            result[mapping.key] = mapping.extract_value(response[3])
-
-        result = list(itertools.zip_longest(itertools.repeat(self.name, len(result['currency_pair_first'])),
-                                            itertools.repeat(response[1], len(result['currency_pair_first'])),
-                                            itertools.repeat(response[2], len(result['currency_pair_first'])),
-                                            result['currency_pair_first'],
-                                            result['currency_pair_second'],
-                                            result['ticker_last_price'],
-                                            result['ticker_last_trade'],
-                                            result['ticker_best_ask'],
-                                            result['ticker_best_bid'],
-                                            result['ticker_daily_volume']))
-        return result
-=======
         responses = response[3]
         currency_pair: ExchangeCurrencyPair
 
@@ -644,7 +592,6 @@ class Exchange:
                                                 temp_results['ticker_daily_volume']))
             results.extend(result)
         return results
->>>>>>> config:ParallelResponses/model/exchange/exchange.py
 
     def add_exchange_currency_pairs(self, currency_pairs: list):
         """

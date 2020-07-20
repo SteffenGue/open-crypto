@@ -92,7 +92,7 @@ class ExchangeCurrencyPair(Base):
     __tablename__ = 'exchanges_currency_pairs'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange_id = Column(Integer, ForeignKey('exchange.id'))
+    exchange_id = Column(Integer, ForeignKey('exchanges.id'))
     first_id = Column(Integer, ForeignKey('currencies.id'))
     second_id = Column(Integer, ForeignKey('currencies.id'))
 
