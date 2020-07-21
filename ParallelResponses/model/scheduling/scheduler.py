@@ -61,7 +61,8 @@ class Scheduler:
 
         # if there are exchanges to request, one request per exchange will be sent
         if not len(primary_exchanges) == 0:
-            responses = await asyncio.gather(*(ex.request('ticker', start_time, primary_exchanges[ex]) for ex in primary_exchanges.keys()))
+            responses = await asyncio.gather(*(ex.request('ticker', start_time, primary_exchanges[ex]) for ex in
+                                               primary_exchanges.keys()))
 
             for response in responses:
                 if response:

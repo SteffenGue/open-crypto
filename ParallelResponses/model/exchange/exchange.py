@@ -8,6 +8,7 @@ from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
 from model.database.tables import ExchangeCurrencyPair
 
+
 class Exchange:
     """
     Attributes:
@@ -16,7 +17,7 @@ class Exchange:
         Each 'job' is in the end a method called on every exchange.
 
         The Attributes and mappings are all extracted from the
-        .yaml-files whose location is described in the config.ini file.
+        .yaml-files whose location is described in the config.yaml file.
 
         name: str
             Name of this exchange.
@@ -81,7 +82,6 @@ class Exchange:
 
         self.api_url = yaml_file['api_url']
         if yaml_file.get('rate_limit') and yaml_file.get('units') and yaml_file.get('max'):
-            #if (yaml_file['rate_limit'] is None or yaml_file['rate_limit']['units'] is None or yaml_file['rate_limit']['max'] is None):
             if yaml_file['rate_limit']['max'] <= 0:
                 self.rate_limit = 0
             else:
@@ -96,9 +96,8 @@ class Exchange:
         self.consecutive_exception = False
         self.exchange_currency_pairs = list()
 
-
     async def request(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
-    Tuple[str, datetime, datetime, Dict]:
+            Tuple[str, datetime, datetime, Dict]:
         """
         Sends a request which is identified by the given name and returns
         the response with the name of this exchange and the time,
@@ -182,7 +181,6 @@ class Exchange:
 
             return self.name, start_time, datetime.utcnow(), responses
 
-
     async def test_connection(self) -> Tuple[str, bool, Dict]:
         """
         This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
@@ -215,7 +213,6 @@ class Exchange:
                     return self.name, False, {}
                 except Exception as ex:
                     return self.name, False, {}
-
 
     async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
             -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
@@ -563,7 +560,6 @@ class Exchange:
             temp_results = {'currency_pair_first': [],
                             'currency_pair_second': [],
                             'ticker_last_price': [],
-                            'ticker_last_trade': [],
                             'ticker_best_ask': [],
                             'ticker_best_bid': [],
                             'ticker_daily_volume': []}
@@ -576,7 +572,8 @@ class Exchange:
                 currency_pair_info = (currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
 
             for mapping in mappings:
-                temp_results[mapping.key] = mapping.extract_value(current_response, currency_pair_info=currency_pair_info)
+                temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                  currency_pair_info=currency_pair_info)
                 if not hasattr(temp_results[mapping.key], "__iter__") or isinstance(temp_results[mapping.key], str):
                     temp_results[mapping.key] = [temp_results[mapping.key]]
 
@@ -586,7 +583,6 @@ class Exchange:
                                                 temp_results['currency_pair_first'],
                                                 temp_results['currency_pair_second'],
                                                 temp_results['ticker_last_price'],
-                                                temp_results['ticker_last_trade'],
                                                 temp_results['ticker_best_ask'],
                                                 temp_results['ticker_best_bid'],
                                                 temp_results['ticker_daily_volume']))
@@ -676,7 +672,8 @@ class Exchange:
 
             current_response = responses[currency_pair]
             curr_pair_string_formatted: str = self.apply_currency_pair_format('historic_rates', currency_pair)
-            currency_pair_info: (str, str, str) = (currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+            currency_pair_info: (str, str, str) = (
+            currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
             if current_response:  # response might be empty
                 try:
                     for mapping in mappings:

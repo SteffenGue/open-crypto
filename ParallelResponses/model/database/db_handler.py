@@ -98,7 +98,7 @@ class DatabaseHandler:
 
     def persist_tickers(self,
                         queried_currency_pairs: List[ExchangeCurrencyPair],
-                        tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float, float]]):
+                        tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
         TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
@@ -123,7 +123,6 @@ class DatabaseHandler:
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
-                 ticker_last_trade,
                  ticker_best_ask,
                  ticker_best_bid,
                  ticker_daily_volume)
@@ -134,16 +133,15 @@ class DatabaseHandler:
                 exchange_currency_pair: ExchangeCurrencyPair = self.get_exchange_currency_pair(session, ticker[0], ticker[3], ticker[4])
                 if exchange_currency_pair is not None:
                     if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
-                        #todo: was ist wenn man alle cps holen willl, oder wenn keins angegeben ist??
+                        #todo: was ist wenn man alle cps holen will, oder wenn keins angegeben ist??
                         ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                               exchange_pair=exchange_currency_pair,
                                               start_time=ticker[1],
                                               response_time=ticker[2],
                                               last_price=ticker[5],
-                                              last_trade=ticker[6],
-                                              best_ask=ticker[7],
-                                              best_bid=ticker[8],
-                                              daily_volume=ticker[9])
+                                              best_ask=ticker[6],
+                                              best_bid=ticker[7],
+                                              daily_volume=ticker[8])
                         tuple_counter = tuple_counter + 1
                         session.add(ticker_tuple)
                     # session.add(ticker_tuple)

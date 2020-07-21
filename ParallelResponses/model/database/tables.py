@@ -137,8 +137,6 @@ class Ticker(Base):
 
     last_price: float
         Latest price of the currency_pair given from the exchange.
-    last_trade: float
-        Information on the last trade of a currency_pair. Information can differ for each exchange!
     best_ask: float
         Best ask price of an exchange for a currency_pair.
     best_bid: float
@@ -158,7 +156,6 @@ class Ticker(Base):
     start_time = Column(DateTime)
     response_time = Column(DateTime, primary_key=True)
     last_price = Column(Float)
-    last_trade = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
     daily_volume = Column(Float)
