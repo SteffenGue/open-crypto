@@ -89,10 +89,10 @@ class Scheduler:
             print('There are currently no exchanges to test its connection.')
         print('Done collecting ticker.')
 
-    async def get_historic_rates(self, exchanges: [Exchange]):
+    async def get_historic_rates(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         print('Starting to collect historic rates.')
-        for ex in exchanges:
-            curr_exchange: Exchange = exchanges[ex]
+        for ex in exchanges_with_pairs.keys():
+            curr_exchange: Exchange = ex
 
             # Setting Currency-Pairs
             all_currency_pairs: [ExchangeCurrencyPair] = self.database_handler.get_all_exchange_currency_pairs(
@@ -108,15 +108,18 @@ class Scheduler:
 
         print('Done collecting historic rates.')
 
-    async def get_currency_pairs(self, exchanges: Dict[str, Exchange]):
+    async def get_currency_pairs(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         print('Starting to collect currency pairs.')
         responses = await asyncio.gather(
-            *(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
+            *(ex.request_currency_pairs('currency_pairs') for ex in exchanges_with_pairs.keys()))
 
         for response in responses:
-            current_exchange = exchanges[response[0]]
+            exchange_name = response[0]
+            for exchange in exchanges_with_pairs.keys():
+                if exchange.name.upper() == exchange_name.upper():
+                    break
             if response[1] is not None:
-                currency_pairs = current_exchange.format_currency_pairs(response)
+                currency_pairs = exchange.format_currency_pairs(response)
                 self.database_handler.persist_exchange_currency_pairs(currency_pairs)
 
         print('Done collecting currency pairs.')

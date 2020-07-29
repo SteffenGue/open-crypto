@@ -6,7 +6,6 @@ import yaml #install PyYaml
 import pathlib
 from pathlib import Path
 
-#bin ich in master
 
 TYPE_CONVERSION = {
 

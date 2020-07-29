@@ -17,10 +17,10 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
         exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
         for exchange_name in exchange_names:
-            #TODO: Error, wenn yaml nicht existiert
+            # TODO: Error, wenn yaml nicht existiert
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
-            #cps aktualisieren
+            # cps aktualisieren
             response = await exchange.request_currency_pairs('currency_pairs')
             if response[1] is not None:
                 formatted_response = exchange.format_currency_pairs(response)
@@ -50,11 +50,6 @@ async def main(database_handler: DatabaseHandler):
     As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     """
-
-    # run program with single exchange for debugging/testing purposes
-    # exchange_names = ['binance']
-    # TODO nicht vergessen config path zu ändern: gerade in hr_exchanges
-
     # Falls du doch die Pairs brauchst
     # exchanges_to_update_currency_pairs_on: Dict[str, Exchange] = dict()
     # for job in jobs: job_exchanges: [Exchange] = job.exchanges_with_pairs.keys()
@@ -67,8 +62,7 @@ async def main(database_handler: DatabaseHandler):
     # TODO: minutes aus der config holen
     timeout_in_minutes = 1
     while True:
-        await asyncio.gather(sched.run(),
-                       asyncio.sleep(timeout_in_minutes * 60))
+        await asyncio.gather(sched.run(), asyncio.sleep(timeout_in_minutes * 60))
 
 
 if __name__ == "__main__":

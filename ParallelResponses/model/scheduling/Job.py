@@ -19,4 +19,3 @@ class Job:
         self.request_name = request_name
         self.frequency = frequency
         self.exchanges_with_pairs = exchanges_with_pairs
-
