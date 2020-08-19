@@ -142,10 +142,11 @@ class Exchange:
                 params = request_url_and_params['params']
                 pair_template_dict = request_url_and_params['pair_template']
                 pair_formatting_needed = pair_template_dict
-
-                for cp in currency_pairs:
+                cps = currency_pairs.copy()
+                while True:
                     url: str = request_url_and_params['url']
-
+                    if cps:
+                        cp = cps.pop()
                     if pair_formatting_needed:
                         pair_formatted: str = self.apply_currency_pair_format(request_name, cp)
 
@@ -178,6 +179,9 @@ class Exchange:
                         print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
                         self.exception_counter += 1
                         self.consecutive_exception = True
+                    finally:
+                        if not cps:
+                            break
 
             return self.name, start_time, datetime.utcnow(), responses
 

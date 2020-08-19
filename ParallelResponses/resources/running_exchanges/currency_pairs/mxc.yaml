@@ -1,7 +1,7 @@
 name: mxc
 terms: null
 
-api_url: https://www.mxc.com/
+api_url: https://www.mxc.com
 
 requests:
   currency_pairs:
@@ -40,14 +40,10 @@ requests:
           - splitupper
           - "_"
           - 1
-  test_connection:
-    request:
-      template: n/a
-    response:
-      type: dict
+
   ticker:
     request:
-      template: open/api/v1/data/ticker
+      template: /open/api/v1/data/ticker
       pair_template: null
       params: null
     response:
@@ -71,64 +67,64 @@ requests:
                   type: float
                 sell:
                   type: float
-                open: 
+                open:
                   type: float
-                last: 
+                last:
                   type: float
                 percentChange:
                   type: float
         msg:
           type: str
-    
+
     mapping:
-    - key: ticker_time
-      path: []
-      type:
-      - none
-      - now
-    - key: currency_pair_first
-      path:
-      - data
-      - dict_key
-      type:
-      - str
-      - splitupper
-      - "_"
-      - 0
-    - key: currency_pair_second
-      path: 
-      - data
-      - dict_key
-      type:
-      - str
-      - splitupper
-      - "_"
-      - 1
-    - key: ticker_daily_volume
-      path: 
-      - data
-      - dict_values
-      - volume
-      type:
-      - float
-    - key: ticker_best_ask
-      path:
-      - data
-      - dict_values
-      - buy
-      type: 
-      - float
-    - key: ticker_best_bid
-      path:
-      - data
-      - dict_values
-      - sell
-      type: 
-      - float
-    - key: ticker_last_price
-      path:
-      - data
-      - dict_values
-      - last
-      type:
-      - float 
+      - key: ticker_time
+        path: []
+        type:
+          - none
+          - now
+      - key: currency_pair_first
+        path:
+          - data
+          - dict_key
+        type:
+          - str
+          - splitupper
+          - "_"
+          - 0
+      - key: currency_pair_second
+        path:
+          - data
+          - dict_key
+        type:
+          - str
+          - splitupper
+          - "_"
+          - 1
+      - key: ticker_daily_volume
+        path:
+          - data
+          - dict_values
+          - volume
+        type:
+          - float
+      - key: ticker_best_ask
+        path:
+          - data
+          - dict_values
+          - buy
+        type:
+          - float
+      - key: ticker_best_bid
+        path:
+          - data
+          - dict_values
+          - sell
+        type:
+          - float
+      - key: ticker_last_price
+        path:
+          - data
+          - dict_values
+          - last
+        type:
+          - float

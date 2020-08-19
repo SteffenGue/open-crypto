@@ -26,7 +26,7 @@ class Scheduler:
     def determine_task(self, request_name: str) -> Callable:
         possible_requests = {
             "ticker": self.get_tickers,
-            "historic_rates": self.get_currency_pairs,
+            "historic_rates": self.get_historic_rates,
             "currency_pairs": self.get_currency_pairs
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
@@ -39,11 +39,11 @@ class Scheduler:
         :param exchanges_with_pairs: The dictionary of all given exchanges with the given exchange currency pairs
         :return: None
         """
+        # todo: auch ticker abfragen erlauben von exchanges die keine currencypair abfrage haben
         print('Starting to collect ticker.')
         # checking every exchange for its flag
         primary_exchanges = {}
         secondary_exchanges = {}
-        #todo: loop wieder einfügen für hochfrequente daten
         for exchange in exchanges_with_pairs.keys():
             if exchange.active_flag:
                 primary_exchanges[exchange] = exchanges_with_pairs[exchange]
@@ -73,7 +73,8 @@ class Scheduler:
                             break
                     formatted_response = exchange.format_ticker(response)
                     if formatted_response:
-                        self.database_handler.persist_tickers(primary_exchanges[exchange], formatted_response)
+                        x = primary_exchanges[exchange]
+                        self.database_handler.persist_tickers(x, formatted_response)
         else:
             print('There are currently no exchanges to request')
 
@@ -95,7 +96,7 @@ class Scheduler:
             curr_exchange: Exchange = ex
 
             # Setting Currency-Pairs
-            all_currency_pairs: [ExchangeCurrencyPair] = self.database_handler.get_all_exchange_currency_pairs(
+            all_currency_pairs: [ExchangeCurrencyPair] = self.database_handler.get_all_currency_pairs_from_exchange(
                 curr_exchange.name)
             curr_exchange.exchange_currency_pairs = all_currency_pairs
 

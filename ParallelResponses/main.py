@@ -60,9 +60,9 @@ async def main(database_handler: DatabaseHandler):
     jobs = await initialize_jobs(database_handler, read_config('jobs'))
     sched = Scheduler(database_handler, jobs)
     # TODO: minutes aus der config holen
-    timeout_in_minutes = 1
+    timeout_in_minutes = 600
     while True:
-        await asyncio.gather(sched.run(), asyncio.sleep(timeout_in_minutes * 60))
+        await asyncio.gather(sched.run(), asyncio.sleep(timeout_in_minutes))
 
 
 if __name__ == "__main__":
