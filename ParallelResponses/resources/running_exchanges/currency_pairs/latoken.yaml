@@ -1,0 +1,263 @@
+name: latoken
+terms: null
+api_url: https://api.latoken.com/api/v1/
+rate_limit: null
+terms:
+
+requests:
+  currencies:
+    request:
+      template: ExchangeInfo/currencies
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          currencyID:
+            type: int
+          symbol: 
+            type: str
+          name:
+            type: str
+          precision:
+            type: int
+          type: 
+            type: str
+          fee:
+            type: str
+    mapping:
+      - key: currency_symbol
+        path:
+        - symbol
+        type:
+        - str
+      - key: currency_name
+        path:
+        - name
+        type:
+        - str
+
+  currency_pairs:
+    request:
+      template: ExchangeInfo/pairs
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values: 
+        type: dict
+        values:
+          pairId:
+            type: int
+          symbol:
+            type: str
+          baseCurrency:
+            type: str
+          quotedCurrency:
+            type: str
+          makerFee:
+            type: int
+          takerFee: 
+            type: int
+          pricePrecision:
+            type: int
+          amountPrecision:
+            type: int
+          minQyt:
+            type: int
+    mapping:          
+      - key: currency_pair_first
+        path:
+        - quotedCurrency
+        type:
+        - str
+      - key: currency_pair_second
+        path:
+        - baseCurrency
+        type:
+        - str
+       
+  ticker:
+    request:
+      template: MarketData/ticker/{currency_pair}
+      pair_template: #BTCETH
+        template: "{first}{second}"
+        lower_case: fase
+      params: null
+    response:
+      type: dict
+      values:
+        pairId:
+          type: int
+        symbol:
+          type: str
+        volume:
+          type: str
+        open:
+          type: str
+        low:
+          type: int
+        high: 
+          type: int
+        close:
+          type: int
+        priceChange:
+          type: int
+    mapping:
+      - key: historic_rates_time
+        path: []
+        type:
+        - none
+        - nowstrptime
+      - key: historic_rates_low
+        path:
+        - low
+        type: 
+        - int
+      - key: historic_rates_high
+        path:
+        - high
+        type:
+        - int
+      - key: historic_rates_open
+        path:
+        - open
+        type:
+        - int
+      - key: historic_rates_close
+        path:
+        - close
+        type:
+        - int
+      - key: historic_rates_volume
+        path:
+        - volume
+        type:
+        - str
+        - int
+        
+  # order_book:
+    # request: 
+      # template: MarketData/orderBook
+      # pair_template: #BTCETH
+        # template: "{first}{second}"
+        # lower_case: false
+        # alias: symbol
+      # params: null
+   
+    # response:
+      # type: dict
+      # values:
+        # pairId:
+          # type: int
+        # symbol:
+          # type: str
+        # spread:
+          # type: int
+        # asks:
+          # type: list
+          # value:
+            # type: dict
+            # value:
+              # price:
+                # type: float
+              # amount:
+                # type: float
+        # bids:
+          # type: list
+          # value:
+            # type: dict
+            # value:
+              # price:
+                # type: float
+              # amount:
+                # type: float                
+ 
+    # mapping:
+      # - key: order_book_time  
+        # path: []
+        # type:
+        # - none
+        # - now
+      # - key: order_book_asks_price
+        # path:
+        # - asks
+        # - price
+        # type: 
+        # - float
+      # - key: order_book_asks_size
+        # path:
+        # - asks
+        # - amount
+        # type:
+        # - float
+      # - key: order_book_bids_price
+        # path:
+        # - bids
+        # - price
+        # type:
+        # - float
+      # - key: order_book_bids_size
+        # path:
+        # - bids
+        # - amount
+        # type:
+        # - float
+      
+#  trades:
+#    request: 
+#      template: MarketData/trades
+#      pair_template: #BTCETH
+#        template: "{first}{second}"
+#        lower_case: true
+#        alias: symbol
+#      params: null
+#    
+#    response:
+#      type: dict
+#      value: 
+#        pair_Id: 
+#          type: int
+#        symbols:
+#          type: str
+#        tradeCount:
+#          type: int
+#        trades:
+#          type: list
+#          values:
+#            type: dict
+#            values:
+#              side:
+#                type: str
+#              price:
+#                type: float
+#              amount:
+#                type: float
+#              timestamp: 
+#                type: int
+#    mapping:
+#      - key: trade_time
+#        path: []
+#        type:
+#        - none
+#        - now
+#      - key: trade_last_price
+#        path: 
+#        - trades
+#        - price
+#        type:
+#        - float
+#      - key: trade_amount
+#        path:
+#        - trades
+#        - amount
+#        type:
+#        - float
+#      - key: trade_side
+#        path:
+#        - trades
+#        - side
+#        type:
+#        - str
