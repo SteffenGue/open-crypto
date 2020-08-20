@@ -133,7 +133,6 @@ class DatabaseHandler:
                 exchange_currency_pair: ExchangeCurrencyPair = self.get_exchange_currency_pair(session, ticker[0], ticker[3], ticker[4])
                 if exchange_currency_pair is not None:
                     if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
-                        #todo: was ist wenn man alle cps holen will, oder wenn keins angegeben ist??
                         ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                               exchange_pair=exchange_currency_pair,
                                               start_time=ticker[1],
@@ -165,14 +164,13 @@ class DatabaseHandler:
         @return:
             List of all currency-pairs for the given exchange.
         """
+        # todo : session factory -> session scope
         session = self.sessionFactory()
         currency_pairs = list()
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is not None:
             currency_pairs = session.query(ExchangeCurrencyPair).filter(
                 ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
-            # ExchangeCurrencyPair.exchange_id.__eq__(exchange_id),
-            # ExchangeCurrencyPair.second_id.__eq__(6)).all() #WICHTIG DEN FILTER RAUSZUNEHMEN
         session.close()
         return currency_pairs
 

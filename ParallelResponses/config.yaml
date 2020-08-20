@@ -2,16 +2,16 @@ general:
   database:
     sqltype: postgresql
     client: psycopg2
-    user_name: postgres
-    password: 1Himmelsrand
+    user_name: bjarne
+    password: ""
     host: localhost
     port: 5432
     db_name: hochfrequenz
   export:
     export_data_to_csv: false
-    csv_dir: /Benutzer/pool/Desktop/
+    csv_dir: /Users/bjarne/Desktop/
   utilities:
-    yaml_path: resources/running_exchanges/ticker/
+    yaml_path: resources/running_exchanges/currency_pairs/
 
 jobs:
   collecting_ticker:
@@ -24,7 +24,6 @@ jobs:
     second_currency:
       - usdt
       - usd
-
 
 #  ticker:
 #    yaml_request_name: ticker

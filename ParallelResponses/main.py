@@ -25,7 +25,7 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
             if response[1] is not None:
                 formatted_response = exchange.format_currency_pairs(response)
                 database_handler.persist_exchange_currency_pairs(formatted_response)
-
+            # todo : all currency pairs abfrage
             exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.collect_exchanges_currency_pairs(
                 exchange.name,
                 job_params['currency_pairs'],
