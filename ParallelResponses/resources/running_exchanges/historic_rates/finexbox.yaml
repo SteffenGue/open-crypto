@@ -1,0 +1,151 @@
+name: finexbox
+
+terms: null
+api_url: https://xapi.finexbox.com/v1/
+rate_limit:
+  max: 2
+  unit: 1
+    
+requests:
+  currency_pairs:
+    request: 
+      template: market
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              market:
+                type: str
+              currency:
+                type: str
+              base:
+                type: str
+              high:
+                type: str
+              price:
+                type: str
+              low:
+                type: str
+              average:
+                type: str
+              percent:
+                type: str
+              volume:
+                type: str
+              active:
+                type: bool
+              timestamp:
+                type: int
+                
+    mapping:
+    - key: currency_pair_first
+      path:
+      - result
+      - market
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - result
+      - base
+      type:
+      - str
+    - key: currency_symbol
+      path:
+      - result
+      - market
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_name
+      path:
+      - result
+      - currency
+      type:
+      - str
+
+  ticker:
+    request:
+      template: cmcpublicticker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair:
+          type: dict
+          values:
+            baseVolume:
+              type: float
+            high24hr:
+              type: str
+            highestBid:
+              type: str
+            id:
+              type: str
+            isFrozen:
+              type: bool
+            last:
+              type: str
+            low24hr:
+              type: str
+            lowestAsk:
+              type: str
+            percentChange:
+              type: float
+            quoteVolume:
+              type: int
+            timestamp:
+              type: int
+            volume:
+              type: int
+    mapping:
+    - key: ticker_time
+      path:
+      - dict_values
+      - timestamp
+      type:
+      - int
+      - fromtimestamp
+    - key: currency_pair_first
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - str
+      - float
+  
+              
+              
+              
+                
+            

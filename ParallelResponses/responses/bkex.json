@@ -1,8 +1,0 @@
-{
-    "timestamp": 1588418494640,
-    "status": 400,
-    "error": "Bad Request",
-    "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
-    "message": "Required String parameter 'pair' is not present",
-    "path": "/v1/q/ticker/price"
-}

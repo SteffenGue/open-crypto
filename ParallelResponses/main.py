@@ -1,112 +1,73 @@
 import asyncio
-import json
-import time
-from datetime import datetime, timedelta
-from typing import Dict
+from typing import Dict, List
 
-import db_handler
-from db_handler import DatabaseHandler
-from exchanges.exchange import Exchange
-from tables import metadata, ExchangeCurrencyPair
-from utilities import read_config, yaml_loader, get_exchange_names
-from dictionary import ExceptionDict
+from model.scheduling.Job import Job
+from model.scheduling.scheduler import Scheduler
+from model.database.db_handler import DatabaseHandler
+from model.exchange.exchange import Exchange
+from model.database.tables import metadata, ExchangeCurrencyPair
+from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 
 
-async def main():
+async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -> List[Job]:
+    jobs: [Job] = list()
+    for job in job_config.keys():
+        job_params: Dict = job_config[job]
+
+        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
+        exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
+        for exchange_name in exchange_names:
+            # TODO: Error, wenn yaml nicht existiert
+            exchange: Exchange = Exchange(yaml_loader(exchange_name))
+
+            # cps aktualisieren
+            response = await exchange.request_currency_pairs('currency_pairs')
+            if response[1] is not None:
+                formatted_response = exchange.format_currency_pairs(response)
+                database_handler.persist_exchange_currency_pairs(formatted_response)
+            # todo : all currency pairs abfrage
+            exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.collect_exchanges_currency_pairs(
+                exchange.name,
+                job_params['currency_pairs'],
+                job_params['first_currency'],
+                job_params['second_currency'])
+            exchanges_with_pairs[exchange] = exchange_currency_pairs
+
+        new_job: Job = Job(job,
+                           job_params['yaml_request_name'],
+                           job_params['frequency'],
+                           exchanges_with_pairs)
+        jobs.append(new_job)
+    return jobs
+
+
+async def main(database_handler: DatabaseHandler):
     """
-    The main() function to run the program. Loads the database, including the database_handler.
+    The model() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
-    In an asynchronous manner it is iterated over the exchanges and and the responses are awaited and collected
+    In an asynchronous manner it is iterated over the exchange and and the responses are awaited and collected
         by await asyncio.gather(..)
-    As soon as all responses from the exchanges are returned, the values get extracted, formatted into tuples
+    As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     """
+    # Falls du doch die Pairs brauchst
+    # exchanges_to_update_currency_pairs_on: Dict[str, Exchange] = dict()
+    # for job in jobs: job_exchanges: [Exchange] = job.exchanges_with_pairs.keys()
+    #     for exchange in job_exchanges:
+    #         if all(exchange.name != ex_to_update for ex_to_update in exchanges_to_update_currency_pairs_on):
+    #             exchanges_to_update_currency_pairs_on[exchange.name] = exchange
 
-    db_params = read_config('database')
-    database_handler = DatabaseHandler(metadata, **db_params)
-    # run program with single exchange for debugging/testing purposes
-    # exchange_names = ['binance']
-    #TODO nicht vergessen config path zu ändern: gerade in hr_exchanges
+    jobs = await initialize_jobs(database_handler, read_config('jobs'))
+    sched = Scheduler(database_handler, jobs)
+    # TODO: minutes aus der config holen
+    timeout_in_minutes = 600
+    while True:
+        await asyncio.gather(sched.run(), asyncio.sleep(timeout_in_minutes))
 
-    exchange_names = get_exchange_names()
-    exchanges = {exchange_name: Exchange(yaml_loader(exchange_name), database_handler.request_params)
-                 for exchange_name in exchange_names}
-
-    print('done')
-    # start_time : datetime when request run is started
-    # delta : given microseconds for the datetime
-    start_time = datetime.utcnow()
-    delta = start_time.microsecond
-    # rounding the given datetime on seconds
-    start_time = start_time - timedelta(microseconds=delta)
-    if delta >= 500000:
-        start_time = start_time + timedelta(seconds=1)
-
-
-    for ex in exchanges:
-        current_exchange: Exchange = exchanges[ex]
-        database_handler.persist_exchange(current_exchange.name)
-
-    print("currency pairs")
-    responses = await asyncio.gather(*(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
-    print('got em')
-
-    for response in responses:
-        current_exchange = exchanges[response[0]]
-        if response[1] is not None:
-            currency_pairs = current_exchange.format_currency_pairs(response)
-            database_handler.persist_exchange_currency_pairs(currency_pairs)
-        all_currency_pairs = database_handler.get_all_exchange_currency_pairs(current_exchange.name)
-        current_exchange.add_exchange_currency_pairs(all_currency_pairs)
-
-    print('currency pairs done')
-
-    print('historic rates')
-    for ex in exchanges:
-        curr_exchange: Exchange = exchanges[ex]
-
-        #Setting Currency-Pairs
-        all_currency_pairs: [ExchangeCurrencyPair]= database_handler.get_all_exchange_currency_pairs(curr_exchange.name)
-        curr_exchange.exchange_currency_pairs = all_currency_pairs
-
-        #Getting Historic Rates
-        hr_response = await curr_exchange.request_historic_rates('historic_rates', curr_exchange.exchange_currency_pairs)
-        if hr_response is not None:
-            formatted_hr_response = curr_exchange.format_historic_rates(hr_response)
-            database_handler.persist_historic_rates(formatted_hr_response)
-
-    print('historic rates done')
-
-    #TODO: reactivate
-    # responses = await asyncio.gather(*(exchanges[ex].request('ticker', start_time) for ex in exchanges))
-
-
-    # for response in responses:
-    #     if response:
-    #         # print('Response: {}'.format(response))
-    #         exchange = exchanges[response[0]]
-    #         formatted_response = exchange.format_ticker(response)
-    #         database_handler.persist_tickers(formatted_response)
-
-    # whitebit_json = open('responses/whitebit.json')
-    # whitebit_json = json.load(whitebit_json)
-    # whitebit_tuple = ('whitebit', start_time, datetime.utcnow(), whitebit_json)
-    # formatted_response = exchanges['whitebit'].format_ticker(whitebit_tuple)
-    # database_handler.persist_tickers(formatted_response)
-
-
-    #exceptions : instance of the dictionary of exceptions for the request run
-    #with method call to check and persist the flags with the given exceptions
-    exceptions = ExceptionDict()
-    database_handler.update_exceptions(exceptions.get_dict())
-    exceptions.get_dict().clear()
 
 if __name__ == "__main__":
-    try:
-        while True:
-            asyncio.run(main())
-            print("5 Minuten Pause.")
-            time.sleep(300)
-    except Exception as e:
-        print(e, e.__cause__)
-        pass
+    db_params = read_config('database')
+    database_handler = DatabaseHandler(metadata, **db_params)
+    asyncio.run(main(database_handler))
+    # scheduler = Scheduler(database_handler, jobs)
+    # scheduler.run()

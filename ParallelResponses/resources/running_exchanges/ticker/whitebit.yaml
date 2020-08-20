@@ -1,0 +1,100 @@
+name: whitebit
+api_url: https://whitebit.com/api/v2/public/
+
+requests:
+  test_connection:
+    request:
+      template: n/a
+    response:
+      type: dict
+  ticker:
+    request:
+      template: ticker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              lastUpdateTimestamp:
+                type: str
+              tradingPairs:
+                type: str
+              lastPrice:
+                type: str
+              lowestAsk:
+                type: str
+              highestBid:
+                type: str
+              baseVolume24H:
+                type: str
+              quoteVolume24H:
+                type: str
+              tradesEnabled:
+                type: str
+    mapping:
+#      - key: ticker_time
+#        path: []
+#        type:
+#          - none
+#          - now
+      - key: currency_pair_first
+        path:
+          - result
+          - []
+          - tradingPairs
+        type:
+          - str
+          - split
+          - "_"
+          - 0
+      - key: currency_pair_second
+        path:
+          - result
+          - []
+          - tradingPairs
+        type:
+          - str
+          - split
+          - "_"
+          - 1
+      - key: ticker_last_price
+        path:
+          - result
+          - []
+          - lastPrice
+        type:
+          - str
+          - float
+      - key: ticker_best_bid
+        path:
+          - result
+          - []
+          - highestBid
+        type:
+          - str
+          - float
+      - key: ticker_best_ask
+        path:
+          - result
+          - []
+          - lowestAsk
+        type:
+          - str
+          - float
+      - key: ticker_daily_volume
+        path:
+          - result
+          - []
+          - quoteVolume24h
+        type:
+          - str
+          - float

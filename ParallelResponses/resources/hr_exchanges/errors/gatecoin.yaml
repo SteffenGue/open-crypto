@@ -4,7 +4,7 @@ terms:
   permission: null
   search_targets:
   - tag: div
-    id: main-body
+    id: model-body
   - tag: article
 api_url: https://api.gatecoin.com/v1/
 rate_limit:

@@ -1,0 +1,99 @@
+name: hotbit
+terms: null
+rate_limit: null
+api_url: https://api.hotbit.io/api/v1/
+
+requests:
+  test_connection:
+    request:
+      template: n/a
+      #method: server.ping
+      #params: null
+    response:
+      type: dict
+  ticker:
+    request:
+      template: allticker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        date:
+          type: int
+        ticker:
+          type: list
+          values:
+            type: dict
+            values:
+              buy:
+                type: float
+              close:
+                type: float
+              high:
+                type: float
+              last:
+                type: float
+              low:
+                type: float
+              open:
+                type: float
+              sell:
+                type: float
+              symbol:
+                type: str
+              vol:
+                type: int
+    mapping:
+    - key: ticker_time
+      path:
+      - date
+      type:
+      - int
+      - fromtimestamp
+    - key: currency_pair_first
+      path:
+      - ticker
+      - symbol
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - ticker
+      - symbol
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - ticker
+      - last
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - ticker
+      - buy
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - ticker
+      - sell
+      type:
+      - float
+    - key: ticker_daily_volume
+      path:
+      - ticker
+      - vol
+      type: 
+      - int
+
+  
+    
+

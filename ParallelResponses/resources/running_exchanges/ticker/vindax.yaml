@@ -1,0 +1,90 @@
+name: vindax
+
+terms: null
+rate_limit:
+  max: 6
+  units: 1
+api_url: https://api.vindax.com/api/v1/
+
+requests:
+  test_connection:
+    request:
+      template: ping
+    response:
+      type: dict
+  ticker:
+    request:
+      template: returnTicker
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        currency_pair:
+          type: dict
+          values:
+            quote_volume:
+              type: str
+            symbol:
+              type: str
+            percentChange:
+              type: float
+            last:
+              type: float
+            highestBid:
+              type: float
+            lowsetAsk:
+              type: float
+            baseVolume:
+              type: float
+            openTime:
+              type: int
+            closeTime:
+              type: int
+            high24hr:
+              type: float
+            low24hr:
+              type: float
+            isFrozen:
+              type: bool
+                  
+    mapping:
+    - key: ticker_time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path: 
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: ticker_last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - float
+    - key: ticker_best_bid
+      path:
+      - dict_values
+      - highestBid
+      type:
+      - float
+    - key: ticker_best_ask
+      path:
+      - dict_values
+      - lowsetAsk
+      type:
+      - flaot

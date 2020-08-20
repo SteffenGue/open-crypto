@@ -1,462 +1,470 @@
 [
     {
         "market": "ADA-BTC",
-        "price": "0.000004924"
+        "price": "0.000010625"
     },
     {
         "market": "ADA-EUR",
-        "price": "0.030495"
+        "price": "0.088375"
     },
     {
         "market": "AE-BTC",
-        "price": "0.000016112"
+        "price": "0.000015429"
     },
     {
         "market": "AE-EUR",
-        "price": "0.090678"
+        "price": "0.11807"
     },
     {
         "market": "AION-BTC",
-        "price": "0.00001"
+        "price": "0.000010473"
     },
     {
         "market": "AION-EUR",
-        "price": "0.058216"
+        "price": "0.089881"
     },
     {
         "market": "ANT-BTC",
-        "price": "0.00011772"
+        "price": "0.00015088"
     },
     {
         "market": "ANT-EUR",
-        "price": "0.77571"
+        "price": "1.237"
     },
     {
         "market": "ARK-BTC",
-        "price": "0.000025078"
+        "price": "0.000027882"
     },
     {
         "market": "ARK-EUR",
-        "price": "0.13984"
+        "price": "0.22567"
     },
     {
         "market": "BAT-BTC",
-        "price": "0.000020655"
+        "price": "0.000026823"
     },
     {
         "market": "BAT-EUR",
-        "price": "0.14697"
+        "price": "0.22463"
     },
     {
         "market": "BCH-BTC",
-        "price": "0.032796"
+        "price": "0.02499"
     },
     {
         "market": "BCH-EUR",
-        "price": "205.74"
+        "price": "198.04"
     },
     {
         "market": "BSV-BTC",
-        "price": "0.027484"
+        "price": "0.017053"
     },
     {
         "market": "BSV-EUR",
-        "price": "173.26"
+        "price": "138.92"
     },
     {
         "market": "BTC-EUR",
-        "price": "6301.8"
+        "price": "8076.6"
     },
     {
         "market": "CMT-BTC",
-        "price": "0.0000017423"
+        "price": "0.0000012649"
     },
     {
         "market": "CMT-EUR",
-        "price": "0.0067111"
+        "price": "0.010133"
     },
     {
         "market": "DCR-BTC",
-        "price": "0.0017379"
+        "price": "0.0015448"
     },
     {
         "market": "DCR-EUR",
-        "price": "11.103"
+        "price": "12.406"
     },
     {
         "market": "DGB-BTC",
-        "price": "0.00000069008"
+        "price": "0.0000021973"
     },
     {
         "market": "DGB-EUR",
-        "price": "0.00481"
+        "price": "0.018099"
     },
     {
         "market": "ELF-BTC",
-        "price": "0.0000090939"
+        "price": "0.000010093"
     },
     {
         "market": "ELF-EUR",
-        "price": "0.057008"
+        "price": "0.08061"
     },
     {
         "market": "ENJ-BTC",
-        "price": "0.000013868"
+        "price": "0.00001864"
     },
     {
         "market": "ENJ-EUR",
-        "price": "0.082227"
+        "price": "0.16038"
     },
     {
         "market": "EOS-BTC",
-        "price": "0.00035698"
+        "price": "0.00027163"
     },
     {
         "market": "EOS-EUR",
-        "price": "2.2468"
+        "price": "2.198"
     },
     {
         "market": "ETC-BTC",
-        "price": "0.00075911"
+        "price": "0.000621"
     },
     {
         "market": "ETC-EUR",
-        "price": "4.7657"
+        "price": "5.0619"
     },
     {
         "market": "ETH-BTC",
-        "price": "0.02296"
+        "price": "0.02492"
     },
     {
         "market": "ETH-EUR",
-        "price": "144.2"
+        "price": "201.37"
     },
     {
         "market": "GAS-BTC",
-        "price": "0.00016281"
+        "price": "0.0001935"
     },
     {
         "market": "GAS-EUR",
-        "price": "1.0169"
+        "price": "1.5622"
     },
     {
         "market": "GNT-BTC",
-        "price": "0.0000053713"
+        "price": "0.0000063792"
     },
     {
         "market": "GNT-EUR",
-        "price": "0.033605"
+        "price": "0.046381"
     },
     {
         "market": "HOT-BTC",
-        "price": "0.000000052487"
+        "price": "0.0000000612"
     },
     {
         "market": "HOT-EUR",
-        "price": "0.00030796"
+        "price": "0.00048477"
     },
     {
         "market": "ICX-BTC",
-        "price": "0.000034354"
+        "price": "0.00003757"
     },
     {
         "market": "ICX-EUR",
-        "price": "0.21039"
+        "price": "0.29594"
     },
     {
         "market": "IOST-BTC",
-        "price": "0.00000046725"
+        "price": "0.00000067015"
     },
     {
         "market": "IOST-EUR",
-        "price": "0.0029192"
+        "price": "0.0048438"
     },
     {
         "market": "KMD-BTC",
-        "price": "0.000064536"
+        "price": "0.000065814"
     },
     {
         "market": "KMD-EUR",
-        "price": "0.40758"
+        "price": "0.53531"
     },
     {
         "market": "LINK-BTC",
-        "price": "0.00049491"
+        "price": "0.00051812"
     },
     {
         "market": "LINK-EUR",
-        "price": "3.102"
+        "price": "4.2197"
     },
     {
         "market": "LRC-BTC",
-        "price": "0.0000041036"
+        "price": "0.000010243"
     },
     {
         "market": "LRC-EUR",
-        "price": "0.025009"
+        "price": "0.08894"
     },
     {
         "market": "LSK-BTC",
-        "price": "0.00014284"
+        "price": "0.00012402"
     },
     {
         "market": "LSK-EUR",
-        "price": "0.89941"
+        "price": "0.996"
     },
     {
         "market": "LTC-BTC",
-        "price": "0.0059995"
+        "price": "0.0045247"
     },
     {
         "market": "LTC-EUR",
-        "price": "37.88"
+        "price": "36.994"
     },
     {
         "market": "MIOTA-BTC",
-        "price": "0.000023076"
+        "price": "0.000025113"
     },
     {
         "market": "MIOTA-EUR",
-        "price": "0.14542"
+        "price": "0.2054"
     },
     {
         "market": "NANO-BTC",
-        "price": "0.000077876"
+        "price": "0.00012103"
     },
     {
         "market": "NANO-EUR",
-        "price": "0.49759"
+        "price": "0.83766"
     },
     {
         "market": "NAS-BTC",
-        "price": "0.00004069"
+        "price": "0.000039388"
     },
     {
         "market": "NAS-EUR",
-        "price": "0.23508"
+        "price": "0.32561"
     },
     {
         "market": "NEO-BTC",
-        "price": "0.0010997"
+        "price": "0.0010923"
     },
     {
         "market": "NEO-EUR",
-        "price": "6.665"
+        "price": "8.7886"
     },
     {
         "market": "NPXS-BTC",
-        "price": "0.000000016771"
+        "price": "0.000000019332"
     },
     {
         "market": "NPXS-EUR",
-        "price": "0.00010251"
+        "price": "0.00016111"
     },
     {
         "market": "NULS-BTC",
-        "price": "0.000045027"
+        "price": "0.000055814"
     },
     {
         "market": "NULS-EUR",
-        "price": "0.17965"
+        "price": "0.49694"
     },
     {
         "market": "OMG-BTC",
-        "price": "0.000084721"
+        "price": "0.00015966"
     },
     {
         "market": "OMG-EUR",
-        "price": "0.51452"
+        "price": "1.3556"
     },
     {
         "market": "ONG-BTC",
-        "price": "0.000018299"
+        "price": "0.000026064"
     },
     {
         "market": "ONG-EUR",
-        "price": "0.077401"
+        "price": "0.2054"
     },
     {
         "market": "ONT-BTC",
-        "price": "0.000061915"
+        "price": "0.000060923"
     },
     {
         "market": "ONT-EUR",
-        "price": "0.35779"
+        "price": "0.50239"
     },
     {
         "market": "POWR-BTC",
-        "price": "0.0000086878"
+        "price": "0.000010113"
     },
     {
         "market": "POWR-EUR",
-        "price": "0.052505"
+        "price": "0.077855"
     },
     {
         "market": "QTUM-BTC",
-        "price": "0.00019605"
+        "price": "0.00018915"
     },
     {
         "market": "QTUM-EUR",
-        "price": "1.2416"
+        "price": "1.4789"
     },
     {
         "market": "RDD-BTC",
-        "price": "0.000000099729"
+        "price": "0.00000015007"
     },
     {
         "market": "RDD-EUR",
-        "price": "0.00058622"
+        "price": "0.001049"
     },
     {
         "market": "REQ-BTC",
-        "price": "0.0000011702"
+        "price": "0.0000026072"
     },
     {
         "market": "REQ-EUR",
-        "price": "0.0073052"
+        "price": "0.023819"
     },
     {
         "market": "RVN-BTC",
-        "price": "0.0000023607"
+        "price": "0.0000020005"
     },
     {
         "market": "RVN-EUR",
-        "price": "0.014881"
+        "price": "0.016322"
     },
     {
         "market": "SNT-BTC",
-        "price": "0.0000027358"
+        "price": "0.0000024976"
     },
     {
         "market": "SNT-EUR",
-        "price": "0.015008"
+        "price": "0.020698"
     },
     {
         "market": "STEEM-BTC",
-        "price": "0.00002342"
+        "price": "0.000022002"
     },
     {
         "market": "STEEM-EUR",
-        "price": "0.13914"
+        "price": "0.17908"
+    },
+    {
+        "market": "STMX-BTC",
+        "price": "0.00000024659"
+    },
+    {
+        "market": "STMX-EUR",
+        "price": "0.0017112"
     },
     {
         "market": "STORM-BTC",
-        "price": "0.0000001675"
+        "price": "0.00000032019"
     },
     {
         "market": "STORM-EUR",
-        "price": "0.00097938"
+        "price": "0.0028761"
     },
     {
         "market": "STRAT-BTC",
-        "price": "0.000041667"
+        "price": "0.000049724"
     },
     {
         "market": "STRAT-EUR",
-        "price": "0.25146"
+        "price": "0.39609"
     },
     {
         "market": "TRX-BTC",
-        "price": "0.0000018059"
+        "price": "0.000001855"
     },
     {
         "market": "TRX-EUR",
-        "price": "0.011572"
+        "price": "0.014915"
     },
     {
         "market": "VET-BTC",
-        "price": "0.00000053994"
+        "price": "0.0000012003"
     },
     {
         "market": "VET-EUR",
-        "price": "0.0033"
+        "price": "0.0096672"
     },
     {
         "market": "VTC-BTC",
-        "price": "0.000032497"
+        "price": "0.000027768"
     },
     {
         "market": "VTC-EUR",
-        "price": "0.19725"
+        "price": "0.22478"
     },
     {
         "market": "VTHO-BTC",
-        "price": "0.0000000052"
+        "price": "0.000000575"
     },
     {
         "market": "VTHO-EUR",
-        "price": "0.0002825"
+        "price": "0.00050952"
     },
     {
         "market": "WAVES-BTC",
-        "price": "0.00014676"
+        "price": "0.00012697"
     },
     {
         "market": "WAVES-EUR",
-        "price": "0.91522"
+        "price": "1.0005"
     },
     {
         "market": "WTC-BTC",
-        "price": "0.00003381"
+        "price": "0.00003623"
     },
     {
         "market": "WTC-EUR",
-        "price": "0.20995"
+        "price": "0.30042"
     },
     {
         "market": "XEM-BTC",
-        "price": "0.0000064932"
+        "price": "0.000004859"
     },
     {
         "market": "XEM-EUR",
-        "price": "0.033813"
+        "price": "0.038292"
     },
     {
         "market": "XLM-BTC",
-        "price": "0.0000059315"
+        "price": "0.0000074938"
     },
     {
         "market": "XLM-EUR",
-        "price": "0.044455"
+        "price": "0.059705"
     },
     {
         "market": "XRP-BTC",
-        "price": "0.000027393"
+        "price": "0.000019365"
     },
     {
         "market": "XRP-EUR",
-        "price": "0.17184"
+        "price": "0.15829"
     },
     {
         "market": "XTZ-BTC",
-        "price": "0.000287"
+        "price": "0.00025239"
     },
     {
         "market": "XTZ-EUR",
-        "price": "1.7724"
+        "price": "2.0573"
     },
     {
         "market": "XVG-BTC",
-        "price": "0.00000036981"
+        "price": "0.00000079067"
     },
     {
         "market": "XVG-EUR",
-        "price": "0.002398"
+        "price": "0.0063082"
     },
     {
         "market": "ZIL-BTC",
-        "price": "0.00000059029"
+        "price": "0.0000018899"
     },
     {
         "market": "ZIL-EUR",
-        "price": "0.0037966"
+        "price": "0.015408"
     },
     {
         "market": "ZRX-BTC",
-        "price": "0.000024766"
+        "price": "0.00003583"
     },
     {
         "market": "ZRX-EUR",
-        "price": "0.15662"
+        "price": "0.36372"
     }
 ]
