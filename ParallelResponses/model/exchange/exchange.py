@@ -322,7 +322,7 @@ class Exchange:
                 try:
                     response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
                     response_json = await response.json(content_type=None)
-                    print('{} bekommen.'.format(request_url_and_params['url']))
+                    print('{} bekommen.'.format(response.url))
 
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
