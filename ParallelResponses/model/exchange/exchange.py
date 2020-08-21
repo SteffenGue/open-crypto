@@ -156,7 +156,7 @@ class Exchange:
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
-                        print('{} bekommen.'.format(request_url_and_params['url']))
+                        print('{} bekommen.'.format(response.url))
                         if pair_formatting_needed:
                             responses[cp] = response_json
                         else:

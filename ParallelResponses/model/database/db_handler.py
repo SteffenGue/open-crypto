@@ -228,8 +228,8 @@ class DatabaseHandler:
             with self.session_scope() as session:
                 if currency_pairs is not None:
                     for currency_pair in currency_pairs:
-                        first_currency = currency_pair['first']
-                        second_currency = currency_pair['second']
+                        first_currency = currency_pair['first'][0]
+                        second_currency = currency_pair['second'][0]
                         if first_currency and second_currency:
                             first_id: int = self.get_currency_id(first_currency)
                             second_id: int = self.get_currency_id(second_currency)
@@ -247,10 +247,15 @@ class DatabaseHandler:
 
     def collect_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]], first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
-        found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+        if 'all' in currency_pairs:
+            found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
+        elif currency_pairs[0] is not None:
+            found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
         found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
         found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
         result: List = list()
+
+
         for pair in found_currency_pairs:
             if not any(pair.id == result_pair.id for result_pair in result):
                 result.append(pair)

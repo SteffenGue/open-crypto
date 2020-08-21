@@ -9,22 +9,24 @@ from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 
 
-async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -> List[Job]:
+async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict, update_cp=True) -> List[Job]:
     jobs: [Job] = list()
     for job in job_config.keys():
         job_params: Dict = job_config[job]
 
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
         exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
+
         for exchange_name in exchange_names:
             # TODO: Error, wenn yaml nicht existiert
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
-            # cps aktualisieren
-            response = await exchange.request_currency_pairs('currency_pairs')
-            if response[1] is not None:
-                formatted_response = exchange.format_currency_pairs(response)
-                database_handler.persist_exchange_currency_pairs(formatted_response)
+            if update_cp:
+                print("Updating Currency Pairs: {}".format(exchange_name))
+                response = await exchange.request_currency_pairs('currency_pairs')
+                if response[1] is not None:
+                    formatted_response = exchange.format_currency_pairs(response)
+                    database_handler.persist_exchange_currency_pairs(formatted_response)
             # todo : all currency pairs abfrage
             exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.collect_exchanges_currency_pairs(
                 exchange.name,
@@ -57,7 +59,7 @@ async def main(database_handler: DatabaseHandler):
     #         if all(exchange.name != ex_to_update for ex_to_update in exchanges_to_update_currency_pairs_on):
     #             exchanges_to_update_currency_pairs_on[exchange.name] = exchange
 
-    jobs = await initialize_jobs(database_handler, read_config('jobs'))
+    jobs = await initialize_jobs(database_handler, read_config('jobs'), read_config('updates')['update_currency_pairs'])
     sched = Scheduler(database_handler, jobs)
     # TODO: minutes aus der config holen
     timeout_in_minutes = 600
