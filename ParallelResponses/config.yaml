@@ -1,29 +1,47 @@
 general:
   database:
-    sqltype: sqlite
+    sqltype: postgresql
     client: psycopg2
-    user_name: postgres
-    password:
+    user_name: bjarne
+    password: ''
     host: localhost
     port: 5432
-    db_name: test_db
+    db_name: hochfrequenz
   operation_settings:
-    frequency: 0.1
+    frequency: 1
   export:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
- collecting_ticker:
-   yaml_request_name: trades
-   update_cp: true
-   exchanges:
-    - bibox
-   currency_pairs:
-     - first: eth
-       second: btc
-   first_currencies:
-   second_currencies:
+  collecting_ticker:
+    yaml_request_name: ticker
+    frequency: 1
+    exchanges:
+      - bibox
+    currency_pairs: #ToDo: Werden First/Second ignoriert wenn cp: all eingestellt wird?
+      - null
+    first_currency:
+      - BTC
+    second_currency:
+      - USD
+
+#  ticker:
+#    yaml_request_name: ticker
+#    frequency: 3
+#    exchange:
+#      - binance
+#      - bibox
+#    currency_pairs:
+#      - first: eth
+#        second: btc
+#      - first: eth
+#        second: doge
+#
+#    first_currency:
+#      - eth
+#    second_currency:
+
