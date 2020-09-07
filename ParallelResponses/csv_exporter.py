@@ -10,14 +10,43 @@ from dateutil import parser as dateparser
 
 
 class CsvExporter:
-    database_handler: DatabaseHandler
+    """
+    Controls and guides the export of database-tuples as a csv-file.
+    The actual parameters for the export can be set in csv_config.yaml.
 
-    # export parameter
+    Attributes:
+        database_handler: DatabaseHandler
+            Instance of the handler for the database connection.
+        path: str
+            Path where the csv-file should be saved.
+        name: str
+            Name of the file.
+        delimiter: str
+            Delimeter which seperates the column-entries.
+
+    Filter Attributes:
+        query_everything: bool
+            If everything that is stored in the database should be queried.
+        from_timestamp: datetime
+            Timestamp for the minimum time the request was sent.
+        to_timestamp: datetime
+            Timestamp for the maximum time the request was sent.
+        exchanges: List[str]
+            List of exchanges where tuples should be exported from.
+        first_currencies: List[str]
+            List of currencies that are the first one of a pair.
+            Currency-pairs with first-currencies that can be found in this list will be exported.
+        second_currencies: List[str]
+            List of currencies that are the second one of a pair that should be exported.
+            Currency-pairs with second-currencies that can be found in this list will be exported.
+        currency_pairs: List[Tuple[str, str]]
+            List of dictionaries of currency-pairs that should be exported.
+            Currency-pairs which can be found in this list will be exported.
+    """
+    database_handler: DatabaseHandler
     path: str
     name: str
     delimiter: str
-
-    # query options
     query_everything: bool
     from_timestamp: datetime
     to_timestamp: datetime
@@ -27,6 +56,12 @@ class CsvExporter:
     currency_pairs: List[Tuple[str, str]]
 
     def __init__(self):
+        """
+        Creates a new CSV-Export process.
+        The initializer takes in first the parameters described in csv_config.yaml
+        and tries to export the data which is stored in the database
+        based on the filters set by the user in the config-file.
+        """
         db_params: Dict = utilities.read_config('database', 'csv_config.yaml')
         self.database_handler = DatabaseHandler(metadata, **db_params)
 
@@ -56,6 +91,13 @@ class CsvExporter:
         self.create_csv()
 
     def create_csv(self):
+        """
+        Receives from the DatabaseHandler the tuples that should be exported.
+        The received tuples are based on the parameters set by the user in csv-config.yaml.
+        The method tries to create the save-path if it not already exists.
+        Creates or modifies the file.
+        All previously stored content in the file will be erased.
+        """
         ticker_data = self.database_handler.get_readable_tickers(self.query_everything,
                                                                  self.from_timestamp,
                                                                  self.to_timestamp,
@@ -66,9 +108,15 @@ class CsvExporter:
 
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        full_path: str = os.path.join(self.path, '{}.csv'.format(self.filename))
+        if self.filename.endswith('.csv'):
+            full_path: str = os.path.join(self.path, self.filename)
+        else:
+            full_path: str = os.path.join(self.path, '{}.csv'.format(self.filename))
         print(full_path)
         with open(full_path, 'w', newline='') as file:
             writer = csv.writer(file, delimiter=self.delimiter)
-            for tuple in ticker_data:
-                writer.writerow(tuple)
+            writer.writerows(ticker_data)
+
+
+if __name__ == "__main__":
+    CsvExporter()
