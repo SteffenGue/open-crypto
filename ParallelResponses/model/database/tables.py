@@ -1,8 +1,10 @@
 import sqlalchemy
-from sqlalchemy import *
+from sqlalchemy import join, Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select, \
+    Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, validates, aliased
+from sqlalchemy.orm import relationship, validates, aliased, mapper
 from sqlalchemy_utils import create_view
+from sqlalchemy_utils.functions import orm
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -93,7 +95,7 @@ class ExchangeCurrencyPair(Base):
     __tablename__ = 'exchanges_currency_pairs'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange_id = Column(Integer, ForeignKey('exchange.id'))
+    exchange_id = Column(Integer, ForeignKey('exchanges.id'))
     first_id = Column(Integer, ForeignKey('currencies.id'))
     second_id = Column(Integer, ForeignKey('currencies.id'))
 
@@ -219,7 +221,6 @@ class Trade(Base):
     __repr__(self) describes the representation if queried.
 
     """
-
     __tablename__ = 'trades'
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
@@ -253,13 +254,42 @@ class ExchangeCurrencyPairView(Base):
         name='exchanges_currency_pairs_view',
         selectable=sqlalchemy.select(
             [
-                ExchangeCurrencyPair.id.label('id'),
+                ExchangeCurrencyPair.id,
                 Exchange.name.label('exchange_name'),
                 first.name.label('first_name'),
                 second.name.label('second_name')
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+            )
+        ),
+        metadata=Base.metadata
+    )
+
+
+class TickersView(Base):
+    first = aliased(Currency)
+    second = aliased(Currency)
+    __table__ = create_view(
+        name='tickers_view',
+        selectable=select(
+            [
+                Exchange.name.label('exchange'),
+                first.name.label('first_currency'),
+                second.name.label('second_currency'),
+                Ticker.start_time,
+                Ticker.response_time,
+                Ticker.last_price,
+                Ticker.last_trade,
+                Ticker.best_ask,
+                Ticker.best_bid,
+                Ticker.daily_volume
+            ],
+            from_obj=(
+                Ticker.__table__.join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
                     .join(first, ExchangeCurrencyPair.first_id == first.id)
                     .join(second, ExchangeCurrencyPair.second_id == second.id)
             )

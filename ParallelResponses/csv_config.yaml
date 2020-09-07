@@ -1,0 +1,32 @@
+database:
+  sqltype: postgresql
+  client: psycopg2
+  user_name: bjarne
+  password: ""
+  host: localhost
+  port: 5432
+  db_name: hochfrequenz
+
+export:
+  save_path: resources/csv/
+  filename: my_own_csv
+  delimiter: ","
+
+query_options:
+  query_everything: false
+  from_timestamp: #01-09-2020 13:20:00
+  to_timestamp: 01-09-2020 13:26:00
+  exchanges:
+    - binance
+#    - kucoin
+  first_currencies:
+#    - eth
+  second_currencies:
+#    - ngn
+  currency_pairs:
+#    - first: ltc
+#      second: usdt
+#    - first: ltc
+#      second: bnb
+#    - first: btc
+#      second: pax

@@ -383,7 +383,7 @@ requests:
       - int
       - fromtimestampms
 
-  ticker: # Best price/qty on the order book for a symbol or symbols.
+  ticker:
     request:
       template: v3/ticker/bookTicker
       pair_template: # e.g. BNBBTC
@@ -391,7 +391,6 @@ requests:
         lower_case: false
         alias: symbol
       params: null
-      weight: 1
     response:
       type: dict
       values:

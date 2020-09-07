@@ -1,6 +1,7 @@
 import asyncio
 from typing import Dict, List
 
+from csv_exporter import CsvExporter
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
 from model.database.db_handler import DatabaseHandler
@@ -26,7 +27,7 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
                 formatted_response = exchange.format_currency_pairs(response)
                 database_handler.persist_exchange_currency_pairs(formatted_response)
 
-            exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.collect_exchanges_currency_pairs(
+            exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
                 exchange.name,
                 job_params['currency_pairs'],
                 job_params['first_currency'],
@@ -72,8 +73,9 @@ async def main(database_handler: DatabaseHandler):
 
 
 if __name__ == "__main__":
-    db_params = read_config('database')
-    database_handler = DatabaseHandler(metadata, **db_params)
-    asyncio.run(main(database_handler))
+    # db_params = read_config('database')
+    # database_handler = DatabaseHandler(metadata, **db_params)
+    # asyncio.run(main(database_handler))
+    CsvExporter()
     # scheduler = Scheduler(database_handler, jobs)
     # scheduler.run()

@@ -4,13 +4,14 @@ from contextlib import contextmanager
 
 import psycopg2
 import sqlalchemy
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine, MetaData, or_, and_, tuple_
 from sqlalchemy.exc import ProgrammingError
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
+from model.database import tables
 from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, \
-    ExchangeCurrencyPairView
+    ExchangeCurrencyPairView, TickersView
 
 
 class DatabaseHandler:
@@ -71,12 +72,13 @@ class DatabaseHandler:
         conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
         print(conn_string)
         engine = create_engine(conn_string)
+        print(engine.url)
 
         if not database_exists(engine.url):
             create_database(engine.url)
             print(f"Database '{db_name}' created")
 
-        try: #this is done since one cant test if view-table exists already. if it does an error occurs
+        try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
         except ProgrammingError:
             print('View already exists.')
@@ -131,10 +133,11 @@ class DatabaseHandler:
         with self.session_scope() as session:
             tuple_counter: int = 0
             for ticker in tickers:
-                exchange_currency_pair: ExchangeCurrencyPair = self.get_exchange_currency_pair(session, ticker[0], ticker[3], ticker[4])
+                exchange_currency_pair: ExchangeCurrencyPair = self.get_exchange_currency_pair(session, ticker[0],
+                                                                                               ticker[3], ticker[4])
                 if exchange_currency_pair is not None:
                     if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
-                        #todo: was ist wenn man alle cps holen willl, oder wenn keins angegeben ist??
+                        # todo: was ist wenn man alle cps holen willl, oder wenn keins angegeben ist??
                         ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                               exchange_pair=exchange_currency_pair,
                                               start_time=ticker[1],
@@ -148,17 +151,6 @@ class DatabaseHandler:
                         session.add(ticker_tuple)
                     # session.add(ticker_tuple)
             print('{} ticker added for {}'.format(tuple_counter, ticker[0]))
-
-    def get_active_exchanges(self):
-        """
-        Query every inactive exchange from the database
-        :return: list of all inactive exchange
-        """
-
-        session = self.sessionFactory()
-        query = set(session.query(Exchange.name).filter(Exchange.active == False).all())
-        session.close()
-        return query
 
     def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         """
@@ -249,7 +241,8 @@ class DatabaseHandler:
 
         return found_currency_pairs
 
-    def collect_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]], first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
+    def get_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]],
+                                     first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
         found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
         found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
@@ -411,12 +404,99 @@ class DatabaseHandler:
         finally:
             session.close()
 
-    def get_readable_tickers(self):
+    def get_readable_tickers(self,
+                             query_everything: bool,
+                             from_timestamp: datetime,
+                             to_timestamp: datetime,
+                             exchanges: List[str],
+                             currency_pairs: List[Dict[str, str]],
+                             first_currencies: List[str],
+                             second_currencies: List[str]):
+        # vielleicht boolean einbauen ob alles queried werden soll?
+        result = []
         with self.session_scope() as session:
-            data = session.query(
-                ExchangeCurrencyPairView.exchange_name,
-                ExchangeCurrencyPairView.first_name,
-                ExchangeCurrencyPairView.second_name)
-            print(data)
+            first = aliased(Currency)
+            second = aliased(Currency)
+            data: Query = session.query(Exchange.name.label('exchange'),
+                                        first.name.label('first_currency'),
+                                        second.name.label('second_currency'),
+                                        Ticker.start_time,
+                                        Ticker.response_time,
+                                        Ticker.last_price,
+                                        Ticker.last_trade,
+                                        Ticker.best_ask,
+                                        Ticker.best_bid,
+                                        Ticker.daily_volume). \
+                join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id). \
+                join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id). \
+                join(first, ExchangeCurrencyPair.first_id == first.id). \
+                join(second, ExchangeCurrencyPair.second_id == second.id)
 
+            if query_everything:
+                result = data.all()
+            else:
+                exchange_names = list()
+                first_currency_names = list()
+                second_currency_names = list()
+                currency_pairs_names = list()
 
+                if exchanges:
+                    exchange_names = [name.upper() for name in exchanges]
+                else:
+                    exchange_names = [r[0] for r in session.query(Exchange.name)]
+                if not first_currencies and not second_currencies and not currency_pairs:
+                    first_currency_names = [r[0] for r in session.query(Currency.name)]
+                else:
+                    if first_currencies:
+                        first_currency_names = [name.upper() for name in first_currencies]
+                    if second_currencies:
+                        second_currency_names = [name.upper() for name in second_currencies]
+                    if currency_pairs:
+                        currency_pairs_names = [(pair['first'].upper(), pair['second'].upper()) for pair in currency_pairs]
+
+                result = data.filter(and_(
+                                        Exchange.name.in_(exchange_names),
+                                        or_(
+                                            first.name.in_(first_currency_names), #first currency
+                                            second.name.in_(second_currency_names), #second currency
+                                            tuple_(first.name, second.name).in_(currency_pairs_names) #currency_pair
+                                        ),
+                ))
+
+                if from_timestamp:
+                    result = result.filter(Ticker.start_time >= from_timestamp)
+                if to_timestamp:
+                    result = result.filter(Ticker.start_time <= to_timestamp)
+                    print('we filtering')
+
+                result = result.all()
+
+        # for ticker in result:
+        #     print("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}".format(ticker.exchange,
+        #                                                           ticker.first_currency,
+        #                                                           ticker.second_currency,
+        #                                                           ticker.start_time,
+        #                                                           ticker.response_time,
+        #                                                           ticker.last_price,
+        #                                                           ticker.last_trade,
+        #                                                           ticker.best_ask,
+        #                                                           ticker.best_bid,
+        #                                                           ticker.daily_volume))
+        print('{} rows.'.format(len(result)))
+        return result
+
+    def get_exchange_ids(self, exchange_names: List[str]) -> List[int]:
+        exchange_ids: List[int] = list()
+        with self.session_scope() as session:
+            if exchange_names:
+                exchanges = [x.upper() for x in exchange_names]
+                with self.session_scope() as session:
+                    exchange_ids = session.query(Exchange.id).filter(Exchange.name.in_(exchanges)).all()
+            else:
+                exchange_ids = session.query(Exchange.id).all()
+
+            return [r[0] for r in exchange_ids]
+
+    def get_all_exchange_names(self) -> List[str]:
+        with self.session_scope() as session:
+            return [r[0] for r in session.query(Exchange.name).all()]

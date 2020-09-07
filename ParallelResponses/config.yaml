@@ -9,7 +9,7 @@ general:
     db_name: hochfrequenz
   export:
     export_data_to_csv: false
-    csv_dir: /Users/bjarne/Desktop/
+    csv_dir: /path/where/to/save/csv
   utilities:
     yaml_path: resources/running_exchanges/testing/working/
 
@@ -18,12 +18,16 @@ jobs:
     yaml_request_name: ticker
     frequency: 1
     exchanges:
-      - all
+      - binance
+      - kucoin
+      - bibox
+      - vindax
     currency_pairs:
     first_currency:
+      - btc
+      - eth
+      - ltc
     second_currency:
-      - usdt
-      - usd
 
 
 #  ticker:
@@ -41,4 +45,3 @@ jobs:
 #    first_currency:
 #      - eth
 #    second_currency:
-
