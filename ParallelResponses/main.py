@@ -1,4 +1,8 @@
 import asyncio
+import logging
+import os
+import sys
+from datetime import datetime
 from typing import Dict, List
 
 from csv_exporter import CsvExporter
@@ -22,6 +26,8 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
             #cps aktualisieren
+            print('Checking available currency pairs.')
+            logging.info('Checking available currency pairs.')
             response = await exchange.request_currency_pairs('currency_pairs')
             if response[1] is not None:
                 formatted_response = exchange.format_currency_pairs(response)
@@ -33,10 +39,11 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
                 job_params['first_currency'],
                 job_params['second_currency'])
             exchanges_with_pairs[exchange] = exchange_currency_pairs
+            print('Done loading currency pairs.')
+            logging.info('Done loading currency pairs.')
 
         new_job: Job = Job(job,
                            job_params['yaml_request_name'],
-                           job_params['frequency'],
                            exchanges_with_pairs)
         jobs.append(new_job)
     return jobs
@@ -56,26 +63,41 @@ async def main(database_handler: DatabaseHandler):
     # exchange_names = ['binance']
     # TODO nicht vergessen config path zu ändern: gerade in hr_exchanges
 
-    # Falls du doch die Pairs brauchst
-    # exchanges_to_update_currency_pairs_on: Dict[str, Exchange] = dict()
-    # for job in jobs: job_exchanges: [Exchange] = job.exchanges_with_pairs.keys()
-    #     for exchange in job_exchanges:
-    #         if all(exchange.name != ex_to_update for ex_to_update in exchanges_to_update_currency_pairs_on):
-    #             exchanges_to_update_currency_pairs_on[exchange.name] = exchange
-
+    logging.info('Loading jobs.')
     jobs = await initialize_jobs(database_handler, read_config('jobs'))
-    sched = Scheduler(database_handler, jobs)
-    # TODO: minutes aus der config holen
-    timeout_in_minutes = 1
+    frequency = read_config('operation_settings')['frequency']
+    logging.info('Configuring Scheduler.')
+    scheduler = Scheduler(database_handler, jobs, frequency)
+    print('{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+    logging.info('{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+
     while True:
-        await asyncio.gather(sched.run(),
-                       asyncio.sleep(timeout_in_minutes * 60))
+        await scheduler.start()
+
+
+def init_logger():
+    if not read_config('utilities')['enable_logging']:
+        logging.disable()
+    else:
+        if not os.path.exists('resources/log/'):
+            os.makedirs('resources/log/')
+        logging.basicConfig(filename='resources/log/{}.log'.format(datetime.utcnow()),
+                            level=logging.INFO)
+
+
+def handler(type, value, tb):
+    logging.exception('Uncaught exception: {}'.format(str(value)))
 
 
 if __name__ == "__main__":
-    # db_params = read_config('database')
-    # database_handler = DatabaseHandler(metadata, **db_params)
-    # asyncio.run(main(database_handler))
-    CsvExporter()
+    #todo: enable for exception in log
+    # sys.excepthook = handler
+    init_logger()
+    logging.info('Reading Database Configuration')
+    db_params = read_config('database')
+    logging.info('Establishing Databse Connection')
+    database_handler = DatabaseHandler(metadata, **db_params)
+    asyncio.run(main(database_handler))
+    # CsvExporter()
     # scheduler = Scheduler(database_handler, jobs)
     # scheduler.run()

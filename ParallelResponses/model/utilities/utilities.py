@@ -204,7 +204,6 @@ def yaml_loader(exchange: str):
     with open(YAML_PATH + exchange + '.yaml', 'r') as f:
         try:
             data = yaml.load(f, Loader=yaml.FullLoader)
-            print(exchange)
             return data
         except Exception as ex:
             # create an instance of the exception dictionary to safe the exchange which have thrown the exchange

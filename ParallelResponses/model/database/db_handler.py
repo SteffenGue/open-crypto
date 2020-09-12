@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import List, Tuple, Iterator, Iterable, Dict
 from contextlib import contextmanager
@@ -68,18 +69,20 @@ class DatabaseHandler:
         """
 
         conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
-        print(conn_string)
+        logging.info('Connection String is: {}'.format(conn_string))
         engine = create_engine(conn_string)
-        print(engine.url)
 
         if not database_exists(engine.url):
             create_database(engine.url)
             print(f"Database '{db_name}' created")
+            logging.info(f"Database '{db_name}' created")
 
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
         except ProgrammingError:
             print('View already exists.')
+            logging.warning('Views already exist. If you need to alter or recreate tables delete tickers_view '
+                            'and exchanges_currency_pair_view manually.')
             pass
         self.sessionFactory = sessionmaker(bind=engine)
 
@@ -145,10 +148,12 @@ class DatabaseHandler:
                                               best_ask=ticker[7],
                                               best_bid=ticker[8],
                                               daily_volume=ticker[9])
-                        tuple_counter = tuple_counter + 1
+                        tuple_counter += 1
                         session.add(ticker_tuple)
                     # session.add(ticker_tuple)
-            print('{} ticker added for {}'.format(tuple_counter, ticker[0]))
+            print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
+            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
+            return tuple_counter
 
     def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         """
@@ -322,7 +327,6 @@ class DatabaseHandler:
             in the database.
         """
         with self.session_scope() as session:
-            print(session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first())
             return session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
 
     def get_currency_id(self, currency_name: str):
@@ -597,7 +601,6 @@ class DatabaseHandler:
                     result = result.filter(Ticker.start_time >= from_timestamp)
                 if to_timestamp:
                     result = result.filter(Ticker.start_time <= to_timestamp)
-                    print('we filtering')
 
                 result = result.all()
         return result

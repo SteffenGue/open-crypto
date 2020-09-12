@@ -7,28 +7,38 @@ general:
     host: localhost
     port: 5432
     db_name: hochfrequenz
+  operation_settings:
+    frequency: 1
   export:
     export_data_to_csv: false
     csv_dir: /path/where/to/save/csv
   utilities:
     yaml_path: resources/running_exchanges/testing/working/
+    enable_logging: true
 
 jobs:
   collecting_ticker:
     yaml_request_name: ticker
-    frequency: 1
     exchanges:
-      - binance
-      - kucoin
-      - bibox
+      - exmo
+    currency_pairs:
+      - first: btc
+        second: usd
+      - first: btc
+        second: usdt
+    first_currency:
+    second_currency:
+
+  another_one:
+    yaml_request_name: ticker
+    exchanges:
       - vindax
     currency_pairs:
     first_currency:
-      - btc
       - eth
-      - ltc
+      - btc
     second_currency:
-
+      - btc
 
 #  ticker:
 #    yaml_request_name: ticker

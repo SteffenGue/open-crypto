@@ -1,4 +1,5 @@
 import itertools
+import logging
 import traceback
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple
@@ -77,7 +78,7 @@ class Exchange:
         self.exchange_currency_pairs = list()
 
     async def request(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
-    Tuple[str, datetime, datetime, Dict]:
+            Tuple[str, datetime, datetime, Dict]:
 
         """
         Sends a request which is identified by the given name and returns
@@ -116,7 +117,7 @@ class Exchange:
 
         #TODO: DOKU ANPASSEN
         """
-        if self.request_urls.get(request_name):  # Only when request url exists
+        if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 responses = dict()
@@ -139,24 +140,30 @@ class Exchange:
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
-                        print('{} bekommen.'.format(request_url_and_params['url']))
                         if pair_formatting_needed:
                             responses[cp] = response_json
                         else:
                             responses[None] = response_json
                             break
-
                         # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
                         #     json.dump(response_json, f, ensure_ascii=False, indent=4)
                     except ClientConnectionError:
+                        logging.error('Could not establish connection to {}'.format(self.name))
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                     except Exception as ex:
-                        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        print(message)
-                        print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-
+                        print('Unable to read response from {}. Check exchange config file.\n'
+                              'Url: {}, Parameters: {}'
+                              .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                        logging.error('Unable to read response from {}. Check config file.\n'
+                                      'Url: {}, Parameters: {}'
+                                      .format(self.name, request_url_and_params['url'],
+                                              request_url_and_params['params']))
             return self.name, start_time, datetime.utcnow(), responses
+        else:
+            logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
+            print("{} has no Ticker request.".format(self.name))
+            return self.name, start_time, datetime.utcnow(), None
+
 
     async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
             -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
@@ -204,16 +211,16 @@ class Exchange:
                         responses[cp] = response_json
 
                     except ClientConnectionError:
+                        logging.error('Could not establish connection to {}'.format(self.name))
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                        pass
                     except Exception as ex:
-                        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        print(message)
-                        print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                        pass
-
-                print("Completed collecting historic rates for {}.".format(self.name))
+                        print('Unable to read response from {}. Check exchange config file.\n'
+                              'Url: {}, Parameters: {}'
+                              .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                        logging.error('Unable to read response from {}. Check config file.\n'
+                                      'Url: {}, Parameters: {}'
+                                      .format(self.name, request_url_and_params['url'],
+                                              request_url_and_params['params']))
                 return self.name, responses
         else:
             print('{} hat keine Historic Rates'.format(self.name))
@@ -263,16 +270,18 @@ class Exchange:
                 try:
                     response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
                     response_json = await response.json(content_type=None)
-                    print('{} bekommen.'.format(request_url_and_params['url']))
 
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                 except Exception as ex:
-                    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    print(message)
-                    print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
+                    print('Unable to read response from {}. Check exchange config file.\n'
+                          'Url: {}, Parameters: {}'
+                          .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                    logging.warning('Unable to read response from {}. Check config file.\n'
+                                    'Url: {}, Parameters: {}'
+                                    .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
         else:
+            logging.warning('{} has no currency pair request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no currency-pair request.".format(self.name))
         return self.name, response_json
 
@@ -493,7 +502,8 @@ class Exchange:
                 currency_pair_info = (currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
 
             for mapping in mappings:
-                temp_results[mapping.key] = mapping.extract_value(current_response, currency_pair_info=currency_pair_info)
+                temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                  currency_pair_info=currency_pair_info)
                 if not hasattr(temp_results[mapping.key], "__iter__") or isinstance(temp_results[mapping.key], str):
                     temp_results[mapping.key] = [temp_results[mapping.key]]
 
@@ -593,7 +603,8 @@ class Exchange:
 
             current_response = responses[currency_pair]
             curr_pair_string_formatted: str = self.apply_currency_pair_format('historic_rates', currency_pair)
-            currency_pair_info: (str, str, str) = (currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+            currency_pair_info: (str, str, str) = (
+            currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
             if current_response:  # response might be empty
                 try:
                     for mapping in mappings:
