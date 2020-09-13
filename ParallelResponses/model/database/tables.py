@@ -247,6 +247,9 @@ class Trade(Base):
 
 
 class ExchangeCurrencyPairView(Base):
+    """
+    View vor ExchangeCurrencyPairs.
+    """
     first = aliased(Currency)
     second = aliased(Currency)
 
@@ -270,6 +273,11 @@ class ExchangeCurrencyPairView(Base):
 
 
 class TickersView(Base):
+    """
+    View for Tickers.
+    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+    the exchange name and the name of the first and second currency.
+    """
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(

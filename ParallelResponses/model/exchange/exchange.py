@@ -2,7 +2,7 @@ import itertools
 import logging
 import traceback
 from datetime import datetime
-from typing import Iterator, Dict, List, Tuple
+from typing import Iterator, Dict, List, Tuple, Optional
 import aiohttp
 from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
@@ -78,12 +78,12 @@ class Exchange:
         self.exchange_currency_pairs = list()
 
     async def request(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
-            Tuple[str, datetime, datetime, Dict]:
+            Tuple[str, datetime, datetime, Optional[Dict]]:
 
         """
-        Sends a request which is identified by the given name and returns
-        the response with the name of this exchange and the time,
-        when the response arrived.
+        Method tries to request ticker data for all given currency pairs.
+        Depending on if ticker data can be received for all available currency pairs with one request
+        the methods sends a request for each currency pair or just one request for all the data.
 
         The Method is asynchronous so that after the request is send, the program does not wait
         until the response arrives. For asynchrony we use the library asyncio.
@@ -103,19 +103,19 @@ class Exchange:
         TODO: Logging von Exceptions / option in config
         TODO: Saving responses / option in config
 
-        :param request_name: str
+        @param request_name: str
             Name of the request. i.e. 'ticker' for ticker-request
-        :param start_time : datetime
+        @param start_time : datetime
             The given datetime for the request for each request loop.
+        @param currency_pairs:
+            List of currency pairs that should be requested.
 
-        :return: (str, datetime, datetime, .json)
+        @return: (str, datetime, datetime, .json)
             Tuple of the following structure:
                 (exchange_name, start time, response time, response)
                 - time of arrival is a datetime-object in utc
-        :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
+        @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
-
-        #TODO: DOKU ANPASSEN
         """
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
@@ -123,6 +123,7 @@ class Exchange:
                 responses = dict()
                 params = request_url_and_params['params']
                 pair_template_dict = request_url_and_params['pair_template']
+                # when there is no pair formatting section then all ticker data can be accessed with one request
                 pair_formatting_needed = pair_template_dict
 
                 for cp in currency_pairs:
@@ -142,11 +143,9 @@ class Exchange:
                         response_json = await response.json(content_type=None)
                         if pair_formatting_needed:
                             responses[cp] = response_json
-                        else:
+                        else:  # when ticker data is returned for all available currency pairs
                             responses[None] = response_json
                             break
-                        # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
-                        #     json.dump(response_json, f, ensure_ascii=False, indent=4)
                     except ClientConnectionError:
                         logging.error('Could not establish connection to {}'.format(self.name))
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
@@ -158,15 +157,15 @@ class Exchange:
                                       'Url: {}, Parameters: {}'
                                       .format(self.name, request_url_and_params['url'],
                                               request_url_and_params['params']))
+
             return self.name, start_time, datetime.utcnow(), responses
         else:
             logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no Ticker request.".format(self.name))
             return self.name, start_time, datetime.utcnow(), None
 
-
     async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
-            -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
+            -> Tuple[str, Optional[Dict[ExchangeCurrencyPair, Dict]]]:
         """
         Sends a request for the historic rates of each given currency-pair and returns the
         responses that were collected. Is asynchronous so there can be multiple resquests
@@ -224,7 +223,7 @@ class Exchange:
                 return self.name, responses
         else:
             print('{} hat keine Historic Rates'.format(self.name))
-            return None
+            return self.name, None
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """
@@ -604,7 +603,7 @@ class Exchange:
             current_response = responses[currency_pair]
             curr_pair_string_formatted: str = self.apply_currency_pair_format('historic_rates', currency_pair)
             currency_pair_info: (str, str, str) = (
-            currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+                currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
             if current_response:  # response might be empty
                 try:
                     for mapping in mappings:
