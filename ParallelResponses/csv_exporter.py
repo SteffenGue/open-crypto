@@ -8,6 +8,30 @@ import model.utilities.utilities as utilities
 from model.database.tables import metadata
 from dateutil import parser as dateparser
 
+'''
+
+
+
+
+
+
+
+
+Was ist wenn from_time größer als to_time ist?
+-> exception muss geraised werden
+
+
+
+
+
+
+
+
+
+
+
+
+'''
 
 class CsvExporter:
     """

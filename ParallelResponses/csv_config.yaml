@@ -13,11 +13,10 @@ export:
   delimiter: ","
 
 query_options:
-  query_everything: false
+  query_everything: true
   from_timestamp: #01-09-2020 13:20:00
   to_timestamp: 01-09-2020 13:26:00
   exchanges:
-    - binance
 #    - kucoin
   first_currencies:
 #    - eth
