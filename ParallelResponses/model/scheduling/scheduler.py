@@ -71,7 +71,7 @@ class Scheduler:
         """
         possible_requests = {
             "ticker": self.get_tickers,
-            "historic_rates": self.get_currency_pairs,
+            "historic_rates": self.get_historic_rates,
             "currency_pairs": self.get_currency_pairs
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
@@ -104,27 +104,31 @@ class Scheduler:
         logging.info('Added {} Ticker tuple to the database.\n'.format(added_ticker_counter))
         print('Done collecting ticker.')
 
-    async def get_historic_rates(self, exchanges: [Exchange]):
+    async def get_historic_rates(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         # todo: funktioniert noch nicht. methode existiert nur aufgrund von refactoring
         print('Starting to collect historic rates.')
         logging.info('Starting to collect historic rates.')
-        for ex in exchanges:
-            curr_exchange: Exchange = exchanges[ex]
 
-            # Setting Currency-Pairs
-            all_currency_pairs: [ExchangeCurrencyPair] = self.database_handler.get_all_exchange_currency_pairs(
-                curr_exchange.name)
-            curr_exchange.exchange_currency_pairs = all_currency_pairs
+        responses = await asyncio.gather(
+            *(ex.request_historic_rates('historic_rates', exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys()))
 
-            # Getting Historic Rates
-            hr_response = await curr_exchange.request_historic_rates('historic_rates',
-                                                                     curr_exchange.exchange_currency_pairs)
-            if hr_response is not None:
-                formatted_hr_response = curr_exchange.format_historic_rates(hr_response)
-                self.database_handler.persist_historic_rates(formatted_hr_response)
+        added_tuple_counter = 0
+        for response in responses:
+            if response:
+                # print('Response: {}'.format(response))
+                exchange_name = response[0]
+                for exchange in exchanges_with_pairs.keys():
+                    if exchange.name.upper() == exchange_name.upper():
+                        break
+                formatted_response = exchange.format_historic_rates(response)
+
+                if formatted_response:
+                    added_tuple_counter += self.database_handler.persist_historic_rates(formatted_response)
 
         print('Done collecting historic rates.')
+        print('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
         logging.info('Done collecting historic rates.\n')
+        logging.info('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
 
     async def get_currency_pairs(self, exchanges: Dict[str, Exchange]):
         """

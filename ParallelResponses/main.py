@@ -36,8 +36,8 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
             exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
                 exchange.name,
                 job_params['currency_pairs'],
-                job_params['first_currency'],
-                job_params['second_currency'])
+                job_params['first_currencies'],
+                job_params['second_currencies'])
             exchanges_with_pairs[exchange] = exchange_currency_pairs
             print('Done loading currency pairs.')
             logging.info('Done loading currency pairs.')

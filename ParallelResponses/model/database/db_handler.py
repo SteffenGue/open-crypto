@@ -490,8 +490,11 @@ class DatabaseHandler:
                                                 volume=historic_rate[6])
                         session.add(hr_tuple)
                 session.commit()
-                session.close()
-                print('{} tupel eingefügt in historic rates.'.format(i))
+            session.close()
+
+            print('{} historic rates added for {}.'.format(i, historic_rate[0]))
+            logging.info('{} historic rates added for {}.'.format(i, historic_rate([0])))
+            return i
         except Exception as e:
             print(e, e.__cause__)
             session.rollback()

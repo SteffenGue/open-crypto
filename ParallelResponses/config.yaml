@@ -17,22 +17,22 @@ general:
     enable_logging: true
 
 jobs:
-  collecting_ticker:
-    yaml_request_name: ticker
-    exchanges:
-      - exmo
-    currency_pairs:
-      - first: btc
-        second: usd
-      - first: btc
-        second: usdt
-    first_currencies:
-    second_currencies:
+#  collecting_ticker:
+#    yaml_request_name: ticker
+#    exchanges:
+#      - exmo
+#    currency_pairs:
+#      - first: btc
+#        second: usd
+#      - first: btc
+#        second: usdt
+#    first_currencies:
+#    second_currencies:
 
   another_one:
-    yaml_request_name: ticker
+    yaml_request_name: historic_rates
     exchanges:
-      - vindax
+      - bibox
     currency_pairs:
     first_currencies:
       - eth
