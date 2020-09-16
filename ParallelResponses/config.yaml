@@ -22,7 +22,7 @@ jobs:
     frequency: 1
     exchanges:
       - bibox
-    currency_pairs: #ToDo: Werden First/Second ignoriert wenn cp: all eingestellt wird?
+    currency_pairs:
       - null
     first_currency:
       - BTC
