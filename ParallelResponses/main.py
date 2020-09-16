@@ -25,22 +25,37 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
             #TODO: Error, wenn yaml nicht existiert
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
-            #cps aktualisieren
-            print('Checking available currency pairs.')
-            logging.info('Checking available currency pairs.')
-            response = await exchange.request_currency_pairs('currency_pairs')
-            if response[1] is not None:
-                formatted_response = exchange.format_currency_pairs(response)
-                database_handler.persist_exchange_currency_pairs(formatted_response)
+            if job_params['update_cp'] is False:
+                print('Checking available currency pairs for {}...'.format(exchange_name.upper()),
+                      end=" ")
+                logging.info('Checking available currency pairs.'.format(exchange_name.upper()))
+                exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
+                    exchange.name,
+                    job_params['currency_pairs'],
+                    job_params['first_currencies'],
+                    job_params['second_currencies'])
+                exchanges_with_pairs[exchange] = exchange_currency_pairs
+                print('found {}'.format(len(exchange_currency_pairs)))
 
-            exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
-                exchange.name,
-                job_params['currency_pairs'],
-                job_params['first_currencies'],
-                job_params['second_currencies'])
-            exchanges_with_pairs[exchange] = exchange_currency_pairs
-            print('Done loading currency pairs.')
-            logging.info('Done loading currency pairs.')
+            # cps aktualisieren
+            if exchanges_with_pairs[exchange] == []:
+
+                response = await exchange.request_currency_pairs('currency_pairs')
+                if response[1] is not None:
+                    formatted_response = exchange.format_currency_pairs(response)
+                    database_handler.persist_exchange_currency_pairs(formatted_response)
+
+                    exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
+                        exchange.name,
+                        job_params['currency_pairs'],
+                        job_params['first_currencies'],
+                        job_params['second_currencies'])
+                    exchanges_with_pairs[exchange] = exchange_currency_pairs
+
+                    print('Updated Currency Pairs for {}'.format(exchange_name.upper()))
+
+        print('Done loading currency pairs.')
+        logging.info('Done loading currency pairs.')
 
         new_job: Job = Job(job,
                            job_params['yaml_request_name'],
@@ -81,7 +96,7 @@ def init_logger():
     else:
         if not os.path.exists('resources/log/'):
             os.makedirs('resources/log/')
-        logging.basicConfig(filename='resources/log/{}.log'.format(datetime.utcnow()),
+        logging.basicConfig(filename='resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
                             level=logging.INFO)
 
 
@@ -91,11 +106,11 @@ def handler(type, value, tb):
 
 if __name__ == "__main__":
     #todo: enable for exception in log
-    # sys.excepthook = handler
+    sys.excepthook = handler
     init_logger()
     logging.info('Reading Database Configuration')
     db_params = read_config('database')
-    logging.info('Establishing Databse Connection')
+    logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, **db_params)
     asyncio.run(main(database_handler))
     # CsvExporter()

@@ -14,44 +14,40 @@ general:
     csv_dir: /path/where/to/save/csv
   utilities:
     yaml_path: resources/running_exchanges/testing/working/
-    enable_logging: true
+    enable_logging: True
+
+
 
 jobs:
-#  collecting_ticker:
-#    yaml_request_name: ticker
-#    exchanges:
-#      - exmo
-#    currency_pairs:
-#      - first: btc
-#        second: usd
-#      - first: btc
-#        second: usdt
-#    first_currencies:
-#    second_currencies:
 
-  another_one:
-    yaml_request_name: historic_rates
+  tickers:
+    yaml_request_name: ticker
+    update_cp: False
     exchanges:
-      - bibox
+      - exmo
+#      - bibox
+#      - binance
     currency_pairs:
+      - first: btc
+        second: usd
+      - first: btc
+        second: usdt
     first_currencies:
-      - eth
       - btc
     second_currencies:
-      - btc
 
-#  ticker:
-#    yaml_request_name: ticker
-#    frequency: 3
-#    exchange:
-#      - binance
+#  historic_rates:
+#    yaml_request_name: historic_rates
+#    update_cp: False
+#    exchanges:
 #      - bibox
 #    currency_pairs:
-#      - first: eth
-#        second: btc
-#      - first: eth
-#        second: doge
-#
-#    first_currency:
+##      - first: eth
+##        second: btc
+#    first_currencies:
+##      - btc
+#    second_currencies:
 #      - eth
-#    second_currency:
+
+
+

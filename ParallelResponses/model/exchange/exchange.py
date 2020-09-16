@@ -560,6 +560,7 @@ class Exchange:
                                           results['currency_pair_first'],
                                           results['currency_pair_second']))
 
+
     def format_historic_rates(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
             -> List[Iterator[Tuple[datetime, float, float, float, float, float]]]:
         """
@@ -611,7 +612,8 @@ class Exchange:
                                                                           currency_pair_info=currency_pair_info)
                 except Exception as exc:
                     print("Error while formatting historic rates: {}".format(currency_pair))
-                    traceback.print_exc()
+                    logging.exception(f'{currency_pair}: {traceback}')
+                    # traceback.print_exc()
                     pass
                 else:
 

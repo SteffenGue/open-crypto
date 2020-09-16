@@ -138,7 +138,7 @@ class DatabaseHandler:
                                                                                                ticker[3], ticker[4])
                 if exchange_currency_pair is not None:
                     if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
-                        # todo: was ist wenn man alle cps holen willl, oder wenn keins angegeben ist??
+                        # todo: was ist wenn man alle cps holen will, oder wenn keins angegeben ist??
                         ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                               exchange_pair=exchange_currency_pair,
                                               start_time=ticker[1],
@@ -281,6 +281,7 @@ class DatabaseHandler:
                     session.expunge_all()
 
         return found_currency_pairs
+
 
     def get_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]],
                                      first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
@@ -469,38 +470,38 @@ class DatabaseHandler:
         @param historic_rates:
             Iterator containing the already formatted historic-rates-tuple.
         """
-        try:
-            i = 0
-            for historic_rate in historic_rates:
-                with self.session_scope() as session:
-                    tuple_exists = session.query(HistoricRate.exchange_pair_id). \
-                        filter(
-                        HistoricRate.exchange_pair_id == historic_rate[0],
-                        HistoricRate.timestamp == historic_rate[1]
-                    ). \
-                        first()
-                    if tuple_exists is None:
-                        i += 1
-                        hr_tuple = HistoricRate(exchange_pair_id=historic_rate[0],
-                                                timestamp=historic_rate[1],
-                                                open=historic_rate[2],
-                                                high=historic_rate[3],
-                                                low=historic_rate[4],
-                                                close=historic_rate[5],
-                                                volume=historic_rate[6])
-                        session.add(hr_tuple)
-                session.commit()
-            session.close()
+        # try:
+        tuple_counter: int = 0
+        for historic_rate in historic_rates:
+            with self.session_scope() as session:
+                tuple_exists = session.query(HistoricRate.exchange_pair_id). \
+                    filter(
+                    HistoricRate.exchange_pair_id == historic_rate[0],
+                    HistoricRate.timestamp == historic_rate[1]
+                ). \
+                    first()
+                if tuple_exists is None:
+                    tuple_counter += 1
+                    hr_tuple = HistoricRate(exchange_pair_id=historic_rate[0],
+                                            timestamp=historic_rate[1],
+                                            open=historic_rate[2],
+                                            high=historic_rate[3],
+                                            low=historic_rate[4],
+                                            close=historic_rate[5],
+                                            volume=historic_rate[6])
+                    session.add(hr_tuple)
+        #     session.commit()
+        # session.close()
 
-            print('{} historic rates added for {}.'.format(i, historic_rate[0]))
-            logging.info('{} historic rates added for {}.'.format(i, historic_rate([0])))
-            return i
-        except Exception as e:
-            print(e, e.__cause__)
-            session.rollback()
-            pass
-        finally:
-            session.close()
+        print('{} historic rates added for {}.'.format(tuple_counter, historic_rate[0]))
+        logging.info('{} historic rates added for {}.'.format(tuple_counter, historic_rate[0]))
+        return tuple_counter
+        # except Exception as e:
+        #     print(e, e.__cause__)
+        #     session.rollback()
+        #     pass
+        # finally:
+        #     session.close()
 
     def get_readable_tickers(self,
                              query_everything: bool,

@@ -126,9 +126,9 @@ class Scheduler:
                     added_tuple_counter += self.database_handler.persist_historic_rates(formatted_response)
 
         print('Done collecting historic rates.')
-        print('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
+        # print('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
         logging.info('Done collecting historic rates.\n')
-        logging.info('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
+        # logging.info('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
 
     async def get_currency_pairs(self, exchanges: Dict[str, Exchange]):
         """
