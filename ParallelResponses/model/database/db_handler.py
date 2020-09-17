@@ -10,7 +10,7 @@ from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate
+from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook
 
 
 class DatabaseHandler:
@@ -150,7 +150,6 @@ class DatabaseHandler:
                                               daily_volume=ticker[9])
                         tuple_counter += 1
                         session.add(ticker_tuple)
-                    # session.add(ticker_tuple)
             print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
             logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
             return tuple_counter
@@ -462,7 +461,9 @@ class DatabaseHandler:
                                                         ExchangeCurrencyPair.second.__eq__(second)).first()
         return cp
 
-    def persist_historic_rates(self, historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
+    def persist_historic_rates(self,
+                               exchange_name: str,
+                               historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
         """
         Persists the given already formatted historic-rates-tuple if they not already exist.
         The formatting ist done in @see{Exchange.format_historic_rates()}.
@@ -470,10 +471,10 @@ class DatabaseHandler:
         @param historic_rates:
             Iterator containing the already formatted historic-rates-tuple.
         """
-        # try:
+
         tuple_counter: int = 0
-        for historic_rate in historic_rates:
-            with self.session_scope() as session:
+        with self.session_scope() as session:
+            for historic_rate in historic_rates:
                 tuple_exists = session.query(HistoricRate.exchange_pair_id). \
                     filter(
                     HistoricRate.exchange_pair_id == historic_rate[0],
@@ -490,18 +491,51 @@ class DatabaseHandler:
                                             close=historic_rate[5],
                                             volume=historic_rate[6])
                     session.add(hr_tuple)
-        #     session.commit()
-        # session.close()
 
-        print('{} historic rates added for {}.'.format(tuple_counter, historic_rate[0]))
-        logging.info('{} historic rates added for {}.'.format(tuple_counter, historic_rate[0]))
+        print('{} historic rates added for {}.'.format(tuple_counter, exchange_name))
+        logging.info('{} historic rates added for {}.'.format(tuple_counter, exchange_name))
         return tuple_counter
-        # except Exception as e:
-        #     print(e, e.__cause__)
-        #     session.rollback()
-        #     pass
-        # finally:
-        #     session.close()
+
+
+
+    def persist_order_books(self,
+                            exchange_name: str,
+                            order_books: Iterable[Tuple[int, int, int, datetime, float, float, float, float]]):
+        """
+               Persists the given already formatted order-book-tuple if they not already exist.
+               The formatting ist done in @see{Exchange.format_order_books()}.
+
+               @param order_books:
+                   Iterator containing the already formatted order-book-tuple.
+               """
+
+        tuple_counter = 0
+
+        with self.session_scope() as session:
+            for order_book in order_books:
+                entry_exists = session.query(OrderBook.exchange_pair_id). \
+                    filter(
+                    OrderBook.exchange_pair_id == order_book[0],
+                    OrderBook.id == order_book[1],
+                    OrderBook.position == order_book[2]
+                ).first()
+
+                if entry_exists is None:
+                    tuple_counter += 1
+
+                    ob_tuple = OrderBook(exchange_pair_id=order_book[0],
+                                         id=order_book[1],
+                                         position=order_book[2],
+                                         timestamp=order_book[3],
+                                         bids_price=order_book[4],
+                                         bids_amount=order_book[5],
+                                         asks_price=order_book[6],
+                                         asks_amount=order_book[7])
+                    session.add(ob_tuple)
+        print('{} tuple(s) added to order books for {}.'.format(tuple_counter, exchange_name))
+        logging.info('{} order books added for {}.'.format(tuple_counter, exchange_name))
+        return tuple_counter
+
 
     def get_readable_tickers(self,
                              query_everything: bool,

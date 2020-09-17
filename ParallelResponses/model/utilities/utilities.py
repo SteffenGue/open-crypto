@@ -207,8 +207,7 @@ def yaml_loader(exchange: str):
             return data
         except Exception as ex:
             # create an instance of the exception dictionary to safe the exchange which have thrown the exchange
-            exception = ExceptionDict()
-            exception.get_dict()['{}'.format(exchange)] = 1
+            print('error of loading yaml')
 
 
 def get_exchange_names() -> List[str]:

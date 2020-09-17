@@ -246,6 +246,34 @@ class Trade(Base):
         return value.upper()
 
 
+
+class OrderBook(Base):
+    """
+    Table for the method order-books. Tables contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+
+    Primary_keys are Exchange_Pair_id, id, and position.
+
+    Table next to the bids and asks (both with Price and Amount) the position which indicates the position in
+    the order book at given time. I.e position 0 contains the highest Bid and the lowest Ask. The ID is gathered
+    directly from the exchange and is used to identify to identify changes in the order-book.
+    """
+
+    __tablename__ = 'order_books'
+
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="OrderBook")
+
+    id = Column(Integer, primary_key=True)
+    position = Column(Integer, primary_key=True)
+
+    timestamp = Column(DateTime)
+    bids_price = Column(Float)
+    bids_amount = Column(Float)
+    asks_price = Column(Float)
+    asks_amount = Column(Float)
+
+
 class ExchangeCurrencyPairView(Base):
     """
     View vor ExchangeCurrencyPairs.

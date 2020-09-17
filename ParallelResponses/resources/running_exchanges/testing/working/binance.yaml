@@ -69,9 +69,9 @@ requests:
       type:
       - str
 
-  order_book:
+  order_books:
     request:
-      template: v1/depth
+      template: v3/depth
       pair_template: # e.g. BNBBTC
         template: "{first}{second}"
         lower_case: false
@@ -79,7 +79,7 @@ requests:
       params:
         limit:
           type: int
-          max: 1000
+          max: 100
           allowed:
           - 5
           - 10
@@ -88,7 +88,7 @@ requests:
           - 100
           - 500
           - 1000
-          default: 100
+          default: 5
       weight:
       # limit 5, 10, 20, 50, 100
       - 1
@@ -114,8 +114,6 @@ requests:
                 type:
                 - str
                 - float
-              2: # ignore
-                type: ignore
         asks:
           type: list
           values:
@@ -129,36 +127,47 @@ requests:
                 type:
                 - str
                 - float
-              2: # ignore
-                type: ignore
     mapping:
-    - key: order_book_time
+    - key: order_books_time
       path: []
       type:
       - none
       - now
-    - key: order_book_bids_price
+
+    - key: order_books_id
+      path:
+        - lastUpdateId
+      type:
+        - str
+
+    - key: order_books_position
+      path: []
+      type:
+        - none
+        - constant
+        - 1
+    - key: order_books_bids_price
       path:
       - bids
       - 0
       type:
       - str
       - float
-    - key: order_book_bids_size
+    - key: order_books_bids_amount
       path:
       - bids
       - 1
       type:
       - str
       - float
-    - key: order_book_asks_price
+    - key: order_books_asks_price
       path:
       - asks
       - 0
       type:
       - str
       - float
-    - key: order_book_asks_size
+    - key: order_books_asks_amount
       path:
       - asks
       - 1
@@ -440,3 +449,85 @@ requests:
         - symbol
       type:
         - second_currency
+
+#  order_books:
+#    request:
+#      template: depth
+#      pair_template: {'first'}{'second'}
+#      alias: symbol
+#      params:
+#        limit:
+#          type: int
+#          default: 5
+#
+#    response:
+#      type: dict
+#      values:
+#        lastUpdateId:
+#          type: int
+#        bids:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0:
+#                type: str
+#              1:
+#                type: str
+#
+#        asks:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0:
+#                type: str
+#              1:
+#                type: str
+#
+#    mapping:
+#      - key: order_book_id
+#        path:
+#          - lastUpdateId
+#        type:
+#          - str
+#
+#      - key: order_book_time
+#        path: []
+#        type:
+#          - none
+#          - now
+#      - key: order_book_position
+#        path: []
+#        type:
+#          - none
+#          - constant
+#          - 1
+#      - key: order_book_bids_price
+#        path:
+#          - bids
+#          - 0
+#        type:
+#          - str
+#          - int
+#      - key: order_book_bids_amount
+#        path:
+#          - bids
+#          - 1
+#        type:
+#          - str
+#          - int
+#      - key: order_book_asks_price
+#        path:
+#          - asks
+#          - 0
+#        type:
+#          - str
+#          - int
+#      - key: order_book_asks_amount
+#        path:
+#          - asks
+#          - 1
+#        type:
+#          - str
+#          - int

@@ -77,7 +77,7 @@ class Exchange:
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
         self.exchange_currency_pairs = list()
 
-    async def request(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
+    async def request_tickers(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
             Tuple[str, datetime, datetime, Optional[Dict]]:
 
         """
@@ -164,7 +164,7 @@ class Exchange:
             print("{} has no Ticker request.".format(self.name))
             return self.name, start_time, datetime.utcnow(), None
 
-    async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
+    async def request(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
             -> Tuple[str, Optional[Dict[ExchangeCurrencyPair, Dict]]]:
         """
         Sends a request for the historic rates of each given currency-pair and returns the
@@ -560,7 +560,6 @@ class Exchange:
                                           results['currency_pair_first'],
                                           results['currency_pair_second']))
 
-
     def format_historic_rates(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
             -> List[Iterator[Tuple[datetime, float, float, float, float, float]]]:
         """
@@ -637,4 +636,94 @@ class Exchange:
                         temp_results['historic_rates_close'],
                         temp_results['historic_rates_volume']))
                     results.extend(result)
+        return results
+
+    def format_order_books(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
+            -> List[Iterator[Tuple[int, int, datetime, float, float, float, float]]]:
+
+        """
+               Extracts the tuples of order books rates out of the raw json-response for each queried currency-pair.
+               Process is similar to the described in @see{self.format_ticker()} but it's done for each
+               response given in the dictionary.
+
+               @param response:
+                   The collected json-responses from the order-books-request for this exchange.
+                   The string contains the name of the exchange that was requested.
+                   The json-responses are accessible over the currency-pair.
+               @return:
+                   None or a list of tuples with the following structure:
+                   (ExchangeCurrencyPair.id,
+                    order_book_id,
+                    order_book_position,
+                    order_book_time,
+                    order_book_bids_price,
+                    order_book_bids_amount,
+                    order_books_asks_price,
+                    order_book_bids_amount)
+
+                    Returns None if exchange_name of the response does not match the name of this exchange.
+               """
+
+        if response[0] != self.name:
+            return None
+
+        results = list()
+
+        mappings = self.response_mappings['order_books']
+        responses = response[1]
+
+        currency_pair: ExchangeCurrencyPair
+
+        for currency_pair in responses.keys():
+            temp_results = {'order_books_id': [],
+                            'order_books_position': [],
+                            'order_books_time': [],
+                            'order_books_bids_price': [],
+                            'order_books_bids_amount': [],
+                            'order_books_asks_price': [],
+                            'order_books_asks_amount': []}
+
+            current_response = responses[currency_pair]
+
+            curr_pair_string_formatted: str = self.apply_currency_pair_format('order_books', currency_pair)
+            currency_pair_info: (str, str, str) = (
+                currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+
+            if current_response:
+                try:
+                    for mapping in mappings:
+                        temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                          currency_pair_info=currency_pair_info)
+                except Exception:
+                    print('Error while formatting order books: {}'.format(currency_pair))
+                    traceback.print_exc()
+                    pass
+
+                else:
+                    extracted_data_is_valid: bool = True
+                    for extracted_field in temp_results.keys():
+                        if temp_results[extracted_field] is None:
+                            print("{} has no valid data in {}".format(currency_pair, extracted_field))
+                            extracted_data_is_valid = False
+                            break
+
+                    # if not extracted_data_is_valid:
+                    #     continue
+
+                    assert (len(results[0]) == len(result) for result in temp_results)
+
+                    len_results = len(temp_results['order_books_asks_price'])
+
+                    result = list(itertools.zip_longest(
+                        itertools.repeat(currency_pair.id, len_results),
+                        itertools.repeat(temp_results['order_books_id'], len_results),
+                        range(len_results),
+                        itertools.repeat(temp_results['order_books_time'], len_results),
+                        temp_results['order_books_bids_price'],
+                        temp_results['order_books_bids_amount'],
+                        temp_results['order_books_asks_price'],
+                        temp_results['order_books_asks_amount']))
+
+                    results.extend(result)
+
         return results

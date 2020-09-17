@@ -38,7 +38,7 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
                 print('found {}'.format(len(exchange_currency_pairs)))
 
             # cps aktualisieren
-            if exchanges_with_pairs[exchange] == []:
+            if exchanges_with_pairs[exchange] == [] or job_params['update_cp'] is True:
 
                 response = await exchange.request_currency_pairs('currency_pairs')
                 if response[1] is not None:
@@ -106,7 +106,7 @@ def handler(type, value, tb):
 
 if __name__ == "__main__":
     #todo: enable for exception in log
-    sys.excepthook = handler
+    # sys.excepthook = handler
     init_logger()
     logging.info('Reading Database Configuration')
     db_params = read_config('database')
