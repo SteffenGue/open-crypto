@@ -349,83 +349,83 @@ requests:
 #      - str
 #
 
-#  historic_rates:
-#    request:
-#      template: candlestick2/{currency_pair}
-#      pair_template:
-#        template: "{first}_{second}"
-#        lower_case: true
-#      params:
-#        group_sec:
-#          type: int
-#          default: 86400 # in Seconds --> 1 Day
-#        range_hour:
-#          type: int
-#          default: 87600 #in Hours --> 10 Jahre
-#    response:
-#      type: dict
-#      values:
-#        elapsed:
-#          type: str
-#        result:
-#          type: str
-#        data:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0: #timestamp in Milliseconds
-#                type: str
-#              1: # vol
-#                type: str
-#              2: # close
-#                type: str
-#              3: # high
-#                type: str
-#              4: # low
-#                type: str
-#              5: # open
-#                type: str
-#    mapping:
-#    - key: historic_rates_time
-#      path:
-#      - data
-#      - 0
-#      type:
-#      - str
-#      - int
-#      - fromtimestampms
-#    - key: historic_rates_volume
-#      path:
-#      - data
-#      - 1
-#      type:
-#      - str
-#      - float
-#    - key: historic_rates_close
-#      path:
-#      - data
-#      - 2
-#      type:
-#      - str
-#      - float
-#    - key: historic_rates_high
-#      path:
-#      - data
-#      - 3
-#      type:
-#      - str
-#      - float
-#    - key: historic_rates_low
-#      path:
-#      - data
-#      - 4
-#      type:
-#      - str
-#      - float
-#    - key: historic_rates_open
-#      path:
-#      - data
-#      - 5
-#      type:
-#      - str
+  historic_rates:
+    request:
+      template: candlestick2/{currency_pair}
+      pair_template:
+        template: "{first}_{second}"
+        lower_case: true
+      params:
+        group_sec:
+          type: int
+          default: 86400 # in Seconds --> 1 Day
+        range_hour:
+          type: int
+          default: 87600 #in Hours --> 10 Jahre
+    response:
+      type: dict
+      values:
+        elapsed:
+          type: str
+        result:
+          type: str
+        data:
+          type: list
+          values:
+            type: list
+            values:
+              0: #timestamp in Milliseconds
+                type: str
+              1: # vol
+                type: str
+              2: # close
+                type: str
+              3: # high
+                type: str
+              4: # low
+                type: str
+              5: # open
+                type: str
+    mapping:
+    - key: historic_rates_time
+      path:
+      - data
+      - 0
+      type:
+      - str
+      - int
+      - fromtimestampms
+    - key: historic_rates_volume
+      path:
+      - data
+      - 1
+      type:
+      - str
+      - float
+    - key: historic_rates_close
+      path:
+      - data
+      - 2
+      type:
+      - str
+      - float
+    - key: historic_rates_high
+      path:
+      - data
+      - 3
+      type:
+      - str
+      - float
+    - key: historic_rates_low
+      path:
+      - data
+      - 4
+      type:
+      - str
+      - float
+    - key: historic_rates_open
+      path:
+      - data
+      - 5
+      type:
+      - str
