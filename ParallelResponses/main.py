@@ -21,47 +21,50 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
 
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
         exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
+
         for exchange_name in exchange_names:
-            #TODO: Error, wenn yaml nicht existiert
+            # TODO: Error, wenn yaml nicht existiert
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
-            if job_params['update_cp'] is False:
-                print('Checking available currency pairs for {}...'.format(exchange_name.upper()),
-                      end=" ")
-                logging.info('Checking available currency pairs.'.format(exchange_name.upper()))
-                exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
-                    exchange.name,
-                    job_params['currency_pairs'],
-                    job_params['first_currencies'],
-                    job_params['second_currencies'])
-                exchanges_with_pairs[exchange] = exchange_currency_pairs
-                print('found {}'.format(len(exchange_currency_pairs)))
+            if job_params['update_cp'] is True:
+                await update_and_get_currency_pairs(exchange, job_params)
+            else:
+                exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
+                if exchanges_with_pairs[exchange] == []:
+                    await update_and_get_currency_pairs(exchange, job_params)
 
-            # cps aktualisieren
-            if exchanges_with_pairs[exchange] == [] or job_params['update_cp'] is True:
 
-                response = await exchange.request_currency_pairs('currency_pairs')
-                if response[1] is not None:
-                    formatted_response = exchange.format_currency_pairs(response)
-                    database_handler.persist_exchange_currency_pairs(formatted_response)
-
-                    exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
-                        exchange.name,
-                        job_params['currency_pairs'],
-                        job_params['first_currencies'],
-                        job_params['second_currencies'])
-                    exchanges_with_pairs[exchange] = exchange_currency_pairs
-
-                    print('Updated Currency Pairs for {}'.format(exchange_name.upper()))
-
-        print('Done loading currency pairs.')
-        logging.info('Done loading currency pairs.')
+            print('Done loading currency pairs.')
+            logging.info('Done loading currency pairs.')
 
         new_job: Job = Job(job,
                            job_params['yaml_request_name'],
                            exchanges_with_pairs)
         jobs.append(new_job)
     return jobs
+
+
+async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
+    response = await exchange.request_currency_pairs('currency_pairs')
+    if response[1] is not None:
+        formatted_response = exchange.format_currency_pairs(response)
+        database_handler.persist_exchange_currency_pairs(formatted_response)
+        print('Updated Currency Pairs for {}'.format(exchange.name.upper()))
+    return await get_currency_pairs(exchange, job_params)
+
+
+async def get_currency_pairs(exchange: Exchange, job_params: Dict):
+    print('Checking available currency pairs for {}...'.format(exchange.name.upper()),
+          end=" ")
+    logging.info('Checking available currency pairs.'.format(exchange.name.upper()))
+    exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
+        exchange.name,
+        job_params['currency_pairs'],
+        job_params['first_currencies'],
+        job_params['second_currencies'])
+    print('found {}'.format(len(exchange_currency_pairs)))
+    return exchange_currency_pairs
+
 
 
 async def main(database_handler: DatabaseHandler):
@@ -84,7 +87,8 @@ async def main(database_handler: DatabaseHandler):
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
     print('{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
-    logging.info('{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+    logging.info(
+        '{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
 
     while True:
         await scheduler.start()
@@ -104,8 +108,9 @@ def handler(type, value, tb):
     logging.exception('Uncaught exception: {}'.format(str(value)))
 
 
+
 if __name__ == "__main__":
-    #todo: enable for exception in log
+    # todo: enable for exception in log
     # sys.excepthook = handler
     init_logger()
     logging.info('Reading Database Configuration')
