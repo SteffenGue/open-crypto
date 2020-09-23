@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from typing import List, Tuple, Iterator, Iterable, Dict
 from contextlib import contextmanager
-
+import tqdm
 import psycopg2
 import sqlalchemy
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_
@@ -10,7 +10,7 @@ from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook
+from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM
 
 
 class DatabaseHandler:
@@ -371,13 +371,17 @@ class DatabaseHandler:
             session = self.sessionFactory()
             ex_currency_pairs: List[ExchangeCurrencyPair] = list()
 
-            try:
-                for cp in currency_pairs:
+            # try:
+            with self.session_scope() as session:
+                for cp in tqdm.tqdm(currency_pairs):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
 
                     if exchange_name is None or first_currency_name is None or second_currency_name is None:
+                        continue
+
+                    if first_currency_name.upper() == second_currency_name.upper():
                         continue
 
                     existing_exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
@@ -404,15 +408,15 @@ class DatabaseHandler:
                         ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
 
-                session.commit()
-                # TODO: Reactivate
-                # print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
-            except Exception as e:
-                print(e, e.__cause__)
-                session.rollback()
-                pass
-            finally:
-                session.close()
+            #     session.commit()
+            #     # TODO: Reactivate
+            #     # print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
+            # except Exception as e:
+            #     print(e, e.__cause__)
+            #     session.rollback()
+            #     pass
+            # finally:
+            #     session.close()
 
     def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
                                        second_currency_name: str) -> ExchangeCurrencyPair:
@@ -492,8 +496,8 @@ class DatabaseHandler:
                                             volume=historic_rate[6])
                     session.add(hr_tuple)
 
-        print('{} historic rates added for {}.'.format(tuple_counter, exchange_name))
-        logging.info('{} historic rates added for {}.'.format(tuple_counter, exchange_name))
+        print('{} historic rates added for {}.'.format(tuple_counter, exchange_name.upper()))
+        logging.info('{} historic rates added for {}.'.format(tuple_counter, exchange_name.upper()))
         return tuple_counter
 
 
@@ -532,8 +536,38 @@ class DatabaseHandler:
                                          asks_price=order_book[6],
                                          asks_amount=order_book[7])
                     session.add(ob_tuple)
-        print('{} tuple(s) added to order books for {}.'.format(tuple_counter, exchange_name))
-        logging.info('{} order books added for {}.'.format(tuple_counter, exchange_name))
+        print('{} tuple(s) added to order books for {}.'.format(tuple_counter, exchange_name.upper()))
+        logging.info('{} order books added for {}.'.format(tuple_counter, exchange_name.upper()))
+        return tuple_counter
+
+    def persist_platform_data(self,
+                              exchange_name: str,
+                              ohlcvms: Iterable[Tuple[int, datetime, float, float, float, float, float, float]]):
+
+        tuple_counter = 0
+
+        with self.session_scope() as session:
+            for ohlcvm in ohlcvms:
+                entry_exists = session.query(OHLCVM.exchange_pair_id). \
+                    filter(
+                    OHLCVM.exchange_pair_id == ohlcvm[0],
+                    OHLCVM.timestamp == ohlcvm[1],
+                ).first()
+
+                if entry_exists is None:
+                    tuple_counter += 1
+
+                    ohlcvm_tuple = OHLCVM(exchange_pair_id=ohlcvm[0],
+                                          timestamp=ohlcvm[1],
+                                          open=ohlcvm[2],
+                                          high=ohlcvm[3],
+                                          low=ohlcvm[4],
+                                          close=ohlcvm[5],
+                                          volume=ohlcvm[6],
+                                          mcap=ohlcvm[7])
+                    session.add(ohlcvm_tuple)
+        print('{} tuple(s) added to ohlcvm for {}.'.format(tuple_counter, exchange_name.upper()))
+        logging.info('{} tuple(s) added to ohlcvm for {}.'.format(tuple_counter, exchange_name.upper()))
         return tuple_counter
 
 

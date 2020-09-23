@@ -1,0 +1,116 @@
+name: coingecko
+
+api_url: https://api.coingecko.com/api/v3/
+
+requests:
+  currency_pairs:
+    request:
+      template: coins/list
+      pair_template: null
+      params: null
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          symbol:
+            type: str
+          name:
+            type: str
+
+    mapping:
+      - key: currency_pair_first
+        path:
+          - id
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - []
+        type:
+          - none
+          - constant
+          - USD
+
+  ohlcvm:
+    request:
+      template: /coins/{currency_pair}/market_chart
+      pair_template:
+        template: "{first}"
+        lower_case: true
+        alias: null
+      params:
+        vs_currency:
+          type: str
+          default: USD
+        days:
+          type: int
+          allowed:
+            - 1
+            - 14
+            - 30
+            - max
+          default: max
+
+    reponse:
+      type: dict
+      values:
+        prices:
+          type: list
+          values:
+            type: list
+            values:
+              0:
+                type: int
+              1:
+                type: float
+        market_caps:
+          type: list
+          values:
+            type: list
+            values:
+              0:
+                type: int
+              1:
+                type: float
+        total_volumes:
+          type: list
+          values:
+            type: list
+            values:
+              0:
+                type: int
+              1:
+                type: float
+
+    mapping:
+      - key: ohlcvm_time
+        path:
+          - prices
+          - 0
+        type:
+          - int
+          - fromtimestampms
+      - key: ohlcvm_close
+        path:
+          - prices
+          - 1
+        type:
+          - float
+      - key: ohlcvm_volume
+        path:
+          - total_volumes
+          - 1
+        type:
+          - float
+      - key: ohlcvm_mcap
+        path:
+          - market_caps
+          - 1
+        type:
+          - float
+
+

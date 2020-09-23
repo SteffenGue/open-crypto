@@ -31,7 +31,7 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
             else:
                 exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
                 if exchanges_with_pairs[exchange] == []:
-                    await update_and_get_currency_pairs(exchange, job_params)
+                    exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
 
 
             print('Done loading currency pairs.')
@@ -47,9 +47,11 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
 async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
     response = await exchange.request_currency_pairs('currency_pairs')
     if response[1] is not None:
+        print('Updating Currency Pairs for {}...'.format(exchange.name.upper()), end=" ")
         formatted_response = exchange.format_currency_pairs(response)
         database_handler.persist_exchange_currency_pairs(formatted_response)
-        print('Updated Currency Pairs for {}'.format(exchange.name.upper()))
+        print('done.')
+
     return await get_currency_pairs(exchange, job_params)
 
 

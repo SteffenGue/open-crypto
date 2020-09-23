@@ -10,15 +10,6 @@ Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
 
 
-# class BaseMixin(object):
-#     """
-#     Classmethods blueprint for the database classes. Class "BaseMixin" needs to be inherited to an Object.
-#     """
-#
-#     @classmethod
-#     def method_xyz(cls):
-#         pass
-
 
 class Exchange(Base):
     """
@@ -35,6 +26,7 @@ class Exchange(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True, )
     active = Column(Boolean, default=True)
+    is_exchange = Column(Boolean, default=True)
     exceptions = Column(Integer, unique=False, nullable=True, default=0)
     total_exceptions = Column(Integer, unique=False, nullable=True, default=0)
 
@@ -62,6 +54,7 @@ class Currency(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), unique=True, nullable=False)
+    from_exchange = Column(Boolean, default=True)
 
     def __repr__(self):
         return "#{}: {}".format(self.id, self.name)
@@ -210,41 +203,41 @@ class HistoricRate(Base):
                                                          self.timestamp)
 
 
-class Trade(Base):
-    """
-    Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
-    foreign_keys.
-    Primary_keys are Exchange_Pair_id and the timestamp.
-
-    Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
-
-    __repr__(self) describes the representation if queried.
-
-    """
-    __tablename__ = 'trades'
-
-    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
-    timestamp = Column(DateTime, primary_key=True)
-
-    amount = Column(Float)
-    best_bid = Column(Float)
-    best_ask = Column(Float)
-    price = Column(Float)
-    direction = Column(String)
-
-    def __repr__(self):
-        return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
-                                                                    self.exchange_pair.first.name,
-                                                                    self.exchange_pair.second.name,
-                                                                    self.amount,
-                                                                    self.price,
-                                                                    self.timestamp)
-
-    @validates('direction')
-    def convert_upper(self, key, value):
-        return value.upper()
-
+# class Trade(Base):
+#     """
+#     Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
+#     foreign_keys.
+#     Primary_keys are Exchange_Pair_id and the timestamp.
+#
+#     Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
+#
+#     __repr__(self) describes the representation if queried.
+#
+#     """
+#     __tablename__ = 'trades'
+#
+#     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+#     exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
+#     timestamp = Column(DateTime, primary_key=True)
+#
+#     amount = Column(Float)
+#     best_bid = Column(Float)
+#     best_ask = Column(Float)
+#     price = Column(Float)
+#     direction = Column(String)
+#
+#     def __repr__(self):
+#         return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
+#                                                                     self.exchange_pair.first.name,
+#                                                                     self.exchange_pair.second.name,
+#                                                                     self.amount,
+#                                                                     self.price,
+#                                                                     self.timestamp)
+#
+#     @validates('direction')
+#     def convert_upper(self, key, value):
+#         return value.upper()
+#
 
 
 class OrderBook(Base):
@@ -272,6 +265,34 @@ class OrderBook(Base):
     bids_amount = Column(Float)
     asks_price = Column(Float)
     asks_amount = Column(Float)
+
+
+class OHLCVM(Base):
+    """
+    Table for the platform queries. Tables contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+
+    Primary_keys are Exchange_Pair_id and the timestamp.
+
+    This table contains OHLCVM (Open-High-Low-Close-Volume-MarketCap) data gathered from platforms.
+    Data is on a daily basis and all quoted in US-Dollar. Volume is the 24 hour trading volume.
+    """
+
+    __tablename__ = 'ohlcvm'
+
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="OHLCVM")
+    timestamp = Column(DateTime, primary_key=True)
+
+    open = Column(Float)
+    high = Column(Float)
+    low = Column(Float)
+    close = Column(Float)
+    volume = Column(Float)
+    mcap = Column(Float)
+
+    def __repr__(self):
+        pass
 
 
 class ExchangeCurrencyPairView(Base):

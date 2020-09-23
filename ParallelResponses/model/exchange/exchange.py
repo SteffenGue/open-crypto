@@ -77,7 +77,8 @@ class Exchange:
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
         self.exchange_currency_pairs = list()
 
-    async def request_tickers(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
+    async def request_tickers(self, request_name: str, start_time: datetime,
+                              currency_pairs: List[ExchangeCurrencyPair]) -> \
             Tuple[str, datetime, datetime, Optional[Dict]]:
 
         """
@@ -707,8 +708,8 @@ class Exchange:
                             extracted_data_is_valid = False
                             break
 
-                    # if not extracted_data_is_valid:
-                    #     continue
+                    if not extracted_data_is_valid:
+                        continue
 
                     assert (len(results[0]) == len(result) for result in temp_results)
 
@@ -727,3 +728,73 @@ class Exchange:
                     results.extend(result)
 
         return results
+
+    def format_platform_data(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
+            -> List[Iterator[Tuple[int, datetime, float, float, float, float, float, float]]]:
+
+        if response[0] != self.name:
+            return None
+
+        results = list()
+
+        mappings = self.response_mappings['ohlcvm']
+
+        responses = response[1]
+
+        currency_pair: ExchangeCurrencyPair
+
+        for currency_pair in responses.keys():
+            temp_results = {'ohlcvm_id': [],
+                            'ohlcvm_time': [],
+                            'ohlcvm_open': [],
+                            'ohlcvm_high': [],
+                            'ohlcvm_low': [],
+                            'ohlcvm_close': [],
+                            'ohlcvm_volume': [],
+                            'ohlcvm_mcap': []}
+
+            current_response = responses[currency_pair]
+            # ToDo apply_currency_pair_format
+            curr_pair_string_formatted: str = self.apply_currency_pair_format('ohlcvm', currency_pair)
+            currency_pair_info: (str, str, str) = (
+                currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+            if current_response:
+                try:
+                    for mapping in mappings:
+                        temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                          currency_pair_info=currency_pair_info)
+                except Exception:
+                    print('Error while formatting order books: {}'.format(currency_pair))
+                    traceback.print_exc()
+                    pass
+
+                else:
+                    extracted_data_is_valid: bool = True
+                    for extracted_field in temp_results.keys():
+                        if temp_results[extracted_field] is None:
+                            print("{} has no valid data in {}".format(currency_pair, extracted_field))
+                            extracted_data_is_valid = False
+                            break
+
+                    if not extracted_data_is_valid:
+                        continue
+
+                    assert (len(results[0]) == len(result) for result in temp_results)
+
+                    len_results = len(temp_results['ohlcvm_close'])
+
+                    result = list(itertools.zip_longest(
+                        itertools.repeat(currency_pair.id, len_results),
+                        temp_results['ohlcvm_time'],
+                        temp_results['ohlcvm_open'],
+                        temp_results['ohlcvm_high'],
+                        temp_results['ohlcvm_low'],
+                        temp_results['ohlcvm_close'],
+                        temp_results['ohlcvm_volume'],
+                        temp_results['ohlcvm_mcap']
+                    ))
+
+                    results.extend(result)
+
+        return results
+

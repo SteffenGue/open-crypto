@@ -73,7 +73,8 @@ class Scheduler:
             "ticker": self.get_tickers,
             "historic_rates": self.get_historic_rates,
             "order_books": self.get_order_books,
-            "currency_pairs": self.get_currency_pairs
+            "currency_pairs": self.get_currency_pairs,
+            "ohlcvm": self.get_platform_data
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
@@ -178,12 +179,40 @@ class Scheduler:
                 for exchange in exchanges_with_pairs.keys():
                     if exchange.name.upper == exchange_name.upper():
                         break
-                formatted_response = exchange.format_order_books(response)
+                    formatted_response = exchange.format_order_books(response)
 
-                if formatted_response:
-                    added_tuple_counter += self.database_handler.persist_order_books(exchange_name, formatted_response)
+                    if formatted_response:
+                        added_tuple_counter += self.database_handler.persist_order_books(exchange_name,
+                                                                                         formatted_response)
 
         print('Done collecting order books.')
         logging.info('Done collecting order books.')
+
+
+    async def get_platform_data(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+        print('Starting to collect ohlcvm.')
+        logging.info('Starting to collect ohlcvm.')
+
+        responses = await asyncio.gather(
+            *(ex.request('ohlcvm', exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+        )
+
+        added_tuple_counter = 0
+
+        for response in responses:
+            if response:
+                exchange_name = response[0]
+                for exchange in exchanges_with_pairs.keys():
+                    if exchange.name.upper == exchange_name.upper():
+                        break
+
+                    formatted_response = exchange.format_platform_data(response)
+
+                    if formatted_response:
+                        added_tuple_counter += self.database_handler.persist_platform_data(exchange_name,
+                                                                                           formatted_response)
+
+        print('Done collecting ohlcvm.')
+        logging.info('Done collecting ohlcvm.')
 
 
