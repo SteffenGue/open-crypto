@@ -262,8 +262,8 @@ class DatabaseHandler:
             with self.session_scope() as session:
                 if currency_pairs is not None:
                     for currency_pair in currency_pairs:
-                        first_currency = currency_pair['first'][0]
-                        second_currency = currency_pair['second'][0]
+                        first_currency = currency_pair['first']
+                        second_currency = currency_pair['second']
                         if first_currency and second_currency:
                             first_id: int = self.get_currency_id(first_currency)
                             second_id: int = self.get_currency_id(second_currency)

@@ -314,7 +314,6 @@ class TickersView(Base):
                 Ticker.start_time,
                 Ticker.response_time,
                 Ticker.last_price,
-                Ticker.last_trade,
                 Ticker.best_ask,
                 Ticker.best_bid,
                 Ticker.daily_volume

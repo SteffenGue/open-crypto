@@ -78,6 +78,7 @@ class Scheduler:
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
+
     async def get_currency_pairs(self, exchanges: Dict[str, Exchange]):
         """
         Starts the currency pair request for each given exchange.

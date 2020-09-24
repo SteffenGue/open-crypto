@@ -217,7 +217,7 @@ class Exchange:
                 except Exception as ex:
                     return self.name, False, {}
 
-    async def request_historic_rates(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
+    async def request(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
             -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
         """
         Sends a request for the historic rates of each given currency-pair and returns the

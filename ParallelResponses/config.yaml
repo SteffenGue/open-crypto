@@ -2,8 +2,8 @@ general:
   database:
     sqltype: postgresql
     client: psycopg2
-    user_name: postgres
-    password: Thw_kiel
+    user_name: bjarne
+    password: ''
     host: localhost
     port: 5432
     db_name: hochfrequenz
@@ -11,12 +11,10 @@ general:
     frequency: 1
   export:
     export_data_to_csv: false
-    csv_dir: /path/where/to/save/csv
+    csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/testing/working/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: True
-
-
 
 jobs:
 #
