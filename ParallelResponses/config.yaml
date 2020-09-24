@@ -7,41 +7,58 @@ general:
     host: localhost
     port: 5432
     db_name: hochfrequenz
+  operation_settings:
+    frequency: 1
   export:
     export_data_to_csv: false
-    csv_dir: /Users/bjarne/Desktop/
+    csv_dir: /path/where/to/save/csv
   utilities:
-    yaml_path: resources/running_exchanges/currency_pairs/
+    yaml_path: resources/running_exchanges/testing/working/
+    enable_logging: True
 
-updates:
-  update_currency_pairs: False
+
 
 jobs:
-  collecting_ticker:
-    yaml_request_name: ticker
-    frequency: 1
-    exchanges:
-      - bibox
-    currency_pairs:
-      - null
-    first_currency:
-      - BTC
-    second_currency:
-      - USD
-
-#  ticker:
+#
+#  tickers:
 #    yaml_request_name: ticker
-#    frequency: 3
-#    exchange:
+#    update_cp: False
+#    exchanges:
+##      - exmo
+##      - bibox
 #      - binance
+#    currency_pairs:
+#      - first: btc
+#        second: usd
+#      - first: ltc
+#        second: btc
+#    first_currencies:
+#      - btc
+#    second_currencies:
+#
+#  historic_rates:
+#    yaml_request_name: historic_rates
+#    update_cp: False
+#    exchanges:
 #      - bibox
 #    currency_pairs:
 #      - first: eth
 #        second: btc
-#      - first: eth
-#        second: doge
-#
-#    first_currency:
-#      - eth
-#    second_currency:
+#    first_currencies:
+##      - btc
+#    second_currencies:
+##      - eth
 
+
+  order_books:
+    yaml_request_name: order_books
+    update_cp: False
+    exchanges:
+      - binance
+    currency_pairs:
+      - first: ltc
+        second: btc
+    first_currencies:
+#      - btc
+    second_currencies:
+#      - eth

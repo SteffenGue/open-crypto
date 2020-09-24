@@ -1,8 +1,10 @@
 import sqlalchemy
-from sqlalchemy import *
+from sqlalchemy import join, Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select, \
+    Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, validates, aliased
+from sqlalchemy.orm import relationship, validates, aliased, mapper
 from sqlalchemy_utils import create_view
+from sqlalchemy_utils.functions import orm
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -215,7 +217,6 @@ class Trade(Base):
     __repr__(self) describes the representation if queried.
 
     """
-
     __tablename__ = 'trades'
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
@@ -241,7 +242,38 @@ class Trade(Base):
         return value.upper()
 
 
+
+class OrderBook(Base):
+    """
+    Table for the method order-books. Tables contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+
+    Primary_keys are Exchange_Pair_id, id, and position.
+
+    Table next to the bids and asks (both with Price and Amount) the position which indicates the position in
+    the order book at given time. I.e position 0 contains the highest Bid and the lowest Ask. The ID is gathered
+    directly from the exchange and is used to identify to identify changes in the order-book.
+    """
+
+    __tablename__ = 'order_books'
+
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="OrderBook")
+
+    id = Column(Integer, primary_key=True)
+    position = Column(Integer, primary_key=True)
+
+    timestamp = Column(DateTime)
+    bids_price = Column(Float)
+    bids_amount = Column(Float)
+    asks_price = Column(Float)
+    asks_amount = Column(Float)
+
+
 class ExchangeCurrencyPairView(Base):
+    """
+    View vor ExchangeCurrencyPairs.
+    """
     first = aliased(Currency)
     second = aliased(Currency)
 
@@ -249,13 +281,47 @@ class ExchangeCurrencyPairView(Base):
         name='exchanges_currency_pairs_view',
         selectable=sqlalchemy.select(
             [
-                ExchangeCurrencyPair.id.label('id'),
+                ExchangeCurrencyPair.id,
                 Exchange.name.label('exchange_name'),
                 first.name.label('first_name'),
                 second.name.label('second_name')
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+            )
+        ),
+        metadata=Base.metadata
+    )
+
+
+class TickersView(Base):
+    """
+    View for Tickers.
+    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+    the exchange name and the name of the first and second currency.
+    """
+    first = aliased(Currency)
+    second = aliased(Currency)
+    __table__ = create_view(
+        name='tickers_view',
+        selectable=select(
+            [
+                Exchange.name.label('exchange'),
+                first.name.label('first_currency'),
+                second.name.label('second_currency'),
+                Ticker.start_time,
+                Ticker.response_time,
+                Ticker.last_price,
+                Ticker.last_trade,
+                Ticker.best_ask,
+                Ticker.best_bid,
+                Ticker.daily_volume
+            ],
+            from_obj=(
+                Ticker.__table__.join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
                     .join(first, ExchangeCurrencyPair.first_id == first.id)
                     .join(second, ExchangeCurrencyPair.second_id == second.id)
             )

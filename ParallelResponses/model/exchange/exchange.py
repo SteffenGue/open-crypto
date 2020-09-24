@@ -1,8 +1,9 @@
 import itertools
 import time
+import logging
 import traceback
 from datetime import datetime
-from typing import Iterator, Dict, List, Tuple
+from typing import Iterator, Dict, List, Tuple, Optional
 import aiohttp
 from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
@@ -96,12 +97,13 @@ class Exchange:
         self.consecutive_exception = False
         self.exchange_currency_pairs = list()
 
-    async def request(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
-            Tuple[str, datetime, datetime, Dict]:
+    async def request_tickers(self, request_name: str, start_time: datetime, currency_pairs: List[ExchangeCurrencyPair]) -> \
+            Tuple[str, datetime, datetime, Optional[Dict]]:
+
         """
-        Sends a request which is identified by the given name and returns
-        the response with the name of this exchange and the time,
-        when the response arrived.
+        Method tries to request ticker data for all given currency pairs.
+        Depending on if ticker data can be received for all available currency pairs with one request
+        the methods sends a request for each currency pair or just one request for all the data.
 
         The Method is asynchronous so that after the request is send, the program does not wait
         until the response arrives. For asynchrony we use the library asyncio.
@@ -121,26 +123,27 @@ class Exchange:
         TODO: Logging von Exceptions / option in config
         TODO: Saving responses / option in config
 
-        :param request_name: str
+        @param request_name: str
             Name of the request. i.e. 'ticker' for ticker-request
-        :param start_time : datetime
+        @param start_time : datetime
             The given datetime for the request for each request loop.
+        @param currency_pairs:
+            List of currency pairs that should be requested.
 
-        :return: (str, datetime, datetime, .json)
+        @return: (str, datetime, datetime, .json)
             Tuple of the following structure:
                 (exchange_name, start time, response time, response)
                 - time of arrival is a datetime-object in utc
-        :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
+        @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
-
-        #TODO: DOKU ANPASSEN
         """
-        if self.request_urls.get(request_name):  # Only when request url exists
+        if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 responses = dict()
                 params = request_url_and_params['params']
                 pair_template_dict = request_url_and_params['pair_template']
+                # when there is no pair formatting section then all ticker data can be accessed with one request
                 pair_formatting_needed = pair_template_dict
                 for cp in currency_pairs:
                     url: str = request_url_and_params['url']
@@ -156,28 +159,30 @@ class Exchange:
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
-                        print('{} bekommen.'.format(response.url))
                         if pair_formatting_needed:
                             responses[cp] = response_json
-                        else:
+                        else:  # when ticker data is returned for all available currency pairs
                             responses[None] = response_json
                             break
-
-                        # with open('responses/{}'.format(self.name + '.json'), 'w', encoding='utf-8') as f:
-                        #     json.dump(response_json, f, ensure_ascii=False, indent=4)
                     except ClientConnectionError:
+                        logging.error('Could not establish connection to {}'.format(self.name))
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                         self.exception_counter += 1
                         self.consecutive_exception = True
                     except Exception as ex:
-                        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        print(message)
-                        print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                        self.exception_counter += 1
-                        self.consecutive_exception = True
+                        print('Unable to read response from {}. Check exchange config file.\n'
+                              'Url: {}, Parameters: {}'
+                              .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                        logging.error('Unable to read response from {}. Check config file.\n'
+                                      'Url: {}, Parameters: {}'
+                                      .format(self.name, request_url_and_params['url'],
+                                              request_url_and_params['params']))
 
             return self.name, start_time, datetime.utcnow(), responses
+        else:
+            logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
+            print("{} has no Ticker request.".format(self.name))
+            return self.name, start_time, datetime.utcnow(), None
 
     async def test_connection(self) -> Tuple[str, bool, Dict]:
         """
@@ -259,16 +264,16 @@ class Exchange:
                         self.consecutive_exception = False
 
                     except ClientConnectionError:
+                        logging.error('Could not establish connection to {}'.format(self.name))
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                        pass
                     except Exception as ex:
-                        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                        message = template.format(type(ex).__name__, ex.args)
-                        print(message)
-                        print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
-                        # add one unit to the exception to the exchange
-                        self.exception_counter += 1
-                        self.consecutive_exception = True
+                        print('Unable to read response from {}. Check exchange config file.\n'
+                              'Url: {}, Parameters: {}'
+                              .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                        logging.error('Unable to read response from {}. Check config file.\n'
+                                      'Url: {}, Parameters: {}'
+                                      .format(self.name, request_url_and_params['url'],
+                                              request_url_and_params['params']))
                     finally:
                         time.sleep(self.rate_limit)
 
@@ -276,7 +281,7 @@ class Exchange:
                 return self.name, responses
         else:
             print('{} hat keine Historic Rates'.format(self.name))
-            return None
+            return self.name, None
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """
@@ -322,16 +327,18 @@ class Exchange:
                 try:
                     response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
                     response_json = await response.json(content_type=None)
-                    print('{} bekommen.'.format(response.url))
 
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
                 except Exception as ex:
-                    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-                    message = template.format(type(ex).__name__, ex.args)
-                    print(message)
-                    print('Die Response von {} konnte nicht gelesen werden.'.format(self.name))
+                    print('Unable to read response from {}. Check exchange config file.\n'
+                          'Url: {}, Parameters: {}'
+                          .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                    logging.warning('Unable to read response from {}. Check config file.\n'
+                                    'Url: {}, Parameters: {}'
+                                    .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
         else:
+            logging.warning('{} has no currency pair request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no currency-pair request.".format(self.name))
         return self.name, response_json
 
@@ -671,7 +678,7 @@ class Exchange:
             current_response = responses[currency_pair]
             curr_pair_string_formatted: str = self.apply_currency_pair_format('historic_rates', currency_pair)
             currency_pair_info: (str, str, str) = (
-            currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+                currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
             if current_response:  # response might be empty
                 try:
                     for mapping in mappings:
@@ -679,7 +686,8 @@ class Exchange:
                                                                           currency_pair_info=currency_pair_info)
                 except Exception as exc:
                     print("Error while formatting historic rates: {}".format(currency_pair))
-                    traceback.print_exc()
+                    logging.exception(f'{currency_pair}: {traceback}')
+                    # traceback.print_exc()
                     pass
                 else:
 
@@ -705,38 +713,92 @@ class Exchange:
                     results.extend(result)
         return results
 
-    def update_exception_counter(self):
-        """
-        This method updates the given parameter of the exception counter and the flag which represents the activity of
-        the exchange.
-        If the exception counter is greater than 3 the exchange will be set to passive.
-        :return None
-        """
-        if self.exception_counter > 3:
-            self.active_flag = False
-            print('{} was set inactive.'.format(self.name))
+    def format_order_books(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
+            -> List[Iterator[Tuple[int, int, datetime, float, float, float, float]]]:
 
-    def update_consecutive_exception(self):
         """
-        This method updates the given parameter of the consecutive exception bool which represents if an exchange throws
-        consecutive exceptions.
-        If the exceptions have not been thrown consecutive the exception counter will be reset to 0.
-        :return None
-        """
-        if not self.consecutive_exception:
-            self.exception_counter = 0
+               Extracts the tuples of order books rates out of the raw json-response for each queried currency-pair.
+               Process is similar to the described in @see{self.format_ticker()} but it's done for each
+               response given in the dictionary.
 
-    def update_flag(self, response):
-        """
-        This method updates the given parameter of the activity flag which represents the activity / availability of an
-        exchange.
-        This method is purposed to update the activity flag after the connectivity of an exchange is tested.
-        If the connectivity test was successful the flag will be set to true otherwise it will be set to false.
-        :param response: bool
-            represents the result of a connectivity test of an exchange
-        :return None
-        """
-        if response:
-            self.active_flag = True
-        else:
-            self.active_flag = False
+               @param response:
+                   The collected json-responses from the order-books-request for this exchange.
+                   The string contains the name of the exchange that was requested.
+                   The json-responses are accessible over the currency-pair.
+               @return:
+                   None or a list of tuples with the following structure:
+                   (ExchangeCurrencyPair.id,
+                    order_book_id,
+                    order_book_position,
+                    order_book_time,
+                    order_book_bids_price,
+                    order_book_bids_amount,
+                    order_books_asks_price,
+                    order_book_bids_amount)
+
+                    Returns None if exchange_name of the response does not match the name of this exchange.
+               """
+
+        if response[0] != self.name:
+            return None
+
+        results = list()
+
+        mappings = self.response_mappings['order_books']
+        responses = response[1]
+
+        currency_pair: ExchangeCurrencyPair
+
+        for currency_pair in responses.keys():
+            temp_results = {'order_books_id': [],
+                            'order_books_position': [],
+                            'order_books_time': [],
+                            'order_books_bids_price': [],
+                            'order_books_bids_amount': [],
+                            'order_books_asks_price': [],
+                            'order_books_asks_amount': []}
+
+            current_response = responses[currency_pair]
+
+            curr_pair_string_formatted: str = self.apply_currency_pair_format('order_books', currency_pair)
+            currency_pair_info: (str, str, str) = (
+                currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+
+            if current_response:
+                try:
+                    for mapping in mappings:
+                        temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                          currency_pair_info=currency_pair_info)
+                except Exception:
+                    print('Error while formatting order books: {}'.format(currency_pair))
+                    traceback.print_exc()
+                    pass
+
+                else:
+                    extracted_data_is_valid: bool = True
+                    for extracted_field in temp_results.keys():
+                        if temp_results[extracted_field] is None:
+                            print("{} has no valid data in {}".format(currency_pair, extracted_field))
+                            extracted_data_is_valid = False
+                            break
+
+                    # if not extracted_data_is_valid:
+                    #     continue
+
+                    assert (len(results[0]) == len(result) for result in temp_results)
+
+                    len_results = len(temp_results['order_books_asks_price'])
+
+                    result = list(itertools.zip_longest(
+                        itertools.repeat(currency_pair.id, len_results),
+                        itertools.repeat(temp_results['order_books_id'], len_results),
+                        range(len_results),
+                        itertools.repeat(temp_results['order_books_time'], len_results),
+                        temp_results['order_books_bids_price'],
+                        temp_results['order_books_bids_amount'],
+                        temp_results['order_books_asks_price'],
+                        temp_results['order_books_asks_amount']))
+
+                    results.extend(result)
+
+        return results

@@ -13,15 +13,15 @@ TYPE_CONVERSION = {
     Type Conversions used to convert extracted values from the API-Response into the desired type ("first", "second").
     The values are specified in the .yaml-file of each exchange under the "mapping" of each method.
     The function is called in the Mapping Class of utilities.py under the method convert_types().
-    
-    "first": 
+
+    "first":
         The actual type extracted from the API-Request (.json)
-    "second": 
+    "second":
         The desired type to convert
-    "function": 
+    "function":
         the actual function to apply
-    "params": 
-        the number of additional parameters needed    
+    "params":
+        the number of additional parameters needed
     """
 
     : {  # Tested
@@ -135,8 +135,8 @@ TYPE_CONVERSION = {
 }
 
 
-"""A dictionary containing lambda function calls in order to get request parameters variable. The function calls 
-will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment, 
+"""A dictionary containing lambda function calls in order to get request parameters variable. The function calls
+will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment,
 during the preparation of the API request.
 
 'name' : call name of the lambda function
@@ -165,7 +165,15 @@ REQUEST_PARAMS = {
 
 
 def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
-    #todo: doku
+    """
+    @param section: str
+        Name of the section the information is stored in.
+    @param filename: str
+        Name of the config file.
+    @return:
+        Parameters for the program as a dictionary.
+        Keys are the names of the parameters in the config-file.
+    """
 
     config_yaml = open(filename)
     config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
@@ -179,7 +187,6 @@ def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
                 return config_dict[general_section][nested_section]
 
     Exception()
-
 
 
 def yaml_loader(exchange: str):
@@ -196,7 +203,6 @@ def yaml_loader(exchange: str):
     with open(YAML_PATH + exchange + '.yaml', 'r') as f:
         try:
             data = yaml.load(f, Loader=yaml.FullLoader)
-            print(exchange)
             return data
         except Exception as ex:
             print("error of loading yaml")
@@ -226,4 +232,3 @@ def get_exchange_names() -> List[str]:
 
 # Constant that contains the path to the yaml-files of working exchange.
 YAML_PATH = read_config('utilities')['yaml_path']
-

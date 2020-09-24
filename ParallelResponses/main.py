@@ -1,6 +1,11 @@
 import asyncio
+import logging
+import os
+import sys
+from datetime import datetime
 from typing import Dict, List
 
+from csv_exporter import CsvExporter
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
 from model.database.db_handler import DatabaseHandler
@@ -21,25 +26,45 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict, u
             # TODO: Error, wenn yaml nicht existiert
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
-            if update_cp & ('currency_pairs' != job_params['yaml_request_name']):
-                print("Updating Currency Pairs: {}".format(exchange_name))
-                response = await exchange.request_currency_pairs('currency_pairs')
-                if response[1] is not None:
-                    formatted_response = exchange.format_currency_pairs(response)
-                    database_handler.persist_exchange_currency_pairs(formatted_response)
-            exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.collect_exchanges_currency_pairs(
-                exchange.name,
-                job_params['currency_pairs'],
-                job_params['first_currency'],
-                job_params['second_currency'])
-            exchanges_with_pairs[exchange] = exchange_currency_pairs
+            if job_params['update_cp'] is True:
+                await update_and_get_currency_pairs(exchange, job_params)
+            else:
+                exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
+                if exchanges_with_pairs[exchange] == []:
+                    await update_and_get_currency_pairs(exchange, job_params)
+
+
+            print('Done loading currency pairs.')
+            logging.info('Done loading currency pairs.')
 
         new_job: Job = Job(job,
                            job_params['yaml_request_name'],
-                           job_params['frequency'],
                            exchanges_with_pairs)
         jobs.append(new_job)
     return jobs
+
+
+async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
+    response = await exchange.request_currency_pairs('currency_pairs')
+    if response[1] is not None:
+        formatted_response = exchange.format_currency_pairs(response)
+        database_handler.persist_exchange_currency_pairs(formatted_response)
+        print('Updated Currency Pairs for {}'.format(exchange.name.upper()))
+    return await get_currency_pairs(exchange, job_params)
+
+
+async def get_currency_pairs(exchange: Exchange, job_params: Dict):
+    print('Checking available currency pairs for {}...'.format(exchange.name.upper()),
+          end=" ")
+    logging.info('Checking available currency pairs.'.format(exchange.name.upper()))
+    exchange_currency_pairs: List[ExchangeCurrencyPair] = database_handler.get_exchanges_currency_pairs(
+        exchange.name,
+        job_params['currency_pairs'],
+        job_params['first_currencies'],
+        job_params['second_currencies'])
+    print('found {}'.format(len(exchange_currency_pairs)))
+    return exchange_currency_pairs
+
 
 
 async def main(database_handler: DatabaseHandler):
@@ -51,26 +76,48 @@ async def main(database_handler: DatabaseHandler):
     As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     """
-    # Falls du doch die Pairs brauchst
-    # exchanges_to_update_currency_pairs_on: Dict[str, Exchange] = dict()
-    # for job in jobs: job_exchanges: [Exchange] = job.exchanges_with_pairs.keys()
-    #     for exchange in job_exchanges:
-    #         if all(exchange.name != ex_to_update for ex_to_update in exchanges_to_update_currency_pairs_on):
-    #             exchanges_to_update_currency_pairs_on[exchange.name] = exchange
 
-    jobs = await initialize_jobs(database_handler, read_config('jobs'), read_config('updates')['update_currency_pairs'])
-    sched = Scheduler(database_handler, jobs)
-    timeout_in_minutes = None
-    for j in jobs:
-        timeout_in_minutes = j.frequency
-    timeout_in_minutes *= 60
+    # run program with single exchange for debugging/testing purposes
+    # exchange_names = ['binance']
+    # TODO nicht vergessen config path zu ändern: gerade in hr_exchanges
+
+    logging.info('Loading jobs.')
+    jobs = await initialize_jobs(database_handler, read_config('jobs'))
+    frequency = read_config('operation_settings')['frequency']
+    logging.info('Configuring Scheduler.')
+    scheduler = Scheduler(database_handler, jobs, frequency)
+    print('{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+    logging.info(
+        '{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+
     while True:
-        await asyncio.gather(sched.run(), asyncio.sleep(timeout_in_minutes))
+        await scheduler.start()
+
+
+def init_logger():
+    if not read_config('utilities')['enable_logging']:
+        logging.disable()
+    else:
+        if not os.path.exists('resources/log/'):
+            os.makedirs('resources/log/')
+        logging.basicConfig(filename='resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
+                            level=logging.INFO)
+
+
+def handler(type, value, tb):
+    logging.exception('Uncaught exception: {}'.format(str(value)))
+
 
 
 if __name__ == "__main__":
+    # todo: enable for exception in log
+    # sys.excepthook = handler
+    init_logger()
+    logging.info('Reading Database Configuration')
     db_params = read_config('database')
+    logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, **db_params)
     asyncio.run(main(database_handler))
+    # CsvExporter()
     # scheduler = Scheduler(database_handler, jobs)
     # scheduler.run()
