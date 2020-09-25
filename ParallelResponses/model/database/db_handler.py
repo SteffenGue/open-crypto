@@ -5,7 +5,7 @@ from contextlib import contextmanager
 import tqdm
 import psycopg2
 import sqlalchemy
-from sqlalchemy import create_engine, MetaData, or_, and_, tuple_
+from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
@@ -130,6 +130,7 @@ class DatabaseHandler:
                  ticker_best_ask,
                  ticker_best_bid,
                  ticker_daily_volume)
+        @param queried_currency_pairs: List of all queried ExchangeCurrencyPairs from the database
         """
         with self.session_scope() as session:
             tuple_counter: int = 0
@@ -281,7 +282,6 @@ class DatabaseHandler:
 
         return found_currency_pairs
 
-
     def get_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]],
                                      first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
         """
@@ -341,22 +341,25 @@ class DatabaseHandler:
         with self.session_scope() as session:
             return session.query(Currency.id).filter(Currency.name.__eq__(currency_name.upper())).first()
 
-    def persist_exchange(self, exchange_name: str):
+    def persist_exchange(self, exchange_name: str, is_exchange: bool):
         """
         Persists the given exchange-name if it's not already in the database.
 
         @param exchange_name:
             Name that should is to persist.
+        @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
         session = self.sessionFactory()
         exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
         if exchange_id is None:
-            exchange = Exchange(name=exchange_name)
+            exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
             session.add(exchange)
             session.commit()
         session.close()
 
-    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]]):
+    # ToDo: den boolean 'is_exchange' in jedes *.yaml-file schreiben.
+    # ToDo: alle persist methoden überprüfen ob der boolean 'is_exchange' implementiert ist.
+    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]], is_exchange: bool):
         """
         Persists the given already formatted ExchangeCurrencyPair-tuple if they not already exist.
         The formatting ist done in @see{Exchange.format_currency_pairs()}.
@@ -366,12 +369,11 @@ class DatabaseHandler:
 
         @param currency_pairs:
             Iterator of currency-pair tuple that are to persist.
+        @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
         if currency_pairs is not None:
-            session = self.sessionFactory()
-            ex_currency_pairs: List[ExchangeCurrencyPair] = list()
 
-            # try:
+            # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             with self.session_scope() as session:
                 for cp in tqdm.tqdm(currency_pairs):
                     exchange_name = cp[0]
@@ -381,22 +383,22 @@ class DatabaseHandler:
                     if exchange_name is None or first_currency_name is None or second_currency_name is None:
                         continue
 
-                    if first_currency_name.upper() == second_currency_name.upper():
+                    if first_currency_name == second_currency_name:
                         continue
 
                     existing_exchange = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
                     exchange: Exchange = existing_exchange if existing_exchange is not None else Exchange(
-                        name=exchange_name)
+                        name=exchange_name, is_exchange=is_exchange)
 
                     existing_first_cp = session.query(Currency).filter(
                         Currency.name == first_currency_name.upper()).first()
                     first: Currency = existing_first_cp if existing_first_cp is not None else Currency(
-                        name=first_currency_name)
+                        name=first_currency_name, from_exchange=is_exchange)
 
                     existing_second_cp = session.query(Currency).filter(
                         Currency.name == second_currency_name.upper()).first()
                     second: Currency = existing_second_cp if existing_second_cp is not None else Currency(
-                        name=second_currency_name)
+                        name=second_currency_name, from_exchange=is_exchange)
 
                     existing_exchange_pair = session.query(ExchangeCurrencyPair).filter(
                         ExchangeCurrencyPair.exchange_id == exchange.id,
@@ -405,21 +407,11 @@ class DatabaseHandler:
 
                     if existing_exchange_pair is None:
                         exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
-                        ex_currency_pairs.append(exchange_pair)
+                        # ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
 
-            #     session.commit()
-            #     # TODO: Reactivate
-            #     # print('{} Currency Pairs für {} hinzugefügt'.format(ex_currency_pairs.__len__(), exchange_name))
-            # except Exception as e:
-            #     print(e, e.__cause__)
-            #     session.rollback()
-            #     pass
-            # finally:
-            #     session.close()
-
     def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
-                                       second_currency_name: str) -> ExchangeCurrencyPair:
+                                       second_currency_name: str, is_exchange: bool):
         """
         Adds a single ExchangeCurrencyPair to the database is it does not already exist.
 
@@ -429,10 +421,12 @@ class DatabaseHandler:
             Name of the first currency.
         @param second_currency_name: str
             Name of the second currency.
+        @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
-        self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)])
+        self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
+                                             is_exchange=is_exchange)
 
-    #NEVER CALL THIS OUTSIDE OF THIS CLASS
+    # NEVER CALL THIS OUTSIDE OF THIS CLASS
     def get_exchange_currency_pair(self, session: Session, exchange_name: str, first_currency_name: str,
                                    second_currency_name: str) -> ExchangeCurrencyPair:
         """
@@ -455,7 +449,7 @@ class DatabaseHandler:
         if exchange_name is None or first_currency_name is None or second_currency_name is None:
             return None
         # sollte raus in der actual Implementierung
-        self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name)
+        self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
         ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
         first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
         second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
@@ -465,111 +459,41 @@ class DatabaseHandler:
                                                         ExchangeCurrencyPair.second.__eq__(second)).first()
         return cp
 
-    def persist_historic_rates(self,
-                               exchange_name: str,
-                               historic_rates: Iterable[Tuple[int, datetime, float, float, float, float, float]]):
-        """
-        Persists the given already formatted historic-rates-tuple if they not already exist.
-        The formatting ist done in @see{Exchange.format_historic_rates()}.
+    def general_persist(self, exchange_name: str, method: str, data: Iterable, mappings: List):
 
-        @param historic_rates:
-            Iterator containing the already formatted historic-rates-tuple.
-        """
+        db_table_object_mapper = {'tickers': Ticker,
+                                  'historic_rates': HistoricRate,
+                                  'order_books': OrderBook,
+                                  'ohlcvm': OHLCVM}
 
-        tuple_counter: int = 0
-        with self.session_scope() as session:
-            for historic_rate in historic_rates:
-                tuple_exists = session.query(HistoricRate.exchange_pair_id). \
-                    filter(
-                    HistoricRate.exchange_pair_id == historic_rate[0],
-                    HistoricRate.timestamp == historic_rate[1]
-                ). \
-                    first()
-                if tuple_exists is None:
-                    tuple_counter += 1
-                    hr_tuple = HistoricRate(exchange_pair_id=historic_rate[0],
-                                            timestamp=historic_rate[1],
-                                            open=historic_rate[2],
-                                            high=historic_rate[3],
-                                            low=historic_rate[4],
-                                            close=historic_rate[5],
-                                            volume=historic_rate[6])
-                    session.add(hr_tuple)
+        col_names = [key.name for key in inspect(db_table_object_mapper[method]).columns]
+        primary_keys = [key.name for key in inspect(db_table_object_mapper[method]).primary_key]
 
-        print('{} historic rates added for {}.'.format(tuple_counter, exchange_name.upper()))
-        logging.info('{} historic rates added for {}.'.format(tuple_counter, exchange_name.upper()))
-        return tuple_counter
+        check_columns = [mapping.key in col_names for mapping in mappings]
 
-
-
-    def persist_order_books(self,
-                            exchange_name: str,
-                            order_books: Iterable[Tuple[int, int, int, datetime, float, float, float, float]]):
-        """
-               Persists the given already formatted order-book-tuple if they not already exist.
-               The formatting ist done in @see{Exchange.format_order_books()}.
-
-               @param order_books:
-                   Iterator containing the already formatted order-book-tuple.
-               """
+        if not all(check_columns):
+            failed_columns = dict(zip([mapping.key for mapping in mappings], check_columns))
+            raise ValueError("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
+                                                                                                    failed_columns))
+            logging.error("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
+                                                                                                 failed_columns))
+            return
 
         tuple_counter = 0
-
         with self.session_scope() as session:
-            for order_book in order_books:
-                entry_exists = session.query(OrderBook.exchange_pair_id). \
-                    filter(
-                    OrderBook.exchange_pair_id == order_book[0],
-                    OrderBook.id == order_book[1],
-                    OrderBook.position == order_book[2]
-                ).first()
+            for data_tuple in data:
+                data_tuple = dict(zip(col_names, data_tuple))
+                p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
+                query_exists: bool = True if session.query(db_table_object_mapper[method]). \
+                                                 filter_by(**p_key_filter).count() > 0 else False
 
-                if entry_exists is None:
+                if not query_exists:
                     tuple_counter += 1
+                    add_tuple = db_table_object_mapper[method](**data_tuple)
+                    session.add(add_tuple)
 
-                    ob_tuple = OrderBook(exchange_pair_id=order_book[0],
-                                         id=order_book[1],
-                                         position=order_book[2],
-                                         timestamp=order_book[3],
-                                         bids_price=order_book[4],
-                                         bids_amount=order_book[5],
-                                         asks_price=order_book[6],
-                                         asks_amount=order_book[7])
-                    session.add(ob_tuple)
-        print('{} tuple(s) added to order books for {}.'.format(tuple_counter, exchange_name.upper()))
-        logging.info('{} order books added for {}.'.format(tuple_counter, exchange_name.upper()))
-        return tuple_counter
-
-    def persist_platform_data(self,
-                              exchange_name: str,
-                              ohlcvms: Iterable[Tuple[int, datetime, float, float, float, float, float, float]]):
-
-        tuple_counter = 0
-
-        with self.session_scope() as session:
-            for ohlcvm in ohlcvms:
-                entry_exists = session.query(OHLCVM.exchange_pair_id). \
-                    filter(
-                    OHLCVM.exchange_pair_id == ohlcvm[0],
-                    OHLCVM.timestamp == ohlcvm[1],
-                ).first()
-
-                if entry_exists is None:
-                    tuple_counter += 1
-
-                    ohlcvm_tuple = OHLCVM(exchange_pair_id=ohlcvm[0],
-                                          timestamp=ohlcvm[1],
-                                          open=ohlcvm[2],
-                                          high=ohlcvm[3],
-                                          low=ohlcvm[4],
-                                          close=ohlcvm[5],
-                                          volume=ohlcvm[6],
-                                          mcap=ohlcvm[7])
-                    session.add(ohlcvm_tuple)
         print('{} tuple(s) added to ohlcvm for {}.'.format(tuple_counter, exchange_name.upper()))
         logging.info('{} tuple(s) added to ohlcvm for {}.'.format(tuple_counter, exchange_name.upper()))
-        return tuple_counter
-
 
     def get_readable_tickers(self,
                              query_everything: bool,
@@ -603,7 +527,7 @@ class DatabaseHandler:
         @param to_timestamp: datetime
             Maximum date for the start of the request.
         @param exchanges: List[str]
-            List of exchanges of which the typle should be queried.
+            List of exchanges of which the tuple should be queried.
         @param currency_pairs: List[Dict[str, str]]
             List of specific currency pairs that should be queried.
             Dict needs to have the following structure:
@@ -677,8 +601,7 @@ class DatabaseHandler:
                 result = result.all()
         return result
 
-
-    #Methods that are currently not used but might be useful:
+    # Methods that are currently not used but might be useful:
 
     # def get_exchange_ids(self, exchange_names: List[str]) -> List[int]:
     #     exchange_ids: List[int] = list()

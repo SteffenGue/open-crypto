@@ -291,8 +291,7 @@ class OHLCVM(Base):
     volume = Column(Float)
     mcap = Column(Float)
 
-    def __repr__(self):
-        pass
+
 
 
 class ExchangeCurrencyPairView(Base):

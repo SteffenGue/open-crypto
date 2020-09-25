@@ -176,6 +176,9 @@ class Mapping:
         """
         #print(types_queue)
         #print(self.key)
+
+
+
         if path_queue is None:
             path_queue = deque(self.path)
 
@@ -184,6 +187,7 @@ class Mapping:
 
         if not response:
             return None
+
 
         if not path_queue:
             return self.convert_type(None, types_queue)

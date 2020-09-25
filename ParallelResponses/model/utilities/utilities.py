@@ -133,6 +133,10 @@ TYPE_CONVERSION = {
         "function": lambda *args: args[1],
         "params": 1
     },
+    ('none', 'range'): {
+        'function': lambda *args: range(args[1]),
+        'params': 1
+    }
 }
 
 

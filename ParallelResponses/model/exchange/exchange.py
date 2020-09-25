@@ -561,83 +561,6 @@ class Exchange:
                                           results['currency_pair_first'],
                                           results['currency_pair_second']))
 
-    def format_historic_rates(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
-            -> List[Iterator[Tuple[datetime, float, float, float, float, float]]]:
-        """
-        Extracts the tuples of historic rates out of the raw json-response for each queried currency-pair.
-        Process is similar to the described in @see{self.format_ticker()} but it's done for each
-        response given in the dictionary.
-
-        @param response:
-            The collected json-responses from the historic-rates-request for this exchange.
-            The string contains the name of the exchange that was requested.
-            The json-responses are accessible over the currency-pair.
-        @return:
-            None or a list of tuples with the following structure:
-            (ExchangeCurrencyPair.id,
-             historic_rates_time,
-             historic_rates_open,
-             historic_rates_high,
-             historic_rates_low,
-             historic_rates_close,
-             historic_rates_volume)
-
-             Returns None if exchange_name of the response does not match the name of this exchange.
-        """
-        if response[0] != self.name:
-            return None
-
-        results = list()
-
-        mappings = self.response_mappings['historic_rates']
-        responses = response[1]
-
-        currency_pair: ExchangeCurrencyPair
-        for currency_pair in responses.keys():
-            temp_results = {'historic_rates_time': [],
-                            'historic_rates_open': [],
-                            'historic_rates_high': [],
-                            'historic_rates_low': [],
-                            'historic_rates_close': [],
-                            'historic_rates_volume': []}
-
-            current_response = responses[currency_pair]
-            curr_pair_string_formatted: str = self.apply_currency_pair_format('historic_rates', currency_pair)
-            currency_pair_info: (str, str, str) = (
-                currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
-            if current_response:  # response might be empty
-                try:
-                    for mapping in mappings:
-                        temp_results[mapping.key] = mapping.extract_value(current_response,
-                                                                          currency_pair_info=currency_pair_info)
-                except Exception as exc:
-                    print("Error while formatting historic rates: {}".format(currency_pair))
-                    logging.exception(f'{currency_pair}: {traceback}')
-                    # traceback.print_exc()
-                    pass
-                else:
-
-                    extracted_data_is_valid: bool = True
-                    for extracted_field in temp_results.keys():
-                        if temp_results[extracted_field] is None:
-                            print("{} has no valid data in {}.".format(currency_pair, extracted_field))
-                            extracted_data_is_valid = False
-                            break
-
-                    if not extracted_data_is_valid:
-                        continue
-
-                    assert (len(results[0]) == len(result) for result in results)
-                    result = list(itertools.zip_longest(
-                        itertools.repeat(currency_pair.id, len(temp_results['historic_rates_time'])),
-                        temp_results['historic_rates_time'],
-                        temp_results['historic_rates_open'],
-                        temp_results['historic_rates_high'],
-                        temp_results['historic_rates_low'],
-                        temp_results['historic_rates_close'],
-                        temp_results['historic_rates_volume']))
-                    results.extend(result)
-        return results
 
     def format_order_books(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
             -> List[Iterator[Tuple[int, int, datetime, float, float, float, float]]]:
@@ -729,42 +652,34 @@ class Exchange:
 
         return results
 
-    def format_platform_data(self, response: Tuple[str, Dict[ExchangeCurrencyPair, Dict]]) \
-            -> List[Iterator[Tuple[int, datetime, float, float, float, float, float, float]]]:
+
+
+    def format_data(self, method, response: Iterator[Tuple[str, Dict]]):
 
         if response[0] != self.name:
             return None
 
         results = list()
-
-        mappings = self.response_mappings['ohlcvm']
-
+        mappings = self.response_mappings[method]
         responses = response[1]
-
         currency_pair: ExchangeCurrencyPair
 
         for currency_pair in responses.keys():
-            temp_results = {'ohlcvm_id': [],
-                            'ohlcvm_time': [],
-                            'ohlcvm_open': [],
-                            'ohlcvm_high': [],
-                            'ohlcvm_low': [],
-                            'ohlcvm_close': [],
-                            'ohlcvm_volume': [],
-                            'ohlcvm_mcap': []}
+            temp_results = dict(zip((mapping.key for mapping in mappings),
+                                    itertools.repeat([], len(mappings))))
 
             current_response = responses[currency_pair]
-            # ToDo apply_currency_pair_format
-            curr_pair_string_formatted: str = self.apply_currency_pair_format('ohlcvm', currency_pair)
+            curr_pair_string_formatted: str = self.apply_currency_pair_format(method, currency_pair)
             currency_pair_info: (str, str, str) = (
                 currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
+
             if current_response:
                 try:
                     for mapping in mappings:
                         temp_results[mapping.key] = mapping.extract_value(current_response,
                                                                           currency_pair_info=currency_pair_info)
                 except Exception:
-                    print('Error while formatting order books: {}'.format(currency_pair))
+                    print('Error while formatting {}: {}'.format(method, currency_pair))
                     traceback.print_exc()
                     pass
 
@@ -781,20 +696,16 @@ class Exchange:
 
                     assert (len(results[0]) == len(result) for result in temp_results)
 
-                    len_results = len(temp_results['ohlcvm_close'])
 
-                    result = list(itertools.zip_longest(
-                        itertools.repeat(currency_pair.id, len_results),
-                        temp_results['ohlcvm_time'],
-                        temp_results['ohlcvm_open'],
-                        temp_results['ohlcvm_high'],
-                        temp_results['ohlcvm_low'],
-                        temp_results['ohlcvm_close'],
-                        temp_results['ohlcvm_volume'],
-                        temp_results['ohlcvm_mcap']
-                    ))
+                    len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
+                    len_results = max(len_results.values())
+
+                    result = [v if hasattr(v, '__iter__')
+                              else itertools.repeat(v, len_results) for k, v in temp_results.items()]
+
+                    result = list(itertools.zip_longest(itertools.repeat(currency_pair.id, len_results),
+                                                        *result))
 
                     results.extend(result)
 
-        return results
-
+                return results, mappings
