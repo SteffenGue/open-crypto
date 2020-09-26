@@ -469,10 +469,10 @@ class DatabaseHandler:
         col_names = [key.name for key in inspect(db_table_object_mapper[method]).columns]
         primary_keys = [key.name for key in inspect(db_table_object_mapper[method]).primary_key]
 
-        check_columns = [mapping.key in col_names for mapping in mappings]
+        check_columns = [mapping in col_names for mapping in mappings]
 
         if not all(check_columns):
-            failed_columns = dict(zip([mapping.key for mapping in mappings], check_columns))
+            failed_columns = dict(zip([mapping for mapping in mappings], check_columns))
             raise ValueError("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
                                                                                                     failed_columns))
             logging.error("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
@@ -482,7 +482,7 @@ class DatabaseHandler:
         tuple_counter = 0
         with self.session_scope() as session:
             for data_tuple in data:
-                data_tuple = dict(zip(col_names, data_tuple))
+                data_tuple = dict(zip(mappings, data_tuple))
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table_object_mapper[method]). \
                                                  filter_by(**p_key_filter).count() > 0 else False
@@ -492,8 +492,8 @@ class DatabaseHandler:
                     add_tuple = db_table_object_mapper[method](**data_tuple)
                     session.add(add_tuple)
 
-        print('{} tuple(s) added to ohlcvm for {}.'.format(tuple_counter, exchange_name.upper()))
-        logging.info('{} tuple(s) added to ohlcvm for {}.'.format(tuple_counter, exchange_name.upper()))
+        print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.upper()))
+        logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.upper()))
 
     def get_readable_tickers(self,
                              query_everything: bool,

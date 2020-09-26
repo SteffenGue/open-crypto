@@ -700,12 +700,12 @@ class Exchange:
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values())
 
+                    temp_results.update({'exchange_pair_id': currency_pair.id})
                     result = [v if hasattr(v, '__iter__')
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
-                    result = list(itertools.zip_longest(itertools.repeat(currency_pair.id, len_results),
-                                                        *result))
+                    result = list(itertools.zip_longest(*result))
 
                     results.extend(result)
 
-                return results, mappings
+                return results, temp_results.keys()
