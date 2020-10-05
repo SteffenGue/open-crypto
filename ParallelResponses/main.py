@@ -16,11 +16,12 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 
 async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
     response = await exchange.request_currency_pairs('currency_pairs')
+
     if response[1] is not None:
-        print('Updating Currency Pairs for {}...'.format(exchange.name.upper()), end=" ")
+        print('Updating Currency Pairs for {}...'.format(exchange.name.upper()))
+        # logging.info('Updating Currency Pairs for {}...'.format(exchange.name.upper()), end=" ")
         formatted_response = exchange.format_currency_pairs(response)
         database_handler.persist_exchange_currency_pairs(formatted_response, is_exchange=False)
-        print('done.')
 
     return await get_currency_pairs(exchange, job_params)
 

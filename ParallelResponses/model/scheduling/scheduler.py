@@ -8,7 +8,7 @@ from model.scheduling.Job import Job
 
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
-from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM
+from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
 
 
 class Scheduler:
@@ -58,7 +58,10 @@ class Scheduler:
 
         """
         request = self.determine_task(job.request_name)
-        await request(job.request_name, job.exchanges_with_pairs)
+        request_fun = request.get('function')
+        request_table = request.get('table')
+
+        await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> Callable:
         """
@@ -70,15 +73,27 @@ class Scheduler:
             Method for the request name or a string that the request is false.
         """
         possible_requests = {
-            "currency_pairs": self.get_currency_pairs,
-            "ticker": self.get_tickers,
-            "historic_rates": self.get_job_done,
-            "order_books": self.get_job_done,
-            "ohlcvm": self.get_job_done
+            "currency_pairs":
+                {'function': self.get_currency_pairs,
+                 'table': ExchangeCurrencyPair},
+            "ticker":
+                {'function': self.get_tickers,
+                 'table': Ticker},
+            "historic_rates":
+                {'function': self.get_job_done,
+                 'table': HistoricRate},
+            "order_books":
+                {'function': self.get_job_done,
+                 'table': OrderBook},
+            "trades":
+                {'function': self.get_job_done,
+                 'table': Trade},
+            "ohlcvm": {'function': self.get_job_done,
+                       'table': OHLCVM}
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
-    async def get_currency_pairs(self, request_name,  exchanges: Dict[str, Exchange]):
+    async def get_currency_pairs(self, method, exchanges: Dict[str, Exchange]):
         """
         Starts the currency pair request for each given exchange.
 
@@ -98,7 +113,7 @@ class Scheduler:
         # logging.info('Done collection currency pairs.\n')
         print('Done collecting currency pairs.')
 
-    async def get_tickers(self, request_name, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+    async def get_tickers(self, method, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """
         Tries to request, filter and persist ticker data for the given exchanges and their currency pairs.
 
@@ -129,6 +144,7 @@ class Scheduler:
 
     async def get_job_done(self,
                            request_name: str,
+                           requst_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
 
         print('Starting to collect {}.'.format(request_name))
@@ -151,6 +167,7 @@ class Scheduler:
                     if formatted_response:
                         self.database_handler.general_persist(exchange_name,
                                                               request_name,
+                                                              requst_table,
                                                               formatted_response,
                                                               mappings)
         print('Done collecting {}.'.format(request_name))

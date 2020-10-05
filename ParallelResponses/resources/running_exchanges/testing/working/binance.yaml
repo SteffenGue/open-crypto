@@ -212,19 +212,24 @@ requests:
           isBestMatch:
             type: bool
     mapping:
-    - key: trade_last_price
+    - key: id
+      path:
+        - id
+      type:
+        - int
+    - key: price
       path:
       - price
       type:
       - str
       - float
-    - key: trade_amount
+    - key: amount
       path:
       - qty
       type:
       - str
       - float
-    - key: trade_time
+    - key: timestamp
       path:
       - time
       type:

@@ -203,41 +203,41 @@ class HistoricRate(Base):
                                                          self.timestamp)
 
 
-# class Trade(Base):
-#     """
-#     Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
-#     foreign_keys.
-#     Primary_keys are Exchange_Pair_id and the timestamp.
-#
-#     Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
-#
-#     __repr__(self) describes the representation if queried.
-#
-#     """
-#     __tablename__ = 'trades'
-#
-#     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-#     exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
-#     timestamp = Column(DateTime, primary_key=True)
-#
-#     amount = Column(Float)
-#     best_bid = Column(Float)
-#     best_ask = Column(Float)
-#     price = Column(Float)
-#     direction = Column(String)
-#
-#     def __repr__(self):
-#         return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
-#                                                                     self.exchange_pair.first.name,
-#                                                                     self.exchange_pair.second.name,
-#                                                                     self.amount,
-#                                                                     self.price,
-#                                                                     self.timestamp)
-#
-#     @validates('direction')
-#     def convert_upper(self, key, value):
-#         return value.upper()
-#
+class Trade(Base):
+    """
+    Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+    Primary_keys are Exchange_Pair_id and the timestamp.
+
+    Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
+
+    __repr__(self) describes the representation if queried.
+
+    """
+    __tablename__ = 'trades'
+
+    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+    exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, primary_key=True)
+
+    amount = Column(Float)
+    best_bid = Column(Float)
+    best_ask = Column(Float)
+    price = Column(Float)
+    direction = Column(String)
+
+    def __repr__(self):
+        return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
+                                                                    self.exchange_pair.first.name,
+                                                                    self.exchange_pair.second.name,
+                                                                    self.amount,
+                                                                    self.price,
+                                                                    self.timestamp)
+
+    @validates('direction')
+    def convert_upper(self, key, value):
+        return value.upper()
 
 
 class OrderBook(Base):

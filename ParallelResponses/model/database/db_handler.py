@@ -10,7 +10,7 @@ from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM
+from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
 
 
 class DatabaseHandler:
@@ -459,37 +459,39 @@ class DatabaseHandler:
                                                         ExchangeCurrencyPair.second.__eq__(second)).first()
         return cp
 
-    def general_persist(self, exchange_name: str, method: str, data: Iterable, mappings: List):
+    def general_persist(self, exchange_name: str, method: str, request_table, data: Iterable, mappings: List):
 
-        db_table_object_mapper = {'tickers': Ticker,
-                                  'historic_rates': HistoricRate,
-                                  'order_books': OrderBook,
-                                  'ohlcvm': OHLCVM}
+        # db_table = {'tickers': Ticker,
+        #                           'historic_rates': HistoricRate,
+        #                           'order_books': OrderBook,
+        #                           'ohlcvm': OHLCVM,
+        #                           'trades': Trade}
+        db_table = request_table
 
-        col_names = [key.name for key in inspect(db_table_object_mapper[method]).columns]
-        primary_keys = [key.name for key in inspect(db_table_object_mapper[method]).primary_key]
+        col_names = [key.name for key in inspect(db_table).columns]
+        primary_keys = [key.name for key in inspect(db_table).primary_key]
 
         check_columns = [mapping in col_names for mapping in mappings]
 
         if not all(check_columns):
             failed_columns = dict(zip([mapping for mapping in mappings], check_columns))
-            raise ValueError("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
-                                                                                                    failed_columns))
+
             logging.error("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
                                                                                                  failed_columns))
-            return
+            raise ValueError("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
+                                                                                                    failed_columns))
 
         tuple_counter = 0
         with self.session_scope() as session:
             for data_tuple in data:
                 data_tuple = dict(zip(mappings, data_tuple))
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
-                query_exists: bool = True if session.query(db_table_object_mapper[method]). \
+                query_exists: bool = True if session.query(db_table). \
                                                  filter_by(**p_key_filter).count() > 0 else False
 
                 if not query_exists:
                     tuple_counter += 1
-                    add_tuple = db_table_object_mapper[method](**data_tuple)
+                    add_tuple = db_table(**data_tuple)
                     session.add(add_tuple)
 
         print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.upper()))
