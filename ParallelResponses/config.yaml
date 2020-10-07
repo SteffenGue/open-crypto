@@ -2,10 +2,10 @@ general:
   database:
     sqltype: postgresql
     client: psycopg2
-    user_name: bjarne
-    password: ''
+    user_name: postgres
+    password: Thw_kiel
     host: localhost
-    port: 1234
+    port: 5432
     db_name: test
   operation_settings:
     frequency: 1
@@ -18,22 +18,22 @@ general:
 
 jobs:
 #
-#  tickers:
-#    yaml_request_name: ticker
-#    update_cp: False
-#    exchanges:
-##      - exmo
-##      - bibox
-#      - binance
-#    currency_pairs:
-#      - first: btc
-#        second: usd
-#      - first: ltc
-#        second: btc
-#    first_currencies:
-#      - btc
-#    second_currencies:
-
+  tickers:
+    yaml_request_name: ticker
+    update_cp: False
+    exchanges:
+#      - exmo
+#      - bibox
+      - binance
+    currency_pairs:
+      - first: btc
+        second: usd
+      - first: ltc
+        second: btc
+    first_currencies:
+      - btc
+    second_currencies:
+      - ltc
 #  historic_rates:
 #    yaml_request_name: historic_rates
 #    update_cp: False
@@ -47,19 +47,19 @@ jobs:
 #    second_currencies:
 ##      - eth
 
-#
-  order_books:
-    yaml_request_name: order_books
-    update_cp: False
-    exchanges:
-      - binance
-    currency_pairs:
-      - first: ltc
-        second: btc
-    first_currencies:
-#      - btc
-    second_currencies:
-#      - eth
+
+#  order_books:
+#    yaml_request_name: order_books
+#    update_cp: False
+#    exchanges:
+#      - binance
+#    currency_pairs:
+#      - first: ltc
+#        second: btc
+#    first_currencies:
+##      - btc
+#    second_currencies:
+##      - eth
 
 #  ohlcvm:
 #    yaml_request_name: ohlcvm

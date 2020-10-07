@@ -128,7 +128,7 @@ requests:
                 - str
                 - float
     mapping:
-    - key: timestamp
+    - key: time
       path: []
       type:
       - none
@@ -229,7 +229,7 @@ requests:
       type:
       - str
       - float
-    - key: timestamp
+    - key: time
       path:
       - time
       type:

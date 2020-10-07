@@ -94,7 +94,7 @@ class Scheduler:
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
-    async def get_currency_pairs(self, method, exchanges: Dict[str, Exchange]):
+    async def get_currency_pairs(self, method, table, exchanges: Dict[str, Exchange]):
         """
         Starts the currency pair request for each given exchange.
 
@@ -114,7 +114,7 @@ class Scheduler:
         # logging.info('Done collection currency pairs.\n')
         print('Done collecting currency pairs.')
 
-    async def get_tickers(self, method, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+    async def get_tickers(self, method, table, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """
         Tries to request, filter and persist ticker data for the given exchanges and their currency pairs.
 
@@ -137,10 +137,9 @@ class Scheduler:
                         break
                 formatted_response = exchange.format_ticker(response)
                 if formatted_response:
-                    added_ticker_counter += self.database_handler.persist_tickers(exchanges_with_pairs[exchange],
-                                                                                  formatted_response)
+                    self.database_handler.persist_tickers(exchanges_with_pairs[exchange],
+                                                          formatted_response)
         logging.info('Done collecting ticker.')
-        logging.info('Added {} Ticker tuple to the database.\n'.format(added_ticker_counter))
         print('Done collecting ticker.')
 
     async def get_job_done(self,

@@ -218,6 +218,7 @@ class Exchange:
                 except Exception as ex:
                     return self.name, False, {}
 
+    #ToDo: Doku anpassen. Die Method wurde für HR, OB, Trades übernommen
     async def request(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
             -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
         """
@@ -278,10 +279,9 @@ class Exchange:
                     finally:
                         time.sleep(self.rate_limit)
 
-                print("Completed collecting historic rates for {}.".format(self.name))
                 return self.name, responses
         else:
-            print('{} hat keine Historic Rates'.format(self.name))
+            print('{} hat keine {}'.format(self.name, request_name.capitalize()))
             return self.name, None
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:

@@ -6,7 +6,7 @@ import tqdm
 import psycopg2
 import sqlalchemy
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
-from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
@@ -67,8 +67,10 @@ class DatabaseHandler:
         @param db_name: str
             Name of the database.
         """
-
-        conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
+        if sqltype == 'sqlite':
+            conn_string = '{}:///{}.db'.format(sqltype, db_name)
+        else:
+            conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
         logging.info('Connection String is: {}'.format(conn_string))
         engine = create_engine(conn_string)
 
@@ -79,7 +81,7 @@ class DatabaseHandler:
 
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
-        except ProgrammingError:
+        except (ProgrammingError, OperationalError):
             print('View already exists.')
             logging.warning('Views already exist. If you need to alter or recreate tables delete tickers_view '
                             'and exchanges_currency_pair_view manually.')
@@ -98,6 +100,19 @@ class DatabaseHandler:
             raise
         finally:
             session.close()
+
+    @contextmanager
+    def session_query_scope(self):
+        """Provide a transactional scope around a series of operations."""
+        session = self.sessionFactory()
+        try:
+            yield session
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
 
     def persist_tickers(self,
                         queried_currency_pairs: List[ExchangeCurrencyPair],
@@ -144,10 +159,9 @@ class DatabaseHandler:
                                               start_time=ticker[1],
                                               response_time=ticker[2],
                                               last_price=ticker[5],
-                                              last_trade=ticker[6],
-                                              best_ask=ticker[7],
-                                              best_bid=ticker[8],
-                                              daily_volume=ticker[9])
+                                              best_ask=ticker[6],
+                                              best_bid=ticker[7],
+                                              daily_volume=ticker[8])
                         tuple_counter += 1
                         session.add(ticker_tuple)
             print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
@@ -162,14 +176,13 @@ class DatabaseHandler:
             List of all currency-pairs for the given exchange.
         """
         # todo : session factory -> session scope
-        session = self.sessionFactory()
-        currency_pairs = list()
-        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
-        if exchange_id is not None:
-            currency_pairs = session.query(ExchangeCurrencyPair).filter(
-                ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
-        session.close()
-        return currency_pairs
+        with self.session_query_scope() as session:
+            currency_pairs = list()
+            exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).scalar()
+            if exchange_id is not None:
+                currency_pairs = session.query(ExchangeCurrencyPair).filter(
+                    ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
+            return currency_pairs
 
     def get_currency_pairs_with_first_currency(self, exchange_name: str, currency_names: [str]) \
             -> List[ExchangeCurrencyPair]:
@@ -190,7 +203,7 @@ class DatabaseHandler:
         if exchange_name is not None and exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
-            with self.session_scope() as session:
+            with self.session_query_scope() as session:
                 if currency_names is not None:
                     for currency_name in currency_names:
                         if currency_name is not None and currency_name:
@@ -225,7 +238,7 @@ class DatabaseHandler:
         if exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
-            with self.session_scope() as session:
+            with self.session_query_scope() as session:
                 if currency_names is not None:
                     for currency_name in currency_names:
                         if currency_name:
@@ -260,7 +273,7 @@ class DatabaseHandler:
 
         if exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
-            with self.session_scope() as session:
+            with self.session_query_scope() as session:
                 if currency_pairs is not None:
                     for currency_pair in currency_pairs:
                         first_currency = currency_pair['first']
@@ -329,8 +342,8 @@ class DatabaseHandler:
             Id of the given exchange or None if no exchange with the given name exists
             in the database.
         """
-        with self.session_scope() as session:
-            return session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
+        with self.session_query_scope() as session:
+            return session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).scalar()
 
     def get_currency_id(self, currency_name: str):
         """
@@ -341,8 +354,8 @@ class DatabaseHandler:
             Id of the given currency or None if no currency with the given name exists
             in the database.
         """
-        with self.session_scope() as session:
-            return session.query(Currency.id).filter(Currency.name.__eq__(currency_name.upper())).first()
+        with self.session_query_scope() as session:
+            return session.query(Currency.id).filter(Currency.name.__eq__(currency_name.upper())).scalar()
 
     def persist_exchange(self, exchange_name: str, is_exchange: bool):
         """
@@ -378,7 +391,7 @@ class DatabaseHandler:
 
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             with self.session_scope() as session:
-                for cp in tqdm.tqdm(currency_pairs):
+                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs)<10)):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
@@ -497,8 +510,8 @@ class DatabaseHandler:
                     add_tuple = db_table(**data_tuple)
                     session.add(add_tuple)
 
-        print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.upper()))
-        logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.upper()))
+        print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.capitalize()))
+        logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.capitalize()))
 
     def get_readable_tickers(self,
                              query_everything: bool,
@@ -557,7 +570,6 @@ class DatabaseHandler:
                                         Ticker.start_time,
                                         Ticker.response_time,
                                         Ticker.last_price,
-                                        Ticker.last_trade,
                                         Ticker.best_ask,
                                         Ticker.best_bid,
                                         Ticker.daily_volume). \

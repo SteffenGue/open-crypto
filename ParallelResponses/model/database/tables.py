@@ -183,7 +183,7 @@ class HistoricRate(Base):
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
     exchange_pair = relationship('ExchangeCurrencyPair', backref="historic_rates")
-    timestamp = Column(DateTime, primary_key=True)
+    time = Column(DateTime, primary_key=True)
 
     open = Column(Float)
     high = Column(Float)
@@ -216,7 +216,7 @@ class Trade(Base):
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
     exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
     id = Column(Integer, primary_key=True)
-    timestamp = Column(DateTime, primary_key=True)
+    time = Column(DateTime, primary_key=True)
 
     amount = Column(Float)
     best_bid = Column(Float)
@@ -257,7 +257,7 @@ class OrderBook(Base):
     id = Column(Integer, primary_key=True)
     position = Column(Integer, primary_key=True)
 
-    timestamp = Column(DateTime)
+    time = Column(DateTime)
     bids_price = Column(Float)
     bids_amount = Column(Float)
     asks_price = Column(Float)
@@ -279,7 +279,7 @@ class OHLCVM(Base):
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
     exchange_pair = relationship('ExchangeCurrencyPair', backref="OHLCVM")
-    timestamp = Column(DateTime, primary_key=True)
+    time = Column(DateTime, primary_key=True)
 
     open = Column(Float)
     high = Column(Float)
