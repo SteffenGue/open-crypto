@@ -318,10 +318,12 @@ class DatabaseHandler:
             of the above stated conditions.
         """
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
-        if 'all' in currency_pairs:
-            found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
-        elif currency_pairs[0] is not None:
-            found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+        if currency_pairs:
+            if 'all' in currency_pairs:
+                found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
+            elif currency_pairs[0] is not None:
+                found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+
         found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
         found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
         result: List = list()
