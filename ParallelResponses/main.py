@@ -27,11 +27,11 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict, u
             exchange: Exchange = Exchange(yaml_loader(exchange_name))
 
             if job_params['update_cp'] is True:
-                await update_and_get_currency_pairs(exchange, job_params)
+                exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
             else:
                 exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
                 if exchanges_with_pairs[exchange] == []:
-                    await update_and_get_currency_pairs(exchange, job_params)
+                    exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
 
 
             print('Done loading currency pairs.')

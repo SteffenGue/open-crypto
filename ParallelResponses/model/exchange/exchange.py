@@ -159,6 +159,7 @@ class Exchange:
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
+                        print(response_json)
                         if pair_formatting_needed:
                             responses[cp] = response_json
                         else:  # when ticker data is returned for all available currency pairs
@@ -259,6 +260,7 @@ class Exchange:
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
+
                         # print(response_json)
                         responses[cp] = response_json
                         self.consecutive_exception = False

@@ -143,10 +143,9 @@ class DatabaseHandler:
                                               start_time=ticker[1],
                                               response_time=ticker[2],
                                               last_price=ticker[5],
-                                              last_trade=ticker[6],
-                                              best_ask=ticker[7],
-                                              best_bid=ticker[8],
-                                              daily_volume=ticker[9])
+                                              best_ask=ticker[6],
+                                              best_bid=ticker[7],
+                                              daily_volume=ticker[8])
                         tuple_counter += 1
                         session.add(ticker_tuple)
             print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
@@ -305,10 +304,12 @@ class DatabaseHandler:
             of the above stated conditions.
         """
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
-        if 'all' in currency_pairs:
-            found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
-        elif currency_pairs[0] is not None:
-            found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+        if currency_pairs:
+            if 'all' in currency_pairs:
+                found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
+            elif currency_pairs[0] is not None:
+                found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+
         found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
         found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
         result: List = list()
