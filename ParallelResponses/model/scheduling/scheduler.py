@@ -9,7 +9,7 @@ from model.scheduling.Job import Job
 
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
-from model.database.tables import ExchangeCurrencyPair
+from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
 
 
 class Scheduler:
@@ -48,7 +48,7 @@ class Scheduler:
         runs = [self.run(job) for job in self.job_list]
         runs.append(asyncio.sleep(self.frequency))
 
-        #das hast du noch nachträglich eingefügt, vielleicht musst du das hier wieder ändern
+        # das hast du noch nachträglich eingefügt, vielleicht musst du das hier wieder ändern
         await asyncio.gather(*runs)
 
     async def run(self, job: Job):
@@ -59,7 +59,10 @@ class Scheduler:
 
         """
         request = self.determine_task(job.request_name)
-        await request(job.exchanges_with_pairs)
+        request_fun = request.get('function')
+        request_table = request.get('table')
+
+        await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> Callable:
         """
@@ -71,15 +74,27 @@ class Scheduler:
             Method for the request name or a string that the request is false.
         """
         possible_requests = {
-            "ticker": self.get_tickers,
-            "historic_rates": self.get_historic_rates,
-            "order_books": self.get_order_books,
-            "currency_pairs": self.get_currency_pairs
+            "currency_pairs":
+                {'function': self.get_currency_pairs,
+                 'table': ExchangeCurrencyPair},
+            "ticker":
+                {'function': self.get_tickers,
+                 'table': Ticker},
+            "historic_rates":
+                {'function': self.get_job_done,
+                 'table': HistoricRate},
+            "order_books":
+                {'function': self.get_job_done,
+                 'table': OrderBook},
+            "trades":
+                {'function': self.get_job_done,
+                 'table': Trade},
+            "ohlcvm": {'function': self.get_job_done,
+                       'table': OHLCVM}
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
-
-    async def get_currency_pairs(self, exchanges: Dict[str, Exchange]):
+    async def get_currency_pairs(self, method, exchanges: Dict[str, Exchange]):
         """
         Starts the currency pair request for each given exchange.
 
@@ -96,10 +111,10 @@ class Scheduler:
             current_exchange = exchanges[response[0]]
             if response[1] is not None:
                 currency_pairs = current_exchange.format_currency_pairs(response)
-        logging.info('Done collection currency pairs.\n')
+        # logging.info('Done collection currency pairs.\n')
         print('Done collecting currency pairs.')
 
-    async def get_tickers(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+    async def get_tickers(self, method, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """
         Tries to request, filter and persist ticker data for the given exchanges and their currency pairs.
 
@@ -122,68 +137,39 @@ class Scheduler:
                         break
                 formatted_response = exchange.format_ticker(response)
                 if formatted_response:
-                    added_ticker_counter += self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
+                    added_ticker_counter += self.database_handler.persist_tickers(exchanges_with_pairs[exchange],
+                                                                                  formatted_response)
         logging.info('Done collecting ticker.')
         logging.info('Added {} Ticker tuple to the database.\n'.format(added_ticker_counter))
         print('Done collecting ticker.')
 
+    async def get_job_done(self,
+                           request_name: str,
+                           requst_table: object,
+                           exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
 
-    async def get_historic_rates(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-        # todo: funktioniert noch nicht. methode existiert nur aufgrund von refactoring
-        print('Starting to collect historic rates.')
-        logging.info('Starting to collect historic rates.')
-
-        responses = await asyncio.gather(
-            *(ex.request('historic_rates', exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys()))
-
-        added_tuple_counter = 0
-        for response in responses:
-            if response:
-                # print('Response: {}'.format(response))
-                exchange_name = response[0]
-                for exchange in exchanges_with_pairs.keys():
-                    if exchange.name.upper() == exchange_name.upper():
-                        break
-                formatted_response = exchange.format_historic_rates(response)
-
-                if formatted_response:
-                    added_tuple_counter += self.database_handler.persist_historic_rates(exchange_name,
-                                                                                        formatted_response)
-
-        print('Done collecting historic rates.')
-        # print('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
-        logging.info('Done collecting historic rates.\n')
-        # logging.info('Added {} Ticker tuple to the database.\n'.format(added_tuple_counter))
-
-
-    async def get_order_books(self, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-        """
-         Tries to request, filter and persist order-book data for the given exchanges and their currency pairs.
-
-         @param exchanges_with_pairs:
-             Dictionary with all the exchanges and the currency pairs that need to be queried.
-         """
-
-        print('Starting to collect order books.')
-        logging.info('Starting to collect order books')
+        print('Starting to collect {}.'.format(request_name))
+        logging.info('Starting to collect {}.'.format(request_name))
 
         responses = await asyncio.gather(
-            *(ex.request('order_books', exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+            *(ex.request(request_name, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
 
-        added_tuple_counter = 0
-
         for response in responses:
             if response:
                 exchange_name = response[0]
-
                 for exchange in exchanges_with_pairs.keys():
                     if exchange.name.upper == exchange_name.upper():
                         break
-                formatted_response = exchange.format_order_books(response)
 
-                if formatted_response:
-                    added_tuple_counter += self.database_handler.persist_order_books(exchange_name, formatted_response)
+                    formatted_response, mappings = exchange.format_data(request_name,
+                                                                        response)
 
-        print('Done collecting order books.')
-        logging.info('Done collecting order books.')
+                    if formatted_response:
+                        self.database_handler.general_persist(exchange_name,
+                                                              request_name,
+                                                              requst_table,
+                                                              formatted_response,
+                                                              mappings)
+        print('Done collecting {}.'.format(request_name))
+        logging.info('Done collecting {}.'.format(request_name))

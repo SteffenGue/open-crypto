@@ -5,8 +5,8 @@ general:
     user_name: bjarne
     password: ''
     host: localhost
-    port: 5432
-    db_name: hochfrequenz
+    port: 1234
+    db_name: test
   operation_settings:
     frequency: 1
   export:
@@ -33,7 +33,7 @@ jobs:
 #    first_currencies:
 #      - btc
 #    second_currencies:
-#
+
 #  historic_rates:
 #    yaml_request_name: historic_rates
 #    update_cp: False
@@ -47,7 +47,7 @@ jobs:
 #    second_currencies:
 ##      - eth
 
-
+#
   order_books:
     yaml_request_name: order_books
     update_cp: False
@@ -60,3 +60,29 @@ jobs:
 #      - btc
     second_currencies:
 #      - eth
+
+#  ohlcvm:
+#    yaml_request_name: ohlcvm
+#    update_cp: False
+#    exchanges:
+#      - coingecko
+#    currency_pairs:
+#      - first: bitcoin
+#        second: USD
+#    first_currencies:
+#      - None
+#    second_currencies:
+#      - None
+
+#  trades:
+#    yaml_request_name: trades
+#    update_cp: False
+#    exchanges:
+#      - binance
+#    currency_pairs:
+#      - first: ltc
+#        second: btc
+#    first_currencies:
+##      - btc
+#    second_currencies:
+##      - eth

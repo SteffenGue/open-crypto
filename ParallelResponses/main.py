@@ -14,42 +14,15 @@ from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 
 
-async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict, update_cp=True) -> List[Job]:
-    jobs: [Job] = list()
-    for job in job_config.keys():
-        job_params: Dict = job_config[job]
-
-        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
-        exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
-
-        for exchange_name in exchange_names:
-            # TODO: Error, wenn yaml nicht existiert
-            exchange: Exchange = Exchange(yaml_loader(exchange_name))
-
-            if job_params['update_cp'] is True:
-                await update_and_get_currency_pairs(exchange, job_params)
-            else:
-                exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
-                if exchanges_with_pairs[exchange] == []:
-                    await update_and_get_currency_pairs(exchange, job_params)
-
-
-            print('Done loading currency pairs.')
-            logging.info('Done loading currency pairs.')
-
-        new_job: Job = Job(job,
-                           job_params['yaml_request_name'],
-                           exchanges_with_pairs)
-        jobs.append(new_job)
-    return jobs
-
-
 async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
     response = await exchange.request_currency_pairs('currency_pairs')
+
     if response[1] is not None:
+        print('Updating Currency Pairs for {}...'.format(exchange.name.upper()))
+        # logging.info('Updating Currency Pairs for {}...'.format(exchange.name.upper()), end=" ")
         formatted_response = exchange.format_currency_pairs(response)
-        database_handler.persist_exchange_currency_pairs(formatted_response)
-        print('Updated Currency Pairs for {}'.format(exchange.name.upper()))
+        database_handler.persist_exchange_currency_pairs(formatted_response, is_exchange=False)
+
     return await get_currency_pairs(exchange, job_params)
 
 
@@ -64,6 +37,34 @@ async def get_currency_pairs(exchange: Exchange, job_params: Dict):
         job_params['second_currencies'])
     print('found {}'.format(len(exchange_currency_pairs)))
     return exchange_currency_pairs
+
+async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -> List[Job]:
+    jobs: [Job] = list()
+    for job in job_config.keys():
+        job_params: Dict = job_config[job]
+
+        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict()
+        exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
+
+        for exchange_name in exchange_names:
+            # TODO: Error, wenn yaml nicht existiert
+            exchange: Exchange = Exchange(yaml_loader(exchange_name))
+
+            if job_params['update_cp'] is True:
+                exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
+            else:
+                exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
+                if exchanges_with_pairs[exchange] == []:
+                    exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
+
+            print('Done loading currency pairs.')
+            logging.info('Done loading currency pairs.')
+
+        new_job: Job = Job(job,
+                           job_params['yaml_request_name'],
+                           exchanges_with_pairs)
+        jobs.append(new_job)
+    return jobs
 
 
 
@@ -86,9 +87,9 @@ async def main(database_handler: DatabaseHandler):
     frequency = read_config('operation_settings')['frequency']
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
-    print('{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+    print('{} were created and will run every {} minute(s).'.format(', '.join([job.name for job in jobs]), frequency))
     logging.info(
-        '{} were created and will run every {} minutes.'.format(', '.join([job.name for job in jobs]), frequency))
+        '{} were created and will run every {} minute(s).'.format(', '.join([job.name for job in jobs]), frequency))
 
     while True:
         await scheduler.start()

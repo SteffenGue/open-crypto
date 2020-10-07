@@ -88,7 +88,7 @@ requests:
           - 100
           - 500
           - 1000
-          default: 5
+          default: 10
       weight:
       # limit 5, 10, 20, 50, 100
       - 1
@@ -128,46 +128,46 @@ requests:
                 - str
                 - float
     mapping:
-    - key: order_books_time
+    - key: timestamp
       path: []
       type:
       - none
       - now
 
-    - key: order_books_id
+    - key: id
       path:
         - lastUpdateId
       type:
         - str
 
-    - key: order_books_position
+    - key: position
       path: []
       type:
         - none
-        - constant
-        - 1
-    - key: order_books_bids_price
+        - range
+        - 10
+    - key: bids_price
       path:
       - bids
       - 0
       type:
       - str
       - float
-    - key: order_books_bids_amount
+    - key: bids_amount
       path:
       - bids
       - 1
       type:
       - str
       - float
-    - key: order_books_asks_price
+    - key: asks_price
       path:
       - asks
       - 0
       type:
       - str
       - float
-    - key: order_books_asks_amount
+    - key: asks_amount
       path:
       - asks
       - 1
@@ -212,19 +212,24 @@ requests:
           isBestMatch:
             type: bool
     mapping:
-    - key: trade_last_price
+    - key: id
+      path:
+        - id
+      type:
+        - int
+    - key: price
       path:
       - price
       type:
       - str
       - float
-    - key: trade_amount
+    - key: amount
       path:
       - qty
       type:
       - str
       - float
-    - key: trade_time
+    - key: timestamp
       path:
       - time
       type:
