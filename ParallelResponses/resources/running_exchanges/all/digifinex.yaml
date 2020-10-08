@@ -52,7 +52,6 @@ requests:
       template: ticker
       pair_template: null
       params: null
-    
     response:
       type: dict
       values:

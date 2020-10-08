@@ -13,74 +13,26 @@ general:
     export_data_to_csv: true
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/currency_pairs/
     enable_logging: True
 
 jobs:
-  tickers:
-    yaml_request_name: ticker
-    update_cp: False
-    exchanges:
-      - binance
-      - coinall
-    currency_pairs:
-      - first: btc
-        second: usdt
-    first_currencies:
-      - null
-    second_currencies:
-      - null
+ collecting_ticker:
+   yaml_request_name: ticker
+   update_cp: true
+   exchanges:
+    - bittrex
+   currency_pairs:
+   first_currencies:
+     - eth #checken, dass es für bittrex nur 4 cps gibt wenn nur eth als first
+   second_currencies:
 
-
-#  historic_rates:
-#    yaml_request_name: historic_rates
-#    update_cp: False
-#    exchanges:
-#      - bibox
-#    currency_pairs:
-#      - first: eth
-#        second: btc
-#    first_currencies:
-##      - btc
-#    second_currencies:
-##      - eth
-
-
-  order_books:
-    yaml_request_name: order_books
-    update_cp: False
-    exchanges:
-      - binance
-    currency_pairs:
-      - first: ltc
-        second: btc
-    first_currencies:
-#      - btc
-    second_currencies:
-#      - eth
-
-#  ohlcvm:
-#    yaml_request_name: ohlcvm
-#    update_cp: False
-#    exchanges:
-#      - coingecko
-#    currency_pairs:
-#      - first: bitcoin
-#        second: USD
-#    first_currencies:
-#      - None
-#    second_currencies:
-#      - None
-#
-#  trades:
-#    yaml_request_name: trades
-#    update_cp: true
-#    exchanges:
-#      - binance
-#    currency_pairs:
-#      - first: ltc
-#        second: btc
-#    first_currencies:
-##      - btc
-#    second_currencies:
-##      - eth
+# collecting_rates:
+#   yaml_request_name: historic_rates
+#   update_cp: False
+#   exchanges:
+#     - atilly
+#   currency_pairs:
+#   first_currencies:
+#     - eth
+#   second_currencies:

@@ -583,6 +583,7 @@ class Exchange:
                 temp_results[mapping.key] = mapping.extract_value(current_response,
                                                                   currency_pair_info=currency_pair_info)
                 if not hasattr(temp_results[mapping.key], "__iter__") or isinstance(temp_results[mapping.key], str):
+                    #if only one value extracted wrap in list
                     temp_results[mapping.key] = [temp_results[mapping.key]]
 
             result = list(itertools.zip_longest(itertools.repeat(response[0], len(temp_results['currency_pair_first'])),

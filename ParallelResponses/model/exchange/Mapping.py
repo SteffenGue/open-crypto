@@ -86,7 +86,6 @@ class Mapping:
                 for number in range(0, conversion["params"]):
                     params.append(types_queue.popleft())
 
-
             if not result and isinstance(result, (str, list)):
                 result = None
             else:
@@ -137,7 +136,7 @@ class Mapping:
             traversed = response[currency_pair_info[2]]
         elif is_scalar(response):
             return None
-        else: #Hier editiert für Kraken sonderfall
+        else:  # Hier editiert für Kraken sonderfall
             if isinstance(response, dict):
                 if path_element in response.keys():
                     traversed = response[path_element]
@@ -174,11 +173,8 @@ class Mapping:
             Can be a list of values which get extracted iteratively from
             the response.
         """
-        #print(types_queue)
-        #print(self.key)
-
-
-
+        # print(types_queue)
+        # print(self.key)
         if path_queue is None:
             path_queue = deque(self.path)
 
@@ -190,16 +186,19 @@ class Mapping:
 
 
         if not path_queue:
+            if types_queue[0] == 'first_currency':
+                return currency_pair_info[0]
+            elif types_queue[0] == 'second_currency':
+                return currency_pair_info[1]
             return self.convert_type(None, types_queue)
 
         while path_queue:
 
-            if iterate and \
-                    isinstance(response, list):
+            if iterate and isinstance(response, list):
                 # Iterate through list of results
                 result = list()
 
-                #TODO: HIER HAST DU WAS GEÄNDERT
+                # TODO: HIER HAST DU WAS GEÄNDERT
                 # if len(response) == 1:
                 #     response = response[0]
                 # else:
@@ -223,7 +222,7 @@ class Mapping:
                 # print("")
                 # print("")
                 return result
-                #bis hier war in else
+                # bis hier war in else
 
             elif is_scalar(response):
                 # Return converted scalar value
@@ -247,15 +246,14 @@ class Mapping:
                 response = result
 
             else:
-                if types_queue[0] == 'first_currency':
-                    response = currency_pair_info[0]
-                elif types_queue[0] == 'second_currency':
-                    response = currency_pair_info[1]
-                else:
-                    response = self.convert_type(response, types_queue)
+                # if types_queue[0] == 'first_currency':
+                #     response = currency_pair_info[0]
+                # elif types_queue[0] == 'second_currency':
+                #     response = currency_pair_info[1]
+                # else:
+                response = self.convert_type(response, types_queue)
 
         return response
-
 
     def __str__(self) -> str:
         """String representation of a Mapping"""

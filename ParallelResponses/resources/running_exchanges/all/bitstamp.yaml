@@ -54,22 +54,6 @@ requests:
       - split
       - "/"
       - 1
-#    - key: currency_name
-#      path:
-#      - description
-#      - 0
-#      type:
-#      - str
-#      - split
-#      - "/"
-#    - key: currency_name
-#      path:
-#      - description
-#      - 1
-#      type:
-#      - str
-#      - split
-#      - "/"
 
   ticker:
     request:
@@ -119,6 +103,14 @@ requests:
           - str
           - float
     mapping:
+    - key: currency_pair_first
+      path: []
+      type:
+        - first_currency
+    - key: currency_pair_second
+      path: []
+      type:
+        - second_currency
     - key: ticker_last_price
       path:
       - last
@@ -150,6 +142,113 @@ requests:
       - str
       - int
       - fromtimestamp
+
+  historic_rates:
+    request:
+      template: ohlc/{currency_pair}/
+      pair_template:
+        template: '{first}{second}'
+        lower_case: true
+      params:
+        step:
+          type: int
+          allowed:
+            - 60
+            - 180
+            - 300
+            - 900
+            - 1800
+            - 3600
+            - 7200
+            - 14400
+            - 21600
+            - 43200
+            - 86400
+            - 259200
+          default: 21600
+        limit:
+          type: int
+          default: 1000 #limit between 1 and 1000
+    response:
+      type: dict
+      values:
+        data:
+          type: dict
+          values:
+            pair:
+              - str
+            ohlc:
+              type: list
+              values:
+                high:
+                  - str
+                  - float
+                timestamp:
+                  - str
+                  - int
+                  - fromtimestamp
+                volume:
+                  - str
+                  - float
+                low:
+                  - str
+                  - float
+                open:
+                  - str
+                  - float
+                close:
+                  - str
+                  - float
+    mapping:
+      - key: historic_rates_open
+        path:
+          - data
+          - ohlc
+          - open
+        type:
+          - str
+          - float
+      - key: historic_rates_close
+        path:
+          - data
+          - ohlc
+          - close
+        type:
+          - str
+          - float
+      - key: historic_rates_high
+        path:
+          - data
+          - ohlc
+          - high
+        type:
+          - str
+          - float
+      - key: historic_rates_close
+        path:
+          - data
+          - ohlc
+          - close
+        type:
+          - str
+          - float
+      - key: historic_rates_volume
+        path:
+          - data
+          - ohlc
+          - volume
+        type:
+          - str
+          - float
+      - key: historic_rates_time
+        path:
+          - data
+          - ohlc
+          - timestamp
+        type:
+          - str
+          - int
+          - fromtimestamp
 
   # order_book:
     # request:
