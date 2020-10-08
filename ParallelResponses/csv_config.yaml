@@ -9,13 +9,14 @@ database:
 
 export:
   save_path: resources/csv/
-  filename: my_own_csv
+#  filename: my_own_csv
   delimiter: ","
 
 query_options:
+  table_name: OrderBook
   query_everything: true
-  from_timestamp: #01-09-2020 13:20:00
-  to_timestamp: 01-09-2020 13:26:00
+  from_timestamp: 01-09-2020 13:20:00
+  to_timestamp:
   exchanges:
 #    - kucoin
   first_currencies:

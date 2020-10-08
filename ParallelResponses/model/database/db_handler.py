@@ -5,12 +5,13 @@ from contextlib import contextmanager
 import tqdm
 import psycopg2
 import sqlalchemy
+from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError
-from sqlalchemy.orm import sessionmaker, Session, Query, aliased
+from sqlalchemy.orm import sessionmaker, Session, Query, aliased, joinedload
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
+from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
 
 
 class DatabaseHandler:
@@ -53,7 +54,7 @@ class DatabaseHandler:
             Information about the table-structure of the database.
             See tables.py for more information.
         @param sqltype: atr
-            Type of the database sql-dialect. ('postgresql' for us)
+            Type of the database sql-dialect. ('postgresql, sqlite' for us)
         @param client: str
             Name of the Client which is used to connect to the database.
         @param user_name: str
@@ -76,7 +77,7 @@ class DatabaseHandler:
 
         if not database_exists(engine.url):
             create_database(engine.url)
-            print(f"Database '{db_name}' created")
+            print(f"Database '{db_name}' created", end="\n\n")
             logging.info(f"Database '{db_name}' created")
 
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
@@ -101,25 +102,12 @@ class DatabaseHandler:
         finally:
             session.close()
 
-    @contextmanager
-    def session_query_scope(self):
-        """Provide a transactional scope around a series of operations."""
-        session = self.sessionFactory()
-        try:
-            yield session
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-
 
     def persist_tickers(self,
                         queried_currency_pairs: List[ExchangeCurrencyPair],
                         tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
-        TUPLES MUST HAVE THE DESCRIBED STRUCTURE STATED BELOW
 
         The method checks for each tuple if the referenced exchange and
         currencies exist in the database.
@@ -137,7 +125,7 @@ class DatabaseHandler:
             Tuple must have the following structure:
                 (exchange-name,
                  start_time,
-                 response_time,
+                 time,
                  first_currency_symbol,
                  second_currency_symbol,
                  ticker_last_price,
@@ -146,6 +134,7 @@ class DatabaseHandler:
                  ticker_daily_volume)
         @param queried_currency_pairs: List of all queried ExchangeCurrencyPairs from the database
         """
+
         with self.session_scope() as session:
             tuple_counter: int = 0
             for ticker in tickers:
@@ -157,15 +146,15 @@ class DatabaseHandler:
                         ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                               exchange_pair=exchange_currency_pair,
                                               start_time=ticker[1],
-                                              response_time=ticker[2],
+                                              time=ticker[2],
                                               last_price=ticker[5],
                                               best_ask=ticker[6],
                                               best_bid=ticker[7],
                                               daily_volume=ticker[8])
                         tuple_counter += 1
                         session.add(ticker_tuple)
-            print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
-            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
+            print('{} ticker added for {}.'.format(tuple_counter, ticker[0].capitalize()))
+            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0].capitalize()))
             return tuple_counter
 
     def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
@@ -176,12 +165,14 @@ class DatabaseHandler:
             List of all currency-pairs for the given exchange.
         """
         # todo : session factory -> session scope
-        with self.session_query_scope() as session:
+        with self.session_scope() as session:
+            # session.expire_on_commit = False
             currency_pairs = list()
-            exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).scalar()
+            exchange_id: int = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).scalar()
             if exchange_id is not None:
                 currency_pairs = session.query(ExchangeCurrencyPair).filter(
                     ExchangeCurrencyPair.exchange_id.__eq__(exchange_id)).all()
+                session.expunge_all()
             return currency_pairs
 
     def get_currency_pairs_with_first_currency(self, exchange_name: str, currency_names: [str]) \
@@ -203,7 +194,7 @@ class DatabaseHandler:
         if exchange_name is not None and exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
-            with self.session_query_scope() as session:
+            with self.session_scope() as session:
                 if currency_names is not None:
                     for currency_name in currency_names:
                         if currency_name is not None and currency_name:
@@ -238,7 +229,7 @@ class DatabaseHandler:
         if exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
-            with self.session_query_scope() as session:
+            with self.session_scope() as session:
                 if currency_names is not None:
                     for currency_name in currency_names:
                         if currency_name:
@@ -273,7 +264,7 @@ class DatabaseHandler:
 
         if exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
-            with self.session_query_scope() as session:
+            with self.session_scope() as session:
                 if currency_pairs is not None:
                     for currency_pair in currency_pairs:
                         first_currency = currency_pair['first']
@@ -295,6 +286,7 @@ class DatabaseHandler:
 
     def get_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]],
                                      first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
+
         """
         Collects and returns all currency pairs for the given exchange that either have any
         of the currencies of first_currencies/second_currencies as a currency as
@@ -328,7 +320,6 @@ class DatabaseHandler:
         found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
         result: List = list()
 
-
         for pair in found_currency_pairs:
             if not any(pair.id == result_pair.id for result_pair in result):
                 result.append(pair)
@@ -344,19 +335,22 @@ class DatabaseHandler:
             Id of the given exchange or None if no exchange with the given name exists
             in the database.
         """
-        with self.session_query_scope() as session:
+
+        with self.session_scope() as session:
             return session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).scalar()
 
     def get_currency_id(self, currency_name: str):
         """
         Gets the id of a currency.
+
         @param currency_name:
             Name of the currency.
         @return:
             Id of the given currency or None if no currency with the given name exists
             in the database.
         """
-        with self.session_query_scope() as session:
+
+        with self.session_scope() as session:
             return session.query(Currency.id).filter(Currency.name.__eq__(currency_name.upper())).scalar()
 
     def persist_exchange(self, exchange_name: str, is_exchange: bool):
@@ -367,13 +361,12 @@ class DatabaseHandler:
             Name that should is to persist.
         @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
-        session = self.sessionFactory()
-        exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
-        if exchange_id is None:
-            exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
-            session.add(exchange)
-            session.commit()
-        session.close()
+
+        with self.session_scope() as session:
+            exchange_id = session.query(Exchange.id).filter(Exchange.name.__eq__(exchange_name.upper())).first()
+            if exchange_id is None:
+                exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
+                session.add(exchange)
 
     # ToDo: den boolean 'is_exchange' in jedes *.yaml-file schreiben.
     # ToDo: alle persist methoden überprüfen ob der boolean 'is_exchange' implementiert ist.
@@ -389,11 +382,12 @@ class DatabaseHandler:
             Iterator of currency-pair tuple that are to persist.
         @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
+
         if currency_pairs is not None:
 
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             with self.session_scope() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs)<10)):
+                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 10)):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
@@ -477,14 +471,15 @@ class DatabaseHandler:
                                                         ExchangeCurrencyPair.second.__eq__(second)).first()
         return cp
 
-    def general_persist(self, exchange_name: str, method: str, request_table, data: Iterable, mappings: List):
-
-        # db_table = {'tickers': Ticker,
-        #                           'historic_rates': HistoricRate,
-        #                           'order_books': OrderBook,
-        #                           'ohlcvm': OHLCVM,
-        #                           'trades': Trade}
-        db_table = request_table
+    def general_persist(self, exchange_name: str, method: str, db_table, data: Iterable, mappings: List):
+        """
+        #ToDo: Doku schreiben
+        @param exchange_name:
+        @param method:
+        @param db_table:
+        @param data:
+        @param mappings:
+        """
 
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
@@ -515,79 +510,77 @@ class DatabaseHandler:
         print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.capitalize()))
         logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.capitalize()))
 
-    def get_readable_tickers(self,
-                             query_everything: bool,
-                             from_timestamp: datetime,
-                             to_timestamp: datetime,
-                             exchanges: List[str],
-                             currency_pairs: List[Dict[str, str]],
-                             first_currencies: List[str],
-                             second_currencies: List[str]):
-        """
-        Queries based on the parameters readable ticker data and returns it.
-        If query_everything is true, everything ticker tuple will be returned.
-        This is also the case if query_everything is false but there were no
-        exchanges or currencies/currency pairs given.
-        If exchanges are given only tuples of these given exchanges will be returned.
-        If there are no currencies/currency pairs given,
-        all ticker-tuple of the given exchange will be returned.
-        If currencies are given note that only ticker tuple with currency pairs,
-        which have either any currency in first_currencies as first OR any currency
-        in second_currencies as second OR any currency pairs in currency_pairs will be returned.
-        If timestamps are given the queried tuples will be filtered accordingly.
+    def get_readable_query(self,
+                           db_table: object,
+                           query_everything: bool,
+                           from_timestamp: datetime,
+                           to_timestamp: datetime,
+                           exchanges: List[str],
+                           currency_pairs: List[Dict[str, str]],
+                           first_currencies: List[str],
+                           second_currencies: List[str]):
 
-        So query logic for each tuple is (if exchange, currencies and time are given):
-            exchange AND (first OR second OR pair) AND from_time AND to_time
-
-        See csv-config for details of how to write/give parameters.
-        @param query_everything: bool
-            If everything in the database should be queried.
-        @param from_timestamp: datetime
-            Minimum date for the start of the request.
-        @param to_timestamp: datetime
-            Maximum date for the start of the request.
-        @param exchanges: List[str]
-            List of exchanges of which the tuple should be queried.
-        @param currency_pairs: List[Dict[str, str]]
-            List of specific currency pairs that should be queried.
-            Dict needs to have the following structure:
-                - first: 'Name of the first currency'
-                  second: 'Name of the second currency'
-        @param first_currencies: List[str]
-            List of viable currencies for the first currency in a currency pair.
-        @param second_currencies: List[str]
-            List of viable currencies for the second currency in a currency pair.
-        @return:
-            List of readable ticker tuple.
-            List might be empty if database is empty or there where no ExchangeCurrencyPairs
-            which fulfill the above stated requirements.
         """
-        result = []
+             Queries based on the parameters readable database data and returns it.
+             If query_everything is true, everything ticker tuple will be returned.
+             This is also the case if query_everything is false but there were no
+             exchanges or currencies/currency pairs given.
+             If exchanges are given only tuples of these given exchanges will be returned.
+             If there are no currencies/currency pairs given,
+             all ticker-tuple of the given exchange will be returned.
+             If currencies are given note that only ticker tuple with currency pairs,
+             which have either any currency in first_currencies as first OR any currency
+             in second_currencies as second OR any currency pairs in currency_pairs will be returned.
+             If timestamps are given the queried tuples will be filtered accordingly.
+
+             So query logic for each tuple is (if exchange, currencies and time are given):
+                 exchange AND (first OR second OR pair) AND from_time AND to_time
+
+             See csv-config for details of how to write/give parameters.
+             @param db_table: object
+                 The respective object of the table to be queried (i.e. Ticker, Trade,...).
+             @param query_everything: bool
+                 If everything in the database should be queried.
+             @param from_timestamp: datetime
+                 Minimum date for the start of the request.
+             @param to_timestamp: datetime
+                 Maximum date for the start of the request.
+             @param exchanges: List[str]
+                 List of exchanges of which the tuple should be queried.
+             @param currency_pairs: List[Dict[str, str]]
+                 List of specific currency pairs that should be queried.
+                 Dict needs to have the following structure:
+                     - first: 'Name of the first currency'
+                       second: 'Name of the second currency'
+             @param first_currencies: List[str]
+                 List of viable currencies for the first currency in a currency pair.
+             @param second_currencies: List[str]
+                 List of viable currencies for the second currency in a currency pair.
+             @return:
+                 List of readable database tuple.
+                 List might be empty if database is empty or there where no ExchangeCurrencyPairs
+                 which fulfill the above stated requirements.
+             """
+
         with self.session_scope() as session:
             first = aliased(Currency)
             second = aliased(Currency)
+            col_names = [key.name for key in inspect(db_table).columns]
+
             data: Query = session.query(Exchange.name.label('exchange'),
                                         first.name.label('first_currency'),
                                         second.name.label('second_currency'),
-                                        Ticker.start_time,
-                                        Ticker.response_time,
-                                        Ticker.last_price,
-                                        Ticker.best_ask,
-                                        Ticker.best_bid,
-                                        Ticker.daily_volume). \
-                join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id). \
+                                        db_table). \
+                join(ExchangeCurrencyPair, db_table.exchange_pair_id == ExchangeCurrencyPair.id). \
                 join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id). \
                 join(first, ExchangeCurrencyPair.first_id == first.id). \
-                join(second, ExchangeCurrencyPair.second_id == second.id)
+                join(second, ExchangeCurrencyPair.second_id == second.id)#.options(joinedload('exchange_pair'))
+
+            # data = data.options(undefer('*'))
 
             if query_everything:
-                result = data.all()
+                result = pd_read_sql_query(data.statement, con=session.bind)
             else:
-                exchange_names = list()
-                first_currency_names = list()
-                second_currency_names = list()
-                currency_pairs_names = list()
-
                 if exchanges:
                     exchange_names = [name.upper() for name in exchanges]
                 else:
@@ -613,11 +606,12 @@ class DatabaseHandler:
                 ))
 
                 if from_timestamp:
-                    result = result.filter(Ticker.start_time >= from_timestamp)
+                    result = result.filter(db_table.time >= from_timestamp)
                 if to_timestamp:
-                    result = result.filter(Ticker.start_time <= to_timestamp)
+                    result = result.filter(db_table.time <= to_timestamp)
 
-                result = result.all()
+                result = pd_read_sql_query(data.statement, con=session.bind)
+            session.expunge_all()
         return result
 
     # Methods that are currently not used but might be useful:
@@ -637,3 +631,111 @@ class DatabaseHandler:
     # def get_all_exchange_names(self) -> List[str]:
     #     with self.session_scope() as session:
     #         return [r[0] for r in session.query(Exchange.name).all()]
+
+
+
+    # def get_readable_tickers(self,
+    #                          query_everything: bool,
+    #                          from_timestamp: datetime,
+    #                          to_timestamp: datetime,
+    #                          exchanges: List[str],
+    #                          currency_pairs: List[Dict[str, str]],
+    #                          first_currencies: List[str],
+    #                          second_currencies: List[str]):
+    #     """
+    #     Queries based on the parameters readable ticker data and returns it.
+    #     If query_everything is true, everything ticker tuple will be returned.
+    #     This is also the case if query_everything is false but there were no
+    #     exchanges or currencies/currency pairs given.
+    #     If exchanges are given only tuples of these given exchanges will be returned.
+    #     If there are no currencies/currency pairs given,
+    #     all ticker-tuple of the given exchange will be returned.
+    #     If currencies are given note that only ticker tuple with currency pairs,
+    #     which have either any currency in first_currencies as first OR any currency
+    #     in second_currencies as second OR any currency pairs in currency_pairs will be returned.
+    #     If timestamps are given the queried tuples will be filtered accordingly.
+    #
+    #     So query logic for each tuple is (if exchange, currencies and time are given):
+    #         exchange AND (first OR second OR pair) AND from_time AND to_time
+    #
+    #     See csv-config for details of how to write/give parameters.
+    #     @param query_everything: bool
+    #         If everything in the database should be queried.
+    #     @param from_timestamp: datetime
+    #         Minimum date for the start of the request.
+    #     @param to_timestamp: datetime
+    #         Maximum date for the start of the request.
+    #     @param exchanges: List[str]
+    #         List of exchanges of which the tuple should be queried.
+    #     @param currency_pairs: List[Dict[str, str]]
+    #         List of specific currency pairs that should be queried.
+    #         Dict needs to have the following structure:
+    #             - first: 'Name of the first currency'
+    #               second: 'Name of the second currency'
+    #     @param first_currencies: List[str]
+    #         List of viable currencies for the first currency in a currency pair.
+    #     @param second_currencies: List[str]
+    #         List of viable currencies for the second currency in a currency pair.
+    #     @return:
+    #         List of readable ticker tuple.
+    #         List might be empty if database is empty or there where no ExchangeCurrencyPairs
+    #         which fulfill the above stated requirements.
+    #     """
+    #
+    #     with self.session_scope() as session:
+    #         first = aliased(Currency)
+    #         second = aliased(Currency)
+    #         data: Query = session.query(Exchange.name.label('exchange'),
+    #                                     first.name.label('first_currency'),
+    #                                     second.name.label('second_currency'),
+    #                                     Ticker.start_time,
+    #                                     Ticker.time,
+    #                                     Ticker.last_price,
+    #                                     Ticker.best_ask,
+    #                                     Ticker.best_bid,
+    #                                     Ticker.daily_volume). \
+    #             join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id). \
+    #             join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id). \
+    #             join(first, ExchangeCurrencyPair.first_id == first.id). \
+    #             join(second, ExchangeCurrencyPair.second_id == second.id)
+    #
+    #         if query_everything:
+    #             result = data.all()
+    #         else:
+    #             exchange_names = list()
+    #             first_currency_names = list()
+    #             second_currency_names = list()
+    #             currency_pairs_names = list()
+    #
+    #             if exchanges:
+    #                 exchange_names = [name.upper() for name in exchanges]
+    #             else:
+    #                 exchange_names = [r[0] for r in session.query(Exchange.name)]
+    #             if not first_currencies and not second_currencies and not currency_pairs:
+    #                 first_currency_names = [r[0] for r in session.query(Currency.name)]
+    #             else:
+    #                 if first_currencies:
+    #                     first_currency_names = [name.upper() for name in first_currencies]
+    #                 if second_currencies:
+    #                     second_currency_names = [name.upper() for name in second_currencies]
+    #                 if currency_pairs:
+    #                     currency_pairs_names = [(pair['first'].upper(), pair['second'].upper()) for pair in
+    #                                             currency_pairs]
+    #
+    #             result = data.filter(and_(
+    #                 Exchange.name.in_(exchange_names),
+    #                 or_(
+    #                     first.name.in_(first_currency_names),  # first currency
+    #                     second.name.in_(second_currency_names),  # second currency
+    #                     tuple_(first.name, second.name).in_(currency_pairs_names)  # currency_pair
+    #                 ),
+    #             ))
+    #
+    #             if from_timestamp:
+    #                 result = result.filter(Ticker.start_time >= from_timestamp)
+    #             if to_timestamp:
+    #                 result = result.filter(Ticker.start_time <= to_timestamp)
+    #
+    #             result = result.all()
+    #     return result
+

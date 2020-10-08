@@ -150,7 +150,7 @@ class Ticker(Base):
     exchange_pair = relationship('ExchangeCurrencyPair', backref="tickers")
 
     start_time = Column(DateTime)
-    response_time = Column(DateTime, primary_key=True)
+    time = Column(DateTime, primary_key=True)
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
@@ -162,7 +162,7 @@ class Ticker(Base):
                                                   self.exchange_pair.first.name,
                                                   self.exchange_pair.second.name,
                                                   self.last_price,
-                                                  self.start_time)
+                                                  self.time)
 
 
 class HistoricRate(Base):
@@ -230,7 +230,7 @@ class Trade(Base):
                                                                     self.exchange_pair.second.name,
                                                                     self.amount,
                                                                     self.price,
-                                                                    self.timestamp)
+                                                                    self.time)
 
     @validates('direction')
     def convert_upper(self, key, value):
@@ -289,8 +289,6 @@ class OHLCVM(Base):
     mcap = Column(Float)
 
 
-
-
 class ExchangeCurrencyPairView(Base):
     """
     View vor ExchangeCurrencyPairs.
@@ -333,7 +331,7 @@ class TickersView(Base):
                 first.name.label('first_currency'),
                 second.name.label('second_currency'),
                 Ticker.start_time,
-                Ticker.response_time,
+                Ticker.time,
                 Ticker.last_price,
                 Ticker.best_ask,
                 Ticker.best_bid,

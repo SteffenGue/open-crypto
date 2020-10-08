@@ -24,4 +24,4 @@ setup(**CONFIG, install_requires=['sqlalchemy',
                                   'aiohttp',
                                   'psycopg2',
                                   'aioschedule',
-                                  'aiohttp', 'tqdm'])
+                                  'aiohttp', 'tqdm', 'dateutil', 'pandas'])

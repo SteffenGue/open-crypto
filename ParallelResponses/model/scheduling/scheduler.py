@@ -112,7 +112,7 @@ class Scheduler:
             if response[1] is not None:
                 currency_pairs = current_exchange.format_currency_pairs(response)
         # logging.info('Done collection currency pairs.\n')
-        print('Done collecting currency pairs.')
+        # print('Done collecting currency pairs.')
 
     async def get_tickers(self, method, table, exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """
@@ -127,10 +127,8 @@ class Scheduler:
         responses = await asyncio.gather(
             *(ex.request_tickers('ticker', start_time, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys()))
 
-        added_ticker_counter = 0
         for response in responses:
             if response:
-                # print('Response: {}'.format(response))
                 exchange_name = response[0]
                 for exchange in exchanges_with_pairs.keys():
                     if exchange.name.upper() == exchange_name.upper():
@@ -140,14 +138,14 @@ class Scheduler:
                     self.database_handler.persist_tickers(exchanges_with_pairs[exchange],
                                                           formatted_response)
         logging.info('Done collecting ticker.')
-        print('Done collecting ticker.')
+        print('Done collecting ticker.', end="\n\n")
 
     async def get_job_done(self,
                            request_name: str,
                            requst_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
 
-        print('Starting to collect {}.'.format(request_name))
+        print('Starting to collect {}.'.format(request_name), end="\n\n")
         logging.info('Starting to collect {}.'.format(request_name))
 
         responses = await asyncio.gather(
@@ -170,5 +168,5 @@ class Scheduler:
                                                               requst_table,
                                                               formatted_response,
                                                               mappings)
-        print('Done collecting {}.'.format(request_name))
+        print('Done collecting {}.'.format(request_name), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name))
