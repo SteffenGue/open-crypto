@@ -119,38 +119,38 @@ requests:
             type: str    
 
     mapping:
-    - key: historic_rates_time
+    - key: time
       path: 
       - timestamp
       type:
       - str
       - strptime
       - '%Y-%m-%dT%H:%M:%S.%fZ'
-    - key: historic_rates_open
+    - key: open
       path:
       - open
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - close
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - max
       type:
       - str
       - float      
-    - key: historic_rates_low
+    - key: low
       path:
       - min
       type:
       - str
       - float      
-    - key: historic_rates_volume
+    - key: volume
       path:
       - volume
       type:

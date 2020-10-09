@@ -103,7 +103,6 @@ requests:
                 type: float
               InfoMassage: 
                 type: str
-
     mapping:
     - key: currency_pair_first
       path:
@@ -117,6 +116,8 @@ requests:
       - BaseAsset
       type:
       - str
+
+
   ticker:
     request:
       template: public/getticker
@@ -146,6 +147,24 @@ requests:
               Last:
                 type: float
     mapping:
+      - key: currency_pair_first
+        path:
+          - result
+          - Market
+        type:
+          - str
+          - split
+          - '_'
+          - 0
+      - key: currency_pair_second
+        path:
+          - result
+          - Market
+        type:
+          - str
+          - split
+          - '_'
+          - 1
       - key: ticker_time
         path: []      
         type:
@@ -170,113 +189,6 @@ requests:
         type:
         - float
         
-        
-#  ticker:  #e.g. 24h Summaries
-#    request:
-#      template: public/getmarketsummaries/
-#      pair_template: null
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        success:
-#          type: bool
-#        message:
-#          type: str
-#        result:
-#          type: list
-#          values:
-#            type: dict
-#            values:
-#              MarketCurrency:
-#                type: str
-#              BaseCurrency:
-#                type: str
-#              MarketName:
-#                type: str
-#              PrevDay:
-#                type:
-#                - str
-#                - float
-#              High:
-#                type:
-#                - str
-#                - float
-#              Low:
-#                type:
-#                - str
-#                - float
-#              Last:
-#                type:
-#                - str
-#                - float
-#              Average:
-#                type:
-#                - str
-#                - float
-#              Volume:
-#                type:
-#                - str
-#                - float
-#              BaseVolume:
-#                type:
-#                - str
-#                - float
-#              TimeStamp:
-#                type:
-#                - str
-#                - strptime
-#                - "%Y-%m-%d %H:%M:%SZ"
-#              Bid:
-#                type:
-#                - str
-#                - float
-#              Ask:
-#                type:
-#                - str
-#                - float
-#              IsActive:
-#                type:
-#                - str
-#                - boolean
-#    mapping:
-#    - key: ticker_last_price
-#      path:
-#      - result
-#      - Last
-#      type:
-#      - str
-#      - float
-#    - key: ticker_daily_volume
-#      path:
-#      - result
-#      - Volume
-#      type:
-#      - str
-#      - float
-#    - key: ticker_time
-#      path:
-#      - result
-#      - TimeStamp
-#      type:
-#      - str
-#      - strptime
-#      - "%Y-%m-%d %H:%M:%SZ"
-#    - key: ticker_best_bid
-#      path:
-#      - result
-#      - Bid
-#      type:
-#      - str
-#      - float
-#    - key: ticker_best_ask
-#      path:
-#      - result
-#      - Ask
-#      type:
-#      - str
-#      - float
-
   # order_book:
     # request:
       # template: public/getorderbook
@@ -485,7 +397,7 @@ requests:
                 - str
                 - float
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - result
       - TimeStamp
@@ -493,35 +405,35 @@ requests:
       - str
       - strptime
       - "%Y-%m-%d %H:%M:%S"
-    - key: historic_rates_open
+    - key: open
       path:
       - result
       - Open
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - result
       - High
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - result
       - Low
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - result
       - Close
       type:
       - str
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - result
       - Volume

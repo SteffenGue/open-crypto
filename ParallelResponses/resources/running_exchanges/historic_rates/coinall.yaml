@@ -147,7 +147,7 @@ requests:
           5: #volume
             type: str
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - []
       - 0
@@ -155,35 +155,35 @@ requests:
       - str
       - strptime
       - "%Y-%m-%dT%H:%M:%S.%fz"
-    - key: historic_rates_open
+    - key: open
       path:
       - []
       - 1
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - []
       - 2
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - []
       - 3
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - []
       - 4
       type:
       - str
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - []
       - 5

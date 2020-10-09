@@ -125,42 +125,42 @@ requests:
         ver:
           type: str
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - result
       - time
       type:
       - int
       - fromtimestampms
-    - key: historic_rates_open
+    - key: open
       path:
       - result
       - open
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - result
       - high
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - result
       - low
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - result
       - close
       type:
       - str
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - result
       - vol

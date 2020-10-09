@@ -292,33 +292,33 @@ requests:
           5: # volume
             type: float
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - 0
       type:
       - int
       - fromtimestamp
-    - key: historic_rates_open
+    - key: open
       path:
       - 1
       type:
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - 2
       type:
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - 3
       type:
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - 4
       type:
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - 5
       type:

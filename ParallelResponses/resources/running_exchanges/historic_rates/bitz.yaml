@@ -439,7 +439,7 @@ requests:
         source:
           type: str
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - data
       - bars
@@ -448,7 +448,7 @@ requests:
       - str
       - int
       - fromtimestampms
-    - key: historic_rates_open
+    - key: open
       path:
       - data
       - bars
@@ -456,7 +456,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - data
       - bars
@@ -464,7 +464,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - data
       - bars
@@ -472,7 +472,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - data
       - bars
@@ -480,7 +480,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - data
       - bars

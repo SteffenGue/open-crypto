@@ -200,7 +200,7 @@ requests:
                   - str
                   - float
     mapping:
-      - key: historic_rates_open
+      - key: open
         path:
           - data
           - ohlc

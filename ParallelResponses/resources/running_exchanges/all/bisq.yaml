@@ -207,31 +207,31 @@ requests:
             - str
             - float
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - period_start
       type:
       - int
       - fromtimestamp
-    - key: historic_rates_open
+    - key: open
       path:
       - open
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - high
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - low
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - close
       type:

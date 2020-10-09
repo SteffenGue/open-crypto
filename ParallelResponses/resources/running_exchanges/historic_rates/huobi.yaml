@@ -128,38 +128,38 @@ requests:
               vol:
                 type: float
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - data
       - id
       type:
       - int
       - fromtimestamp
-    - key: historic_rates_open
+    - key: open
       path:
       - data
       - open
       type:
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - data
       - close
       type:
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - data
       - low
       type:
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - data
       - high
       type:
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - data
       - vol
