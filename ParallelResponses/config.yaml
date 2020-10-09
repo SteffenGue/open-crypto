@@ -46,18 +46,18 @@ jobs:
 ##      - eth
 
 
-  order_books:
-    yaml_request_name: order_books
-    update_cp: False
-    exchanges:
-      - binance
-    currency_pairs:
-      - first: ltc
-        second: btc
-    first_currencies:
-#      - btc
-    second_currencies:
-#      - eth
+#  order_books:
+#    yaml_request_name: order_books
+#    update_cp: False
+#    exchanges:
+#      - binance
+#    currency_pairs:
+#      - first: ltc
+#        second: btc
+#    first_currencies:
+##      - btc
+#    second_currencies:
+##      - eth
 
 #  ohlcvm:
 #    yaml_request_name: ohlcvm

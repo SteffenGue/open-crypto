@@ -12,6 +12,16 @@ from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
+import signal
+
+def signal_handler(signal, frame):
+    """
+    Helper function to exit the program. When strg+c is hit, the program will shut down with exit code(0)
+    """
+    print("\nExiting program.")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 
 
 async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
@@ -54,11 +64,18 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
                 exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
             else:
                 exchanges_with_pairs[exchange] = await get_currency_pairs(exchange, job_params)
-                if exchanges_with_pairs[exchange] == []:
+                if not exchanges_with_pairs[exchange]:
                     exchanges_with_pairs[exchange] = await update_and_get_currency_pairs(exchange, job_params)
+            if not exchanges_with_pairs[exchange]:
+                del exchanges_with_pairs[exchange]
+
+
 
             print('Done loading currency pairs.', end="\n\ne")
             logging.info('Done loading currency pairs.')
+
+        if exchanges_with_pairs == {}:
+            return None
 
         new_job: Job = Job(job,
                            job_params['yaml_request_name'],

@@ -34,7 +34,7 @@ class Scheduler:
             The interval in minutes with that the run() method gets called.
         """
         self.database_handler = database_handler
-        self.job_list = job_list
+        self.job_list = self.validate_job(job_list)
         self.frequency = frequency * 60
 
     async def start(self):
@@ -63,6 +63,21 @@ class Scheduler:
         request_table = request.get('table')
 
         await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
+
+    def validate_job(self, job_list):
+        if job_list:
+            for job in job_list:
+                if not job.exchanges_with_pairs:
+                    job_list.remove(job)
+            if job_list:
+                return job_list
+            else:
+                self.validate_job(job_list)
+        else:
+            logging.error('No or invalid Jobs.')
+            raise ValueError("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
+                             "matching currency pairs found for a all exchanges. Please check your \n"
+                             "parameters in the configuration.")
 
     def determine_task(self, request_name: str) -> Callable:
         """

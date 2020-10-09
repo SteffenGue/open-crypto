@@ -12,7 +12,7 @@ except ImportError:
 
 CONFIG = {
     "name": "Crypto Data Collector",
-    "version": "1.0",
+    "version": "0.9",
     "url": "https://gitlab.informatik.uni-bremen.de/fiwi-crypto/crypto_high_frequency",
     "python_requires": ">=3.7",
     # "test_suite": "discover_tests"
@@ -22,6 +22,9 @@ setup(**CONFIG, install_requires=['sqlalchemy',
                                   'sqlalchemy_utils',
                                   'PyYAML',
                                   'aiohttp',
-                                  'psycopg2',
+                                  'psycopg2-binary',
                                   'aioschedule',
-                                  'aiohttp', 'tqdm', 'dateutil', 'pandas'])
+                                  'aiohttp',
+                                  'tqdm',
+                                  'dateutil',
+                                  'pandas'])
