@@ -177,10 +177,10 @@ class Scheduler:
                                                                         response)
 
                 if formatted_response:
-                    self.database_handler.general_persist(exchange_name,
-                                                          request_name,
-                                                          requst_table,
-                                                          formatted_response,
-                                                          mappings)
+                    self.database_handler.persist_response(exchange_name,
+                                                           request_name,
+                                                           requst_table,
+                                                           formatted_response,
+                                                           mappings)
         print('Done collecting {}.'.format(request_name), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name))

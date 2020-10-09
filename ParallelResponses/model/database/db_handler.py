@@ -102,61 +102,6 @@ class DatabaseHandler:
         finally:
             session.close()
 
-
-    def persist_tickers(self,
-                        queried_currency_pairs: List[ExchangeCurrencyPair],
-                        tickers: [Tuple[str, datetime, datetime, str, str, float, float, float, float]]):
-        """
-        Persists the given tuples of ticker-data.
-
-        The method checks for each tuple if the referenced exchange and
-        currencies exist in the database.
-        If so, the Method creates with the stored data of the current tuple
-        a new Ticker-object which is then added to the commit.
-        After all tuples where checked, the added Ticker-objects will be
-        committed and the connection will be closed.
-
-        Exceptions will be caught but not really handled.
-        TODO: Exception handling and
-        TODO: Logging of Exception
-
-        @param tickers: Iterator
-            Iterator of tuples containing ticker-data.
-            Tuple must have the following structure:
-                (exchange-name,
-                 start_time,
-                 time,
-                 first_currency_symbol,
-                 second_currency_symbol,
-                 ticker_last_price,
-                 ticker_best_ask,
-                 ticker_best_bid,
-                 ticker_daily_volume)
-        @param queried_currency_pairs: List of all queried ExchangeCurrencyPairs from the database
-        """
-
-        with self.session_scope() as session:
-            tuple_counter: int = 0
-            for ticker in tickers:
-                exchange_currency_pair: ExchangeCurrencyPair = self.get_exchange_currency_pair(session, ticker[0],
-                                                                                               ticker[3], ticker[4])
-                if exchange_currency_pair is not None:
-                    if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
-                        if ticker[5] is not None or ticker[6] is not None or ticker[7] is not None or ticker[8] is not None: #filtering empty tuple
-                            ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
-                                                  exchange_pair=exchange_currency_pair,
-                                                  start_time=ticker[1],
-                                                  time=ticker[2],
-                                                  last_price=ticker[5],
-                                                  best_ask=ticker[6],
-                                                  best_bid=ticker[7],
-                                                  daily_volume=ticker[8])
-                            tuple_counter += 1
-                            session.add(ticker_tuple)
-            print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
-            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
-            return tuple_counter
-
     def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         """
         @param exchange_name:
@@ -368,6 +313,57 @@ class DatabaseHandler:
                 exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
                 session.add(exchange)
 
+        # NEVER CALL THIS OUTSIDE OF THIS CLASS
+    def __get_exchange_currency_pair(self, session: Session, exchange_name: str, first_currency_name: str,
+                                   second_currency_name: str) -> ExchangeCurrencyPair:
+        """
+        Checks if there is a currency pair in the database with the given parameters and
+        returns it if so.
+
+        @param session: Session
+            sqlalchemy-session.
+        @param exchange_name: str
+            Name of the exchange.
+        @param first_currency_name: str
+            Name of the first currency in the currency pair.
+        @param second_currency_name: str
+            Name of the second currency in the currency pair.
+        @return:
+            The ExchangeCurrencyPair which fulfills all the requirements or None
+            if no such ExchangeCurrencyPair exists.
+        """
+
+        if exchange_name is None or first_currency_name is None or second_currency_name is None:
+            return None
+        # sollte raus in der actual Implementierung
+        # ToDo: ausgeschaltet von Steffen, aber ich verstehe nicht wofür das gut sein soll. Überprüfen!
+
+        # self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
+        ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+        first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+        second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
+
+        cp = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange.__eq__(ex),
+                                                        ExchangeCurrencyPair.first.__eq__(first),
+                                                        ExchangeCurrencyPair.second.__eq__(second)).first()
+        return cp
+
+    def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
+                                       second_currency_name: str, is_exchange: bool):
+        """
+        Adds a single ExchangeCurrencyPair to the database is it does not already exist.
+
+        @param exchange_name: str
+            Name of the exchange.
+        @param first_currency_name: str
+            Name of the first currency.
+        @param second_currency_name: str
+            Name of the second currency.
+        @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
+        """
+        self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
+                                             is_exchange=is_exchange)
+
     # ToDo: den boolean 'is_exchange' in jedes *.yaml-file schreiben.
     # ToDo: alle persist methoden überprüfen ob der boolean 'is_exchange' implementiert ist.
     def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]], is_exchange: bool):
@@ -423,65 +419,87 @@ class DatabaseHandler:
                         # ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
 
-    def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
-                                       second_currency_name: str, is_exchange: bool):
+    def persist_tickers(self,
+                        queried_currency_pairs: List[ExchangeCurrencyPair],
+                        tickers: [Tuple[str, datetime, datetime, str, str, float, float, float, float]]):
         """
-        Adds a single ExchangeCurrencyPair to the database is it does not already exist.
+        Persists the given tuples of ticker-data.
+
+        The method checks for each tuple if the referenced exchange and
+        currencies exist in the database.
+        If so, the Method creates with the stored data of the current tuple
+        a new Ticker-object which is then added to the commit.
+        After all tuples where checked, the added Ticker-objects will be
+        committed and the connection will be closed.
+
+        Exceptions will be caught but not really handled.
+        TODO: Exception handling and
+        TODO: Logging of Exception
+
+        @param tickers: Iterator
+            Iterator of tuples containing ticker-data.
+            Tuple must have the following structure:
+                (exchange-name,
+                 start_time,
+                 time,
+                 first_currency_symbol,
+                 second_currency_symbol,
+                 ticker_last_price,
+                 ticker_best_ask,
+                 ticker_best_bid,
+                 ticker_daily_volume)
+        @param queried_currency_pairs: List of all queried ExchangeCurrencyPairs from the database
+        """
+
+        with self.session_scope() as session:
+            tuple_counter: int = 0
+            for ticker in tickers:
+                exchange_currency_pair: ExchangeCurrencyPair = self.__get_exchange_currency_pair(session, ticker[0],
+                                                                                                 ticker[3], ticker[4])
+                if exchange_currency_pair is not None:
+                    if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
+                        if ticker[5] is not None or ticker[6] is not None or ticker[7] is not None or ticker[
+                            8] is not None:  # filtering empty tuple
+                            ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
+                                                  exchange_pair=exchange_currency_pair,
+                                                  start_time=ticker[1],
+                                                  time=ticker[2],
+                                                  last_price=ticker[5],
+                                                  best_ask=ticker[6],
+                                                  best_bid=ticker[7],
+                                                  daily_volume=ticker[8])
+                            tuple_counter += 1
+                            session.add(ticker_tuple)
+            print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
+            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
+            return tuple_counter
+
+    def persist_response(self, exchange_name: str, method: str, db_table, data: Iterable, mappings: List):
+        """
+        This method persists the given tuples of data. The method currently works for all methods, despite
+        tickers and currency_pairs. If the program is augmented with a new request-method, use this method to
+        persist data.
+
+        The method first gets all columns and primary keys for the request-method from the database.
+        As the table-objects are created using **kwargs, it is important that the database column names and the
+        .yaml-mapping keys match. Otherwise an exception is raised.
+
+        The method then continues to check the existence of each tuple. The other option, to "ask for forgiveness,
+        rather then permission" leads to a lot of "UniqueConstraintError", therefore rollbacks and consequently
+        heavily fills up especially PostgreSQL log files.
+
+        If the object is not existing in the database, it will be added.
 
         @param exchange_name: str
-            Name of the exchange.
-        @param first_currency_name: str
-            Name of the first currency.
-        @param second_currency_name: str
-            Name of the second currency.
-        @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
-        """
-        self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
-                                             is_exchange=is_exchange)
-
-    # NEVER CALL THIS OUTSIDE OF THIS CLASS
-    def get_exchange_currency_pair(self, session: Session, exchange_name: str, first_currency_name: str,
-                                   second_currency_name: str) -> ExchangeCurrencyPair:
-        """
-        Checks if there is a currency pair in the database with the given parameters and
-        returns it if so.
-
-        @param session: Session
-            sqlalchemy-session.
-        @param exchange_name: str
-            Name of the exchange.
-        @param first_currency_name: str
-            Name of the first currency in the currency pair.
-        @param second_currency_name: str
-            Name of the second currency in the currency pair.
-        @return:
-            The ExchangeCurrencyPair which fulfills all the requirements or None
-            if no such ExchangeCurrencyPair exists.
-        """
-
-        if exchange_name is None or first_currency_name is None or second_currency_name is None:
-            return None
-        # sollte raus in der actual Implementierung
-        #ToDo: ausgeschaltet von Steffen, aber ich verstehe nicht wofür das gut sein soll. Überprüfen!
-
-        # self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
-        ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
-        first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
-        second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
-
-        cp = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange.__eq__(ex),
-                                                        ExchangeCurrencyPair.first.__eq__(first),
-                                                        ExchangeCurrencyPair.second.__eq__(second)).first()
-        return cp
-
-    def general_persist(self, exchange_name: str, method: str, db_table, data: Iterable, mappings: List):
-        """
-        #ToDo: Doku schreiben
-        @param exchange_name:
-        @param method:
-        @param db_table:
-        @param data:
-        @param mappings:
+            The exchange name of the response. This is just for printing purposes.
+        @param method: str
+            The actual request-method, i.e. tickers, order_books,...
+        @param db_table: object
+            The database table object for the respective method, i.e. Ticker, OrderBook
+        @param data: Iterable
+            The actual response values
+        @param mappings: List
+            The mapping keys from the .yaml-file, in the same order as the data-tuples.
         """
 
         col_names = [key.name for key in inspect(db_table).columns]
@@ -511,7 +529,7 @@ class DatabaseHandler:
                     add_tuple = db_table(**data_tuple)
                     session.add(add_tuple)
 
-        counter_dict={k:counter_list.count(k) for k in set(counter_list)}
+        counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
         print('{} tuple(s) added to {} for {}:'.format(tuple_counter, method, exchange_name.capitalize()))
         for item in counter_dict.items():
             print("CuPair-ID {}: {}".format(item[0], item[1]))
