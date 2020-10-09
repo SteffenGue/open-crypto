@@ -146,7 +146,7 @@ class DatabaseHandler:
                             ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                                   exchange_pair=exchange_currency_pair,
                                                   start_time=ticker[1],
-                                                  response_time=ticker[2],
+                                                  time=ticker[2],
                                                   last_price=ticker[5],
                                                   best_ask=ticker[6],
                                                   best_bid=ticker[7],
