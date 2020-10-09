@@ -146,7 +146,7 @@ class DatabaseHandler:
                             ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
                                                   exchange_pair=exchange_currency_pair,
                                                   start_time=ticker[1],
-                                                  response_time=ticker[2],
+                                                  time=ticker[2],
                                                   last_price=ticker[5],
                                                   best_ask=ticker[6],
                                                   best_bid=ticker[7],
@@ -391,6 +391,7 @@ class DatabaseHandler:
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
+                    is_exchange: bool = is_exchange
 
                     if exchange_name is None or first_currency_name is None or second_currency_name is None:
                         continue
@@ -461,7 +462,9 @@ class DatabaseHandler:
         if exchange_name is None or first_currency_name is None or second_currency_name is None:
             return None
         # sollte raus in der actual Implementierung
-        self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
+        #ToDo: ausgeschaltet von Steffen, aber ich verstehe nicht wofür das gut sein soll. Überprüfen!
+
+        # self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
         ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
         first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
         second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
@@ -493,7 +496,7 @@ class DatabaseHandler:
                                                                                                  failed_columns))
             raise ValueError("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
                                                                                                     failed_columns))
-
+        counter_list = list()
         tuple_counter = 0
         with self.session_scope() as session:
             for data_tuple in data:
@@ -503,11 +506,15 @@ class DatabaseHandler:
                                                  filter_by(**p_key_filter).count() > 0 else False
 
                 if not query_exists:
+                    counter_list.append(data_tuple['exchange_pair_id'])
                     tuple_counter += 1
                     add_tuple = db_table(**data_tuple)
                     session.add(add_tuple)
 
-        print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.capitalize()))
+        counter_dict={k:counter_list.count(k) for k in set(counter_list)}
+        print('{} tuple(s) added to {} for {}:'.format(tuple_counter, method, exchange_name.capitalize()))
+        for item in counter_dict.items():
+            print("CuPair-ID {}: {}".format(item[0], item[1]))
         logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange_name.capitalize()))
 
     def get_readable_query(self,

@@ -46,6 +46,7 @@ class Exchange:
     """
     name: str
     terms_url: str
+    is_exchange: bool
     scrape_permission: bool
     api_url: str
     rate_limit: float
@@ -95,6 +96,7 @@ class Exchange:
         self.exception_counter = 0
         self.active_flag = True
         self.consecutive_exception = False
+        self.is_exchange = yaml_file.get('exchange')
         self.exchange_currency_pairs = list()
 
     async def request_tickers(self, request_name: str, start_time: datetime,
@@ -690,6 +692,6 @@ class Exchange:
 
                     result = list(itertools.zip_longest(*result))
 
-                    results.extend(result)
+            results.extend(result)
 
-                return results, temp_results.keys()
+        return results, temp_results.keys()

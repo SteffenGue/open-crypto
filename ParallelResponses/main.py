@@ -31,7 +31,7 @@ async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
         print('Updating Currency Pairs for {}...'.format(exchange.name.capitalize()))
         # logging.info('Updating Currency Pairs for {}...'.format(exchange.name.upper()), end=" ")
         formatted_response = exchange.format_currency_pairs(response)
-        database_handler.persist_exchange_currency_pairs(formatted_response, is_exchange=False)
+        database_handler.persist_exchange_currency_pairs(formatted_response, is_exchange=exchange.is_exchange)
 
     return await get_currency_pairs(exchange, job_params)
 
@@ -71,7 +71,7 @@ async def initialize_jobs(database_handler: DatabaseHandler, job_config: Dict) -
 
 
 
-            print('Done loading currency pairs.', end="\n\ne")
+            print('Done loading currency pairs.', end="\n\n")
             logging.info('Done loading currency pairs.')
 
         if exchanges_with_pairs == {}:
@@ -104,9 +104,9 @@ async def main(database_handler: DatabaseHandler):
     frequency = read_config('operation_settings')['frequency']
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
-    print('{} were created and will run every {} minute(s).'.format(', '.join([job.name for job in jobs]), frequency))
+    print('{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]), frequency))
     logging.info(
-        '{} were created and will run every {} minute(s).'.format(', '.join([job.name for job in jobs]), frequency))
+        '{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]), frequency))
 
     while True:
         await scheduler.start()

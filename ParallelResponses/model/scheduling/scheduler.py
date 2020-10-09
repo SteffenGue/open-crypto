@@ -171,17 +171,17 @@ class Scheduler:
             if response:
                 exchange_name = response[0]
                 for exchange in exchanges_with_pairs.keys():
-                    if exchange.name.upper == exchange_name.upper():
+                    if exchange.name.upper() == exchange_name.upper():
                         break
 
-                    formatted_response, mappings = exchange.format_data(request_name,
+                formatted_response, mappings = exchange.format_data(request_name,
                                                                         response)
 
-                    if formatted_response:
-                        self.database_handler.general_persist(exchange_name,
-                                                              request_name,
-                                                              requst_table,
-                                                              formatted_response,
-                                                              mappings)
+                if formatted_response:
+                    self.database_handler.general_persist(exchange_name,
+                                                          request_name,
+                                                          requst_table,
+                                                          formatted_response,
+                                                          mappings)
         print('Done collecting {}.'.format(request_name), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name))
