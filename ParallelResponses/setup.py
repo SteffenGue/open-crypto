@@ -26,5 +26,5 @@ setup(**CONFIG, install_requires=['sqlalchemy',
                                   'aioschedule',
                                   'aiohttp',
                                   'tqdm',
-                                  'dateutil',
+                                  'python-dateutil',
                                   'pandas'])
