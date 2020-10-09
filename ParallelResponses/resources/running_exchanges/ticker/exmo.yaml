@@ -1,12 +1,5 @@
 name: exmo
-terms:
-  terms_url: https://exmo.com/de/docs/agreement/
-  permission: null
-  search_targets:
-  - tag: div
-    class: content_black
-  - tag: div
-    class: info_agree
+exchange: true
 api_url: https://api.exmo.com/v1/
 rate_limit: null
 requests:

@@ -1,13 +1,5 @@
 name: binance
-terms:
-  terms_url: https://www.binance.com/agreement.html
-  permission: true
-  search_targets:
-  - tag: div
-    class: agreementInner
-    ng-if: cur_lang!='cn'
-  - tag: div
-    class: agreementCon
+exchange: true
 api_url: https://api.binance.com/api/
 rate_limit: # Each route has a weight which determines for the number of requests each endpoint counts for
   # sum of all weights
@@ -69,9 +61,9 @@ requests:
       type:
       - str
 
-  order_book:
+  order_books:
     request:
-      template: v1/depth
+      template: v3/depth
       pair_template: # e.g. BNBBTC
         template: "{first}{second}"
         lower_case: false
@@ -79,7 +71,7 @@ requests:
       params:
         limit:
           type: int
-          max: 1000
+          max: 100
           allowed:
           - 5
           - 10
@@ -88,7 +80,7 @@ requests:
           - 100
           - 500
           - 1000
-          default: 100
+          default: 10
       weight:
       # limit 5, 10, 20, 50, 100
       - 1
@@ -114,8 +106,6 @@ requests:
                 type:
                 - str
                 - float
-              2: # ignore
-                type: ignore
         asks:
           type: list
           values:
@@ -129,36 +119,47 @@ requests:
                 type:
                 - str
                 - float
-              2: # ignore
-                type: ignore
     mapping:
-    - key: order_book_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: order_book_bids_price
+
+    - key: id
+      path:
+        - lastUpdateId
+      type:
+        - str
+
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+        - 10
+    - key: bids_price
       path:
       - bids
       - 0
       type:
       - str
       - float
-    - key: order_book_bids_size
+    - key: bids_amount
       path:
       - bids
       - 1
       type:
       - str
       - float
-    - key: order_book_asks_price
+    - key: asks_price
       path:
       - asks
       - 0
       type:
       - str
       - float
-    - key: order_book_asks_size
+    - key: asks_amount
       path:
       - asks
       - 1
@@ -203,19 +204,24 @@ requests:
           isBestMatch:
             type: bool
     mapping:
-    - key: trade_last_price
+    - key: id
+      path:
+        - id
+      type:
+        - int
+    - key: price
       path:
       - price
       type:
       - str
       - float
-    - key: trade_amount
+    - key: amount
       path:
       - qty
       type:
       - str
       - float
-    - key: trade_time
+    - key: time
       path:
       - time
       type:
@@ -346,44 +352,44 @@ requests:
           11: # ignore
             type: ignore
     mapping:
-    - key: historic_rates_open
+    - key: open
       path:
       - 1
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - 2
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - 3
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - 4
       type:
       - str
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - 5
       type:
       - str
       - float
-    - key: historic_rates_time
+    - key: time
       path:
       - 6
       type:
       - int
       - fromtimestampms
 
-  ticker: # Best price/qty on the order book for a symbol or symbols.
+  ticker:
     request:
       template: v3/ticker/bookTicker
       pair_template: # e.g. BNBBTC
@@ -391,7 +397,6 @@ requests:
         lower_case: false
         alias: symbol
       params: null
-      weight: 1
     response:
       type: dict
       values:
@@ -432,12 +437,92 @@ requests:
       - str
       - float
     - key: currency_pair_first
-      path:
-        - symbol
+      path: []
       type:
         - first_currency
     - key: currency_pair_second
-      path:
-        - symbol
+      path: []
       type:
         - second_currency
+
+#  order_books:
+#    request:
+#      template: depth
+#      pair_template: {'first'}{'second'}
+#      alias: symbol
+#      params:
+#        limit:
+#          type: int
+#          default: 5
+#
+#    response:
+#      type: dict
+#      values:
+#        lastUpdateId:
+#          type: int
+#        bids:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0:
+#                type: str
+#              1:
+#                type: str
+#
+#        asks:
+#          type: list
+#          values:
+#            type: list
+#            values:
+#              0:
+#                type: str
+#              1:
+#                type: str
+#
+#    mapping:
+#      - key: order_book_id
+#        path:
+#          - lastUpdateId
+#        type:
+#          - str
+#
+#      - key: order_book_time
+#        path: []
+#        type:
+#          - none
+#          - now
+#      - key: order_book_position
+#        path: []
+#        type:
+#          - none
+#          - constant
+#          - 1
+#      - key: order_book_bids_price
+#        path:
+#          - bids
+#          - 0
+#        type:
+#          - str
+#          - int
+#      - key: order_book_bids_amount
+#        path:
+#          - bids
+#          - 1
+#        type:
+#          - str
+#          - int
+#      - key: order_book_asks_price
+#        path:
+#          - asks
+#          - 0
+#        type:
+#          - str
+#          - int
+#      - key: order_book_asks_amount
+#        path:
+#          - asks
+#          - 1
+#        type:
+#          - str
+#          - int

@@ -1,6 +1,5 @@
 name: finexbox
-
-terms: null
+exchange: true
 api_url: https://xapi.finexbox.com/v1/
 rate_limit:
   max: 2

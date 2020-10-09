@@ -1,13 +1,5 @@
 name: braziliex
-terms:
-  terms_url: https://braziliex.com/exchange/terms.php
-  permission: null
-  search_targets:
-  - tag: div
-    class: mdl-grid
-  - tag: div
-    class: mdl-card mdl-cell mdl-cell--8-col mc_background_card mdl-shadow--4dp
-
+exchange: true
 api_url: https://braziliex.com/api/v1/
 rate_limit:
   max: 1

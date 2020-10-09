@@ -1,10 +1,5 @@
 name: livecoin
-terms:
-  terms_url: https://www.livecoin.net/en/useragreement
-  permission: null
-  search_targets:
-  - tag: section
-    class: content
+exchange: true
 api_url: https://api.livecoin.net/
 rate_limit: null
 requests:

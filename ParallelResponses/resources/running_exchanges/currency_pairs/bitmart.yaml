@@ -1,14 +1,5 @@
 name: bitmart
-terms:
-  terms_url: https://support.bitmart.com/hc/en-us/articles/115004890354-Terms-of-Use
-  permission: null
-  search_targets:
-  - tag: section
-    class: article-info
-  - tag: div
-    class: article-content
-  - tag: div
-    class: article-body
+exchange: true
 api_url: https://openapi.bitmart.com/v2/
 rate_limit:
   max: 10 # 3-90

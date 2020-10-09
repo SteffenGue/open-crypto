@@ -1,12 +1,5 @@
 name: cexio
-terms:
-  terms_url: https://cex.io/terms
-  permission: false
-  search_targets:
-  - tag: div
-    class: container
-  - tag: div
-    class: box bg-white
+exchange: true
 api_url: https://cex.io/api/
 rate_limit: null
 requests:

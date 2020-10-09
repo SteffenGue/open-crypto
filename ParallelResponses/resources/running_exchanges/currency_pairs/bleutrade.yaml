@@ -1,12 +1,5 @@
 name: bleutrade
-terms:
-  # terms_url: https://bleutrade.com/terms_of_use.pdf
-  permission: null
-  search_targets:
-  - tag: div
-    class: canvasWrapper
-  - tag: div
-    class: textLayer
+exchange: true
 api_url: https://bleutrade.com/api/v3/
 rate_limit: null
 requests:

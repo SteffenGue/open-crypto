@@ -1,12 +1,5 @@
 name: hitbtc
-terms:
-  terms_url: https://hitbtc.com/api-license-agreement
-  permission: null
-  search_targets:
-  - tag: div
-    class: static-content-container
-  - tag: div
-    class: static
+exchange: true
 api_url: https://api.hitbtc.com/api/2/
 rate_limit:
   max: 100

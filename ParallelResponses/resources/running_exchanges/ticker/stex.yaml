@@ -1,5 +1,5 @@
 name: stex
-terms: null
+exchange: true
 api_url: https://api3.stex.com/public/
 
 rate_limit:

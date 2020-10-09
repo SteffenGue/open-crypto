@@ -1,10 +1,5 @@
 name: bibox
-terms:
-  terms_url: https://www.bibox.com/user_agreement
-  permission: null
-  search_targets:
-  - tag: div
-    class: user-agreement
+exchange: true
 api_url: https://api.bibox.com/v1/mdata
 rate_limit: null
 requests:

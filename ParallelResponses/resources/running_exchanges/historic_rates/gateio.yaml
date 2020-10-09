@@ -1,12 +1,5 @@
 name: gateio
-terms:
-  terms_url: https://www.gate.io/docs/agreement.pdf
-  permission: true
-  search_targets:
-    - tag: div
-      class: page
-    - tag: div
-      class: textLayer
+exchange: true
 api_url: https://data.gateio.co/api2/1/
 rate_limit: null
 requests:

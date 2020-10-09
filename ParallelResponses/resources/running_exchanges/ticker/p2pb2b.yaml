@@ -1,7 +1,6 @@
 name: p2pb2b
-terms: null
+exchange: true
 rate_limit: null
-
 api_url: https://api.p2pb2b.io/api/v1/public/
 
 requests:

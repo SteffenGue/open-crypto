@@ -1,5 +1,5 @@
 name: digifinex
-terms: null
+exchange: true
 rate_limit: null
 api_url: https://openapi.digifinex.vip/v3/
 

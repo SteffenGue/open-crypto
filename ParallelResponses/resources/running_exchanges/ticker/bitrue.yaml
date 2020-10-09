@@ -1,9 +1,6 @@
 name: bitrue
-
-terms: null
-
+exchange: true
 rate_limit: null
-
 api_url: https://www.bitrue.com/kline-api/
 
 requests:

@@ -1,10 +1,5 @@
 name: zb  #Empty String splitted
-terms:
-  terms_url: https://www.zb.com/i/document?item=4
-  permission: null
-  search_targets:
-  - tag: div
-    class: col-xs-12
+exchange: true
 api_url: http://api.zb.cn/data/v1/
 rate_limit: null
 requests:

@@ -1,5 +1,5 @@
 name: folgory
-
+exchange: true
 api_url: https://folgory.com/api/v1
 
 requests:

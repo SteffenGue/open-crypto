@@ -1,13 +1,5 @@
 name: binance
-terms:
-  terms_url: https://www.binance.com/agreement.html
-  permission: true
-  search_targets:
-  - tag: div
-    class: agreementInner
-    ng-if: cur_lang!='cn'
-  - tag: div
-    class: agreementCon
+exchange: true
 api_url: https://api.binance.com/api/
 rate_limit: # Each route has a weight which determines for the number of requests each endpoint counts for
   # sum of all weights

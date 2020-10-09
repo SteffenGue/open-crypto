@@ -1,5 +1,5 @@
 name: hotbit
-terms: null
+exchange: true
 rate_limit: null
 api_url: https://api.hotbit.io/api/v1/
 

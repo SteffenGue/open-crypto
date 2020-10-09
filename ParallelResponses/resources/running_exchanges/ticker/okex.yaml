@@ -1,5 +1,5 @@
 name: okex
-terms: null
+exchange: true
 api_url: https://www.okex.com/api/spot/v3/
 rate_limit:
   max: 20

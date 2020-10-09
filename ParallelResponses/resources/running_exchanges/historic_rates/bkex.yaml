@@ -1,6 +1,5 @@
 name: bkex
-terms: null
-
+exchange: true
 api_url: https://api.bkex.com
 
 requests:

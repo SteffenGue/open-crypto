@@ -1,12 +1,5 @@
 name: bitz
-terms:
-  terms_url: https://www.bit-z.com/terms?welcome
-  permission: null
-  search_targets:
-  - tag: div
-    id: model
-  - tag: div
-    class: terms_content
+exchange: true
 api_url: https://api.bitzapi.com/
 rate_limit: null
 requests:

@@ -1,6 +1,6 @@
 #todo: exchange hat für ticker keine daten, die wir persistieren + doku im git ist auf chinesich
 name: bkex
-terms: null
+exchange: true
 api_url: https://api.bkex.com
 
 requests:

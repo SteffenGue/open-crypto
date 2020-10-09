@@ -1,8 +1,7 @@
 name: latoken
-terms: null
+exchange: true
 api_url: https://api.latoken.com/api/v1/
 rate_limit: null
-terms:
 
 requests:
   currencies:

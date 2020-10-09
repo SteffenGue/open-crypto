@@ -1,14 +1,5 @@
 name: lbank
-terms:
-  terms_url: https://lbankinfo.zendesk.com/hc/zh-cn/articles/115002292673-%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE
-  permission: true
-  search_targets:
-  - tag: div
-    class: article-container
-  - tag: article
-    class: article
-  - tag: div
-    class: article-body
+exchange: true
 api_url: https://api.lbkex.com/v1/
 rate_limit: null
 

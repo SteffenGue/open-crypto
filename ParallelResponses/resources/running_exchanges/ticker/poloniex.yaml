@@ -1,5 +1,5 @@
 name: poloniex
-terms: null
+exchange: true
 api_url: https://poloniex.com/
 rate_limit: null
 requests:

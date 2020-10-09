@@ -1,10 +1,5 @@
 name: btc_markets
-terms:
-  terms_url: https://www.btcmarkets.net/terms-of-service
-  permission: null
-  search_targets:
-  - tag: section
-    id: TermsOfServicePage
+exchange: true
 api_url: https://api.btcmarkets.net/
 rate_limit: null
 requests:

@@ -1,11 +1,6 @@
 #TODO: keine moeglichkeit candles/historic_rates abzufragen
 name: bitso
-terms:
-  terms_url: https://bitso.com/terms
-  permission: true
-  search_targets:
-  - tag: div
-    class: static smaller
+exchange: true
 api_url: https://api.bitso.com/v3/
 rate_limit:
   max: 60

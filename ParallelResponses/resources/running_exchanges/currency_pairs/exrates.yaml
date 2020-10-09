@@ -1,5 +1,5 @@
 name: exrates
-terms: null
+exchange: true
 api_url: https://api.exrates.me/v1/public/
 rate_limit: null
 

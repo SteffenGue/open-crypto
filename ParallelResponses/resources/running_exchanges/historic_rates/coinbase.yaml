@@ -1,10 +1,5 @@
 name: coinbase
-terms:
-  terms_url: https://www.coinbase.com/legal/user_agreement
-  permission: null
-  search_targets:
-  - tag: div
-    class: legal
+exchange: true
 api_url: https://api.pro.coinbase.com/
 #rate_limit:
 #  max: 3

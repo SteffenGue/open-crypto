@@ -1,10 +1,9 @@
 name: vindax
-
-terms: null
+exchange: true
+api_url: https://api.vindax.com/api/v1/
 rate_limit:
   max: 6
   units: 1
-api_url: https://api.vindax.com/api/v1/
 
 requests:
   test_connection:

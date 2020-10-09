@@ -1,5 +1,5 @@
 name: coinbene
-terms: null
+exchange: true
 api_url: https://api.coinbene.com/v1/market/
 rate_limit: 
   max: 15

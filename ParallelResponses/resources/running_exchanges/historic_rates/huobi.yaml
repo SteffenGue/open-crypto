@@ -1,10 +1,5 @@
 name: huobi
-terms:
-  terms_url: https://www.hbus.com/terms-of-service/
-  permission: null
-  search_targets:
-  - tag: div
-    class: legal_body
+exchange: true
 api_url: https://api.huobi.pro/
 rate_limit:
   max: 100

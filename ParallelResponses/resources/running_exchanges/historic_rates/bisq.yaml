@@ -1,6 +1,5 @@
 name: bisq
-terms:
-  terms_url: null
+exchange: true
 api_url: https://markets.bisq.network/api/
 rate_limit: null
 requests:

@@ -1,6 +1,5 @@
 name: exx
-terms:
-  terms_url: null
+exchange: true
 api_url: https://api.exx.com/data/v1/
 rate_limit: null
 requests:

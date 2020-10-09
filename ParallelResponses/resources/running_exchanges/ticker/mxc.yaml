@@ -1,6 +1,5 @@
 name: mxc
-terms: null
-
+exchange: true
 api_url: https://www.mxc.com/
 
 requests:

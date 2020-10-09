@@ -1,4 +1,5 @@
 name: whitebit
+exchange: true
 api_url: https://whitebit.com/api/v2/public/
 
 requests:

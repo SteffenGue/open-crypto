@@ -1,14 +1,5 @@
 name: kucoin
-terms:
-  terms_url: https://news.kucoin.com/en/terms-of-use/
-  permission: null
-  search_targets:
-  - tag: div
-    class: loop-container
-  - tag: div
-    class: post-216 page type-page status-publish hentry entry
-  - tag: div
-    class: post-content
+exchange: true
 api_url: https://api.kucoin.com/api/v1/
 rate_limit:
   max: 50000

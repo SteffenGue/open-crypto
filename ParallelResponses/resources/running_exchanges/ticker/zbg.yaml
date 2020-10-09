@@ -1,6 +1,5 @@
 name: zbg
-terms: null
-
+exchange: true
 api_url: https://kline.zbg.com/api/data/v1/
 
 rate_limit: 

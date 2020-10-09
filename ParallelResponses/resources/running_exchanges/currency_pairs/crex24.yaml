@@ -1,5 +1,5 @@
 name: crex24
-terms: null
+exchange: true
 api_url: https://api.crex24.com/v2/public/
 rate_limit: null
 
