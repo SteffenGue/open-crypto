@@ -105,7 +105,7 @@ class DatabaseHandler:
 
     def persist_tickers(self,
                         queried_currency_pairs: List[ExchangeCurrencyPair],
-                        tickers: Iterator[Tuple[str, datetime, datetime, str, str, float, float, float, float]]):
+                        tickers: [Tuple[str, datetime, datetime, str, str, float, float, float, float]]):
         """
         Persists the given tuples of ticker-data.
 
