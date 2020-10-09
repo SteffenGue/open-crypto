@@ -142,19 +142,19 @@ class DatabaseHandler:
                                                                                                ticker[3], ticker[4])
                 if exchange_currency_pair is not None:
                     if any(exchange_currency_pair.id == q_cp.id for q_cp in queried_currency_pairs):
-                        # todo: was ist wenn man alle cps holen will, oder wenn keins angegeben ist??
-                        ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
-                                              exchange_pair=exchange_currency_pair,
-                                              start_time=ticker[1],
-                                              time=ticker[2],
-                                              last_price=ticker[5],
-                                              best_ask=ticker[6],
-                                              best_bid=ticker[7],
-                                              daily_volume=ticker[8])
-                        tuple_counter += 1
-                        session.add(ticker_tuple)
-            print('{} ticker added for {}.'.format(tuple_counter, ticker[0].capitalize()))
-            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0].capitalize()))
+                        if ticker[5] is not None or ticker[6] is not None or ticker[7] is not None or ticker[8] is not None: #filtering empty tuple
+                            ticker_tuple = Ticker(exchange_pair_id=exchange_currency_pair.id,
+                                                  exchange_pair=exchange_currency_pair,
+                                                  start_time=ticker[1],
+                                                  response_time=ticker[2],
+                                                  last_price=ticker[5],
+                                                  best_ask=ticker[6],
+                                                  best_bid=ticker[7],
+                                                  daily_volume=ticker[8])
+                            tuple_counter += 1
+                            session.add(ticker_tuple)
+            print('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
+            logging.info('{} ticker added for {}.'.format(tuple_counter, ticker[0]))
             return tuple_counter
 
     def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
@@ -738,4 +738,3 @@ class DatabaseHandler:
     #
     #             result = result.all()
     #     return result
-

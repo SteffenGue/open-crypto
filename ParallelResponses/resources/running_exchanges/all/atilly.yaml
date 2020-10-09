@@ -84,13 +84,11 @@ requests:
       - strptime
       - "%Y-%m-%dT%H:%M:%S.%fZ"
     - key: currency_pair_first
-      path:
-        - symbol
+      path: []
       type:
         - first_currency
     - key: currency_pair_second
-      path:
-        - symbol
+      path: []
       type:
         - second_currency
     - key: ticker_best_ask
@@ -108,6 +106,12 @@ requests:
     - key: ticker_last_price
       path:
         - last
+      type:
+        - str
+        - float
+    - key: ticker_daily_volume
+      path:
+        - volume
       type:
         - str
         - float

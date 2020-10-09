@@ -445,13 +445,11 @@ requests:
       - str
       - float
     - key: currency_pair_first
-      path:
-        - symbol
+      path: []
       type:
         - first_currency
     - key: currency_pair_second
-      path:
-        - symbol
+      path: []
       type:
         - second_currency
 

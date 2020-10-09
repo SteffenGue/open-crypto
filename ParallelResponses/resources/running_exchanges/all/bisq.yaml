@@ -241,9 +241,9 @@ requests:
   ticker:
     request:
       template: ticker
-      pair_template: # e.g. 1cr_btc
-        template: "{first}_{second}"
-        lower_case: true
+      pair_template:
+        template: '{first}_{second}'
+        lower_case: False
         alias: market
       params:
         format:
@@ -253,47 +253,68 @@ requests:
           - jsonpretty
           default: jsonpretty
     response:
-      type: list
+      type: dict
       values:
-        type: dict
-        values:
-          type: dict
-          values:
-            last:
-              type: 
-              - str
-              - float
-            high:
-              type:
-              - str
-              - float
-            low:
-              type:
-              - str
-              - float
-            volume_left:
-              type: str
-            volume_right:
-              type: str
-            buy:
-              type:
-              - str
-            sell:
-              type:
-              - str
+        last:
+          type:
+          - str
+          - float
+        high:
+          type:
+          - str
+          - float
+        low:
+          type:
+          - str
+          - float
+        volume_left:
+          type: str
+        volume_right:
+          type: str
+        buy:
+          type:
+          - str
+        sell:
+          type:
+          - str
     mapping:
+      - key: currency_pair_first
+        path: []
+        type:
+          - first_currency
+      - key: currency_pair_second
+        path: []
+        type:
+          - second_currency
+      - key: ticker_best_ask
+        path:
+          - sell
+        type:
+          - str
+          - float
+      - key: ticker_best_bid
+        path:
+          - buy
+        type:
+          - str
+          - float
       - key: ticker_time
         path: []
         type:
         - none
         - now
       - key: ticker_last_price
-        path: 
-        - last
+        path:
+          - last
         type:
-        - str
-        - float
-
+          - str
+          - float
+      - key: ticker_daily_volume
+        path:
+          - volume_left
+        type:
+          - str
+          - float
 
 #  trades:
 #    request:
