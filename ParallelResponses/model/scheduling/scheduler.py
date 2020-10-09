@@ -150,8 +150,7 @@ class Scheduler:
                         break
                 formatted_response = exchange.format_ticker(response)
                 if formatted_response:
-                    self.database_handler.persist_tickers(exchanges_with_pairs[exchange],
-                                                          formatted_response)
+                    self.database_handler.persist_tickers(exchanges_with_pairs[exchange], formatted_response)
         logging.info('Done collecting ticker.')
         print('Done collecting ticker.', end="\n\n")
 
