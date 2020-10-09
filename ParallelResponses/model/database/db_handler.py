@@ -314,8 +314,9 @@ class DatabaseHandler:
                 session.add(exchange)
 
         # NEVER CALL THIS OUTSIDE OF THIS CLASS
+
     def __get_exchange_currency_pair(self, session: Session, exchange_name: str, first_currency_name: str,
-                                   second_currency_name: str) -> ExchangeCurrencyPair:
+                                     second_currency_name: str) -> ExchangeCurrencyPair:
         """
         Checks if there is a currency pair in the database with the given parameters and
         returns it if so.
@@ -512,8 +513,10 @@ class DatabaseHandler:
 
             logging.error("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
                                                                                                  failed_columns))
-            raise ValueError("YAML mapping-keys do not match database columns for {}: \n {}".format(method.upper(),
-                                                                                                    failed_columns))
+            raise ValueError(
+                "YAML mapping-keys for {} do not match database columns for {}: \n {}".format(exchange_name,
+                                                                                              method.upper(),
+                                                                                              failed_columns))
         counter_list = list()
         tuple_counter = 0
         with self.session_scope() as session:
@@ -599,7 +602,7 @@ class DatabaseHandler:
                 join(ExchangeCurrencyPair, db_table.exchange_pair_id == ExchangeCurrencyPair.id). \
                 join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id). \
                 join(first, ExchangeCurrencyPair.first_id == first.id). \
-                join(second, ExchangeCurrencyPair.second_id == second.id)#.options(joinedload('exchange_pair'))
+                join(second, ExchangeCurrencyPair.second_id == second.id)  # .options(joinedload('exchange_pair'))
 
             # data = data.options(undefer('*'))
 
@@ -656,8 +659,6 @@ class DatabaseHandler:
     # def get_all_exchange_names(self) -> List[str]:
     #     with self.session_scope() as session:
     #         return [r[0] for r in session.query(Exchange.name).all()]
-
-
 
     # def get_readable_tickers(self,
     #                          query_everything: bool,
