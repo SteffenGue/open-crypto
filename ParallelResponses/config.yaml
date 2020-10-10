@@ -13,7 +13,7 @@ general:
     export_data_to_csv: true
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
@@ -39,13 +39,13 @@ jobs:
 #   second_currencies:
 
   historic_rates:
-    yaml_request_name: historic_rates
+    yaml_request_name: trades
     update_cp: False
     exchanges:
-      - bithumb
+      - coinbase
     currency_pairs:
-      - first: btc
-        second: usdt
+      - first: eth
+        second: btc
     first_currencies:
 #      - btc
     second_currencies:
@@ -56,10 +56,10 @@ jobs:
 #    yaml_request_name: order_books
 #    update_cp: False
 #    exchanges:
-#      - bithumb
+#      - coinbase
 #    currency_pairs:
-#      - first: btc
-#        second: usdt
+#      - first: eth
+#        second: btc
 #    first_currencies:
 ##      - btc
 #    second_currencies:

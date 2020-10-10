@@ -223,7 +223,7 @@ def yaml_loader(exchange: str):
         except Exception as ex:
             print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
             print("")
-            logging.exception(f"Error loading yaml of {exchange}.\n", ex.with_traceback())
+            logging.exception(f"Error loading yaml of {exchange}.\n", ex)
             #todo: insert new exception handling
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 

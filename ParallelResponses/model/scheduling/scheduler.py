@@ -156,7 +156,7 @@ class Scheduler:
 
     async def get_job_done(self,
                            request_name: str,
-                           requst_table: object,
+                           request_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
 
         print('Starting to collect {}.'.format(request_name), end="\n\n")
@@ -179,7 +179,7 @@ class Scheduler:
                 if formatted_response:
                     self.database_handler.persist_response(exchange_name,
                                                            request_name,
-                                                           requst_table,
+                                                           request_table,
                                                            formatted_response,
                                                            mappings)
 

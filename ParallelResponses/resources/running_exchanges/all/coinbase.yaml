@@ -24,15 +24,12 @@ requests:
           base_min_size:
             type:
             - str
-            - float
           base_max_size:
             type:
             - str
-            - float
           quote_increment:
             type:
             - str
-            - float
     mapping:
     - key: currency_pair_first
       path:
@@ -44,92 +41,6 @@ requests:
       - quote_currency
       type:
       - str
-
-  # order_book:
-    # request:
-      # template: products/{currency_pair}/book
-      # pair_template:  # e.g. BTC-USD
-        # template: "{first}-{second}"
-        # lower_case: false
-      # params:
-        # level:
-          # type: int
-          # allowed:
-          # - 1 # Only the best bid and ask
-          # - 2 # Top 50 bids and asks (aggregated)
-          # - 3 # Full order book (non aggregated), Abuse of Level 3 via polling will cause your access to be limited or blocked.
-          # default: 1
-    # response:
-      # type: dict
-      # values:
-        # sequence:
-          # type:
-          # - str
-          # - int
-        # bids:
-          # type: list
-          # values:
-            # type: list
-            # values:
-              # 0: # price
-                # type:
-                # - str
-                # - float
-              # 1: # size
-                # type:
-                # - str
-                # - float
-              # 2: # num-orders
-                # type: int
-        # asks:
-          # type: list
-          # values:
-            # type: list
-            # values:
-              # 0: # price
-                # type:
-                # - str
-                # - float
-              # 1: # size
-                # type:
-                # - str
-                # - float
-              # 2: # num-orders
-                # type: int
-    # mapping:
-    # - key: order_book_time
-      # path: []
-      # type:
-      # - none
-      # - now
-    # - key: order_book_bids_price
-      # path:
-      # - bids
-      # - 0
-      # type:
-      # - str
-      # - float
-    # - key: order_book_bids_size
-      # path:
-      # - bids
-      # - 1
-      # type:
-      # - str
-      # - float
-    # - key: order_book_asks_price
-      # path:
-      # - asks
-      # - 0
-      # type:
-      # - str
-      # - float
-    # - key: order_book_asks_size
-      # path:
-      # - asks
-      # - 1
-      # type:
-      # - str
-      # - float
 
   ticker:
     request:
@@ -146,27 +57,32 @@ requests:
         price:
           type:
           - str
-          - float
         size:
           type:
           - str
-          - float
         bid:
           type:
           - str
-          - float
         ask:
           type:
           - str
-          - float
         volume:
           type:
           - str
-          - float
         time:
           type:
           - str
     mapping:
+    - key: currency_pair_first
+      path: []
+      type:
+        - first_currency
+    - key: currency_pair_second
+      path: []
+      type:
+        - second_currency
+
+
     - key: ticker_last_price
       path:
       - price
@@ -199,58 +115,154 @@ requests:
       - strptime
       - "%Y-%m-%dT%H:%M:%S.%fZ"
 
-#  trades:
-#    request:
-#      template: products/{currency_pair}/trades
-#      pair_template:  # e.g. BTC-USD
-#        template: "{first}-{second}"
-#        lower_case: false
-#      params: null
-#    response:
-#      type: list
-#      values:
-#        type: dict
-#        values:
-#          time:
-#            type:
-#            - str
-#          trade_id:
-#            type: int
-#          price:
-#            type:
-#            - str
-#            - float
-#          size:
-#            type:
-#            - str
-#            - float
-#          side:
-#            type: str
-#    mapping:
-#    - key: trade_time
-#      path:
-#      - time
-#      type:
-#      - str
-#      - strptime
-#      - "%Y-%m-%dT%H:%M:%S.%fZ"
-#    - key: trade_last_price
-#      path:
-#      - price
-#      type:
-#      - str
-#      - float
-#    - key: trade_amount
-#      path:
-#      - size
-#      type:
-#      - str
-#      - float
-#    - key: trade_side
-#      path:
-#      - side
-#      type:
-#      - str
+
+  order_books:
+     request:
+       template: products/{currency_pair}/book
+       pair_template:  # e.g. BTC-USD
+         template: "{first}-{second}"
+         lower_case: false
+       params:
+         level:
+           type: int
+           allowed:
+           - 1 # Only the best bid and ask
+           - 2 # Top 50 bids and asks (aggregated)
+           - 3 # Full order book (non aggregated), Abuse of Level 3 via polling will cause your access to be limited or blocked.
+           default: 2
+     response:
+       type: dict
+       values:
+         sequence:
+           type:
+           - int
+         bids:
+           type: list
+           values:
+             type: list
+             values:
+               0: # price
+                 type:
+                 - str
+               1: # size
+                 type:
+                 - str
+               2: # num-orders
+                 type: int
+         asks:
+           type: list
+           values:
+             type: list
+             values:
+               0: # price
+                 type:
+                 - str
+               1: # size
+                 type:
+                 - str
+               2: # num-orders
+                 type: int
+     mapping:
+     - key: time
+       path: []
+       type:
+       - none
+       - now
+     - key: bids_price
+       path:
+       - bids
+       - 0
+       type:
+       - str
+       - float
+     - key: bids_amount
+       path:
+       - bids
+       - 1
+       type:
+       - str
+       - float
+     - key: asks_price
+       path:
+       - asks
+       - 0
+       type:
+       - str
+       - float
+     - key: asks_amount
+       path:
+       - asks
+       - 1
+       type:
+       - str
+       - float
+     - key: position
+       path: []
+       type:
+       - none
+       - range
+     - key: id
+       path:
+         - sequence
+       type:
+         - int
+
+
+  trades:
+    request:
+      template: products/{currency_pair}/trades
+      pair_template:  # e.g. BTC-USD
+        template: "{first}-{second}"
+        lower_case: false
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          time:
+            type:
+            - str
+          trade_id:
+            type: int
+          price:
+            type:
+            - str
+          size:
+            type:
+            - str
+          side:
+            type: str
+    mapping:
+    - key: time
+      path:
+      - time
+      type:
+      - str
+      - strptime
+      - "%Y-%m-%dT%H:%M:%S.%fZ"
+    - key: price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: amount
+      path:
+      - size
+      type:
+      - str
+      - float
+    - key: direction
+      path:
+      - side
+      type:
+      - str
+    - key: id
+      path:
+        - trade_id
+      type:
+        - int
 
   historic_rates: # Historical rates should not be polled frequently. If you need real-time information, use the trade and book endpoints along with the websocket feed.
     request:
@@ -265,6 +277,7 @@ requests:
           - strftime
           - "%Y-%m-%dT%H:%M:%S.%fZ"
           required: false
+          default: 2010-01-01T00:00:00.0001
         end: # End time in ISO 8601
           type:
           - datetime
@@ -301,33 +314,33 @@ requests:
           5: # volume
             type: float
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - 0
       type:
       - int
-      - fromtimestamp
-    - key: historic_rates_low
+      - utcfromtimestamp
+    - key: low
       path:
       - 1
       type:
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - 2
       type:
       - float
-    - key: historic_rates_open
+    - key: open
       path:
       - 3
       type:
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - 4
       type:
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - 5
       type:
