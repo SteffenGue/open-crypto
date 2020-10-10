@@ -72,6 +72,7 @@ class DatabaseHandler:
             conn_string = '{}:///{}.db'.format(sqltype, db_name)
         else:
             conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
+            print(conn_string)
         logging.info('Connection String is: {}'.format(conn_string))
         engine = create_engine(conn_string)
 

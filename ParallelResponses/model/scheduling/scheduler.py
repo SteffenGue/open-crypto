@@ -65,6 +65,7 @@ class Scheduler:
         await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
 
     def validate_job(self, job_list):
+        #todo: doku und return
         if job_list:
             for job in job_list:
                 if not job.exchanges_with_pairs:
@@ -158,7 +159,7 @@ class Scheduler:
                            request_name: str,
                            request_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-
+        #todo: doku
         print('Starting to collect {}.'.format(request_name), end="\n\n")
         logging.info('Starting to collect {}.'.format(request_name))
 
@@ -169,19 +170,20 @@ class Scheduler:
         for response in responses:
             if response:
                 exchange_name = response[0]
+                found_exchange: Exchange = None
                 for exchange in exchanges_with_pairs.keys():
-                    if exchange.name.upper() == exchange_name.upper():
+                    if exchange.name.upper() == exchange_name.upper(): #finding the right exchange
+                        found_exchange = exchange
                         break
 
-                formatted_response, mappings = exchange.format_data(request_name,
-                                                                        response)
+                if found_exchange:
+                    formatted_response, mappings = found_exchange.format_data(request_name, response)
 
-                if formatted_response:
-                    self.database_handler.persist_response(exchange_name,
-                                                           request_name,
-                                                           request_table,
-                                                           formatted_response,
-                                                           mappings)
-
-        print('Done collecting {}.'.format(request_name), end="\n\n")
-        logging.info('Done collecting {}.'.format(request_name))
+                    if formatted_response:
+                        self.database_handler.persist_response(exchange_name,
+                                                               request_name,
+                                                               requst_table,
+                                                               formatted_response,
+                                                               mappings)
+            print('Done collecting {}.'.format(request_name), end="\n\n")
+            logging.info('Done collecting {}.'.format(request_name))

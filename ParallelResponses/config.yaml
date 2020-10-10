@@ -1,92 +1,51 @@
 general:
   database:
-    sqltype: sqlite
+    sqltype: postgresql
     client: psycopg2
-    user_name: postgres
-    password: Thw_kiel
+    user_name: bjarne
+    password: ''
     host: localhost
     port: 5432
-    db_name: test_db
+    db_name: hochfrequenz
   operation_settings:
-    frequency: 0.1
+    frequency: 1
   export:
-    export_data_to_csv: true
+    export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
     yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
-# collecting_ticker:
-#   yaml_request_name: ticker
-#   update_cp: true
-#   exchanges:
-#      - bithumb
-#   currency_pairs:
-#     - all
-#   first_currencies:
-##     - eth #checken, dass es für bittrex nur 4 cps gibt wenn nur eth als first
-#   second_currencies:
-
-# collecting_rates:
-#   yaml_request_name: historic_rates
-#   update_cp: False
-#   exchanges:
-#     - atilly
-#   currency_pairs:
-#   first_currencies:
-#     - eth
-#   second_currencies:
-
-  historic_rates:
-    yaml_request_name: trades
-    update_cp: False
-    exchanges:
-      - coinbase
-    currency_pairs:
-      - first: eth
-        second: btc
-    first_currencies:
-#      - btc
-    second_currencies:
-#      - eth
-
-
-#  order_books:
-#    yaml_request_name: order_books
-#    update_cp: False
-#    exchanges:
-#      - coinbase
-#    currency_pairs:
-#      - first: eth
-#        second: btc
-#    first_currencies:
-##      - btc
-#    second_currencies:
-##      - eth
-
-#  ohlcvm:
-#    yaml_request_name: ohlcvm
-#    update_cp: true
-#    exchanges:
-#      - coingecko
-#    currency_pairs:
-#      - first: bitcoin
-#        second: USD
-#    first_currencies:
-#      - None
-#    second_currencies:
-#      - None
-
-#  trades:
-#    yaml_request_name: trades
-#    update_cp: false
-#    exchanges:
-#      - bithumb
-#    currency_pairs:
-#      - first: btc
-#        second: usdt
-#    first_currencies:
-##      - btc
-#    second_currencies:
-##      - btc
+ collecting_ticker:
+   yaml_request_name: ticker
+   update_cp: true
+   exchanges:
+    - all
+   currency_pairs:
+     - first: eos
+       second: usd
+     - first: eos
+       second: usdt
+     - first: xrp
+       second: usdt
+     - first: xrp
+       second: usd
+     - first: xlm
+       second: usdt
+     - first: xlm
+       second: usd
+     - first: neo
+       second: usdt
+     - first: neo
+       second: usd
+     - first: btc
+       second: usdt
+     - first: btc
+       second: usd
+     - first: eth
+       second: usdt
+     - first: eth
+       second: usd
+   first_currencies:
+   second_currencies:
