@@ -8,7 +8,7 @@ import aiohttp
 from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
 from model.database.tables import ExchangeCurrencyPair
-
+from model.utilities.utilities import TYPE_CONVERSION
 
 class Exchange:
     """
@@ -90,9 +90,9 @@ class Exchange:
                 self.rate_limit = yaml_file['rate_limit']['units'] / yaml_file['rate_limit']['max']
         else:
             self.rate_limit = 0
-        self.request_urls = self.extract_request_urls(yaml_file['requests'])
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
+        self.request_urls = self.extract_request_urls(yaml_file['requests'])
         self.exception_counter = 0
         self.active_flag = True
         self.consecutive_exception = False
@@ -433,6 +433,14 @@ class Exchange:
                 for param in request_dict['params']:
                     if 'default' in request_dict['params'][param]:
                         params[param] = str(request_dict['params'][param]['default'])
+
+                    if 'function' in request_dict['params'][param]:
+                        conv_params = request_dict['params'][param]['function']
+                        conversion_tuple = (conv_params[0], conv_params[1])
+
+                        params[param] = TYPE_CONVERSION[conversion_tuple]['function']
+
+
             request_parameters['params'] = params
 
             urls[request] = request_parameters

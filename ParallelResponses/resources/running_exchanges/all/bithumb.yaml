@@ -254,7 +254,6 @@ requests:
         - none
         - range
 
-
   trades:
     request:
       template: spot/trades
@@ -317,3 +316,89 @@ requests:
         - s
       type:
         - str
+
+  historic_rates:
+    request:
+      template: spot/kline
+      pair_template:
+        template: "{first}-{second}"
+        alias: symbol
+        lower_case: false
+      params:
+        type:
+          type: str
+          default: d1
+        end:
+          type: int
+          required: true
+          function:
+            - timestamp_now
+            - int
+    response:
+      type: dict
+      values:
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              c:
+                type: str
+              s:
+                type: str
+              t:
+                type: str
+              v:
+                type: str
+              h:
+                type: str
+              time:
+                type: str
+              l:
+                type: str
+              o:
+                type: str
+    mapping:
+      - key: time
+        path:
+          - data
+          - time
+        type:
+          - str
+          - int
+          - utcfromtimestamp
+      - key: open
+        path:
+          - data
+          - o
+        type:
+          - str
+          - float
+      - key: high
+        path:
+          - data
+          - h
+        type:
+          - str
+          - float
+      - key: low
+        path:
+          - data
+          - l
+        type:
+          - str
+          - float
+      - key: close
+        path:
+          - data
+          - c
+        type:
+          - str
+          - float
+      - key: volume
+        path:
+          - data
+          - v
+        type:
+          - str
+          - float

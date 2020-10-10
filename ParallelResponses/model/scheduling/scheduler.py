@@ -182,5 +182,6 @@ class Scheduler:
                                                            requst_table,
                                                            formatted_response,
                                                            mappings)
+
         print('Done collecting {}.'.format(request_name), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name))

@@ -140,6 +140,10 @@ TYPE_CONVERSION = {
     ('none', 'range'): {
         'function': lambda *args: range(1),
         'params': 0
+    },
+    ('timestamp_now', 'int'): {
+        'function': datetime.datetime.timestamp(datetime.datetime.now()).__int__(),
+        'params': 0
     }
 }
 
@@ -169,6 +173,9 @@ REQUEST_PARAMS = {
     "last_ts": {
         "name": 'last_ts',
         "function": lambda session, table, exchange, pair: session.query(table).filter()
+    },
+    "timestamp_now": {
+        "function": datetime.datetime.now()
     }
 }
 
