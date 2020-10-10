@@ -1,12 +1,5 @@
 name: bitmex
-terms:
-  terms_url: https://www.bitmex.com/app/terms
-  permission: null
-  search_targets:
-  - tag: div
-    class: body
-  - tag: div
-    class: staticContent terms
+exchange: true
 api_url: https://www.bitmex.com/api/v1/
 rate_limit:
   max: 150 # 300 when logged in
@@ -143,7 +136,7 @@ requests:
           - 5m
           - 1h
           - 1d
-          required: false
+          required: True
           default: 1d
         partial: # If true, will send in-progress (incomplete) bins for the current time period.
           type: bool

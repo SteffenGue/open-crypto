@@ -13,18 +13,19 @@ general:
     export_data_to_csv: true
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
-    enable_logging: True
+    yaml_path: resources/running_exchanges/testing/working/
+    enable_logging: false
 
 jobs:
 # collecting_ticker:
 #   yaml_request_name: ticker
 #   update_cp: true
 #   exchanges:
-#    - binance
+#      - bithumb
 #   currency_pairs:
+#     - all
 #   first_currencies:
-#     - eth #checken, dass es für bittrex nur 4 cps gibt wenn nur eth als first
+##     - eth #checken, dass es für bittrex nur 4 cps gibt wenn nur eth als first
 #   second_currencies:
 
 # collecting_rates:
@@ -41,7 +42,7 @@ jobs:
 #    yaml_request_name: historic_rates
 #    update_cp: False
 #    exchanges:
-#      - binance
+#      - bitfinex
 #    currency_pairs:
 #      - first: eth
 #        second: btc
@@ -57,10 +58,10 @@ jobs:
 #    yaml_request_name: order_books
 #    update_cp: False
 #    exchanges:
-#      - binance
+#      - bithumb
 #    currency_pairs:
-#      - first: ltc
-#        second: btc
+#      - first: btc
+#        second: usdt
 #    first_currencies:
 ##      - btc
 #    second_currencies:
@@ -68,7 +69,7 @@ jobs:
 
 #  ohlcvm:
 #    yaml_request_name: ohlcvm
-#    update_cp: False
+#    update_cp: true
 #    exchanges:
 #      - coingecko
 #    currency_pairs:
@@ -78,17 +79,15 @@ jobs:
 #      - None
 #    second_currencies:
 #      - None
-#
+
   trades:
     yaml_request_name: trades
     update_cp: false
     exchanges:
-      - binance
+      - bithumb
     currency_pairs:
-      - first: ltc
-        second: btc
-      - first: eth
-        second: btc
+      - first: btc
+        second: usdt
     first_currencies:
 #      - btc
     second_currencies:

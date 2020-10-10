@@ -5,7 +5,7 @@ from typing import List, Any, Dict
 import yaml #install PyYaml
 import pathlib
 from pathlib import Path
-
+import logging
 
 TYPE_CONVERSION = {
 
@@ -42,6 +42,11 @@ TYPE_CONVERSION = {
     },
     ("int", "utcfromtimestamp"): {  # Partially tested
         "function": datetime.datetime.utcfromtimestamp,
+        "params": 0
+    },
+    ("int", "utcfromtimestampms"): {  # Partially tested
+        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
+            timestampms/1000),
         "params": 0
     },
     ("int", "fromtimestampms"): {  # Partially tested
@@ -125,7 +130,7 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("none", "now"): {
-        "function": lambda arg: datetime.datetime.now(),
+        "function": lambda arg: datetime.datetime.utcnow(),
         "params": 0
     },
     ("none", "constant"): {  # Returns the first argument
@@ -133,8 +138,8 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ('none', 'range'): {
-        'function': lambda *args: range(args[1]),
-        'params': 1
+        'function': lambda *args: range(1),
+        'params': 0
     }
 }
 
@@ -209,7 +214,9 @@ def yaml_loader(exchange: str):
             data = yaml.load(f, Loader=yaml.FullLoader)
             return data
         except Exception as ex:
-            print("error of loading yaml")
+            print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
+            print("")
+            logging.exception(f"Error loading yaml of {exchange}.\n", ex.with_traceback())
             #todo: insert new exception handling
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 

@@ -1,5 +1,5 @@
 name: coingecko
-
+exchange: false
 api_url: https://api.coingecko.com/api/v3/
 
 requests:
@@ -87,26 +87,26 @@ requests:
                 type: float
 
     mapping:
-      - key: ohlcvm_time
+      - key: time
         path:
           - prices
           - 0
         type:
           - int
           - fromtimestampms
-      - key: ohlcvm_close
+      - key: close
         path:
           - prices
           - 1
         type:
           - float
-      - key: ohlcvm_volume
+      - key: volume
         path:
           - total_volumes
           - 1
         type:
           - float
-      - key: ohlcvm_mcap
+      - key: mcap
         path:
           - market_caps
           - 1

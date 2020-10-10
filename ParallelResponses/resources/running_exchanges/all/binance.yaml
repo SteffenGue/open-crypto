@@ -137,7 +137,6 @@ requests:
       type:
         - none
         - range
-        - 10
     - key: bids_price
       path:
       - bids

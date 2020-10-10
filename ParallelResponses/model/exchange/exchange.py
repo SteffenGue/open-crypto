@@ -442,7 +442,7 @@ class Exchange:
     def extract_mappings(self, requests: dict) -> Dict[str, List[Mapping]]:
         """
         Helper-Method which should be only called by the constructor.
-        Extracts out of a given exchange.yaml-requests-section for each
+        Extracts out of a given exchange .yaml-requests-section for each
         request the necessary mappings so the values can be extracted from
         the response for said request.
 
@@ -537,7 +537,7 @@ class Exchange:
 
         AMEN
 
-        :param response: Tuple[exchnage_name, time of arrival, response from exchnage-api]
+        :param response: Tuple[exchange_name, time of arrival, response from exchange-api]
             response is a parsed json -> Dict.
 
         :return: Iterator of tuples with the following structure:
@@ -635,7 +635,10 @@ class Exchange:
         for mapping in mappings:
             results[mapping.key] = mapping.extract_value(response[1])
 
+        #ToDo:Das funktioniert nicht!
         assert (len(results[0]) == len(result) for result in results)
+
+
 
         return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
                                           results['currency_pair_first'],
@@ -685,6 +688,9 @@ class Exchange:
 
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values())
+
+                    if 'position' in temp_results.keys():
+                        temp_results['position'] = range(len_results)
 
                     temp_results.update({'exchange_pair_id': currency_pair.id})
                     result = [v if hasattr(v, '__iter__')

@@ -1,15 +1,5 @@
 name: bitfinex
-terms:
-  terms_url: https://www.bitfinex.com/legal/api_terms
-  permission: null
-  search_targets:
-  - tag: div
-    class: pub-wrapper
-  - tag: div
-    class: row container
-  - tag: div
-    class: pad-for-content policy-pages max-width
-versions:
+
   v1:
     api_url: https://api.bitfinex.com/v1/
     rate_limit: null
@@ -514,22 +504,6 @@ versions:
                 type: bool
 
   v2:
-    api_url: https://api.bitfinex.com/v2/
-    rate_limit: null
-    requests:
-      platform status: # not required
-        request:
-          template: platform/status/
-          values: null
-          params: null
-        response:
-          type: int
-          values:
-            # 1=operative, 0=maintenance
-            operative:
-              type:
-              - int
-              - bool # true (operative), false (maintenance)
 
       tickers:
         request:
