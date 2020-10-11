@@ -198,10 +198,10 @@ class Mapping:
                 # Iterate through list of results
                 result = list()
 
-                # TODO: HIER HAST DU WAS GEÄNDERT
-                # if len(response) == 1:
-                #     response = response[0]
-                # else:
+                if len(response) == 1: #special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
+                    response = response[0]
+                    #continue #das continue hast du eingefügt
+
                 for item in response:
 
                     if is_scalar(item):
