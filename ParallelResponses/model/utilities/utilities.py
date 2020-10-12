@@ -88,6 +88,10 @@ TYPE_CONVERSION = {
         datetime.datetime.strptime(string, args[0]),
         "params": 1
     },
+    ("strptime_w_f", 'strptime_wo_f'): {
+        'function': lambda string, *args: datetime.datetime.strptime(string.split(".")[0], *args),
+        'params': 1
+    },
     ("str", "split"): {  # Tested
         "function": lambda string, *args: string.split(args[0])[args[1]],
         "params": 2
@@ -140,6 +144,10 @@ TYPE_CONVERSION = {
     ('none', 'range'): {
         'function': lambda *args: range(1),
         'params': 0
+    },
+    ('value', 'map'): {
+        'function': lambda *args: {args[1]: args[2], args[3]: args[4]}[args[0]],
+        'params': 4
     },
     ('timestamp_now', 'int'): {
         'function': datetime.datetime.timestamp(datetime.datetime.now()).__int__(),

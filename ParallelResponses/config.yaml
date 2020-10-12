@@ -1,51 +1,29 @@
 general:
   database:
-    sqltype: postgresql
+    sqltype: sqlite
     client: psycopg2
-    user_name: bjarne
-    password: ''
+    user_name: postgres
+    password:
     host: localhost
     port: 5432
-    db_name: hochfrequenz
+    db_name: test_db
   operation_settings:
-    frequency: 1
+    frequency: 0.1
   export:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
  collecting_ticker:
-   yaml_request_name: ticker
+   yaml_request_name: trades
    update_cp: true
    exchanges:
-    - all
+    - bibox
    currency_pairs:
-     - first: eos
-       second: usd
-     - first: eos
-       second: usdt
-     - first: xrp
-       second: usdt
-     - first: xrp
-       second: usd
-     - first: xlm
-       second: usdt
-     - first: xlm
-       second: usd
-     - first: neo
-       second: usdt
-     - first: neo
-       second: usd
-     - first: btc
-       second: usdt
-     - first: btc
-       second: usd
      - first: eth
-       second: usdt
-     - first: eth
-       second: usd
+       second: btc
    first_currencies:
    second_currencies:

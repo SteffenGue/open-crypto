@@ -165,105 +165,6 @@ requests:
       type:
       - float
 
-#  order_book:
-#    request:
-#      template: orders
-#      pair_template: # e.g. KCS-BTC
-#        template: "{first}-{second}"
-#        lower_case: false
-#        alias: symbol
-#      params:
-#        group:
-#          type: int
-#          required: false
-#        limit:
-#          type: int
-#          required: false
-#        direction:
-#          type: str
-#          allowed:
-#          - buy
-#          - sell
-#          required: false
-#    response:
-#      type: dict
-#      values:
-#        success:
-#          type: bool
-#        code:
-#          type: str
-#        msg:
-#          type: str
-#        timestamp:
-#          type:
-#          - int
-#          - fromtimestamp
-#        data:
-#          type: dict
-#          values:
-#            SELL:
-#              type: list
-#              values:
-#                type: list
-#                values:
-#                  0: # price
-#                    type: float
-#                  1: # amont
-#                    type: float
-#                  2: # volume
-#                    type: float
-#            BUY:
-#              type: list
-#              values:
-#                type: list
-#                values:
-#                  0: # price
-#                    type: float
-#                  1: # amont
-#                    type: float
-#                  2: # volume
-#                    type: float
-#            timestamp:
-#              type:
-#              - int
-#              - fromtimestamp
-#    mapping:
-#    - key: order_book_asks_price
-#      path:
-#      - data
-#      - SELL
-#      - 0
-#      type:
-#      - float
-#    - key: order_book_asks_size
-#      path:
-#      - data
-#      - SELL
-#      - 2
-#      type:
-#      - float
-#    - key: order_book_bids_price
-#      path:
-#      - data
-#      - BUY
-#      - 0
-#      type:
-#      - float
-#    - key: order_book_bids_size
-#      path:
-#      - data
-#      - BUY
-#      - 2
-#      type:
-#      - float
-#    - key: order_book_time
-#      path:
-#      - data
-#      - timestamp
-#      type:
-#      - int
-#      - fromtimestamp
-
   historic_rates:
     request:
       template: market/candles
@@ -274,11 +175,8 @@ requests:
       params:
         startAt:
           type: int
-          default: 1357031727
-            
         endAt:
-          type: int
-          default: 1568880927 # 18.09.2019 HIER VARIABLER WERT!!
+          type: int # 18.09.2019 HIER VARIABLER WERT!!
         type:
           type: 
           allowed:
@@ -331,7 +229,7 @@ requests:
       type:
       - str
       - int
-      - fromtimestamp
+      - utcfromtimestamp
     - key: open
       path:
       - data
@@ -367,3 +265,161 @@ requests:
       type:
       - str
       - float
+
+
+  order_books:
+    request:
+      template: market/orderbook/level2
+      pair_template: # e.g. KCS-BTC
+        template: "{first}-{second}"
+        lower_case: false
+        alias: symbol
+      params: null
+    response:
+      type: dict
+      values:
+        code:
+          type: str
+        data:
+          type: dict
+          values:
+            time:
+              type: int
+            sequence:
+              type: str
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0:
+                    type: str
+                  1:
+                    type: str
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0:
+                    type: str
+                  1:
+                    type: str
+    mapping:
+    - key: asks_price
+      path:
+      - data
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: asks_amount
+      path:
+      - data
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: bids_price
+      path:
+      - data
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: bids_amount
+      path:
+      - data
+      - bids
+      - 1
+      type:
+      - str
+      - float
+    - key: time
+      path:
+      - data
+      - time
+      type:
+      - int
+      - utcfromtimestampms
+    - key: id
+      path:
+        - data
+        - sequence
+      type:
+        - str
+        - int
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+
+  trades:
+    request:
+      template: market/histories
+      pair_template:
+        template: "{first}-{second}"
+        alias: symbol
+        lower_case: false
+      params: null
+
+    response:
+      type: dict
+      values:
+        code:
+          type: str
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              sequence:
+                type: str
+              price:
+                type: str
+              size:
+                type: str
+              side:
+                type: str
+              time:
+                type: int
+    mapping:
+      - key: time
+        path:
+          - data
+          - time
+        type:
+          - int
+          - utcfromtimestampps
+      - key: price
+        path:
+          - data
+          - price
+        type:
+          - str
+          - float
+      - key: amount
+        path:
+          - data
+          - size
+        type:
+          - str
+          - float
+      - key: direction
+        path:
+          - data
+          - side
+        type:
+          - str
+      - key: id
+        path:
+          - data
+          - sequence
+        type:
+          - str
+          - int
+

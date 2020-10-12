@@ -182,7 +182,7 @@ class Scheduler:
                     if formatted_response:
                         self.database_handler.persist_response(exchange_name,
                                                                request_name,
-                                                               requst_table,
+                                                               request_table,
                                                                formatted_response,
                                                                mappings)
             print('Done collecting {}.'.format(request_name), end="\n\n")

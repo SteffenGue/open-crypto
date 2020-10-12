@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, validates, aliased, mapper
 from sqlalchemy_utils import create_view
 from sqlalchemy_utils.functions import orm
+from sqlalchemy.ext.hybrid import hybrid_property
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -222,7 +223,23 @@ class Trade(Base):
     best_bid = Column(Float)
     best_ask = Column(Float)
     price = Column(Float)
-    direction = Column(String)
+    _direction = Column('direction', Integer)
+
+    @hybrid_property
+    def direction(self):
+        return self._direction
+
+    @direction.setter
+    def direction(self, direction):
+        if isinstance(direction, str):
+            if direction.lower() == 'sell':
+                self._direction = 0
+            elif direction.lower() == 'buy':
+                self._direction = 1
+            else:
+                self._direction = direction
+
+
 
     def __repr__(self):
         return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
