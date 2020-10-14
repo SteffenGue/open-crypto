@@ -1,34 +1,47 @@
 name: gateio
 exchange: true
-api_url: https://data.gateio.co/api2/1/
+api_url: https://api.gateio.ws/api/v4/spot/
 rate_limit: null
 requests:
   currency_pairs:
     request:
-      template: pairs/
+      template: currency_pairs
       pair_template: null
       params: null
     response:
       type: list
-      values: # each available currency pair, i.e. "eth_btc"
-        type: str
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          base:
+            type: str
+          quote:
+            type: str
+          fee:
+            type: str
+          min_base_amount:
+            type: str
+          min_quote_amount:
+            type: str
+          amount_precision:
+            type: str
+          precision:
+            type: int
+          trade_status:
+            type: str
     mapping:
       - key: currency_pair_first
         path:
-          - []
+          - base
         type:
           - str
-          - split
-          - "_"
-          - 0
       - key: currency_pair_second
         path:
-          - []
+          - quote
         type:
           - str
-          - split
-          - "_"
-          - 1
 
   ticker:
     request:
@@ -36,56 +49,32 @@ requests:
       pair_template: null
       params: null
     response:
-      type: dict
+      type: list
       values:
-        currency_pair: # e.g. eth_btc, variable key, each available currency pair
-          type: dict
-          values:
-            result:
-              type:
-                - str
-                - bool
-            last:
-              type:
-                - str
-                - float
-            lowestAsk:
-              type:
-                - str
-                - float
-            highestBid:
-              type:
-                - str
-                - float
-            percentChange:
-              type:
-                - str
-                - float
-            baseVolume:
-              type:
-                - str
-                - float
-            quoteVolume:
-              type:
-                - str
-                - float
-            high24hr:
-              type:
-                - str
-                - float
-            low24hr:
-              type:
-                - str
-                - float
+        type: dict
+        values:
+          currency_pair:
+            type: str
+          last:
+            type: str
+          lowest_ask:
+            type: str
+          highest_bid:
+            type: str
+          change_percentage:
+            type: str
+          base_volume:
+            type: str
+          quote_volume:
+            type: str
+          high_24h:
+            type: str
+          low_24h:
+            type: str
     mapping:
-      - key: ticker_time
-        path: []
-        type:
-          - none
-          - now
       - key: currency_pair_first
         path:
-          - dict_key
+          - currency_pair
         type:
           - str
           - split
@@ -93,117 +82,59 @@ requests:
           - 0
       - key: currency_pair_second
         path:
-          - dict_key
+          - currency_pair
         type:
           - str
           - split
           - "_"
           - 1
-      - key: ticker_last_price
+#      - key: ticker_time
+#        path: []
+#        type:
+#          - none
+#          - now
+      - key: last_price
         path:
-          - dict_values
           - last
         type:
           - str
           - float
-      - key: ticker_best_ask
+      - key: best_bid
         path:
-          - dict_values
-          - lowestAsk
+          - highest_bid
         type:
           - str
           - float
-      - key: ticker_best_bid
+      - key: best_ask
         path:
-          - dict_values
-          - highestBid
+          - lowest_ask
         type:
           - str
           - float
-
-#   currencies:
-#     request:
-#       template: marketlist/
-#       pair_template: null
-#       params: null
-#     response:
-#       type: dict
-#       values:
-#         result:
-#           type:
-#           - str
-#           - boolean
-#         data:
-#           type: list
-#           values:
-#             type: dict
-#             values:
-#               no:
-#                 type: int
-#               symbol:
-#                 type: str
-#               name:
-#                 type: str
-#               name_en:
-#                 type: str
-#               name_cn:
-#                 type: str
-#               pair:
-#                 type: str
-#               rate:
-#                 type:
-#                 - str
-#                 - float
-#               vol_a:
-#                 type: float
-#               vol_b:
-#                 type:
-#                 - str
-#                 - float
-#               curr_a:
-#                 type: str
-#               curr_b:
-#                 type: str
-#               curr_suffix:
-#                 type: str
-#               rate_percent:
-#                 type:
-#                 - str
-#                 - float
-#               trend:
-#                 type: str
-#               supply:
-#                 type: int
-#               marketcap:
-#                 type: str
-#               plot:
-#                 type: str
-#     mapping:
-#     - key: currency_symbol
-#       path:
-#       - data
-#       - symbol
-#       type:
-#       - str
-#     - key: currency_name
-#       path:
-#       - data
-#       - name
-#       type:
-#       - str
-
+      - key: daily_volume
+        path:
+          - quote_volume
+        type:
+          - str
+          - float
+#
 #  order_book:
 #    request:
-#      template: orderBook/{currency_pair}/
+#      template: order_book
 #      pair_template:
 #        template: "{first}_{second}"
 #        lower_case: true
-#      params: null
+#      params:
+#        interval:
+#          type: int
+#          default: 0
+#        limit:
+#          type: int
+#          default: 30
+#
 #    response:
 #      type: dict
 #      values:
-#        elapsed:
-#          type: str
 #        asks:
 #          type: list
 #          values:
@@ -268,157 +199,149 @@ requests:
 #      type:
 #      - str
 #      - float
-#
-#  trades:
-#    request:
-#      template: tradeHistory/{currency_pair}/
-#      pair_template:
-#        template: "{first}_{second}"
-#        lower_case: true
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        elapsed:
-#          type: str
-#        result:
-#          type:
-#          - str
-#          - bool
-#        data:
-#          type: list
-#          values:
-#            type: dict
-#            values:
-#              tradeID:
-#                type:
-#                - str
-#                - int
-#              total:
-#                type:
-#                - str
-#                - float
-#              date:
-#                type:
-#                - str
-#                - strptime
-#                - "%Y-%m-%d %H:%M:%S"
-#              rate:
-#                type:
-#                - str
-#                - float
-#              amount:
-#                type:
-#                - str
-#                - float
-#              timestamp:
-#                type:
-#                - str
-#                - int
-#                - fromtimestamp
-#              type:
-#                type: str
-#    mapping:
-#    - key: trade_time
-#      path:
-#      - data
-#      - date
-#      type:
-#      - str
-#      - strptime
-#      - "%Y-%m-%d %H:%M:%S"
-#    - key: trade_amount
-#      path:
-#      - data
-#      - amount
-#      type:
-#      - str
-#      - float
-#    - key: trade_side
-#      path:
-#      - data
-#      - type
-#      type:
-#      - str
-#
 
-  historic_rates:
+  trades:
     request:
-      template: candlestick2/{currency_pair}
+      template: trades
       pair_template:
         template: "{first}_{second}"
+        alias: currency_pair
         lower_case: true
       params:
-        group_sec:
+        limit:
           type: int
-          default: 86400 # in Seconds --> 1 Day
-        range_hour:
+          default: 200
+        last_id:
           type: int
-          default: 87600 #in Hours --> 10 Jahre
+          required: false
     response:
-      type: dict
+      type: list
       values:
-        elapsed:
-          type: str
-        result:
-          type: str
-        data:
-          type: list
-          values:
-            type: list
-            values:
-              0: #timestamp in Milliseconds
-                type: str
-              1: # vol
-                type: str
-              2: # close
-                type: str
-              3: # high
-                type: str
-              4: # low
-                type: str
-              5: # open
-                type: str
+        type: dict
+        values:
+          id:
+            type: str
+          create_time:
+            type: str
+          side:
+            type: str
+          role:
+            type: str
+          amount:
+            type: str
+          price:
+            type: str
+          order_id:
+            type: str
+          fee:
+            type: str
+          fee_currency:
+            type: str
+          point_fee:
+            type: str
+          gt_fee:
+            type: str
+
     mapping:
     - key: time
       path:
-      - data
+      - create_time
+      type:
+      - str
+      - int
+      - utcfromtimestamp
+    - key: amount
+      path:
+        - amount
+      type:
+      - str
+      - float
+    - key: direction
+      path:
+        - side
+      type:
+      - str
+    - key: price
+      path:
+        - price
+      type:
+        - str
+        - float
+    - key: id
+      path:
+        - id
+      type:
+        - str
+        - int
+
+
+  historic_rates:
+    request:
+      template: candlesticks
+      pair_template:
+        template: "{first}_{second}"
+        alias: currency_pair
+        lower_case: true
+      params:
+        limit:
+          type: int
+          default: 1000
+        interval:
+          type: str
+          default: 1d
+    response:
+      type: list
+      values:
+        type: list
+        values:
+          0:
+            type: str
+          1:
+            type: str
+          2:
+            type: str
+          3:
+            type: str
+          4:
+            type: str
+          5:
+            type: str
+          6:
+            type: str
+    mapping:
+    - key: time
+      path:
       - 0
       type:
       - str
       - int
-      - fromtimestampms
+      - utcfromtimestamp
     - key: volume
       path:
-      - data
       - 1
       type:
       - str
       - float
     - key: close
       path:
-      - data
       - 2
       type:
       - str
       - float
     - key: high
       path:
-      - data
       - 3
       type:
       - str
       - float
     - key: low
       path:
-      - data
       - 4
       type:
       - str
       - float
     - key: open
       path:
-      - data
       - 5
       type:
       - str

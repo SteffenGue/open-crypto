@@ -1,47 +1,34 @@
 general:
   database:
-    sqltype: postgresql
+    sqltype: sqlite
     client: psycopg2
-    user_name: bjarne
-    password: ''
+    user_name: postgres
+    password:
     host: localhost
     port: 5432
     db_name: hochfrequenz
   operation_settings:
-    frequency: 1
+    frequency: 0.1
   export:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
   collecting_ticker:
     yaml_request_name: ticker
-    frequency: 1
+    update_cp: false
     exchanges:
-      - bibox
+      - gateio
     currency_pairs:
-      - null
-    first_currency:
-      - BTC
-    second_currency:
-      - USD
-
-#  ticker:
-#    yaml_request_name: ticker
-#    frequency: 3
-#    exchange:
-#      - binance
-#      - bibox
-#    currency_pairs:
+      - all
 #      - first: eth
 #        second: btc
-#      - first: eth
-#        second: doge
-#
-#    first_currency:
-#      - eth
-#    second_currency:
+    first_currencies:
+#      - BTC
+    second_currencies:
+#      - USD
+
 

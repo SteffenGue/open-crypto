@@ -151,7 +151,7 @@ class Mapping:
                       path_queue: deque = None,
                       types_queue=None,
                       iterate=True,
-                      currency_pair_info: (str, str, str) = None):  # TODO DOKU
+                      currency_pair_info: (str, str, str) = (None, None, None)):  # TODO DOKU
         """Extracts the value specfied by "self.path".
 
         Extracts the value specified by the path sequence and converts it
