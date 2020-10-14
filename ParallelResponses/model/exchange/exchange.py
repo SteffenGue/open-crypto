@@ -148,7 +148,7 @@ class Exchange:
     async def request(self,
                       request_name: str,
                       currency_pairs: List[ExchangeCurrencyPair]) -> \
-            Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair]]]:
+            Tuple[datetime, str, Tuple[Optional[ExchangeCurrencyPair]]]:
 
         """
         Method tries to request data for all given methods and currency pairs.

@@ -11,7 +11,6 @@ Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
 
 
-
 class Exchange(Base):
     """
     Database ORM-Class storing the exchange table. ALl exchange used to perform requests
@@ -238,8 +237,6 @@ class Trade(Base):
                 self._direction = 1
             else:
                 self._direction = direction
-
-
 
     def __repr__(self):
         return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
