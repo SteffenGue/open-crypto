@@ -6,7 +6,7 @@ general:
     password:
     host: localhost
     port: 5432
-    db_name: hochfrequenz
+    db_name: neue_db
   operation_settings:
     frequency: 0.1
   export:
@@ -18,16 +18,18 @@ general:
 
 jobs:
   collecting_ticker:
-    yaml_request_name: ticker
+    yaml_request_name: order_books
     update_cp: false
     exchanges:
       - gateio
     currency_pairs:
-      - all
-#      - first: eth
-#        second: btc
+#      - all
+      - first: btc
+        second: usdt
+      - first: eth
+        second: btc
     first_currencies:
-#      - BTC
+      - null
     second_currencies:
 #      - USD
 

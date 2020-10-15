@@ -88,11 +88,11 @@ requests:
           - split
           - "_"
           - 1
-#      - key: ticker_time
-#        path: []
-#        type:
-#          - none
-#          - now
+      - key: time
+        path: []
+        type:
+          - none
+          - now
       - key: last_price
         path:
           - last
@@ -118,87 +118,90 @@ requests:
           - str
           - float
 #
-#  order_book:
-#    request:
-#      template: order_book
-#      pair_template:
-#        template: "{first}_{second}"
-#        lower_case: true
-#      params:
-#        interval:
-#          type: int
-#          default: 0
-#        limit:
-#          type: int
-#          default: 30
-#
-#    response:
-#      type: dict
-#      values:
-#        asks:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0: # price
-#                type:
-#                - str
-#                - float
-#              1: # size
-#                type:
-#                - str
-#                - float
-#        bids:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0:
-#                type:
-#                - str
-#                - float
-#              1:
-#                type:
-#                - str
-#                - float
-#        result:
-#          type:
-#          - str
-#          - bool
-#    mapping:
-#    - key: order_book_time
-#      path: []
-#      type:
-#      - none
-#      - now
-#    - key: order_book_asks_price
-#      path:
-#      - asks
-#      - 0
-#      type:
-#      - str
-#      - float
-#    - key: order_book_asks_size
-#      path:
-#      - asks
-#      - 1
-#      type:
-#      - str
-#      - float
-#    - key: order_book_bids_price
-#      path:
-#      - bids
-#      - 0
-#      type:
-#      - str
-#      - float
-#    - key: order_book_bids_size
-#      path:
-#      - bids
-#      - 1
-#      type:
-#      - str
-#      - float
+  order_books:
+    request:
+      template: order_book
+      pair_template:
+        template: "{first}_{second}"
+        alias: currency_pair
+        lower_case: true
+      params:
+        interval:
+          type: int
+          default: 0
+        limit:
+          type: int
+          default: 30
+
+    response:
+      type: dict
+      values:
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+              1: # size
+                type:
+                - str
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0:
+                type:
+                - str
+              1:
+                type:
+                - str
+    mapping:
+    - key: time
+      path: []
+      type:
+      - none
+      - now
+    - key: asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: asks_amount
+      path:
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: bids_amount
+      path:
+      - bids
+      - 1
+      type:
+      - str
+      - float
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
 
   trades:
     request:

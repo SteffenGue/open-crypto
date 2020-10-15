@@ -230,7 +230,7 @@ class Exchange:
             return datetime.utcnow(), self.name, responses
         else:
             logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
-            print("{} has no Ticker request.".format(self.name))
+            print("{} has no {} request.".format(self.name, request_name))
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """
@@ -567,7 +567,8 @@ class Exchange:
 
                     if 'currency_pair_first' and 'currency_pair_second' not in mapping_keys:
                         temp_results.update({'exchange_pair_id': currency_pair.id})
-                    temp_results.update(**kwargs)
+                    # update new keys only if not already exsits to prevent overwriting!
+                    temp_results = {**kwargs, **temp_results}
                     result = [v if hasattr(v, '__iter__')
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
