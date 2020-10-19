@@ -1,0 +1,20 @@
+export:
+  save_path: resources/csv/
+  delimiter: ","
+
+query_options:
+  table_name: Ticker
+  query_everything: true
+  from_timestamp: 01-01-2020 00:00:01
+  to_timestamp:
+  exchanges:
+#    - kucoin
+#    - all
+  currency_pairs:
+#    - first: ltc
+#      second: usdt
+  first_currencies:
+#    - eth
+  second_currencies:
+#    - ngn
+
