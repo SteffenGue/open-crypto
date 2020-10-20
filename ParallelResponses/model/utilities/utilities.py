@@ -6,6 +6,7 @@ import yaml #install PyYaml
 import pathlib
 from pathlib import Path
 import logging
+from resources import ConfigFile
 
 TYPE_CONVERSION = {
 
@@ -196,7 +197,7 @@ REQUEST_PARAMS = {
 }
 
 
-def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
+def read_config(section: str) -> Dict[str, Any]:
     """
     @param section: str
         Name of the section the information is stored in.
@@ -207,9 +208,16 @@ def read_config(section: str, filename='config.yaml') -> Dict[str, Any]:
         Keys are the names of the parameters in the config-file.
     """
 
-    config_yaml = open(filename)
-    config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
+    while True:
+        try:
+            filename = ConfigFile.config_file
+            config_yaml = open(filename)
+        except FileNotFoundError:
+            ConfigFile.setter()
+        else:
+            break
 
+    config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
     for general_section in config_dict.keys():
         if section == general_section:
             return config_dict[general_section]

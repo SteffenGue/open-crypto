@@ -4,8 +4,8 @@ import os
 import sys
 from datetime import datetime
 from typing import Dict, List
-
-from csv_exporter import CsvExporter
+from resources import ConfigFile
+# from csv_exporter import CsvExporter
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
 from model.database.db_handler import DatabaseHandler
@@ -98,7 +98,6 @@ async def main(database_handler: DatabaseHandler):
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['binance']
     # TODO nicht vergessen config path zu ändern: gerade in hr_exchanges
-
     logging.info('Loading jobs.')
     jobs = await initialize_jobs(database_handler, read_config('jobs'))
     frequency = read_config('operation_settings')['frequency']
@@ -136,6 +135,7 @@ if __name__ == "__main__":
     logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, **db_params)
     asyncio.run(main(database_handler))
+
     # CsvExporter()
     # scheduler = Scheduler(database_handler, jobs)
     # scheduler.run()
