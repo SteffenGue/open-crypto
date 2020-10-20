@@ -32,7 +32,7 @@ def read_config(filename='config.yaml') -> Dict[str, Any]:
 
 
 def write_config(new_config: dict, filename='config.yaml'):
-    with open(filename, 'w') as config_yaml:
+    with open("/resources/configs/" + filename, 'w') as config_yaml:
         yaml.dump(new_config, config_yaml)
 
 

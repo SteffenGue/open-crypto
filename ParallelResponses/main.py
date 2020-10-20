@@ -4,7 +4,6 @@ import os
 import sys
 from datetime import datetime
 from typing import Dict, List
-from resources import ConfigFile
 # from csv_exporter import CsvExporter
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
@@ -128,7 +127,7 @@ def handler(type, value, tb):
 
 if __name__ == "__main__":
     # todo: enable for exception in log
-    # sys.excepthook = handler
+    sys.excepthook = handler
     init_logger()
     logging.info('Reading Database Configuration')
     db_params = read_config('database')

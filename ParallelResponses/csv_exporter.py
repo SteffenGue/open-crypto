@@ -9,7 +9,6 @@ from model.database.tables import metadata
 from dateutil import parser as dateparser
 import inspect
 from pandas import DataFrame as pd_DataFrame
-
 '''
 
 

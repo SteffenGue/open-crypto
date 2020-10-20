@@ -1,0 +1,36 @@
+general:
+  database:
+    sqltype: sqlite
+    client: psycopg2
+    user_name: postgres
+    password:
+    host: localhost
+    port: 5432
+    db_name: neue_db
+  operation_settings:
+    frequency: 0.1
+  export:
+    export_data_to_csv: false
+    csv_dir: resources/csv
+  utilities:
+    yaml_path: resources/running_exchanges/all/
+    enable_logging: false
+
+jobs:
+  Ticker:
+    yaml_request_name: ticker
+    update_cp: false
+    exchanges:
+      - gateio
+    currency_pairs:
+#      - all
+#      - first: btc
+#        second: usdt
+#      - first: eth
+#        second: btc
+    first_currencies:
+#      - null
+    second_currencies:
+#      - USD
+
+

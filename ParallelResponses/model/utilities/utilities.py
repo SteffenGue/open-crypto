@@ -6,7 +6,7 @@ import yaml #install PyYaml
 import pathlib
 from pathlib import Path
 import logging
-from resources import ConfigFile
+from resources.configs import GlobalConfig
 
 TYPE_CONVERSION = {
 
@@ -210,10 +210,10 @@ def read_config(section: str) -> Dict[str, Any]:
 
     while True:
         try:
-            filename = ConfigFile.config_file
+            filename = GlobalConfig.config_file
             config_yaml = open(filename)
         except FileNotFoundError:
-            ConfigFile.setter()
+            GlobalConfig.setter()
         else:
             break
 

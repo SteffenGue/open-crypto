@@ -10,7 +10,7 @@ from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
-
+import sys
 
 class Scheduler:
     """
@@ -85,9 +85,11 @@ class Scheduler:
                 self.validate_job(job_list)
         else:
             logging.error('No or invalid Jobs.')
-            raise ValueError("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
+            print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
                              "matching currency pairs found for a all exchanges. Please check your \n"
                              "parameters in the configuration.")
+            sys.exit(0)
+
 
     def determine_task(self, request_name: str) -> Callable:
         """
