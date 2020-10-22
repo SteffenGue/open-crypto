@@ -21,7 +21,7 @@ jobs:
     yaml_request_name: ticker
     update_cp: false
     exchanges:
-#      - atilly
+      - gateio
       - binance
     currency_pairs:
 #      - all

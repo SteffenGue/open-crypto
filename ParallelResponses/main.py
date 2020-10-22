@@ -127,7 +127,7 @@ def handler(type, value, tb):
 
 if __name__ == "__main__":
     # todo: enable for exception in log
-    sys.excepthook = handler
+    # sys.excepthook = handler
     init_logger()
     logging.info('Reading Database Configuration')
     db_params = read_config('database')

@@ -485,8 +485,10 @@ class DatabaseHandler:
                     if not currency_pair:
                         new_pairs.append(temp_currency_pair)
 
-                    if currency_pair and currency_pair.id in requested_cp_ids:
+                    if currency_pair and (currency_pair.id in requested_cp_ids):
                         data_tuple.update({'exchange_pair_id': currency_pair.id})
+                    else:
+                        continue
 
                 check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]
                 data_tuple = {key: data_tuple.get(key) for key in col_names}
@@ -496,6 +498,7 @@ class DatabaseHandler:
                                      failed_columns)
                     logging.exception('Formatted response does not contain all primary keys. \n',
                                       '{}'.format(failed_columns))
+                    continue
 
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
