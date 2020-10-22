@@ -24,7 +24,7 @@ import re
 import textwrap
 from typing import Any, Dict, Iterable, List, Set, Text, Type, Union
 import validators
-import yaml
+import oyaml as yaml
 
 
 class Valid:

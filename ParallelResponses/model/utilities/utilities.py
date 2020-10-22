@@ -2,7 +2,7 @@ import calendar
 import datetime
 import os
 from typing import List, Any, Dict
-import yaml #install PyYaml
+import oyaml as yaml #install PyYaml
 import pathlib
 from pathlib import Path
 import logging

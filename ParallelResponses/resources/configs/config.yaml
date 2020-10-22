@@ -18,16 +18,16 @@ general:
 
 jobs:
   OrderBooks:
-    yaml_request_name: order_books
+    yaml_request_name: ticker
     update_cp: false
     exchanges:
       - gateio
     currency_pairs:
-#      - all
-      - first: btc
-        second: usdt
-      - first: eth
-        second: btc
+      - all
+#      - first: btc
+#        second: usdt
+#      - first: eth
+#        second: btc
     first_currencies:
       - null
     second_currencies:

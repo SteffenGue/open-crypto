@@ -20,11 +20,12 @@ CONFIG = {
 
 setup(**CONFIG, install_requires=['sqlalchemy',
                                   'sqlalchemy_utils',
-                                  'PyYAML',
+                                  # 'PyYAML',
                                   'aiohttp',
                                   'psycopg2-binary',
                                   'aioschedule',
                                   'aiohttp',
                                   'tqdm',
                                   'python-dateutil',
-                                  'pandas'])
+                                  'pandas',
+                                  'oyaml'])
