@@ -82,14 +82,14 @@ requests:
       - str
       - strptime
       - "%Y-%m-%dT%H:%M:%S.%fZ"
-    - key: currency_pair_first
-      path: []
-      type:
-        - first_currency
-    - key: currency_pair_second
-      path: []
-      type:
-        - second_currency
+#    - key: currency_pair_first
+#      path: []
+#      type:
+#        - first_currency
+#    - key: currency_pair_second
+#      path: []
+#      type:
+#        - second_currency
     - key: ticker_best_ask
       path:
         - ask

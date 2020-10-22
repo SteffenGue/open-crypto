@@ -17,17 +17,18 @@ general:
     enable_logging: false
 
 jobs:
-  Ticker:
+  OrderBook:
     yaml_request_name: ticker
     update_cp: false
     exchanges:
-      - gateio
+#      - atilly
+      - binance
     currency_pairs:
 #      - all
-#      - first: btc
-#        second: usdt
-#      - first: eth
-#        second: btc
+      - first: btc
+        second: usdt
+      - first: eth
+        second: btc
     first_currencies:
 #      - null
     second_currencies:

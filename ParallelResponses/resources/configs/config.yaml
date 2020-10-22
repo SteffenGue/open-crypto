@@ -17,7 +17,7 @@ general:
     enable_logging: false
 
 jobs:
-  OrderBooks:
+  Ticker:
     yaml_request_name: ticker
     update_cp: false
     exchanges:

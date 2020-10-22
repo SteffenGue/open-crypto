@@ -560,7 +560,7 @@ class Exchange:
                     assert (len(results[0]) == len(result) for result in temp_results)
 
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
-                    len_results = max(len_results.values())
+                    len_results = max(len_results.values()) if bool(len_results) else 1
 
                     if 'position' in temp_results.keys():
                         temp_results['position'] = range(len_results)

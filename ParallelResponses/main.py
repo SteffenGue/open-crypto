@@ -27,7 +27,7 @@ async def update_and_get_currency_pairs(exchange: Exchange, job_params: Dict):
     response = await exchange.request_currency_pairs('currency_pairs')
 
     if response[1] is not None:
-        print('Updating Currency Pairs for {}...'.format(exchange.name.capitalize()), end=" ")
+        print('Updating Currency Pairs for {}...'.format(exchange.name.capitalize()))
         logging.info('Updating Currency Pairs for {}...'.format(exchange.name.upper()))
         formatted_response = exchange.format_currency_pairs(response)
         database_handler.persist_exchange_currency_pairs(formatted_response, is_exchange=exchange.is_exchange)
