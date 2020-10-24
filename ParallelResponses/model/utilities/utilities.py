@@ -229,7 +229,11 @@ def read_config(section: str) -> Dict[str, Any]:
     Exception()
 
 
-def yaml_loader(exchange: str):
+# Constant that contains the path to the yaml-files of working exchange.
+YAML_PATH = read_config('utilities')['yaml_path']
+
+
+def yaml_loader(exchange: str, path: str = YAML_PATH):
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
@@ -239,8 +243,7 @@ def yaml_loader(exchange: str):
         returns a dict of the loaded data from the .yaml-file
     :exceptions Exception: the .yaml file could not be evaluated for a given exchange
     """
-
-    with open(YAML_PATH + exchange + '.yaml', 'r') as f:
+    with open(path + exchange + '.yaml', 'r') as f:
         try:
             data = yaml.load(f, Loader=yaml.FullLoader)
             return data
@@ -252,7 +255,7 @@ def yaml_loader(exchange: str):
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
 
-def get_exchange_names() -> List[str]:
+def get_exchange_names(yaml_path: str = YAML_PATH) -> List[str]:
     """
     Gives information about all exchange that the program will send
     requests to. This means if the name of a exchange is not part of the
@@ -265,12 +268,10 @@ def get_exchange_names() -> List[str]:
         the directory described in YAML_PATH.
 """
     path_to_resoureces: Path = pathlib.Path().parent.absolute()
-    exchanges_list = os.listdir(Path.joinpath(path_to_resoureces, YAML_PATH))
+    exchanges_list = os.listdir(Path.joinpath(path_to_resoureces, yaml_path))
     exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
     exchanges = exchange_names
     exchange_names.sort()
     return exchanges
 
 
-# Constant that contains the path to the yaml-files of working exchange.
-YAML_PATH = read_config('utilities')['yaml_path']

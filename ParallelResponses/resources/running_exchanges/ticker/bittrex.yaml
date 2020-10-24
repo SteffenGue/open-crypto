@@ -1,176 +1,230 @@
 #TODO: für historic rates muss das intervall mit im String übergeben werden,
+# OrderBooks leider ohne ID
 # leider können wir bis jetzt nur das currency_pair in den String einfügern
 name: bittrex
 exchange: true
-api_url: https://api.bittrex.com/v3/
+api_url: https://api.bittrex.com/api/v1.1/public/
 rate_limit: null
+
+
 requests:
   currency_pairs:
     request:
-      template: markets
+      template: getmarkets
       pair_template: null
       params: null
     response:
-      type: list
+      type: dict
       values:
-        type: dict
-        values:
-          symbol:
+        success:
+          type: bool
+          message:
             type: str
-          baseCurrencySymbol:
-            type: str
-          quoteCurrencySymbol:
-            type: str
-          minTradeSize:
-            type:
-              - str
-              - float
-          precision:
-            type: int
-          status:
-            type: str
-          createdAt:
-            type:
-              - str
-          notice:
-            type: str
-          prohibitedIn:
-            type: list
-            values:
-              - str
-          associatedTermsOfService:
-            type: list
-    mapping:
-    - key: currency_pair_first
-      path:
-        - baseCurrencySymbol
-      type:
-        - str
-    - key: currency_pair_second
-      path:
-        - quoteCurrencySymbol
-      type:
-        - str
+            result:
+              type: list
+              values:
+                type: dict
+                values:
+                  MarketCurrency:
+                    type: str
+                  BaseCurrency:
+                    type: str
+                  BaseCurrencyLong:
+                    type: str
+                  MinTradeSize:
+                    type: float
+                  MarketName:
+                    type: str
+                  IsActive:
+                    type: bool
+                  IsRestricted:
+                    type: bool
+                  Created:
+                    type: str
+                  Notice:
+                    type: str
+                  IsSponsored:
+                    type: str
+                  LogoUrl:
+                    type: str
 
+    mapping:
+      - key: currency_pair_first
+        path:
+          - result
+          - BaseCurrency
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - result
+          - MarketCurrency
+        type:
+          - str
 
   ticker:
     request:
-      template: markets/tickers
+      template: getmarketsummaries
       pair_template: null
       params: null
     response:
-      type: list
+      type: dict
       values:
-        type: dict
-        values:
-          symbol:
-            type:
-              - str
-          lastTradeRate:
-            type:
-              - str
-              - float
-          bidRate:
-            type:
-              - str
-              - float
-          askRate:
-            type:
-              - str
-              - float
+        message:
+          type: str
+        success:
+          type: bool
+        result:
+          type: list
+          value:
+            type: dict
+            values:
+              MarketName:
+                type: str
+              High:
+                type: float
+              Low:
+                type: float
+              Volume:
+                type: float
+              Last:
+                type: float
+              BaseVolume:
+                type: float
+              Timestamp:
+                type: str
+              Bid:
+                type: float
+              Ask:
+                type: float
+
     mapping:
     - key: currency_pair_first
       path:
-        - symbol
+        - result
+        - MarketName
       type:
         - str
         - split
-        - '-'
+        - "-"
         - 0
     - key: currency_pair_second
       path:
-        - symbol
+        - result
+        - MarketName
       type:
         - str
         - split
-        - '-'
+        - "-"
         - 1
-    - key: ticker_time
-      path: []
-      type:
-        - now
     - key: ticker_last_price
       path:
-        - lastTradeRate
+        - result
+        - Last
+      type:
+        - float
+    - key: ticker_time
+      path:
+        - result
+        - Timestamp
       type:
         - str
-        - float
+        - strptime
+        - "%Y-%m-%dT%H:%M:%S.%f"
     - key: ticker_best_bid
       path:
-        - bidRate
+        - result
+        - Bid
       type:
-        - str
         - float
     - key: ticker_best_ask
       path:
-        - askRate
+        - result
+        - Ask
       type:
-        - str
         - float
-#
-#  market_summaries: # not required
-#    request:
-#      template: getmarketsummaries/
-#      values: null
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        success:
-#          type: bool
-#        message:
-#          type: str
-#        result:
-#          type: list
-#          values:
-#            type: dict
-#            values:
-#              MarketName:
-#                type: str
-#              High:
-#                type: float
-#              Low:
-#                type: float
-#              Volume:
-#                type: float
-#              Last:
-#                type: float
-#              BaseVolume:
-#                type: float
-#              Timestamp:
-#                type:
-#                - str
-#                - strptime
-#                - "%Y-%m-%dT%H:%M:%SZ"
-#              Bid:
-#                type: float
-#              Ask:
-#                type: float
-#              OpenBuyOrders:
-#                type: int
-#              OpenSellOrders:
-#                type: int
-#              PrevDay:
-#                type: float
-#              Created:
-#                type:
-#                - str
-#                - strptime
-#                - "%Y-%m-%dT%H:%M:%SZ"
-#              DisplayMarketName:
-#                type: str
-#    mapping: null
-#
+    - key: ticker_daily_volume
+      path:
+        - result
+        - BaseVolume
+      type:
+        - float
+
+
+  trades:
+    request:
+      template: getmarkethistory
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+        alias: market
+      params: null
+    response:
+      type: dict
+      values:
+        success:
+          type: bool
+        message:
+          type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              Id:
+                type: int
+              TimeStamp:
+                type:
+                - str
+              Quantity:
+                type: float
+              Price:
+                type: float
+              Total:
+                type: float
+              FillType:
+                type: str
+              OrderType:
+                type: str
+
+    mapping:
+    - key: time
+      path:
+      - result
+      - TimeStamp
+      type:
+      - strptime_w_f
+      - strptime_wo_f
+      - "%Y-%m-%dT%H:%M:%S"
+    - key: amount
+      path:
+      - result
+      - Quantity
+      type:
+      - float
+    - key: price
+      path:
+      - result
+      - Price
+      type:
+      - float
+    - key: direction
+      path:
+      - result
+      - OrderType
+      type:
+      - str
+      - lower
+    - key: id
+      path:
+        - result
+        - Id
+      type:
+        - int
+
+
+
+
   # order_book:
     # request:
       # template: getorderbook
@@ -248,66 +302,3 @@ requests:
       # - Quantity
       # type:
       # - float
-
-#  trades:
-#    request:
-#      template: getmarkethistory
-#      pair_template:
-#        template: "{first}-{second}"
-#        lower_case: false
-#        alias: market
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        success:
-#          type: bool
-#        message:
-#          type: str
-#        result:
-#          type: list
-#          values:
-#            type: dict
-#            values:
-#              Id:
-#                type: int
-#              TimeStamp:
-#                type:
-#                - str
-#              Quantity:
-#                type: float
-#              Price:
-#                type: float
-#              Total:
-#                type: float
-#              FillType:
-#                type: str
-#              OrderType:
-#                type: str
-#    mapping:
-#    - key: trade_time
-#      path:
-#      - result
-#      - TimeStamp
-#      type:
-#      - str
-#      - strptime
-#      - "%Y-%m-%dT%H:%M:%S.%f"
-#    - key: trade_amount
-#      path:
-#      - result
-#      - Quantity
-#      type:
-#      - float
-#    - key: trade_last_price
-#      path:
-#      - result
-#      - Price
-#      type:
-#      - float
-#    - key: trade_side
-#      path:
-#      - result
-#      - OrderType
-#      type:
-#      - str
