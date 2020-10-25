@@ -180,8 +180,8 @@ class Scheduler:
                                                                request_table,
                                                                formatted_response,
                                                                mappings)
-            print('Done collecting {}.'.format(request_name.capitalize()), end="\n\n")
-            logging.info('Done collecting {}.'.format(request_name.capitalize()))
+        print('Done collecting {}.'.format(request_name.capitalize()), end="\n\n")
+        logging.info('Done collecting {}.'.format(request_name.capitalize()))
 
 
 

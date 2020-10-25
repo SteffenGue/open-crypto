@@ -10,7 +10,6 @@ from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased, joinedload
 from sqlalchemy_utils import database_exists, create_database
-
 from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
 
 
@@ -512,20 +511,31 @@ class DatabaseHandler:
                     session.add(add_tuple)
 
         counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
-        print('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange.name.capitalize()))
+        print('{} tuple(s) added to {} for {}.'.format(tuple_counter,
+                                                       method.capitalize(),
+                                                       exchange.name.capitalize()))
         if counter_dict:
             for item in counter_dict.items():
                 print("CuPair-ID {}: {}".format(item[0], item[1]))
-        logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter, method, exchange.name.capitalize()))
+        logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter,
+                                                              method.capitalize(),
+                                                              exchange.name.capitalize()))
 
+        # Persist currency_pairs if not already in the database. This can only happen if an response contains
+        # all pairs at once. Problem: Some exchange return "derivatives" which include only a first-currency.
+        # Those will be filtered out when updating the currency_pairs in the method Exchange.format_currency_pairs().
+        # However, we do not have an instance of
+        #
         if len(new_pairs) > 0:
             added_cp_counter = 0
             for item in new_pairs:
-                self.persist_exchange_currency_pair(**item, is_exchange=exchange.is_exchange)
-                added_cp_counter += 1
-            print("Added {} new currency pairs to {} \n"
-                  "Data will be persisted next time.".format(added_cp_counter, exchange.name.capitalize()))
-            logging.info("Added {} new currency pairs to {}".format(added_cp_counter, exchange.name.capitalize()))
+                if all(item.values()):
+                    self.persist_exchange_currency_pair(item, is_exchange=exchange.is_exchange)
+                    added_cp_counter += 1
+            if added_cp_counter > 0:
+                print("Added {} new currency pairs to {} \n"
+                      "Data will be persisted next time.".format(added_cp_counter, exchange.name.capitalize()))
+                logging.info("Added {} new currency pairs to {}".format(added_cp_counter, exchange.name.capitalize()))
 
 
 
