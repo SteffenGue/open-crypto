@@ -185,12 +185,12 @@ class Mapping:
             return None
 
 
-        if not path_queue:
-            if types_queue[0] == 'first_currency':
-                return currency_pair_info[0]
-            elif types_queue[0] == 'second_currency':
-                return currency_pair_info[1]
-            return self.convert_type(None, types_queue)
+        # if not path_queue:
+        #     if types_queue[0] == 'first_currency':
+        #         return currency_pair_info[0]
+        #     elif types_queue[0] == 'second_currency':
+        #         return currency_pair_info[1]
+        #     return self.convert_type(None, types_queue)
 
         while path_queue:
 

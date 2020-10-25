@@ -47,7 +47,7 @@ TYPE_CONVERSION = {
     },
     ("int", "utcfromtimestampms"): {  # Partially tested
         "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
-            timestampms/1000),
+            int(timestampms)/1000),
         "params": 0
     },
     ("int", "fromtimestampms"): {  # Partially tested
@@ -149,10 +149,6 @@ TYPE_CONVERSION = {
     ('value', 'map'): {
         'function': lambda *args: {args[1]: args[2], args[3]: args[4]}[args[0]],
         'params': 4
-    },
-    ('timestamp_now', 'int'): {
-        'function': datetime.datetime.timestamp(datetime.datetime.now()).__int__(),
-        'params': 0
     },
     ('str', 'split_at_del_or_index'): {
         'function': lambda string, *args: string.split(args[0])[args[2]] if len(string) != len(string.split(args[0])[0]) else string[:args[1]] if args[2] == 0 else string[args[1]:],

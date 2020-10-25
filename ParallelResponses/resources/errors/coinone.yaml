@@ -1,15 +1,100 @@
+# Keine Currency-Pair Abfragen möglich
+
 name: coinone
-terms:
-  terms_url: https://coinone.co.kr/terms/basic
-  permission: null
-  search_targets: # Loading time conflicts with finding the element
-  - tag: div
-    class: page_content
 api_url: https://api.coinone.co.kr/
 rate_limit: # If you make more requests than the above notice, you will be blocked for 10 minutes.
   max: 300
   unit: 60
 requests:
+
+  ticker:
+    request:
+      template: ticker
+      pair_template: # btc, bch, eth, etc, xrp, qtum, iota, ltc, btg, omg, eos, data, zil, knc, zrx, xtz
+        template: "{first}"
+        lower_case: true
+        alias: currency
+      params: null
+    response:
+      type: dict
+      values:
+        result:
+          type: str
+        errorCode:
+          type:
+          - str
+        first:
+          type:
+          - str
+        last:
+          type:
+          - str
+        high:
+          type:
+          - str
+        low:
+          type:
+          - str
+        volume:
+          type:
+          - str
+        yesterday_first:
+          type:
+          - str
+        yesterday_last:
+          type:
+          - str
+        yesterday_high:
+         type:
+          - str
+        yesterday_low:
+          type:
+          - str
+        yesterday_volume:
+          type:
+          - str
+        timestamp:
+          type:
+          - str
+        currency:
+          type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - currency
+      type:
+      - str
+    - key: currency_pair_second
+      path: []
+      type:
+        - none
+        - constant
+        - KRW
+
+    - key: ticker_last_price
+      path:
+      - last
+      type:
+      - str
+      - int
+    - key: ticker_daily_volume
+      path:
+      - volume
+      type:
+      - str
+      - float
+    - key: ticker_time
+      path:
+      - timestamp
+      type:
+      - str
+      - int
+      - utcfromtimestamp
+
+
+
+
+
   order_book:
     request:
       template: orderbook
@@ -179,88 +264,3 @@ requests:
       type:
       - str
       - float
-
-  ticker:
-    request:
-      template: ticker
-      pair_template: # btc, bch, eth, etc, xrp, qtum, iota, ltc, btg, omg, eos, data, zil, knc, zrx, xtz
-        template: "{first}"
-        lower_case: true
-        alias: currency
-      params: null
-    response:
-      type: dict
-      values:
-        result:
-          type: str
-        errorCode:
-          type:
-          - str
-          - int
-        first:
-          type:
-          - str
-          - int
-        last:
-          type:
-          - str
-          - int
-        high:
-          type:
-          - str
-          - int
-        low:
-          type:
-          - str
-          - int
-        volume:
-          type:
-          - str
-          - float
-        yesterday_first:
-          type:
-          - str
-          - int
-        yesterday_last:
-          type:
-          - str
-          - int
-        yesterday_high:
-         type:
-          - str
-          - int
-        yesterday_low:
-          type:
-          - str
-          - int
-        yesterday_volume:
-          type:
-          - str
-          - int
-        timestamp:
-          type:
-          - str
-          - int
-          - fromtimestamp
-        currency:
-          type: str
-    mapping:
-    - key: ticker_last_price
-      path:
-      - last
-      type:
-      - str
-      - int
-    - key: ticker_daily_volume
-      path:
-      - volume
-      type:
-      - str
-      - float
-    - key: ticker_time
-      path:
-      - timestamp
-      type:
-      - str
-      - int
-      - fromtimestamp
