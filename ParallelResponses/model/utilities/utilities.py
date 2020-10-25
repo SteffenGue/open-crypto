@@ -146,7 +146,7 @@ TYPE_CONVERSION = {
         'function': lambda *args: range(1),
         'params': 0
     },
-    ('value', 'map'): {
+    ('value', 'map'): { #translate into buy/sell. Args: {0: 'buy', 1:'sell'} and arg[0] is the response value (i.e. 0/1)
         'function': lambda *args: {args[1]: args[2], args[3]: args[4]}[args[0]],
         'params': 4
     },

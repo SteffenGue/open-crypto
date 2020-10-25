@@ -574,7 +574,7 @@ class Exchange:
 
                     result = list(itertools.zip_longest(*result))
 
-                results.extend(result)
+                    results.extend(result)
         return results, temp_results.keys()
 
 # Currently unused or outdated methods.
