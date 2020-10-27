@@ -1,4 +1,6 @@
 from collections import deque
+from typing import Collection
+
 from model.utilities.utilities import TYPE_CONVERSION
 
 
@@ -147,7 +149,7 @@ class Mapping:
         return traversed
 
     def extract_value(self,
-                      response: dict,
+                      response: Collection,
                       path_queue: deque = None,
                       types_queue=None,
                       iterate=True,
@@ -184,13 +186,13 @@ class Mapping:
         if not response:
             return None
 
-
-        # if not path_queue:
-        #     if types_queue[0] == 'first_currency':
-        #         return currency_pair_info[0]
-        #     elif types_queue[0] == 'second_currency':
-        #         return currency_pair_info[1]
-        #     return self.convert_type(None, types_queue)
+        if not path_queue:
+            # TODO: after integration tests, look if clause for first and second currency can be deleted!
+            if types_queue[0] == 'first_currency':
+                return currency_pair_info[0]
+            elif types_queue[0] == 'second_currency':
+                return currency_pair_info[1]
+            return self.convert_type(None, types_queue)
 
         while path_queue:
 
@@ -200,7 +202,7 @@ class Mapping:
 
                 if len(response) == 1: #special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
                     response = response[0]
-                    #continue #das continue hast du eingefügt
+                    continue  # because instance of response has to be checked
 
                 for item in response:
 
@@ -232,7 +234,7 @@ class Mapping:
                 # Traverse path
                 response = self.traverse_path(response, path_queue, currency_pair_info=currency_pair_info)
 
-        if types_queue and response:
+        if types_queue and response is not None: #hier zu None geändert, weil sonst nicht zu 0 zo Bool geändert werden kann
 
             if isinstance(response, list):
 
@@ -243,14 +245,12 @@ class Mapping:
                         self.convert_type(item, deque(types_queue))
                     )
 
+                if len(result) == 1: #for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
+                    result = result[0]
+
                 response = result
 
             else:
-                # if types_queue[0] == 'first_currency':
-                #     response = currency_pair_info[0]
-                # elif types_queue[0] == 'second_currency':
-                #     response = currency_pair_info[1]
-                # else:
                 response = self.convert_type(response, types_queue)
 
         return response

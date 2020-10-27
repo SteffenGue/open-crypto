@@ -5,13 +5,14 @@ Test module for testing api_scheduling.Mapping class
 
 Authors:
     Carolina Keil,
-    Martin Schorfmann
+    Martin Schorfmann,
+    Bjarne Schröder
 
 Since:
     27.09.2018
 
 Version:
-    08.11.2018
+    25.10.2020
 """
 
 import datetime
@@ -33,7 +34,7 @@ class TestMapping(unittest.TestCase):
         result = mapping.extract_value({
             "product_id": "BTC-ETH"
         })
-        self.assertEqual(result, "BTC")
+        self.assertEqual('BTC', result)
 
     def test_extract_value_split_index_one(self):
         """Test of splitting a str and taking the index one."""
@@ -44,7 +45,7 @@ class TestMapping(unittest.TestCase):
         result = mapping.extract_value({
             "product_id": "BTC-ETH"
         })
-        self.assertEqual(result, "ETH")
+        self.assertEqual("ETH", result)
 
     def test_extract_value_split_index_two(self):
         """Test of splitting a str and taking the index two."""
@@ -55,7 +56,7 @@ class TestMapping(unittest.TestCase):
         result = mapping.extract_value({
             "product_id": "BTC-ETH-USD"
         })
-        self.assertEqual(result, "USD")
+        self.assertEqual("USD", result)
 
     def test_extract_value_slice_first_half(self):
         """Test of slicing a str and taking the first half."""
@@ -66,7 +67,7 @@ class TestMapping(unittest.TestCase):
         result = mapping.extract_value({
             "product_id": "BTCETH"
         })
-        self.assertEqual(result, "BTC")
+        self.assertEqual("BTC", result)
 
     def test_extract_value_slice_second_half(self):
         """Test of slicing a str and taking the second half."""
@@ -77,7 +78,7 @@ class TestMapping(unittest.TestCase):
         result = mapping.extract_value({
             "product_id": "BTCETH"
         })
-        self.assertEqual(result, "ETH")
+        self.assertEqual("ETH", result)
 
     # def test_extract_value_bool_to_str_true(self):
     #     """Test of conversion from bool to str in case of True."""
@@ -115,7 +116,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, True)
+        self.assertEqual(True, result)
 
     def test_extract_value_str_to_bool_true_lowercase(self):
         """Test of conversion from str to bool in case of lowercase True."""
@@ -129,7 +130,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, True)
+        self.assertEqual(True, result)
 
     def test_extract_value_str_to_bool_true_uppercase(self):
         """Test of conversion from str to bool in case of uppercase True."""
@@ -143,9 +144,9 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, True)
+        self.assertEqual(True, result)
 
-    def test_extract_value_str_to_bool_false(self):#
+    def test_extract_value_str_to_bool_false(self):  #
         """Test of conversion from str to bool in case of False."""
 
         mapping = Mapping("active",
@@ -157,7 +158,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, False)
+        self.assertEqual(False, result)
 
     def test_extract_value_str_to_bool_false_lowercase(self):
         """Test of conversion from str to bool in case of lowercase False."""
@@ -171,7 +172,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, False)
+        self.assertEqual(False, result)
 
     def test_extract_value_str_to_bool_false_uppercase(self):
         """Test of conversion from str to bool in case of uppercase False."""
@@ -185,7 +186,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, False)
+        self.assertEqual(False, result)
 
     def test_extract_value_str_to_bool_false_anything(self):
         """Test of conversion from str to bool in case of anything."""
@@ -199,7 +200,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, False)
+        self.assertEqual(False, result)
 
     def test_extract_value_bool_to_int_true(self):
         """Test of conversion from bool to int in case of True."""
@@ -213,7 +214,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, 1)
+        self.assertEqual(1, result)
 
     def test_extract_value_bool_to_int_false(self):
         """Test of conversion from bool to int in case of False."""
@@ -227,7 +228,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, 0)
+        self.assertEqual(0, result)
 
     def test_extract_value_int_to_bool_one(self):
         """Test of conversion from int to bool in case of one."""
@@ -241,7 +242,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, True)
+        self.assertEqual(True, result)
 
     def test_extract_value_int_to_bool_zero(self):
         """Test of conversion from int to bool in case of zero."""
@@ -255,7 +256,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, False)
+        self.assertEqual(False, result)
 
     def test_extract_value_int_to_bool_two(self):
         """Test of conversion from int to bool in case of two."""
@@ -269,7 +270,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, True)
+        self.assertEqual(True, result)
 
     def test_extract_value_int_to_bool_neg_two(self):
         """Test of conversion from int to bool in case of negative two."""
@@ -283,7 +284,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, bool)
-        self.assertEqual(result, True)
+        self.assertEqual(True, result)
 
     def test_extract_value_int_fromtimestamp(self):
         """Test of conversion from an int timestamp to datetime."""
@@ -325,7 +326,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, datetime.datetime)
-        self.assertEqual(result.microsecond, 123000)
+        self.assertEqual(123000, result.microsecond)
 
     def test_extract_value_float_fromtimestamp(self):
         """Test of conversion from a float timestamp to datetime."""
@@ -339,7 +340,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, datetime.datetime)
-        self.assertEqual(result.microsecond, 123000)
+        self.assertEqual(123000, result.microsecond)
 
     def test_extract_value_float_utcfromtimestamp(self):
         """Test of conversion from a float UTC timestamp to datetime."""
@@ -353,7 +354,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, datetime.datetime)
-        self.assertEqual(result.microsecond, 123000)
+        self.assertEqual(123000, result.microsecond)
 
     def test_extract_value_str_to_int_zero(self):
         """Test of conversion from str to int in case of zero."""
@@ -367,7 +368,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, 0)
+        self.assertEqual(0, result)
 
     def test_extract_value_str_to_int_one(self):
         """Test of conversion from str to int in case of one."""
@@ -381,7 +382,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, 1)
+        self.assertEqual(1, result)
 
     def test_extract_value_str_to_int_two(self):
         """Test of conversion from str to int in case of two."""
@@ -395,7 +396,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, 2)
+        self.assertEqual(2, result)
 
     def test_extract_value_str_to_int_twelve(self):
         """Test of conversion from str to int in case of twelve."""
@@ -409,7 +410,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, 12)
+        self.assertEqual(12, result)
 
     def test_extract_value_str_to_int_neg_one(self):
         """Test of conversion from str to int in case negative one."""
@@ -423,7 +424,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, int)
-        self.assertEqual(result, -1)
+        self.assertEqual(-1, result)
 
     def test_extract_value_str_to_float_zero(self):
         """Test of conversion from str to float in case of zero."""
@@ -437,7 +438,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, 0.0)
+        self.assertEqual(0.0, result)
 
     def test_extract_value_str_to_float_one(self):
         """Test of conversion from str to float in case of one."""
@@ -451,7 +452,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, 1.0)
+        self.assertEqual(1.0, result)
 
     def test_extract_value_str_to_float_two(self):
         """Test of conversion from str to float in case of two."""
@@ -465,7 +466,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, 2.0)
+        self.assertEqual(2.0, result)
 
     def test_extract_value_str_to_float_twelve(self):
         """Test of conversion from str to float in case of twelve."""
@@ -479,7 +480,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, 12.0)
+        self.assertEqual(12.0, result)
 
     def test_extract_value_str_to_float_pi(self):
         """Test of conversion from str to float in case of Pi."""
@@ -493,7 +494,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, 3.141592654)
+        self.assertEqual(3.141592654, result)
 
     def test_extract_value_str_to_float_neg_one(self):
         """Test of conversion from str to float in case of negative one."""
@@ -507,7 +508,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, -1.0)
+        self.assertEqual(-1.0, result)
 
     def test_extract_value_str_to_float_neg_pi(self):
         """Test of conversion from str to float in case of negative Pi."""
@@ -521,7 +522,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, float)
-        self.assertEqual(result, -3.141592654)
+        self.assertEqual(-3.141592654, result)
 
     def test_extract_value_datetime_totimestamp(self):
         """Test of conversion from datetome to timestamp."""
@@ -579,7 +580,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, datetime.datetime)
-        self.assertEqual(result, datetime.datetime(2018, 10, 11))
+        self.assertEqual(datetime.datetime(2018, 10, 11), result)
 
     def test_extract_value_str_strptime_datetime(self):
         """Test of conversion timestring via strptime in case of a datetime."""
@@ -593,7 +594,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, datetime.datetime)
-        self.assertEqual(result, datetime.datetime(2018, 10, 11, 12, 6))
+        self.assertEqual(datetime.datetime(2018, 10, 11, 12, 6), result)
 
     def test_extract_value_datetime_strftime_date(self):
         """Test of conversion from datetime via strftime in case of a date."""
@@ -607,7 +608,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, str)
-        self.assertEqual(result, "2018-10-11")
+        self.assertEqual("2018-10-11", result)
 
     def test_extract_value_datetime_strftime_datetime(self):
         """Test of conversion from datetime via strftime in case of a dt."""
@@ -621,7 +622,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, str)
-        self.assertEqual(result, "2018-10-11 12:06")
+        self.assertEqual("2018-10-11 12:06", result)
 
     def test_extract_value_dict_key(self):
         """Test of extract value for dict_keys without further processing."""
@@ -636,7 +637,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, list)
-        self.assertEqual(result, ["BTC_USD", "ETH_EUR"])
+        self.assertEqual(["BTC_USD", "ETH_EUR"], result)
 
     def test_extract_value_dict_key_split_index_zero(self):
         """Test of extract value for dict_keys with split and index 0."""
@@ -651,7 +652,7 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, list)
-        self.assertEqual(result, ["BTC", "ETH"])
+        self.assertEqual(["BTC", "ETH"], result)
 
     def test_extract_value_dict_key_split_index_one(self):
         """Test of extract value for dict_keys with split and index 1."""
@@ -666,7 +667,193 @@ class TestMapping(unittest.TestCase):
         })
 
         self.assertIsInstance(result, list)
-        self.assertEqual(result, ["USD", "EUR"])
+        self.assertEqual(["USD", "EUR"], result)
+
+    def test_extract_value_where_pair_can_not_be_split(self):
+        """Test extract value for special case where value is currency pair but cannot be extracted
+           since there is no delimiter for splitting the pair."""
+        mapping = Mapping("first",
+                          [],
+                          ["first_currency"])
+        result = mapping.extract_value(['ETHBTC', 'XRPBTC'], currency_pair_info=('XRP', 'BTC', 'XRPBTC'))
+        self.assertEqual('XRP', result)
+
+        mapping = Mapping('second',
+                          [],
+                          ["second_currency"])
+        result = mapping.extract_value(['ETHBTC', 'XRPBTC'], currency_pair_info=('ETH', 'BTC', 'ETHBTC'))
+        self.assertEqual('BTC', result)
+
+    def test_extract_value_list(self):
+        """Test of extracting all elements in a list."""
+        mapping = Mapping("number_as_string",
+                          [[]],
+                          ['str'])
+        value_list = ['1.0', '1.1', '1.2', '1.3', '2.4', '2.5', '3.6', '3.7']
+        result = mapping.extract_value(value_list)
+        self.assertEqual(value_list, result)
+
+    def test_extract_value_list_containing_dict_with_key(self):
+        """Test of extract value for a list that contains a dict for each index with a known key."""
+
+        # list element directly holds value behind key
+        mapping = Mapping('first_currency',
+                          ['first'],
+                          ['str'])
+
+        extract_list = [{'first': 'BTC'},
+                        {'first': 'ETH'},
+                        {'first': 'XRP'},
+                        {'first': 'DOGE'},
+                        {'first': 'XSA'},
+                        {'first': 'TEST'}]
+        result = mapping.extract_value(extract_list)
+        value_list = ['BTC', 'ETH', 'XRP', 'DOGE', 'XSA', 'TEST']
+        self.assertEqual(value_list, result)
+
+        # list element holds dict that holds another dict which holds the value behind key
+        mapping = Mapping('first_currency',
+                          ['a', 'first'],  # ['dict_values', 'first'] works also since it's only one level
+                          ['str'])
+
+        extract_list = [{'a': {'first': 'BTC', 'second': 'should not matter'}},
+                        {'a': {'first': 'ETH', 'second': 'should not matter'}},
+                        {'a': {'first': 'XRP', 'second': 'should not matter'}},
+                        {'a': {'first': 'DOGE', 'second': 'should not matter'}},
+                        {'a': {'first': 'XSA', 'second': 'should not matter'}},
+                        {'a': {'first': 'TEST', 'second': 'should not matter'}}]
+        result = mapping.extract_value(extract_list)
+        self.assertEqual(value_list, result)
+
+        # list element with few more levels of dictionaries
+        mapping = Mapping('first_currency',
+                          ['a', 'b', 'c', 'd', 'first'],
+                          ['str'])
+
+        extract_list = [
+            {'a': {'b': {'c': {'d': {'first': 'BTC', 'second': 'should not matter'}, 'dist': 'other_value'}}}},
+            {'a': {'b': {'c': {'d': {'first': 'ETH', 'second': 'should not matter'}}, 'dist': 'other_value'}}},
+            {'a': {'b': {'c': {'d': {'first': 'XRP', 'second': 'should not matter'}}}, 'dist': 'other_value'}},
+            {'a': {'b': {'c': {'d': {'first': 'DOGE', 'second': 'should not matter'}}}}, 'dist': 'other_value'},
+            {'a': {'b': {'c': {'d': {'first': 'XSA', 'second': 'should not matter'}}}, 'dist': 'other_value'}},
+            {'a': {'b': {'c': {'d': {'first': 'TEST', 'second': 'should not matter'}}, 'dist': 'other_value'}}}]
+        result = mapping.extract_value(extract_list)
+        self.assertEqual(value_list, result)
+
+    def test_extract_values_dict_values(self):
+        """Test of extract values for the special case that each key of a dictionary holds the values."""
+        mapping = Mapping('first_currency',
+                          ['dict_values'],
+                          ['str'])
+
+        extract_dict = {'1': 'XRP',
+                        2: 'ETH',
+                        '3': 'BTC',
+                        4: 'DOGE'}
+        result = mapping.extract_value(extract_dict)
+        value_list = ['XRP', 'ETH', 'BTC', 'DOGE']
+        self.assertEqual(value_list, result)
+
+        # extracting dicts with dict_values -> aka flattening the json
+        mapping = Mapping('first_currency',
+                          ['dict_values', 'first'],
+                          ['str'])
+
+        extract_dict = {'1': {'first': 'XRP', 'second': 'Whatever'},
+                        2: {'first': 'ETH', 'second': 'Whatever'},
+                        '3': {'first': 'BTC', 'second': 'Whatever'},
+                        4: {'first': 'DOGE', 'second': 'Whatever'}}
+        result = mapping.extract_value(extract_dict)
+        value_list = ['XRP', 'ETH', 'BTC', 'DOGE']
+        self.assertEqual(value_list, result)
+
+        # How to not use dict_values, since other values will be filtered also
+        mapping = Mapping('first_currency',
+                          ['dict_values', 'dict_values', 'dict_values', 'dict_values', 'first'],
+                          ['str'])
+        extract_list = [
+            {'a': {'b': {'c': {'d': {'first': 'BTC', 'second': 'should not matter'}, 'dist': 'other_value'}}}},
+            {'a': {'b': {'c': {'d': {'first': 'ETH', 'second': 'should not matter'}}, 'dist': 'other_value'}}},
+            {'a': {'b': {'c': {'d': {'first': 'XRP', 'second': 'should not matter'}}}, 'dist': 'other_value'}},
+            {'a': {'b': {'c': {'d': {'first': 'DOGE', 'second': 'should not matter'}}}}, 'dist': 'other_value'},
+            {'a': {'b': {'c': {'d': {'first': 'XSA', 'second': 'should not matter'}}}, 'dist': 'other_value'}},
+            {'a': {'b': {'c': {'d': {'first': 'TEST', 'second': 'should not matter'}}, 'dist': 'other_value'}}}]
+        value_list = ['BTC', 'ETH', 'XRP', 'DOGE', 'XSA', 'TEST']
+        self.assertRaises(TypeError, mapping.extract_value, extract_list)
+
+    def test_extract_value_list_containing_dict_where_key_is_value(self):
+        """Test of extract value for a list that contains a dict that contains a dict.
+           The first dict only has one key, which is the value we search for."""
+        mapping = Mapping('second_currency',
+                          ['dict_key'],
+                          ['str', 'split', '_', 1])
+        extract_list = [{'btc_eth': {'other': 'values'}},
+                        {'btc_eur': {'other': 'values'}},
+                        {'btc_usd': {'other': 'values'}},
+                        {'btc_usdt': {'other': 'values'}}]
+        value_list = ['eth', 'eur', 'usd', 'usdt']
+        result = mapping.extract_value(extract_list)
+        self.assertEqual(value_list, result)
+
+    def test_extract_value_list_containing_dict_where_pair_is_key_to_values(self):
+        """Test of extract value for a list that contains dicts that hold a single dict.
+           The key is the formatted currency pair that is needed to gain access to the value."""
+        mapping = Mapping('value',
+                          ['currency_pair', 1],
+                          ['str', 'float'])
+        extract_dict = {'btc_eth': {1: '123.456'},
+                        'btc_xrp': {1: '789.101'},
+                        'xrp_eth': {1: '112.131'},
+                        'doge_btc': {1: '415.161'}}
+        value_list = [415.161, 112.131, 789.101, 123.456]
+
+        # note that currency pair infos are from bottom to top if compared to extract_dict
+        currency_pair_infos = (('DOGE', 'BTC', 'doge_btc'),
+                               ('XRP', 'ETH', 'xrp_eth'),
+                               ('BTC', 'XRP', 'btc_xrp'),
+                               ('BTC', 'ETH', 'btc_eth'))
+
+        result = []
+        for currency_pair_info in currency_pair_infos:
+            result.append(mapping.extract_value(extract_dict, currency_pair_info=currency_pair_info))
+        self.assertEqual(value_list, result)
+
+    def test_extract_value_dict_containing_list(self):
+        """Test of extract value where the response is a dict and the known key contains a list of the values."""
+        mapping = Mapping('first_currency',
+                          ['data'],
+                          ['str', 'split', '_', 0])
+        extract_dict = {'data': ['eth_btc', 'usd_btc', 'xrp_eth', 'eth_xrp'],
+                        'other_stuff': 'that does not matter'}
+        value_list = ['eth', 'usd', 'xrp', 'eth']
+        result = mapping.extract_value(extract_dict)
+        self.assertEqual(value_list, result)
+
+    def test_extract_value_dict_containing_list_containing_dict_with_value(self):
+        """Test of extract value where the response is a dict and a known key contains a list of dicts that hold the value."""
+        mapping = Mapping('value',
+                          ['data', 'value'],
+                          ['str', 'float'])
+        extract_dict = {'data': [{'value': '1.12'},
+                                 {'value': '1.44'},
+                                 {'value': '1.34'},
+                                 {'value': '1.89'}]}
+        value_list = [1.12, 1.44, 1.34, 1.89]
+        result = mapping.extract_value(extract_dict)
+        self.assertEqual(value_list, result)
+
+    def test_extract_value_dict_containing_list_containing_dict_where_key_is_value(self):
+        """Test of extract value where the response is a dict and a known key contains a list of dicts with a single key that is the value."""
+        mapping = Mapping('second_currency',
+                          ['data', 'dict_key'],
+                          ['str', 'split', '_', 1])
+        extract_dict = {'data': [{'eth_btc': {'other': 'values'}},
+                                 {'btc_xrp': {'other': 'values'}},
+                                 {'tsla_usd': {'other': 'values'}},
+                                 {'usdt_eth': {'other': 'values'}}]}
+        value_list = ['btc', 'xrp', 'usd', 'eth']
+        result = mapping.extract_value(extract_dict)
+        self.assertEqual(value_list, result)
 
 
 if __name__ == "__main__":

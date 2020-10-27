@@ -530,22 +530,24 @@ class Exchange:
         currency_pair: ExchangeCurrencyPair
         mapping_keys = [mapping.key for mapping in mappings]
         for currency_pair in responses.keys():
-            temp_results = dict(zip((mapping.key for mapping in mappings),
+            # creating dictionary where key is the name of the mapping which holds an empty list
+            temp_results = dict(zip((key for key in mapping_keys),
                                     itertools.repeat([], len(mappings))))
-            if currency_pair:
+            if currency_pair:  # responses had to be collected individualy
                 current_response = responses[currency_pair]
-            else:
+            else:  # data for all currency_pairs in one response
                 current_response = responses[None]
 
             if current_response:
                 try:
+                    # extraction of actual values; note that currencies might not be in mappings (later important)
                     for mapping in mappings:
+                        # TODO: does extract_value never need currency-pair info?
                         temp_results[mapping.key] = mapping.extract_value(current_response)
                 except Exception:
                     print('Error while formatting {}: {}'.format(method, currency_pair))
                     traceback.print_exc()
                     pass
-
                 else:
                     extracted_data_is_valid: bool = True
                     for extracted_field in temp_results.keys():
@@ -557,16 +559,21 @@ class Exchange:
                     if not extracted_data_is_valid:
                         continue
 
+                    # asserting that the extracted lists for each mapping are having the same length
                     assert (len(results[0]) == len(result) for result in temp_results)
 
+                    # TODO: can't len_results = results[0] since we asserted that all lists have the same length?
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values()) if bool(len_results) else 1
 
                     if 'position' in temp_results.keys():
                         temp_results['position'] = range(len_results)
 
+                    # adding pair id when we don't have currencies in mapping
+                    # TODO: do we benefit from this later in persist-method since we know id already?
                     if 'currency_pair_first' and 'currency_pair_second' not in mapping_keys:
                         temp_results.update({'exchange_pair_id': currency_pair.id})
+
                     # update new keys only if not already exsits to prevent overwriting!
                     temp_results = {**kwargs, **temp_results}
                     result = [v if hasattr(v, '__iter__')
