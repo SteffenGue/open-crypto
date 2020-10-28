@@ -530,7 +530,7 @@ class DatabaseHandler:
             added_cp_counter = 0
             for item in new_pairs:
                 if all(item.values()):
-                    self.persist_exchange_currency_pair(item, is_exchange=exchange.is_exchange)
+                    self.persist_exchange_currency_pair(**item, is_exchange=exchange.is_exchange)
                     added_cp_counter += 1
             if added_cp_counter > 0:
                 print("Added {} new currency pairs to {} \n"
