@@ -5,12 +5,37 @@
 """
 Exchange API Map Validation
 
-Classes for completely validating the API Maps of Exchanges and generating
+Classes for validating the API yaml files of Exchanges and generating
 a complete Report.
+
+general structure:
+( validate.py calls ApiMapValidator )
+-ApiMapValidator line 689 (calls)
+    -LoadFileValidator
+    -LoadYamlValidator
+    -ApiMapValidator (contains)
+        -NameValidator
+        -ApiUrlValidator (calls)
+            -UrlValidator
+        -RateLimitValidator
+        -RequestsValidator (calls)
+            -ApiMethodValidator (contains)
+                -RequestValidator (contains)
+                    -TemplateValidator
+                    -PairTemplateValidator
+                    -ParamsValidator (calls)
+                        -ParamValidator
+                -ResponseValidator
+                -MappingValidator (calls)
+                    -MappingEntryValidator (contains)
+                        -KeyValidator
+                        -PathValidator
+                        -TypeValidator
 
 Authors:
     Carolina Keil
     Martin Schorfmann
+    Paul Böttger
 
 Since:
     19.03.2019
@@ -388,7 +413,7 @@ class WrongTypeError(ValidationError):
         """
 
         super().__init__("Value has wrong type.")
-        self.expected_type = expected_type\
+        self.expected_type = expected_type \
             if not isinstance(expected_type, Iterable) else set(expected_type)
         self.actual_type = actual_type
 
@@ -882,6 +907,7 @@ class NameValidator(Validator):
 
         return True
 
+
 class UrlValidator(Validator):
     """Validator for a valid URL.
 
@@ -1155,8 +1181,6 @@ class ApiMethodValidator(CompositeValidator):
             ResponseValidator(value),
             MappingValidator(value)
         )
-
-
 
 
 class RequestValidator(CompositeValidator):
@@ -1581,11 +1605,6 @@ class ParamValidator(Validator):
             is_value_dict = Report(Valid("Value of param is a dict."))
             self.report = CompositeReport(is_value_dict)
 
-            # TODO: Implement TypeValidator and remove comment markers
-            # type_validator = TypeValidator(self.value)
-            # type_validator.validate()
-            # self.report.append_report(type_validator)
-
             # if the key 'allowed' does exist
             if "allowed" in self.value:
                 has_allowed_key = Report(
@@ -1852,6 +1871,7 @@ class MappingEntryValidator(CompositeValidator):
 
             return super().validate()
 
+
 class KeyValidator(Validator):
     """Validator for the key 'key'.
 
@@ -1903,8 +1923,8 @@ class KeyValidator(Validator):
                 is_key_str = Report(Valid("Value of key 'key' was a str."))
 
                 self.report = CompositeReport(has_key_key, is_key_str)
-                # TODO: Compare values of keys with database_column_mapping in file config.yaml
-
+                # TODO: Compare values of keys with database_column_mapping
+#!!!
         return True
 
 
@@ -1963,7 +1983,6 @@ class PathValidator(Validator):
         return True
 
 
-# TODO: Is a differentiation between regular type and mapping type needed?
 class TypeValidator(Validator):
     """Validator for the key 'type'.
 
@@ -2018,4 +2037,3 @@ class TypeValidator(Validator):
                 self.report = CompositeReport(has_type_key, is_type_list)
 
         return True
-
