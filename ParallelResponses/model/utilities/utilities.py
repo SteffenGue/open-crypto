@@ -130,6 +130,10 @@ TYPE_CONVERSION = {
         "function": lambda time: calendar.timegm(time.utctimetuple()),
         "params": 0
     },
+    ("strptime", "totimestamp"): {
+        "function": lambda string, *args: int(datetime.datetime.timestamp(datetime.datetime.strptime(string, args[0]))),
+        "params": 1
+    },
     ("none", "nowstrptime"): {
         "function": lambda arg: datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d"),
         "params": 0

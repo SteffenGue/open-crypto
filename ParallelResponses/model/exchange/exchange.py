@@ -584,6 +584,8 @@ class Exchange:
                     results.extend(result)
         return results, temp_results.keys()
 
+
+
 # Currently unused or outdated methods.
 
 # async def request(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
