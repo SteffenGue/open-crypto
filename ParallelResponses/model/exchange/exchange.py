@@ -533,7 +533,7 @@ class Exchange:
             # creating dictionary where key is the name of the mapping which holds an empty list
             temp_results = dict(zip((key for key in mapping_keys),
                                     itertools.repeat([], len(mappings))))
-            if currency_pair:  # responses had to be collected individualy
+            if currency_pair:  # responses had to be collected individually
                 current_response = responses[currency_pair]
             else:  # data for all currency_pairs in one response
                 current_response = responses[None]

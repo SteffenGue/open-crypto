@@ -3,6 +3,76 @@ exchange: true
 api_url: https://api.bibox.com/v1/mdata
 rate_limit: null
 requests:
+
+  ticker:
+    request:
+      template: ""
+      pair_template: null
+      params:
+        cmd:
+          type: str
+          default: marketAll
+    response:
+      type: dict
+      values:
+
+        type: list
+        values:
+          result:
+            type: dict
+            values:
+
+              buy:
+                type: int
+              high:
+                type: int
+              last:
+                type: float
+              low:
+                type: int
+              sell:
+                type: int
+              vol24H:
+                type: float
+              last_cny:
+                type: int
+              last_usd:
+                type: int
+          cmd:
+            type: str
+    mapping:
+      - key: time
+        path: []
+        type:
+          - none
+          - now
+      - key: currency_pair_first
+        path:
+          - result
+          - coin_symbol
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - result
+          - currency_symbol
+        type:
+          - str
+      - key: daily_volume
+        path:
+          - result
+          - vol24H
+        type:
+          - str
+          - float
+      - key: last_price
+        path:
+          - result
+          - last
+        type:
+          - str
+          - float
+
   currency_pairs:
     request:
       template: ""
@@ -355,72 +425,3 @@ requests:
       type:
       - str
       - int
-
-  ticker:
-    request:
-      template: ""
-      pair_template: null
-      params:
-        cmd:
-          type: str
-          default: marketAll
-    response:
-      type: dict
-      values:
-      
-        type: list
-        values:
-          result:
-            type: dict
-            values:
-              
-              buy:
-                type: int
-              high:
-                type: int
-              last:
-                type: float
-              low:
-                type: int
-              sell:
-                type: int
-              vol24H:
-                type: float
-              last_cny:
-                type: int
-              last_usd:
-                type: int
-          cmd:
-            type: str
-    mapping:
-    - key: ticker_time
-      path: []
-      type:
-      - none
-      - now
-    - key: currency_pair_first
-      path:
-      - result
-      - coin_symbol
-      type:
-      - str
-    - key: currency_pair_second
-      path: 
-      - result
-      - currency_symbol
-      type:
-      - str
-    - key: ticker_daily_volume
-      path:
-      - result
-      - vol24H
-      type:
-      - str
-      - float
-    - key: ticker_last_price
-      path:
-      - result
-      - last
-      type:
-      - str
-      - float

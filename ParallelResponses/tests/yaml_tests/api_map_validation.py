@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # pylint: disable=too-many-lines
+from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
+from sqlalchemy import inspect
 
 """
 Exchange API Map Validation
@@ -31,6 +33,7 @@ general structure:
                         -KeyValidator
                         -PathValidator
                         -TypeValidator
+        -RequestMappingValidator
 
 Authors:
     Carolina Keil
@@ -840,7 +843,8 @@ class ApiMapValidator(CompositeValidator):
             NameValidator(value),
             ApiUrlValidator(value),
             RateLimitValidator(value),
-            RequestsValidator(value)
+            RequestsValidator(value),
+            RequestMappingValidator(value['requests'])
         )
 
 
@@ -1157,7 +1161,6 @@ class RequestsValidator(CompositeValidator):
 
                 for api_method in requests.values():
                     self.append_validator(ApiMethodValidator(api_method))
-
                 return super().validate()
 
 
@@ -1923,8 +1926,6 @@ class KeyValidator(Validator):
                 is_key_str = Report(Valid("Value of key 'key' was a str."))
 
                 self.report = CompositeReport(has_key_key, is_key_str)
-                # TODO: Compare values of keys with database_column_mapping
-#!!!
         return True
 
 
@@ -2036,4 +2037,50 @@ class TypeValidator(Validator):
 
                 self.report = CompositeReport(has_type_key, is_type_list)
 
+        return True
+
+
+class RequestMappingValidator(Validator):
+    """
+
+    """
+    value: Dict[Text, Any]
+
+    def determine_class(self, class_name: str) -> Dict:
+        """
+        Returns the method that is to execute based on the given request name.
+
+        @param request_name: str
+            Name of the request.
+        @return:
+            Method for the request name or a string that the request is false.
+        """
+        possible_class = {
+            "currency_pairs":
+                {'table': ExchangeCurrencyPair},
+            "ticker":
+                {'table': Ticker},
+            "historic_rates":
+                {'table': HistoricRate},
+            "order_books":
+                {'table': OrderBook},
+            "trades":
+                {'table': Trade},
+            "ohlcvm": {'table': OHLCVM}
+        }
+        return possible_class.get(class_name, lambda: "Invalid request class.")
+
+    def validate(self) -> bool:
+        requests = self.value
+        for request in requests.keys():
+            match_class = self.determine_class(request)['table']
+            class_keys = [key.name for key in inspect(match_class).columns]
+            for mapping in requests[request]['mapping']:
+                mapping_key = mapping['key']
+                try:
+                    class_keys.index(mapping_key)
+                except ValueError as error:
+                    #todo: curreny_pair_first and _second als mögliches exchange_currency_pair erkennen
+                    is_type_list = Report(Valid(error))
+                    self.report = is_type_list
         return True
