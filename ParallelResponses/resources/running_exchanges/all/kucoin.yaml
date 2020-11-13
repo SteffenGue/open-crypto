@@ -109,7 +109,7 @@ requests:
             time:
               type: int
     mapping:
-    - key: ticker_time
+    - key: time
       path:
       - data
       - time
@@ -136,28 +136,28 @@ requests:
       - split
       - "-"
       - 1
-    - key: ticker_last_price
+    - key: last_price
       path:
       - data
       - ticker
       - last
       type:
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - data
       - ticker
       - buy
       type:
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - data
       - ticker
       - sell
       type:
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - data
       - ticker

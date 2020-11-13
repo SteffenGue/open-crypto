@@ -223,26 +223,26 @@ requests:
       path: []
       type:
         - second_currency
-    - key: ticker_time
+    - key: time
       path:
       - ts
       type:
       - int
       - utcfromtimestampms
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - tick
       - vol
       type:
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - tick
       - ask
       - 0
       type:
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - tick
       - bid
@@ -351,7 +351,7 @@ requests:
        type:
        - none
        - range
-##
+# Probleme mit der resoponse. Die können wir nicht mappen, da manchmal zu einem Zeitpunkt mehrere Trades zurückkommen.
 #  trades:
 #    request:
 #      template: market/history/trade

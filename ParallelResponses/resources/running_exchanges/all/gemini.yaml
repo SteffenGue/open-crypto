@@ -1,22 +1,18 @@
+# The extraction of the currency_pairs relies on the fact, that every quote_currency is only 3 digits long.
+# However this may change in future.
+
 name: gemini
-terms:
-  terms_url: https://gemini.com/api-agreement/#gemini-market-data
-  permission: null
-  search_targets:
-  - tag: div
-    class: container-fluid
-  - tag: div
-    class: row
-  - tag: section
-    class: col-lg-8 col-xl-7 offset-xl-1 col-md-10 offset-md-1 offset-lg-0 content page-content
-api_url: https://api.gemini.com/v1/
+exchange: true
+
+api_url: https://api.gemini.com/
 rate_limit: # For public API entry points, we limit requests to 120 requests per minute, and recommend that you do not exceed 1 request per second.
   max: 120 # recommended: 60
   unit: 60
+
 requests:
   currency_pairs:
     request:
-      template: symbols/
+      template: v1/symbols
       pair_template: null
       params: null
     response:
@@ -26,86 +22,69 @@ requests:
     mapping: # TODO split Methode
     - key: currency_pair_first
       path:
-      - 0
+        - []
       type:
       - str
-      - split
-      - ""
+      - slice
+      - 0
+      - -3
     - key: currency_pair_second
       path:
-      - 1
+        - []
       type:
       - str
-      - split
-      - ""
-
+      - slice
+      - -3
+      -
   ticker:
     request:
-      template: pubticker/{currency_pair}/
-      pair_template: # e.g. btcusd
-        template: "{first}{second}"
-        lower_case: true
+      template: v1/pricefeed
+      pair_template: null
       params: null
     response:
-      type: dict
+      type: list
       values:
-        ask: # The lowest ask currently available
-          type:
-          - str
-          - float
-        bid: # The highest bid currently available
-          type:
-          - str
-          - float
-        last: # The price of the last executed trade
-          type:
-          - str
-          - float
-        volume: # Information about the 24 hour volume on the exchange.
-          type: dict
-          values:
-            first: # first currency symbols
-              type: # The volume denominated in the quantity currency
-              - str
-              - float
-            second: # first currency symbols
-              type: # The volume denominated in the price currency
-              - str
-              - float
-            timestamp:
-              type:
-              - int
-              - fromtimestampms
-    mapping:
-    - key: ticker_best_ask
-      path:
-      - ask
-      type:
-      - str
-      - float
-    - key: ticker_best_bid
-      path:
-      - bid
-      type:
-      - str
-      - float
-    - key: ticker_last_price
-      path:
-      - last
-      type:
-      - str
-      - float
-    - key: ticker_time
-      path:
-      - volume
-      - timestamp
-      type:
-      - int
-      - fromtimestampms
+        type: dict
+        values:
+          pair:
+            type: str
+          price:
+            type: str
+          percentageChange24h:
+            type: str
 
-  order_book:
+    mapping:
+    - key: currency_pair_first
+      path:
+        - pair
+      type:
+        - str
+        - slice
+        - 0
+        - -3
+    - key: currency_pair_second
+      path:
+        - pair
+      type:
+        - str
+        - slice
+        - -3
+        -
+    - key: last_price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: time
+      path: []
+      type:
+        - none
+        - now
+
+  order_books:
     request:
-      template: book/{currency_pair}
+      template: v1/book/{currency_pair}
       pair_template: # e.g. btcusd
         template: "{first}{second}"
         lower_case: true
@@ -127,16 +106,12 @@ requests:
               amount: # The total quantity remaining at the price
                 type:
                 - str
-                - float
               price: # The price
                 type:
                 - str
-                - float
               timestamp: # DO NOT USE - this field is included for compatibility reasons only and is just populated with a dummy value.
                 type:
                 - str
-                - int
-                - fromtimestamp
         asks: # The asks currently on the book. These are offers to sell at a given price
           type: list
           values:
@@ -145,44 +120,55 @@ requests:
               amount: # The total quantity remaining at the price
                 type:
                 - str
-                - float
               price: # The price
                 type:
                 - str
-                - float
               timestamp: # DO NOT USE - this field is included for compatibility reasons only and is just populated with a dummy value.
                 type:
                 - str
-                - int
-                - fromtimestamp
     mapping:
-    - key: order_book_time
+    - key: time
+      path:
+        - bids
+        - timestamp
+      type:
+        - str
+        - int
+        - utcfromtimestamp
+    - key: id
+      path:
+        - bids
+        - timestamp
+      type:
+        - str
+        - int
+    - key: position
       path: []
       type:
-      - none
-      - now
-    - key: order_book_bids_size
+        - none
+        - range
+    - key: bids_amount
       path:
       - bids
       - amount
       type:
       - str
       - float
-    - key: order_book_bids_price
+    - key: bids_price
       path:
       - bids
       - price
       type:
       - str
       - float
-    - key: order_book_asks_size
+    - key: asks_amount
       path:
       - asks
       - amount
       type:
       - str
       - float
-    - key: order_book_asks_price
+    - key: asks_price
       path:
       - asks
       - price
@@ -192,7 +178,7 @@ requests:
 
   trades: # This public API endpoint is limited to retrieving seven calendar days of data.
     request:
-      template: trades/{currency_pair}
+      template: v1/trades/{currency_pair}
       pair_template: # e.g. btcusd
         template: "{first}{second}"
         lower_case: true
@@ -200,7 +186,6 @@ requests:
         since: # Optional. Only return trades after this timestamp. If not present, will show the most recent trades.
           type:
           - datetime
-          - totimestamp
           required: false
         limit_trades: # Optional. The maximum number of trades to return. The default is 50.
           type: int
@@ -216,21 +201,18 @@ requests:
           timestamp: # The time that the trade was executed
             type:
             - int
-            - fromtimestamp
           timestampms: # The time that the trade was executed in milliseconds
             type:
             - int
-            - fromtimestampms
           tid: # The trade ID number
-            type: int
+            type:
+            - int
           price: # The price the trade was executed at
             type:
             - str
-            - float
           amount: # The amount that was traded
             type:
             - str
-            - float
           exchange: # Will always be "gemini"
             type: str
           type:
@@ -243,26 +225,88 @@ requests:
           broken:
             type: bool # Whether the trade was broken or not. Broken trades will not be displayed by default; use the include_breaks to display them.
     mapping:
-    - key: trade_time
+    - key: time
       path:
       - timestamp
       type:
       - int
-      - fromtimestamp
-    - key: trade_last_price
+      - utcfromtimestamp
+    - key: id
+      path:
+        - tid
+      type:
+        - int
+    - key: price
       path:
       - price
       type:
       - str
       - float
-    - key: trade_amount
+    - key: amount
       path:
       - amount
       type:
       - str
       - float
-    - key: trade_side
+    - key: direction
       path:
       - type
       type:
       - str
+
+  historic_rates:
+    request:
+      template: v2/candles/{currency_pair}/1day
+      pair_template:
+        template: "{first}{second}"
+        lower_case: true
+      params: null
+    response:
+      type: list
+      values:
+        type: list
+        values:
+          0: # timestamp
+            type: int
+          1: # open
+            type: float
+          2: # high
+            type: float
+          3: # low
+            type: float
+          4: # close
+            type: float
+          5: # volume
+            type: float
+    mapping:
+      - key: time
+        path:
+          - 0
+        type:
+          - int
+          - utcfromtimestampms
+      - key: open
+        path:
+          - 1
+        type:
+          - float
+      - key: high
+        path:
+          - 2
+        type:
+          - float
+      - key: low
+        path:
+          - 3
+        type:
+          - float
+      - key: close
+        path:
+          - 4
+        type:
+          - float
+      - key: volume
+        path:
+          - 5
+        type:
+          - float
