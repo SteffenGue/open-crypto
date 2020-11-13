@@ -20,7 +20,7 @@ class Exchange:
         Each 'job' is in the end a method called on every exchange.
 
         The Attributes and mappings are all extracted from the
-        .yaml-files whose location is described in the config.yaml file.
+        .yaml-files whose location is described in the trades.yaml file.
 
         name: str
             Name of this exchange.
@@ -529,6 +529,7 @@ class Exchange:
         responses = response[1]
         currency_pair: ExchangeCurrencyPair
         mapping_keys = [mapping.key for mapping in mappings]
+        updated_mappings=[]
         for currency_pair in responses.keys():
             # creating dictionary where key is the name of the mapping which holds an empty list
             temp_results = dict(zip((key for key in mapping_keys),
@@ -580,9 +581,10 @@ class Exchange:
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
                     result = list(itertools.zip_longest(*result))
-
+                    updated_mappings = temp_results.keys()
                     results.extend(result)
-        return results, temp_results.keys()
+
+        return results, updated_mappings
 
 
 
