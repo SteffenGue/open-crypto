@@ -7,6 +7,7 @@ import pathlib
 from pathlib import Path
 import logging
 from resources.configs import GlobalConfig
+import dateutil.parser
 
 TYPE_CONVERSION = {
 
@@ -38,11 +39,12 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("int", "fromtimestamp"): {  # Partially tested
-        "function": datetime.datetime.fromtimestamp,
+        "function": datetime.datetime.utcfromtimestamp,
         "params": 0
     },
     ("int", "utcfromtimestamp"): {  # Partially tested
-        "function": datetime.datetime.utcfromtimestamp,
+        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
+            int(timestampms)),
         "params": 0
     },
     ("int", "utcfromtimestampms"): {  # Partially tested
@@ -51,13 +53,18 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("int", "fromtimestampms"): {  # Partially tested
-        "function": lambda timestampms: datetime.datetime.fromtimestamp(
+        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
             timestampms / 1000),
         "params": 0
     },
     ("int", "fromtimestampns"): {  # Not tested
-        "function": lambda timestampns: datetime.datetime.fromtimestamp(
+        "function": lambda timestampns: datetime.datetime.utcfromtimestamp(
             timestampns / 1000000),
+        "params": 0
+    },
+    ("int", "utcfromtimestamp-9"): {  # Not tested
+        "function": lambda timestampns: datetime.datetime.utcfromtimestamp(
+            timestampns / 1000000000),
         "params": 0
     },
     ("float", "fromtimestamp"): {  # Partially tested
@@ -112,6 +119,10 @@ TYPE_CONVERSION = {
     ("str", "lower"): {  # Not tested
         "function": lambda string: string.lower(),
         "params": 0
+    },
+    ('str', 'dateparser'): {
+        'function': lambda string: dateutil.parser.parse(string),
+        'params': 0
     },
     ("datetime", "strftime"): {  # Partially tested
         "function": lambda time, *args:

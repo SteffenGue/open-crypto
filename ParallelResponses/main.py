@@ -97,6 +97,7 @@ async def main(database_handler: DatabaseHandler):
     # run program with single exchange for debugging/testing purposes
     # exchange_names = ['binance']
     # TODO nicht vergessen config path zu ändern: gerade in hr_exchanges
+
     logging.info('Loading jobs.')
     jobs = await initialize_jobs(database_handler, read_config('jobs'))
     frequency = read_config('operation_settings')['frequency']
@@ -117,18 +118,18 @@ def init_logger():
         if not os.path.exists('resources/log/'):
             os.makedirs('resources/log/')
         logging.basicConfig(filename='resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
-                            level=logging.INFO)
+                            level=logging.ERROR)
 
 
 def handler(type, value, tb):
     logging.exception('Uncaught exception: {}'.format(str(value)))
 
 
-
 if __name__ == "__main__":
     # todo: enable for exception in log
-    # sys.excepthook = handler
+
     init_logger()
+    sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config('database')
     logging.info('Establishing Database Connection')

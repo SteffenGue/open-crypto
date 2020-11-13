@@ -239,8 +239,7 @@ requests:
       - time
       type:
       - str
-      - strptime
-      - "%Y-%m-%dT%H:%M:%S.%fZ"
+      - dateparser
     - key: price
       path:
       - price
