@@ -226,45 +226,16 @@ requests:
       type:
       - int
       - fromtimestampms
-
-  historical_trades: # endpoint not required
-    request:
-      template: v1/historicalTrades/
-      pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
-      params:
-        limit: # max. 1000
-          type: int
-          default: 500
-        fromId:
-          type: long
-      weight: 5
-    response:
-      type: list
-      values:
-        type: dict
-        values:
-          id:
-            type: int
-          price:
-            type:
-            - str
-            - float
-          qty:
-            type:
-            - str
-            - float
-          time:
-            type:
-            - int
-            - fromtimestampms
-          isBuyerMaker:
-            type: bool
-          isBestMatch:
-            type: bool
-    mapping: []
+    - key: direction
+      path:
+        - isBuyerMaker
+      type:
+        - value
+        - map
+        - True
+        - buy
+        - False
+        - sell
 
   historic_rates:
     request:
