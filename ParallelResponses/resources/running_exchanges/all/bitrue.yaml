@@ -132,9 +132,9 @@ requests:
           - value
           - map
           - true
-          - buy
-          - false
           - sell
+          - false
+          - buy
       - key: id
         path:
           - id
