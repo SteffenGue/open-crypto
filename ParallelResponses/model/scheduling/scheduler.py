@@ -12,6 +12,7 @@ from model.exchange.exchange import Exchange
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
 import sys
 
+
 class Scheduler:
     """
     The scheduler is in charge of requesting, filtering and persisting data received from the exchanges.
@@ -34,8 +35,9 @@ class Scheduler:
             The interval in minutes with that the run() method gets called.
         """
         self.database_handler = database_handler
-        self.job_list = self.validate_job(job_list)
+        self.job_list = job_list
         self.frequency = frequency * 60
+        self.validated: bool = False
 
     async def start(self):
         """
@@ -58,13 +60,16 @@ class Scheduler:
             The job that will be executed.
 
         """
+        if not self.validated:
+            await self.validate_job()
+
         request = self.determine_task(job.request_name)
         request_fun = request.get('function')
         request_table = request.get('table')
 
         await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
 
-    def validate_job(self, job_list: List):
+    async def validate_job(self):
         """
         This methods validates the job_list given to the scheduler instance. If the job-list does not contain
         any "exchange_with_pairs", the job is removed from the list. This happens of the user specified currency-pairs
@@ -75,21 +80,32 @@ class Scheduler:
         :return: job_list
             Returns the cleaned and validated job list.
         """
-        if job_list:
-            for job in job_list:
-                if not job.exchanges_with_pairs:
-                    job_list.remove(job)
-            if job_list:
-                return job_list
-            else:
-                self.validate_job(job_list)
-        else:
-            logging.error('No or invalid Jobs.')
-            print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
-                             "matching currency pairs found for a all exchanges. Please check your \n"
-                             "parameters in the configuration.")
-            sys.exit(0)
 
+        def remove_jobs(job_list):
+            if job_list:
+                for job in job_list:
+                    if not job.exchanges_with_pairs:
+                        job_list.remove(job)
+
+                    for exchange in job.exchanges_with_pairs.keys():
+                        if not job.exchanges_with_pairs[exchange]:
+                            del job.exchanges_with_pairs[exchange]
+                            remove_jobs(job_list)
+                if job_list:
+                    return job_list
+                else:
+                    remove_jobs(job_list)
+            else:
+                logging.error('No or invalid Jobs.')
+                print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
+                      "matching currency pairs found for a all exchanges. Please check your \n"
+                      "parameters in the configuration.")
+                sys.exit(0)
+
+        formatted_job_list = await self.get_currency_pairs(self.job_list)
+        formatted_job_list = remove_jobs(formatted_job_list)
+        self.job_list = formatted_job_list
+        self.validated = True
 
     def determine_task(self, request_name: str) -> Callable:
         """
@@ -116,38 +132,46 @@ class Scheduler:
             "trades":
                 {'function': self.get_job_done,
                  'table': Trade},
-            "ohlcvm": {'function': self.get_job_done,
-                       'table': OHLCVM}
+            "ohlcvm":
+                {'function': self.get_job_done,
+                 'table': OHLCVM}
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
-    async def get_currency_pairs(self, exchanges: Dict[str, Exchange], **kwargs):
-        # ToDo wieso persisted diese methode keine Currency_pairs?!
-        """
-        Starts the currency pair request for each given exchange.
+    async def get_currency_pairs(self, job_list):
 
-        @param exchanges:
-            Exchanges that should send a request to their API for all trading
-            currency pairs. Key is always the name of the exchange.
-        @param kwargs: Currently unused parameters as the request name and the request table object.
-        """
-        print('Starting to collect currency pairs.')
-        logging.info('Starting collection of currency pairs for all used exchanges.')
-        responses = await asyncio.gather(
-            *(exchanges[ex].request_currency_pairs('currency_pairs') for ex in exchanges))
+        async def update_currency_pairs(exchange):
+            response = await exchange.request_currency_pairs()
+            if response[1]:
+                formatted_response = exchange.format_currency_pairs(response)
+                self.database_handler.persist_exchange_currency_pairs(formatted_response,
+                                                                      is_exchange=exchange.is_exchange)
 
-        for response in responses:
-            current_exchange = exchanges[response[0]]
-            if response[1] is not None:
-                currency_pairs = current_exchange.format_currency_pairs(response)
-        # logging.info('Done collection currency pairs.\n')
-        # print('Done collecting currency pairs.')
+        for job in job_list:
+
+            job_params = job.job_params
+            exchanges = list(job.exchanges_with_pairs.keys())
+
+            for exchange in exchanges:
+                if job_params['update_cp']:
+                    await update_currency_pairs(exchange)
+                elif self.database_handler.get_all_currency_pairs_from_exchange(exchange.name) == []:
+                    await update_currency_pairs(exchange)
+
+                job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
+                    exchange.name,
+                    job_params['currency_pairs'],
+                    job_params['first_currencies'],
+                    job_params['second_currencies']
+                )
+
+        return job_list
 
     async def get_job_done(self,
                            request_name: str,
                            request_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-        #todo: doku
+        # todo: doku
         print('Starting to collect {}.'.format(request_name.capitalize()), end="\n\n")
         logging.info('Starting to collect {}.'.format(request_name.capitalize()))
         start_time = datetime.utcnow()
@@ -159,7 +183,6 @@ class Scheduler:
             if response:
                 response_time = response[0]
                 exchange_name = response[1]
-            if response:
                 found_exchange: Exchange = None
                 for exchange in exchanges_with_pairs.keys():
                     # finding the right exchange
@@ -182,8 +205,6 @@ class Scheduler:
                                                                mappings)
         print('Done collecting {}.'.format(request_name.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name.capitalize()))
-
-
 
 # Currently unused or outdated methods:
 #     async def get_tickers(self,

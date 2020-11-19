@@ -29,7 +29,6 @@ class Validate:
             self.report_error(api_map.report)
             return False
 
-
     def validate(self):
 
         Map = self.__ValidateMapFile__()

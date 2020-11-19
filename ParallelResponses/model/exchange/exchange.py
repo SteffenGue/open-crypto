@@ -257,7 +257,7 @@ class Exchange:
 
         return formatted_string
 
-    async def request_currency_pairs(self, request_name: str) -> Tuple[str, Dict]:
+    async def request_currency_pairs(self, request_name: str = 'currency_pairs') -> Tuple[str, Dict]:
         """
         Tries to retrieve all available currency-pairs that are traded on this exchange.
 

@@ -13,10 +13,11 @@ class Job:
     name: str
     request_name: str
     exchanges_with_pairs: [Exchange, [ExchangeCurrencyPair]]
+    job_params: Dict
 
     def __init__(self,
                  name: str,
-                 request_name: str,
+                 job_params: Dict,
                  exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """
         Initializer of a job.
@@ -29,5 +30,6 @@ class Job:
             Dictionary for each exchange and it's currency pairs that have to be queried from it.
         """
         self.name = name
-        self.request_name = request_name
+        self.request_name = job_params['yaml_request_name']
         self.exchanges_with_pairs = exchanges_with_pairs
+        self.job_params = job_params
