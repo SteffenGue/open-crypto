@@ -11,9 +11,8 @@ class Job:
     Should only be used to hold information for it tasks.
     """
     name: str
-    request_name: str
-    exchanges_with_pairs: [Exchange, [ExchangeCurrencyPair]]
     job_params: Dict
+    exchanges_with_pairs: [Exchange, [ExchangeCurrencyPair]]
 
     def __init__(self,
                  name: str,
@@ -23,9 +22,9 @@ class Job:
         Initializer of a job.
 
         @param name:
-            Name of the job taken out of config.yaml
-        @param request_name:
-            Name of the request name taken out of config.yaml
+            Name of the job taken out of config-file
+        @param job_params:
+            All job parameter from the config-file
         @param exchanges_with_pairs:
             Dictionary for each exchange and it's currency pairs that have to be queried from it.
         """

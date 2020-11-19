@@ -33,6 +33,8 @@ class Scheduler:
             List of Jobs. A job can be created with the specific yaml-template in config.yaml
         @param frequency: int
             The interval in minutes with that the run() method gets called.
+        @param validated: bool
+            Bool if the job_list has been validated. Default: False.
         """
         self.database_handler = database_handler
         self.job_list = job_list
@@ -58,8 +60,8 @@ class Scheduler:
         The method represents one execution of the given job.
         @param job: Job
             The job that will be executed.
-
         """
+
         if not self.validated:
             await self.validate_job()
 
@@ -72,13 +74,10 @@ class Scheduler:
     async def validate_job(self):
         """
         This methods validates the job_list given to the scheduler instance. If the job-list does not contain
-        any "exchange_with_pairs", the job is removed from the list. This happens of the user specified currency-pairs
-        in the config but an exchange does not offer that pair.
+        any "exchange_with_pairs" or no currency_pair for an exchange, the job is removed from the list.
+        This happens of the user specified currency-pairs in the config but an exchange does not offer that pair.
 
-        :param job_list: List
-            List with all jobs and required parameters.
-        :return: job_list
-            Returns the cleaned and validated job list.
+        @return: New job_list without empty job and sets self.validated: True if the validation is successful.
         """
 
         def remove_jobs(job_list):
@@ -171,7 +170,25 @@ class Scheduler:
                            request_name: str,
                            request_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-        # todo: doku
+        """"
+        Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
+        are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
+        responses and the mappings (IMPORTANT: THE ORDER OF THE RESPONSE TUPLES AND MAPPINGS REMAIN UNTOUCHED)
+        are given to the DatabaseHandler where they are checked, single items removed (who do not belong in the
+        database table, especially the start_time is only present in the ticker table) and persisted.
+
+        This method works for all kind of request, except the currency_pairs. To add a new request-type
+        (i.e. like order_books, ticker,..) add a new item into 'possible_requests' from self.determine_task(),
+        create a new database class (i.e. like OrderBook, Ticker,...) and expand the yaml-file for each exchange.
+
+        Please ensure the following:
+            - The database columns MUST match the mapping-keys from the yaml-file.
+            - The order of the mapping-keys from the yaml-file does not matter. It is matched to the values
+                in "Exchange.format_data()" and handed over to SQLAlchemy (where a new object is created for each row)
+                via **kwargs.
+            - The DatabaseHandler will reject to persist new items if any primary key is emtpy.
+            - For more detailed instructions, including an example, see into the handbook.
+        """
         print('Starting to collect {}.'.format(request_name.capitalize()), end="\n\n")
         logging.info('Starting to collect {}.'.format(request_name.capitalize()))
         start_time = datetime.utcnow()
