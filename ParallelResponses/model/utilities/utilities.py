@@ -125,8 +125,7 @@ TYPE_CONVERSION = {
         'params': 0
     },
     ("datetime", "strftime"): {  # Partially tested
-        "function": lambda time, *args:
-        datetime.datetime.strftime(time, args[0]),
+        "function": lambda time, *args: datetime.datetime.strftime(time, args[0]),
         "params": 1
     },
     ("datetime", "totimestamp"): {  # Partially tested
