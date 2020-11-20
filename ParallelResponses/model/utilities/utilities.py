@@ -8,6 +8,7 @@ from pathlib import Path
 import logging
 from resources.configs import GlobalConfig
 import dateutil.parser
+import sys
 
 TYPE_CONVERSION = {
 
@@ -259,8 +260,9 @@ def yaml_loader(exchange: str, path: str = YAML_PATH):
             return data
         except Exception as ex:
             print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
-            print("")
+            print(ex)
             logging.exception(f"Error loading yaml of {exchange}.\n", ex)
+            sys.exit(1)
             #todo: insert new exception handling
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
@@ -277,8 +279,8 @@ def get_exchange_names(yaml_path: str = YAML_PATH) -> List[str]:
         Names from all the exchange, which have a .yaml-file in
         the directory described in YAML_PATH.
 """
-    path_to_resoureces: Path = pathlib.Path().parent.absolute()
-    exchanges_list = os.listdir(Path.joinpath(path_to_resoureces, yaml_path))
+    path_to_resources: Path = pathlib.Path().parent.absolute()
+    exchanges_list = os.listdir(Path.joinpath(path_to_resources, yaml_path))
     exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
     exchanges = exchange_names
     exchange_names.sort()

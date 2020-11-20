@@ -493,11 +493,11 @@ class DatabaseHandler:
                 data_tuple = {key: data_tuple.get(key) for key in col_names}
                 if not all(check_columns):
                     failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
-                    raise ValueError('Formatted response does not contain all primary keys. \n',
-                                     failed_columns)
                     logging.exception('Formatted response does not contain all primary keys. \n',
                                       '{}'.format(failed_columns))
-                    continue
+                    raise ValueError('Formatted response does not contain all primary keys. \n',
+                                     failed_columns)
+
 
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
