@@ -26,8 +26,6 @@ class Exchange:
             Name of this exchange.
         terms_url: str
             Url to Terms&Conditions of this exchange.
-        scrape_permission: bool
-            Permission if scraping data from this exchange is permitted.
         api_url: str
             Url for the public_api of this exchange.
         request_urls: dict[request_name: List[url, params]
@@ -49,7 +47,6 @@ class Exchange:
     name: str
     terms_url: str
     is_exchange: bool
-    scrape_permission: bool
     api_url: str
     rate_limit: float
     request_urls: dict
