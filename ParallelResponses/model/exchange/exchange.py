@@ -451,7 +451,6 @@ class Exchange:
         for mapping in mappings:
             results[mapping.key] = mapping.extract_value(response[1])
 
-        # ToDo:Das funktioniert nicht!
         assert (len(results[0]) == len(result) for result in results)
 
         return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
@@ -529,7 +528,7 @@ class Exchange:
         responses = response[1]
         currency_pair: ExchangeCurrencyPair
         mapping_keys = [mapping.key for mapping in mappings]
-        updated_mappings=[]
+        updated_mappings = []
         for currency_pair in responses.keys():
             # creating dictionary where key is the name of the mapping which holds an empty list
             temp_results = dict(zip((key for key in mapping_keys),
@@ -585,8 +584,6 @@ class Exchange:
                     results.extend(result)
 
         return results, updated_mappings
-
-
 
 # Currently unused or outdated methods.
 

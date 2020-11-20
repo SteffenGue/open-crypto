@@ -14,7 +14,7 @@ import signal
 
 def signal_handler(signal, frame):
     """
-    Helper function to exit the program. When strg+c is hit, the program will shut down with exit code(0)
+    Helper function to exit the program. When STRG+C is hit, the program will shut down with exit code(0)
     """
     print("\nExiting program.")
     sys.exit(0)
@@ -23,6 +23,13 @@ signal.signal(signal.SIGINT, signal_handler)
 
 
 async def initialize_jobs(job_config: Dict) -> List[Job]:
+    """
+    Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
+    method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
+    'exchanges_with_pairs' is created with Exchange Objects as keys, the values are filled in the Scheduler.
+    @param job_config: Dictionary with job parameter gathered from the config-file.
+    @return: A list of Job objects.
+    """
     jobs: [Job] = list()
     for job in job_config.keys():
         job_params: Dict = job_config[job]
