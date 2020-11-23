@@ -542,7 +542,7 @@ class Exchange:
                         # TODO: does extract_value never need currency-pair info?
                         temp_results[mapping.key] = mapping.extract_value(current_response)
                 except Exception:
-                    print('Error while formatting {}: {}'.format(method, currency_pair))
+                    print('Error while formatting {}, {}: {}'.format(method, mapping.key, currency_pair))
                     traceback.print_exc()
                     pass
                 else:

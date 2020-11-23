@@ -80,7 +80,7 @@ class Scheduler:
         @return: New job_list without empty job and sets self.validated: True if the validation is successful.
         """
 
-        def remove_jobs(job_list):
+        def remove_empty_jobs(job_list):
             if job_list:
                 for job in job_list:
                     if not job.exchanges_with_pairs:
@@ -89,11 +89,11 @@ class Scheduler:
                     for exchange in job.exchanges_with_pairs.keys():
                         if not job.exchanges_with_pairs[exchange]:
                             del job.exchanges_with_pairs[exchange]
-                            remove_jobs(job_list)
+                            remove_empty_jobs(job_list)
                 if job_list:
                     return job_list
                 else:
-                    remove_jobs(job_list)
+                    remove_empty_jobs(job_list)
             else:
                 logging.error('No or invalid Jobs.')
                 print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
@@ -102,7 +102,7 @@ class Scheduler:
                 sys.exit(0)
 
         formatted_job_list = await self.get_currency_pairs(self.job_list)
-        formatted_job_list = remove_jobs(formatted_job_list)
+        formatted_job_list = remove_empty_jobs(formatted_job_list)
         self.job_list = formatted_job_list
         self.validated = True
 

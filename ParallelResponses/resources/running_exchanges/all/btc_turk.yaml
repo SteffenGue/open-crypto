@@ -1,7 +1,10 @@
 name: btc_turk
+is_exchange: true
 
 api_url: "" #Base Api url changes. Complete URL therefore in templates
-rate_limit: null
+rate_limit:
+  max: 60
+  unit: 60
 
 requests:
   currency_pairs:
