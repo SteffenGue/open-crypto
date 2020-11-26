@@ -1,5 +1,5 @@
-from tests.yaml_tests.api_map_validation import ApiMapFileValidator
-from model.utilities.utilities import YAML_PATH
+from ParallelResponses.tests.yaml_tests.api_map_validation import ApiMapFileValidator
+from ParallelResponses.model.utilities.utilities import YAML_PATH
 import os
 
 
