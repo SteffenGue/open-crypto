@@ -10,7 +10,7 @@ from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased, joinedload
 from sqlalchemy_utils import database_exists, create_database
-from ParallelResponses.model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
+from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
 
 
 class DatabaseHandler:
