@@ -2046,7 +2046,7 @@ class RequestMappingValidator(Validator):
     """
     value: Dict[Text, Any]
 
-    def determine_class(self, class_name: str) -> Dict:
+    def determine_table(self, table_name: str) -> Dict:
         """
         Returns the method that is to execute based on the given request name.
 
@@ -2068,19 +2068,40 @@ class RequestMappingValidator(Validator):
                 {'table': Trade},
             "ohlcvm": {'table': OHLCVM}
         }
-        return possible_class.get(class_name, lambda: "Invalid request class.")
+        return possible_class.get(table_name, lambda: "Invalid request class.")
+
+    def determine_primary_keys(self, table_name: str) -> List:
+        possible_primary_keys = {
+            "currency_pairs":
+                [],
+            "ticker":
+                ['time'],
+            "historic_rates":
+                ['time'],
+            "order_books":
+                ['position'],
+            "trades":
+                ['time'],
+            "ohlcvm":
+                ['time']
+        }
+        return possible_primary_keys.get(table_name, lambda: "Invalid request class")
 
     def validate(self) -> bool:
         requests = self.value
         for request in requests.keys():
-            match_class = self.determine_class(request)['table']
-            class_keys = [key.name for key in inspect(match_class).columns]
+            match_table = self.determine_table(request)['table']
+            class_keys = [key.name for key in inspect(match_table).columns]
             for mapping in requests[request]['mapping']:
                 mapping_key = mapping['key']
-                try:
-                    class_keys.index(mapping_key)
-                except ValueError as error:
-                    #todo: curreny_pair_first and _second als mögliches exchange_currency_pair erkennen
-                    is_type_list = Report(Valid(error))
-                    self.report = is_type_list
+                if mapping_key != 'currency_pair_first' or mapping_key != 'currency_pair_second':
+                    try:
+                        class_keys.index(mapping_key)
+                    except ValueError as error:
+                        is_type_list = Report(Valid(error))
+                        self.report = is_type_list
+            primary_keys = self.determine_primary_keys(request)
+            for primary_key in primary_keys:
+                if primary_key == requests[request]['mapping']:
+                    return False
         return True

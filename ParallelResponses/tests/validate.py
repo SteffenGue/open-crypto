@@ -21,7 +21,7 @@ class Validate:
         if api_map.report.__bool__():
             return True
         else:
-            with open('yaml_tests/reports/report_' + self.file_name + '.txt', "w+") as report:
+            with open('tests/yaml_tests/reports/report_' + self.file_name + '.txt', 'w') as report:
                 report.writelines(api_map.report.indented_report())
                 report.close()
             print("API Map is Invalid! \n"
