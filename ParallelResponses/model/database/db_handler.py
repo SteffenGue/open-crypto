@@ -383,12 +383,14 @@ class DatabaseHandler:
         if currency_pairs is not None:
 
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
+            i=0
             with self.session_scope() as session:
                 for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 10)):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
                     is_exchange: bool = is_exchange
+                    i+=1
 
                     if exchange_name is None or first_currency_name is None or second_currency_name is None:
                         continue
@@ -419,6 +421,9 @@ class DatabaseHandler:
                         exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
                         # ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
+                    # persist data in order to avoid slowing down every 500 CP
+                    if i % 500 == 0:
+                        session.commit()
 
     def persist_response(self,
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
