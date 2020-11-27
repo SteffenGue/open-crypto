@@ -383,14 +383,14 @@ class DatabaseHandler:
         if currency_pairs is not None:
 
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
-            i=0
+            i = 0
             with self.session_scope() as session:
                 for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 10)):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
                     is_exchange: bool = is_exchange
-                    i+=1
+                    i += 1
 
                     if exchange_name is None or first_currency_name is None or second_currency_name is None:
                         continue
@@ -421,7 +421,7 @@ class DatabaseHandler:
                         exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
                         # ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
-                    # persist data in order to avoid slowing down every 500 CP
+                    # persist data every 500 CPs in order to avoid slowing down
                     if i % 500 == 0:
                         session.commit()
 
@@ -503,7 +503,6 @@ class DatabaseHandler:
                     raise ValueError('Formatted response does not contain all primary keys. \n',
                                      failed_columns)
 
-
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
                     else False
@@ -542,18 +541,15 @@ class DatabaseHandler:
                       "Data will be persisted next time.".format(added_cp_counter, exchange.name.capitalize()))
                 logging.info("Added {} new currency pairs to {}".format(added_cp_counter, exchange.name.capitalize()))
 
-
-
-
     def get_readable_query(self,
                            db_table: object,
                            query_everything: bool,
-                           from_timestamp: datetime,
-                           to_timestamp: datetime,
-                           exchanges: List[str],
-                           currency_pairs: List[Dict[str, str]],
-                           first_currencies: List[str],
-                           second_currencies: List[str]):
+                           from_timestamp: datetime = None,
+                           to_timestamp: datetime = datetime.now(),
+                           exchanges: List[str] = None,
+                           currency_pairs: List[Dict[str, str]] = None,
+                           first_currencies: List[str] = None,
+                           second_currencies: List[str] = None):
 
         """
              Queries based on the parameters readable database data and returns it.
