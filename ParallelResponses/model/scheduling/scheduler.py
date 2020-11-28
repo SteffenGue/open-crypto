@@ -71,6 +71,52 @@ class Scheduler:
 
         await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
 
+    def remove_empty_jobs(self, jobs: List):
+        """
+        Method to clean up the job list. If the job list is empty, shut down program.
+        Else the algorithm will go through every job specification and delete empty jobs or exchanges.
+
+        @param jobs: List of all jobs specified by the config
+        @return: List of jobs, cleaned by empty or invalid jobs
+        """
+
+        if jobs:
+            for job in jobs:
+
+                if job.exchanges_with_pairs:
+                    for exchange in job.exchanges_with_pairs.copy():
+                        # Delete exchanges with no API for that request type
+                        if job.request_name not in list(exchange.request_urls.keys()):
+                            job.exchanges_with_pairs.pop(exchange)
+                            continue
+                        # Delete exchanges with no matching Currency_Pairs
+                        if not job.exchanges_with_pairs[exchange]:
+                            job.exchanges_with_pairs.pop(exchange)
+                            continue
+                        # Delete empty jobs, if the previous conditions removed all exchanges
+                    if not job.exchanges_with_pairs:
+                        jobs.remove(job)
+                        continue
+                else:
+                    # remove job if initially empty
+                    jobs.remove(job)
+                    continue
+
+            if jobs:
+                # If there are jobs left, return them
+                return jobs
+            else:
+                # Reentry the method to get into the first else (down) condition and shut down process
+                self.remove_empty_jobs(jobs)
+
+        else:
+            logging.error('No or invalid Jobs.')
+
+            print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
+                  "matching currency pairs found for a all exchanges. Please check your \n"
+                  "parameters in the configuration.")
+            sys.exit(0)
+
     async def validate_job(self):
         """
         This methods validates the job_list given to the scheduler instance. If the job-list does not contain
@@ -80,29 +126,8 @@ class Scheduler:
         @return: New job_list without empty job and sets self.validated: True if the validation is successful.
         """
 
-        def remove_empty_jobs(job_list):
-            if job_list:
-                for job in job_list:
-                    if not job.exchanges_with_pairs:
-                        job_list.remove(job)
-
-                    for exchange in job.exchanges_with_pairs.keys():
-                        if not job.exchanges_with_pairs[exchange]:
-                            del job.exchanges_with_pairs[exchange]
-                            remove_empty_jobs(job_list)
-                if job_list:
-                    return job_list
-                else:
-                    remove_empty_jobs(job_list)
-            else:
-                logging.error('No or invalid Jobs.')
-                print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
-                      "matching currency pairs found for a all exchanges. Please check your \n"
-                      "parameters in the configuration.")
-                sys.exit(0)
-
         formatted_job_list = await self.get_currency_pairs(self.job_list)
-        formatted_job_list = remove_empty_jobs(formatted_job_list)
+        self.remove_empty_jobs(formatted_job_list)
         self.job_list = formatted_job_list
         self.validated = True
 
@@ -222,4 +247,3 @@ class Scheduler:
                                                                mappings)
         print('Done collecting {}.'.format(request_name.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name.capitalize()))
-
