@@ -71,7 +71,7 @@ class Scheduler:
 
         await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
 
-    def remove_empty_jobs(self, jobs: List):
+    def remove_invalid_jobs(self, jobs: List):
         """
         Method to clean up the job list. If the job list is empty, shut down program.
         Else the algorithm will go through every job specification and delete empty jobs or exchanges.
@@ -107,7 +107,7 @@ class Scheduler:
                 return jobs
             else:
                 # Reentry the method to get into the first else (down) condition and shut down process
-                self.remove_empty_jobs(jobs)
+                self.remove_invalid_jobs(jobs)
 
         else:
             logging.error('No or invalid Jobs.')
@@ -126,9 +126,8 @@ class Scheduler:
         @return: New job_list without empty job and sets self.validated: True if the validation is successful.
         """
 
-        formatted_job_list = await self.get_currency_pairs(self.job_list)
-        self.remove_empty_jobs(formatted_job_list)
-        self.job_list = formatted_job_list
+        self.job_list = await self.get_currency_pairs(self.job_list)
+        self.remove_invalid_jobs(self.job_list)
         self.validated = True
 
     def determine_task(self, request_name: str) -> Callable:

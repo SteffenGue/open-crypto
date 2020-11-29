@@ -170,7 +170,7 @@ TYPE_CONVERSION = {
         'params': 3  #delimeter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
-        'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
+        'function': int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
         'params': 0
     }
 }
@@ -229,6 +229,7 @@ def read_config(section: str) -> Dict[str, Any]:
             break
 
     config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
+    config_yaml.close()
     for general_section in config_dict.keys():
         if section == general_section:
             return config_dict[general_section]

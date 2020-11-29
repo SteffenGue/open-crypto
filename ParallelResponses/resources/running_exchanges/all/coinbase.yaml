@@ -73,47 +73,37 @@ requests:
           type:
           - str
     mapping:
-    - key: currency_pair_first
-      path: []
-      type:
-        - first_currency
-    - key: currency_pair_second
-      path: []
-      type:
-        - second_currency
 
-
-    - key: ticker_last_price
+    - key: last_price
       path:
       - price
       type:
       - str
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - bid
       type:
       - str
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - ask
       type:
       - str
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - volume
       type:
       - str
       - float
-    - key: ticker_time
+    - key: time
       path:
       - time
       type:
       - str
-      - strptime
-      - "%Y-%m-%dT%H:%M:%S.%fZ"
+      - dateparser
 
 
   order_books:
