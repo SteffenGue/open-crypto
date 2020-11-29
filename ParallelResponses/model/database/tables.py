@@ -1,6 +1,6 @@
 import sqlalchemy
 from sqlalchemy import join, Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select, \
-    Table
+    Table, inspect
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, validates, aliased, mapper
 from sqlalchemy_utils import create_view
@@ -329,7 +329,7 @@ class ExchangeCurrencyPairView(Base):
     )
 
 
-class TickersView(Base):
+class TickerView(Base):
     """
     View for Tickers.
     Instead of only showing the ID of the ExchangeCurrencyPair the View displays
@@ -360,6 +360,145 @@ class TickersView(Base):
         ),
         metadata=Base.metadata
     )
+
+
+
+class TradeView(Base):
+    """
+    View for Trades.
+    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+    the exchange name and the name of the first and second currency.
+    """
+    first = aliased(Currency)
+    second = aliased(Currency)
+    __table__ = create_view(
+        name='trades_view',
+        selectable=select(
+            [
+                Exchange.name.label('exchange'),
+                first.name.label('first_currency'),
+                second.name.label('second_currency'),
+                Trade.id,
+                Trade.time,
+                Trade.amount,
+                Trade.best_ask,
+                Trade.best_bid,
+                Trade.price,
+                Trade.direction
+            ],
+            from_obj=(
+                Trade.__table__.join(ExchangeCurrencyPair, Trade.exchange_pair_id == ExchangeCurrencyPair.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+            )
+        ),
+        metadata=Base.metadata
+    )
+
+
+
+class OrderBookView(Base):
+    """
+    View for Order-Books.
+    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+    the exchange name and the name of the first and second currency.
+    """
+    first = aliased(Currency)
+    second = aliased(Currency)
+    __table__ = create_view(
+        name='order_books_view',
+        selectable=select(
+            [
+                Exchange.name.label('exchange'),
+                first.name.label('first_currency'),
+                second.name.label('second_currency'),
+                OrderBook.id,
+                OrderBook.position,
+                OrderBook.time,
+                OrderBook.bids_amount,
+                OrderBook.bids_price,
+                OrderBook.asks_price,
+                OrderBook.asks_amount
+            ],
+            from_obj=(
+                OrderBook.__table__.join(ExchangeCurrencyPair, OrderBook.exchange_pair_id == ExchangeCurrencyPair.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+            )
+        ),
+        metadata=Base.metadata
+    )
+
+
+class HistoricRateView(Base):
+    """
+    View for Historic-Rates.
+    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+    the exchange name and the name of the first and second currency.
+    """
+    first = aliased(Currency)
+    second = aliased(Currency)
+    __table__ = create_view(
+        name='historic_rates_view',
+        selectable=select(
+            [
+                Exchange.name.label('exchange'),
+                first.name.label('first_currency'),
+                second.name.label('second_currency'),
+                HistoricRate.time,
+                HistoricRate.open,
+                HistoricRate.high,
+                HistoricRate.low,
+                HistoricRate.close,
+                HistoricRate.volume,
+            ],
+            from_obj=(
+                HistoricRate.__table__.join(ExchangeCurrencyPair, HistoricRate.exchange_pair_id == ExchangeCurrencyPair.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+            )
+        ),
+        metadata=Base.metadata
+    )
+
+
+class OHLCVMView(Base):
+    """
+    View for Historic-Rates.
+    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+    the exchange name and the name of the first and second currency.
+    """
+    first = aliased(Currency)
+    second = aliased(Currency)
+    __table__ = create_view(
+        name='ohlcvm_view',
+        selectable=select(
+            [
+                Exchange.name.label('exchange'),
+                first.name.label('first_currency'),
+                second.name.label('second_currency'),
+                OHLCVM.time,
+                OHLCVM.open,
+                OHLCVM.high,
+                OHLCVM.low,
+                OHLCVM.close,
+                OHLCVM.volume,
+                OHLCVM.mcap
+            ],
+            from_obj=(
+                OHLCVM.__table__.join(ExchangeCurrencyPair, OHLCVM.exchange_pair_id == ExchangeCurrencyPair.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+            )
+        ),
+        metadata=Base.metadata
+    )
+
+
 
 # Query for getting ecps with id
 # select ecp.id, ecp.exchange_id, e.name, ecp.first_id, c1.name as first, ecp.second_id, c2.name as second from exchange e join exchanges_currency_pairs ecp on e.id=ecp.exchange_id join currencies c1 on ecp.first_id=c1.id join currencies c2 on ecp.second_id=c2.id;

@@ -5,8 +5,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 from pandas import read_sql_query as pd_read_sql_query
-from ParallelResponses.model.database.db_handler import DatabaseHandler
-from ParallelResponses.model.database.tables import metadata
+from model.database.db_handler import DatabaseHandler
+from model.database.tables import metadata
 
 
 class TestDatabase(unittest.TestCase):
