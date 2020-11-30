@@ -88,6 +88,8 @@ class Scheduler:
                         # Delete exchanges with no API for that request type
                         if job.request_name not in list(exchange.request_urls.keys()):
                             job.exchanges_with_pairs.pop(exchange)
+                            print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
+                                  f" removed.")
                             continue
                         # Delete exchanges with no matching Currency_Pairs
                         if not job.exchanges_with_pairs[exchange]:

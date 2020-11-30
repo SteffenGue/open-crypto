@@ -379,7 +379,7 @@ class Exchange:
                         conv_params = request_dict['params'][param]['function']
                         conversion_tuple = (conv_params[0], conv_params[1])
 
-                        params[param] = TYPE_CONVERSION[conversion_tuple]['function']
+                        params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
 
             request_parameters['params'] = params
 

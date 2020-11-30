@@ -65,7 +65,7 @@ requests:
       - split
       - "-"
       - 1
-            
+
   ticker:
     request:
       template: market/allTickers

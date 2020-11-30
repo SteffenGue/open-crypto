@@ -170,7 +170,7 @@ TYPE_CONVERSION = {
         'params': 3  #delimeter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
-        'function': int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
+        'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
         'params': 0
     }
 }
