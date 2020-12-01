@@ -7,6 +7,7 @@ from sqlalchemy_utils import database_exists, create_database
 from pandas import read_sql_query as pd_read_sql_query
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata
+from model.exchange.exchange import Exchange
 
 
 class TestDatabase(unittest.TestCase):
@@ -83,8 +84,11 @@ class TestDatabase(unittest.TestCase):
 
         """
         session = self.sessionFactory()
-        # result = session.query().all()
-        self.assertTrue(True)
+        exchange = Exchange("test")
+        session.add(exchange)
+
+        result = session.query().all()
+        self.assertTrue(exchange == result)
         session.close()
 
     def test_persist_and_get_exchange_currency_pair(self):

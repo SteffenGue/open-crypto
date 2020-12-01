@@ -1,0 +1,51 @@
+name: true
+exchange: true
+api_url: test.com
+rate_limit: null
+requests:
+
+  ticker:
+    request:
+      template: ""
+      pair_template: null
+      params:
+        cmd:
+          type: str
+          default: test
+    response:
+      type: list
+    mapping:
+
+  currency_pairs:
+    request:
+      template: ""
+      pair_template: null
+      params:
+        cmd:
+          type: str
+          default: test
+    response:
+      type: list
+    mapping:
+
+  historic_rates:
+    request:
+      template: ""
+      params:
+        cmd:
+          type: str
+          default: test
+    response:
+      type: list
+    mapping:
+
+  order_books:
+     request:
+       template: ""
+       params:
+         cmd:
+           type: str
+           default: test
+     response:
+       type: list
+     mapping:
