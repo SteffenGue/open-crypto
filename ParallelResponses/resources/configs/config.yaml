@@ -13,7 +13,7 @@ general:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/ticker/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:

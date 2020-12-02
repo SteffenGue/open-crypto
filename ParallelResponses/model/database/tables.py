@@ -197,7 +197,7 @@ class HistoricRate(Base):
                                                          self.exchange_pair.first.name,
                                                          self.exchange_pair.second.name,
                                                          self.close,
-                                                         self.timestamp)
+                                                         self.time)
 
 
 class Trade(Base):
