@@ -1,6 +1,6 @@
 name: bisq
 exchange: true
-api_url: https://markets.bisq.network/api/
+api_url: https://bisq.markets/api/
 rate_limit: null
 requests:
   symbols:
@@ -81,72 +81,67 @@ requests:
       type:
       - str
 
-  # order_book:
-    # request:
-      # template: depth
-      # pair_template: # e.g. 1cr_btc
-        # template: "{first}_{second}"
-        # lower_case: true
-        # alias: market
-      # params:
-        # format:
-          # type: str
-          # allowed:
-          # - json
-          # - jsonpretty
-          # default: jsonpretty
-    # response:
-      # type: dict
-      # values:
-        # currency_pairs: # variable key
-          # type: dict # is empty list when lack of values
-          # values:
-            # buys:
-              # type: list
-              # values: # open offer prices
-                # type:
-                  # - str
-                  # - float
-            # sells:
-              # type: list
-              # values: # open offer prices
-                # type:
-                  # - str
-                  # - float
-    # mapping:
-    # - key: currency_pair_first
-      # path:
-      # - dict_key
-      # type:
-      # - split
-      # - "_"
-      # - 0
-    # - key: currency_pair_second
-      # path:
-      # - dict_key
-      # type:
-      # - split
-      # - "_"
-      # - 1
-    # - key: order_book_time
-      # path: []
-      # type:
-      # - none
-      # - now
-    # - key: order_book_bids_price
-      # path:
-      # - dict_values
-      # - buys
-      # type:
-      # - str
-      # - float
-    # - key: order_book_asks_price
-      # path:
-      # - dict_values
-      # - sells
-      # type:
-      # - str
-      # - float
+  order_books:
+    request:
+      template: depth
+      pair_template: # e.g. 1cr_btc
+        template: "{first}_{second}"
+        lower_case: true
+        alias: market
+      params:
+        format:
+          type: str
+          allowed:
+          - json
+          - jsonpretty
+    response:
+      type: dict
+      values:
+        currency_pairs: # variable key
+          type: dict # is empty list when lack of values
+          values:
+            buys:
+              type: list
+              values: # open offer prices
+                type:
+                  - str
+                  - float
+            sells:
+              type: list
+              values: # open offer prices
+                type:
+                  - str
+                  - float
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: bids_price
+      path:
+      - dict_values
+      - buys
+      type:
+      - str
+      - float
+    - key: asks_price
+      path:
+      - dict_values
+      - sells
+      type:
+      - str
+      - float
 
   historic_rates:
     request:
@@ -307,102 +302,107 @@ requests:
           - str
           - float
 
-#  trades:
-#    request:
-#      template: trades
-#      pair_template: # e.g. 1cr_btc
-#        template: "{first}_{second}"
-#        lower_case: true
-#        alias: market
-#      params:
-#        format:
-#          type: str
-#          allowed:
-#          - json
-#          - jsonpretty
-#          default: jsonpretty
-#        timestamp_from: # start time, in seconds since 1970
-#          type:
-#          - datetime
-#          - strftime
-#          - "%Y-%m-%d"
-#          default: 2016-01-01
-#        timestamp_to: # end time, in seconds since 1970
-#          type:
-#          - datetime
-#          - strftime
-#          - "%Y-%m-%d"
-#          default: now
-#        trade_id_from: # identifies first trade to include
-#          type: str
-#          required: false
-#        trade_id_to: # identifies last trade to include
-#          type: str
-#          required: false
-#        direction: # trade direction: buy or sell. omit or leave null for both.
-#          type: str
-#          allowed:
-#          - buy
-#          - sell
-#          required: false
-#        limit:
-#          type: int
-#          max: 2000
-#          default: 100
-#        sort:
-#          type: str
-#          allowed:
-#          - asc
-#          - desc
-#          default: desc
-#    response:
-#      type: list
-#      values:
-#        type: dict
-#        values:
-#          direction:
-#            type: str
-#          price:
-#            type:
-#            - str
-#            - float
-#          amount:
-#            type:
-#            - str
-#            - float
-#          volume:
-#            type:
-#            - str
-#            - float
-#          payment_method:
-#            type: str
-#          trade_id:
-#            type: str
-#          trade_date: # in milliseconds since 1970
-#            type:
-#            - int
-#            - fromtimestampms
-#    mapping:
-#    - key: trade_side
-#      path:
-#      - direction
-#      type:
-#      - str
-#    - key: trade_last_price
-#      path:
-#      - price
-#      type:
-#      - str
-#      - float
-#    - key: trade_amount
-#      path:
-#      - amount
-#      type:
-#      - str
-#      - float
-#    - key: trade_time
-#      path:
-#      - trade_date
-#      type:
-#      - int
-#      - fromtimestampms
+  trades:
+    request:
+      template: trades
+      pair_template: # e.g. 1cr_btc
+        template: "{first}_{second}"
+        lower_case: true
+        alias: market
+      params:
+        format:
+          type: str
+          allowed:
+          - json
+          - jsonpretty
+          default: jsonpretty
+        timestamp_from: # start time, in seconds since 1970
+          type:
+          - datetime
+          - strftime
+          - "%Y-%m-%d"
+          default: 2016-01-01
+        timestamp_to: # end time, in seconds since 1970
+          type:
+          - datetime
+          - strftime
+          - "%Y-%m-%d"
+          default: now
+        trade_id_from: # identifies first trade to include
+          type: str
+          required: false
+        trade_id_to: # identifies last trade to include
+          type: str
+          required: false
+        direction: # trade direction: buy or sell. omit or leave null for both.
+          type: str
+          allowed:
+          - buy
+          - sell
+          required: false
+        limit:
+          type: int
+          max: 2000
+          default: 100
+        sort:
+          type: str
+          allowed:
+          - asc
+          - desc
+          default: desc
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          direction:
+            type: str
+          price:
+            type:
+            - str
+            - float
+          amount:
+            type:
+            - str
+            - float
+          volume:
+            type:
+            - str
+            - float
+          payment_method:
+            type: str
+          trade_id:
+            type: str
+          trade_date: # in milliseconds since 1970
+            type:
+            - int
+            - fromtimestampms
+    mapping:
+    - key: id
+      path:
+        - trade_date
+      type:
+        - int
+    - key: direction
+      path:
+      - direction
+      type:
+      - str
+    - key: price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: amount
+      path:
+      - amount
+      type:
+      - str
+      - float
+    - key: time
+      path:
+      - trade_date
+      type:
+      - int
+      - utcfromtimestampms
