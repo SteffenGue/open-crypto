@@ -8,7 +8,7 @@ general:
     port: 5432
     db_name: kimchi
   operation_settings:
-    frequency: 0
+    frequency: 1
   export:
     export_data_to_csv: false
     csv_dir: resources/csv
@@ -18,10 +18,10 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: historic_rates
-    update_cp: false
+    yaml_request_name: ticker
+    update_cp: true
     exchanges:
-      - bithumb
+      - binance
     currency_pairs:
 #      - all
 #      - first: xbt
