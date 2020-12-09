@@ -3,9 +3,7 @@ import unittest
 from datetime import datetime
 from typing import Dict, Any
 from unittest.mock import MagicMock, Mock, patch, AsyncMock
-
 from aiohttp import ClientConnectionError, ClientResponse
-
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
 

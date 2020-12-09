@@ -2,37 +2,62 @@ import os
 import sys
 
 """
-Script to generate a global config_file variable. The goal is that the user is able to
-create multiple configs and choose one when starting the program.
+Global config built after the Singelton principle. That is, there can only exists ONE instance of a class or,
+equivalently, all instances share the same state. 
 
-Right now, config_file is only used in the utilities.read_config()
+The config-file will be set and read only from utilities.read_config().
+
 """
-config_file: str = None
-config_path = os.path.dirname(os.path.realpath(__file__))
 
-if not config_file:
-    # input_str = input("Enter config file name: ")
-    input_str = 'config'
-    if input_str in ['quit', 'exit']:
-        sys.exit(0)
+class GlobalConfig(object):
+    class __GlobalConfig:
 
-    config_file = config_path + "/" + input_str
-    if '.yaml' not in config_file:
-        config_file = config_file + '.yaml'
+        def __init__(self):
+            self.__filename = None
 
+            # The first is used normally. The second (os.getcwd()) is needed when the directory
+            # of the program and the resources differs. That is the case for the Python Package as
+            # we want the User to manipulate the resources (i.e. config files and exchange mappings). The resources
+            # will be copied into the current working directory and taken by the program from there.
+            self.path = os.path.dirname(os.path.realpath(__file__))
+            # self.path = os.getcwd() + "/resources/configs/"
 
-def setter(filename: str = None):
-    """
-    This function resets the global variable "config_file" to some user input (either the parameter filename
-    or the keyboard input).
-    :param filename: str: the config filename.
-    """
-    if not filename:
-        filename = input('Config file not found. Retry: ')
+        def set_file(self, file: str = None):
+            """
+            Sets self.__filename to either the variable given or an input string from the command prompt.
+            The filename will be augmented with ".yaml" if needed.
+            :param file: name of the config
+            """
+            if not file:
+                file = input("Enter config file name: ").lower()
+                if file in ['quit', 'exit']:
+                    sys.exit(0)
+            if '.yaml' not in file:
+                file = file + '.yaml'
+            self.__filename = file
 
-        if filename in ['quit', 'exit']:
-            sys.exit(0)
-    if '.yaml' not in filename:
-        filename = filename + '.yaml'
-    global config_file
-    config_file = config_path + "/" + filename
+        @property
+        def file(self, file: str = None):
+            """
+            Returns the complete path to the config file. If the attribute self.__filename is not set yet,
+            calls the method self.set_file.
+            :param file: name of the config-file
+            :return: str: compelete path to config-file
+            """
+            if not self.__filename:
+                self.set_file(file=file)
+
+            return "/".join([str(self.path), str(self.__filename)])
+
+    instance = None
+
+    def __new__(cls):
+        """
+        Create a new instance of __GlobalConfig if and only if none exists. Else returns the existing instance.
+        That ensures that all instances of the class share the same state.
+        """
+        if not GlobalConfig.instance:
+            GlobalConfig.instance = GlobalConfig.__GlobalConfig()
+        return GlobalConfig.instance
+
+#

@@ -6,7 +6,7 @@ import oyaml as yaml #install PyYaml
 import pathlib
 from pathlib import Path
 import logging
-from resources.configs import GlobalConfig
+from resources.configs.GlobalConfig import GlobalConfig
 import dateutil.parser
 import sys
 
@@ -208,7 +208,8 @@ REQUEST_PARAMS = {
 }
 
 
-def read_config(section: str) -> Dict[str, Any]:
+
+def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
     """
     @param section: str
         Name of the section the information is stored in.
@@ -218,18 +219,25 @@ def read_config(section: str) -> Dict[str, Any]:
         Parameters for the program as a dictionary.
         Keys are the names of the parameters in the config-file.
     """
+    if file:
+        GlobalConfig().set_file(file)
 
     while True:
         try:
-            filename = GlobalConfig.config_file
+            filename = GlobalConfig().file
             config_yaml = open(filename)
         except FileNotFoundError:
-            GlobalConfig.setter()
+            print("File not found. Retry!")
+            GlobalConfig().set_file()
         else:
             break
 
     config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
     config_yaml.close()
+
+    if not section:
+        return config_dict
+
     for general_section in config_dict.keys():
         if section == general_section:
             return config_dict[general_section]
@@ -242,10 +250,10 @@ def read_config(section: str) -> Dict[str, Any]:
 
 
 # Constant that contains the path to the yaml-files of working exchange.
-YAML_PATH = read_config('utilities')['yaml_path']
+# YAML_PATH = read_config('utilities')['yaml_path']
 
 
-def yaml_loader(exchange: str, path: str = YAML_PATH):
+def yaml_loader(exchange: str):
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
@@ -255,6 +263,8 @@ def yaml_loader(exchange: str, path: str = YAML_PATH):
         returns a dict of the loaded data from the .yaml-file
     :exceptions Exception: the .yaml file could not be evaluated for a given exchange
     """
+
+    path = read_config(file=None, section='utilities')['yaml_path']
     with open(path + exchange + '.yaml', 'r') as f:
         try:
             data = yaml.load(f, Loader=yaml.FullLoader)
@@ -268,7 +278,7 @@ def yaml_loader(exchange: str, path: str = YAML_PATH):
             #es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
 
-def get_exchange_names(yaml_path: str = YAML_PATH) -> List[str]:
+def get_exchange_names() -> List[str]:
     """
     Gives information about all exchange that the program will send
     requests to. This means if the name of a exchange is not part of the
@@ -280,6 +290,7 @@ def get_exchange_names(yaml_path: str = YAML_PATH) -> List[str]:
         Names from all the exchange, which have a .yaml-file in
         the directory described in YAML_PATH.
 """
+    yaml_path = read_config(file=None, section='utilities')['yaml_path']
     path_to_resources: Path = pathlib.Path().parent.absolute()
     exchanges_list = os.listdir(Path.joinpath(path_to_resources, yaml_path))
     exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])

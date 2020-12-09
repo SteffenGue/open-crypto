@@ -60,8 +60,8 @@ async def main(database_handler: DatabaseHandler):
     # exchange_names = ['binance']
 
     logging.info('Loading jobs.')
-    jobs = await initialize_jobs(read_config('jobs'))
-    frequency = read_config('operation_settings')['frequency']
+    jobs = await initialize_jobs(read_config(file=None, section='jobs'))
+    frequency = read_config(file=None, section='operation_settings')['frequency']
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
     await scheduler.validate_job()
@@ -74,7 +74,7 @@ async def main(database_handler: DatabaseHandler):
 
 
 def init_logger():
-    if not read_config('utilities')['enable_logging']:
+    if not read_config(file=None, section='utilities')['enable_logging']:
         logging.disable()
     else:
         if not os.path.exists('resources/log/'):
@@ -87,14 +87,14 @@ def handler(type, value, tb):
     logging.exception('Uncaught exception: {}'.format(str(value)))
 
 
-if __name__ == "__main__":
-    # todo: enable for exception in log
-
+# if __name__ == "__main__":
+#     # todo: enable for exception in log
+def run(path: str = None):
     init_logger()
     sys.excepthook = handler
     logging.info('Reading Database Configuration')
-    db_params = read_config('database')
+    db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')
-    database_handler = DatabaseHandler(metadata, **db_params)
+    database_handler = DatabaseHandler(metadata, path=path, **db_params)
     asyncio.run(main(database_handler))
 

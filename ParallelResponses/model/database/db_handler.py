@@ -8,9 +8,10 @@ import sqlalchemy
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError
-from sqlalchemy.orm import sessionmaker, Session, Query, aliased, joinedload
+from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
-from model.database.tables import Currency, Exchange, ExchangeCurrencyPair, Ticker
+from model.database.tables import *
+import os
 
 
 class DatabaseHandler:
@@ -35,7 +36,8 @@ class DatabaseHandler:
                  password: str,
                  host: str,
                  port: str,
-                 db_name: str):
+                 db_name: str,
+                 path=None):
         """
         Initializes the database-handler.
 
@@ -67,8 +69,12 @@ class DatabaseHandler:
         @param db_name: str
             Name of the database.
         """
+
+        if not path:
+            path = os.getcwd()
+
         if sqltype == 'sqlite':
-            conn_string = '{}:///{}.db'.format(sqltype, db_name)
+            conn_string = '{}:///{}/{}.db'.format(sqltype, path, db_name)
         else:
             conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
             print(conn_string)
@@ -596,7 +602,7 @@ class DatabaseHandler:
         with self.session_scope() as session:
             first = aliased(Currency)
             second = aliased(Currency)
-            col_names = [key.name for key in inspect(db_table).columns]
+            # col_names = [key.name for key in inspect(db_table).columns]
 
             data: Query = session.query(Exchange.name.label('exchange'),
                                         first.name.label('first_currency'),
