@@ -425,9 +425,75 @@ requests:
       type:
       - str
       - int
-<<<<<<< Updated upstream
-=======
 
+<<<<<<< Updated upstream
+  # ticker:
+  #   request:
+  #     template: ""
+  #     pair_template: null
+  #     params:
+  #       cmd:
+  #         type: str
+  #         default: marketAll
+  #   response:
+  #     type: dict
+  #     values:
+  #       result:
+  #         type: list
+  #         values:
+  #           type: dict
+  #           values:
+  #             buy:
+  #               type: int
+  #             high:
+  #               type: int
+  #             last:
+  #               type: float
+  #             low:
+  #               type: int
+  #             sell:
+  #               type: int
+  #             vol24H:
+  #               type: float
+  #             last_cny:
+  #               type: int
+  #             last_usd:
+  #               type: int
+  #         cmd:
+  #           type: str
+  #   mapping:
+  #     - key: currency_pair_first
+  #       path:
+  #         - result
+  #         - coin_symbol
+  #       type:
+  #         - str
+  #     - key: currency_pair_second
+  #       path:
+  #         - result
+  #         - currency_symbol
+  #       type:
+  #         - str
+  #     - key: time
+  #       path: [ ]
+  #       type:
+  #         - none
+  #         - now
+  #     - key: daily_volume
+  #       path:
+  #         - result
+  #         - vol24H
+  #       type:
+  #         - str
+  #         - float
+  #     - key: last_price
+  #       path:
+  #         - result
+  #         - last
+  #       type:
+  #         - str
+  #         - float
+=======
   ticker:
     request:
       template: ""
@@ -494,4 +560,7 @@ requests:
         type:
           - str
           - float
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

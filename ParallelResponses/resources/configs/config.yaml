@@ -6,15 +6,9 @@ general:
     password:
     host: localhost
     port: 5432
-<<<<<<< Updated upstream
-    db_name: kimchi
-  operation_settings:
-    frequency: 1
-=======
     db_name: hochfrequenz
   operation_settings:
     frequency: 0.5
->>>>>>> Stashed changes
   export:
     export_data_to_csv: false
     csv_dir: resources/csv
@@ -23,6 +17,7 @@ general:
     enable_logging: false
 
 jobs:
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   Ticker:
     yaml_request_name: ticker
@@ -39,6 +34,9 @@ jobs:
 #        second: usdt
 #      - first: krw
 #        second: btc
+    first_currencies:
+      - btc
+    second_currencies:
 =======
   circle_ticker:
     yaml_request_name: ticker
@@ -46,10 +44,21 @@ jobs:
     exchanges:
       - kucoin
     currency_pairs:
->>>>>>> Stashed changes
     first_currencies:
       - btc
     second_currencies:
+=======
+  circle_ticker:
+    yaml_request_name: ticker
+    update_cp: false
+    exchanges:
+      - kucoin
+    currency_pairs:
+    first_currencies:
+      - btc
+    second_currencies:
+>>>>>>> Stashed changes
 
 
 
+>>>>>>> Stashed changes
