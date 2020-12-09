@@ -75,21 +75,13 @@ requests:
           symbol:
             type: str
     mapping:
-    - key: ticker_time
+    - key: time
       path:
       - timestamp
       type:
       - str
       - strptime
       - "%Y-%m-%dT%H:%M:%S.%fZ"
-#    - key: currency_pair_first
-#      path: []
-#      type:
-#        - first_currency
-#    - key: currency_pair_second
-#      path: []
-#      type:
-#        - second_currency
     - key: best_ask
       path:
         - ask
@@ -154,8 +146,7 @@ requests:
       - timestamp
       type:
       - str
-      - strptime
-      - '%Y-%m-%dT%H:%M:%S.%fZ'
+      - dateparser
     - key: open
       path:
       - open

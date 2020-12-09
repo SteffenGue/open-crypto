@@ -9,6 +9,7 @@ requests:
       template: n/a
     response:
       type: dict
+
   ticker:
     request:
       template: tickers
@@ -48,7 +49,7 @@ requests:
                     change:
                       type: float
     mapping:
-    - key: ticker_time
+    - key: time
       path:
       - result
       - dict_values
@@ -74,7 +75,7 @@ requests:
       - split
       - "_"
       - 1
-    - key: ticker_last_price
+    - key: last_price
       path:
       - result
       - dict_values
@@ -82,7 +83,7 @@ requests:
       - last
       type:
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - result
       - dict_values
@@ -90,7 +91,7 @@ requests:
       - bid
       type: 
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - result
       - dict_values
@@ -98,7 +99,7 @@ requests:
       - ask
       type:
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - result
       - dict_values

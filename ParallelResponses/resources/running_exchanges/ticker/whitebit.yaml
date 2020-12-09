@@ -42,11 +42,6 @@ requests:
               tradesEnabled:
                 type: str
     mapping:
-#      - key: ticker_time
-#        path: []
-#        type:
-#          - none
-#          - now
       - key: currency_pair_first
         path:
           - result
@@ -67,7 +62,7 @@ requests:
           - split
           - "_"
           - 1
-      - key: ticker_last_price
+      - key: last_price
         path:
           - result
           - []
@@ -75,7 +70,7 @@ requests:
         type:
           - str
           - float
-      - key: ticker_best_bid
+      - key: best_bid
         path:
           - result
           - []
@@ -83,7 +78,7 @@ requests:
         type:
           - str
           - float
-      - key: ticker_best_ask
+      - key: best_ask
         path:
           - result
           - []
@@ -91,7 +86,7 @@ requests:
         type:
           - str
           - float
-      - key: ticker_daily_volume
+      - key: daily_volume
         path:
           - result
           - []

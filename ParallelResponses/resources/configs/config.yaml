@@ -13,7 +13,7 @@ general:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/ticker/
     enable_logging: false
 
 jobs:
@@ -21,17 +21,32 @@ jobs:
     yaml_request_name: ticker
     update_cp: true
     exchanges:
-      - binance
+      - braziliex
+      - exmo
+      - exrates
+      - folgory
+      - hotbit
+      - openledger
+      - p2pb2b
+      - stex
+      - upbit
+      - vindax
+      - whitebit
+      - zbg
     currency_pairs:
-#      - all
-#      - first: xbt
-#        second: zar
-      - first: eth
-        second: btc
-#      - first: btc
-#        second: usdt
-#      - first: krw
-#        second: btc
+      - all
     first_currencies:
-      - btc
     second_currencies:
+# ex:
+# - bisq
+# - braziliex
+# - exmo
+# - exrates
+# - folgory
+# - hotbit
+# - openledger
+# - p2pb2b
+# - stex
+# - vindax
+# - whitebit
+# - zbg

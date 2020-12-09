@@ -70,7 +70,6 @@ requests:
         book:
           type: str
           default: all
-
     response:
       type: dict
       values:
@@ -106,7 +105,6 @@ requests:
             created_at:
               type:
               - str
-
     mapping:
     - key: currency_pair_first
       path:

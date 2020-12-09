@@ -1,304 +1,296 @@
 #TODO: für historic rates muss das intervall mit im String übergeben werden,
-# OrderBooks leider ohne ID
 # leider können wir bis jetzt nur das currency_pair in den String einfügern
 name: bittrex
 exchange: true
-api_url: https://api.bittrex.com/api/v1.1/public/
+api_url: https://api.bittrex.com/v3/
 rate_limit: null
-
-
 requests:
   currency_pairs:
     request:
-      template: getmarkets
+      template: markets
       pair_template: null
       params: null
     response:
-      type: dict
+      type: list
       values:
-        success:
-          type: bool
-          message:
+        type: dict
+        values:
+          symbol:
             type: str
-            result:
-              type: list
-              values:
-                type: dict
-                values:
-                  MarketCurrency:
-                    type: str
-                  BaseCurrency:
-                    type: str
-                  BaseCurrencyLong:
-                    type: str
-                  MinTradeSize:
-                    type: float
-                  MarketName:
-                    type: str
-                  IsActive:
-                    type: bool
-                  IsRestricted:
-                    type: bool
-                  Created:
-                    type: str
-                  Notice:
-                    type: str
-                  IsSponsored:
-                    type: str
-                  LogoUrl:
-                    type: str
-
+          baseCurrencySymbol:
+            type: str
+          quoteCurrencySymbol:
+            type: str
     mapping:
       - key: currency_pair_first
         path:
-          - result
-          - BaseCurrency
+          - baseCurrencySymbol
         type:
           - str
       - key: currency_pair_second
         path:
-          - result
-          - MarketCurrency
+          - quoteCurrencySymbol
         type:
           - str
 
   ticker:
     request:
-      template: getmarketsummaries
+      template: markets/tickers
       pair_template: null
       params: null
     response:
-      type: dict
+      type: list
       values:
-        message:
-          type: str
-        success:
-          type: bool
-        result:
-          type: list
-          value:
-            type: dict
-            values:
-              MarketName:
-                type: str
-              High:
-                type: float
-              Low:
-                type: float
-              Volume:
-                type: float
-              Last:
-                type: float
-              BaseVolume:
-                type: float
-              Timestamp:
-                type: str
-              Bid:
-                type: float
-              Ask:
-                type: float
-
+        type: dict
+        values:
+          symbol:
+            type:
+              - str
+          lastTradeRate:
+            type:
+              - str
+              - float
+          bidRate:
+            type:
+              - str
+              - float
+          askRate:
+            type:
+              - str
+              - float
     mapping:
     - key: currency_pair_first
       path:
-        - result
-        - MarketName
+        - symbol
       type:
         - str
         - split
-        - "-"
+        - '-'
         - 0
     - key: currency_pair_second
       path:
-        - result
-        - MarketName
+        - symbol
       type:
         - str
         - split
-        - "-"
+        - '-'
         - 1
-    - key: ticker_last_price
-      path:
-        - result
-        - Last
+    - key: time
+      path: []
       type:
-        - float
-    - key: ticker_time
+        - none
+        - now
+    - key: last_price
       path:
-        - result
-        - Timestamp
+        - lastTradeRate
       type:
         - str
-        - strptime
-        - "%Y-%m-%dT%H:%M:%S.%f"
-    - key: ticker_best_bid
-      path:
-        - result
-        - Bid
-      type:
         - float
-    - key: ticker_best_ask
+    - key: best_bid
       path:
-        - result
-        - Ask
+        - bidRate
       type:
+        - str
         - float
-    - key: ticker_daily_volume
+    - key: best_ask
       path:
-        - result
-        - BaseVolume
+        - askRate
       type:
+        - str
         - float
 
-
-  trades:
+  order_books:
     request:
-      template: getmarkethistory
+      template: markets/{currency_pair}/orderbook
       pair_template:
         template: "{first}-{second}"
         lower_case: false
-        alias: market
-      params: null
+      params:
+        depth:
+          type: int
+          max: 500
+          default: 25
     response:
       type: dict
       values:
-        success:
-          type: bool
-        message:
-          type: str
-        result:
+        bid:
           type: list
           values:
             type: dict
             values:
-              Id:
-                type: int
-              TimeStamp:
-                type:
-                - str
-              Quantity:
-                type: float
-              Price:
-                type: float
-              Total:
-                type: float
-              FillType:
+              quantity:
                 type: str
-              OrderType:
+              rate:
                 type: str
+        ask:
+          type: list
+          values:
+            type: dict
+            values:
+              quantity:
+                type: str
+              rate:
+                type: str
+    mapping:
+    - key: time
+      path: []
+      type:
+        - none
+        - now
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: bids_price
+      path:
+        - bid
+        - rate
+      type:
+        - str
+        - float
+    - key: bids_amount
+      path:
+        - bid
+        - quantity
+      type:
+        - str
+        - float
+    - key: asks_price
+      path:
+        - ask
+        - rate
+      type:
+        - str
+        - float
+    - key: asks_amount
+      path:
+        - ask
+        - quantity
+      type:
+        - str
+        - float
+
+  trades:
+    request:
+      template: markets/{currency_pair}/trades
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: true
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          executedAt:
+            type: str
+          quantity:
+            type: str
+          rate:
+            type: str
+          takerSide:
+            type: str
 
     mapping:
     - key: time
       path:
-      - result
-      - TimeStamp
+        - executedAt
       type:
-      - strptime_w_f
-      - strptime_wo_f
-      - "%Y-%m-%dT%H:%M:%S"
-    - key: amount
-      path:
-      - result
-      - Quantity
-      type:
-      - float
-    - key: price
-      path:
-      - result
-      - Price
-      type:
-      - float
-    - key: direction
-      path:
-      - result
-      - OrderType
-      type:
-      - str
-      - lower
+        - str
+        - dateparser
     - key: id
       path:
-        - result
-        - Id
+        - id
       type:
-        - int
+        - str
+    - key: price
+      path:
+        - rate
+      type:
+        - str
+        - float
+    - key: amount
+      path:
+        - quantity
+      type:
+        - str
+        - float
+    - key: direction
+      path:
+        - takerSide
+      type:
+        - str
 
+  historic_rates:
+    request:
+      template: markets/{currency_pair}/candles/DAY_1/recent
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+        alias: null
+      params: null
 
-
-
-  # order_book:
-    # request:
-      # template: getorderbook
-      # pair_template:
-        # template: "{first}-{second}"
-        # lower_case: false
-        # alias: market
-      # params:
-        # type:
-          # type: str
-          # allowed:
-          # - buy
-          # - sell
-          # - both
-          # default: both
-    # response:
-      # type: dict
-      # values:
-        # success:
-          # type: bool
-        # message:
-          # type: str
-        # result:
-          # type: dict
-          # values:
-            # buy:
-              # type: list
-              # values:
-                # type: dict
-                # values:
-                  # Quantity:
-                    # type: float
-                  # Rate:
-                    # type: float
-            # sell:
-              # type: list
-              # values:
-                # type: dict
-                # values:
-                  # Quantity:
-                    # type: float
-                  # Rate:
-                    # type: float
-    # mapping:
-    # - key: order_book_time
-      # path: []
-      # type:
-      # - none
-      # - now
-    # - key: order_book_bids_price
-      # path:
-      # - result
-      # - buy
-      # - Rate
-      # type:
-      # - float
-    # - key: order_book_bids_size
-      # path:
-      # - result
-      # - buy
-      # - Quantity
-      # type:
-      # - float
-    # - key: order_book_asks_price
-      # path:
-      # - result
-      # - sell
-      # - Rate
-      # type:
-      # - float
-    # - key: order_book_asks_size
-      # path:
-      # - result
-      # - sell
-      # - Quantity
-      # type:
-      # - float
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          startsAt:
+            type: str
+          open:
+            type: str
+          high:
+            type: str
+          low:
+            type: str
+          close:
+            type: str
+          volume:
+            type: str
+          quoteVolume:
+            type: str
+    mapping:
+      - key: time
+        path:
+          - startsAt
+        type:
+          - str
+          - dateparser
+      - key: open
+        path:
+          - open
+        type:
+          - str
+          - float
+      - key: high
+        path:
+          - high
+        type:
+          - str
+          - float
+      - key: low
+        path:
+          - low
+        type:
+          - str
+          - float
+      - key: close
+        path:
+          - close
+        type:
+          - str
+          - float
+      - key: volume
+        path:
+          - quoteVolume
+        type:
+          - str
+          - float

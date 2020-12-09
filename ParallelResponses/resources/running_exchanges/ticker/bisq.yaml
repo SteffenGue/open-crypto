@@ -277,38 +277,30 @@ requests:
           type:
           - str
     mapping:
-      - key: currency_pair_first
-        path: []
-        type:
-          - first_currency
-      - key: currency_pair_second
-        path: []
-        type:
-          - second_currency
-      - key: ticker_best_ask
+      - key: best_ask
         path:
           - sell
         type:
           - str
           - float
-      - key: ticker_best_bid
+      - key: best_bid
         path:
           - buy
         type:
           - str
           - float
-      - key: ticker_time
+      - key: time
         path: []
         type:
         - none
         - now
-      - key: ticker_last_price
+      - key: last_price
         path:
           - last
         type:
           - str
           - float
-      - key: ticker_daily_volume
+      - key: daily_volume
         path:
           - volume_left
         type:

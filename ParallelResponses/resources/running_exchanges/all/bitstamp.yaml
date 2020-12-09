@@ -98,14 +98,6 @@ requests:
           - str
           - float
     mapping:
-    - key: currency_pair_first
-      path: []
-      type:
-        - first_currency
-    - key: currency_pair_second
-      path: []
-      type:
-        - second_currency
     - key: last_price
       path:
       - last

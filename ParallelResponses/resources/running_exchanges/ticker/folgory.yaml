@@ -8,6 +8,7 @@ requests:
       template: n/a
     response:
       type: dict
+
   ticker:
     request:
       template: null
@@ -39,11 +40,6 @@ requests:
           best_bid:
             type: str
     mapping:
-#      - key: ticker_time
-#        path: []
-#        type:
-#          - none
-#          - now
       - key: currency_pair_first
         path:
           - []
@@ -62,28 +58,28 @@ requests:
           - split
           - /
           - 1
-      - key: ticker_last_price
+      - key: last_price
         path:
           - []
           - last
         type:
           - str
           - float
-      - key: ticker_best_bid
+      - key: best_bid
         path:
           - []
           - max_bid
         type:
           - str
           - float
-      - key: ticker_best_ask
+      - key: best_ask
         path:
           - []
           - best_ask
         type:
           - str
           - float
-      - key: ticker_daily_volume
+      - key: daily_volume
         path:
           - []
           - volume

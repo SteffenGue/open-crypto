@@ -140,42 +140,24 @@ requests:
               Last:
                 type: float
     mapping:
-      - key: currency_pair_first
-        path:
-          - result
-          - Market
-        type:
-          - str
-          - split
-          - '_'
-          - 0
-      - key: currency_pair_second
-        path:
-          - result
-          - Market
-        type:
-          - str
-          - split
-          - '_'
-          - 1
-      - key: ticker_time
+      - key: time
         path: []      
         type:
         - none
         - now
-      - key: ticker_last_price
+      - key: last_price
         path:
         - result
         - Last
         type:
         - float
-      - key: ticker_best_bid
+      - key: best_bid
         path: 
         - result
         - Bid
         type: 
         - float
-      - key: ticker_best_ask
+      - key: best_ask
         path:
         - result
         - Ask

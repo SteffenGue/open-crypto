@@ -74,7 +74,7 @@ requests:
             riseRate:
               type: float
     mapping:
-    - key: ticker_time
+    - key: time
       path: []
       type:
       - none
@@ -95,28 +95,28 @@ requests:
       - splitupper
       - "_"
       - 1
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - dict_values
       - vol
       type:
       - str
       - float
-    - key: ticker_last_price
+    - key: last_price
       path:
       - dict_values
       - last
       type:
       - str
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - dict_values
       - sell
       type:
       - str
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - dict_values
       - buy

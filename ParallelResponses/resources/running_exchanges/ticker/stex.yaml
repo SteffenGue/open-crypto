@@ -74,7 +74,7 @@ requests:
                 group_position:
                   type: int
     mapping:
-    - key: ticker_time
+    - key: time
       path:
       - data
       - timestamp
@@ -93,19 +93,19 @@ requests:
       - market_code
       type:
       - str
-    - key: ticker_last_price
+    - key: last_price
       path:
       - data
       - last
       type:
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - data
       - bid
       type:
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - data
       - ask

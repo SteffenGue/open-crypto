@@ -293,46 +293,28 @@ requests:
         source:
           type: str
     mapping:
-    - key: currency_pair_second
-      path:
-        - data
-        - symbol
-      type:
-        - str
-        - split
-        - '_'
-        - 1
-    - key: currency_pair_first
-      path:
-        - data
-        - symbol
-      type:
-        - str
-        - split
-        - '_'
-        - 0
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - data
       - askPrice
       type:
       - str
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - data
       - bidPrice
       type:
       - str
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - data
       - volume
       type:
       - str
       - float
-    - key: ticker_time
+    - key: time
       path:
       - time
       type:

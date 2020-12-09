@@ -1,98 +1,225 @@
 name: bitrue
 exchange: true
+
 rate_limit: null
-api_url: https://www.bitrue.com/kline-api/
+
+api_url:  https://www.bitrue.com/
 
 requests:
-  test_connection:
+  currency_pairs:
     request:
-      template: n/a
-    response:
-      type: dict
-  ticker:
-    request:
-      template: public.json
+      template: api/v1/exchangeInfo
       pair_template: null
-      params:
-        command:
-          type: str
-          default: returnTicker
+      params: null
     response:
       type: dict
       values:
-        code:
+        timezone:
           type: str
-        msg:
-          type: str
-        data:
-          type: dict
+        serverTime:
+          type: int
+        symbols:
+          type: list
           values:
-            currency_pair:
-              type: str
-              values:
-                id:
-                  type: int
-                last:
-                  type: float
-                lowestAsk:
-                  type: float
-                highestBid:
-                  type: float
-                percentChange:
-                  type: float
-                baseVolume:
-                  type: float
-                quoteVolume:
-                  type: float
-                isFrozen:
-                  type: bool
-                highest24h:
-                  type: float
-                low24h:
-                  type: float
-    
+            type: dict
+            values:
+              symbol:
+                type: str
+              status:
+                type: str
+              baseAsset:
+                type: str
+              quoteAsset:
+                type: str
     mapping:
-    - key: ticker_time
+      - key: currency_pair_first
+        path:
+          - symbols
+          - baseAsset
+        type:
+          - str
+          - upper
+      - key: currency_pair_second
+        path:
+          - symbols
+          - quoteAsset
+        type:
+          - str
+          - upper
+
+  ticker:
+    request:
+      template: /api/v1/ticker/price
+      pair_template:
+        template: "{first}{second}"
+        lower_case: false
+        alias: symbol
+      params: null
+
+    response:
+      type: dict
+      values:
+        symbol:
+          type: str
+        price:
+          type: str
+
+    mapping:
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: currency_pair_first
-      path: 
-      - data
-      - dict_key
+    - key: last_price
+      path:
+        - price
       type:
       - str
-      - split
-      - "_"
-      - 0
-    - key: currency_pair_second
-      path:
-      - data
-      - dict_key
-      type:
-      - str
-      - split
-      - "_"
-      - 1
-    - key: ticker_last_price
-      path:
-      - data
-      - dict_values
-      - last
-      type:
       - float
-    - key: ticker_best_bid
-      path:
-      - data
-      - dict_values
-      - highestBid
-      type:
-      - float
-    - key: ticker_best_ask
-      path:
-      - data
-      - dict_values
-      - lowestAsk
-      type:
-      - float
+
+  trades:
+    request:
+      template: /api/v1/trades
+      pair_template:
+        template: "{first}{second}"
+        lower_case: false
+        alias: symbol
+      params:
+        limit:
+          type: int
+          default: 100 #max 1000
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: int
+          price:
+            type: str
+          qty:
+            type: str
+          time:
+            type: str
+          isBuyerMaker:
+            type: bool
+          isBestMatch:
+            type: bool
+    mapping:
+      - key: time
+        path:
+          - time
+        type:
+          - int
+          - utcfromtimestampms
+      - key: amount
+        path:
+          - qty
+        type:
+          - str
+          - float
+      - key: price
+        path:
+          - price
+        type:
+          - str
+          - float
+      - key: direction
+        path:
+          - isBuyerMaker
+        type:
+          - value
+          - map
+          - true
+          - sell
+          - false
+          - buy
+      - key: id
+        path:
+          - id
+        type:
+          - int
+
+
+  order_books:
+    request:
+      template: /api/v1/depth
+      pair_template:
+        template: "{first}{second}"
+        lower_case: false
+        alias: symbol
+      params:
+        limit:
+          type: int
+          default: 100 #max 1000
+    response:
+      type: dict
+      values:
+        lastUpdateId:
+          type: int
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: str
+              1: # amount
+                type: str
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: str
+              1: # amount
+                type: str
+    mapping:
+      - key: time
+        path:
+          - lastUpdateId
+        type:
+          - int
+          - utcfromtimestampms
+      - key: id
+        path:
+          - lastUpdateId
+        type:
+          - int
+      - key: position
+        path: []
+        type:
+          - none
+          - range
+      - key: bids_price
+        path:
+          - bids
+          - 0
+        type:
+          - str
+          - float
+      - key: bids_amount
+        path:
+          - bids
+          - 1
+        type:
+          - str
+          - float
+      - key: asks_price
+        path:
+          - asks
+          - 0
+        type:
+          - str
+          - float
+      - key: asks_amount
+        path:
+          - asks
+          - 1
+        type:
+          - str
+          - float
+
+    
