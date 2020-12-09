@@ -136,10 +136,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
-                               {'first': 'eth', 'second': 'xrp', 'value': 2},
-                               {'first': 'btc', 'second': 'usd', 'value': 3},
-                               {'first': 'eth', 'second': 'usdt', 'value': 4}]})
+            exchange_name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
+                                   {'first': 'eth', 'second': 'xrp', 'value': 2},
+                                   {'first': 'btc', 'second': 'usd', 'value': 3},
+                                   {'first': 'eth', 'second': 'usdt', 'value': 4}]})
         self.assertRaises(NoCurrencyPairProvidedException, exchange.format_data, method, response, start_time, time)
 
         # currency_pair_second missing
@@ -179,10 +179,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
-                               {'first': 'eth', 'second': 'xrp', 'value': 2},
-                               {'first': 'btc', 'second': 'usd', 'value': 3},
-                               {'first': 'eth', 'second': 'usdt', 'value': 4}]})
+            exchange_name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
+                                   {'first': 'eth', 'second': 'xrp', 'value': 2},
+                                   {'first': 'btc', 'second': 'usd', 'value': 3},
+                                   {'first': 'eth', 'second': 'usdt', 'value': 4}]})
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
@@ -213,10 +213,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {None: [{'data': {'first': 'btc', 'second': 'eth', 'value': 5}},
-                               {'data': {'first': 'eth', 'second': 'xrp', 'value': 6}},
-                               {'data': {'first': 'btc', 'second': 'usd', 'value': 7}},
-                               {'data': {'first': 'eth', 'second': 'usdt', 'value': 8}}]})
+            exchange_name, {None: [{'data': {'first': 'btc', 'second': 'eth', 'value': 5}},
+                                   {'data': {'first': 'eth', 'second': 'xrp', 'value': 6}},
+                                   {'data': {'first': 'btc', 'second': 'usd', 'value': 7}},
+                                   {'data': {'first': 'eth', 'second': 'usdt', 'value': 8}}]})
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
@@ -247,10 +247,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {None: {'data': [{'first': 'btc', 'second': 'eth', 'value': 1},
-                                        {'first': 'eth', 'second': 'xrp', 'value': 2},
-                                        {'first': 'btc', 'second': 'usd', 'value': 3},
-                                        {'first': 'eth', 'second': 'usdt', 'value': 4}]}})
+            exchange_name, {None: {'data': [{'first': 'btc', 'second': 'eth', 'value': 1},
+                                            {'first': 'eth', 'second': 'xrp', 'value': 2},
+                                            {'first': 'btc', 'second': 'usd', 'value': 3},
+                                            {'first': 'eth', 'second': 'usdt', 'value': 4}]}})
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
@@ -272,6 +272,7 @@ class TestFormatData(unittest.TestCase):
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
         exchange = Exchange(exchange_dict)
+        exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['v1'], ['str', 'int']),
                     Mapping('value2', ['v2'], ['str']),
                     Mapping('value3', ['v3'], ['str'])]
@@ -291,10 +292,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {cp1_mock: {'v1': '10', 'v2': 'a', 'v3': 'b'},
-                        cp2_mock: {'v1': '11', 'v2': 'c', 'v3': 'd'},
-                        cp3_mock: {'v1': '12', 'v2': 'e', 'v3': 'f'},
-                        cp4_mock: {'v1': '13', 'v2': 'g', 'v3': 'h'}})
+            exchange_name, {cp1_mock: {'v1': '10', 'v2': 'a', 'v3': 'b'},
+                            cp2_mock: {'v1': '11', 'v2': 'c', 'v3': 'd'},
+                            cp3_mock: {'v1': '12', 'v2': 'e', 'v3': 'f'},
+                            cp4_mock: {'v1': '13', 'v2': 'g', 'v3': 'h'}})
         value_list = {(start_time, time, 10, 'A', 'B', 1),
                       (start_time, time, 11, 'C', 'D', 2),
                       (start_time, time, 12, 'E', 'F', 3),
@@ -315,6 +316,7 @@ class TestFormatData(unittest.TestCase):
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
         exchange = Exchange(exchange_dict)
+        exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),
                     Mapping('value3', ['data', 'v3'], ['str'])]
@@ -342,10 +344,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
-                        cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
-                        cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
-                        cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
+            exchange_name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
+                            cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
+                            cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
+                            cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
         value_list = {(start_time, time, 10, 'A', 'B', 1),
                       (start_time, time, 11, 'C', 'D', 2),
                       (start_time, time, 12, 'E', 'F', 3),
@@ -368,6 +370,7 @@ class TestFormatData(unittest.TestCase):
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
         exchange = Exchange(exchange_dict)
+        exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),
                     Mapping('value3', ['data', 'v3'], ['str'])]
@@ -387,10 +390,10 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-        exchange_name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
-                        cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
-                        cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
-                        cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
+            exchange_name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
+                            cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
+                            cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
+                            cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
         value_list = {(start_time, time, 10, 'A', 'B', 1),
                       (start_time, time, 11, 'C', 'D', 2),
                       (start_time, time, 12, 'E', 'F', 3),
