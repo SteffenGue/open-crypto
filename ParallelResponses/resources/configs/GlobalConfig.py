@@ -11,7 +11,8 @@ config_file: str = None
 config_path = os.path.dirname(os.path.realpath(__file__))
 
 if not config_file:
-    input_str = input("Enter config file name: ")
+    # input_str = input("Enter config file name: ")
+    input_str = 'config'
     if input_str in ['quit', 'exit']:
         sys.exit(0)
 

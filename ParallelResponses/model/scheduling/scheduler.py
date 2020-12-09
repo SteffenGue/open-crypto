@@ -1,8 +1,6 @@
 import asyncio
 import logging
-import threading
-import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Callable, Dict
 
 from model.scheduling.Job import Job
@@ -11,6 +9,8 @@ from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
 import sys
+
+from model.utilities.exceptions import MappingNotFoundException
 
 
 class Scheduler:
@@ -227,6 +227,7 @@ class Scheduler:
                 response_time = response[0]
                 exchange_name = response[1]
                 found_exchange: Exchange = None
+
                 for exchange in exchanges_with_pairs.keys():
                     # finding the right exchange
                     if exchange.name.upper() == exchange_name.upper():
@@ -234,10 +235,14 @@ class Scheduler:
                         break
 
                 if found_exchange:
-                    formatted_response, mappings = found_exchange.format_data(request_name,
-                                                                              response[1:],
-                                                                              start_time=start_time,
-                                                                              time=response_time)
+                    try:
+                        formatted_response, mappings = found_exchange.format_data(request_name,
+                                                                                  response[1:],
+                                                                                  start_time=start_time,
+                                                                                  time=response_time)
+                    except MappingNotFoundException:
+                        #todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
+                        formatted_response, mappings = None, None
 
                     if formatted_response:
                         self.database_handler.persist_response(exchanges_with_pairs,

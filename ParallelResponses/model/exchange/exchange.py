@@ -1,15 +1,15 @@
 import itertools
-import time
 import logging
 import traceback
 from datetime import datetime
-from typing import Iterator, Dict, List, Tuple, Optional
+from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
 from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
 from model.database.tables import ExchangeCurrencyPair
+from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
+    NoCurrencyPairProvidedException
 from model.utilities.utilities import TYPE_CONVERSION
-from model.database.db_handler import DatabaseHandler
 
 
 class Exchange:
@@ -68,11 +68,6 @@ class Exchange:
         :param yaml_file: Dict
             Content of a .yaml file as a dict-object.
             Constructor does not check if content is viable.
-
-        :param database_handler_request_params: Function
-            DatabaseHandler-Function from the model() database_handler instance.
-            This is necessary to perform function calls from the request parameters which include
-            database queries. Database connections should only take place from DatabaseHandler instances.
         """
         self.name = yaml_file['name']
         if yaml_file.get('terms'):
@@ -139,13 +134,13 @@ class Exchange:
                     return self.name, True, response_json
                 except ClientConnectionError:
                     return self.name, False, {}
-                except Exception as ex:
+                except Exception:
                     return self.name, False, {}
 
     async def request(self,
                       request_name: str,
                       currency_pairs: List[ExchangeCurrencyPair]) -> \
-            Tuple[datetime, str, Tuple[Optional[ExchangeCurrencyPair]]]:
+            Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
 
         """
         Method tries to request data for all given methods and currency pairs.
@@ -213,9 +208,7 @@ class Exchange:
                     except ClientConnectionError:
                         logging.error('Could not establish connection to {}'.format(self.name))
                         print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                        self.exception_counter += 1
-                        self.consecutive_exception = True
-                    except Exception as ex:
+                    except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
                               .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
@@ -223,11 +216,11 @@ class Exchange:
                                       'Url: {}, Parameters: {}'
                                       .format(self.name, request_url_and_params['url'],
                                               request_url_and_params['params']))
-
             return datetime.utcnow(), self.name, responses
         else:
             logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no {} request.".format(self.name, request_name))
+            return None
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """
@@ -354,36 +347,36 @@ class Exchange:
             See example above.
         """
         urls = dict()
+        if requests:
+            for request in requests:
+                request_parameters = dict()
+                url = self.api_url
+                request_dict = requests[request]['request']
 
-        for request in requests:
-            request_parameters = dict()
-            url = self.api_url
-            request_dict = requests[request]['request']
+                if 'template' in request_dict.keys() and request_dict['template']:
+                    url += '{}'.format(request_dict['template'])
+                request_parameters['url'] = url
 
-            if 'template' in request_dict.keys() and request_dict['template']:
-                url += '{}'.format(request_dict['template'])
-            request_parameters['url'] = url
+                pair_template = dict()
+                if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
+                    pair_template = request_dict['pair_template']
+                request_parameters['pair_template'] = pair_template
 
-            pair_template = dict()
-            if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
-                pair_template = request_dict['pair_template']
-            request_parameters['pair_template'] = pair_template
+                params = dict()
+                if 'params' in request_dict.keys() and request_dict['params']:
+                    for param in request_dict['params']:
+                        if 'default' in request_dict['params'][param]:
+                            params[param] = str(request_dict['params'][param]['default'])
 
-            params = dict()
-            if 'params' in request_dict.keys() and request_dict['params']:
-                for param in request_dict['params']:
-                    if 'default' in request_dict['params'][param]:
-                        params[param] = str(request_dict['params'][param]['default'])
-
-                    if 'function' in request_dict['params'][param]:
-                        conv_params = request_dict['params'][param]['function']
-                        conversion_tuple = (conv_params[0], conv_params[1])
+                        if 'function' in request_dict['params'][param]:
+                            conv_params = request_dict['params'][param]['function']
+                            conversion_tuple = (conv_params[0], conv_params[1])
 
                         params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
 
-            request_parameters['params'] = params
+                request_parameters['params'] = params
 
-            urls[request] = request_parameters
+                urls[request] = request_parameters
 
         return urls
 
@@ -411,17 +404,18 @@ class Exchange:
                 {'request_name': List[Mapping]}
         """
         response_mappings = dict()
-        for request in requests:
-            request_mapping: dict = requests[request]
+        if requests:
+            for request in requests:
+                request_mapping: dict = requests[request]
 
-            if 'mapping' in request_mapping.keys():
-                mapping = request_mapping['mapping']
-                mapping_list = list()
+                if 'mapping' in request_mapping.keys():
+                    mapping = request_mapping['mapping']
+                    mapping_list = list()
 
-                for entry in mapping:
-                    mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
+                    for entry in mapping:
+                        mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
 
-                response_mappings[request] = mapping_list
+                    response_mappings[request] = mapping_list
 
         return response_mappings
 
@@ -455,9 +449,10 @@ class Exchange:
                                           results['currency_pair_second']))
 
     def format_data(self,
-                    method,
-                    response: Iterator[Tuple[str, Dict[object, list]]],
-                    **kwargs):
+                    method: str,
+                    response: Tuple[str, Dict[object, Dict]],
+                    start_time: datetime,
+                    time: datetime):
 
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
@@ -505,32 +500,39 @@ class Exchange:
 
         AMEN
 
-        :param method: str
+        @param method: str
             The request method name, i.e. ticker, trades,...
-        :param response: Iterator
+        @param response: Iterator
             response is a parsed json -> Dict.
                 Tuple might contain None if there was no Mapping-Object for a key (every x-th element of all
                  the tuples is none or the extracted value was simply None.
-        :param kwargs: Dict
-            Key:Value pairs that will be added to each data tuple. Currently 'start_time', i.e a datetime object
-            when the scheduler started the request and 'time', i.e. the timestamp an exchange responded.
+        @param start_time: datetime
+            Timestamp when the request started.
+        @param time: datetime
+            Timestamp the exchange responded.
 
-        :return List of Tuples with the formatted data and the name of the mapping_keys to map the data points.
+        @return List of Tuples with the formatted data and the name of the mapping_keys to map the data points.
         """
 
         if response[0] != self.name:
-            return None
+            raise DifferentExchangeContentException(response[0], self.name)
         results = list()
-        mappings = self.response_mappings[method]
+        if method in self.response_mappings.keys():
+            mappings = self.response_mappings[method]
+            if not mappings:
+                raise MappingNotFoundException(self.name, method)
+        else:
+            raise MappingNotFoundException(self.name, method)
         responses = response[1]
         currency_pair: ExchangeCurrencyPair
         mapping_keys = [mapping.key for mapping in mappings]
-        updated_mappings = []
+
+        # creating dictionary where key is the name of the mapping which holds an empty list
+        temp_results = dict(zip((key for key in mapping_keys),
+                                itertools.repeat([], len(mappings))))
+
         for currency_pair in responses.keys():
-            # creating dictionary where key is the name of the mapping which holds an empty list
-            temp_results = dict(zip((key for key in mapping_keys),
-                                    itertools.repeat([], len(mappings))))
-            if currency_pair:  # responses had to be collected individually
+            if currency_pair:  # responses had to be collected individualy
                 current_response = responses[currency_pair]
             else:  # data for all currency_pairs in one response
                 current_response = responses[None]
@@ -539,8 +541,16 @@ class Exchange:
                 try:
                     # extraction of actual values; note that currencies might not be in mappings (later important)
                     for mapping in mappings:
-                        # TODO: does extract_value never need currency-pair info?
-                        temp_results[mapping.key] = mapping.extract_value(current_response)
+                        if currency_pair:
+                            temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                              currency_pair_info=(
+                                                                                  currency_pair.first.name,
+                                                                                  currency_pair.second.name,
+                                                                                  self.apply_currency_pair_format(
+                                                                                      method,
+                                                                                      currency_pair)))
+                        else:
+                            temp_results[mapping.key]: List = mapping.extract_value(current_response)
                 except Exception:
                     print('Error while formatting {}, {}: {}'.format(method, mapping.key, currency_pair))
                     traceback.print_exc()
@@ -559,7 +569,6 @@ class Exchange:
                     # asserting that the extracted lists for each mapping are having the same length
                     assert (len(results[0]) == len(result) for result in temp_results)
 
-                    # TODO: can't len_results = results[0] since we asserted that all lists have the same length?
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values()) if bool(len_results) else 1
 
@@ -567,209 +576,20 @@ class Exchange:
                         temp_results['position'] = range(len_results)
 
                     # adding pair id when we don't have currencies in mapping
-                    # TODO: do we benefit from this later in persist-method since we know id already?
-                    if 'currency_pair_first' and 'currency_pair_second' not in mapping_keys:
-                        temp_results.update({'exchange_pair_id': currency_pair.id})
+                    if 'currency_pair_first' not in mapping_keys and 'currency_pair_second' not in mapping_keys:
+                        if currency_pair:
+                            temp_results.update({'exchange_pair_id': currency_pair.id})
+                        else:
+                            raise NoCurrencyPairProvidedException(self.name, method)
+                    elif 'currency_pair_first' not in mapping_keys or 'currency_pair_second' not in mapping_keys:
+                        raise NoCurrencyPairProvidedException(self.name, method)
 
                     # update new keys only if not already exsits to prevent overwriting!
-                    temp_results = {**kwargs, **temp_results}
+                    temp_results = {'start_time': start_time, 'time': time, **temp_results}
                     result = [v if hasattr(v, '__iter__')
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
                     result = list(itertools.zip_longest(*result))
                     updated_mappings = temp_results.keys()
                     results.extend(result)
-
-        return results, updated_mappings
-
-# Currently unused or outdated methods.
-
-# async def request(self, request_name: str, currency_pairs: List[ExchangeCurrencyPair]) \
-#         -> Tuple[str, Dict[ExchangeCurrencyPair, Dict]]:
-#     """
-#     Sends a request for the historic rates of each given currency-pair and returns the
-#     responses that were collected. Is asynchronous so there can be multiple resquests
-#     be send without the need of waiting for each response before the next request can be send.
-#
-#     @param request_name: str
-#         Name of the request specified in the yaml-file for getting the historic rates.
-#         Aka. the key for the request_urls dict.
-#     @param currency_pairs: List[ExchangeCurrencyPairs]
-#         List of currency-pairs the data should be retrieved for.
-#     @return: (str, Dict[ExchangeCurrencyPair, json]) or None
-#         Tuple containing the name of this exchange and a Dict which contains the responses
-#         accessible through the ExchangeCurrencyPair.
-#
-#         Returns None if the request could not be found in requesst_urls or if the
-#         connection to the Rest-API failed and a ClientConnectionError was thrown.
-#         So either the given request_name was wrong or this exchange has no reqeust
-#         named after request_name in it's yaml.
-#     """
-#     if self.request_urls.get(request_name):
-#         async with aiohttp.ClientSession() as session:
-#             request_url_and_params: Dict = self.request_urls[request_name]
-#             responses = dict()
-#             params = request_url_and_params['params']
-#             pair_template_dict = request_url_and_params['pair_template']
-#
-#             for cp in currency_pairs:
-#                 url: str = request_url_and_params['url']
-#
-#                 pair_formatted: str = self.apply_currency_pair_format(request_name, cp)
-#
-#                 # if formatted currency pair needs to be a parameter
-#                 if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
-#                     params[pair_template_dict['alias']] = pair_formatted
-#                 else:
-#                     url = url.format(currency_pair=pair_formatted)
-#
-#                 try:
-#                     response = await session.get(url=url, params=params)
-#                     response_json = await response.json(content_type=None)
-#
-#                     # print(response_json)
-#                     responses[cp] = response_json
-#                     self.consecutive_exception = False
-#
-#                 except ClientConnectionError:
-#                     logging.error('Could not establish connection to {}'.format(self.name))
-#                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-#                 except Exception as ex:
-#                     print('Unable to read response from {}. Check exchange config file.\n'
-#                           'Url: {}, Parameters: {}'
-#                           .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
-#                     logging.error('Unable to read response from {}. Check config file.\n'
-#                                   'Url: {}, Parameters: {}'
-#                                   .format(self.name, request_url_and_params['url'],
-#                                           request_url_and_params['params']))
-#                 finally:
-#                     time.sleep(self.rate_limit)
-#
-#             return self.name, responses
-#     else:
-#         print('{} hat keine {}'.format(self.name, request_name.capitalize()))
-#         return self.name, None
-
-
-# def format_ticker(self, response: Tuple[str, datetime, datetime, dict]) -> Iterator[Tuple[str,
-#                                                                                           datetime,
-#                                                                                           datetime,
-#                                                                                           str,
-#                                                                                           str,
-#                                                                                           float,
-#                                                                                           float,
-#                                                                                           float,
-#                                                                                           float,
-#                                                                                           float]]:
-#
-#     """
-#     Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
-#     the requested values and formats them to fitting tuples for persist_tickers() in db_handler.
-#
-#     Starts with a dictionary of empty lists where each key is the possible key-name from a mapping.
-#     This is necessary because not every exchange returns every value that we try to store but a list
-#     is later necessary to fill up 'empty places'.
-#     i.e. Some exchange don't return last_trade volumes for their currencies.
-#
-#     TODO: prevent hardcoding key_names ( nice to have )
-#
-#     Each Mapping stored behind response_mappings['ticker'] is then called to extract its values.
-#     i.e. The Mapping-Object with the key_name 'currency_pair_first' extracts a list which is ordered
-#     from first to last line with all the symbols of the first named currency.
-#     The return from extract_values() is then stored behind the key-name,
-#     e.g. the empty list is now replaced with the extracted values.
-#
-#     The overall result of this process looks something like the following:
-#         first_currency =    ['BTC', 'ETH', ...]
-#         second_currency =   ['XRP', 'USDT', ...]
-#         ticker_last_price = []  <--- no Mapping-Object in exchange.yaml specified
-#         ticker_best_ask =   [0.123, 5.456, ...]
-#         ...
-#     Lists which are filled have the same length.
-#     (obviously because extraction of the same number of lines in response)
-#     The X-th elements from each value-list(extracted with Mapping-object) represent
-#     one 'response-line' in the given json.
-#
-#     Because returning just the dictionary containing the lists is not intuitive
-#     the last step is formatting the extracted values into fitting tuples.
-#     This is done by using itertools.zip_longest() which works like the following:
-#         a = itertools.repeat('a', len(b))
-#         b = [1, 2, 3]
-#         c = []
-#         d = [1, 2]
-#
-#         result:
-#             ('a', 1, None, 1)
-#             ('a', 2, None, 2)
-#             ('a', 3, None, None)
-#
-#     We are using the length of currency_pair_first because every entry in general ticker_data
-#     has to contain a currency pair. It is always viable because the lists of extracted values
-#     all need to have the same length.
-#
-#     The formatted list of ticker-data-tuples is then returned.
-#
-#     AMEN
-#
-#     :param response: Tuple[exchange_name, time of arrival, response from exchange-api]
-#         response is a parsed json -> Dict.
-#
-#     :return: Iterator of tuples with the following structure:
-#             (exchange-name,
-#              timestamp,
-#              timestamp,
-#              first_currency_symbol,
-#              second_currency_symbol,
-#              ticker_last_price,
-#              ticker_last_trade,
-#              ticker_best_ask,
-#              ticker_best_bid,
-#              ticker_daily_volume)
-#
-#             Tuple might contain None if there was no Mapping-Object for a key(every x-th element of all
-#              the tuples is none or the extracted value was simply None.
-#
-#         Returns None if the given exchange-name of is not the name of this exchange.
-#     """
-#     if response[0] != self.name:
-#         return None
-#
-#     results = list()
-#
-#     mappings = self.response_mappings['ticker']
-#     responses = response[3]
-#     currency_pair: ExchangeCurrencyPair
-#
-#     for currency_pair in responses.keys():
-#         temp_results = {'currency_pair_first': [],
-#                         'currency_pair_second': [],
-#                         'ticker_last_price': [],
-#                         'ticker_best_ask': [],
-#                         'ticker_best_bid': [],
-#                         'ticker_daily_volume': []}
-#
-#         current_response = responses[currency_pair]
-#         curr_pair_string_formatted: str = None
-#         currency_pair_info: (str, str, str) = None
-#         if currency_pair:
-#             curr_pair_string_formatted = self.apply_currency_pair_format('ticker', currency_pair)
-#             currency_pair_info = (currency_pair.first.name, currency_pair.second.name, curr_pair_string_formatted)
-#
-#         for mapping in mappings:
-#             temp_results[mapping.key] = mapping.extract_value(current_response,
-#                                                               currency_pair_info=currency_pair_info)
-#             if not hasattr(temp_results[mapping.key], "__iter__") or isinstance(temp_results[mapping.key], str):
-#                 #if only one value extracted wrap in list
-#                 temp_results[mapping.key] = [temp_results[mapping.key]]
-#
-#         result = list(itertools.zip_longest(itertools.repeat(response[0], len(temp_results['currency_pair_first'])),
-#                                             itertools.repeat(response[1], len(temp_results['currency_pair_first'])),
-#                                             itertools.repeat(response[2], len(temp_results['currency_pair_first'])),
-#                                             temp_results['currency_pair_first'],
-#                                             temp_results['currency_pair_second'],
-#                                             temp_results['ticker_last_price'],
-#                                             temp_results['ticker_best_ask'],
-#                                             temp_results['ticker_best_bid'],
-#                                             temp_results['ticker_daily_volume']))
-#         results.extend(result)
-#     return results
+        return results, list(temp_results.keys())

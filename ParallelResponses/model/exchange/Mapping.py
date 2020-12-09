@@ -96,6 +96,9 @@ class Mapping:
 
             current_type = next_type
 
+        if type(result) is str:
+            return result.upper()
+
         return result
 
     def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: str = None) -> dict:
@@ -110,7 +113,7 @@ class Mapping:
             path_queue:
                 The queue of path traversal instructions.
 
-            currency_pair:
+            currency_pair_info:
                 The formatted String of a currency pair.
                 For special case that the key of a dictionary is the formatted currency pair string.
 
@@ -131,14 +134,14 @@ class Mapping:
             traversed = list(response.keys())
         elif path_element == "list_values":
             traversed = list(response.values())
-        elif path_element == []:
+        elif not path_element:
             # Special case to extract multiple values from a single list ["USD","BTC",...]
             traversed = response
         elif path_element == "currency_pair" and currency_pair_info[2] is not None:
             traversed = response[currency_pair_info[2]]
         elif is_scalar(response):
             return None
-        else:  # Hier editiert für Kraken sonderfall
+        else:  # edited here for kraken special case
             if isinstance(response, dict):
                 if path_element in response.keys():
                     traversed = response[path_element]
@@ -168,6 +171,9 @@ class Mapping:
                 The queue of type conversion instructions.
             iterate:
                 Whether still an auto-iteration is possible.
+            currency_pair_info:
+                Infos about currencies and the formatted string.
+                ex: (first_cur_name, second_curr_name, pair_string_formatted)
 
         Returns:
             The value specified by "path_queue" and converted
@@ -200,7 +206,7 @@ class Mapping:
                 # Iterate through list of results
                 result = list()
 
-                if len(response) == 1: #special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
+                if len(response) == 1:
                     response = response[0]
                     continue  # because instance of response has to be checked
 
@@ -234,7 +240,7 @@ class Mapping:
                 # Traverse path
                 response = self.traverse_path(response, path_queue, currency_pair_info=currency_pair_info)
 
-        if types_queue and response is not None: #hier zu None geändert, weil sonst nicht zu 0 zo Bool geändert werden kann
+        if types_queue and response is not None:  # hier zu None geändert, weil sonst nicht zu 0 zo Bool geändert werden kann
 
             if isinstance(response, list):
 
@@ -245,7 +251,7 @@ class Mapping:
                         self.convert_type(item, deque(types_queue))
                     )
 
-                if len(result) == 1: #for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
+                if len(result) == 1:  # for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
                     result = result[0]
 
                 response = result
