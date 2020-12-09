@@ -149,7 +149,11 @@ requests:
         type:
           - str
           - float
+<<<<<<< Updated upstream
       - key: volume
+=======
+      - key: daily_volume
+>>>>>>> Stashed changes
         path:
           - data
           - v

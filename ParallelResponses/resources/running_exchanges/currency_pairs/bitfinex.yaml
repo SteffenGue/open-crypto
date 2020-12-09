@@ -546,8 +546,10 @@ requests:
     response:
       type: list
       values:
+        type: list
+        values:
         # template on trading pairs (ex. tBTCUSD)
-        - 0: # SYMBOL: The currency symbol
+          0: # SYMBOL: The currency symbol
             type: str
           1: # BID: Price of last highest bid
             type: float
@@ -571,35 +573,27 @@ requests:
             type: float
           # template on funding currencies (ex. fUSD)
     mapping: # for trading pairs (ex. tBTCUSD)
-      - key: currency_pair_first
-        path: []
-        type:
-          - first_currency
-      - key: currency_pair_second
-        path: []
-        type:
-          - second_currency
-      - key: ticker_time
+      - key: time
         path: [ ]
         type:
           - none
           - now
-      - key: ticker_best_bid
+      - key: best_bid
         path:
           - 1
         type:
           - float
-      - key: ticker_best_ask
+      - key: best_ask
         path:
           - 3
         type:
           - float
-      - key: ticker_last_price
+      - key: last_price
         path:
           - 7
         type:
           - float
-      - key: ticker_daily_volume
+      - key: daily_volume
         path:
           - 8
         type:

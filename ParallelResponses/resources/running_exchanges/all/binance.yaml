@@ -389,31 +389,23 @@ requests:
           - str
           - float
     mapping:
-    - key: ticker_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - bidPrice
       type:
       - str
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - askPrice
       type:
       - str
       - float
-#    - key: currency_pair_first
-#      path: []
-#      type:
-#        - first_currency
-#    - key: currency_pair_second
-#      path: []
-#      type:
-#        - second_currency
 
 #  order_books:
 #    request:
