@@ -791,7 +791,7 @@ class TestMapping(unittest.TestCase):
                         {'btc_eur': {'other': 'values'}},
                         {'btc_usd': {'other': 'values'}},
                         {'btc_usdt': {'other': 'values'}}]
-        value_list = ['eth', 'eur', 'usd', 'usdt']
+        value_list = ['ETH', 'EUR', 'USD', 'USDT']
         result = mapping.extract_value(extract_list)
         self.assertEqual(value_list, result)
 
@@ -825,7 +825,7 @@ class TestMapping(unittest.TestCase):
                           ['str', 'split', '_', 0])
         extract_dict = {'data': ['eth_btc', 'usd_btc', 'xrp_eth', 'eth_xrp'],
                         'other_stuff': 'that does not matter'}
-        value_list = ['eth', 'usd', 'xrp', 'eth']
+        value_list = ['ETH', 'USD', 'XRP', 'ETH']
         result = mapping.extract_value(extract_dict)
         self.assertEqual(value_list, result)
 
@@ -851,7 +851,7 @@ class TestMapping(unittest.TestCase):
                                  {'btc_xrp': {'other': 'values'}},
                                  {'tsla_usd': {'other': 'values'}},
                                  {'usdt_eth': {'other': 'values'}}]}
-        value_list = ['btc', 'xrp', 'usd', 'eth']
+        value_list = ['BTC', 'XRP', 'USD', 'ETH']
         result = mapping.extract_value(extract_dict)
         self.assertEqual(value_list, result)
 
