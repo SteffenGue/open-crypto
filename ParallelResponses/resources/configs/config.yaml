@@ -17,8 +17,6 @@ general:
     enable_logging: false
 
 jobs:
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   Ticker:
     yaml_request_name: ticker
     update_cp: true
@@ -37,28 +35,3 @@ jobs:
     first_currencies:
       - btc
     second_currencies:
-=======
-  circle_ticker:
-    yaml_request_name: ticker
-    update_cp: false
-    exchanges:
-      - kucoin
-    currency_pairs:
-    first_currencies:
-      - btc
-    second_currencies:
-=======
-  circle_ticker:
-    yaml_request_name: ticker
-    update_cp: false
-    exchanges:
-      - kucoin
-    currency_pairs:
-    first_currencies:
-      - btc
-    second_currencies:
->>>>>>> Stashed changes
-
-
-
->>>>>>> Stashed changes

@@ -1,13 +1,5 @@
-<<<<<<< Updated upstream:ParallelResponses/tests/validate.py
-<<<<<<< Updated upstream:ParallelResponses/tests/validate.py
-from ParallelResponses.tests.yaml_tests.api_map_validation import ApiMapFileValidator
-from ParallelResponses.model.utilities.utilities import YAML_PATH
-=======
-=======
->>>>>>> Stashed changes:ParallelResponses/validate.py
 from tests.yaml_tests.api_map_validation import ApiMapFileValidator
 from model.utilities.utilities import YAML_PATH
->>>>>>> Stashed changes:ParallelResponses/validate.py
 import os
 
 
