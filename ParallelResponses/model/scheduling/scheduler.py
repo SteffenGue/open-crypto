@@ -53,7 +53,12 @@ class Scheduler:
         runs.append(asyncio.sleep(self.frequency))
 
         # das hast du noch nachträglich eingefügt, vielleicht musst du das hier wieder ändern
+
         await asyncio.gather(*runs)
+        return True
+        # loop = asyncio.get_event_loop()
+        # loop.run_until_complete(await asyncio.gather(*runs))
+
 
     async def run(self, job: Job):
         """

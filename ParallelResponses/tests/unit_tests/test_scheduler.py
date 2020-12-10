@@ -1,16 +1,22 @@
 import datetime
 import unittest
+import oyaml as yaml
 from model.scheduling.scheduler import Scheduler
 from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
-from model.database.tables import *
+from model.database.tables import metadata
 from model.utilities.utilities import read_config
+from model.exchange.exchange import Exchange
 
 class TestMapping(unittest.TestCase):
     """Test class for Scheduling."""
 
-    db_config = read_config('database')
-    db_handler = DatabaseHandler(metadata, **db_config)
+    with open("test.yaml") as file:
+        test_yaml = yaml.load(file, Loader=yaml.FullLoader)
+    exchange = Exchange(test_yaml)
+
+    # db_config = read_config('database')
+    # db_handler = DatabaseHandler(metadata, **db_config)
 
     # pylint: disable=too-many-public-methods
 

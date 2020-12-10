@@ -4,6 +4,7 @@ import traceback
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
+import asyncio
 from aiohttp import ClientConnectionError
 from model.exchange.Mapping import Mapping
 from model.database.tables import ExchangeCurrencyPair
@@ -199,6 +200,7 @@ class Exchange:
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
+
                         # print(response_json)
                         if pair_formatting_needed:
                             responses[cp] = response_json
@@ -216,6 +218,9 @@ class Exchange:
                                       'Url: {}, Parameters: {}'
                                       .format(self.name, request_url_and_params['url'],
                                               request_url_and_params['params']))
+                    if self.rate_limit and len(currency_pairs) > self.rate_limit:
+                        await asyncio.sleep(1/self.rate_limit)
+
             return datetime.utcnow(), self.name, responses
         else:
             logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
@@ -556,14 +561,17 @@ class Exchange:
                     traceback.print_exc()
                     pass
                 else:
-                    extracted_data_is_valid: bool = True
+                    # extracted_data_is_valid: bool = True
                     for extracted_field in temp_results.keys():
                         if temp_results[extracted_field] is None:
                             print("{} has no valid data in {}".format(currency_pair, extracted_field))
-                            extracted_data_is_valid = False
-                            break
+                            # extracted_data_is_valid = False
+                            # continue
 
-                    if not extracted_data_is_valid:
+                    # CHANGE: One filed invalid -> all fields invalid.
+                    # changed this in order to avoid responses kicked out just because of one invalid filed.
+                    # The response will be filtered out in the DB-Handler if the primary-keys are missing anyways.
+                    if all(value is None for value in list(temp_results.values())):
                         continue
 
                     # asserting that the extracted lists for each mapping are having the same length
@@ -590,6 +598,6 @@ class Exchange:
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
                     result = list(itertools.zip_longest(*result))
-                    updated_mappings = temp_results.keys()
+                    # updated_mappings = temp_results.keys()
                     results.extend(result)
         return results, list(temp_results.keys())

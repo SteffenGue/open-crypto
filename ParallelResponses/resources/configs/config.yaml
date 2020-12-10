@@ -1,6 +1,6 @@
 general:
   database:
-    sqltype: postgresql
+    sqltype: sqlite
     client: psycopg2
     user_name: bjarne
     password:
@@ -8,7 +8,8 @@ general:
     port: 5432
     db_name: hochfrequenz
   operation_settings:
-    frequency: 0.5
+    frequency: 0
+    run_once: true
   export:
     export_data_to_csv: false
     csv_dir: resources/csv
@@ -19,22 +20,17 @@ general:
 jobs:
   Ticker:
     yaml_request_name: ticker
-    update_cp: true
+    update_cp: false
     exchanges:
-      - braziliex
-      - exmo
-      - exrates
-      - folgory
-      - hotbit
-      - openledger
-      - p2pb2b
-      - stex
-      - upbit
-      - vindax
-      - whitebit
-      - zbg
+      - bisq
     currency_pairs:
-      - all
+#      - all
+      - first: bsq
+        second: btc
+      - first: cash2
+        second: btc
+      - first: doi
+        second: btc
     first_currencies:
     second_currencies:
 # ex:
