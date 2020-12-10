@@ -562,14 +562,14 @@ class Exchange:
                     pass
                 else:
                     # extracted_data_is_valid: bool = True
-                    for extracted_field in temp_results.keys():
-                        if temp_results[extracted_field] is None:
-                            print("{} has no valid data in {}".format(currency_pair, extracted_field))
+                    # for extracted_field in temp_results.keys():
+                    #     if temp_results[extracted_field] is None:
+                    #         print("{} has no valid data in {}".format(currency_pair, extracted_field))
                             # extracted_data_is_valid = False
                             # continue
 
                     # CHANGE: One filed invalid -> all fields invalid.
-                    # changed this in order to avoid responses kicked out just because of one invalid filed.
+                    # changed this in order to avoid responses kicked out just because of one invalid field.
                     # The response will be filtered out in the DB-Handler if the primary-keys are missing anyways.
                     if all(value is None for value in list(temp_results.values())):
                         continue

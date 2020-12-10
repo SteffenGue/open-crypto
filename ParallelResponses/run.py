@@ -4,8 +4,10 @@ from model.utilities.utilities import read_config
 from export import CsvExport
 import main as main
 import os
+import sys
 import shutil
 from typing import Dict
+
 
 path = os.getcwd()
 
@@ -122,8 +124,11 @@ def run(path=path):
     :param path: The current working directory if not specified differently.
     """
     check_path()
-    main.run(path)
+    run(main.run(path))
+
 
 
 if __name__ == '__main__':
-    run()
+    run(path)
+
+

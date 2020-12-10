@@ -12,12 +12,14 @@ from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 import signal
 
+
 def signal_handler(signal, frame):
     """
     Helper function to exit the program. When STRG+C is hit, the program will shut down with exit code(0)
     """
     print("\nExiting program.")
     sys.exit(0)
+
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -45,34 +47,6 @@ async def initialize_jobs(job_config: Dict) -> List[Job]:
     return jobs
 
 
-
-async def main(database_handler: DatabaseHandler):
-    """
-    The model() function to run the program. Loads the database, including the database_handler.
-    The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
-    In an asynchronous manner it is iterated over the exchange and and the responses are awaited and collected
-        by await asyncio.gather(..)
-    As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
-        by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
-    """
-
-    # run program with single exchange for debugging/testing purposes
-    # exchange_names = ['binance']
-
-    logging.info('Loading jobs.')
-    jobs = await initialize_jobs(read_config(file=None, section='jobs'))
-    frequency = read_config(file=None, section='operation_settings')['frequency']
-    logging.info('Configuring Scheduler.')
-    scheduler = Scheduler(database_handler, jobs, frequency)
-    await scheduler.validate_job()
-    print('{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]), frequency))
-    logging.info(
-        '{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]), frequency))
-
-    while True:
-        await scheduler.start()
-
-
 def init_logger():
     if not read_config(file=None, section='utilities')['enable_logging']:
         logging.disable()
@@ -87,14 +61,49 @@ def handler(type, value, tb):
     logging.exception('Uncaught exception: {}'.format(str(value)))
 
 
-# if __name__ == "__main__":
-#     # todo: enable for exception in log
+async def main(database_handler: DatabaseHandler):
+    """
+    The model() function to run the program. Loads the database, including the database_handler.
+    The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
+    In an asynchronous manner it is iterated over the exchange and and the responses are awaited and collected
+        by await asyncio.gather(..)
+    As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
+        by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
+    """
+
+    # run program with single exchange for debugging/testing purposes
+    # exchange_names = ['binance']
+    config = read_config(file=None, section=None)
+
+    logging.info('Loading jobs.')
+    jobs = await initialize_jobs(config['jobs'])
+    frequency = config['general']['operation_settings']['frequency']
+    logging.info('Configuring Scheduler.')
+    scheduler = Scheduler(database_handler, jobs, frequency)
+    await scheduler.validate_job()
+    print('{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]),
+                                                                    frequency))
+    logging.info(
+        '{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]),
+                                                                  frequency))
+
+    while True:
+        await scheduler.start()
+
+
+
+
+
 def run(path: str = None):
+
     init_logger()
     sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
+
     asyncio.run(main(database_handler))
+
+
 
