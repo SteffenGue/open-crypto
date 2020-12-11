@@ -42,7 +42,7 @@ requests:
       type:
       - str
 
-  ticker:
+  tickers:
     request:
       template: products/{currency_pair}/ticker
       pair_template:  # e.g. BTC-USD

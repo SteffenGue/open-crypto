@@ -232,7 +232,7 @@ requests:
       - str
       - float
 
-  ticker:
+  tickers:
     request:
       template: ticker
       pair_template:

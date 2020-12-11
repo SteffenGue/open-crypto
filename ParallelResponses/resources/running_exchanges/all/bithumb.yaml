@@ -72,7 +72,7 @@ requests:
           - "-"
           - 1
 
-  ticker:
+  tickers:
     request:
       template: spot/ticker
       pair_template: null

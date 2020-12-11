@@ -187,7 +187,7 @@ requests:
       type:
         - float
 
-  ticker:
+  tickers:
     request:
       template: ticker
       pair_template:

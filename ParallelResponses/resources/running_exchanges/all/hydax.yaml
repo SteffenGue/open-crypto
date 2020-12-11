@@ -40,7 +40,7 @@ requests:
       type:
         - str
 
-  ticker:
+  tickers:
     request:
       template: openapi/quote/v1/ticker/price
       pair_template:

@@ -47,7 +47,7 @@ requests:
         - "_"
         - 1
 
-  ticker:
+  tickers:
     request:
       template: ticker
       pair_template: null

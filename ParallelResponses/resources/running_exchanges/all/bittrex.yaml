@@ -33,7 +33,7 @@ requests:
         type:
           - str
 
-  ticker:
+  tickers:
     request:
       template: markets/tickers
       pair_template: null

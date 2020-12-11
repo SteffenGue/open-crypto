@@ -37,7 +37,7 @@ requests:
       - -3
       -
 
-  ticker:
+  tickers:
     request:
       template: v1/pricefeed
       pair_template: null

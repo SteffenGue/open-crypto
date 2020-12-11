@@ -61,7 +61,7 @@ requests:
         type:
           - str
 
-  ticker:
+  tickers:
     request:
       template: markets
       pair_template: null

@@ -36,7 +36,7 @@ requests:
           - "/"
           - 1
 
-  ticker:
+  tickers:
     request:
       template: ticker/{currency_pair}
       pair_template:

@@ -47,7 +47,7 @@ requests:
         type:
           - str
 
-  ticker:
+  tickers:
     request:
       template: market/ticker
       pair_template:

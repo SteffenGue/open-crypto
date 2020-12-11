@@ -54,11 +54,7 @@ requests:
           - 3
           - 6
 
-
-
-
-
-  ticker:
+  tickers:
     request:
       template: tickers
       pair_template: null

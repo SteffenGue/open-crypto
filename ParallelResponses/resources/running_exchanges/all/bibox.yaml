@@ -4,7 +4,7 @@ api_url: https://api.bibox.com/v1/mdata
 rate_limit: null
 requests:
 
-  ticker:
+  tickers:
     request:
       template: ""
       pair_template: null

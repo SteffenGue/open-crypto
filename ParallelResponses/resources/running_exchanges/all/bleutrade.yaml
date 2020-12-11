@@ -3,66 +3,6 @@ exchange: true
 api_url: https://bleutrade.com/api/v3/
 rate_limit: null
 requests:
-  currencies:
-    request:
-      template: public/getassets
-      pair_template: null
-      params: null
-    response:
-      type: dict
-      values:
-        success:
-          type: boolean
-        message:
-          type: str
-        result:
-          type: list
-          values:
-            type: dict
-            values:
-              Asset: # e.g. BTC
-                type: str
-              AssetLong: # e.g. Bitcoin
-                type: str
-              MinConfirmation:
-                type: int
-              WithdrawTxFee:
-                type: float
-              SystemProtocol:
-                type: str
-              IsActive:
-                type: boolean
-              InfoMessage:
-                type: str
-              MaintenanceMode:
-                type: boolean
-              MaintenanceMessage:
-                type: str
-              FormatPrefix:
-                type: str
-              FormatSuffix:
-                type: str
-              DecimalSeparator:
-                type: str
-              ThousandSeparator:
-                type: str
-              DecimalPlaces:
-                type: int
-
-    mapping:
-    - key: currency_symbol
-      path:
-      - result
-      - Asset
-      type:
-      - str
-    - key: currency_name
-      path:
-      - result
-      - AssetLong
-      type:
-      - str
-
   currency_pairs:
     request:
       template: public/getmarkets
@@ -111,7 +51,7 @@ requests:
       - str
 
 
-  ticker:
+  tickers:
     request:
       template: public/getticker
       pair_template:

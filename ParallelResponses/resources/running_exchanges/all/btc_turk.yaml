@@ -61,7 +61,7 @@ requests:
       - "_"
       - 1
 
-  ticker:
+  tickers:
     request:
       template: https://api.btcturk.com/api/v2/ticker
       pair_template: null

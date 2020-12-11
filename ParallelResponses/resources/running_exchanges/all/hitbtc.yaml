@@ -51,7 +51,7 @@ requests:
       type:
       - str
 
-  ticker:
+  tickers:
     request:
       template: public/ticker/{currency_pair}/
       pair_template: # i.e. ETHBTC

@@ -51,7 +51,7 @@ requests:
           - lower
 
 
-  ticker:
+  tickers:
     request:
       template: instruments/ticker
       pair_template: null

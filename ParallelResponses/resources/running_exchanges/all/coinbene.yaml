@@ -40,7 +40,7 @@ requests:
         type:
         - str
   
-  ticker:
+  tickers:
     request:
       template: ticker/one
       pair_template:

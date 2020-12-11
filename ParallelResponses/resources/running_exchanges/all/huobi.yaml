@@ -161,7 +161,7 @@ requests:
       type:
       - float
 
-  ticker:
+  tickers:
     request:
       template: market/detail/merged
       pair_template: # i.e. BTC_CQ

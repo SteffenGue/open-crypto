@@ -359,7 +359,7 @@ requests:
       - int
       - fromtimestampms
 
-  ticker:
+  tickers:
     request:
       template: v3/ticker/bookTicker
       pair_template: # e.g. BNBBTC

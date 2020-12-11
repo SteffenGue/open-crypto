@@ -56,7 +56,7 @@ requests:
           - "_"
           - 1
 
-  ticker:
+  tickers:
     request:
       template: public?command=returnTicker
       pair_template: null

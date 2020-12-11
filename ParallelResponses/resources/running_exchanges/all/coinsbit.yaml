@@ -39,7 +39,7 @@ requests:
         type:
           - str
 
-  ticker:
+  tickers:
     request:
       template: tickers
       pair_template: null

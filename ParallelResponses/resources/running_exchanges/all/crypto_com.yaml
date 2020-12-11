@@ -46,7 +46,7 @@ requests:
         type:
           - str
 
-  ticker:
+  tickers:
     request:
       template: public/get-ticker
       pair_template: null

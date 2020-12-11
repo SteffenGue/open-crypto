@@ -47,7 +47,7 @@ requests:
           - str
           - upper
 
-  ticker:
+  tickers:
     request:
       template: /api/v1/ticker/price
       pair_template:

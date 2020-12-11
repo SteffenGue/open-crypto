@@ -79,113 +79,121 @@ requests:
       type:
       - str
       - upper
+#
+# The order-books is unsorted, i.e. the bids are sorted descending, but the asks not ascending
+#  order_books:
+#    request:
+#      template: Market/depth
+#      pair_template: # e.g. 777_btc
+#        template: "{first}_{second}"
+#        lower_case: true
+#        alias: symbol
+#      params: null
+#    response:
+#      type: dict
+#      values:
+#        status:
+#          type: int
+#        msg:
+#          type: str
+#        data:
+#          type: dict
+#          values:
+#            asks:
+#              type: list
+#              values:
+#                type: list
+#                values:
+#                  0: # price
+#                    type:
+#                    - str
+#                  1: # number
+#                    type:
+#                    - str
+#                  2: # Total price
+#                    type:
+#                    - str
+#            bids:
+#              type: list
+#              values:
+#                type: list
+#                values:
+#                  0: # price
+#                    type:
+#                    - str
+#                  1: # number
+#                    type:
+#                    - str
+#                  2: # Total price
+#                    type:
+#                    - str
+#            coinPair:
+#              type: str
+#        time:
+#          type:
+#          - int
+#        microtime:
+#          type:
+#          - str
+#        source:
+#          type: str
+#
+#    mapping:
+#    - key: time
+#      path:
+#      - time
+#      type:
+#      - int
+#      - utcfromtimestamp
+#    - key: position
+#      path: []
+#      type:
+#        - none
+#        - range
+#    - key: id
+#      path:
+#        - time
+#      type:
+#        - int
+#    - key: asks_price
+#      path:
+#      - data
+#      - asks
+##      - []
+#      - 0
+#      type:
+#      - str
+#      - float
+#    - key: asks_amount
+#      path:
+#      - data
+#      - asks
+##      - []
+#      - 1
+#      type:
+#      - str
+#      - float
+#    - key: bids_price
+#      path:
+#      - data
+#      - bids
+##      - []
+#      - 0
+#      type:
+#      - str
+#      - float
+#    - key: bids_amount
+#      path:
+#      - data
+#      - bids
+##      - []
+#      - 1
+#      type:
+#      - str
+#      - float
 
-  # order_book:
-    # request:
-      # template: Market/depth
-      # pair_template: # e.g. 777_btc
-        # template: "{first}_{second}"
-        # lower_case: true
-        # alias: symbol
-      # params: null
-    # response:
-      # type: dict
-      # values:
-        # status:
-          # type: int
-        # msg:
-          # type: str
-        # data:
-          # type: dict
-          # values:
-            # asks:
-              # type: list
-              # values:
-                # type: list
-                # values:
-                  # 0: # price
-                    # type:
-                    # - str
-                    # - float
-                  # 1: # number
-                    # type:
-                    # - str
-                    # - float
-                  # 2: # Total price
-                    # type:
-                    # - str
-                    # - float
-            # bids:
-              # type: list
-              # values:
-                # type: list
-                # values:
-                  # 0: # price
-                    # type:
-                    # - str
-                    # - float
-                  # 1: # number
-                    # type:
-                    # - str
-                    # - float
-                  # 2: # Total price
-                    # type:
-                    # - str
-                    # - float
-            # coinPair:
-              # type: str
-        # time:
-          # type:
-          # - int
-          # - fromtimestamp
-        # microtime:
-          # type:
-          # - str
-          # - int
-          # - fromtimestamp
-        # source:
-          # type: str
-    # mapping:
-    # - key: order_book_asks_price
-      # path:
-      # - data
-      # - asks
-      # - 0
-      # type:
-      # - str
-      # - float
-    # - key: order_book_asks_size
-      # path:
-      # - data
-      # - asks
-      # - 1
-      # type:
-      # - str
-      # - float
-    # - key: order_book_bids_price
-      # path:
-      # - data
-      # - bids
-      # - 0
-      # type:
-      # - str
-      # - float
-    # - key: order_book_bids_size
-      # path:
-      # - data
-      # - bids
-      # - 1
-      # type:
-      # - str
-      # - float
-    # - key: order_book_time
-      # path:
-      # - time
-      # type:
-      # - int
-      # - fromtimestamp
 
-  ticker:
+  tickers:
     request:
       template: Market/ticker
       pair_template: # e.g. 777_btc
@@ -464,71 +472,73 @@ requests:
       - str
       - float
 
-#  trades:
-#    request:
-#      template: Market/order
-#      pair_template: # e.g. 777_btc
-#        template: "{first}_{second}"
-#        lower_case: true
-#        alias: symbol
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        status:
-#          type: int
-#        msg:
-#          type: str
-#        data:
-#          type: list
-#          values:
-#            type: dict
-#            values:
-#              id:
-#                type:
-#                - str
-#                - int
-#              t: # time, e.g. 12:58:48
-#                type: str
-#              T: # timestamp
-#                type:
-#                - int
-#                - fromtimestamp
-#              p: # price
-#                type:
-#                - str
-#                - float
-#              n: # number
-#                type:
-#                - str
-#                - float
-#              s: # type
-#                type: str
-#    mapping:
-#    - key: trade_time
-#      path:
-#      - data
-#      - T
-#      type:
-#      - int
-#      - fromtimestamp
-#    - key: trade_last_price
-#      path:
-#      - data
-#      - p
-#      type:
-#      - str
-#      - float
-#    - key: trade_amount
-#      path:
-#      - data
-#      - n
-#      type:
-#      - str
-#      - float
-#    - key: trade_side
-#      path:
-#      - data
-#      - s
-#      type:
-#      - str
+  trades:
+    request:
+      template: Market/order
+      pair_template: # e.g. 777_btc
+        template: "{first}_{second}"
+        lower_case: true
+        alias: symbol
+      params: null
+    response:
+      type: dict
+      values:
+        status:
+          type: int
+        msg:
+          type: str
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              id:
+                type:
+                - str
+              t: # time, e.g. 12:58:48
+                type: str
+              T: # timestamp
+                type:
+                - int
+              p: # price
+                type:
+                - str
+              n: # number
+                type:
+                - str
+              s: # type
+                type: str
+    mapping:
+    - key: id
+      path:
+        - data
+        - id
+      type:
+        - int
+    - key: time
+      path:
+      - data
+      - T
+      type:
+      - int
+      - utcfromtimestamp
+    - key: price
+      path:
+      - data
+      - p
+      type:
+      - str
+      - float
+    - key: amount
+      path:
+      - data
+      - n
+      type:
+      - str
+      - float
+    - key: direction
+      path:
+      - data
+      - s
+      type:
+      - str
