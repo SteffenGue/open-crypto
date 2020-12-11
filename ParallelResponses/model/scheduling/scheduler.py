@@ -252,7 +252,6 @@ class Scheduler:
                     if formatted_response:
                         self.database_handler.persist_response(exchanges_with_pairs,
                                                                found_exchange,
-                                                               request_name,
                                                                request_table,
                                                                formatted_response,
                                                                mappings)

@@ -30,3 +30,14 @@ class NoCurrencyPairProvidedException(Exception):
         @param method_name: Name of the method where the currency pair is needed
         """
         Exception.__init__(self, 'For the exchange \'{}\' for the method \'{}\' currency pair info is needed but not sufficiently provided.'.format(exchange_name, method_name))
+
+class NotAllPrimaryKeysException(Exception):
+    """Custom exception indicating that not all primary keys are in the formatted_response. This exception is raised
+        prior to any database interaction."""
+
+    def __init__(self, exchange_name: str, pkeys: dict):
+        """
+        :param exchange_name: Name of the Exchange that had a missing primary key.
+        :param pkeys: String representation of all missing primary keys
+        """
+        Exception.__init__(self, "The exchange \'{}\' is missing a primary key: \'{}\'".format(exchange_name, pkeys))

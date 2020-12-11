@@ -5,6 +5,7 @@ from contextlib import contextmanager
 import tqdm
 import psycopg2
 import sqlalchemy
+from model.utilities.exceptions import NotAllPrimaryKeysException
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError
@@ -37,7 +38,8 @@ class DatabaseHandler:
                  host: str,
                  port: str,
                  db_name: str,
-                 path=None):
+                 path: str = None,
+                 debug: bool = False):
         """
         Initializes the database-handler.
 
@@ -69,15 +71,15 @@ class DatabaseHandler:
         @param db_name: str
             Name of the database.
         """
-
         if not path:
             path = os.getcwd()
-
         if sqltype == 'sqlite':
             conn_string = '{}:///{}/{}.db'.format(sqltype, path, db_name)
+        elif debug:
+            conn_string = "sqlite://"
         else:
             conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
-            print(conn_string)
+
         logging.info('Connection String is: {}'.format(conn_string))
         engine = create_engine(conn_string)
 
@@ -434,7 +436,6 @@ class DatabaseHandler:
     def persist_response(self,
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
                          exchange,
-                         method: str,
                          db_table,
                          data: Iterable,
                          mappings: List):
@@ -473,7 +474,7 @@ class DatabaseHandler:
         @param mappings: List
             The mapping keys from the .yaml-file, in the same order as the data-tuples.
         """
-
+        #ToDo: Table Names (nicht Objectnames) mit jenen aus der yaml angleichen. I.e. ticker -> tickers
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         counter_list = list()
@@ -504,17 +505,15 @@ class DatabaseHandler:
                 data_tuple = {key: data_tuple.get(key) for key in col_names}
                 if not all(check_columns):
                     failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
-                    logging.exception('Formatted response does not contain all primary keys. \n',
-                                      '{}'.format(failed_columns))
-                    raise ValueError('Formatted response does not contain all primary keys. \n',
-                                     failed_columns)
+                    raise NotAllPrimaryKeysException(exchange.name, failed_columns)
+                    continue
 
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
                     else False
 
                 if not query_exists:
-                    if method != 'ticker':
+                    if db_table.__name__ != Ticker.__name__:
                         counter_list.append(data_tuple['exchange_pair_id'])
                     tuple_counter += 1
                     add_tuple = db_table(**data_tuple)
@@ -522,13 +521,13 @@ class DatabaseHandler:
 
         counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
         print('{} tuple(s) added to {} for {}.'.format(tuple_counter,
-                                                       method.capitalize(),
+                                                       db_table.__name__.capitalize(),
                                                        exchange.name.capitalize()))
         if counter_dict:
             for item in counter_dict.items():
                 print("CuPair-ID {}: {}".format(item[0], item[1]))
         logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter,
-                                                              method.capitalize(),
+                                                              db_table.__name__.capitalize(),
                                                               exchange.name.capitalize()))
 
         # Persist currency_pairs if not already in the database. This can only happen if an response contains
