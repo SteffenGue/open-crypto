@@ -150,7 +150,7 @@ class Scheduler:
             "currency_pairs":
                 {'function': self.get_currency_pairs,
                  'table': ExchangeCurrencyPair},
-            "ticker":
+            "tickers":
                 {'function': self.get_job_done,
                  'table': Ticker},
             "historic_rates":

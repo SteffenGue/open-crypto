@@ -134,7 +134,7 @@ class Mapping:
             traversed = list(response.keys())
         elif path_element == "list_values":
             traversed = list(response.values())
-        elif not path_element:
+        elif path_element == []:
             # Special case to extract multiple values from a single list ["USD","BTC",...]
             traversed = response
         elif path_element == "currency_pair" and currency_pair_info[2] is not None:

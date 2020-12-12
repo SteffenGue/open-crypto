@@ -91,9 +91,6 @@ async def main(database_handler: DatabaseHandler):
         await scheduler.start()
 
 
-
-
-
 def run(path: str = None):
 
     init_logger()

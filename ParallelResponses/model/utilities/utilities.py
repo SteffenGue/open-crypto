@@ -35,6 +35,10 @@ TYPE_CONVERSION = {
         "function": int,
         "params": 0
     },
+    ('float', 'int'): {
+        "function": int,
+        "params": 0
+    },
     ("int", "bool"): {  # Tested
         "function": bool,
         "params": 0
