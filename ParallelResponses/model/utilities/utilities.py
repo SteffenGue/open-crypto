@@ -43,6 +43,10 @@ TYPE_CONVERSION = {
         "function": bool,
         "params": 0
     },
+    ('int', 'div'): {
+        'function': lambda integer, div: integer / (1*div),
+        'params': 1
+    },
     ("int", "fromtimestamp"): {  # Partially tested
         "function": datetime.datetime.utcfromtimestamp,
         "params": 0

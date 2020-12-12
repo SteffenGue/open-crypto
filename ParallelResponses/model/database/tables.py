@@ -218,7 +218,7 @@ class Trade(Base):
     id = Column(Integer, primary_key=True)
     time = Column(DateTime, primary_key=True)
 
-    amount = Column(Float)
+    amount = Column(Float, primary_key=True)
     best_bid = Column(Float)
     best_ask = Column(Float)
     price = Column(Float)
