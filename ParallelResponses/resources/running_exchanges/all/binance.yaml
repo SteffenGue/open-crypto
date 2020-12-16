@@ -1,8 +1,7 @@
 name: binance
 exchange: true
 api_url: https://api.binance.com/api/
-rate_limit: # Each route has a weight which determines for the number of requests each endpoint counts for
-  # sum of all weights
+rate_limit:
   max: 1200
   unit: 60
 requests:
@@ -60,6 +59,54 @@ requests:
       - quoteAsset
       type:
       - str
+
+  tickers:
+    request:
+      template: v3/ticker/bookTicker
+      pair_template: # e.g. BNBBTC
+        template: "{first}{second}"
+        lower_case: false
+        alias: symbol
+      params: null
+    response:
+      type: dict
+      values:
+        symbol:
+          type: str
+        bidPrice:
+          type:
+          - str
+          - float
+        bidQty:
+          type:
+          - str
+          - float
+        askPrice:
+          type:
+          - str
+          - float
+        askQty:
+          type:
+          - str
+          - float
+    mapping:
+    - key: time
+      path: []
+      type:
+      - none
+      - now
+    - key: best_bid
+      path:
+      - bidPrice
+      type:
+      - str
+      - float
+    - key: best_ask
+      path:
+      - askPrice
+      type:
+      - str
+      - float
 
   order_books:
     request:
@@ -359,132 +406,4 @@ requests:
       - int
       - fromtimestampms
 
-  tickers:
-    request:
-      template: v3/ticker/bookTicker
-      pair_template: # e.g. BNBBTC
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
-      params: null
-    response:
-      type: dict
-      values:
-        symbol:
-          type: str
-        bidPrice:
-          type:
-          - str
-          - float
-        bidQty:
-          type:
-          - str
-          - float
-        askPrice:
-          type:
-          - str
-          - float
-        askQty:
-          type:
-          - str
-          - float
-    mapping:
-    - key: time
-      path: []
-      type:
-      - none
-      - now
-    - key: best_bid
-      path:
-      - bidPrice
-      type:
-      - str
-      - float
-    - key: best_ask
-      path:
-      - askPrice
-      type:
-      - str
-      - float
 
-#  order_books:
-#    request:
-#      template: depth
-#      pair_template: {'first'}{'second'}
-#      alias: symbol
-#      params:
-#        limit:
-#          type: int
-#          default: 5
-#
-#    response:
-#      type: dict
-#      values:
-#        lastUpdateId:
-#          type: int
-#        bids:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0:
-#                type: str
-#              1:
-#                type: str
-#
-#        asks:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0:
-#                type: str
-#              1:
-#                type: str
-#
-#    mapping:
-#      - key: order_book_id
-#        path:
-#          - lastUpdateId
-#        type:
-#          - str
-#
-#      - key: order_book_time
-#        path: []
-#        type:
-#          - none
-#          - now
-#      - key: order_book_position
-#        path: []
-#        type:
-#          - none
-#          - constant
-#          - 1
-#      - key: order_book_bids_price
-#        path:
-#          - bids
-#          - 0
-#        type:
-#          - str
-#          - int
-#      - key: order_book_bids_amount
-#        path:
-#          - bids
-#          - 1
-#        type:
-#          - str
-#          - int
-#      - key: order_book_asks_price
-#        path:
-#          - asks
-#          - 0
-#        type:
-#          - str
-#          - int
-#      - key: order_book_asks_amount
-#        path:
-#          - asks
-#          - 1
-#        type:
-#          - str
-#          - int

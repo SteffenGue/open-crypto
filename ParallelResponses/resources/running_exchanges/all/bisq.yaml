@@ -3,7 +3,7 @@ exchange: true
 api_url: https://bisq.markets/api/
 rate_limit: null
 requests:
-  symbols:
+  symbols: 
     request:
       template: currencies/
       pair_template: null

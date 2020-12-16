@@ -68,3 +68,7 @@ class CsvExport:
             full_path: str = os.path.join(self.path, '{}.csv'.format(self.filename))
         print(full_path)
         ticker_data.to_csv(full_path, sep=self.options.get("delimiter", ","), index=False)
+
+
+if __name__ == '__main__':
+    CsvExport('csv_config').create_csv()
