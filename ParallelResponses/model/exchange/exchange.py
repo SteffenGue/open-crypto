@@ -547,7 +547,7 @@ class Exchange:
                     # extraction of actual values; note that currencies might not be in mappings (later important)
                     for mapping in mappings:
                         if currency_pair:
-                            temp_results[mapping.key] = mapping.extract_value(current_response,
+                            temp_results[mapping.key]: List = mapping.extract_value(current_response,
                                                                               currency_pair_info=(
                                                                                   currency_pair.first.name,
                                                                                   currency_pair.second.name,

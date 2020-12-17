@@ -1,156 +1,121 @@
-name: xheta_global
-is_exchange: true
-
-api_url: https://api.xthetaglobal.com/
+name: vindax
+exchange: true
+api_url: https://api.vindax.com/api/v1/
 rate_limit:
-  max: 1500
-  unit: 60
+  max: 6
+  units: 1
 
 requests:
   currency_pairs:
     request:
-      template: openapi/v1/brokerInfo
+      template: returnTicker
       pair_template: null
       params: null
-
     response:
       type: dict
       values:
-        symbols:
-          type: list
-          values:
-            type: dict
-            values:
-              baseAsset:
-                type: str
-              quoteAsset:
-                type: str
+        currency_pair:
+          type: dict
 
     mapping:
     - key: currency_pair_first
       path:
-        - symbols
-        - baseAsset
+      - dict_key
       type:
-        - str
+      - str
+      - split
+      - "_"
+      - 0
     - key: currency_pair_second
       path:
-        - symbols
-        - quoteAsset
+      - dict_key
       type:
-        - str
+      - str
+      - split
+      - "_"
+      - 1
 
-  ticker:
+  tickers:
     request:
-      template: openapi/quote/v1/ticker/price
-      pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
+      template: returnTicker
+      pair_template: null
       params: null
-
     response:
       type: dict
       values:
-        symbol:
-          type: str
-        price:
-          type: str
+        currency_pair:
+          type: dict
+          values:
+            quote_volume:
+              type: str
+            symbol:
+              type: str
+            percentChange:
+              type: float
+            last:
+              type: float
+            highestBid:
+              type: float
+            lowsetAsk:
+              type: float
+            baseVolume:
+              type: float
+            openTime:
+              type: int
+            closeTime:
+              type: int
+            high24hr:
+              type: float
+            low24hr:
+              type: float
+            isFrozen:
+              type: bool
+                  
     mapping:
-      - key: time
-        path: []
-        type:
-          - none
-          - now
-      - key: last_price
-        path:
-          - price
-        type:
-          - str
-          - float
+    - key: time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path: 
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 0
+    - key: currency_pair_second
+      path:
+      - dict_key
+      type:
+      - str
+      - split
+      - "_"
+      - 1
+    - key: last_price
+      path:
+      - dict_values
+      - last
+      type:
+      - float
+    - key: best_bid
+      path:
+      - dict_values
+      - highestBid
+      type:
+      - float
+    - key: best_ask
+      path:
+      - dict_values
+      - lowsetAsk
+      type:
+      - float
+
 
   order_books:
     request:
-      template: openapi/quote/v1/depth
-      pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
-      params:
-        limit:
-          type: int
-          max: 100
-          default: 100
-    response:
-      type: dict
-      values:
-        time:
-          type: int
-        bids:
-          type: list
-          values:
-            type: list
-            0: #price
-              type: str
-            1: #qty
-              type: str
-        asks:
-          type: list
-          values:
-            type: list
-            0:
-              type: str
-            1:
-              type: str
-    mapping:
-      - key: time
-        path:
-          - time
-        type:
-          - int
-          - utcfromtimestampms
-      - key: id
-        path:
-          - time
-        type:
-          - int
-      - key: position
-        path: []
-        type:
-          - none
-          - range
-      - key: bids_price
-        path:
-          - bids
-          - 0
-        type:
-          - str
-          - float
-      - key: bids_amount
-        path:
-          - bids
-          - 1
-        type:
-          - str
-          - float
-      - key: asks_price
-        path:
-          - asks
-          - 0
-        type:
-          - str
-          - float
-      - key: asks_amount
-        path:
-          - asks
-          - 1
-        type:
-          - str
-          - float
-
-  trades:
-    request:
-      template: openapi/quote/v1/trades
+      template: depth
       pair_template:
         template: "{first}{second}"
         lower_case: false
@@ -159,42 +124,124 @@ requests:
         limit:
           type: int
           max: 1000
-          default: 500
+          default: 50
+    response:
+      type: dict
+      values:
+        lastUpdateId:
+          type: str
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: #Price
+                type: float
+              1: #Qty
+                type: float
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0:
+                type: float
+              1:
+                type: float
+    mapping:
+      - key: id
+        path: []
+        type:
+          - none
+          - now_timestamp
+      - key: time
+        path: []
+        type:
+          - none
+          - now
+      - key: position
+        path: []
+        type:
+          - none
+          - range
+      - key: bids_amount
+        path:
+          - bids
+          - 1
+        type:
+          - float
+      - key: asks_amount
+        path:
+          - asks
+          - 1
+        type:
+          - float
+      - key: bids_price
+        path:
+          - bids
+          - 0
+        type:
+          - float
+      - key: asks_price
+        path:
+          - asks
+          - 0
+        type:
+          - float
+
+
+  trades:
+    request:
+      template: trades
+      pair_template:
+        template: "{first}{second}"
+        lower_case: false
+        alias: symbol
+      params:
+        limit:
+          type: int
+          max: 500
+          default: 100
+
     response:
       type: list
-      value:
+      values:
         type: dict
         values:
+          id:
+            type: str
           price:
             type: str
           qty:
-            typ: str
+            type: str
           time:
             type: int
           isBuyerMaker:
-            type: bool
+            type: true
+          isBestMatch:
+            type: true
     mapping:
-      - key: time
+      - key: id
         path:
-          - time
+          - id
         type:
-          - int
-          - utcfromtimestampms
+          - str
       - key: direction
         path:
           - isBuyerMaker
         type:
           - value
           - map
-          - True
+          - true
           - sell
-          - False
+          - false
           - buy
-      - key: id
+      - key: time
         path:
           - time
         type:
           - int
+          - utcfromtimestampms
       - key: price
         path:
           - price
@@ -208,83 +255,84 @@ requests:
           - str
           - float
 
+
+
   historic_rates:
     request:
-      template: openapi/quote/v1/klines
+      template: klines
       pair_template:
         template: "{first}{second}"
         lower_case: false
         alias: symbol
       params:
-        interval:
-          type: int
-          default: 1d
         limit:
           type: int
-          max: 1000
+          max: 500
           default: 1000
+        interval:
+          type: str
+          default: 1d
 
     response:
       type: list
       values:
         type: list
         values:
-          0: #timestamp
+          0:
             type: int
-          1: #open
+          1:
             type: str
-          2: #high
+          2:
             type: str
-          3: #low
+          3:
             type: str
-          4: #close
+          4:
             type: str
-          5: #volume
+          5:
             type: str
-          6: #close time
-            type: int
-          7: # quote Asset volume
+          6:
             type: str
-          8: # number of trades
-            type: int
-          9: # taker buy base asset volume
+          7:
             type: str
-          10: # taker buy quote asset volume
-            type: str
-
     mapping:
       - key: time
         path:
-          - 0
+          - []
+          - 6
         type:
           - int
           - utcfromtimestampms
       - key: open
         path:
+          - []
           - 1
         type:
           - str
           - float
       - key: high
         path:
+          - []
           - 2
         type:
           - str
           - float
       - key: low
         path:
+          - []
           - 3
         type:
           - str
           - float
       - key: close
         path:
+          - []
           - 4
         type:
           - str
           - float
       - key: volume
         path:
+          - []
           - 5
         type:
           - str

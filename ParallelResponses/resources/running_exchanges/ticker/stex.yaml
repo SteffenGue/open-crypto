@@ -1,3 +1,5 @@
+# Abfragen mit Pair Template benötigen die PairID der Exchange
+
 name: stex
 exchange: true
 api_url: https://api3.stex.com/public/
@@ -7,12 +9,38 @@ rate_limit:
   units: 60
 
 requests:
-  test_connection:
-    request:
-      template: ping
-    response:
-      type: dict
-  ticker:
+  currency_pairs:
+    template: currency_pairs/list/ALL
+    pair_template: null
+    params: null
+
+  response:
+    type: dict
+    values:
+      data:
+        type: list
+        values:
+          type: dict
+          values:
+            currency_code:
+              type: str
+            market_code:
+              type: str
+  mapping:
+    - key: currency_pair_first
+      path:
+        - data
+        - currency_code
+      type:
+        - str
+    - key: currency_pair_second
+      path:
+        - data
+        - market_code
+      type:
+        - str
+
+  tickers:
     request:
       template: ticker
       pair_template: null
@@ -80,7 +108,7 @@ requests:
       - timestamp
       type:
       - int
-      - fromtimestampms
+      - utcfromtimestampms
     - key: currency_pair_first
       path:
       - data
