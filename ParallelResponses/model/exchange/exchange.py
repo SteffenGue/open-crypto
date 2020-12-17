@@ -199,8 +199,8 @@ class Exchange:
 
                     try:
                         response = await session.get(url=url, params=params)
+                        assert response.status == 200
                         response_json = await response.json(content_type=None)
-
                         # print(response_json)
                         if pair_formatting_needed:
                             responses[cp] = response_json

@@ -53,10 +53,6 @@ class Scheduler:
         # das hast du noch nachträglich eingefügt, vielleicht musst du das hier wieder ändern
 
         await asyncio.gather(*runs)
-        return True
-        # loop = asyncio.get_event_loop()
-        # loop.run_until_complete(await asyncio.gather(*runs))
-
 
     async def run(self, job: Job):
         """
@@ -97,6 +93,7 @@ class Scheduler:
                         # Delete exchanges with no matching Currency_Pairs
                         if not job.exchanges_with_pairs[exchange]:
                             job.exchanges_with_pairs.pop(exchange)
+                            print(f"{exchange.name.capitalize()} has no matching currency_pairs.")
                             continue
                         # Delete empty jobs, if the previous conditions removed all exchanges
                     if not job.exchanges_with_pairs:
@@ -255,7 +252,7 @@ class Scheduler:
                                                                                   start_time=start_time,
                                                                                   time=response_time)
                     except MappingNotFoundException:
-                        #todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
+                        # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
                         formatted_response, mappings = None, None
 
                     if formatted_response:
