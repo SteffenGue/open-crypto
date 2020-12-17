@@ -1,3 +1,5 @@
+#Order-Book sortierung falsche herum
+
 name: exx
 exchange: true
 api_url: https://api.exx.com/data/v1/
@@ -44,7 +46,7 @@ requests:
       - "_"
       - 1
       
-  ticker:
+  tickers:
     request:
       template: tickers
       pair_template: null
@@ -123,8 +125,8 @@ requests:
       type:
       - str
       - float
-
-#  order_book:
+#
+#  order_books:
 #    request:
 #      template: depth
 #      pair_template: # e.g. ltc_cnyt
@@ -143,11 +145,9 @@ requests:
 #              0: # price
 #                type:
 #                - str
-#                - float
 #              1: # size
 #                type:
 #                - str
-#                - float
 #        bids:
 #          type: list
 #          values:
@@ -156,100 +156,112 @@ requests:
 #              0: # price
 #                type:
 #                - str
-#                - float
 #              1: # size
 #                type:
 #                - str
-#                - float
 #        timestamp:
 #          type:
 #          - int
-#          - fromtimestamp
 #    mapping:
-#    - key: order_book_asks_price
+#    - key: id
+#      path:
+#        - timestamp
+#      type:
+#        - int
+#    - key: position
+#      path: []
+#      type:
+#        - none
+#        - range
+#    - key: asks_price
 #      path:
 #      - asks
 #      - 0
 #      type:
 #      - str
 #      - float
-#    - key: order_book_asks_size
+#    - key: asks_amount
 #      path:
 #      - asks
 #      - 1
 #      type:
 #      - str
 #      - float
-#    - key: order_book_bids_price
+#    - key: bids_price
 #      path:
 #      - bids
 #      - 0
 #      type:
 #      - str
 #      - float
-#    - key: order_book_bids_size
+#    - key: bids_amount
 #      path:
 #      - bids
 #      - 1
 #      type:
 #      - str
 #      - float
-#    - key: order_book_time
+#    - key: time
 #      path:
 #      - timestamp
 #      type:
 #      - int
-#      - fromtimestamp
-#
-#  trades:
-#    request:
-#      template: trades
-#      pair_template: # e.g. ltc_cnyt
-#        template: "{first}_{second}"
-#        lower_case: true
-#        alias: currency
-#      params: null
-#    response:
-#      type: list
-#      values:
-#        type: dict
-#        values:
-#          date:
-#            type:
-#            - int
-#            - fromtimestamp
-#          amount:
-#            type: float
-#          price:
-#            type: float
-#          trade_type:
-#            type: str
-#          type:
-#            type: str
-#          tid:
-#            type: int
-#    mapping:
-#    - key: trade_time
-#      path:
-#      - date
-#      type:
-#      - int
-#      - fromtimestamp
-#    - key: trade_amount
-#      path:
-#      - amount
-#      type:
-#      - float
-#    - key: trade_last_price
-#      path:
-#      - price
-#      type:
-#      - float
-#    - key: trade_side
-#      path:
-#      - trade_type
-#      type:
-#      - str
+#      - utcfromtimestamp
+
+  trades:
+    request:
+      template: trades
+      pair_template: # e.g. ltc_cnyt
+        template: "{first}_{second}"
+        lower_case: true
+        alias: currency
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          date:
+            type:
+            - int
+            - fromtimestamp
+          amount:
+            type: float
+          price:
+            type: float
+          trade_type:
+            type: str
+          type:
+            type: str
+          tid:
+            type: int
+    mapping:
+    - key: time
+      path:
+      - date
+      type:
+      - int
+      - utcfromtimestamp
+    - key: id
+      path:
+        - tid
+      type:
+        - int
+    - key: amount
+      path:
+      - amount
+      type:
+      - float
+    - key: price
+      path:
+      - price
+      type:
+      - float
+    - key: direction
+      path:
+      - type
+      type:
+      - str
 
   historic_rates:
     request:
@@ -305,56 +317,46 @@ requests:
                   4: # close
                     type: float
                   5: # volume
-                    type: float#
-            limit:
-              type: int
-            time:
-              type: int
-            symbol:
-              type: str
-            contractUnit:
-              type: str
-            assistCoin:
-              type: str
+                    type: float
                 
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - datas
       - data
       - 0
       type:
       - int
-      - fromtimestampms
-    - key: historic_rates_open
+      - utcfromtimestampms
+    - key: open
       path:
       - datas
       - data
       - 1
       type:
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - datas
       - data
       - 2
       type:
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - datas
       - data
       - 3
       type:
       - float
-    - key: historic_rates_close
+    - key: close
       path:
       - datas
       - data
       - 4
       type:
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - datas
       - data

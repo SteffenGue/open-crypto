@@ -52,8 +52,8 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("int", "utcfromtimestamp"): {  # Partially tested
-        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
-            int(timestampms)),
+        "function": lambda timestamp: datetime.datetime.utcfromtimestamp(
+            int(timestamp)),
         "params": 0
     },
     ("int", "utcfromtimestampms"): {  # Partially tested

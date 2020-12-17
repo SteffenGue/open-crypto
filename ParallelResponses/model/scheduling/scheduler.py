@@ -251,6 +251,7 @@ class Scheduler:
                                                                                   response[1:],
                                                                                   start_time=start_time,
                                                                                   time=response_time)
+
                     except MappingNotFoundException:
                         # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
                         formatted_response, mappings = None, None
