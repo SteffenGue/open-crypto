@@ -31,8 +31,6 @@ class Scheduler:
             List of Jobs. A job can be created with the specific yaml-template in config.yaml
         :param frequency: int
             The interval in minutes with that the run() method gets called.
-        :param validated: bool
-            Bool if the job_list has been validated. Default: False.
         """
         self.database_handler = database_handler
         self.job_list = job_list

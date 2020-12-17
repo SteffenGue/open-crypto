@@ -219,7 +219,7 @@ class Exchange:
                                       .format(self.name, request_url_and_params['url'],
                                               request_url_and_params['params']))
                     if self.rate_limit and len(currency_pairs) > self.rate_limit:
-                        await asyncio.sleep(1/self.rate_limit)
+                        await asyncio.sleep(1 / self.rate_limit)
 
             return datetime.utcnow(), self.name, responses
         else:
@@ -503,8 +503,6 @@ class Exchange:
         all need to have the same length.
         The formatted list of ticker-data-tuples is then returned.
 
-        AMEN
-
         @param method: str
             The request method name, i.e. ticker, trades,...
         @param response: Iterator
@@ -548,12 +546,12 @@ class Exchange:
                     for mapping in mappings:
                         if currency_pair:
                             temp_results[mapping.key]: List = mapping.extract_value(current_response,
-                                                                              currency_pair_info=(
-                                                                                  currency_pair.first.name,
-                                                                                  currency_pair.second.name,
-                                                                                  self.apply_currency_pair_format(
-                                                                                      method,
-                                                                                      currency_pair)))
+                                                                                    currency_pair_info=(
+                                                                                        currency_pair.first.name,
+                                                                                        currency_pair.second.name,
+                                                                                        self.apply_currency_pair_format(
+                                                                                            method,
+                                                                                            currency_pair)))
                         else:
                             temp_results[mapping.key]: List = mapping.extract_value(current_response)
                 except Exception:
@@ -565,8 +563,8 @@ class Exchange:
                     # for extracted_field in temp_results.keys():
                     #     if temp_results[extracted_field] is None:
                     #         print("{} has no valid data in {}".format(currency_pair, extracted_field))
-                            # extracted_data_is_valid = False
-                            # continue
+                    # extracted_data_is_valid = False
+                    # continue
 
                     # CHANGE: One filed invalid -> all fields invalid.
                     # changed this in order to avoid responses kicked out just because of one invalid field.
@@ -580,7 +578,25 @@ class Exchange:
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values()) if bool(len_results) else 1
 
-                    if 'position' in temp_results.keys():
+
+                    if (method == 'order_books') and ('position' in temp_results.keys()):
+
+                        # Sort the order_books by price. I.e. asks ascending, Bids descending.
+                        bids = [(price, amount) for (price, amount) in
+                                sorted(zip(temp_results['bids_price'], temp_results['bids_amount']),
+                                       reverse=True,
+                                       key=lambda pair: pair[0])]
+                        asks = [(price, amount) for (price, amount) in
+                                sorted(zip(temp_results['asks_price'], temp_results['asks_amount']),
+                                       reverse=False,
+                                       key=lambda pair: pair[0])]
+
+                        temp_results.update({'bids_price': [bid[0] for bid in bids]})
+                        temp_results.update({'bids_amount': [bid[1] for bid in bids]})
+                        temp_results.update({'asks_price': [ask[0] for ask in asks]})
+                        temp_results.update({'asks_amount': [ask[1] for ask in asks]})
+
+                        # Implement the order-book position for easy query afterwards.
                         temp_results['position'] = range(len_results)
 
                     # adding pair id when we don't have currencies in mapping

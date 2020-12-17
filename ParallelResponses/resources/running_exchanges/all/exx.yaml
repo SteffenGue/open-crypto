@@ -125,88 +125,88 @@ requests:
       type:
       - str
       - float
-#
-#  order_books:
-#    request:
-#      template: depth
-#      pair_template: # e.g. ltc_cnyt
-#        template: "{first}_{second}"
-#        lower_case: true
-#        alias: currency
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        asks:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0: # price
-#                type:
-#                - str
-#              1: # size
-#                type:
-#                - str
-#        bids:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0: # price
-#                type:
-#                - str
-#              1: # size
-#                type:
-#                - str
-#        timestamp:
-#          type:
-#          - int
-#    mapping:
-#    - key: id
-#      path:
-#        - timestamp
-#      type:
-#        - int
-#    - key: position
-#      path: []
-#      type:
-#        - none
-#        - range
-#    - key: asks_price
-#      path:
-#      - asks
-#      - 0
-#      type:
-#      - str
-#      - float
-#    - key: asks_amount
-#      path:
-#      - asks
-#      - 1
-#      type:
-#      - str
-#      - float
-#    - key: bids_price
-#      path:
-#      - bids
-#      - 0
-#      type:
-#      - str
-#      - float
-#    - key: bids_amount
-#      path:
-#      - bids
-#      - 1
-#      type:
-#      - str
-#      - float
-#    - key: time
-#      path:
-#      - timestamp
-#      type:
-#      - int
-#      - utcfromtimestamp
+
+  order_books:
+    request:
+      template: depth
+      pair_template: # e.g. ltc_cnyt
+        template: "{first}_{second}"
+        lower_case: true
+        alias: currency
+      params: null
+    response:
+      type: dict
+      values:
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+              1: # size
+                type:
+                - str
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+              1: # size
+                type:
+                - str
+        timestamp:
+          type:
+          - int
+    mapping:
+    - key: id
+      path:
+        - timestamp
+      type:
+        - int
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: asks_amount
+      path:
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: bids_amount
+      path:
+      - bids
+      - 1
+      type:
+      - str
+      - float
+    - key: time
+      path:
+      - timestamp
+      type:
+      - int
+      - utcfromtimestamp
 
   trades:
     request:
