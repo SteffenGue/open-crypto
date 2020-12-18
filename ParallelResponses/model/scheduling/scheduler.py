@@ -245,20 +245,20 @@ class Scheduler:
 
                 if found_exchange:
                     try:
-                        formatted_response, mappings = found_exchange.format_data(request_name,
-                                                                                  response[1:],
-                                                                                  start_time=start_time,
-                                                                                  time=response_time)
+                        formatted_response, mappings = await found_exchange.format_data(request_name,
+                                                                                        response[1:],
+                                                                                        start_time=start_time,
+                                                                                        time=response_time)
 
                     except MappingNotFoundException:
                         # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
                         formatted_response, mappings = None, None
 
                     if formatted_response:
-                        self.database_handler.persist_response(exchanges_with_pairs,
-                                                               found_exchange,
-                                                               request_table,
-                                                               formatted_response,
-                                                               mappings)
+                        await self.database_handler.persist_response(exchanges_with_pairs,
+                                                                     found_exchange,
+                                                                     request_table,
+                                                                     formatted_response,
+                                                                     mappings)
         print('Done collecting {}.'.format(request_name.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_name.capitalize()))

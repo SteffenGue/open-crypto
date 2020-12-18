@@ -179,30 +179,34 @@ class Exchange:
                     Exception: the given response of an exchange could not be evaluated
         """
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
-            async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls[request_name]
-                responses = dict()
-                params = request_url_and_params['params']
-                pair_template_dict = request_url_and_params['pair_template']
-                # when there is no pair formatting section then all ticker data can be accessed with one request
-                pair_formatting_needed = pair_template_dict
-                for cp in currency_pairs:
-                    url: str = request_url_and_params['url']
-                    if pair_formatting_needed:
-                        pair_formatted: str = self.apply_currency_pair_format(request_name, cp)
 
-                        # if formatted currency pair needs to be a parameter
-                        if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
-                            params[pair_template_dict['alias']] = pair_formatted
-                        else:
-                            url = url.format(currency_pair=pair_formatted)
+            request_url_and_params = self.request_urls[request_name]
+            responses = dict()
+            params = request_url_and_params['params']
+            pair_template_dict = request_url_and_params['pair_template']
+            url: str = request_url_and_params['url']
+
+            rate_limit = 1/self.rate_limit if self.rate_limit and len(currency_pairs) > self.rate_limit else 0
+
+            # when there is no pair formatting section then all ticker data can be accessed with one request
+            if pair_template_dict:
+                pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
+
+            async with aiohttp.ClientSession() as session:
+                for cp in currency_pairs:
+
+                    # if formatted currency pair needs to be a parameter
+                    if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
+                        params[pair_template_dict['alias']] = pair_formatted[cp]
+                    else:
+                        url = url.format(currency_pair=pair_formatted[cp])
 
                     try:
+                        print(f'requesting {self.name}, {pair_formatted[cp]}')
                         response = await session.get(url=url, params=params)
-                        assert response.status == 200
                         response_json = await response.json(content_type=None)
-                        # print(response_json)
-                        if pair_formatting_needed:
+
+                        if pair_formatted:
                             responses[cp] = response_json
                         else:  # when ticker data is returned for all available currency pairs
                             responses[None] = response_json
@@ -218,8 +222,8 @@ class Exchange:
                                       'Url: {}, Parameters: {}'
                                       .format(self.name, request_url_and_params['url'],
                                               request_url_and_params['params']))
-                    if self.rate_limit and len(currency_pairs) > self.rate_limit:
-                        await asyncio.sleep(1 / self.rate_limit)
+
+                        await asyncio.sleep(rate_limit)
 
             return datetime.utcnow(), self.name, responses
         else:
@@ -456,7 +460,7 @@ class Exchange:
                                           results['currency_pair_first'],
                                           results['currency_pair_second']))
 
-    def format_data(self,
+    async def format_data(self,
                     method: str,
                     response: Tuple[str, Dict[object, Dict]],
                     start_time: datetime,

@@ -433,7 +433,7 @@ class DatabaseHandler:
                     if i % 500 == 0:
                         session.commit()
 
-    def persist_response(self,
+    async def persist_response(self,
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
                          exchange,
                          db_table,
@@ -506,7 +506,6 @@ class DatabaseHandler:
                 if not all(check_columns):
                     failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
                     raise NotAllPrimaryKeysException(exchange.name, failed_columns)
-                    continue
 
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
