@@ -376,8 +376,11 @@ class Exchange:
                         if 'function' in request_dict['params'][param]:
                             conv_params = request_dict['params'][param]['function']
                             conversion_tuple = (conv_params[0], conv_params[1])
-
-                            params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
+                            arguments = conv_params[2:] or None
+                            if arguments:
+                                params[param] = TYPE_CONVERSION[conversion_tuple]['function'](*arguments)
+                            else:
+                                params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
 
                 request_parameters['params'] = params
 

@@ -1,5 +1,3 @@
-#Order-Book sortierung falsche herum
-
 name: exx
 exchange: true
 api_url: https://api.exx.com/data/v1/

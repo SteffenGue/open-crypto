@@ -1,20 +1,27 @@
 export:
-  save_path: resources/csv/
   delimiter: ","
+  decimal: "."
+
+database:
+  sqltype: sqlite
+  client: psycopg2
+  user_name:
+  password:
+  host: localhost
+  port: 5432
+  db_name:
 
 query_options:
-  table_name: Ticker
+  table_name: OrderBook
   query_everything: true
-  from_timestamp: 01-01-2020 00:00:01
+  from_timestamp: 01-01-2020 13:20:00
   to_timestamp:
   exchanges:
 #    - kucoin
-#    - all
-  currency_pairs:
-#    - first: ltc
-#      second: usdt
   first_currencies:
 #    - eth
   second_currencies:
 #    - ngn
-
+  currency_pairs:
+#    - first: ltc
+#      second: usdt

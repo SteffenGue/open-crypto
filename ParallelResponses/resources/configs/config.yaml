@@ -14,7 +14,7 @@ general:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
@@ -22,10 +22,10 @@ jobs:
     yaml_request_name: order_books
     update_cp: false
     exchanges:
-      - exx
+      - zbg
     currency_pairs:
 #      - all
-      - first: btc
+      - first: eth
         second: usdt
 
     first_currencies:

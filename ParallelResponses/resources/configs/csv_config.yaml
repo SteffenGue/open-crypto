@@ -12,7 +12,7 @@ database:
 
 
 query_options:
-  table_name: Ticker
+  table_name: OrderBook
   query_everything: true
   from_timestamp: 01-09-2020 13:20:00
   to_timestamp:

@@ -1,8 +1,9 @@
 import calendar
 import datetime
+from datetime import timedelta
 import os
 from typing import List, Any, Dict
-import oyaml as yaml #install PyYaml
+import oyaml as yaml  # install PyYaml
 import pathlib
 from pathlib import Path
 import logging
@@ -44,7 +45,7 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ('int', 'div'): {
-        'function': lambda integer, div: integer / (1*div),
+        'function': lambda integer, div: integer / (1 * div),
         'params': 1
     },
     ("int", "fromtimestamp"): {  # Partially tested
@@ -58,7 +59,7 @@ TYPE_CONVERSION = {
     },
     ("int", "utcfromtimestampms"): {  # Partially tested
         "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
-            int(timestampms)/1000),
+            int(timestampms) / 1000),
         "params": 0
     },
     ("int", "fromtimestampms"): {  # Partially tested
@@ -169,20 +170,26 @@ TYPE_CONVERSION = {
         'function': lambda *args: range(1),
         'params': 0
     },
-    ('value', 'map'): { #translate into buy/sell. Args: {0: 'buy', 1:'sell'} and arg[0] is the response value (i.e. 0/1)
+    ('value', 'map'): {
+        # translate into buy/sell. Args: {0: 'buy', 1:'sell'} and arg[0] is the response value (i.e. 0/1)
         'function': lambda *args: {args[1]: args[2], args[3]: args[4]}[args[0]],
         'params': 4
     },
     ('str', 'split_at_del_or_index'): {
-        'function': lambda string, *args: string.split(args[0])[args[2]] if len(string) != len(string.split(args[0])[0]) else string[:args[1]] if args[2] == 0 else string[args[1]:],
-        'params': 3  #delimeter, index, 0 or 1 aka. left or right
+        'function': lambda string, *args: string.split(args[0])[args[2]] if len(string) != len(
+            string.split(args[0])[0]) else string[:args[1]] if args[2] == 0 else string[args[1]:],
+        'params': 3  # delimeter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
         'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
         'params': 0
+    },
+    ('now', 'timedelta'): {
+        'function': lambda delta: int(datetime.datetime.timestamp(datetime.datetime.utcnow() -
+                                                                  timedelta(days=int(delta)))),
+        'params': 1
     }
 }
-
 
 """A dictionary containing lambda function calls in order to get request parameters variable. The function calls
 will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment,
@@ -194,9 +201,9 @@ during the preparation of the API request.
 'session' : ORM-Session if necessary.
 """
 REQUEST_PARAMS = {
-    "add": {    #for debugging purposes.
+    "add": {  # for debugging purposes.
         "name": 'add',
-        "function": lambda x: x+1,
+        "function": lambda x: x + 1,
         "params": 1,
         "session": False
     },
@@ -214,7 +221,6 @@ REQUEST_PARAMS = {
         "function": datetime.datetime.now()
     }
 }
-
 
 
 def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
@@ -282,8 +288,8 @@ def yaml_loader(exchange: str):
             print(ex)
             logging.exception(f"Error loading yaml of {exchange}.\n", ex)
             sys.exit(1)
-            #todo: insert new exception handling
-            #es wird der name der exchange als string übergeben und nicht die instanz der exchange
+            # todo: insert new exception handling
+            # es wird der name der exchange als string übergeben und nicht die instanz der exchange
 
 
 def get_exchange_names() -> List[str]:
@@ -305,5 +311,3 @@ def get_exchange_names() -> List[str]:
     exchanges = exchange_names
     exchange_names.sort()
     return exchanges
-
-
