@@ -1,0 +1,279 @@
+name: livecoin
+exchange: true
+api_url: https://api.livecoin.net/
+rate_limit: null
+
+
+requests:
+  currency_pairs:
+    request:
+      template: exchange/maxbid_minask
+      pair_template: # e.g. BNT/BTC
+        template: "{first}/{second}"
+        lower_case: false
+        alias: currencyPair
+      params: null
+    response:
+      type: dict
+      values:
+        currencyPairs:
+          type: list
+          values:
+            type: dict
+            values:
+              symbol: # e.g. BNT/BTC
+                type: str
+              maxBid:
+                type:
+                - str
+                - float
+              minAsk:
+                type:
+                - str
+                - float
+    mapping:
+    - key: currency_pair_first
+      path:
+      - currencyPairs
+      - symbol
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: currency_pair_second
+      path:
+      - currencyPairs
+      - symbol
+      type:
+      - str
+      - split
+      - "/"
+      - 1
+
+  tickers:
+    request:
+      template: exchange/ticker
+      pair_template: null # e.g. BNT/BTC
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          cur: # e.g. BNT
+            type: str
+          symbol: # e.g. BNT/BTC
+            type: str
+          last:
+            type: float
+          high:
+            type: float
+          low:
+            type: float
+          volume:
+            type: float
+          vwap:
+            type: float
+          max_bid:
+            type: float
+          min_ask:
+            type: float
+          best_bid:
+            type: float
+          best_ask:
+            type: float
+    mapping:
+    - key: time
+      path: []
+      type:
+      - none
+      - now
+    - key: currency_pair_first
+      path: 
+      - symbol
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: currency_pair_second
+      path:
+      - symbol
+      type:
+      - str
+      - split
+      - "/"
+      - 1
+    - key: last_price
+      path:
+      - last
+      type:
+      - float
+    - key: daily_volume
+      path:
+      - volume
+      type:
+      - float
+    - key: best_bid
+      path:
+      - best_bid
+      type:
+      - float
+    - key: best_ask
+      path:
+      - best_ask
+      type:
+      - float
+
+  trades:
+    request:
+      template: exchange/last_trades
+      pair_template: # e.g. BNT/BTC
+        template: "{first}/{second}"
+        lower_case: false
+        alias: currencyPair
+      params: null
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          time:
+            type:
+            - int
+            - fromtimestamp
+          id:
+            type: int
+          price:
+            type: float
+          quantity:
+            type: float
+          type:
+            type: str
+    mapping:
+    - key: time
+      path:
+      - time
+      type:
+      - int
+      - utcfromtimestamp
+    - key: id
+      path:
+      - id
+      type:
+        - int
+
+    - key: price
+      path:
+      - price
+      type:
+      - float
+    - key: amount
+      path:
+      - quantity
+      type:
+      - float
+    - key: direction
+      path:
+      - type
+      type:
+      - str
+
+  order_books:
+    request:
+      template: exchange/order_book
+      pair_template: # e.g. BNT/BTC
+        template: "{first}/{second}"
+        lower_case: false
+        alias: currencyPair
+      params:
+        groupByPrice: # If true, orders will be grouped by price
+          type: boolean
+          default: false
+        depth: # Returns maximum amount of bids (asks).
+          type: int
+          required: false
+          default: 50
+    response:
+      type: dict
+      values:
+        timestamp:
+          type:
+          - int
+          - fromtimestamp
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+                - float
+              1: # size
+                type:
+                - str
+                - float
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type:
+                - str
+                - float
+              1: # size
+                type:
+                - str
+                - float
+    mapping:
+    - key: time
+      path:
+      - timestamp
+      type:
+      - int
+      - utcfromtimestampms
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: id
+      path:
+        - timestamp
+      type:
+        - int
+    - key: asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - str
+      - float
+    - key: asks_amount
+      path:
+      - asks
+      - 1
+      type:
+      - str
+      - float
+    - key: bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - str
+      - float
+    - key: bids_amount
+      path:
+      - bids
+      - 1
+      type:
+      - str
+      - float
+
+
+

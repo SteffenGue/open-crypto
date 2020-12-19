@@ -138,6 +138,10 @@ TYPE_CONVERSION = {
         "function": lambda time, *args: datetime.datetime.strftime(time, args[0]),
         "params": 1
     },
+    ("dateparser", "totimestamp"): {  # Partially tested
+        "function": lambda time: int(time.timestamp()),
+        "params": 0
+    },
     ("datetime", "totimestamp"): {  # Partially tested
         "function": lambda time: int(time.timestamp()),
         "params": 0
@@ -178,7 +182,7 @@ TYPE_CONVERSION = {
     ('str', 'split_at_del_or_index'): {
         'function': lambda string, *args: string.split(args[0])[args[2]] if len(string) != len(
             string.split(args[0])[0]) else string[:args[1]] if args[2] == 0 else string[args[1]:],
-        'params': 3  # delimeter, index, 0 or 1 aka. left or right
+        'params': 3  # delimiter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
         'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),

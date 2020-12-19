@@ -22,10 +22,10 @@ jobs:
     yaml_request_name: order_books
     update_cp: false
     exchanges:
-      - braziliex
+      - livecoin
     currency_pairs:
 #      - all
-      - first: ltc
+      - first: eth
         second: btc
 #      - first: btc
 #        second: usdt
