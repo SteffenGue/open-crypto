@@ -433,7 +433,7 @@ class DatabaseHandler:
                     if i % 500 == 0:
                         session.commit()
 
-    async def persist_response(self,
+    def persist_response(self,
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
                          exchange,
                          db_table,

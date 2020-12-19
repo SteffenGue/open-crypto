@@ -245,7 +245,7 @@ class Scheduler:
 
                 if found_exchange:
                     try:
-                        formatted_response, mappings = await found_exchange.format_data(request_name,
+                        formatted_response, mappings = found_exchange.format_data(request_name,
                                                                                         response[1:],
                                                                                         start_time=start_time,
                                                                                         time=response_time)
@@ -255,7 +255,7 @@ class Scheduler:
                         formatted_response, mappings = None, None
 
                     if formatted_response:
-                        await self.database_handler.persist_response(exchanges_with_pairs,
+                        self.database_handler.persist_response(exchanges_with_pairs,
                                                                      found_exchange,
                                                                      request_table,
                                                                      formatted_response,

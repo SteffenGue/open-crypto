@@ -198,15 +198,14 @@ class Exchange:
                     # if formatted currency pair needs to be a parameter
                     if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
                         params[pair_template_dict['alias']] = pair_formatted[cp]
-                    else:
+                    elif pair_template_dict:
                         url = url.format(currency_pair=pair_formatted[cp])
 
                     try:
-                        print(f'requesting {self.name}, {pair_formatted[cp]}')
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
 
-                        if pair_formatted:
+                        if pair_template_dict:
                             responses[cp] = response_json
                         else:  # when ticker data is returned for all available currency pairs
                             responses[None] = response_json
@@ -460,7 +459,7 @@ class Exchange:
                                           results['currency_pair_first'],
                                           results['currency_pair_second']))
 
-    async def format_data(self,
+    def format_data(self,
                     method: str,
                     response: Tuple[str, Dict[object, Dict]],
                     start_time: datetime,
