@@ -14,19 +14,19 @@ general:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
   Ticker:
-    yaml_request_name: tickers
+    yaml_request_name: trades
     update_cp: false
     exchanges:
-      - bitmax
+      - currency_com
     currency_pairs:
-      - all
-#      - first: btmx
-#        second: usdt
+#      - all
+      - first: eth
+        second: usd
 #      - first: btc
 #        second: usdt
 #      - first: btc
