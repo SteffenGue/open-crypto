@@ -1,0 +1,379 @@
+name: bitmax
+exchange: true
+api_url: https://bitmax.io/api/pro/v1/
+
+rate_limit: null
+
+requests:
+  currency_pairs:
+    request:
+      template: products
+      pair_template: null
+      params: null
+
+    response:
+    type: dict
+    values:
+      data:
+        type: list
+        values:
+          type: dict
+          values:
+            symbol:
+              type: str
+            baseAsset:
+              type: str
+            quoteAsset:
+              type: str
+
+    mapping:
+    - key: currency_pair_first
+      path:
+        - data
+        - baseAsset
+      type:
+        - str
+    - key: currency_pair_second
+      path:
+        - data
+        - quoteAsset
+      type:
+        - str
+
+  tickers:
+    request:
+      template: ticker
+      pair_template: null
+      params: null
+
+    response:
+      type: dict
+      values:
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              symbol:
+                type: str
+              ask:
+                type: list
+                values:
+                  0: # price
+                    type: str
+                  1: # qty
+                    type: str
+
+    mapping:
+    - key: currency_pair_first
+      path:
+        - data
+        - symbol
+      type:
+        - str
+        - split
+        - "/"
+        - 0
+    - key: currency_pair_second
+      path:
+        - data
+        - symbol
+      type:
+        - str
+        - split
+        - "/"
+        - 1
+    - key: best_bid
+      path:
+        - data
+        - bid
+        - 0
+      type:
+        - str
+        - float
+    - key: best_ask
+      path:
+        - data
+        - ask
+        - 0
+      type:
+        - str
+        - float
+    - key: daily_volume
+      path:
+        - data
+        - volume
+      type:
+        - str
+        - float
+
+
+  historic_rates:
+    request:
+      template: barhist
+      pair_template:
+        template: "{first}/{second}"
+        lower_case: false
+        alias: symbol
+      params:
+        interval:
+          type: str
+          default: 1d
+        n:
+          type: int
+          max: 500
+          default: 500
+    response:
+      type: dict
+      values:
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              data:
+                type: dict
+                values:
+                  c:
+                    type: str
+                  h:
+                    type: str
+                  i:
+                    type: str
+                  l:
+                    type: str
+                  o:
+                    type: str
+                  ts:
+                    type: int
+                  v:
+                    type: str
+    mapping:
+      - key: time
+        path:
+          - data
+          - data
+          - ts
+        type:
+          - int
+          - utcfromtimestampms
+      - key: open
+        path:
+          - data
+          - data
+          - o
+        type:
+          - str
+          - float
+      - key: high
+        path:
+          - data
+          - data
+          - h
+        type:
+          - str
+          - float
+      - key: low
+        path:
+          - data
+          - data
+          - l
+        type:
+          - str
+          - float
+      - key: close
+        path:
+          - data
+          - data
+          - c
+        type:
+          - str
+          - float
+      - key: volume
+        path:
+          - data
+          - data
+          - v
+        type:
+          - str
+          - float
+
+  trades:
+    request:
+      template: trades
+      pair_template:
+        template: "{first}/{second}"
+        lower_case: false
+        alias: symbol
+      params:
+        n:
+          type: int
+          max: 100
+          default: 100
+
+    response:
+      type: dict
+      values:
+        data:
+          type: dict
+          values:
+            data:
+              type: list
+              values:
+                type: dict
+                values:
+                  seqnum:
+                    type: int
+                  p:
+                    type: str
+                  q:
+                    type: str
+                  ts:
+                    type: str
+                  bm:
+                    type: str
+    mapping:
+      - key: id
+        path:
+          - data
+          - data
+          - seqnum
+        type:
+          - int
+      - key: time
+        path:
+          - data
+          - data
+          - ts
+        type:
+          - int
+          - utcfromtimestampms
+      - key: direction
+        path:
+          - data
+          - data
+          - bm
+        type:
+          - value
+          - map
+          - false
+          - buy
+          - true
+          - sell
+      - key: price
+        path:
+          - data
+          - data
+          - p
+        type:
+          - str
+          - float
+      - key: amount
+        path:
+          - data
+          - data
+          - q
+        type:
+          - str
+          - float
+
+
+  order_books:
+    request:
+      template: depth
+      pair_template:
+        template: "{first}/{second}"
+        lower_case: false
+        alias: symbol
+      params: null
+
+    response:
+      type: dict
+      values:
+        data:
+          type: dict
+          values:
+            data:
+              type: list
+              values:
+                type: dict
+                values:
+                  seqnum:
+                    type: int
+                  ts:
+                    type: int
+                  asks:
+                    type: list
+                    values:
+                      type: list
+                      values:
+                        0: #price
+                          type: str
+                        1: # qty
+                          type: str
+                  bids:
+                    type: list
+                    values:
+                      type: list
+                      values:
+                        0:
+                          type: str
+                        1:
+                          type: str
+    mapping:
+      - key: id
+        path:
+          - data
+          - data
+          - seqnum
+        type:
+          - int
+      - key: time
+        path:
+          - data
+          - data
+          - ts
+        type:
+          - int
+          - utcfromtimestampms
+      - key: position
+        path: []
+        type:
+          - none
+          - range
+      - key: bids_amount
+        path:
+          - data
+          - data
+          - bids
+          - 1
+        type:
+          - str
+          - float
+      - key: bids_price
+        path:
+          - data
+          - data
+          - bids
+          - 0
+        type:
+          - str
+          - float
+      - key: asks_amount
+        path:
+          - data
+          - data
+          - asks
+          - 1
+        type:
+          - str
+          - float
+      - key: asks_price
+        path:
+          - data
+          - data
+          - asks
+          - 0
+        type:
+          - str
+          - float

@@ -111,7 +111,7 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ("str", "split"): {  # Tested
-        "function": lambda string, *args: string.split(args[0])[args[1]],
+        "function": lambda string, *args: string.split(args[0])[args[1]] if args[0] in string else None,
         "params": 2
     },
     ("str", "splitupper"): {

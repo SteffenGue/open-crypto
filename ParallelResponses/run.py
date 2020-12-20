@@ -53,9 +53,9 @@ def update_maps(path: str = path):
                 shutil.copy(src_file, dst_dir)
 
 
-def get_path() -> str:
+def get_path():
     """
-    Prints the path to the current working directory.
+    @return: Prints the path to the current working directory.
     """
     return os.getcwd()
 
@@ -72,8 +72,8 @@ def set_path():
 def get_session(filename: str = None):
     """
     Returns an open SqlALchemy-Session. The session is obtained from the DatabaseHandler.
-    :param filename: Name of the configuration file to init the DatabaseHandler
-    :return: SqlAlchemy-Session
+    @param filename: Name of the configuration file to init the DatabaseHandler
+    @return: SqlAlchemy-Session
     """
     db_handler = DatabaseHandler(metadata, path=path, **read_config(file=filename, section='database'))
     return db_handler.sessionFactory()
@@ -82,8 +82,8 @@ def get_session(filename: str = None):
 def get_config(filename: str = None) -> Dict:
     """
     Returns the actual config-file.
-    :param filename: name of the config file.
-    :return:
+    @param filename: name of the config file.
+    @return: Returns the current config.
     """
     return read_config(file=filename)
 
@@ -91,7 +91,7 @@ def get_config(filename: str = None) -> Dict:
 def get_config_template(csv: bool = False):
     """
     Creates a copy of the config templates and puts it into the resources/configs folder.
-    :param csv: boolean: If True, create an csv-export config. Else create a config for the runner.
+    @param csv: boolean: If True, create an csv-export config. Else create a config for the runner.
     """
     if csv:
         filename = "csv_config_template.yaml"
@@ -113,7 +113,7 @@ def export(file: str = None):
     """
     Calls the imported module CsvExport and the respective method create_csv(). This will take a csv-export config as
     input and write data into a csv-file depending on the configuration.
-    :param file: Name of the csv-export configuration file.
+    @param file: Name of the csv-export configuration file.
     """
     CsvExport(file).create_csv()
 
@@ -121,7 +121,7 @@ def export(file: str = None):
 def run(path=path):
     """
     Firstly checks if all necessary folder are available (i.e. config and yaml-maps) and runs the program.
-    :param path: The current working directory if not specified differently.
+    @param path: The current working directory if not specified differently.
     """
     check_path()
     run(main.run(path))

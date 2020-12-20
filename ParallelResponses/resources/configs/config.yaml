@@ -19,14 +19,14 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: order_books
+    yaml_request_name: tickers
     update_cp: false
     exchanges:
-      - livecoin
+      - bitmax
     currency_pairs:
-#      - all
-      - first: eth
-        second: btc
+      - all
+#      - first: btmx
+#        second: usdt
 #      - first: btc
 #        second: usdt
 #      - first: btc

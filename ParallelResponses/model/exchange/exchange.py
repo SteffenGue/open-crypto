@@ -541,7 +541,7 @@ class Exchange:
                                 itertools.repeat([], len(mappings))))
 
         for currency_pair in responses.keys():
-            if currency_pair:  # responses had to be collected individualy
+            if currency_pair:  # responses had to be collected individually
                 current_response = responses[currency_pair]
             else:  # data for all currency_pairs in one response
                 current_response = responses[None]
