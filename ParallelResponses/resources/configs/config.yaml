@@ -14,19 +14,19 @@ general:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
   Ticker:
-    yaml_request_name: trades
+    yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - currency_com
+      - crex24
     currency_pairs:
 #      - all
       - first: eth
-        second: usd
+        second: btc
 #      - first: btc
 #        second: usdt
 #      - first: btc
