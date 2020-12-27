@@ -186,10 +186,10 @@ class TestFormatData(unittest.TestCase):
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
-        value_list = {(start_time, time, 'BTC', 'ETH', 1),
-                      (start_time, time, 'ETH', 'XRP', 2),
-                      (start_time, time, 'BTC', 'USD', 3),
-                      (start_time, time, 'ETH', 'USDT', 4)}
+        value_list = {(start_time, time, 'btc', 'eth', 1),
+                      (start_time, time, 'eth', 'xrp', 2),
+                      (start_time, time, 'btc', 'usd', 3),
+                      (start_time, time, 'eth', 'usdt', 4)}
         key_list = ['start_time', 'time', 'currency_pair_first', 'currency_pair_second', 'value']
 
         self.assertEqual(value_list, set(result))
@@ -220,10 +220,10 @@ class TestFormatData(unittest.TestCase):
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
-        value_list = {(start_time, time, 'BTC', 'ETH', 5),
-                      (start_time, time, 'ETH', 'XRP', 6),
-                      (start_time, time, 'BTC', 'USD', 7),
-                      (start_time, time, 'ETH', 'USDT', 8)}
+        value_list = {(start_time, time, 'btc', 'eth', 5),
+                      (start_time, time, 'eth', 'xrp', 6),
+                      (start_time, time, 'btc', 'usd', 7),
+                      (start_time, time, 'eth', 'usdt', 8)}
         key_list = ['start_time', 'time', 'currency_pair_first', 'currency_pair_second', 'value']
 
         self.assertEqual(value_list, set(result))
@@ -254,10 +254,10 @@ class TestFormatData(unittest.TestCase):
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
-        value_list = {(start_time, time, 'BTC', 'ETH', 1),
-                      (start_time, time, 'ETH', 'XRP', 2),
-                      (start_time, time, 'BTC', 'USD', 3),
-                      (start_time, time, 'ETH', 'USDT', 4)}
+        value_list = {(start_time, time, 'btc', 'eth', 1),
+                      (start_time, time, 'eth', 'xrp', 2),
+                      (start_time, time, 'btc', 'usd', 3),
+                      (start_time, time, 'eth', 'usdt', 4)}
         key_list = ['start_time', 'time', 'currency_pair_first', 'currency_pair_second', 'value']
 
         self.assertEqual(value_list, set(result))
@@ -296,10 +296,10 @@ class TestFormatData(unittest.TestCase):
                             cp2_mock: {'v1': '11', 'v2': 'c', 'v3': 'd'},
                             cp3_mock: {'v1': '12', 'v2': 'e', 'v3': 'f'},
                             cp4_mock: {'v1': '13', 'v2': 'g', 'v3': 'h'}})
-        value_list = {(start_time, time, 10, 'A', 'B', 1),
-                      (start_time, time, 11, 'C', 'D', 2),
-                      (start_time, time, 12, 'E', 'F', 3),
-                      (start_time, time, 13, 'G', 'H', 4)}
+        value_list = {(start_time, time, 10, 'a', 'b', 1),
+                      (start_time, time, 11, 'c', 'd', 2),
+                      (start_time, time, 12, 'e', 'f', 3),
+                      (start_time, time, 13, 'g', 'h', 4)}
         key_list = ['start_time', 'time', 'value1', 'value2', 'value3', 'exchange_pair_id']
 
         result, keys = exchange.format_data(method, response, start_time, time)
@@ -348,10 +348,10 @@ class TestFormatData(unittest.TestCase):
                             cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
                             cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
                             cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
-        value_list = {(start_time, time, 10, 'A', 'B', 1),
-                      (start_time, time, 11, 'C', 'D', 2),
-                      (start_time, time, 12, 'E', 'F', 3),
-                      (start_time, time, 13, 'G', 'H', 4)}
+        value_list = {(start_time, time, 10, 'a', 'b', 1),
+                      (start_time, time, 11, 'c', 'd', 2),
+                      (start_time, time, 12, 'e', 'f', 3),
+                      (start_time, time, 13, 'g', 'h', 4)}
         key_list = ['start_time', 'time', 'value1', 'value2', 'value3', 'exchange_pair_id']
 
         result, keys = exchange.format_data(method, response, start_time, time)
@@ -394,10 +394,10 @@ class TestFormatData(unittest.TestCase):
                             cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
                             cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
                             cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
-        value_list = {(start_time, time, 10, 'A', 'B', 1),
-                      (start_time, time, 11, 'C', 'D', 2),
-                      (start_time, time, 12, 'E', 'F', 3),
-                      (start_time, time, 13, 'G', 'H', 4)}
+        value_list = {(start_time, time, 10, 'a', 'b', 1),
+                      (start_time, time, 11, 'c', 'd', 2),
+                      (start_time, time, 12, 'e', 'f', 3),
+                      (start_time, time, 13, 'g', 'h', 4)}
         key_list = ['start_time', 'time', 'value1', 'value2', 'value3', 'exchange_pair_id']
 
         result, keys = exchange.format_data(method, response, start_time, time)

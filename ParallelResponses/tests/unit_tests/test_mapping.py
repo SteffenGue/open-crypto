@@ -791,7 +791,7 @@ class TestMapping(unittest.TestCase):
                         {'btc_eur': {'other': 'values'}},
                         {'btc_usd': {'other': 'values'}},
                         {'btc_usdt': {'other': 'values'}}]
-        value_list = ['ETH', 'EUR', 'USD', 'USDT']
+        value_list = ['eth', 'eur', 'usd', 'usdt']
         result = mapping.extract_value(extract_list)
         self.assertEqual(value_list, result)
 
@@ -808,10 +808,10 @@ class TestMapping(unittest.TestCase):
         value_list = [415.161, 112.131, 789.101, 123.456]
 
         # note that currency pair infos are from bottom to top if compared to extract_dict
-        currency_pair_infos = (('DOGE', 'BTC', 'doge_btc'),
-                               ('XRP', 'ETH', 'xrp_eth'),
-                               ('BTC', 'XRP', 'btc_xrp'),
-                               ('BTC', 'ETH', 'btc_eth'))
+        currency_pair_infos = (('doge', 'BTC', 'doge_btc'),
+                               ('xrp', 'eth', 'xrp_eth'),
+                               ('btc', 'xrp', 'btc_xrp'),
+                               ('btc', 'eth', 'btc_eth'))
 
         result = []
         for currency_pair_info in currency_pair_infos:
@@ -825,7 +825,7 @@ class TestMapping(unittest.TestCase):
                           ['str', 'split', '_', 0])
         extract_dict = {'data': ['eth_btc', 'usd_btc', 'xrp_eth', 'eth_xrp'],
                         'other_stuff': 'that does not matter'}
-        value_list = ['ETH', 'USD', 'XRP', 'ETH']
+        value_list = ['eth', 'usd', 'xrp', 'eth']
         result = mapping.extract_value(extract_dict)
         self.assertEqual(value_list, result)
 
@@ -851,7 +851,7 @@ class TestMapping(unittest.TestCase):
                                  {'btc_xrp': {'other': 'values'}},
                                  {'tsla_usd': {'other': 'values'}},
                                  {'usdt_eth': {'other': 'values'}}]}
-        value_list = ['BTC', 'XRP', 'USD', 'ETH']
+        value_list = ['btc', 'xrp', 'usd', 'eth']
         result = mapping.extract_value(extract_dict)
         self.assertEqual(value_list, result)
 

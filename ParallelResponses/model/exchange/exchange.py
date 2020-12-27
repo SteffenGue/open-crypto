@@ -614,7 +614,7 @@ class Exchange:
                     elif 'currency_pair_first' not in mapping_keys or 'currency_pair_second' not in mapping_keys:
                         raise NoCurrencyPairProvidedException(self.name, method)
 
-                    # update new keys only if not already exsits to prevent overwriting!
+                    # update new keys only if not already exists to prevent overwriting!
                     temp_results = {'start_time': start_time, 'time': time, **temp_results}
                     result = [v if hasattr(v, '__iter__')
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]

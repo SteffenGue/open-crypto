@@ -6,7 +6,7 @@ general:
     password:
     host: localhost
     port: 5432
-    db_name: hochfrequenz
+    db_name: historic
   operation_settings:
     frequency: 0
     run_once: true
@@ -19,14 +19,16 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: historic_rates
+    yaml_request_name: order_books
     update_cp: false
     exchanges:
-      - crex24
+      - bitvavo
     currency_pairs:
 #      - all
-      - first: eth
-        second: btc
+      - first: btc
+        second: eur
+#      - first: btc
+#        second: usd
 #      - first: btc
 #        second: usdt
 #      - first: btc

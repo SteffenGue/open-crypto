@@ -24,9 +24,9 @@ class TestRequest(unittest.TestCase):
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
         exchange = Exchange(exchange_dict)
-        exchange.request_urls = {"ticker": {}}
+        exchange.request_urls = {"tickers": {}}
         loop = asyncio.get_event_loop()
-        result = loop.run_until_complete(exchange.request("ticker", []))
+        result = loop.run_until_complete(exchange.request("tickers", []))
         self.assertIsNone(result)
 
     def test_empty_currency_pairs(self):
@@ -37,9 +37,9 @@ class TestRequest(unittest.TestCase):
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
         exchange = Exchange(exchange_dict)
-        exchange.request_urls = {"ticker": {"params": {}, "pair_template": {}}}
+        exchange.request_urls = {"tickers": {'url': "", "params": {}, "pair_template": {}}}
         loop = asyncio.get_event_loop()
-        result = loop.run_until_complete(exchange.request("ticker", []))
+        result = loop.run_until_complete(exchange.request("tickers", []))
         self.assertTrue(type(result[0]) == datetime)
         self.assertEqual('test_exchange', result[1])
         self.assertEqual({}, result[2])
@@ -54,10 +54,10 @@ class TestRequest(unittest.TestCase):
                                    "api_url": 'https://url.to.api.com',
                                    "requests": []}
             exchange = Exchange(exchange_dict)
-            exchange.request_urls = {"ticker": {"url": {}, "params": {}, "pair_template": {}}}
+            exchange.request_urls = {"tickers": {"url": {}, "params": {}, "pair_template": {}}}
             loop = asyncio.get_event_loop()
             ecp_mock = Mock(spec=ExchangeCurrencyPair)
-            result = loop.run_until_complete(exchange.request('ticker', [ecp_mock]))
+            result = loop.run_until_complete(exchange.request('tickers', [ecp_mock]))
 
             http_mock.assert_called_with(url={}, params={})
             self.assertTrue(type(result[0]) == datetime)
@@ -73,11 +73,11 @@ class TestRequest(unittest.TestCase):
                                    "api_url": 'https://url.to.api.com',
                                    "requests": []}
             exchange = Exchange(exchange_dict)
-            exchange.request_urls = {"ticker": {"url": {}, "params": {}, "pair_template": {}}}
+            exchange.request_urls = {"tickers": {"url": {}, "params": {}, "pair_template": {}}}
             ecp_mock = Mock(spec=ExchangeCurrencyPair)
 
             loop = asyncio.get_event_loop()
-            result = loop.run_until_complete(exchange.request('ticker', [ecp_mock]))
+            result = loop.run_until_complete(exchange.request('tickers', [ecp_mock]))
 
             http_mock.assert_called_with(url={}, params={})
             self.assertTrue(type(result[0]) == datetime)
@@ -95,11 +95,11 @@ class TestRequest(unittest.TestCase):
                                    "api_url": 'https://url.to.api.com',
                                    "requests": []}
             exchange = Exchange(exchange_dict)
-            exchange.request_urls = {"ticker": {"url": {}, "params": {}, "pair_template": {}}}
+            exchange.request_urls = {"tickers": {"url": {}, "params": {}, "pair_template": {}}}
             ecp_mock = Mock(spec=ExchangeCurrencyPair)
 
             loop = asyncio.get_event_loop()
-            result = loop.run_until_complete(exchange.request('ticker', [ecp_mock]))
+            result = loop.run_until_complete(exchange.request('tickers', [ecp_mock]))
             json_mock.json.assert_called_once()
             http_mock.assert_called_with(url={}, params={})
             self.assertTrue(type(result[0]) == datetime)
@@ -117,13 +117,13 @@ class TestRequest(unittest.TestCase):
                                    "api_url": 'https://url.to.api.com',
                                    "requests": []}
             exchange = Exchange(exchange_dict)
-            exchange.request_urls = {"ticker": {"url": {},
-                                                "params": {'steps': 1299, 'query_all': True},
-                                                "pair_template": {}}}
+            exchange.request_urls = {"tickers": {"url": {},
+                                                 "params": {'steps': 1299, 'query_all': True},
+                                                 "pair_template": {}}}
             ecp_mock = Mock(spec=ExchangeCurrencyPair)
 
             loop = asyncio.get_event_loop()
-            result = loop.run_until_complete(exchange.request('ticker', [ecp_mock]))
+            result = loop.run_until_complete(exchange.request('tickers', [ecp_mock]))
             json_mock.json.assert_called_once()
             http_mock.assert_called_with(url={}, params={'steps': 1299, 'query_all': True})
             self.assertTrue(type(result[0]) == datetime)
@@ -141,7 +141,7 @@ class TestRequest(unittest.TestCase):
                                    "api_url": 'https://url.to.api.com',
                                    "requests": []}
             exchange = Exchange(exchange_dict)
-            exchange.request_urls = {"ticker": {"url": 'ticker/{currency_pair}',
+            exchange.request_urls = {"tickers": {"url": 'tickers/{currency_pair}',
                                                 "params": {},
                                                 "pair_template": {'template': '{first}_{second}', 'lower_case': True}}}
             ecp_mock = Mock(spec=ExchangeCurrencyPair)
@@ -149,9 +149,9 @@ class TestRequest(unittest.TestCase):
             ecp_mock.second.name = 'ETH'
 
             loop = asyncio.get_event_loop()
-            result = loop.run_until_complete(exchange.request('ticker', [ecp_mock]))
+            result = loop.run_until_complete(exchange.request('tickers', [ecp_mock]))
             json_mock.json.assert_called_once()
-            http_mock.assert_called_with(url='ticker/btc_eth', params={})
+            http_mock.assert_called_with(url='tickers/btc_eth', params={})
             self.assertTrue(type(result[0]) == datetime)
             self.assertEqual('test_exchange', result[1])
             self.assertEqual({ecp_mock: {'data': 'This is the response.'}}, result[2])
@@ -167,7 +167,7 @@ class TestRequest(unittest.TestCase):
                                    "api_url": 'https://url.to.api.com',
                                    "requests": []}
             exchange = Exchange(exchange_dict)
-            exchange.request_urls = {"ticker": {"url": '',
+            exchange.request_urls = {"tickers": {"url": '',
                                                 "params": {},
                                                 "pair_template": {'template': '{first}_{second}', 'lower_case': True, 'alias': 'pair'}}}
             ecp_mock = Mock(spec=ExchangeCurrencyPair)
@@ -175,7 +175,7 @@ class TestRequest(unittest.TestCase):
             ecp_mock.second.name = 'ETH'
 
             loop = asyncio.get_event_loop()
-            result = loop.run_until_complete(exchange.request('ticker', [ecp_mock]))
+            result = loop.run_until_complete(exchange.request('tickers', [ecp_mock]))
             json_mock.json.assert_called_once()
             http_mock.assert_called_with(url='', params={'pair': 'btc_eth'})
             self.assertTrue(type(result[0]) == datetime)

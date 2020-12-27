@@ -187,6 +187,7 @@ class Scheduler:
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
+            #ToDo: Asynchronisieren
             for exchange in exchanges:
                 if job_params['update_cp']:
                     await update_currency_pairs(exchange)
