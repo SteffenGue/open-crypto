@@ -2,8 +2,8 @@ general:
   database:
     sqltype: sqlite
     client: psycopg2
-    user_name: bjarne
-    password:
+    user_name: postgres
+    password: 1234
     host: localhost
     port: 5432
     db_name: historic
