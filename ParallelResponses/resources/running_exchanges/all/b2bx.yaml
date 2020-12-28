@@ -1,0 +1,300 @@
+name: b2bx
+exchange: true
+
+rate_limit:
+  unit:
+  max:
+
+api_url: ""
+
+requests:
+  currency_pairs:
+    request:
+      template: https://api.b2bx.exchange:8443/trading/frontoffice/api/info
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        pairs:
+          type: dict
+          values:
+            currency_pair:
+              type: dict
+              values:
+                baseAsset:
+                  type: str
+                quoteAsset:
+                  type: str
+    mapping:
+      - key: currency_pair_first
+        path:
+          - pairs
+          - dict_values
+          - baseAsset
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - pairs
+          - dict_values
+          - quoteAsset
+        type:
+          - str
+
+  tickers:
+    request:
+      template: https://cmc-gate.b2bx.exchange/marketdata/cmc/v1/ticker
+      pair_template: null
+      params: null
+
+    response:
+      type: dict
+      values:
+        currency_pair:
+          type: dict
+          values:
+            last_price:
+              type: str
+            base_volume:
+              type: str
+            quote_volume:
+              type: str
+    mapping:
+      - key: currency_pair_first
+        path:
+          - dict_key
+        type:
+          - str
+          - split
+          - "_"
+          - 0
+      - key: currency_pair_second
+        path:
+          - dict_key
+        type:
+          - str
+          - split
+          - "_"
+          - 1
+      - key: last_price
+        path:
+          - dict_values
+          - last_price
+        type:
+          - str
+          - float
+      - key: daily_volume
+        path:
+          - dict_values
+          - base_volume
+        type:
+          - str
+          - float
+
+  historic_rates:
+    request:
+      template: https://api.b2bx.exchange:8443/trading/marketdata/instruments/{currency_pair}/history
+      pair_template:
+        template: "{first}_{second}"
+        lower_case: true
+      params:
+        startDate:
+          default: "2010-01-01T00:00:00"
+        endDate:
+          function:
+            - none
+            - now_format
+            - "%Y-%m-%dT%H:%M:%S"
+        type:
+          default: 1d
+
+    response:
+      type: dict
+      values:
+        data:
+          type: list
+          values:
+            type: dict
+            values:
+              start:
+                type: str
+              end:
+                type: str
+              open:
+                type: float
+              high:
+                type: float
+              low:
+                type: float
+              close:
+                type: float
+              volume:
+                type: float
+    mapping:
+      - key: time
+        path:
+          - data
+          - end
+        type:
+          - str
+          - dateparser
+      - key: open
+        path:
+          - data
+          - open
+        type:
+          - float
+      - key: high
+        path:
+          - data
+          - high
+        type:
+          - float
+      - key: low
+        path:
+          - data
+          - low
+        type:
+          - float
+      - key: close
+        path:
+          - data
+          - close
+        type:
+          - float
+      - key: volume
+        path:
+          - data
+          - volume
+        type:
+          - float
+
+  trades:
+    request:
+      template: https://cmc-gate.b2bx.exchange/marketdata/cmc/v1/trades/{currency_pair}
+      pair_template:
+        template: "{first}_{second}"
+        lower_case: true
+      params: null
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          tradeID:
+            type: str
+          price:
+            type: str
+          base_volume:
+            type: str
+          quote_volume:
+            type: str
+          trade_timestamp:
+            type: str
+          type:
+            type: str
+    mapping:
+      - key: time
+        path:
+          - trade_timestamp
+        type:
+          - str
+          - int
+          - utcfromtimestamp
+      - key: id
+        path:
+          - trade_timestamp
+        type:
+          - str
+          - int
+      - key: price
+        path:
+          - price
+        type:
+          - str
+          - float
+      - key: amount
+        path:
+          - base_volume
+        type:
+          - str
+          - float
+      - key: direction
+        path:
+          - type
+        type:
+          - str
+
+  order_books:
+    request:
+      template: https://cmc-gate.b2bx.exchange/marketdata/instruments/{currency_pair}/depth
+      pair_template:
+        template: "{first}_{second}"
+        lower_case: true
+      params: null
+
+    response:
+      type: dict
+      values:
+        bids:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type: float
+              price:
+                type: float
+        asks:
+          type: list
+          values:
+            type: dict
+            values:
+              amount:
+                type: float
+              price:
+                type: float
+        version:
+          type: int
+    mapping:
+      - key: id
+        path:
+          - version
+        type:
+          - int
+      - key: time
+        path: []
+        type:
+          - none
+          - now
+      - key: position
+        path: []
+        type:
+          - none
+          - range
+      - key: bids_amount
+        path:
+          - bids
+          - amount
+        type:
+          - float
+      - key: bids_price
+        path:
+          - bids
+          - price
+        type:
+          - float
+      - key: asks_amount
+        path:
+          - asks
+          - amount
+        type:
+          - float
+      - key: asks_price
+        path:
+          - asks
+          - price
+        type:
+          - float

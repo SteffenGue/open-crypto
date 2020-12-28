@@ -62,6 +62,11 @@ TYPE_CONVERSION = {
             int(timestampms) / 1000),
         "params": 0
     },
+    ("int", "utcfromtimestampns"): {  # Partially tested
+        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
+            int(timestampms) / 1000000),
+        "params": 0
+    },
     ("int", "fromtimestampms"): {  # Partially tested
         "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
             timestampms / 1000),
@@ -85,6 +90,10 @@ TYPE_CONVERSION = {
         "function": datetime.datetime.utcfromtimestamp,
         "params": 0
     },
+    ("any", "value"): {
+        "function": lambda number: True if float(number) > 0 else False,
+        "params": 0
+    },
     ("str", "bool"): {  # Tested
         "function": lambda string: string.lower() == "true",
         "params": 0
@@ -95,6 +104,10 @@ TYPE_CONVERSION = {
     },
     ("str", "float"): {  # Tested
         "function": float,
+        "params": 0
+    },
+    ("str", "float_absolut"): {  # Tested
+        "function": lambda string: abs(float(string)),
         "params": 0
     },
     ("str", "floatNA"): {
@@ -165,6 +178,10 @@ TYPE_CONVERSION = {
     ("none", "now"): {
         "function": lambda arg: datetime.datetime.utcnow(),
         "params": 0
+    },
+    ("none", "now_format"): {
+        "function": lambda arg: (datetime.datetime.utcnow()).__format__(arg),
+        "params": 1
     },
     ("none", "constant"): {  # Returns the first argument
         "function": lambda *args: args[1],
