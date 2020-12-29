@@ -262,10 +262,17 @@ class TestPersistResponse(unittest.TestCase):
         self.assertEqual(test_result, result)
 
     def test_persist_exchange_and_get_exchange_id(self):
-        self.db_handler.persist_exchange('TESTEXCHANGE', True)
-        test_result = self.db_handler.get_exchange_id('TESTEXCHANGE')
+        """
+        Test for the methods persist_exchange and get_exchange_id. The method persist_exchange will be called to persist
+        a new test exchange. The return of the method get_exchange_id will be compared. Afterwards the new testexchange
+        will be deleted from the testdataset.
+        """
+        self.db_handler.persist_exchange('TEST', True)
+        test_result = self.db_handler.get_exchange_id('TEST')
         result = self.session.query(Exchange).all()
-        result_id = result[0].id
+        for item in result:
+            if item.name == 'TEST':
+                result_id = item.id
         self.assertEqual(test_result, result_id)
 
-        self.session.query(Exchange).delete()
+        self.session.query(Exchange).filter(Exchange.id.__eq__(result_id)).delete()
