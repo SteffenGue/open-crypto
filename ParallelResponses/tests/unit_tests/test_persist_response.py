@@ -176,6 +176,11 @@ class TestPersistResponse(unittest.TestCase):
         self.session.query(Ticker).delete()
 
     def test_get_all_currency_pairs_from_exchange_with_no_invalid_pair(self):
+        """
+        Test for the method get_all_currency_pairs_from_exchange. This method will be called with the testdataset. The
+        list of the id's of the exchange, first and second currency will be compared. All currencypairs from the
+        testdataset should be returned of the method call, because all pairs are from the given exchange 'TESTEXCHANGE'.
+        """
         test_result = self.db_handler.get_all_currency_pairs_from_exchange('TESTEXCHANGE')
         test_result = [(item.exchange_id,
                         item.first_id,
@@ -187,27 +192,56 @@ class TestPersistResponse(unittest.TestCase):
         self.assertEqual(test_result, result)
 
     def test_get_all_currency_pairs_from_exchange_with_invalid_pair(self):
+        """
+        Test for the method get_all_currency_pairs_from_exchange. This method will be called with the testdataset. An
+        empty list of currencypairs should be returned, because in the given dataset of this testmethod are no
+        currencypairs with the given exchange 'TESTEXCHANGE'.
+        """
         self.session.query(ExchangeCurrencyPair).delete()
         self.db_handler.persist_exchange_currency_pair('invalid', 'BTC', 'ETH', True)
         test_result = self.db_handler.get_all_currency_pairs_from_exchange('TESTEXCHANGE')
         result = []
         self.assertEqual(test_result, result)
+
+        self.session.query(ExchangeCurrencyPair).delete()
         self.db_handler.persist_exchange_currency_pairs(self.exchange_currency_pairs,
                                                         is_exchange=True)
 
     def test_get_currency_pairs_with_first_currency_valid_1(self):
+        """
+        Test for the method get_currency_with_first_currency. This method will be called with the testdataset and 'BTC'
+        as a currency. The list of the id's of the first currency will be compared.
+        """
         test_result = self.db_handler.get_currency_pairs_with_first_currency('TESTEXCHANGE', ['BTC'])
         test_result = [item.first_id for item in test_result]
         result = [1, 1, 1, 1, 1]
         self.assertEqual(test_result, result)
 
     def test_get_currency_pairs_with_first_currency_valid_2(self):
+        """
+        Test for the method get_currency_with_first_currency. This method will be called with the testdataset and 'BTC'
+        and 'LTC' as a currency. The list of the id's of the first currency will be compared.
+        """
         test_result = self.db_handler.get_currency_pairs_with_first_currency('TESTEXCHANGE', ['BTC', 'LTC'])
         test_result = [item.first_id for item in test_result]
         result = [1, 1, 1, 1, 1, 3, 3, 3, 3, 3]
         self.assertEqual(test_result, result)
 
+    def test_get_currency_pairs_with_first_currency_invalid(self):
+        """
+        Test for the method get_currency_with_first_currency. This method will be called with the testdataset and 'BTC'
+        as a currency. The list of the id's of the first currency will be compared. An Empty list should be returned,
+        because there are no currencypairs with the currency 'BAT'.
+        """
+        test_result = self.db_handler.get_currency_pairs_with_first_currency('TESTEXCHANGE', ['BAT'])
+        result = []
+        self.assertEqual(test_result, result)
+
     def test_get_currency_pairs_with_second_currency_valid(self):
+        """
+        Test for the method get_currency_with_second_currency. This method will be called with the testdataset and 'BTC'
+        as a currency. The List of the id's of the second currency will be compared.
+        """
         #todo : Eingabeparameter in der Methode get_currency_pairs_with_second_currency in db_handler
         #       müsste eigentlich eine Liste an Currencies entgegennehmen, wie in der Methode
         #       get_currency_pairs_with_first_currency, und nicht nur einen einzelnen String.
@@ -218,6 +252,20 @@ class TestPersistResponse(unittest.TestCase):
         self.assertEqual(test_result, result)
 
     def test_get_currency_pairs_with_second_currency_invalid(self):
+        """
+        Test for the method get_currency_with_second_currency. This method will be called with the testdataset and 'BTC'
+        as a currency. The list of the id's of the second currency will be compared. An Empty list should be returned,
+        because there are no currencypairs with the currency 'BAT'.
+        """
         test_result = self.db_handler.get_currency_pairs_with_second_currency('TESTEXCHANGE', ['BAT'])
         result = []
         self.assertEqual(test_result, result)
+
+    def test_persist_exchange_and_get_exchange_id(self):
+        self.db_handler.persist_exchange('TESTEXCHANGE', True)
+        test_result = self.db_handler.get_exchange_id('TESTEXCHANGE')
+        result = self.session.query(Exchange).all()
+        result_id = result[0].id
+        self.assertEqual(test_result, result_id)
+
+        self.session.query(Exchange).delete()
