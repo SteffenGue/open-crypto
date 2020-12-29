@@ -205,6 +205,10 @@ TYPE_CONVERSION = {
         'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
         'params': 0
     },
+    ('none', 'now_timestampms'): {
+        'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())*1000),
+        'params': 0
+    },
     ('now', 'timedelta'): {
         'function': lambda delta: int(datetime.datetime.timestamp(datetime.datetime.utcnow() -
                                                                   timedelta(days=int(delta)))),

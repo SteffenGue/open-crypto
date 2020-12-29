@@ -362,7 +362,6 @@ class TickerView(Base):
     )
 
 
-
 class TradeView(Base):
     """
     View for Trades.
@@ -371,6 +370,7 @@ class TradeView(Base):
     """
     first = aliased(Currency)
     second = aliased(Currency)
+
     __table__ = create_view(
         name='trades_view',
         selectable=select(
@@ -384,7 +384,7 @@ class TradeView(Base):
                 Trade.best_ask,
                 Trade.best_bid,
                 Trade.price,
-                Trade.direction
+                Trade.direction,
             ],
             from_obj=(
                 Trade.__table__.join(ExchangeCurrencyPair, Trade.exchange_pair_id == ExchangeCurrencyPair.id)
@@ -395,6 +395,7 @@ class TradeView(Base):
         ),
         metadata=Base.metadata
     )
+
 
 
 
@@ -455,7 +456,8 @@ class HistoricRateView(Base):
                 HistoricRate.volume,
             ],
             from_obj=(
-                HistoricRate.__table__.join(ExchangeCurrencyPair, HistoricRate.exchange_pair_id == ExchangeCurrencyPair.id)
+                HistoricRate.__table__.join(ExchangeCurrencyPair,
+                                            HistoricRate.exchange_pair_id == ExchangeCurrencyPair.id)
                     .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
                     .join(first, ExchangeCurrencyPair.first_id == first.id)
                     .join(second, ExchangeCurrencyPair.second_id == second.id)
@@ -497,8 +499,6 @@ class OHLCVMView(Base):
         ),
         metadata=Base.metadata
     )
-
-
 
 # Query for getting ecps with id
 # select ecp.id, ecp.exchange_id, e.name, ecp.first_id, c1.name as first, ecp.second_id, c2.name as second from exchange e join exchanges_currency_pairs ecp on e.id=ecp.exchange_id join currencies c1 on ecp.first_id=c1.id join currencies c2 on ecp.second_id=c2.id;

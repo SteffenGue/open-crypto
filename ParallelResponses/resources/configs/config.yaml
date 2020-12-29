@@ -19,14 +19,14 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: order_books
+    yaml_request_name: tickers
     update_cp: false
     exchanges:
-      - b2bx
+      - bitkub
     currency_pairs:
-#      - all
-      - first: btc
-        second: usdt
+      - all
+#      - first: thb
+#        second: btc
 #      - first: btc
 #        second: usd
 #      - first: btc
@@ -38,16 +38,3 @@ jobs:
 
     first_currencies:
     second_currencies:
-# ex:
-# - bisq
-# - braziliex
-# - exmo
-# - exrates
-# - folgory
-# - hotbit
-# - openledger
-# - p2pb2b
-# - stex
-# - vindax
-# - whitebit
-# - zbg
