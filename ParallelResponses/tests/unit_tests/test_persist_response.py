@@ -189,7 +189,7 @@ class TestPersistResponse(unittest.TestCase):
         result = [(item.exchange_id,
                    item.first_id,
                    item.second_id) for item in result]
-        self.assertEqual(test_result, result)
+        self.assertEqual(result, test_result)
 
     def test_get_all_currency_pairs_from_exchange_with_invalid_pair(self):
         """
@@ -201,7 +201,7 @@ class TestPersistResponse(unittest.TestCase):
         self.db_handler.persist_exchange_currency_pair('invalid', 'BTC', 'ETH', True)
         test_result = self.db_handler.get_all_currency_pairs_from_exchange('TESTEXCHANGE')
         result = []
-        self.assertEqual(test_result, result)
+        self.assertEqual(result, test_result)
 
         self.session.query(ExchangeCurrencyPair).delete()
         self.db_handler.persist_exchange_currency_pairs(self.exchange_currency_pairs,
@@ -214,8 +214,9 @@ class TestPersistResponse(unittest.TestCase):
         """
         test_result = self.db_handler.get_currency_pairs_with_first_currency('TESTEXCHANGE', ['BTC'])
         test_result = [item.first_id for item in test_result]
-        result = [1, 1, 1, 1, 1]
-        self.assertEqual(test_result, result)
+        result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.first_id.__eq__(1)).all()
+        result = [item.first_id for item in result]
+        self.assertEqual(result, test_result)
 
     def test_get_currency_pairs_with_first_currency_valid_2(self):
         """
@@ -224,8 +225,10 @@ class TestPersistResponse(unittest.TestCase):
         """
         test_result = self.db_handler.get_currency_pairs_with_first_currency('TESTEXCHANGE', ['BTC', 'LTC'])
         test_result = [item.first_id for item in test_result]
-        result = [1, 1, 1, 1, 1, 3, 3, 3, 3, 3]
-        self.assertEqual(test_result, result)
+        result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.first_id.__eq__(1)).all()
+        result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.first_id.__eq__(3)).all())
+        result = [item.first_id for item in result]
+        self.assertEqual(result, test_result)
 
     def test_get_currency_pairs_with_first_currency_invalid(self):
         """
@@ -235,7 +238,7 @@ class TestPersistResponse(unittest.TestCase):
         """
         test_result = self.db_handler.get_currency_pairs_with_first_currency('TESTEXCHANGE', ['BAT'])
         result = []
-        self.assertEqual(test_result, result)
+        self.assertEqual(result, test_result)
 
     def test_get_currency_pairs_with_second_currency_valid(self):
         """
@@ -245,11 +248,12 @@ class TestPersistResponse(unittest.TestCase):
         #todo : Eingabeparameter in der Methode get_currency_pairs_with_second_currency in db_handler
         #       müsste eigentlich eine Liste an Currencies entgegennehmen, wie in der Methode
         #       get_currency_pairs_with_first_currency, und nicht nur einen einzelnen String.
-        # Ich habe das noch nicht gefixt, da ich nicht genau weiß, ob dann eventuell Fehlermeldungen geworfen, bei den vorhandenen Aufrufen der Methode. Diese Aufrufe müssten dann eventuell angepasst werden.
+        # Ich habe das noch nicht gefixt, da ich nicht genau weiß, ob dann eventuell Fehlermeldungen geworfen werden, bei den vorhandenen Aufrufen der Methode. Diese Aufrufe müssten dann eventuell angepasst werden.
         test_result = self.db_handler.get_currency_pairs_with_second_currency('TESTEXCHANGE', ['BTC'])
         test_result = [item.second_id for item in test_result]
-        result = [1, 1, 1, 1, 1]
-        self.assertEqual(test_result, result)
+        result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.second_id.__eq__(1)).all()
+        result = [item.second_id for item in result]
+        self.assertEqual(result, test_result)
 
     def test_get_currency_pairs_with_second_currency_invalid(self):
         """
@@ -259,7 +263,7 @@ class TestPersistResponse(unittest.TestCase):
         """
         test_result = self.db_handler.get_currency_pairs_with_second_currency('TESTEXCHANGE', ['BAT'])
         result = []
-        self.assertEqual(test_result, result)
+        self.assertEqual(result, test_result)
 
     def test_persist_exchange_and_get_exchange_id(self):
         """
@@ -273,6 +277,89 @@ class TestPersistResponse(unittest.TestCase):
         for item in result:
             if item.name == 'TEST':
                 result_id = item.id
-        self.assertEqual(test_result, result_id)
+        self.assertEqual(result_id, test_result)
 
         self.session.query(Exchange).filter(Exchange.id.__eq__(result_id)).delete()
+
+    def test_get_currency_id(self):
+        """
+        Test for the method get_currency_id. This method will be called. The returned id's will be compared.
+        """
+        test_result = self.db_handler.get_currency_id('BTC')
+        result = self.session.query(Currency).all()
+        for item in result:
+            if item.name == 'BTC':
+                result_id = item.id
+        self.assertEqual(result_id, test_result)
+
+    def test_get_currency_pairs(self):
+        """
+        Test for the method get_currency_pairs. This method will be called with a given testexchange and a given list of
+        dictionaries (representing currency pairs).
+        For simplicity, only the id's will be compared (not the whole objects).
+        """
+        currency_pairs = [{'first': 'BTC', 'second': 'LTC'},
+                          {'first': 'BTC', 'second': 'DIO'}]
+        test_result = self.db_handler.get_currency_pairs('TESTEXCHANGE', currency_pairs)
+        test_result = [(item.exchange_id,
+                        item.first_id,
+                        item.second_id) for item in test_result]
+        result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                 ExchangeCurrencyPair.first_id.__eq__(1),
+                                                                 ExchangeCurrencyPair.second_id.__eq__(3)).all()
+        result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                      ExchangeCurrencyPair.first_id.__eq__(1),
+                                                                      ExchangeCurrencyPair.second_id.__eq__(5)).all())
+        result = [(item.exchange_id,
+                   item.first_id,
+                   item.second_id) for item in result]
+        self.assertEqual(result, test_result)
+
+    def test_get_exchange_currency_pairs1(self):
+        """
+        Test for the method get_exchange_currency_pairs. This method will be called with a given testexchange, list of
+        dictionaries (representing currency pairs), al ist of first currencies and a list of second currencies.
+        For simplicity, only the id's will be compared (not the whole objects).
+        """
+        currency_pairs = [{'first': 'BTC', 'second': 'LTC'}]
+        firsts = ['DIO']
+        seconds = []
+        test_result = self.db_handler.get_exchanges_currency_pairs('TESTEXCHANGE', currency_pairs, firsts, seconds)
+        test_result = [(item.exchange_id,
+                        item.first_id,
+                        item.second_id) for item in test_result]
+        result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                 ExchangeCurrencyPair.first_id.__eq__(1),
+                                                                 ExchangeCurrencyPair.second_id.__eq__(3)).all()
+        result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                      ExchangeCurrencyPair.first_id.__eq__(5)).all())
+        result = [(item.exchange_id,
+                   item.first_id,
+                   item.second_id) for item in result]
+        self.assertEqual(result, test_result)
+
+    def test_get_exchange_currency_pairs2(self):
+        """
+        Test for the method get_exchange_currency_pairs. This method will be called with a given testexchange, list of
+        dictionaries (representing currency pairs), al ist of first currencies and a list of second currencies.
+        For simplicity, only the id's will be compared (not the whole objects).
+        """
+        currency_pairs = [{'first': 'BTC', 'second': 'DASH'}]
+        firsts = ['XRP']
+        seconds = ['ETH']
+        test_result = self.db_handler.get_exchanges_currency_pairs('TESTEXCHANGE', currency_pairs, firsts, seconds)
+        test_result = [(item.exchange_id,
+                        item.first_id,
+                        item.second_id) for item in test_result]
+        result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                 ExchangeCurrencyPair.first_id.__eq__(1),
+                                                                 ExchangeCurrencyPair.second_id.__eq__(6)).all()
+        result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                      ExchangeCurrencyPair.first_id.__eq__(4)).all())
+        result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                      ExchangeCurrencyPair.second_id.__eq__(2)).all())
+        result = [(item.exchange_id,
+                   item.first_id,
+                   item.second_id) for item in result]
+        result = list(dict.fromkeys(result))  # remove duplicates from list
+        self.assertEqual(result, test_result)
