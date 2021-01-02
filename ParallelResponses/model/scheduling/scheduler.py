@@ -161,7 +161,7 @@ class Scheduler:
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
-    async def get_currency_pairs(self, job_list: List[Job]) -> List[Job]:
+    async def get_currency_pairs(self, job_list: List[Job], *args) -> List[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
         api for all currency pairs is called.

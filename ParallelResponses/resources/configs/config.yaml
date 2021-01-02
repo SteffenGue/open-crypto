@@ -19,13 +19,14 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: tickers
+    yaml_request_name: order_books
     update_cp: false
     exchanges:
-      - bitkub
+      - mercatox
+#      - bitkub
     currency_pairs:
-      - all
-#      - first: thb
+#      - all
+#      - first: ae
 #        second: btc
 #      - first: btc
 #        second: usd
@@ -33,8 +34,8 @@ jobs:
 #        second: usdt
 #      - first: btc
 #        second: usd
-#      - first: eth
-#        second: btc
+      - first: eth
+        second: btc
 
     first_currencies:
     second_currencies:

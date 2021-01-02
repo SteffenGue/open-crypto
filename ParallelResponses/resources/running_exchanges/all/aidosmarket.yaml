@@ -1,0 +1,331 @@
+name: aidosmarket
+exchange: true
+api_url: https://aidosmarket.com/api/
+rate_limit:
+  max: 60
+  # unit in seconds
+  unit: 60
+
+requests:
+  currency_pairs:
+    request:
+      template: stats
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        stats:
+          type: dict
+          values:
+            market:
+              type: str
+            currency:
+              type: str
+    mapping:
+      - key: currency_pair_first
+        path:
+          - stats
+          - market
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - stats
+          - currency
+        type:
+          - str
+
+  tickers:
+    request:
+      template: stats
+      pair_template: null
+      params: null
+    response:
+      type: dict
+      values:
+        stats:
+          type: dict
+          values:
+            market:
+              type: str
+            currency:
+              type: str
+            last_price:
+              type: float
+            bid:
+              type: float
+            ask:
+              type: float
+            24h_volume:
+              type: float
+
+    mapping:
+      - key: time
+        path: []
+        type:
+          - none
+          - now
+      - key: currency_pair_first
+        path:
+          - stats
+          - market
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - stats
+          - currency
+        type:
+          - str
+      - key: last_price
+        path:
+          - stats
+          - last_price
+        type:
+          - float
+      - key: best_bid
+        path:
+          - stats
+          - bid
+        type:
+          - float
+      - key: best_ask
+        path:
+          - stats
+          - ask
+        type:
+          - float
+      - key: daily_volume
+        path:
+          - stats
+          - 24h_volume
+        type:
+          - float
+
+
+  historic_rates:
+    request:
+      template: historical-prices
+      pair_template:
+        template: ""
+        lower_case: false
+      params:
+        timeframe:
+          type: str
+          default: 1year
+    response:
+      type: dict
+      values:
+        historical-prices:
+          type: dict
+          values:
+            market:
+              type: str
+            currency:
+              type: str
+            data:
+              type: list
+              values:
+                type: dict
+                values:
+                  date:
+                    type: str
+                  price:
+                    type: float
+    mapping:
+      - key: time
+        path:
+          - historical-prices
+          - data
+          - date
+        type:
+          - str
+          - dateparser
+      - key: close
+        path:
+          - historical-prices
+          - data
+          - price
+        type:
+          - float
+
+
+  order_books:
+    request:
+      template: order-book
+      pair_template:
+        template: ""
+        lower_case: false
+      params:
+        market: # Three-letter currency code. If omitted, will return the exchange default.
+          type: str
+          # default: "ADK"
+        currency: # Three-letter currency code. Will return the exchange default if omitted.
+          type: str
+          # default: "BTC"
+    response:
+      type: dict
+      values:
+        order-book:
+          type: dict
+          values:
+            market:
+              type: str
+            currency:
+              type: str
+            ask:
+              type: list
+              values:
+                type: dict
+                values:
+                  price:
+                    type: float
+                  order_amount:
+                    type: float
+                  order_value:
+                    type: float
+            bid:
+              type: list
+              values:
+                type: dict
+                values:
+                  price:
+                    type: float
+                  order_amount:
+                    type: float
+                  order_value:
+                    type: float
+    mapping:
+    - key: time
+      path: []
+      type:
+      - none
+      - now
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: asks_price
+      path:
+      - order-book
+      - ask
+      - price
+      type:
+      - float
+    - key: asks_amount
+      path:
+      - order-book
+      - ask
+      - order_amount
+      type:
+      - float
+    - key: bids_price
+      path:
+      - order-book
+      - bid
+      - price
+      type:
+      - float
+    - key: bids_amount
+      path:
+      - order-book
+      - bid
+      - order_amount
+      type:
+      - float
+
+  trades:
+    request:
+      template: transactions
+      pair_template:
+        template: ""
+        lower_case: false
+      params:
+        limit: # The amount of records to receive. Default is 10.
+          type: int
+          default: 100
+    response:
+      type: dict
+      values:
+        transactions:
+          type: dict
+          values:
+            market:
+              type: str
+            currency:
+              type: str
+            data:
+              type: list
+              values:
+                type: dict
+                values:
+                  id:
+                    type: int
+                  date:
+                    type:
+                    - str
+                  timestamp:
+                    type:
+                    - int
+                  btc:
+                    type: float
+                  price:
+                    type: float
+                  price1:
+                    type: float
+                  amount:
+                    type: float
+                  amount1:
+                    type: float
+                  currency:
+                    type: str
+                  currency1:
+                    type: str
+                  market:
+                    type: str
+                  type: # buy or sell
+                    type: str
+    mapping:
+    - key: time
+      path:
+      - transactions
+      - data
+      - timestamp
+      type:
+      - int
+      - utcfromtimestamp
+    - key: id
+      path:
+        - transactions
+        - data
+        - id
+      type:
+        - int
+    - key: price
+      path:
+      - transactions
+      - data
+      - price
+      type:
+      - float
+    - key: amount
+      path:
+      - transactions
+      - data
+      - amount
+      type:
+      - float
+    - key: direction
+      path:
+      - transactions
+      - data
+      - type
+      type:
+      - str

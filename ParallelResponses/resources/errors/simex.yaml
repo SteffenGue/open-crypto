@@ -1,3 +1,5 @@
+# PairID required for currency_pair specific requests.
+
 name: simex
 terms:
   terms_url: https://simex.global/en/contracts  # PDF: https://cdn.simex.global/985b19ce-6ccf-4e3c-b030-1c619c7ae154/-/inline/yes/

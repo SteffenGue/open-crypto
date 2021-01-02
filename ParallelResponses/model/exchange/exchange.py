@@ -186,7 +186,7 @@ class Exchange:
             pair_template_dict = request_url_and_params['pair_template']
             url: str = request_url_and_params['url']
 
-            rate_limit = 1/self.rate_limit if self.rate_limit and len(currency_pairs) > self.rate_limit else 0
+            rate_limit = 1 / self.rate_limit if self.rate_limit and len(currency_pairs) > self.rate_limit else 0
 
             # when there is no pair formatting section then all ticker data can be accessed with one request
             if pair_template_dict:
@@ -453,6 +453,11 @@ class Exchange:
         for mapping in mappings:
             results[mapping.key] = mapping.extract_value(response[1])
 
+            if isinstance(results[mapping.key], str):
+                # If the result is only one currency, it will be split into every letter.
+                # To avoid this, put it into a list.
+                results[mapping.key] = [results[mapping.key]]
+
         assert (len(results[0]) == len(result) for result in results)
 
         return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
@@ -560,6 +565,12 @@ class Exchange:
                                                                                             currency_pair)))
                         else:
                             temp_results[mapping.key]: List = mapping.extract_value(current_response)
+
+                        if isinstance(temp_results[mapping.key], str):
+                            # Bugfix: if value is a single string, it is an iterable, and the string will
+                            # be split in every letter. Therefore it is put into a list.
+                            temp_results[mapping.key] = [temp_results[mapping.key]]
+
                 except Exception:
                     print('Error while formatting {}, {}: {}'.format(method, mapping.key, currency_pair))
                     traceback.print_exc()
@@ -584,9 +595,7 @@ class Exchange:
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values()) if bool(len_results) else 1
 
-
                     if (method == 'order_books') and ('position' in temp_results.keys()):
-
                         # Sort the order_books by price. I.e. asks ascending, Bids descending.
                         bids = [(price, amount) for (price, amount) in
                                 sorted(zip(temp_results['bids_price'], temp_results['bids_amount']),
