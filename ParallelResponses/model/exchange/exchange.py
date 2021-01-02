@@ -423,8 +423,13 @@ class Exchange:
                     mapping = request_mapping['mapping']
                     mapping_list = list()
 
-                    for entry in mapping:
-                        mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
+                    try:
+                        for entry in mapping:
+                            mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
+                    except KeyError:
+                        print(f"Error loading mappings in {request}: {entry}")
+                        logging.error(f"Error loading mappings in {request}: {entry}")
+                        break
 
                     response_mappings[request] = mapping_list
 
