@@ -12,34 +12,6 @@ rate_limit:
   max: 60
   unit: 60
 requests:
-  currencies:
-    request:
-      template: currencies/
-      pair_template: null
-      params: null
-    response:
-      type: list
-      values:
-        type: dict
-        values:
-          id:
-            type: int
-          name: # e.g. USD
-            type: str
-          description: # e.g. Dollar
-            type: str
-    mapping:
-    - key: currency_symbol
-      path:
-      - name
-      type:
-      - str
-    - key: currency_name
-      path:
-      - description
-      type:
-      - str
-
   currency_pairs:
     request:
       template: pairs/
@@ -119,39 +91,6 @@ requests:
       - name
       type:
       - str
-
-  orders: # not required
-    request:
-      template: orders
-      pair_template: null
-      params:
-        pair_id: # the id of the method "currency_pairs"
-          required: true
-          type: int
-    response:
-      type: list
-      values:
-        type: dict
-        values:
-          id:
-            type: int
-          side:
-            type: str
-          price:
-            type:
-            - str
-            - float
-          size:
-            type:
-            - str
-            - float
-          amount:
-            type:
-            - str
-            - float
-          status:
-            type: str
-    mapping: null
 
   trades:
     request:

@@ -1,17 +1,154 @@
 #Noch keine Möglichkeit im url string parameter außer das currency-pair einzufügen
 name: rightbtc
-terms:
-  terms_url: https://support.rightbtc.com/hc/en-us/articles/360007479512
-  permission: null
-  search_targets:
-  - tag: div
-    class: article-body
-api_url: https://www.rightbtc.com/api/public/
-rate_limit: null
+exchange: true
+
+rate_limit:
+  max: 1200
+  unit: 60
+
+api_url: https://api.rightbtc.com/v1/
+
 requests:
+  currency_pairs:
+    request:
+      template: markets
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          display:
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - display
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: currency_pair_second
+      path:
+      - display
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+
+  tickers:
+    request:
+      template: ticker/{currency_pair}
+      pair_template:
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        ask:
+          type: float
+        bid:
+          type: float
+        ticks:
+          type: float
+        created:
+          type: int
+    mapping:
+    - key: time
+      path:
+      - creates
+      type:
+      - int
+      - fromtimestampms
+    - key: best_ask
+      path:
+        - ask
+      type:
+      - float
+    - key: best_bid
+      path:
+        - bid
+      type:
+      - float
+    - key: last_price
+      path:
+        - tick
+      type:
+      - float
+
+  trades:
+    request:
+      template: trades/{currency_pair}/{amount}/
+      pair_template: # e.g. RTBTC
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        amount:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        status:
+          type: dict
+          values:
+            success:
+              type: int
+            message:
+              type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              date:
+                type:
+                - int
+                - fromtimestampms
+              price: # should divide by 1E8.
+                type: int
+              amount: # should divide by 1E8.
+                type: int
+              tid:
+                type: int
+              side:
+                type: str
+    mapping:
+    - key: time
+      path:
+      - result
+      - date
+      type:
+      - int
+      - fromtimestampms
+    - key: id
+      path:
+      type:
+    - key: price
+      path:
+      - result
+      - price
+      type:
+      - int
+    - key: amount
+      path:
+
+      type:
+      - int
+    - key: direction
+      path:
+
+      type:
+      - str
+
+
   historic_rates:
     request:
-      template: candlestick/{interval}/{currency_pair}/{amount}/
+      template:
       pair_template: # e.g. RTBTC
         template: "{first}{second}"
         lower_case: false
@@ -101,44 +238,7 @@ requests:
       type:
       - int
 
-  currency_pairs:
-    request:
-      template: trading_pairs/
-      pair_template: null
-      params: null
-    response:
-      type: dict
-      values:
-        currency_pair: # variable keys, each available currency pair e.g. BTCCNY
-          type: dict
-          values:
-            name: # e.g. BTCCNY
-              type: str
-            ask_asset_symbol: # e.g. CNY
-              type: str
-            ask_asset_decimals:
-              type: int
-            ask_asset_type:
-              type: str
-            bid_asset_symbol: # e.g. BTC
-              type: str
-            bid_asset_decimals:
-              type: int
-            bid_asset_type:
-              type: int
-    mapping:
-    - key: currency_pair_first
-      path:
-      - dict_values
-      - bid_asset_symbol
-      type:
-      - str
-    - key: currency_pair_second
-      path:
-      - dict_values
-      - ask_asset_symbol
-      type:
-      - str
+
 
   order_book:
     request:
@@ -222,157 +322,4 @@ requests:
       type:
       - int
 
-  ticker:
-    request:
-      template: tickers/
-      pair_template: null
-      params: null
-    response:
-      type: dict
-      values:
-        status:
-          type: dict
-          values:
-            success:
-              type: int
-            message:
-              type: str
-        result: # should divide by 1E8 except date
-          type: list
-          values:
-            type: dict
-            values:
-              market: # e.g. OBSCNY
-                type: str
-              date:
-                type:
-                - int
-                - fromtimestampms
-              sell:
-                type: int
-              buy:
-                type: int
-              high:
-                type: int
-              low:
-                type: int
-              last:
-                type: int
-              last24h:
-                type: int
-              vol:
-                type: int
-    mapping:
-    - key: currency_pair_first
-      path:
-      - result
-      - market
-      - 0
-      type:
-      - str
-      - split
-      - ""
-    - key: currency_pair_first
-      path:
-      - result
-      - market
-      - 1
-      type:
-      - str
-      - split
-      - ""
-    - key: ticker_time
-      path:
-      - result
-      - date
-      type:
-      - int
-      - fromtimestampms
-    - key: ticker_best_ask
-      path:
-      - result
-      - sell
-      type:
-      - int
-    - key: ticker_best_bid
-      path:
-      - result
-      - buy
-      type:
-      - int
-    - key: ticker_last_price
-      path:
-      - result
-      - last
-      type:
-      - int
-    - key: ticker_daily_volume
-      path:
-      - result
-      - vol
-      type:
-      - int
 
-  trades:
-    request:
-      template: trades/{currency_pair}/{amount}/
-      pair_template: # e.g. RTBTC
-        template: "{first}{second}"
-        lower_case: false
-      params:
-        amount:
-          type: int
-          required: false
-    response:
-      type: dict
-      values:
-        status:
-          type: dict
-          values:
-            success:
-              type: int
-            message:
-              type: str
-        result:
-          type: list
-          values:
-            type: dict
-            values:
-              date:
-                type:
-                - int
-                - fromtimestampms
-              price: # should divide by 1E8.
-                type: int
-              amount: # should divide by 1E8.
-                type: int
-              tid:
-                type: int
-              side:
-                type: str
-    mapping:
-    - key: trade_time
-      path:
-      - result
-      - date
-      type:
-      - int
-      - fromtimestampms
-    - key: trade_last_price
-      path:
-      - result
-      - price
-      type:
-      - int
-    - key: trade_amount
-      path:
-      - result
-      - amount
-      type:
-      - int
-    - key: trade_side
-      path:
-      - result
-      - side
-      type:
-      - str

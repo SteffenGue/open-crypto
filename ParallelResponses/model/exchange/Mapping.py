@@ -94,6 +94,7 @@ class Mapping:
                 result = conversion["function"](result,
                                                 *params)
 
+
             current_type = next_type
 
         return result

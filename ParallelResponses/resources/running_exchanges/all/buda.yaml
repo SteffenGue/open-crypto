@@ -1,17 +1,12 @@
 # DEAD
 name: buda
-terms:
-  terms_url: https://www.buda.com/terminos-y-condiciones
-  permission: false
-  search_targets:
-  - tag: div
-    class: buda-page__content
+
 api_url: https://www.buda.com/api/v2/
 rate_limit: null
 requests:
   currency_pairs:
     request:
-      template: markets/
+      template: markets
       pair_template: null
       params: null
     response:
@@ -53,9 +48,9 @@ requests:
       type:
       - str
 
-  ticker:
+  tickers:
     request:
-      template: markets/{currency_pair}/ticker/
+      template: markets/{currency_pair}/ticker
       pair_template: # e.g. btc-clp
         template: "{first}-{second}"
         lower_case: true
@@ -113,12 +108,12 @@ requests:
                 1: # currency
                   type: str
     mapping:
-    - key: ticker_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: ticker_last_price
+    - key: last_price
       path:
       - ticker
       - last_price
@@ -126,7 +121,7 @@ requests:
       type:
       - str
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - ticker
       - max_bid
@@ -134,7 +129,7 @@ requests:
       type:
       - str
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - ticker
       - min_ask
@@ -142,7 +137,7 @@ requests:
       type:
       - str
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - ticker
       - volume
@@ -151,9 +146,9 @@ requests:
       - str
       - float
 
-  order_book:
+  order_books:
     request:
-      template: markets/{currency_pair}/order_book/
+      template: markets/{currency_pair}/order_book
       pair_template: # e.g. btc-clp
         template: "{first}-{second}"
         lower_case: true
@@ -191,12 +186,22 @@ requests:
                     - str
                     - float
     mapping:
-    - key: order_book_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: order_book_asks_price
+    - key: id
+      path: [ ]
+      type:
+        - none
+        - now_timestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: asks_price
       path:
       - order_book
       - asks
@@ -204,7 +209,7 @@ requests:
       type:
       - str
       - float
-    - key: order_book_asks_size
+    - key: asks_amount
       path:
       - order_book
       - asks
@@ -212,7 +217,7 @@ requests:
       type:
       - str
       - float
-    - key: order_book_bids_price
+    - key: bids_price
       path:
       - order_book
       - bids
@@ -220,7 +225,7 @@ requests:
       type:
       - str
       - float
-    - key: order_book_bids_size
+    - key: bids_amount
       path:
       - order_book
       - bids
@@ -254,13 +259,9 @@ requests:
             timestamp:
               type:
               - str
-              - int
-              - fromtimestamp
             last_timestamp:
               type:
               - str
-              - int
-              - fromtimestamp
             market_id:
               type: str
             entries:
@@ -271,20 +272,16 @@ requests:
                   0: # timestamp
                     type:
                     - str
-                    - int
-                    - fromtimestamp
                   1: # amount
                     type:
                     - str
-                    - float
                   2: # price
                     type:
                     - str
-                    - float
                   3: # direction, i.e. "buy"
                     type: str
     mapping:
-    - key: trade_time
+    - key: time
       path:
       - trades
       - entries
@@ -292,8 +289,16 @@ requests:
       type:
       - str
       - int
-      - fromtimestamp
-    - key: trade_amount
+      - utcfromtimestampms
+    - key: id
+      path:
+      - trades
+      - entries
+      - 0
+      type:
+      - str
+      - int
+    - key: amount
       path:
       - trades
       - entries
@@ -301,7 +306,7 @@ requests:
       type:
       - str
       - float
-    - key: trade_last_price
+    - key: price
       path:
       - trades
       - entries
@@ -309,7 +314,7 @@ requests:
       type:
       - str
       - float
-    - key: trade_side
+    - key: direction
       path:
       - trades
       - entries

@@ -1,4 +1,6 @@
-name: quoine
+# Product ID required for requests.
+
+name: liquid
 terms:
   # terms_url: https://quoine-prod.s3.amazonaws.com/uploads/policy_document/term_document/11/Terms_and_Conditions_QUOINE_PTE_LTD.pdf
   permission: true
@@ -14,7 +16,36 @@ rate_limit:
 requests:
   ticker:
     request:
-      template: products/
+      template: products
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          quoted_currency:
+            type: str
+          base_currency:
+            type: str
+
+    mapping:
+      - key: currency_pair_first
+        path:
+          - base_currency
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - quoted_currency
+        type:
+          - str
+
+
+
+  tickers:
+    request:
+      template: products
       pair_template: null
       params: null
     response:
@@ -31,13 +62,9 @@ requests:
           name:
             type: str
           market_ask:
-            type:
-            - str
-            - float
+            type: str
           market_bid:
-            type:
-            - str
-            - float
+            type: str
           indicator:
             type: int
           currency:
@@ -47,9 +74,7 @@ requests:
           symbol:
             type: str
           fiat_minimum_withdraw:
-            type:
-            - str
-            - float
+            type: str
           pusher_channel:
             type: str
           taker_fee:
@@ -93,30 +118,30 @@ requests:
             - str
             - float
     mapping:
-    - key: ticker_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - low_market_bid
       type:
       - str
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - low_market_ask
       type:
       - str
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - volume_24h
       type:
       - str
       - float
-    - key: ticker_last_price
+    - key: last_price
       path:
       - last_traded_price
       type:
@@ -133,7 +158,7 @@ requests:
       type:
       - str
 
-  order_book:
+  order_books:
     request:
       template: products/{id}/price_levels
       pair_template: null

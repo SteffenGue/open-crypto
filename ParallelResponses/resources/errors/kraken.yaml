@@ -1,11 +1,7 @@
 #Bei historic rates sind 4 currency_pairs nicht auf dem markt vorhanden? -> Error-Response
 name: kraken
-terms:
-  terms_url: https://www.kraken.com/en-us/legal
-  permission: null
-  search_targets:
-  - tag: div
-    class: body
+exchange: true
+
 api_url: https://api.kraken.com/0/public/
 rate_limit:
   max: 1
@@ -110,7 +106,7 @@ requests:
       - '/'
       - 1
 
-  ticker:
+  tickers:
     request:
       template: Ticker
       pair_template: # e.g. BCHEUR
@@ -230,12 +226,12 @@ requests:
                   - str
                   - float
     mapping:
-    - key: ticker_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: ticker_last_price
+    - key: last_price
       path:
       - result
       - dict_values
@@ -244,7 +240,7 @@ requests:
       type:
       - str
       - float
-    - key: ticker_best_ask
+    - key: best_ask
       path:
       - result
       - dict_values
@@ -253,7 +249,7 @@ requests:
       type:
       - str
       - float
-    - key: ticker_best_bid
+    - key: best_bid
       path:
       - result
       - dict_values
@@ -262,7 +258,7 @@ requests:
       type:
       - str
       - float
-    - key: ticker_daily_volume
+    - key: daily_volume
       path:
       - result
       - dict_values
@@ -292,7 +288,7 @@ requests:
           - 1440
           - 10080
           - 21600
-          default: 1
+          default: 1440
         since: # return committed OHLC data since given id (optional.  exclusive)
           type: int
           required: false
@@ -312,45 +308,38 @@ requests:
                   0: # time
                     type:
                     - int
-                    - fromtimestamp
                   1: # open
                     type:
                     - str
-                    - float
                   2: # high
                     type:
                     - str
-                    - float
                   3: # low
                     type:
                     - str
-                    - float
                   4: # close
                     type:
                     - str
-                    - float
                   5: # vwap
                     type:
                     - str
-                    - float
                   6: # volume
                     type:
                     - str
-                    - float
                   7: # count
                     type: int
 
             last:
               type: int
     mapping:
-    - key: historic_rates_time
+    - key: time
       path:
       - result
       - currency_pair
       - 0
       type:
       - int
-      - fromtimestamp
+      - utcfromtimestamp
     - key: historic_rates_open
       path:
       - result
@@ -359,7 +348,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_high
+    - key: high
       path:
       - result
       - currency_pair
@@ -367,7 +356,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_low
+    - key: low
       path:
       - result
       - currency_pair
@@ -375,7 +364,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_close
+    - key: hclose
       path:
       - result
       - currency_pair
@@ -383,7 +372,7 @@ requests:
       type:
       - str
       - float
-    - key: historic_rates_volume
+    - key: volume
       path:
       - result
       - currency_pair
@@ -392,7 +381,7 @@ requests:
       - str
       - float
 
-  order_book:
+  order_books:
     request:
       template: Depth
       pair_template: # e.g. BCHEUR
@@ -422,15 +411,12 @@ requests:
                       0: # price
                         type:
                           - str
-                          - float
                       1: # volume
                         type:
                           - str
-                          - float
                       2: # timestamp
                         type:
                         - int
-                        - fromtimestamp
                 bids:
                   type: list
                   values:
@@ -439,22 +425,29 @@ requests:
                       0: # price
                         type:
                           - str
-                          - float
                       1: # volume
                         type:
                           - str
-                          - float
                       2: # timestamp
                         type:
                         - int
-                        - fromtimestamp
     mapping:
-    - key: order_book_time
+    - key: time
       path: []
       type:
       - none
       - now
-    - key: order_book_asks_price
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: asks_price
       path:
       - result
       - dict_values
@@ -463,7 +456,7 @@ requests:
       type:
       - str
       - float
-    - key: order_book_asks_size
+    - key: asks_amount
       path:
       - result
       - dict_values
@@ -472,7 +465,7 @@ requests:
       type:
       - str
       - float
-    - key: order_book_bids_price
+    - key: bids_price
       path:
       - result
       - dict_values
@@ -481,7 +474,7 @@ requests:
       type:
       - str
       - float
-    - key: order_book_bids_size
+    - key: bids_amount
       path:
       - result
       - dict_values
@@ -518,15 +511,12 @@ requests:
                   0: # price
                     type:
                     - str
-                    - float
                   1: # volume
                     type:
                     - str
-                    - float
                   2: # time
                     type:
                     - int
-                    - fromtimestamp
                   3: # buy/sell
                     type: str
                   4: # market/limit
@@ -536,34 +526,41 @@ requests:
         last:
           type: int
     mapping:
-    - key: trade_last_price
+    - key: time
       path:
       - result
-      - dict_values
-      - 0
+      - currency_pair
+      - 2
       type:
-      - str
-      - float
-    - key: trade_amount
-      path:
-      - result
-      - dict_values
-      - 1
-      type:
-      - str
-      - float
-    - key: trade_time
+      - int
+      - utcfromtimestampms
+    - key: id
       path:
       - result
       - dict_values
       - 2
       type:
       - int
-      - fromtimestamp
-    - key: trade_side
+    - key: direction
       path:
       - result
       - dict_values
       - 3
       type:
       - str
+    - key: price
+      path:
+        - result
+        - dict_values
+        - 0
+      type:
+        - str
+        - float
+    - key: amount
+      path:
+        - result
+        - dict_values
+        - 1
+      type:
+        - str
+        - float
