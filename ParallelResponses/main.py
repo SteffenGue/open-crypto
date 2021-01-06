@@ -24,7 +24,7 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: Dict) -> List[Job]:
+async def initialize_jobs(job_config: Dict, db_handler = DatabaseHandler) -> List[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
@@ -37,7 +37,7 @@ async def initialize_jobs(job_config: Dict) -> List[Job]:
         job_params: Dict = job_config[job]
 
         exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
-        Exchanges = [Exchange(yaml_loader(exchange_name)) for exchange_name in exchange_names]
+        Exchanges = [Exchange(yaml_loader(exchange_name), db_handler.get_first_timestamp) for exchange_name in exchange_names]
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(Exchanges)
 
         new_job: Job = Job(job,
@@ -76,7 +76,7 @@ async def main(database_handler: DatabaseHandler):
     config = read_config(file=None, section=None)
 
     logging.info('Loading jobs.')
-    jobs = await initialize_jobs(config['jobs'])
+    jobs = await initialize_jobs(config['jobs'], db_handler=database_handler)
     frequency = config['general']['operation_settings']['frequency']
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
@@ -88,7 +88,12 @@ async def main(database_handler: DatabaseHandler):
                                                                   frequency))
 
     while True:
-        await scheduler.start()
+        loop = asyncio.get_event_loop()
+        if frequency == 'once':
+            loop.run_until_complete(await scheduler.start())
+            break
+        else:
+            await scheduler.start()
 
 
 def run(path: str = None):

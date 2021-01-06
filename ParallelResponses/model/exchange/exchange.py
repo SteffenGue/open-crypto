@@ -5,8 +5,9 @@ from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
 import asyncio
+from collections import deque
 from aiohttp import ClientConnectionError
-from model.exchange.Mapping import Mapping
+from model.exchange.Mapping import Mapping, convert_type
 from model.database.tables import ExchangeCurrencyPair
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
@@ -46,7 +47,6 @@ class Exchange:
             consecutive, it will be set to passive and will no longer be requested.
     """
     name: str
-    terms_url: str
     is_exchange: bool
     api_url: str
     rate_limit: float
@@ -57,7 +57,7 @@ class Exchange:
     active_flag: bool
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict):
+    def __init__(self, yaml_file: Dict, db_handler):
         """
         Creates a new Exchange-object.
 
@@ -70,7 +70,9 @@ class Exchange:
             Content of a .yaml file as a dict-object.
             Constructor does not check if content is viable.
         """
+        self.file = yaml_file
         self.name = yaml_file['name']
+        self.get_last_timestamp = db_handler
         if yaml_file.get('terms'):
             if yaml_file['terms'].get('terms_url'):
                 self.terms_url = yaml_file['terms']['terms_url']
@@ -87,7 +89,7 @@ class Exchange:
             self.rate_limit = 0
         self.response_mappings = self.extract_mappings(
             yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
-        self.request_urls = self.extract_request_urls(yaml_file['requests'])
+
         self.exception_counter = 0
         self.active_flag = True
         self.consecutive_exception = False
@@ -139,7 +141,7 @@ class Exchange:
                     return self.name, False, {}
 
     async def request(self,
-                      request_name: str,
+                      request_table: object,
                       currency_pairs: List[ExchangeCurrencyPair]) -> \
             Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
 
@@ -166,8 +168,8 @@ class Exchange:
         TODO: Logging von Exceptions / option in config
         TODO: Saving responses / option in config
 
-        @param request_name: str
-            Name of the request. i.e. 'ticker' for ticker-request
+        @param request_table: object
+            Object of the request table. i.e. 'Ticker' for tickers-request
         @param currency_pairs:
             List of currency pairs that should be requested.
 
@@ -178,6 +180,13 @@ class Exchange:
         @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
         """
+        request_name = request_table.__tablename__
+
+        self.request_urls = self.extract_request_urls(self.file['requests'],
+                                                      request = request_name,
+                                                      request_table=request_table,
+                                                      currency_pairs=currency_pairs)
+
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
 
             request_url_and_params = self.request_urls[request_name]
@@ -200,7 +209,7 @@ class Exchange:
                         params[pair_template_dict['alias']] = pair_formatted[cp]
                     elif pair_template_dict:
                         url = url.format(currency_pair=pair_formatted[cp])
-
+                    params.update({key: params[key][cp] for key, val in params.items()if isinstance(val, dict)})
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
@@ -267,6 +276,9 @@ class Exchange:
             Dict might be None if an error occurred during the request or the request_name
             does not exist or is empty in the yaml.
         """
+
+        self.request_urls = self.extract_request_urls(self.file['requests'],
+                                                      request = request_name)
         response_json = None
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
@@ -277,7 +289,7 @@ class Exchange:
 
                 except ClientConnectionError:
                     print('{} hat einen ConnectionError erzeugt.'.format(self.name))
-                except Exception as ex:
+                except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'
                           'Url: {}, Parameters: {}'
                           .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
@@ -289,7 +301,10 @@ class Exchange:
             print("{} has no currency-pair request.".format(self.name))
         return self.name, response_json
 
-    def extract_request_urls(self, requests: dict) -> Dict[str, Dict[str, Dict]]:
+    def extract_request_urls(self, requests: dict,
+                             request: str,
+                             request_table: object = None,
+                             currency_pairs: list = None) -> Dict[str, Dict[str, Dict]]:
         """
         Helper-Method which should be only called by the constructor.
         Extracts from the section of requests from the .yaml-file
@@ -356,7 +371,7 @@ class Exchange:
         """
         urls = dict()
         if requests:
-            for request in requests:
+            # for request in requests:
                 request_parameters = dict()
                 url = self.api_url
                 request_dict = requests[request]['request']
@@ -376,14 +391,25 @@ class Exchange:
                         if 'default' in request_dict['params'][param]:
                             params[param] = str(request_dict['params'][param]['default'])
 
-                        if 'function' in request_dict['params'][param]:
-                            conv_params = request_dict['params'][param]['function']
-                            conversion_tuple = (conv_params[0], conv_params[1])
-                            arguments = conv_params[2:] or None
-                            if arguments:
-                                params[param] = TYPE_CONVERSION[conversion_tuple]['function'](*arguments)
-                            else:
-                                params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
+                        if "function" in request_dict['params'][param]:
+                            params[param] = {cp: self.get_last_timestamp(request_table, cp.id) for cp in
+                                             currency_pairs}
+
+                        # ToDo: Change 'function' to type for notational reasons
+                        if 'type' in request_dict['params'][param]:
+                            value = params[param] if param in params.keys() else None
+                            conv_params = request_dict['params'][param]['type']
+                            if isinstance(value, dict):
+                                params[param] = {cp: convert_type(value[cp], deque(conv_params)) for cp in
+                                                 currency_pairs}
+                            elif isinstance(conv_params, list):
+                                params[param] = convert_type(value, deque(conv_params))
+                            # conversion_tuple = (conv_params[0], conv_params[1])
+                            # arguments = conv_params[2:] or None
+                            # if arguments:
+                            #     params[param] = TYPE_CONVERSION[conversion_tuple]['function'](*arguments)
+                            # else:
+                            #     params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
 
                 request_parameters['params'] = params
 
@@ -634,6 +660,5 @@ class Exchange:
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
                     result = list(itertools.zip_longest(*result))
-                    # updated_mappings = temp_results.keys()
                     results.extend(result)
         return results, list(temp_results.keys())

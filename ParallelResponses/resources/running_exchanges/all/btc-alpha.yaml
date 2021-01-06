@@ -38,10 +38,20 @@ requests:
         template: "{first}_{second}"
         lower_case: false
       params:
+        last:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
         limit:
           type: int
           max: 720
           default: 720
+        first:
+          type:
+            - none
+            - now
+
     response:
       type: list
       values:
@@ -66,7 +76,7 @@ requests:
         - time
       type:
         - int
-        - utcfromtimestampms
+        - utcfromtimestamp
     - key: open
       path:
         - open

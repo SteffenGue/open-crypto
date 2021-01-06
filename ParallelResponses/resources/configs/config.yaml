@@ -8,13 +8,9 @@ general:
     port: 5432
     db_name: historic
   operation_settings:
-    frequency: 0
-    run_once: true
-  export:
-    export_data_to_csv: false
-    csv_dir: resources/csv
+    frequency: once
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
@@ -23,7 +19,7 @@ jobs:
 
     update_cp: false
     exchanges:
-      - btc-alpha
+      - b2bx
 #      - bitkub
     currency_pairs:
 #      - all
@@ -31,12 +27,12 @@ jobs:
 #        second: eth
 #      - first: btc
 #        second: usdt
-#      - first: btc
-#        second: usdt
+      - first: btc
+        second: usdt
 #      - first: btc
 #        second: usd
-      - first: eth
-        second: btc
+#      - first: eth
+#        second: btc
 #
     first_currencies:
     second_currencies:

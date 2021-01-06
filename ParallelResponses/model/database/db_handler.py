@@ -7,7 +7,7 @@ import psycopg2
 import sqlalchemy
 from model.utilities.exceptions import NotAllPrimaryKeysException
 from pandas import read_sql_query as pd_read_sql_query
-from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect
+from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect, func
 from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
@@ -465,8 +465,6 @@ class DatabaseHandler:
             Containing the Exchanges and all exchanges_currency_pairs to request specified in the config
         @param exchange: Object
             The Exchange instance from a particular request.
-        @param method: str
-            The actual request-method, i.e. tickers, order_books,...
         @param db_table: object
             The database table object for the respective method, i.e. Ticker, OrderBook
         @param data: Iterable, Tuple
@@ -474,7 +472,7 @@ class DatabaseHandler:
         @param mappings: List
             The mapping keys from the .yaml-file, in the same order as the data-tuples.
         """
-        #ToDo: Table Names (nicht Objectnames) mit jenen aus der yaml angleichen. I.e. ticker -> tickers
+
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         counter_list = list()
@@ -544,6 +542,8 @@ class DatabaseHandler:
                 print("Added {} new currency pairs to {} \n"
                       "Data will be persisted next time.".format(added_cp_counter, exchange.name.capitalize()))
                 logging.info("Added {} new currency pairs to {}".format(added_cp_counter, exchange.name.capitalize()))
+
+        return tuple_counter
 
     def get_readable_query(self,
                            db_table: object,
@@ -646,6 +646,14 @@ class DatabaseHandler:
                 result = pd_read_sql_query(data.statement, con=session.bind)
             session.expunge_all()
         return result
+
+    def get_first_timestamp(self, table: object, ExCuPair_id: int):
+
+        with self.session_scope() as session:
+            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).one()
+
+        return timestamp if timestamp else datetime.now()
+
 
     # Methods that are currently not used but might be useful:
 
