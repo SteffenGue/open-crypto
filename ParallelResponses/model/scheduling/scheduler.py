@@ -177,6 +177,7 @@ class Scheduler:
 
             :param exchange: Current exchange.
             """
+
             response = await exchange.request_currency_pairs()
             if response[1]:
                 formatted_response = exchange.format_currency_pairs(response)
@@ -191,8 +192,10 @@ class Scheduler:
             # ToDo: Asynchronisieren
             for exchange in exchanges:
                 if job_params['update_cp']:
+                    print("Updating exchange currency pairs..")
                     await update_currency_pairs(exchange)
                 elif not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
+                    print("Updating exchange currency pairs..")
                     await update_currency_pairs(exchange)
 
                 job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(

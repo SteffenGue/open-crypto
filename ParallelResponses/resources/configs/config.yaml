@@ -14,16 +14,22 @@ general:
     export_data_to_csv: false
     csv_dir: resources/csv
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
   Ticker:
-    yaml_request_name: order_books
+    yaml_request_name: historic_rates
 
     update_cp: false
     exchanges:
-      - tidex
+#      - b2bx
+#      - bitbay
+#      - bithumb
+#      - bitmart
+#      - coinsbit
+#      - gopax
+      - idex
 #      - bitkub
     currency_pairs:
 #      - all

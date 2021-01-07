@@ -176,11 +176,11 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("none", "now"): {
-        "function": lambda arg: datetime.datetime.utcnow(),
+        "function": lambda: datetime.datetime.utcnow(),
         "params": 0
     },
     ("none", "now_format"): {
-        "function": lambda result, arg: (datetime.datetime.utcnow()).__format__(arg),
+        "function": lambda arg: (datetime.datetime.utcnow()).__format__(arg),
         "params": 1
     },
     ("none", "constant"): {  # Returns the first argument
@@ -188,7 +188,7 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ('none', 'range'): {
-        'function': lambda *args: range(1),
+        'function': lambda: range(1),
         'params': 0
     },
     ('value', 'map'): {
@@ -202,11 +202,11 @@ TYPE_CONVERSION = {
         'params': 3  # delimiter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
-        'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
+        'function': lambda: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
         'params': 0
     },
     ('none', 'now_timestampms'): {
-        'function': lambda arg: int(datetime.datetime.timestamp(datetime.datetime.utcnow())*1000),
+        'function': lambda: int(datetime.datetime.timestamp(datetime.datetime.utcnow())*1000),
         'params': 0
     },
     ('now', 'timedelta'): {
@@ -215,7 +215,7 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ('datetime', 'timestamp'): {
-        'function': lambda datetime: int(datetime.timestamp()),
+        'function': lambda time: int(time.timestamp()),
         'params': 0
     },
 }

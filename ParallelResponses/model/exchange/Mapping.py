@@ -40,8 +40,11 @@ def convert_type(value, types_queue: deque):
             for number in range(0, conversion["params"]):
                 params.append(types_queue.popleft())
 
-        if not result and isinstance(result, (str, list)):
-            result = None
+        # Change here to avoid "None" as result value in the params when no value to convert is needed (i.e. when
+        # methods are called with ("none", ...).
+        # if not result and isinstance(result, (str, list)):
+        if not result:
+            result = conversion["function"](*params)
         else:
             result = conversion["function"](result,
                                             *params)

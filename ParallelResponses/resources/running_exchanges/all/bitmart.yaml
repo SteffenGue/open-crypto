@@ -141,7 +141,6 @@ requests:
         alias: symbol
       params:
         step: # in minutes
-          type: int
           default: 1440 # 1d
         to: # in milliseconds
           type:
