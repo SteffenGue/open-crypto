@@ -1,7 +1,7 @@
 name: aax
 exchange: true
 rate_limit: null
-api_url: https://api.aax.com/v2/market/
+api_url: https://api.aax.com/v2/
 
 requests:
   currency_pairs:
@@ -38,7 +38,7 @@ requests:
 
   order_books:
     request:
-      template: orderbooks
+      template: market/orderbooks
       pair_template:
         template: "{first}{second}"
         lower_case: false
@@ -123,7 +123,7 @@ requests:
 
   trades:
     request:
-      template: trades
+      template: market/trades
       pair_template:
         template: "{first}{second}"
         lower_case: false

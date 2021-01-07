@@ -326,12 +326,10 @@ requests:
         lower_case: false
       params:
         type:
-          type: str
           default: d1
         end:
-          type: int
           required: true
-          function:
+          type:
             - none
             - now_timestamp
     response:

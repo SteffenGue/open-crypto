@@ -145,14 +145,10 @@ requests:
           default: 1440 # 1d
         to: # in milliseconds
           type:
-            - int
-          function:
             - none
             - now_timestamp
         from:
           type:
-            - int
-          function:
             - now
             - timedelta
             - 500

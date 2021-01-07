@@ -19,11 +19,11 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: historic_rates
+    yaml_request_name: order_books
 
     update_cp: false
     exchanges:
-      - btc-alpha
+      - tidex
 #      - bitkub
     currency_pairs:
 #      - all

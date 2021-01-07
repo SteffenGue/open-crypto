@@ -216,11 +216,9 @@ requests:
         alias: market
       params:
         start:
-          type: int #
           default: 1262304000 # 2010-01-01
         end:
-          type: int
-          function:
+          type:
             - none
             - now_timestamp
         interval:

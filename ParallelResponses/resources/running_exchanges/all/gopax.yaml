@@ -93,13 +93,11 @@ requests:
         lower_case: false
       params:
         interval:
-          type: int
           default: 1440 # e.g. 1 day
         start:
-          type: int
           default: 0
         end:
-          function:
+          type:
             - none
             - now_timestampms
 

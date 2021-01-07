@@ -255,14 +255,12 @@ requests:
         alias: market
       params:
         interval:
-          type: str
           default: 1d
         limit:
-          type: int
           max: 1000
           default: 1000
         end:
-          function:
+          type:
             - none
             - now_timestampms
 

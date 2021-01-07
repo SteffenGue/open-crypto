@@ -289,11 +289,10 @@ requests:
         lower_case: false
       params:
         to:
-          function:
+          type:
             - none
             - now_timestampms
         from:
-          type: int
           default: 1262304000000 # 01.01.2010
     response:
       type: dict
