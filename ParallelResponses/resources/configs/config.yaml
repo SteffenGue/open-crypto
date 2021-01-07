@@ -8,19 +8,22 @@ general:
     port: 5432
     db_name: historic
   operation_settings:
-    frequency: once
+    frequency: 0.1
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
   Ticker:
-    yaml_request_name: historic_rates
+    yaml_request_name: trades
 
     update_cp: false
     exchanges:
-      - b2bx
-#      - bitkub
+      - btc-alpha
+      - bibox
+      - aax
+      - bidesk
+
     currency_pairs:
 #      - all
 #      - first: cur

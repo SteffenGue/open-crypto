@@ -38,19 +38,18 @@ requests:
         template: "{first}_{second}"
         lower_case: false
       params:
-        last:
+        limit:
+          type:
+            - str
+            - int
+          max: 720
+          default: 720
+        until:
           function: last_timestamp
           type:
             - datetime
             - timestamp
-        limit:
-          type: int
-          max: 720
-          default: 720
-        first:
-          type:
-            - none
-            - now
+
 
     response:
       type: list

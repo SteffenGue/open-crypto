@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import List, Callable, Dict, Any
+from typing import List, Callable, Dict
 from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
@@ -19,9 +19,9 @@ class Scheduler:
     """
     database_handler: DatabaseHandler
     job_list: List[Job]
-    frequency: Any
+    frequency: float
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: Any):
+    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: float):
         """
         Initializer for a Scheduler.
 
@@ -34,7 +34,7 @@ class Scheduler:
         """
         self.database_handler = database_handler
         self.job_list = job_list
-        self.frequency = frequency * 60 if isinstance(frequency, (int, float)) else frequency
+        self.frequency = frequency * 60
         self.validated: bool = False
 
     async def start(self):
@@ -45,9 +45,9 @@ class Scheduler:
         Otherwise the scheduler will wait x minutes until it starts the jobs again.
         The interval begins counting down at the start of the current iteration.
         """
+
         runs = [self.run(job) for job in self.job_list]
-        if isinstance(self.frequency, (int, float)):
-            runs.append(asyncio.sleep(self.frequency))
+        runs.append(asyncio.sleep(self.frequency))
 
         await asyncio.gather(*runs)
 
@@ -65,9 +65,7 @@ class Scheduler:
         request_fun = request.get('function')
         request_table = request.get('table')
 
-        continue_run = True
-        while continue_run and job.exchanges_with_pairs:
-            continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
+        return await request_fun(request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> Dict[Callable, object]:
         """
@@ -234,40 +232,36 @@ class Scheduler:
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
-        counter = dict()
+
         for response in responses:
-            if response:
-                response_time = response[0]
-                exchange_name = response[1]
-                found_exchange: Exchange = None
+            response_time = response[0]
+            exchange_name = response[1]
+            found_exchange: Exchange = None
 
-                for exchange in exchanges_with_pairs.keys():
-                    # finding the right exchange
-                    if exchange.name.upper() == exchange_name.upper():
-                        found_exchange = exchange
-                        break
+            for exchange in exchanges_with_pairs.keys():
+                # finding the right exchange
+                if exchange.name.upper() == exchange_name.upper():
+                    found_exchange = exchange
+                    break
 
-                if found_exchange:
-                    try:
-                        formatted_response, mappings = found_exchange.format_data(request_table.__tablename__,
-                                                                                  response[1:],
-                                                                                  start_time=start_time,
-                                                                                  time=response_time)
+            if found_exchange:
+                try:
+                    formatted_response, mappings = found_exchange.format_data(request_table.__tablename__,
+                                                                              response[1:],
+                                                                              start_time=start_time,
+                                                                              time=response_time)
 
-                    except MappingNotFoundException:
-                        # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
-                        formatted_response, mappings = None, None
+                except MappingNotFoundException:
+                    # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
+                    formatted_response, mappings = None, None
 
-                    if formatted_response:
-                        counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
-                                                                                         found_exchange,
-                                                                                         request_table,
-                                                                                         formatted_response,
-                                                                                         mappings)
-
-        if request_table.__name__ == 'HistoricRate' and not all(list(counter.values())) == 0:
-            return True, {ex: exchanges_with_pairs[ex] for ex in counter.keys() if counter[ex] > 0}
+                if formatted_response:
+                    self.database_handler.persist_response(exchanges_with_pairs,
+                                                                 found_exchange,
+                                                                 request_table,
+                                                                 formatted_response,
+                                                                 mappings)
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
-        return False, exchanges_with_pairs
+

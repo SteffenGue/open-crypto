@@ -15,6 +15,41 @@ from model.database.tables import *
 import os
 
 
+def _get_exchange_currency_pair(session: Session, exchange_name: str, first_currency_name: str,
+                                second_currency_name: str) -> ExchangeCurrencyPair:
+    """
+    Checks if there is a currency pair in the database with the given parameters and
+    returns it if so.
+
+    @param session: Session
+        sqlalchemy-session.
+    @param exchange_name: str
+        Name of the exchange.
+    @param first_currency_name: str
+        Name of the first currency in the currency pair.
+    @param second_currency_name: str
+        Name of the second currency in the currency pair.
+    @return:
+        The ExchangeCurrencyPair which fulfills all the requirements or None
+        if no such ExchangeCurrencyPair exists.
+    """
+
+    if exchange_name is None or first_currency_name is None or second_currency_name is None:
+        return None
+    # sollte raus in der actual Implementierung
+    # ToDo: ausgeschaltet von Steffen, aber ich verstehe nicht wofür das gut sein soll. Überprüfen!
+
+    # self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
+    ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+    first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+    second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
+
+    cp = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange.__eq__(ex),
+                                                    ExchangeCurrencyPair.first.__eq__(first),
+                                                    ExchangeCurrencyPair.second.__eq__(second)).first()
+    return cp
+
+
 class DatabaseHandler:
     """
     Class which handles every interaction with the database.
@@ -104,7 +139,7 @@ class DatabaseHandler:
         try:
             yield session
             session.commit()
-        except:
+        except Exception:
             session.rollback()
             raise
         finally:
@@ -323,40 +358,6 @@ class DatabaseHandler:
 
         # NEVER CALL THIS OUTSIDE OF THIS CLASS
 
-    def _get_exchange_currency_pair(self, session: Session, exchange_name: str, first_currency_name: str,
-                                    second_currency_name: str) -> ExchangeCurrencyPair:
-        """
-        Checks if there is a currency pair in the database with the given parameters and
-        returns it if so.
-
-        @param session: Session
-            sqlalchemy-session.
-        @param exchange_name: str
-            Name of the exchange.
-        @param first_currency_name: str
-            Name of the first currency in the currency pair.
-        @param second_currency_name: str
-            Name of the second currency in the currency pair.
-        @return:
-            The ExchangeCurrencyPair which fulfills all the requirements or None
-            if no such ExchangeCurrencyPair exists.
-        """
-
-        if exchange_name is None or first_currency_name is None or second_currency_name is None:
-            return None
-        # sollte raus in der actual Implementierung
-        # ToDo: ausgeschaltet von Steffen, aber ich verstehe nicht wofür das gut sein soll. Überprüfen!
-
-        # self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
-        ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
-        first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
-        second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
-
-        cp = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange.__eq__(ex),
-                                                        ExchangeCurrencyPair.first.__eq__(first),
-                                                        ExchangeCurrencyPair.second.__eq__(second)).first()
-        return cp
-
     def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
                                        second_currency_name: str, is_exchange: bool):
         """
@@ -489,8 +490,8 @@ class DatabaseHandler:
                                           'first_currency_name': data_tuple['currency_pair_first'],
                                           'second_currency_name': data_tuple['currency_pair_second']}
 
-                    currency_pair: ExchangeCurrencyPair = self._get_exchange_currency_pair(session,
-                                                                                           **temp_currency_pair)
+                    currency_pair: ExchangeCurrencyPair = _get_exchange_currency_pair(session,
+                                                                                      **temp_currency_pair)
                     if not currency_pair:
                         new_pairs.append(temp_currency_pair)
 
@@ -648,12 +649,17 @@ class DatabaseHandler:
         return result
 
     def get_first_timestamp(self, table: object, ExCuPair_id: int):
+        # ToDo: Doku
+        """
+        @param table:
+        @param ExCuPair_id:
+        @return:
+        """
 
         with self.session_scope() as session:
-            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).one()
+            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
 
         return timestamp if timestamp else datetime.now()
-
 
     # Methods that are currently not used but might be useful:
 

@@ -88,24 +88,19 @@ async def main(database_handler: DatabaseHandler):
                                                                   frequency))
 
     while True:
-        loop = asyncio.get_event_loop()
-        if frequency == 'once':
-            loop.run_until_complete(await scheduler.start())
-            break
-        else:
-            await scheduler.start()
+        await scheduler.start()
 
 
 def run(path: str = None):
-
     init_logger()
-    sys.excepthook = handler
+    # sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
 
     asyncio.run(main(database_handler))
+
 
 
 

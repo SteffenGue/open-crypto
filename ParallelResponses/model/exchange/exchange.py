@@ -11,7 +11,51 @@ from model.exchange.Mapping import Mapping, convert_type
 from model.database.tables import ExchangeCurrencyPair
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
-from model.utilities.utilities import TYPE_CONVERSION
+
+
+def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
+    """
+    Helper-Method which should be only called by the constructor.
+    Extracts out of a given exchange .yaml-requests-section for each
+    request the necessary mappings so the values can be extracted from
+    the response for said request.
+
+    The key-value in the dictionary is the same as the key for the request.
+    i.e. behind 'ticker' are all the mappings stored which are necessary for
+    extracting the values out of a ticker-response.
+
+    If there is no mapping specified in the .yaml for a value which is contained
+    by the response, the value will not be extracted later on because there won't
+    be a Mapping-object for said value.
+
+    :param requests: Dict[str: List[Mapping]]
+        Requests-section from a exchange.yaml as dictionary.
+        Method does not check if dictionary contains viable information.
+
+    :return:
+        Dictionary with the following structure:
+            {'request_name': List[Mapping]}
+    """
+    response_mappings = dict()
+    if requests:
+        for request in requests:
+            request_mapping: dict = requests[request]
+
+            if 'mapping' in request_mapping.keys():
+                mapping = request_mapping['mapping']
+                mapping_list = list()
+
+                try:
+                    for entry in mapping:
+                        mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
+                except KeyError:
+                    print(f"Error loading mappings in {request}: {entry}")
+                    logging.error(f"Error loading mappings in {request}: {entry}")
+                    break
+
+                response_mappings[request] = mapping_list
+
+    return response_mappings
 
 
 class Exchange:
@@ -72,7 +116,7 @@ class Exchange:
         """
         self.file = yaml_file
         self.name = yaml_file['name']
-        self.get_last_timestamp = db_handler
+        self.get_first_timestamp = db_handler
         if yaml_file.get('terms'):
             if yaml_file['terms'].get('terms_url'):
                 self.terms_url = yaml_file['terms']['terms_url']
@@ -87,8 +131,7 @@ class Exchange:
                 self.rate_limit = yaml_file['rate_limit']['units'] / yaml_file['rate_limit']['max']
         else:
             self.rate_limit = 0
-        self.response_mappings = self.extract_mappings(
-            yaml_file['requests'])  # Dict in dem für jede Request eine Liste von Mappings ist
+        self.response_mappings = extract_mappings(yaml_file['requests'])
 
         self.exception_counter = 0
         self.active_flag = True
@@ -114,7 +157,7 @@ class Exchange:
         Exceptions will be caught and in this case the connectivity test failed.
 
         The Method is asynchronous so that after the request is send, the program does not wait
-        until the response arrives. For asynchrony we use the library asyncio.
+        until the response arrives. For asynchronously we use the library asyncio.
         For sending and dealing with requests/responses the library aiohttp is used.
 
         The methods gets the requests matching url out of request_urls.
@@ -133,7 +176,6 @@ class Exchange:
                 try:
                     response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
                     response_json = await response.json(content_type=None)
-                    # print('{} bekommen:'.format(request_url_and_params[0]) + '{} .'.format(response_json))
                     return self.name, True, response_json
                 except ClientConnectionError:
                     return self.name, False, {}
@@ -164,7 +206,7 @@ class Exchange:
         Exceptions will be caught and a suitable message is printed.
         None will be returned in this case.
 
-        TODO: Gutes differenziertes Exception handling
+        TODO: Good Exception handling
         TODO: Logging von Exceptions / option in config
         TODO: Saving responses / option in config
 
@@ -183,7 +225,7 @@ class Exchange:
         request_name = request_table.__tablename__
 
         self.request_urls = self.extract_request_urls(self.file['requests'],
-                                                      request = request_name,
+                                                      request=request_name,
                                                       request_table=request_table,
                                                       currency_pairs=currency_pairs)
 
@@ -209,7 +251,7 @@ class Exchange:
                         params[pair_template_dict['alias']] = pair_formatted[cp]
                     elif pair_template_dict:
                         url = url.format(currency_pair=pair_formatted[cp])
-                    params.update({key: params[key][cp] for key, val in params.items()if isinstance(val, dict)})
+                    params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
                     try:
                         response = await session.get(url=url, params=params)
                         response_json = await response.json(content_type=None)
@@ -221,7 +263,7 @@ class Exchange:
                             break
                     except ClientConnectionError:
                         logging.error('Could not establish connection to {}'.format(self.name))
-                        print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                        print('Could not establish connection to {}.'.format(self.name))
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
@@ -278,7 +320,7 @@ class Exchange:
         """
 
         self.request_urls = self.extract_request_urls(self.file['requests'],
-                                                      request = request_name)
+                                                      request=request_name)
         response_json = None
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
@@ -288,7 +330,7 @@ class Exchange:
                     response_json = await response.json(content_type=None)
 
                 except ClientConnectionError:
-                    print('{} hat einen ConnectionError erzeugt.'.format(self.name))
+                    print('Could not establish connection to {}.'.format(self.name))
                 except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'
                           'Url: {}, Parameters: {}'
@@ -301,10 +343,12 @@ class Exchange:
             print("{} has no currency-pair request.".format(self.name))
         return self.name, response_json
 
-    def extract_request_urls(self, requests: dict,
+    def extract_request_urls(self,
+                             requests: dict,
                              request: str,
                              request_table: object = None,
                              currency_pairs: list = None) -> Dict[str, Dict[str, Dict]]:
+        # ToDo: Doku der Variables
         """
         Helper-Method which should be only called by the constructor.
         Extracts from the section of requests from the .yaml-file
@@ -362,106 +406,59 @@ class Exchange:
                          ...
 
 
-        :param requests: Dict[str: Dict[param_name: value]]
+        @param request:
+        @param currency_pairs:
+        @param request_table:
+        @param requests: Dict[str: Dict[param_name: value]]
             requests-section from a exchange.yaml as dictionary.
             Viability of dict is not checked.
 
-        :return:
+        @return:
             See example above.
         """
         urls = dict()
         if requests:
-            # for request in requests:
-                request_parameters = dict()
-                url = self.api_url
-                request_dict = requests[request]['request']
+            request_parameters = dict()
+            url = self.api_url
+            request_dict = requests[request]['request']
 
-                if 'template' in request_dict.keys() and request_dict['template']:
-                    url += '{}'.format(request_dict['template'])
-                request_parameters['url'] = url
+            if 'template' in request_dict.keys() and request_dict['template']:
+                url += '{}'.format(request_dict['template'])
+            request_parameters['url'] = url
 
-                pair_template = dict()
-                if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
-                    pair_template = request_dict['pair_template']
-                request_parameters['pair_template'] = pair_template
+            pair_template = dict()
+            if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
+                pair_template = request_dict['pair_template']
+            request_parameters['pair_template'] = pair_template
 
-                params = dict()
-                if 'params' in request_dict.keys() and request_dict['params']:
-                    for param in request_dict['params']:
-                        if 'default' in request_dict['params'][param]:
-                            params[param] = str(request_dict['params'][param]['default'])
+            params = dict()
+            if 'params' in request_dict.keys() and request_dict['params']:
+                for param in request_dict['params']:
+                    if 'default' in request_dict['params'][param]:
+                        params[param] = str(request_dict['params'][param]['default'])
 
-                        if "function" in request_dict['params'][param]:
-                            params[param] = {cp: self.get_last_timestamp(request_table, cp.id) for cp in
+                    if "function" in request_dict['params'][param]:
+                        params[param] = {cp: self.get_first_timestamp(request_table, cp.id) for cp in
+                                         currency_pairs}
+
+                    # ToDo: Change 'function' to type for notational reasons (also in every yaml!!)
+                    if 'type' in request_dict['params'][param]:
+                        value = params[param] if param in params.keys() else None
+                        conv_params = request_dict['params'][param]['type']
+                        if isinstance(value, dict):
+                            params[param] = {cp: convert_type(value[cp], deque(conv_params)) for cp in
                                              currency_pairs}
+                        elif isinstance(conv_params, list):
+                            params[param] = convert_type(value, deque(conv_params))
 
-                        # ToDo: Change 'function' to type for notational reasons
-                        if 'type' in request_dict['params'][param]:
-                            value = params[param] if param in params.keys() else None
-                            conv_params = request_dict['params'][param]['type']
-                            if isinstance(value, dict):
-                                params[param] = {cp: convert_type(value[cp], deque(conv_params)) for cp in
-                                                 currency_pairs}
-                            elif isinstance(conv_params, list):
-                                params[param] = convert_type(value, deque(conv_params))
-                            # conversion_tuple = (conv_params[0], conv_params[1])
-                            # arguments = conv_params[2:] or None
-                            # if arguments:
-                            #     params[param] = TYPE_CONVERSION[conversion_tuple]['function'](*arguments)
-                            # else:
-                            #     params[param] = TYPE_CONVERSION[conversion_tuple]['function'](None)
+            request_parameters['params'] = params
 
-                request_parameters['params'] = params
-
-                urls[request] = request_parameters
+            urls[request] = request_parameters
 
         return urls
 
-    def extract_mappings(self, requests: dict) -> Dict[str, List[Mapping]]:
-        """
-        Helper-Method which should be only called by the constructor.
-        Extracts out of a given exchange .yaml-requests-section for each
-        request the necessary mappings so the values can be extracted from
-        the response for said request.
-
-        The key-value in the dictionary is the same as the key for the request.
-        i.e. behind 'ticker' are all the mappings stored which are necessary for
-        extracting the values out of a ticker-response.
-
-        If there is no mapping specified in the .yaml for a value which is contained
-        by the response, the value will not be extracted later on because there won't
-        be a Mapping-object for said value.
-
-        :param requests: Dict[str: List[Mapping]]
-            Requests-section from a exchange.yaml as dictionary.
-            Method does not check if dictionary contains viable information.
-
-        :return:
-            Dictionary with the following structure:
-                {'request_name': List[Mapping]}
-        """
-        response_mappings = dict()
-        if requests:
-            for request in requests:
-                request_mapping: dict = requests[request]
-
-                if 'mapping' in request_mapping.keys():
-                    mapping = request_mapping['mapping']
-                    mapping_list = list()
-
-                    try:
-                        for entry in mapping:
-                            mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
-                    except KeyError:
-                        print(f"Error loading mappings in {request}: {entry}")
-                        logging.error(f"Error loading mappings in {request}: {entry}")
-                        break
-
-                    response_mappings[request] = mapping_list
-
-        return response_mappings
-
     def format_currency_pairs(self, response: Tuple[str, Dict]) -> Iterator[Tuple[str, str, str]]:
+        # ToDo: Error Handling
         """
         Extracts the currency-pairs of out of the given json-response
         that was collected from the Rest-API of this exchange.
