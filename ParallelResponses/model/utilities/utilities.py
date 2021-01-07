@@ -336,7 +336,7 @@ def get_exchange_names() -> List[str]:
     yaml_path = read_config(file=None, section='utilities')['yaml_path']
     path_to_resources: Path = pathlib.Path().parent.absolute()
     exchanges_list = os.listdir(Path.joinpath(path_to_resources, yaml_path))
-    exchange_names = list([str(x.split(".")[0]) for x in exchanges_list if ".yaml" in x])
+    exchange_names = list([str(x.split(".yaml")[0]) for x in exchanges_list if ".yaml" in x])
     exchanges = exchange_names
     exchange_names.sort()
     return exchanges

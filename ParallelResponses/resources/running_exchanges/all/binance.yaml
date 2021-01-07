@@ -303,21 +303,13 @@ requests:
           required: true
           default: 1d
         startTime:
-          type:
-          - datetime
-          - totimestampms
-          - int
           required: false
         endTime:
-          type:
-          - datetime
-          - totimestampms
-          - int
           required: false
         limit:
           type: int
           max: 1000
-          default: 500
+          default: 1000
       weight: 1
     response:
       type: list

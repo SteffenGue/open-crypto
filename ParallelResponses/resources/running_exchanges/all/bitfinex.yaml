@@ -286,20 +286,12 @@ requests:
         lower_case: false
       params:
         limit: # Number of candles requested
-          type: int
           default: 10000 # max
         start: # Filter start (ms)
-          type:
-            - datetime
-            - totimestampms
           required: false
         end: # Filter end (ms)
-          type:
-            - datetime
-            - totimestampms
           required: false
         sort: # if = 1 it sorts results returned with old > new
-          type: int
           required: false
     response:
       type: list

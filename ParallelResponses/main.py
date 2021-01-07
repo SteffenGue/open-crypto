@@ -86,20 +86,32 @@ async def main(database_handler: DatabaseHandler):
     logging.info(
         '{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]),
                                                                   frequency))
-
     while True:
-        await scheduler.start()
+        if frequency == 'once':
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(await scheduler.start())
+            break
+        else:
+            await scheduler.start()
+
+
 
 
 def run(path: str = None):
+
     init_logger()
-    # sys.excepthook = handler
+    sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
 
-    asyncio.run(main(database_handler))
+    # Windows Bug I don't understand. See Github Issue:
+    # https: // github.com / encode / httpx / issues / 914
+    if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    asyncio.run(main(database_handler), debug=True, )
 
 
 

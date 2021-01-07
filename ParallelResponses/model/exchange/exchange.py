@@ -326,11 +326,14 @@ class Exchange:
             async with aiohttp.ClientSession() as session:
                 request_url_and_params = self.request_urls[request_name]
                 try:
-                    response = await session.get(request_url_and_params['url'], params=request_url_and_params['params'])
+                    response = await session.get(request_url_and_params['url'],
+                                                 params=request_url_and_params['params'],
+                                                 timeout=aiohttp.ClientTimeout(total=5))
                     response_json = await response.json(content_type=None)
 
-                except ClientConnectionError:
+                except (ClientConnectionError, TimeoutError):
                     print('Could not establish connection to {}.'.format(self.name))
+                    self.exception_counter +=1
                 except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'
                           'Url: {}, Parameters: {}'
@@ -338,6 +341,8 @@ class Exchange:
                     logging.warning('Unable to read response from {}. Check config file.\n'
                                     'Url: {}, Parameters: {}'
                                     .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                    self.exception_counter += 1
+
         else:
             logging.warning('{} has no currency pair request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no currency-pair request.".format(self.name))

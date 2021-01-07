@@ -260,18 +260,10 @@ requests:
         template: "{first}-{second}"
         lower_case: false
       params:
-        start: # Start time in ISO 8601
-          type:
-          - datetime
-          - strftime
-          - "%Y-%m-%dT%H:%M:%S.%fZ"
+        start: # Start time in ISO 8601 "%Y-%m-%dT%H:%M:%S.%fZ"
           required: false
           default: 2010-01-01T00:00:00.0001
         end: # End time in ISO 8601
-          type:
-          - datetime
-          - strftime
-          - "%Y-%m-%dT%H:%M:%S.%fZ"
           required: false
         granularity: # Desired timeslice in seconds
           type: int

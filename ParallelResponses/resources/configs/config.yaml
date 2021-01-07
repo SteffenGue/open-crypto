@@ -8,7 +8,7 @@ general:
     port: 5432
     db_name: historic
   operation_settings:
-    frequency: 0
+    frequency: once
     run_once: true
   export:
     export_data_to_csv: false
@@ -23,14 +23,11 @@ jobs:
 
     update_cp: false
     exchanges:
-#      - b2bx
-#      - bitbay
-#      - bithumb
-#      - bitmart
-#      - coinsbit
-#      - gopax
-      - idex
-#      - bitkub
+      - btc-alpha
+#      - atilly
+      - hitbtc
+      - binance
+      - bitfinex
     currency_pairs:
 #      - all
 #      - first: cur
@@ -39,7 +36,7 @@ jobs:
 #        second: usdt
 #      - first: btc
 #        second: usdt
-#      - first: btc
+#      - first: eth
 #        second: usd
       - first: eth
         second: btc

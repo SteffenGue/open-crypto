@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import List, Callable, Dict
+from typing import List, Callable, Dict, Any
 from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
@@ -19,9 +19,9 @@ class Scheduler:
     """
     database_handler: DatabaseHandler
     job_list: List[Job]
-    frequency: float
+    frequency: Any
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: float):
+    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: Any):
         """
         Initializer for a Scheduler.
 
@@ -34,7 +34,7 @@ class Scheduler:
         """
         self.database_handler = database_handler
         self.job_list = job_list
-        self.frequency = frequency * 60
+        self.frequency = frequency * 60 if isinstance(frequency, (int, float)) else frequency
         self.validated: bool = False
 
     async def start(self):
@@ -45,9 +45,9 @@ class Scheduler:
         Otherwise the scheduler will wait x minutes until it starts the jobs again.
         The interval begins counting down at the start of the current iteration.
         """
-
         runs = [self.run(job) for job in self.job_list]
-        runs.append(asyncio.sleep(self.frequency))
+        if isinstance(self.frequency, (int, float)):
+            runs.append(asyncio.sleep(self.frequency))
 
         await asyncio.gather(*runs)
 
@@ -65,7 +65,9 @@ class Scheduler:
         request_fun = request.get('function')
         request_table = request.get('table')
 
-        return await request_fun(request_table, job.exchanges_with_pairs)
+        continue_run = True
+        while continue_run:
+            continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> Dict[Callable, object]:
         """
@@ -111,7 +113,8 @@ class Scheduler:
 
         self.job_list = await self.get_currency_pairs(self.job_list)
         self.remove_invalid_jobs(self.job_list)
-        self.validated = True
+        if self.job_list:
+            self.validated = True
 
     def remove_invalid_jobs(self, jobs: List[Job]):
         """
@@ -157,10 +160,11 @@ class Scheduler:
         else:
             logging.error('No or invalid Jobs.')
 
-            print("No or invalid Jobs. This error occurs when the job list is empty due to no \n"
+            print("\n No or invalid Jobs. This error occurs when the job list is empty due to no \n"
                   "matching currency pairs found for a all exchanges. Please check your \n"
                   "parameters in the configuration.")
             sys.exit(0)
+
 
     async def get_currency_pairs(self, job_list: List[Job], *args) -> List[Job]:
         """
@@ -183,6 +187,8 @@ class Scheduler:
                 formatted_response = exchange.format_currency_pairs(response)
                 self.database_handler.persist_exchange_currency_pairs(formatted_response,
                                                                       is_exchange=exchange.is_exchange)
+            else:
+                return []
 
         for job in job_list:
 
@@ -235,7 +241,7 @@ class Scheduler:
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
-
+        counter = {}
         for response in responses:
             response_time = response[0]
             exchange_name = response[1]
@@ -259,12 +265,17 @@ class Scheduler:
                     formatted_response, mappings = None, None
 
                 if formatted_response:
-                    self.database_handler.persist_response(exchanges_with_pairs,
-                                                                 found_exchange,
-                                                                 request_table,
-                                                                 formatted_response,
-                                                                 mappings)
+                    counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
+                                                                                     found_exchange,
+                                                                                     request_table,
+                                                                                     formatted_response,
+                                                                                     mappings)
+
+        if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
+
+            return True, {ex: exchanges_with_pairs[ex] for ex in list(exchanges_with_pairs.keys()) if counter[ex] > 0}
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
 
+        return False, exchanges_with_pairs

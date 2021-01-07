@@ -1,4 +1,4 @@
-name: crypto_com
+name: crypto.com
 exchange: true
 rate_limit:
   max: 6000

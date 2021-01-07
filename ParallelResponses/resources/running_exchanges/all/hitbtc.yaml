@@ -329,14 +329,8 @@ requests:
           - DESC # Descending order
           default: ASC
         from:
-          type:
-          - datetime
-          - totimestamp
           required: false
         till:
-          type:
-          - datetime
-          - totimestamp
           required: false
         limit: # Limit of candles, default 100.
           type: int
