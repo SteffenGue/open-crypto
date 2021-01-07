@@ -3,12 +3,6 @@ exchange: true
 api_url: https://poloniex.com/
 rate_limit: null
 requests:
-  test_connection:
-    request:
-      template: n/a
-    response:
-      type: dict
-
   currency_pairs:
     request:
       template: public?command=returnTicker

@@ -19,9 +19,9 @@ class Scheduler:
     """
     database_handler: DatabaseHandler
     job_list: List[Job]
-    frequency: int
+    frequency: float
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: int):
+    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: float):
         """
         Initializer for a Scheduler.
 
@@ -45,10 +45,9 @@ class Scheduler:
         Otherwise the scheduler will wait x minutes until it starts the jobs again.
         The interval begins counting down at the start of the current iteration.
         """
+
         runs = [self.run(job) for job in self.job_list]
         runs.append(asyncio.sleep(self.frequency))
-
-        # das hast du noch nachträglich eingefügt, vielleicht musst du das hier wieder ändern
 
         await asyncio.gather(*runs)
 
@@ -66,7 +65,53 @@ class Scheduler:
         request_fun = request.get('function')
         request_table = request.get('table')
 
-        await request_fun(job.request_name, request_table, job.exchanges_with_pairs)
+        return await request_fun(request_table, job.exchanges_with_pairs)
+
+    def determine_task(self, request_name: str) -> Dict[Callable, object]:
+        """
+        Returns the method that is to execute based on the given request name.
+
+        :param request_name: str
+            Name of the request.
+        :return:
+            Method for the request name or a string that the request is false.
+        """
+
+        #ToDo: Name OHLVM Ändern
+        possible_requests = {
+            "currency_pairs":
+                {'function': self.get_currency_pairs,
+                 'table': ExchangeCurrencyPair},
+            "tickers":
+                {'function': self.get_job_done,
+                 'table': Ticker},
+            "historic_rates":
+                {'function': self.get_job_done,
+                 'table': HistoricRate},
+            "order_books":
+                {'function': self.get_job_done,
+                 'table': OrderBook},
+            "trades":
+                {'function': self.get_job_done,
+                 'table': Trade},
+            "ohlcvm":
+                {'function': self.get_job_done,
+                 'table': OHLCVM}
+        }
+        return possible_requests.get(request_name, lambda: "Invalid request name.")
+
+    async def validate_job(self):
+        """
+        This methods validates the job_list given to the scheduler instance. If the job-list does not contain
+        any "exchange_with_pairs" or no currency_pair for an exchange, the job is removed from the list.
+        This happens of the user specified currency-pairs in the config but an exchange does not offer that pair.
+
+        :return: New job_list without empty job and sets self.validated: True if the validation is successful.
+        """
+
+        self.job_list = await self.get_currency_pairs(self.job_list)
+        self.remove_invalid_jobs(self.job_list)
+        self.validated = True
 
     def remove_invalid_jobs(self, jobs: List[Job]):
         """
@@ -83,7 +128,7 @@ class Scheduler:
                 if job.exchanges_with_pairs:
                     for exchange in job.exchanges_with_pairs.copy():
                         # Delete exchanges with no API for that request type
-                        if job.request_name not in list(exchange.request_urls.keys()):
+                        if job.request_name not in list(exchange.file['requests'].keys()):
                             job.exchanges_with_pairs.pop(exchange)
                             print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
                                   f" removed.")
@@ -117,50 +162,6 @@ class Scheduler:
                   "parameters in the configuration.")
             sys.exit(0)
 
-    async def validate_job(self):
-        """
-        This methods validates the job_list given to the scheduler instance. If the job-list does not contain
-        any "exchange_with_pairs" or no currency_pair for an exchange, the job is removed from the list.
-        This happens of the user specified currency-pairs in the config but an exchange does not offer that pair.
-
-        :return: New job_list without empty job and sets self.validated: True if the validation is successful.
-        """
-
-        self.job_list = await self.get_currency_pairs(self.job_list)
-        self.remove_invalid_jobs(self.job_list)
-        self.validated = True
-
-    def determine_task(self, request_name: str) -> Callable:
-        """
-        Returns the method that is to execute based on the given request name.
-
-        :param request_name: str
-            Name of the request.
-        :return:
-            Method for the request name or a string that the request is false.
-        """
-        possible_requests = {
-            "currency_pairs":
-                {'function': self.get_currency_pairs,
-                 'table': ExchangeCurrencyPair},
-            "tickers":
-                {'function': self.get_job_done,
-                 'table': Ticker},
-            "historic_rates":
-                {'function': self.get_job_done,
-                 'table': HistoricRate},
-            "order_books":
-                {'function': self.get_job_done,
-                 'table': OrderBook},
-            "trades":
-                {'function': self.get_job_done,
-                 'table': Trade},
-            "ohlcvm":
-                {'function': self.get_job_done,
-                 'table': OHLCVM}
-        }
-        return possible_requests.get(request_name, lambda: "Invalid request name.")
-
     async def get_currency_pairs(self, job_list: List[Job], *args) -> List[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
@@ -187,11 +188,11 @@ class Scheduler:
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
-            #ToDo: Asynchronisieren
+            # ToDo: Asynchronisieren
             for exchange in exchanges:
                 if job_params['update_cp']:
                     await update_currency_pairs(exchange)
-                elif self.database_handler.get_all_currency_pairs_from_exchange(exchange.name) == []:
+                elif not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                     await update_currency_pairs(exchange)
 
                 job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
@@ -203,9 +204,9 @@ class Scheduler:
         return job_list
 
     async def get_job_done(self,
-                           request_name: str,
                            request_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+        #ToDO: Name der Methode ändern
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -225,41 +226,42 @@ class Scheduler:
             - The DatabaseHandler will reject to persist new items if any primary key is emtpy.
             - For more detailed instructions, including an example, see into the handbook.
         """
-        print('Starting to collect {}.'.format(request_name.capitalize()), end="\n\n")
-        logging.info('Starting to collect {}.'.format(request_name.capitalize()))
+        print('Starting to collect {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
+        logging.info('Starting to collect {}.'.format(request_table.__tablename__.capitalize()))
         start_time = datetime.utcnow()
         responses = await asyncio.gather(
-            *(ex.request(request_name, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+            *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
 
         for response in responses:
-            if response:
-                response_time = response[0]
-                exchange_name = response[1]
-                found_exchange: Exchange = None
+            response_time = response[0]
+            exchange_name = response[1]
+            found_exchange: Exchange = None
 
-                for exchange in exchanges_with_pairs.keys():
-                    # finding the right exchange
-                    if exchange.name.upper() == exchange_name.upper():
-                        found_exchange = exchange
-                        break
+            for exchange in exchanges_with_pairs.keys():
+                # finding the right exchange
+                if exchange.name.upper() == exchange_name.upper():
+                    found_exchange = exchange
+                    break
 
-                if found_exchange:
-                    try:
-                        formatted_response, mappings = found_exchange.format_data(request_name,
-                                                                                  response[1:],
-                                                                                  start_time=start_time,
-                                                                                  time=response_time)
+            if found_exchange:
+                try:
+                    formatted_response, mappings = found_exchange.format_data(request_table.__tablename__,
+                                                                              response[1:],
+                                                                              start_time=start_time,
+                                                                              time=response_time)
 
-                    except MappingNotFoundException:
-                        # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
-                        formatted_response, mappings = None, None
+                except MappingNotFoundException:
+                    # todo: wird durch das abfangen der exception das eigentliche auftreten geloggt?
+                    formatted_response, mappings = None, None
 
-                    if formatted_response:
-                        self.database_handler.persist_response(exchanges_with_pairs,
-                                                                     found_exchange,
-                                                                     request_table,
-                                                                     formatted_response,
-                                                                     mappings)
-        print('Done collecting {}.'.format(request_name.capitalize()), end="\n\n")
-        logging.info('Done collecting {}.'.format(request_name.capitalize()))
+                if formatted_response:
+                    self.database_handler.persist_response(exchanges_with_pairs,
+                                                                 found_exchange,
+                                                                 request_table,
+                                                                 formatted_response,
+                                                                 mappings)
+
+        print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
+        logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
+

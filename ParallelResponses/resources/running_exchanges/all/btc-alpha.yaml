@@ -39,9 +39,18 @@ requests:
         lower_case: false
       params:
         limit:
-          type: int
+          type:
+            - str
+            - int
           max: 720
           default: 720
+        until:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
+
+
     response:
       type: list
       values:
@@ -66,7 +75,7 @@ requests:
         - time
       type:
         - int
-        - utcfromtimestampms
+        - utcfromtimestamp
     - key: open
       path:
         - open

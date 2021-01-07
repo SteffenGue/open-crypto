@@ -3,7 +3,7 @@ import datetime
 from datetime import timedelta
 import os
 from typing import List, Any, Dict
-import oyaml as yaml  # install PyYaml
+import oyaml as yaml
 import pathlib
 from pathlib import Path
 import logging
@@ -180,7 +180,7 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("none", "now_format"): {
-        "function": lambda arg: (datetime.datetime.utcnow()).__format__(arg),
+        "function": lambda result, arg: (datetime.datetime.utcnow()).__format__(arg),
         "params": 1
     },
     ("none", "constant"): {  # Returns the first argument
@@ -213,7 +213,11 @@ TYPE_CONVERSION = {
         'function': lambda delta: int(datetime.datetime.timestamp(datetime.datetime.utcnow() -
                                                                   timedelta(days=int(delta)))),
         'params': 1
-    }
+    },
+    ('datetime', 'timestamp'): {
+        'function': lambda datetime: int(datetime.timestamp()),
+        'params': 0
+    },
 }
 
 """A dictionary containing lambda function calls in order to get request parameters variable. The function calls

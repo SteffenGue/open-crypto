@@ -4,6 +4,52 @@ from typing import Collection
 from model.utilities.utilities import TYPE_CONVERSION
 
 
+def convert_type(value, types_queue: deque):
+    """Converts the value via type conversions.
+
+    Helper method to convert the given value via a queue of
+    type conversions .
+
+    Args:
+        value:
+            The value to get converted to another type.
+        types_queue:
+            The queue of type conversion instructions.
+
+    Returns:
+        The converted value.
+    """
+
+    current_type = types_queue.popleft()
+    next_type = None
+
+    result = value
+
+    while types_queue:
+        next_type = types_queue.popleft()
+
+        types_tuple = (current_type,
+                       next_type)
+
+        conversion = TYPE_CONVERSION[types_tuple]
+
+        params = list()
+
+        if conversion["params"]:
+            # pylint: disable=unused-variable
+            for number in range(0, conversion["params"]):
+                params.append(types_queue.popleft())
+
+        if not result and isinstance(result, (str, list)):
+            result = None
+        else:
+            result = conversion["function"](result,
+                                            *params)
+        current_type = next_type
+
+    return result
+
+
 class Mapping:
     """Class representing mapping data and logic.
 
@@ -51,53 +97,6 @@ class Mapping:
         self.key = key
         self.path = path
         self.types = types
-
-    def convert_type(self, value, types_queue: deque):
-        """Converts the value via type conversions.
-
-        Helper method to convert the given value via a queue of
-        type conversions .
-
-        Args:
-            value:
-                The value to get converted to another type.
-            types_queue:
-                The queue of type conversion instructions.
-
-        Returns:
-            The converted value.
-        """
-
-        current_type = types_queue.popleft()
-        next_type = None
-
-        result = value
-
-        while types_queue:
-            next_type = types_queue.popleft()
-
-            types_tuple = (current_type,
-                           next_type)
-
-            conversion = TYPE_CONVERSION[types_tuple]
-
-            params = list()
-
-            if conversion["params"]:
-                # pylint: disable=unused-variable
-                for number in range(0, conversion["params"]):
-                    params.append(types_queue.popleft())
-
-            if not result and isinstance(result, (str, list)):
-                result = None
-            else:
-                result = conversion["function"](result,
-                                                *params)
-
-
-            current_type = next_type
-
-        return result
 
     def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: str = None) -> dict:
         """Traverses the path on a response.
@@ -193,7 +192,7 @@ class Mapping:
                 return currency_pair_info[0]
             elif types_queue[0] == 'second_currency':
                 return currency_pair_info[1]
-            return self.convert_type(None, types_queue)
+            return convert_type(None, types_queue)
 
         while path_queue:
 
@@ -229,7 +228,7 @@ class Mapping:
 
             elif is_scalar(response):
                 # Return converted scalar value
-                return self.convert_type(response, types_queue)
+                return convert_type(response, types_queue)
 
             else:
                 # Traverse path
@@ -243,7 +242,7 @@ class Mapping:
 
                 for item in response:
                     result.append(
-                        self.convert_type(item, deque(types_queue))
+                        convert_type(item, deque(types_queue))
                     )
 
                 if len(result) == 1: #for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
@@ -252,7 +251,7 @@ class Mapping:
                 response = result
 
             else:
-                response = self.convert_type(response, types_queue)
+                response = convert_type(response, types_queue)
 
         return response
 
