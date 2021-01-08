@@ -312,6 +312,8 @@ requests:
         timeframe:
           type: str
           default: 1D
+        limit:
+          default: 100
 
     response:
       type: dict

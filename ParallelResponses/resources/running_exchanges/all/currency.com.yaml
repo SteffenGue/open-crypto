@@ -195,6 +195,18 @@ requests:
         limit:
           type: int
           default: 1000
+        endTime:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
+        startTime:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedeltams
+            - 1000
+
 
     response:
       type: list

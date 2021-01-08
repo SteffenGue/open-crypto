@@ -214,11 +214,13 @@ requests:
           type: int
           required: false
         endTime:
-          type: int
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
         limit:
           type: int
-          max: 100
+          max: 1000
           default: 1000
         interval:
           type: str

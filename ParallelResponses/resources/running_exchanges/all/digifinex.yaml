@@ -146,6 +146,14 @@ requests:
         start_time:
           type: int
           default: 1357038766 # 01.01.2013
+          # If start_time or end_time is defined is basically the same. Start_time gets all data with one query.
+#        end_time:
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timestamp
+
+
           
     response:
       type: dict

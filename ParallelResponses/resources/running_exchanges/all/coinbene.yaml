@@ -180,6 +180,11 @@ requests:
         period:
           type: str
           default: D
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
     response:
       type: dict
       values:

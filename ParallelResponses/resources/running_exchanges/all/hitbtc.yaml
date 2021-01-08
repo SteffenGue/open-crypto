@@ -323,9 +323,19 @@ requests:
           - DESC # Descending order
           default: ASC
         from:
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - 1000
+            - fromtimestamp
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
         till:
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
         limit: # Limit of candles, default 100.
           type: int
           default: 1000

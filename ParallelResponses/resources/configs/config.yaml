@@ -20,7 +20,7 @@ jobs:
 
     update_cp: false
     exchanges:
-      - coinbase
+      - hitbtc
 #      - atilly
 #      - atilly
 #      - hitbtc

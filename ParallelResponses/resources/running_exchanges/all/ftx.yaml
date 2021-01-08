@@ -155,6 +155,11 @@ requests:
         limit:
           type: int
           default: 5000
+        end_time:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
 
     response:
       type: dict

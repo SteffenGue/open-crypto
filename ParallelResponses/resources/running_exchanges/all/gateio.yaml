@@ -292,6 +292,11 @@ requests:
         interval:
           type: str
           default: 1d
+        to:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
     response:
       type: list
       values:
