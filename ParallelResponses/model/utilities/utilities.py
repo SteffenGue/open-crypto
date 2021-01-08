@@ -214,9 +214,29 @@ TYPE_CONVERSION = {
                                                                   timedelta(days=int(delta)))),
         'params': 1
     },
+    ('datetime', 'timedelta'): {
+        'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta)))),
+        'params': 1
+    },
+    ('datetime', 'timedeltams'): {
+        'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta))))*1000,
+        'params': 1
+    },
     ('datetime', 'timestamp'): {
         'function': lambda time: int(time.timestamp()),
         'params': 0
+    },
+    ('datetime', 'timestampms'): {
+        'function': lambda time: int(time.timestamp())*1000,
+        'params': 0
+    },
+    ("datetime", "format"): {
+        "function": lambda time, arg: time.__format__(arg),
+        "params": 1
+    },
+    ("timedelta", "fromtimestamp"): {
+        "function": lambda time, arg: datetime.datetime.fromtimestamp(time).__format__(arg),
+        "params": 1
     },
 }
 
@@ -308,17 +328,14 @@ def yaml_loader(exchange: str):
     """
 
     path = read_config(file=None, section='utilities')['yaml_path']
-    with open(path + exchange + '.yaml', 'r') as f:
-        try:
+    try:
+        with open(path + exchange + '.yaml', 'r') as f:
             data = yaml.load(f, Loader=yaml.FullLoader)
-            return data
-        except Exception as ex:
-            print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
-            print(ex)
-            logging.exception(f"Error loading yaml of {exchange}.\n", ex)
-            sys.exit(1)
-            # todo: insert new exception handling
-            # es wird der name der exchange als string übergeben und nicht die instanz der exchange
+        return data
+    except Exception as ex:
+        print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
+        print(ex)
+        logging.exception(f"Error loading yaml of {exchange}.\n", ex)
 
 
 def get_exchange_names() -> List[str]:

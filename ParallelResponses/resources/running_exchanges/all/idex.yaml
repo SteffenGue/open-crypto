@@ -2,7 +2,7 @@
 name: idex
 exchange: true
 
-api_url: https://api-sandbox.idex.io/
+api_url: https://api.idex.io/
 rate_limit:
   max: 300
   unit: 60

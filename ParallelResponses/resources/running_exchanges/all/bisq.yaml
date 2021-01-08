@@ -3,39 +3,6 @@ exchange: true
 api_url: https://bisq.markets/api/
 rate_limit: null
 requests:
-  symbols: 
-    request:
-      template: currencies/
-      pair_template: null
-      params: null
-    response:
-      type: dict
-      values:
-        currencies: # variable keys, each available currency
-          type: dict
-          values:
-            code: # symbols
-              type: str
-            name: # names
-              type: str
-            precision:
-              type: int
-            type:
-              type: str
-    mapping:
-    - key: currency_symbol
-      path:
-      - dict_values
-      - code
-      type:
-      - str
-    - key: currency_name
-      path:
-      - dict_values
-      - name
-      type:
-      - str
-
   currency_pairs:
     request:
       template: markets/
@@ -113,7 +80,7 @@ requests:
                   - str
                   - float
     mapping:
-    - key: order_book_time
+    - key: time
       path: []
       type:
       - none
@@ -164,6 +131,11 @@ requests:
           - year
           - auto
           default: day
+#        timestamp_to: # returns everything from 01.01.2016 by default.
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timestamp
     response:
       type: list
       values:
@@ -206,7 +178,7 @@ requests:
       - period_start
       type:
       - int
-      - fromtimestamp
+      - utcfromtimestamp
     - key: open
       path:
       - open
@@ -317,16 +289,9 @@ requests:
           - jsonpretty
           default: jsonpretty
         timestamp_from: # start time, in seconds since 1970
-          type:
-          - datetime
-          - strftime
-          - "%Y-%m-%d"
           default: 2016-01-01
         timestamp_to: # end time, in seconds since 1970
           type:
-          - datetime
-          - strftime
-          - "%Y-%m-%d"
           default: now
         trade_id_from: # identifies first trade to include
           type: str
@@ -376,7 +341,6 @@ requests:
           trade_date: # in milliseconds since 1970
             type:
             - int
-            - fromtimestampms
     mapping:
     - key: id
       path:

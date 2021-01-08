@@ -114,6 +114,11 @@ requests:
           type: int
           max: 2880
           default: 2880
+        ts:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
     response:
       type: dict
       values:

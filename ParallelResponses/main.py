@@ -24,11 +24,14 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: Dict, db_handler = DatabaseHandler) -> List[Job]:
+async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler) -> List[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
     'exchanges_with_pairs' is created with Exchange Objects as keys, the values are filled in the Scheduler.
+    @param db_handler: Instance of the DatabaseHandler to pass to the Exchange Class. This is to be able to
+                        perform database queries for variable request parameters.
+    @param timeout: Request timeout for the Exchange Class.
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
@@ -37,7 +40,7 @@ async def initialize_jobs(job_config: Dict, db_handler = DatabaseHandler) -> Lis
         job_params: Dict = job_config[job]
 
         exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
-        Exchanges = [Exchange(yaml_loader(exchange_name), db_handler.get_first_timestamp) for exchange_name in exchange_names]
+        Exchanges = [Exchange(yaml_loader(exchange_name), db_handler.get_first_timestamp, timeout) for exchange_name in exchange_names]
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(Exchanges)
 
         new_job: Job = Job(job,
@@ -76,7 +79,9 @@ async def main(database_handler: DatabaseHandler):
     config = read_config(file=None, section=None)
 
     logging.info('Loading jobs.')
-    jobs = await initialize_jobs(config['jobs'], db_handler=database_handler)
+    jobs = await initialize_jobs(config['jobs'],
+                                 config['general']['operation_settings']['timeout'],
+                                 database_handler)
     frequency = config['general']['operation_settings']['frequency']
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)

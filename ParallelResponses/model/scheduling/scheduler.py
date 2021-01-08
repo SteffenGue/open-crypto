@@ -196,12 +196,12 @@ class Scheduler:
             exchanges = list(job.exchanges_with_pairs.keys())
 
             # ToDo: Asynchronisieren
+            print("Checking and/or updating exchange currency pairs..")
             for exchange in exchanges:
                 if job_params['update_cp']:
-                    print("Updating exchange currency pairs..")
+
                     await update_currency_pairs(exchange)
                 elif not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
-                    print("Updating exchange currency pairs..")
                     await update_currency_pairs(exchange)
 
                 job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
@@ -272,10 +272,10 @@ class Scheduler:
                                                                                      mappings)
 
         if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
-
+            # In order to avoid requesting exchanges where all data points are already  retrieved.
             return True, {ex: exchanges_with_pairs[ex] for ex in list(exchanges_with_pairs.keys()) if counter[ex] > 0}
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
 
-        return False, exchanges_with_pairs
+        return False

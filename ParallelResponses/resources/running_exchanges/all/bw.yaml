@@ -3,8 +3,6 @@ exchange: true
 rate_limit: null
 api_url: https://www.bw.com/api/
 
-
-
 requests:
   currency_pairs:
     request:

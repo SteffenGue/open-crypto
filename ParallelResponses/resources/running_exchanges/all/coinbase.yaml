@@ -1,9 +1,9 @@
 name: coinbase
 exchange: true
 api_url: https://api.pro.coinbase.com/
-#rate_limit:
-#  max: 3
-#  unit: 1
+rate_limit:
+  max: 180
+  unit: 60
 requests:
   currency_pairs:
     request:
@@ -261,10 +261,19 @@ requests:
         lower_case: false
       params:
         start: # Start time in ISO 8601 "%Y-%m-%dT%H:%M:%S.%fZ"
-          required: false
-          default: 2010-01-01T00:00:00.0001
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - 300
+            - fromtimestamp
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
         end: # End time in ISO 8601
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
         granularity: # Desired timeslice in seconds
           type: int
           allowed:

@@ -89,6 +89,11 @@ requests:
           type: int
           min: 1
           default: 1
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
         interval:
           type: str
           default: 1d

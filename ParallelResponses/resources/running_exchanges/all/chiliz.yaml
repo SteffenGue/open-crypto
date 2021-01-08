@@ -223,6 +223,11 @@ requests:
           type: int
           max: 1000
           default: 1000
+        endTime:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
 
     response:
       type: list

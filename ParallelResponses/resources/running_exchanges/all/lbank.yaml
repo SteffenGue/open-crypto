@@ -202,11 +202,8 @@ requests:
           type: int
           min: 1
           max: 600
-          default: 600
+          default: 200
         time:
-          type:
-          - datetime
-          - totimestamp
           required: false
     response:
       type: list

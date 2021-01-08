@@ -2,9 +2,8 @@ name: bitstamp
 exchange: true
 api_url: https://www.bitstamp.net/api/v2/
 rate_limit:
-  max: 600
-  # 10 minutes
-  unit: 600
+  max: 60
+  unit: 60
 requests:
   currency_pairs:
     request:
@@ -128,7 +127,7 @@ requests:
       type:
       - str
       - int
-      - fromtimestamp
+      - utcfromtimestamp
 
   historic_rates:
     request:
@@ -152,10 +151,15 @@ requests:
             - 43200
             - 86400
             - 259200
-          default: 21600
+          default: 86400
         limit:
           type: int
           default: 1000 #limit between 1 and 1000
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
     response:
       type: dict
       values:
@@ -235,7 +239,7 @@ requests:
         type:
           - str
           - int
-          - fromtimestamp
+          - utcfromtimestamp
 
   order_books:
      request:

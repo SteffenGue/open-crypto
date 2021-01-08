@@ -328,10 +328,10 @@ requests:
         type:
           default: d1
         end:
-          required: true
+          function: last_timestamp
           type:
-            - none
-            - now_timestamp
+            - datetime
+            - timestamp
     response:
       type: dict
       values:

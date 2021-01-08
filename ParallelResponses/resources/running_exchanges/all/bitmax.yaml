@@ -123,6 +123,11 @@ requests:
           type: int
           max: 500
           default: 500
+        to:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
     response:
       type: dict
       values:

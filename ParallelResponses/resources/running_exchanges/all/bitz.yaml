@@ -79,118 +79,117 @@ requests:
       type:
       - str
       - upper
-#
-# The order-books is unsorted, i.e. the bids are sorted descending, but the asks not ascending
-#  order_books:
-#    request:
-#      template: Market/depth
-#      pair_template: # e.g. 777_btc
-#        template: "{first}_{second}"
-#        lower_case: true
-#        alias: symbol
-#      params: null
-#    response:
-#      type: dict
-#      values:
-#        status:
-#          type: int
-#        msg:
-#          type: str
-#        data:
-#          type: dict
-#          values:
-#            asks:
-#              type: list
-#              values:
-#                type: list
-#                values:
-#                  0: # price
-#                    type:
-#                    - str
-#                  1: # number
-#                    type:
-#                    - str
-#                  2: # Total price
-#                    type:
-#                    - str
-#            bids:
-#              type: list
-#              values:
-#                type: list
-#                values:
-#                  0: # price
-#                    type:
-#                    - str
-#                  1: # number
-#                    type:
-#                    - str
-#                  2: # Total price
-#                    type:
-#                    - str
-#            coinPair:
-#              type: str
-#        time:
-#          type:
-#          - int
-#        microtime:
-#          type:
-#          - str
-#        source:
-#          type: str
-#
-#    mapping:
-#    - key: time
-#      path:
-#      - time
-#      type:
-#      - int
-#      - utcfromtimestamp
-#    - key: position
-#      path: []
-#      type:
-#        - none
-#        - range
-#    - key: id
-#      path:
-#        - time
-#      type:
-#        - int
-#    - key: asks_price
-#      path:
-#      - data
-#      - asks
-##      - []
-#      - 0
-#      type:
-#      - str
-#      - float
-#    - key: asks_amount
-#      path:
-#      - data
-#      - asks
-##      - []
-#      - 1
-#      type:
-#      - str
-#      - float
-#    - key: bids_price
-#      path:
-#      - data
-#      - bids
-##      - []
-#      - 0
-#      type:
-#      - str
-#      - float
-#    - key: bids_amount
-#      path:
-#      - data
-#      - bids
-##      - []
-#      - 1
-#      type:
-#      - str
-#      - float
+
+  order_books:
+    request:
+      template: Market/depth
+      pair_template: # e.g. 777_btc
+        template: "{first}_{second}"
+        lower_case: true
+        alias: symbol
+      params: null
+    response:
+      type: dict
+      values:
+        status:
+          type: int
+        msg:
+          type: str
+        data:
+          type: dict
+          values:
+            asks:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type:
+                    - str
+                  1: # number
+                    type:
+                    - str
+                  2: # Total price
+                    type:
+                    - str
+            bids:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type:
+                    - str
+                  1: # number
+                    type:
+                    - str
+                  2: # Total price
+                    type:
+                    - str
+            coinPair:
+              type: str
+        time:
+          type:
+          - int
+        microtime:
+          type:
+          - str
+        source:
+          type: str
+
+    mapping:
+    - key: time
+      path:
+      - time
+      type:
+      - int
+      - utcfromtimestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: id
+      path:
+        - time
+      type:
+        - int
+    - key: asks_price
+      path:
+      - data
+      - asks
+#      - []
+      - 0
+      type:
+      - str
+      - float
+    - key: asks_amount
+      path:
+      - data
+      - asks
+#      - []
+      - 1
+      type:
+      - str
+      - float
+    - key: bids_price
+      path:
+      - data
+      - bids
+#      - []
+      - 0
+      type:
+      - str
+      - float
+    - key: bids_amount
+      path:
+      - data
+      - bids
+#      - []
+      - 1
+      type:
+      - str
+      - float
 
 
   tickers:
@@ -357,8 +356,10 @@ requests:
           max: 300
           required: false
         to: # microsecond. Return the data before this microsecond
-          type: str
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
     response:
       type: dict
       values:

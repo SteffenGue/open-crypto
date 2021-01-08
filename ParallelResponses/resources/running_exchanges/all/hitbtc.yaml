@@ -153,14 +153,8 @@ requests:
           - timestamp
           required: false
         from: # Number or Datetime
-          type:
-          - datetime
-          - totimestamp
           required: false
         till: # Number or Datetime
-          type:
-          - datetime
-          - totimestamp
           required: false
         limit:
           type: int

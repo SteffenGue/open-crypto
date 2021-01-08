@@ -117,7 +117,19 @@ requests:
           type: 
           - int
           allowed: null
-          default: 1000 
+          default: 1000
+        to:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
+        from:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedeltams
+            - 1000
+
 
     response:
       type: dict

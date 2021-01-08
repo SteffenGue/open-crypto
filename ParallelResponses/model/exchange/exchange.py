@@ -70,8 +70,8 @@ class Exchange:
 
         name: str
             Name of this exchange.
-        terms_url: str
-            Url to Terms&Conditions of this exchange.
+        timeout: int
+            Timeout for every request before throwing an exception
         api_url: str
             Url for the public_api of this exchange.
         request_urls: dict[request_name: List[url, params]
@@ -99,9 +99,10 @@ class Exchange:
     exception_counter: int
     consecutive_exception: bool
     active_flag: bool
+    timeout: int
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, db_handler):
+    def __init__(self, yaml_file: Dict, db_handler, timeout):
         """
         Creates a new Exchange-object.
 
@@ -115,13 +116,9 @@ class Exchange:
             Constructor does not check if content is viable.
         """
         self.file = yaml_file
+        self.timeout = timeout
         self.name = yaml_file['name']
         self.get_first_timestamp = db_handler
-        if yaml_file.get('terms'):
-            if yaml_file['terms'].get('terms_url'):
-                self.terms_url = yaml_file['terms']['terms_url']
-            if yaml_file['terms'].get('permission'):
-                self.scrape_permission = yaml_file['terms']['permission']
 
         self.api_url = yaml_file['api_url']
         if yaml_file.get('rate_limit') and yaml_file.get('units') and yaml_file.get('max'):
@@ -253,21 +250,25 @@ class Exchange:
                         url = url.format(currency_pair=pair_formatted[cp])
                     params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
                     try:
-                        response = await session.get(url=url, params=params)
+                        response = await session.get(url=url,
+                                                     params=params,
+                                                     timeout=aiohttp.ClientTimeout(total=self.timeout))
                         response_json = await response.json(content_type=None)
 
                         if pair_template_dict:
                             responses[cp] = response_json
-                        else:  # when ticker data is returned for all available currency pairs
+                        else:  # when ticker data is returned for all available currency pairs at once
                             responses[None] = response_json
                             break
-                    except ClientConnectionError:
-                        logging.error('Could not establish connection to {}'.format(self.name))
-                        print('Could not establish connection to {}.'.format(self.name))
+                    except (ClientConnectionError, asyncio.TimeoutError):
+                        print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
+                        logging.error('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
+
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
                               .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'
                                       .format(self.name, request_url_and_params['url'],
@@ -328,11 +329,11 @@ class Exchange:
                 try:
                     response = await session.get(request_url_and_params['url'],
                                                  params=request_url_and_params['params'],
-                                                 timeout=aiohttp.ClientTimeout(total=5))
+                                                 timeout=aiohttp.ClientTimeout(total=self.timeout))
                     response_json = await response.json(content_type=None)
 
-                except (ClientConnectionError, TimeoutError):
-                    print('Could not establish connection to {}.'.format(self.name))
+                except (ClientConnectionError, asyncio.TimeoutError):
+                    print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
                     self.exception_counter +=1
                 except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'

@@ -236,6 +236,11 @@ class Mapping:
                 # Return converted scalar value
                 return convert_type(response, types_queue)
 
+            # Zusätzlich eingefügt für den Fall eines leeren Dict/List. Hier wurden bei Bitz 0.0 zurückgegeben,
+            # was im Folgenden zu einem Integrity-Error beim persisiteren geführt hat.
+            elif not response:
+                return None
+
             else:
                 # Traverse path
                 response = self.traverse_path(response, path_queue, currency_pair_info=currency_pair_info)

@@ -9,10 +9,7 @@ general:
     db_name: historic
   operation_settings:
     frequency: once
-    run_once: true
-  export:
-    export_data_to_csv: false
-    csv_dir: resources/csv
+    timeout: 10
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: false
@@ -23,11 +20,12 @@ jobs:
 
     update_cp: false
     exchanges:
-      - btc-alpha
+      - coinbase
 #      - atilly
-      - hitbtc
-      - binance
-      - bitfinex
+#      - atilly
+#      - hitbtc
+#      - binance
+#      - bitfinex
     currency_pairs:
 #      - all
 #      - first: cur

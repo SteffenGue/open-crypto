@@ -111,20 +111,12 @@ requests:
         lower_case: false
       params:
         limit_trades: # Number of records
-          type: int
           default: 999 # max: 10000
         start: # Millisecond start time
-          type:
-            - datetime
-            - totimestampms
           required: false
         end: # Millisecond end time
-          type:
-            - datetime
-            - totimestampms
           required: false
         sort: # if = 1 it sorts results returned with old > new
-          type: int
           allowed:
             - 1
             - -1
@@ -290,7 +282,10 @@ requests:
         start: # Filter start (ms)
           required: false
         end: # Filter end (ms)
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
         sort: # if = 1 it sorts results returned with old > new
           required: false
     response:

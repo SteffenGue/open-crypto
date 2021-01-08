@@ -185,8 +185,6 @@ requests:
         lower_case: true
       params:
         since: # Optional. Only return trades after this timestamp. If not present, will show the most recent trades.
-          type:
-          - datetime
           required: false
         limit_trades: # Optional. The maximum number of trades to return. The default is 50.
           type: int

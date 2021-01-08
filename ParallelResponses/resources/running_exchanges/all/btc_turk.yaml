@@ -314,7 +314,7 @@ requests:
         template: "{first}_{second}"
         lower_case: false
         alias: pair
-      params: null
+      params: null # from and to params are available. But API returns every data point by default.
     response:
       type: list
       values:

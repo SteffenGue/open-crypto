@@ -117,7 +117,6 @@ requests:
         alias: symbol
       params:
         limit:
-          type: int
           max: 100
           allowed:
           - 5
@@ -128,13 +127,7 @@ requests:
           - 500
           - 1000
           default: 50
-      weight:
-      # limit 5, 10, 20, 50, 100
-      - 1
-      # limit 500
-      - 5
-      # limit 1000
-      - 10
+
     response:
       type: dict
       values:
@@ -222,7 +215,6 @@ requests:
         alias: symbol
       params:
         limit:
-          type: int
           max: 1000
           default: 500
       weight: 1
@@ -305,7 +297,11 @@ requests:
         startTime:
           required: false
         endTime:
-          required: false
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
+
         limit:
           type: int
           max: 1000

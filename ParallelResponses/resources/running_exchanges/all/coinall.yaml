@@ -128,6 +128,13 @@ requests:
         granularity:
           type: str
           default: 86400 #1d in seconds
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
+
     response:
       type: list
       values:

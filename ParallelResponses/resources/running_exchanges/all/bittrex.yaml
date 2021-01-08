@@ -1,5 +1,3 @@
-#TODO: für historic rates muss das intervall mit im String übergeben werden,
-# leider können wir bis jetzt nur das currency_pair in den String einfügern
 name: bittrex
 exchange: true
 api_url: https://api.bittrex.com/v3/

@@ -1,3 +1,5 @@
+# No HR as the API as is only goes back 2 month.
+
 name: cexio
 is_exchange: true
 api_url: https://cex.io/api/

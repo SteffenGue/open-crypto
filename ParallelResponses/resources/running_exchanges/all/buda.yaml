@@ -1,4 +1,3 @@
-# DEAD
 name: buda
 
 api_url: https://www.buda.com/api/v2/
@@ -242,9 +241,6 @@ requests:
         lower_case: true
       params:
         timestamp: # Unix Timestamp (int)
-          type:
-          - datetime
-          - totimestamp
           required: false
         limit:
           type: int
