@@ -1,4 +1,3 @@
-# ToDo: Start und End Parameter bei HR funktioniert nicht. Daher nur 50 Datenpunkte
 name: idex
 exchange: true
 
@@ -260,9 +259,10 @@ requests:
           max: 1000
           default: 1000
         end:
+          function: last_timestamp
           type:
-            - none
-            - now_timestampms
+            - datetime
+            - timestampms
 
     response:
       type: list

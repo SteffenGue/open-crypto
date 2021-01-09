@@ -2,8 +2,8 @@ name: kucoin
 exchange: true
 api_url: https://api.kucoin.com/api/v1/
 rate_limit:
-  max: 50000
-  unit: 300
+  max: 30
+  unit: 60
 requests:
   currency_pairs:
     request:
@@ -174,9 +174,17 @@ requests:
         alias: symbol
       params:
         startAt:
-          type: int
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - 1000
+
         endAt:
-          type: int # 18.09.2019 HIER VARIABLER WERT!!
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp # 18.09.2019 HIER VARIABLER WERT!!
         type:
           type: 
           allowed:

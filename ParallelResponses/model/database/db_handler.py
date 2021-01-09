@@ -500,11 +500,12 @@ class DatabaseHandler:
                     else:
                         continue
 
+                data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
                 check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]
-                data_tuple = {key: data_tuple.get(key) for key in col_names}
                 if not all(check_columns):
                     failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
-                    raise NotAllPrimaryKeysException(exchange.name, failed_columns)
+                    logging.exception(NotAllPrimaryKeysException(exchange.name, failed_columns))
+                    continue
 
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \

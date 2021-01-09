@@ -1,4 +1,4 @@
-name: xheta_global
+name: xtheta_global
 is_exchange: true
 
 api_url: https://api.xthetaglobal.com/
@@ -223,6 +223,11 @@ requests:
           type: int
           max: 1000
           default: 1000
+        endTime:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestampms
 
     response:
       type: list

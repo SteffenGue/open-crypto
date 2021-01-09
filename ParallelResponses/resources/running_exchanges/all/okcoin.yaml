@@ -1,5 +1,3 @@
-# ToDo: historical rates "end" parameter variable machen.
-
 name: okcoin
 exchange: true
 
@@ -266,9 +264,19 @@ requests:
           type: int
           default: 86400 # 1 day
         start: #returns only the last 200 entries until end or "today".
-          type: str
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - 200
+            - fromtimestamp
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
         end:
-          type: str # e.g. 2020-11-10T16:00:00.000Z
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"  # e.g. 2020-11-10T16:00:00.000Z
     response:
       type: list
       values:

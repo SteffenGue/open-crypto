@@ -44,15 +44,6 @@ requests:
       - "/"
       - 1
 
-  tickers:
-    request:
-      template:
-      pair_template:
-      params:
-    response:
-
-
-
   order_books:
     request:
       template: orderbooks

@@ -1,3 +1,5 @@
+# ToDo: Function für einen Offset für HR schreiben.
+
 name: p2pb2b
 exchange: true
 rate_limit:

@@ -20,7 +20,7 @@ jobs:
 
     update_cp: false
     exchanges:
-      - hitbtc
+      - zb
 #      - atilly
 #      - atilly
 #      - hitbtc
@@ -28,16 +28,16 @@ jobs:
 #      - bitfinex
     currency_pairs:
 #      - all
-#      - first: cur
+      - first: btc
+        second: eth
+      - first: btc
+        second: usdt
+#      - first: btc
+#        second: ltc
+#      - first: idex
 #        second: eth
-#      - first: btc
-#        second: usdt
-#      - first: btc
-#        second: usdt
 #      - first: eth
-#        second: usd
-      - first: eth
-        second: btc
+#        second: btc
 #
     first_currencies:
     second_currencies:

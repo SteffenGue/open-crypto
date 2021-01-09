@@ -138,69 +138,78 @@ requests:
       - str
       - float
 #
-#  order_book:
-#    request:
-#      template: instruments/{currnency_pair}/book
-#      pair_template: # e.g. btc_usd
-#        template: "{first}-{second}"
-#        lower_case: false
-#      params:
-#        size:
-#          type: int
-#          min: 1
-#          max: 200
-#          default: 200
-#    response:
-#      type: dict
-#      values:
-#        asks:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0: # price
-#                type: float
-#              1: # size
-#                type: float
-#        bids:
-#          type: list
-#          values:
-#            type: list
-#            values:
-#              0: # price
-#                type: float
-#              1: # size
-#                type: float
-#    mapping:
-#    - key: time
-#      path: []
-#      type:
-#      - none
-#      - now
-#    - key: asks_price
-#      path:
-#      - asks
-#      - 0
-#      type:
-#      - float
-#    - key: asks_amount
-#      path:
-#      - asks
-#      - 1
-#      type:
-#      - float
-#    - key: bids_price
-#      path:
-#      - bids
-#      - 0
-#      type:
-#      - float
-#    - key: bids_amount
-#      path:
-#      - bids
-#      - 1
-#      type:
-#      - float
+  order_books:
+    request:
+      template: instruments/{currency_pair}/book
+      pair_template: # e.g. btc_usd
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        size:
+          min: 1
+          max: 200
+          default: 50
+    response:
+      type: dict
+      values:
+        asks:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+        bids:
+          type: list
+          values:
+            type: list
+            values:
+              0: # price
+                type: float
+              1: # size
+                type: float
+    mapping:
+    - key: time
+      path: []
+      type:
+      - none
+      - now
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: asks_price
+      path:
+      - asks
+      - 0
+      type:
+      - float
+    - key: asks_amount
+      path:
+      - asks
+      - 1
+      type:
+      - float
+    - key: bids_price
+      path:
+      - bids
+      - 0
+      type:
+      - float
+    - key: bids_amount
+      path:
+      - bids
+      - 1
+      type:
+      - float
 
   trades:
     request:
@@ -277,6 +286,22 @@ requests:
         granularity:
           type: int
           default: 86400 # 1day
+        limit:
+          default: 300
+        start:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - 300
+            - fromtimestamp
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
     response:
      type: list
      values:
