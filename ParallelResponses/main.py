@@ -61,7 +61,8 @@ def init_logger():
 
 
 def handler(type, value, tb):
-    logging.exception('Uncaught exception: {}'.format(str(value)))
+    logging.exception('Uncaught exception: {}: {}'.format(str(type), str(value)))
+    pass
 
 
 async def main(database_handler: DatabaseHandler):
@@ -94,8 +95,10 @@ async def main(database_handler: DatabaseHandler):
     while True:
         if frequency == 'once':
             loop = asyncio.get_event_loop()
-            loop.run_until_complete(await scheduler.start())
-            break
+            try:
+                loop.run_until_complete(await scheduler.start())
+            except RuntimeError:
+                break
         else:
             await scheduler.start()
 
@@ -105,7 +108,7 @@ async def main(database_handler: DatabaseHandler):
 def run(path: str = None):
 
     init_logger()
-    sys.excepthook = handler
+    # sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')
@@ -116,7 +119,8 @@ def run(path: str = None):
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    asyncio.run(main(database_handler), debug=True, )
+    asyncio.run(main(database_handler))
+    sys.exit(0)
 
 
 

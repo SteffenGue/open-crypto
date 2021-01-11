@@ -333,7 +333,7 @@ class Exchange:
                     response_json = await response.json(content_type=None)
 
                 except (ClientConnectionError, asyncio.TimeoutError):
-                    print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
+                    print('No connection to {}. Timeout- or ConnectionError!'.format(self.name.capitalize()))
                     self.exception_counter +=1
                 except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'

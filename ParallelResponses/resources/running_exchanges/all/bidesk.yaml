@@ -227,7 +227,7 @@ requests:
           function: last_timestamp
           type:
             - datetime
-            - timestampmsen
+            - timestampms
 
     response:
       type: list

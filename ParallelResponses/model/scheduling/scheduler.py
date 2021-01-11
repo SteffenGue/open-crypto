@@ -79,7 +79,7 @@ class Scheduler:
             Method for the request name or a string that the request is false.
         """
 
-        #ToDo: Name OHLVM Ändern
+        # ToDo: Name OHLVM Ändern
         possible_requests = {
             "currency_pairs":
                 {'function': self.get_currency_pairs,
@@ -165,7 +165,6 @@ class Scheduler:
                   "parameters in the configuration.")
             sys.exit(0)
 
-
     async def get_currency_pairs(self, job_list: List[Job], *args) -> List[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
@@ -180,6 +179,8 @@ class Scheduler:
             This method requests the currency_pairs.
 
             :param exchange: Current exchange.
+            @param exchange: #ToDo
+            @return:
             """
 
             response = await exchange.request_currency_pairs()
@@ -198,10 +199,8 @@ class Scheduler:
             # ToDo: Asynchronisieren
             print("Checking and/or updating exchange currency pairs..")
             for exchange in exchanges:
-                if job_params['update_cp']:
-
-                    await update_currency_pairs(exchange)
-                elif not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
+                if job_params['update_cp'] or \
+                        not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                     await update_currency_pairs(exchange)
 
                 job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
@@ -215,7 +214,7 @@ class Scheduler:
     async def get_job_done(self,
                            request_table: object,
                            exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-        #ToDO: Name der Methode ändern
+        # ToDO: Name der Methode ändern
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -235,6 +234,7 @@ class Scheduler:
             - The DatabaseHandler will reject to persist new items if any primary key is emtpy.
             - For more detailed instructions, including an example, see into the handbook.
         """
+
         print('Starting to collect {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
         logging.info('Starting to collect {}.'.format(request_table.__tablename__.capitalize()))
         start_time = datetime.utcnow()
@@ -272,10 +272,12 @@ class Scheduler:
                                                                                      mappings)
 
         if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
+            new_job = {ex: exchanges_with_pairs[ex] for ex in list(exchanges_with_pairs.keys())
+                       if ex in counter.keys() and counter[ex] > 0}
             # In order to avoid requesting exchanges where all data points are already  retrieved.
-            return True, {ex: exchanges_with_pairs[ex] for ex in list(exchanges_with_pairs.keys()) if counter[ex] > 0}
+            return True, new_job
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
 
-        return False
+        return False, {}

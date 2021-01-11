@@ -9,10 +9,10 @@ general:
     db_name: historic
   operation_settings:
     frequency: once
-    timeout: 10
+    timeout: 5
   utilities:
     yaml_path: resources/running_exchanges/all/
-    enable_logging: false
+    enable_logging: true
 
 jobs:
   Ticker:
@@ -20,24 +20,20 @@ jobs:
 
     update_cp: false
     exchanges:
-      - zb
-#      - atilly
+      - all
+#      - btc-alpha
 #      - atilly
 #      - hitbtc
 #      - binance
-#      - bitfinex
+#      - bibox
     currency_pairs:
 #      - all
-      - first: btc
-        second: eth
-      - first: btc
-        second: usdt
 #      - first: btc
-#        second: ltc
-#      - first: idex
-#        second: eth
-#      - first: eth
-#        second: btc
+#        second: usd
+#      - first: btc
+#        second: usdt
+      - first: eth
+        second: btc
 #
     first_currencies:
     second_currencies:

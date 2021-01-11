@@ -520,13 +520,13 @@ class DatabaseHandler:
 
         counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
         print('{} tuple(s) added to {} for {}.'.format(tuple_counter,
-                                                       db_table.__name__.capitalize(),
+                                                       db_table.__name__,
                                                        exchange.name.capitalize()))
         if counter_dict:
             for item in counter_dict.items():
                 print("CuPair-ID {}: {}".format(item[0], item[1]))
         logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter,
-                                                              db_table.__name__.capitalize(),
+                                                              db_table.__name__,
                                                               exchange.name.capitalize()))
 
         # Persist currency_pairs if not already in the database. This can only happen if an response contains
