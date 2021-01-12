@@ -108,7 +108,7 @@ async def main(database_handler: DatabaseHandler):
 def run(path: str = None):
 
     init_logger(path)
-    # sys.excepthook = handler
+    sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')
@@ -119,10 +119,12 @@ def run(path: str = None):
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
+    #ToDo: Geht das auch schöner?
     while True:
         try:
             asyncio.run(main(database_handler))
         except Exception:
+            logging.exception("Restarting Program. at {}".format(datetime.utcnow()))
             pass
 
 
