@@ -8,24 +8,24 @@ general:
     port: 5432
     db_name: historic
   operation_settings:
-    frequency: 0.1
+    frequency: once
     timeout: 100
   utilities:
-    yaml_path: resources/running_exchanges/all/
-    enable_logging: true
+    yaml_path: resources/running_exchanges/
+    enable_logging: false
 
 jobs:
   Ticker:
-    yaml_request_name: order_books
+    yaml_request_name: historic_rates
 
     update_cp: false
     exchanges:
 #      - all
-      - btc-alpha
-#      - atilly
-      - hitbtc
-      - binance
-      - bibox
+#      - btc-alpha
+      - hoo
+#      - hitbtc
+#      - binance
+#      - bibox
     currency_pairs:
 #      - all
 #      - first: btc
