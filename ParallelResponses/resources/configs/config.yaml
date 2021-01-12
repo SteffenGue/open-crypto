@@ -26,6 +26,8 @@ jobs:
       - hitbtc
       - binance
       - bibox
+    excluded:
+
     currency_pairs:
 #      - all
 #      - first: btc
