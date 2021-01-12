@@ -50,13 +50,13 @@ async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler)
     return jobs
 
 
-def init_logger():
+def init_logger(path):
     if not read_config(file=None, section='utilities')['enable_logging']:
         logging.disable()
     else:
-        if not os.path.exists('resources/log/'):
+        if not os.path.exists(path+'/resources/log/'):
             os.makedirs('resources/log/')
-        logging.basicConfig(filename='resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
+        logging.basicConfig(filename=path+'/resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
                             level=logging.ERROR)
 
 
@@ -98,7 +98,7 @@ async def main(database_handler: DatabaseHandler):
             try:
                 loop.run_until_complete(await scheduler.start())
             except RuntimeError:
-                break
+                sys.exit(0)
         else:
             await scheduler.start()
 
@@ -107,7 +107,7 @@ async def main(database_handler: DatabaseHandler):
 
 def run(path: str = None):
 
-    init_logger()
+    init_logger(path)
     # sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
@@ -119,9 +119,10 @@ def run(path: str = None):
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    asyncio.run(main(database_handler))
-    sys.exit(0)
-
-
+    while True:
+        try:
+            asyncio.run(main(database_handler))
+        except Exception:
+            pass
 
 

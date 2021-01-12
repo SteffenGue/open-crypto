@@ -280,4 +280,4 @@ class Scheduler:
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
         logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
 
-        return False, {}
+        return False, exchanges_with_pairs
