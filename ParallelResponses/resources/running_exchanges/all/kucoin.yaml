@@ -277,7 +277,7 @@ requests:
 
   order_books:
     request:
-      template: market/orderbook/level2
+      template: market/orderbook/level2_20
       pair_template: # e.g. KCS-BTC
         template: "{first}-{second}"
         lower_case: false
