@@ -44,7 +44,7 @@ def convert_type(value, types_queue: deque):
         # methods are called with ("none", ...).
         # if not result and isinstance(result, (str, list)):
         try:
-            if not result:
+            if result is None:
                 result = conversion["function"](*params)
             else:
                 result = conversion["function"](result,
