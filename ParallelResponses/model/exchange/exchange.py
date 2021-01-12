@@ -629,6 +629,7 @@ class Exchange:
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values()) if bool(len_results) else 1
 
+
                     if (method == 'order_books') and ('position' in temp_results.keys()):
                         # Sort the order_books by price. I.e. asks ascending, Bids descending.
                         bids = [(price, amount) for (price, amount) in
