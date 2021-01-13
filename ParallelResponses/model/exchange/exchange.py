@@ -221,8 +221,8 @@ class Exchange:
         """
         request_name = request_table.__tablename__
 
-        self.request_urls = self.extract_request_urls(self.file['requests'],
-                                                      request=request_name,
+        self.request_urls = self.extract_request_urls(self.file['requests'][request_name],
+                                                      request_name=request_name,
                                                       request_table=request_table,
                                                       currency_pairs=currency_pairs)
 
@@ -321,8 +321,8 @@ class Exchange:
             does not exist or is empty in the yaml.
         """
 
-        self.request_urls = self.extract_request_urls(self.file['requests'],
-                                                      request=request_name)
+        self.request_urls = self.extract_request_urls(self.file['requests'][request_name],
+                                                      request_name=request_name)
         response_json = None
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             async with aiohttp.ClientSession() as session:
@@ -351,11 +351,12 @@ class Exchange:
         return self.name, response_json
 
     def extract_request_urls(self,
-                             requests: dict,
-                             request: str,
+                             request: dict,
+                             request_name: str,
                              request_table: object = None,
                              currency_pairs: list = None) -> Dict[str, Dict[str, Dict]]:
         # ToDo: Doku der Variables
+        # ToDo: Doku Update mit variablen request parametern.
         """
         Helper-Method which should be only called by the constructor.
         Extracts from the section of requests from the .yaml-file
@@ -413,10 +414,10 @@ class Exchange:
                          ...
 
 
-        @param request:
-        @param currency_pairs:
-        @param request_table:
-        @param requests: Dict[str: Dict[param_name: value]]
+        @param request_name: str
+        @param currency_pairs: list
+        @param request_table: object
+        @param request: Dict[str: Dict[param_name: value]]
             requests-section from a exchange.yaml as dictionary.
             Viability of dict is not checked.
 
@@ -424,10 +425,10 @@ class Exchange:
             See example above.
         """
         urls = dict()
-        if requests:
+        if request:
             request_parameters = dict()
             url = self.api_url
-            request_dict = requests[request]['request']
+            request_dict = request['request']
 
             if 'template' in request_dict.keys() and request_dict['template']:
                 url += '{}'.format(request_dict['template'])
@@ -448,7 +449,6 @@ class Exchange:
                         params[param] = {cp: self.get_first_timestamp(request_table, cp.id) for cp in
                                          currency_pairs}
 
-                    # ToDo: Change 'function' to type for notational reasons (also in every yaml!!)
                     if 'type' in request_dict['params'][param]:
                         value = params[param] if param in params.keys() else None
                         conv_params = request_dict['params'][param]['type']
@@ -460,7 +460,7 @@ class Exchange:
 
             request_parameters['params'] = params
 
-            urls[request] = request_parameters
+            urls[request_name] = request_parameters
 
         return urls
 

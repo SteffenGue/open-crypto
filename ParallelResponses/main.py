@@ -35,27 +35,26 @@ async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler)
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
+
     jobs: [Job] = list()
+    Exchanges: [Exchange] = list()
+
     for job in job_config.keys():
         job_params: Dict = job_config[job]
-
         exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
 
-        # exchange_names = list(set(exchange_names) - set(job_params.get('excluded')))
         if job_params.get('excluded'):
             exchange_names = [item for item in exchange_names if item not in job_params.get('excluded', [])]
 
-        #ToDo: Excpetion Handling for error in loading the file
-        Exchanges = [Exchange(yaml_loader(exchange_name),
+        exchange_names = [yaml_loader(exchange) for exchange in exchange_names if yaml_loader(exchange) is not None]
+
+        Exchanges = [Exchange(exchange_name,
                               db_handler.get_first_timestamp,
-                              timeout)
-                     for exchange_name in exchange_names]
+                              timeout) for exchange_name in exchange_names]
 
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(Exchanges)
 
-        new_job: Job = Job(job,
-                           job_params,
-                           exchanges_with_pairs)
+        new_job: Job = Job(job, job_params, exchanges_with_pairs)
         jobs.append(new_job)
     return jobs
 
@@ -64,10 +63,11 @@ def init_logger(path):
     if not read_config(file=None, section='utilities')['enable_logging']:
         logging.disable()
     else:
-        if not os.path.exists(path+'/resources/log/'):
+        if not os.path.exists(path + '/resources/log/'):
             os.makedirs('resources/log/')
-        logging.basicConfig(filename=path+'/resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
-                            level=logging.ERROR)
+        logging.basicConfig(
+            filename=path + '/resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
+            level=logging.ERROR)
 
 
 def handler(type, value, tb):
@@ -85,8 +85,6 @@ async def main(database_handler: DatabaseHandler):
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     """
 
-    # run program with single exchange for debugging/testing purposes
-    # exchange_names = ['binance']
     config = read_config(file=None, section=None)
 
     logging.info('Loading jobs.')
@@ -102,6 +100,7 @@ async def main(database_handler: DatabaseHandler):
     logging.info(
         '{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]),
                                                                   frequency))
+
     while True:
         if frequency == 'once':
             loop = asyncio.get_event_loop()
@@ -110,13 +109,14 @@ async def main(database_handler: DatabaseHandler):
             except RuntimeError:
                 sys.exit(0)
         else:
-            await scheduler.start()
-
-
+            try:
+                await scheduler.start()
+            except Exception as e:
+                logging.exception(datetime.utcnow(), e)
+                pass
 
 
 def run(path: str = None):
-
     init_logger(path)
     sys.excepthook = handler
     logging.info('Reading Database Configuration')
@@ -124,17 +124,16 @@ def run(path: str = None):
     logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
 
-    # Windows Bug I don't understand. See Github Issue:
+    # Windows Bug I don't really understand. See Github Issue:
     # https: // github.com / encode / httpx / issues / 914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    #ToDo: Geht das auch schöner?
-    while True:
-        try:
-            asyncio.run(main(database_handler))
-        except Exception:
-            logging.exception("Restarting Program. at {}".format(datetime.utcnow()))
-            pass
-
-
+    #ToDo: diese Methode genauso verlässlich? -> Try Except um scheduler.start()
+    asyncio.run(main(database_handler))
+    # while True:
+    #     try:
+    #         asyncio.run(main(database_handler))
+    #     except Exception:
+    #         logging.exception("Restarting Program. at {}".format(datetime.utcnow()))
+    #         pass

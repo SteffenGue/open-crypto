@@ -85,19 +85,19 @@ class Scheduler:
                 {'function': self.get_currency_pairs,
                  'table': ExchangeCurrencyPair},
             "tickers":
-                {'function': self.get_job_done,
+                {'function': self.request_format_persist,
                  'table': Ticker},
             "historic_rates":
-                {'function': self.get_job_done,
+                {'function': self.request_format_persist,
                  'table': HistoricRate},
             "order_books":
-                {'function': self.get_job_done,
+                {'function': self.request_format_persist,
                  'table': OrderBook},
             "trades":
-                {'function': self.get_job_done,
+                {'function': self.request_format_persist,
                  'table': Trade},
             "ohlcvm":
-                {'function': self.get_job_done,
+                {'function': self.request_format_persist,
                  'table': OHLCVM}
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
@@ -174,20 +174,19 @@ class Scheduler:
         :return job_list with updated exchange_currency_pairs
         """
 
-        async def update_currency_pairs(exchange: Exchange):
+        async def update_currency_pairs(ex: Exchange):
             """
             This method requests the currency_pairs.
 
-            :param exchange: Current exchange.
-            @param exchange: #ToDo
-            @return:
+            @param ex: Current exchange object.
+            @return: Empty list if no response from the exchange.
             """
 
-            response = await exchange.request_currency_pairs()
+            response = await ex.request_currency_pairs()
             if response[1]:
-                formatted_response = exchange.format_currency_pairs(response)
+                formatted_response = ex.format_currency_pairs(response)
                 self.database_handler.persist_exchange_currency_pairs(formatted_response,
-                                                                      is_exchange=exchange.is_exchange)
+                                                                      is_exchange=ex.is_exchange)
             else:
                 return []
 
@@ -196,7 +195,6 @@ class Scheduler:
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
-            # ToDo: Asynchronisieren
             print("Checking and/or updating exchange currency pairs..")
             for exchange in exchanges:
                 if job_params['update_cp'] or \
@@ -211,10 +209,9 @@ class Scheduler:
                 )
         return job_list
 
-    async def get_job_done(self,
-                           request_table: object,
-                           exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
-        # ToDO: Name der Methode ändern
+    async def request_format_persist(self,
+                                     request_table: object,
+                                     exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -248,7 +245,7 @@ class Scheduler:
             found_exchange: Exchange = None
 
             for exchange in exchanges_with_pairs.keys():
-                # finding the right exchange
+                # finding the right exchange object
                 if exchange.name.upper() == exchange_name.upper():
                     found_exchange = exchange
                     break
@@ -260,20 +257,20 @@ class Scheduler:
                                                                               start_time=start_time,
                                                                               time=response_time)
 
-                    if formatted_response:
-                        counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
-                                                                                         found_exchange,
-                                                                                         request_table,
-                                                                                         formatted_response,
-                                                                                         mappings)
-                except (MappingNotFoundException, TypeError, KeyError):
-                    logging.exception("Exception formatting or persisting data for {}".format(found_exchange.name))
-                    continue
+                except MappingNotFoundException:
+                    formatted_response, mappings = None, None
+
+                if formatted_response:
+                    counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
+                                                                                     found_exchange,
+                                                                                     request_table,
+                                                                                     formatted_response,
+                                                                                     mappings)
 
         if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
+            # In order to avoid requesting exchanges where all data points are already collected.
             new_job = {ex: exchanges_with_pairs[ex] for ex in list(exchanges_with_pairs.keys())
                        if ex in counter.keys() and counter[ex] > 0}
-            # In order to avoid requesting exchanges where all data points are already  retrieved.
             return True, new_job
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")

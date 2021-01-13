@@ -36,10 +36,7 @@ def _get_exchange_currency_pair(session: Session, exchange_name: str, first_curr
 
     if exchange_name is None or first_currency_name is None or second_currency_name is None:
         return None
-    # sollte raus in der actual Implementierung
-    # ToDo: ausgeschaltet von Steffen, aber ich verstehe nicht wofür das gut sein soll. Überprüfen!
 
-    # self.persist_exchange_currency_pair(exchange_name, first_currency_name, second_currency_name, is_exchange=True)
     ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
     first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
     second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
@@ -374,8 +371,6 @@ class DatabaseHandler:
         self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
                                              is_exchange=is_exchange)
 
-    # ToDo: den boolean 'is_exchange' in jedes *.yaml-file schreiben.
-    # ToDo: alle persist methoden überprüfen ob der boolean 'is_exchange' implementiert ist.
     def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]], is_exchange: bool):
         """
         Persists the given already formatted ExchangeCurrencyPair-tuple if they not already exist.
@@ -650,11 +645,11 @@ class DatabaseHandler:
         return result
 
     def get_first_timestamp(self, table: object, ExCuPair_id: int):
-        # ToDo: Doku
         """
-        @param table:
-        @param ExCuPair_id:
-        @return:
+        Returns the first timestamp found in the database.
+        @param table: The database table to query.
+        @param ExCuPair_id: The exchange_pair_id of interest
+        @return: datetime: First timestamp of database of datetime.now()
         """
 
         with self.session_scope() as session:
@@ -799,8 +794,7 @@ class DatabaseHandler:
     #     committed and the connection will be closed.
     #
     #     Exceptions will be caught but not really handled.
-    #     TODO: Exception handling and
-    #     TODO: Logging of Exception
+
     #
     #     @param tickers: Iterator
     #         Iterator of tuples containing ticker-data.

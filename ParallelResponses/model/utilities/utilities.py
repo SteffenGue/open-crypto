@@ -9,7 +9,6 @@ from pathlib import Path
 import logging
 from resources.configs.GlobalConfig import GlobalConfig
 import dateutil.parser
-import sys
 
 TYPE_CONVERSION = {
 
@@ -28,11 +27,11 @@ TYPE_CONVERSION = {
         the number of additional parameters needed
     """
 
-    : {  # Tested
+    : {
         "function": str,
         "params": 0
     },
-    ("bool", "int"): {  # Tested
+    ("bool", "int"): {
         "function": int,
         "params": 0
     },
@@ -40,7 +39,7 @@ TYPE_CONVERSION = {
         "function": int,
         "params": 0
     },
-    ("int", "bool"): {  # Tested
+    ("int", "bool"): {
         "function": bool,
         "params": 0
     },
@@ -48,45 +47,45 @@ TYPE_CONVERSION = {
         'function': lambda integer, div: integer / (1 * div),
         'params': 1
     },
-    ("int", "fromtimestamp"): {  # Partially tested
+    ("int", "fromtimestamp"): {
         "function": datetime.datetime.utcfromtimestamp,
         "params": 0
     },
-    ("int", "utcfromtimestamp"): {  # Partially tested
+    ("int", "utcfromtimestamp"): {
         "function": lambda timestamp: datetime.datetime.utcfromtimestamp(
             int(timestamp)),
         "params": 0
     },
-    ("int", "utcfromtimestampms"): {  # Partially tested
+    ("int", "utcfromtimestampms"): {
         "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
             int(timestampms) / 1000),
         "params": 0
     },
-    ("int", "utcfromtimestampns"): {  # Partially tested
+    ("int", "utcfromtimestampns"): {
         "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
             int(timestampms) / 1000000),
         "params": 0
     },
-    ("int", "fromtimestampms"): {  # Partially tested
+    ("int", "fromtimestampms"): {
         "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
             timestampms / 1000),
         "params": 0
     },
-    ("int", "fromtimestampns"): {  # Not tested
+    ("int", "fromtimestampns"): {
         "function": lambda timestampns: datetime.datetime.utcfromtimestamp(
             timestampns / 1000000),
         "params": 0
     },
-    ("int", "utcfromtimestamp-9"): {  # Not tested
+    ("int", "utcfromtimestamp-9"): {
         "function": lambda timestampns: datetime.datetime.utcfromtimestamp(
             timestampns / 1000000000),
         "params": 0
     },
-    ("float", "fromtimestamp"): {  # Partially tested
+    ("float", "fromtimestamp"): {
         "function": datetime.datetime.fromtimestamp,
         "params": 0
     },
-    ("float", "utcfromtimestamp"): {  # Partially tested
+    ("float", "utcfromtimestamp"): {
         "function": datetime.datetime.utcfromtimestamp,
         "params": 0
     },
@@ -94,19 +93,19 @@ TYPE_CONVERSION = {
         "function": lambda number: True if float(number) > 0 else False,
         "params": 0
     },
-    ("str", "bool"): {  # Tested
+    ("str", "bool"): {
         "function": lambda string: string.lower() == "true",
         "params": 0
     },
-    ("str", "int"): {  # Tested
+    ("str", "int"): {
         "function": int,
         "params": 0
     },
-    ("str", "float"): {  # Tested
+    ("str", "float"): {
         "function": float,
         "params": 0
     },
-    ("str", "float_absolut"): {  # Tested
+    ("str", "float_absolut"): {
         "function": lambda string: abs(float(string)),
         "params": 0
     },
@@ -114,7 +113,7 @@ TYPE_CONVERSION = {
         "function": lambda string: float(string) if string != "N/A" else None,
         "params": 0
     },
-    ("str", "strptime"): {  # Partially tested
+    ("str", "strptime"): {
         "function": lambda string, *args:
         datetime.datetime.strptime(string, args[0]),
         "params": 1
@@ -123,7 +122,7 @@ TYPE_CONVERSION = {
         'function': lambda string, *args: datetime.datetime.strptime(string.split(".")[0], *args),
         'params': 1
     },
-    ("str", "split"): {  # Tested
+    ("str", "split"): {
         "function": lambda string, *args: string.split(args[0])[args[1]] if args[0] in string else None,
         "params": 2
     },
@@ -131,15 +130,15 @@ TYPE_CONVERSION = {
         "function": lambda string, *args: string.split(args[0])[args[1]].upper(),
         "params": 2
     },
-    ("str", "slice"): {  # Partially tested
+    ("str", "slice"): {
         "function": lambda string, *args: string[args[0]:args[1]],
         "params": 2
     },
-    ("str", "upper"): {  # Not tested
+    ("str", "upper"): {
         "function": lambda string: string.upper(),
         "params": 0
     },
-    ("str", "lower"): {  # Not tested
+    ("str", "lower"): {
         "function": lambda string: string.lower(),
         "params": 0
     },
@@ -147,23 +146,23 @@ TYPE_CONVERSION = {
         'function': lambda string: dateutil.parser.parse(string),
         'params': 0
     },
-    ("datetime", "strftime"): {  # Partially tested
+    ("datetime", "strftime"): {
         "function": lambda time, *args: datetime.datetime.strftime(time, args[0]),
         "params": 1
     },
-    ("dateparser", "totimestamp"): {  # Partially tested
+    ("dateparser", "totimestamp"): {
         "function": lambda time: int(time.timestamp()),
         "params": 0
     },
-    ("datetime", "totimestamp"): {  # Partially tested
+    ("datetime", "totimestamp"): {
         "function": lambda time: int(time.timestamp()),
         "params": 0
     },
-    ("datetime", "totimestampms"): {  # Partially tested
+    ("datetime", "totimestampms"): {
         "function": lambda time: int(round(time.timestamp() * 1000)),
         "params": 0
     },
-    ("datetime", "utctotimestamp"): {  # Partially tested
+    ("datetime", "utctotimestamp"): {
         "function": lambda time: calendar.timegm(time.utctimetuple()),
         "params": 0
     },
@@ -206,7 +205,7 @@ TYPE_CONVERSION = {
         'params': 0
     },
     ('none', 'now_timestampms'): {
-        'function': lambda: int(datetime.datetime.timestamp(datetime.datetime.utcnow())*1000),
+        'function': lambda: int(datetime.datetime.timestamp(datetime.datetime.utcnow()) * 1000),
         'params': 0
     },
     ('now', 'timedelta'): {
@@ -219,7 +218,7 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ('datetime', 'timedeltams'): {
-        'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta))))*1000,
+        'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta)))) * 1000,
         'params': 1
     },
     ('datetime', 'timestamp'): {
@@ -227,7 +226,7 @@ TYPE_CONVERSION = {
         'params': 0
     },
     ('datetime', 'timestampms'): {
-        'function': lambda time: int(time.timestamp())*1000,
+        'function': lambda time: int(time.timestamp()) * 1000,
         'params': 0
     },
     ("datetime", "format"): {
@@ -240,45 +239,14 @@ TYPE_CONVERSION = {
     },
 }
 
-"""A dictionary containing lambda function calls in order to get request parameters variable. The function calls
-will be stored in the respective .yaml-file of each exchange and executed, outside the yaml environment,
-during the preparation of the API request.
-
-'name' : call name of the lambda function
-'function' : the actual lambda function to execute
-'params' : amount of additional parameters if necessary.
-'session' : ORM-Session if necessary.
-"""
-REQUEST_PARAMS = {
-    "add": {  # for debugging purposes.
-        "name": 'add',
-        "function": lambda x: x + 1,
-        "params": 1,
-        "session": False
-    },
-    "exchange": {
-        "name": 'exchange',
-        "function": lambda session, table: session.query(table),
-        'params': 1,
-        "session": True
-    },
-    "last_ts": {
-        "name": 'last_ts',
-        "function": lambda session, table, exchange, pair: session.query(table).filter()
-    },
-    "timestamp_now": {
-        "function": datetime.datetime.now()
-    }
-}
-
 
 def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
     """
     @param section: str
         Name of the section the information is stored in.
-    @param filename: str
+    @param file: str
         Name of the config file.
-    @return:
+    @return: Dict
         Parameters for the program as a dictionary.
         Keys are the names of the parameters in the config-file.
     """
@@ -312,19 +280,15 @@ def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
     Exception()
 
 
-# Constant that contains the path to the yaml-files of working exchange.
-# YAML_PATH = read_config('utilities')['yaml_path']
-
-
 def yaml_loader(exchange: str):
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
-    :param exchange: str
+    @param exchange: str
         the file name to load (exchange)
-    :return: data: dict
+    @return: data: dict
         returns a dict of the loaded data from the .yaml-file
-    :exceptions Exception: the .yaml file could not be evaluated for a given exchange
+    @exceptions Exception: the .yaml file could not be evaluated for a given exchange
     """
 
     path = read_config(file=None, section='utilities')['yaml_path']
@@ -333,10 +297,10 @@ def yaml_loader(exchange: str):
             data = yaml.load(f, Loader=yaml.FullLoader)
         return data
     except Exception as ex:
-        print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
+        print(f"Error loading yaml of {exchange}. Try validating the file or look in the log-files.")
         print(ex)
         logging.exception(f"Error loading yaml of {exchange}.\n", ex)
-        return None
+        return
 
 
 def get_exchange_names() -> List[str]:
@@ -345,9 +309,9 @@ def get_exchange_names() -> List[str]:
     requests to. This means if the name of a exchange is not part of the
     list that is returned, the program will not send any request to said
     exchange.
-    :param: session: orm_session
+    @param: session: orm_session
         Connection to the Database in order to query all ACTIVE exchange.
-    :return: List[str]
+    @return: List[str]
         Names from all the exchange, which have a .yaml-file in
         the directory described in YAML_PATH.
 """
