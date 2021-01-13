@@ -257,15 +257,15 @@ class Scheduler:
                                                                               start_time=start_time,
                                                                               time=response_time)
 
-                except MappingNotFoundException:
-                    formatted_response, mappings = None, None
-
-                if formatted_response:
-                    counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
-                                                                                     found_exchange,
-                                                                                     request_table,
-                                                                                     formatted_response,
-                                                                                     mappings)
+                    if formatted_response:
+                        counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
+                                                                                         found_exchange,
+                                                                                         request_table,
+                                                                                         formatted_response,
+                                                                                         mappings)
+                except (MappingNotFoundException, TypeError, KeyError):
+                    logging.exception("Exception formatting or persisting data for {}".format(found_exchange.name))
+                    continue
 
         if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
             # In order to avoid requesting exchanges where all data points are already collected.
