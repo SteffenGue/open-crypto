@@ -45,10 +45,12 @@ async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler)
         if job_params.get('excluded'):
             exchange_names = [item for item in exchange_names if item not in job_params.get('excluded', [])]
 
+        #ToDo: Excpetion Handling for error in loading the file
         Exchanges = [Exchange(yaml_loader(exchange_name),
                               db_handler.get_first_timestamp,
                               timeout)
                      for exchange_name in exchange_names]
+
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(Exchanges)
 
         new_job: Job = Job(job,

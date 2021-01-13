@@ -2,8 +2,8 @@ name: b2bx
 exchange: true
 
 rate_limit:
-  unit:
-  max:
+  max: 120
+  unit: 60
 
 api_url: ""
 
@@ -13,6 +13,7 @@ requests:
       template: https://api.b2bx.exchange:8443/trading/frontoffice/api/info
       pair_template: null
       params: null
+
     response:
       type: dict
       values:
@@ -21,33 +22,33 @@ requests:
           values:
             currency_pair:
               type: dict
-              values:
-                baseAsset:
-                  type: str
-                quoteAsset:
-                  type: str
+
     mapping:
       - key: currency_pair_first
         path:
           - pairs
-          - dict_values
-          - baseAsset
+          - dict_key
         type:
           - str
+          - split
+          - "_"
+          - 0
       - key: currency_pair_second
         path:
           - pairs
-          - dict_values
-          - quoteAsset
+          - dict_key
         type:
           - str
+          - split
+          - "_"
+          - 1
+
 
   tickers:
     request:
       template: https://cmc-gate.b2bx.exchange/marketdata/cmc/v1/ticker
       pair_template: null
       params: null
-
     response:
       type: dict
       values:
@@ -60,6 +61,7 @@ requests:
               type: str
             quote_volume:
               type: str
+
     mapping:
       - key: currency_pair_first
         path:
@@ -84,6 +86,11 @@ requests:
         type:
           - str
           - float
+      - key: time
+        path: []
+        type:
+          - none
+          - now
       - key: daily_volume
         path:
           - dict_values
@@ -99,16 +106,24 @@ requests:
         template: "{first}_{second}"
         lower_case: true
       params:
-        startDate:
-          default: "2010-01-01T00:00:00"
         endDate:
+          function: last_timestamp
           type:
-            - none
-            - now_format
+            - datetime
+            - format
             - "%Y-%m-%dT%H:%M:%S"
+        startDate:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - 1000
+            - fromtimestamp
+            - "%Y-%m-%dT%H:%M:%S"
+        count:
+          default: 1000 #max
         type:
           default: 1d
-
     response:
       type: dict
       values:
@@ -131,44 +146,48 @@ requests:
                 type: float
               volume:
                 type: float
+              quoteVolume:
+                type: float
+
     mapping:
-      - key: time
-        path:
-          - data
-          - end
-        type:
-          - str
-          - dateparser
-      - key: open
-        path:
-          - data
-          - open
-        type:
-          - float
-      - key: high
-        path:
-          - data
-          - high
-        type:
-          - float
-      - key: low
-        path:
-          - data
-          - low
-        type:
-          - float
-      - key: close
-        path:
-          - data
-          - close
-        type:
-          - float
-      - key: volume
-        path:
-          - data
-          - volume
-        type:
-          - float
+    - key: time
+      path:
+        - data
+        - start
+      type:
+        - str
+        - dateparser
+    - key: open
+      path:
+        - data
+        - open
+      type:
+        - float
+    - key: high
+      path:
+        - data
+        - high
+      type:
+        - float
+    - key: low
+      path:
+        - data
+        - low
+      type:
+        - float
+    - key: close
+      path:
+        - data
+        - close
+      type:
+        - float
+    - key: volume
+      path:
+        - data
+        - volume
+      type:
+        - float
+
 
   trades:
     request:
@@ -196,40 +215,40 @@ requests:
           type:
             type: str
     mapping:
-      - key: time
-        path:
-          - trade_timestamp
-        type:
-          - str
-          - int
-          - utcfromtimestamp
-      - key: id
-        path:
-          - trade_timestamp
-        type:
-          - str
-          - int
-      - key: price
-        path:
-          - price
-        type:
-          - str
-          - float
-      - key: amount
-        path:
-          - base_volume
-        type:
-          - str
-          - float
-      - key: direction
-        path:
-          - type
-        type:
-          - str
+    - key: time
+      path:
+        - trade_timestamp
+      type:
+        - str
+        - int
+        - utcfromtimestamp
+    - key: id
+      path:
+        - tradeID
+      type:
+        - str
+        - int
+    - key: direction
+      path:
+        - type
+      type:
+        - str
+    - key: price
+      path:
+        - price
+      type:
+        - str
+        - float
+    - key: amount
+      path:
+        - base_volume
+      type:
+        - str
+        - float
 
   order_books:
     request:
-      template: https://cmc-gate.b2bx.exchange/marketdata/instruments/{currency_pair}/depth
+      template: https://api.b2bx.exchange:8443/trading/marketdata/instruments/{currency_pair}/depth
       pair_template:
         template: "{first}_{second}"
         lower_case: true
@@ -258,43 +277,45 @@ requests:
                 type: float
         version:
           type: int
+
+
     mapping:
-      - key: id
-        path:
-          - version
-        type:
-          - int
-      - key: time
-        path: []
-        type:
-          - none
-          - now
-      - key: position
-        path: []
-        type:
-          - none
-          - range
-      - key: bids_amount
-        path:
-          - bids
-          - amount
-        type:
-          - float
-      - key: bids_price
-        path:
-          - bids
-          - price
-        type:
-          - float
-      - key: asks_amount
-        path:
-          - asks
-          - amount
-        type:
-          - float
-      - key: asks_price
-        path:
-          - asks
-          - price
-        type:
-          - float
+    - key: time
+      path: []
+      type:
+        - none
+        - now
+    - key: id
+      path:
+        - version
+      type:
+        - int
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: bids_amount
+      path:
+        - bids
+        - amount
+      type:
+        - float
+    - key: bids_price
+      path:
+        - bids
+        - price
+      type:
+        - float
+    - key: asks_amount
+      path:
+        - asks
+        - amount
+      type:
+        - float
+    - key: asks_price
+      path:
+        - asks
+        - price
+      type:
+        - float

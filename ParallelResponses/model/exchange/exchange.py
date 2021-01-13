@@ -263,6 +263,7 @@ class Exchange:
                     except (ClientConnectionError, asyncio.TimeoutError):
                         print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
                         logging.error('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
+                        return
 
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
@@ -274,7 +275,7 @@ class Exchange:
                                       .format(self.name, request_url_and_params['url'],
                                               request_url_and_params['params']))
 
-                        await asyncio.sleep(rate_limit)
+                    await asyncio.sleep(rate_limit)
 
             return datetime.utcnow(), self.name, responses
         else:

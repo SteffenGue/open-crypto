@@ -336,6 +336,7 @@ def yaml_loader(exchange: str):
         print(f"Error of loading yaml of {exchange}. Try validating the file or look in the log-files.")
         print(ex)
         logging.exception(f"Error loading yaml of {exchange}.\n", ex)
+        return None
 
 
 def get_exchange_names() -> List[str]:
