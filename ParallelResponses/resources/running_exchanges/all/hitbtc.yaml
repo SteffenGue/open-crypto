@@ -53,7 +53,7 @@ requests:
 
   tickers:
     request:
-      template: public/ticker/{currency_pair}/
+      template: public/ticker/{currency_pair}
       pair_template: # i.e. ETHBTC
         template: "{first}{second}"
         lower_case: false
@@ -217,7 +217,7 @@ requests:
 
   order_books:
     request:
-      template: public/orderbook/{currency_pair}/
+      template: public/orderbook/{currency_pair}
       pair_template: # i.e. ETHBTC
          template: "{first}{second}"
          lower_case: false

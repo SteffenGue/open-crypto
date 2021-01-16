@@ -247,10 +247,10 @@ class Exchange:
                     if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
                         params[pair_template_dict['alias']] = pair_formatted[cp]
                     elif pair_template_dict:
-                        url = url.format(currency_pair=pair_formatted[cp])
+                        url_formatted = url.format(currency_pair=pair_formatted[cp])
                     params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
                     try:
-                        response = await session.get(url=url,
+                        response = await session.get(url=url_formatted,
                                                      params=params,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         response_json = await response.json(content_type=None)
