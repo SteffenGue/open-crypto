@@ -246,6 +246,7 @@ class Exchange:
                     # if formatted currency pair needs to be a parameter
                     if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
                         params[pair_template_dict['alias']] = pair_formatted[cp]
+                        url_formatted = url
                     elif pair_template_dict:
                         url_formatted = url.format(currency_pair=pair_formatted[cp])
                     params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
@@ -255,6 +256,9 @@ class Exchange:
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         response_json = await response.json(content_type=None)
 
+                        #ToDo: Does every sucessfull response hase code 200?
+                        assert (response.status == 200)
+
                         if pair_template_dict:
                             responses[cp] = response_json
                         else:  # when ticker data is returned for all available currency pairs at once
@@ -263,7 +267,12 @@ class Exchange:
                     except (ClientConnectionError, asyncio.TimeoutError):
                         print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
                         logging.error('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
-                        return
+                        #ToDo: Changes for all exception: "return -> responses[cp]= []"
+                        responses[cp] = []
+
+                    except AssertionError:
+                        print("Failed request for {}. Status: {}".format(self.name.capitalize(), response.status))
+                        responses[cp] = []
 
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
@@ -272,8 +281,9 @@ class Exchange:
 
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'
-                                      .format(self.name, request_url_and_params['url'],
+                                      .format(self.name, url_formatted,
                                               request_url_and_params['params']))
+                        responses[cp] = []
 
                     await asyncio.sleep(rate_limit)
 
@@ -335,7 +345,7 @@ class Exchange:
 
                 except (ClientConnectionError, asyncio.TimeoutError):
                     print('No connection to {}. Timeout- or ConnectionError!'.format(self.name.capitalize()))
-                    self.exception_counter +=1
+                    self.exception_counter += 1
                 except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'
                           'Url: {}, Parameters: {}'
@@ -621,7 +631,7 @@ class Exchange:
                     # CHANGE: One filed invalid -> all fields invalid.
                     # changed this in order to avoid responses kicked out just because of one invalid field.
                     # The response will be filtered out in the DB-Handler if the primary-keys are missing anyways.
-                    if all(value is None for value in list(temp_results.values())):
+                    if all(value is None for value in list(temp_results.values()) if not isinstance(value, datetime)):
                         continue
 
                     # asserting that the extracted lists for each mapping are having the same length
@@ -629,7 +639,6 @@ class Exchange:
 
                     len_results = {key: len(value) for key, value in temp_results.items() if hasattr(value, '__iter__')}
                     len_results = max(len_results.values()) if bool(len_results) else 1
-
 
                     if (method == 'order_books') and ('position' in temp_results.keys()):
                         # Sort the order_books by price. I.e. asks ascending, Bids descending.

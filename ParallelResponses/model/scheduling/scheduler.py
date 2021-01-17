@@ -232,7 +232,7 @@ class Scheduler:
             - For more detailed instructions, including an example, see into the handbook.
         """
 
-        print('Starting to collect {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
+        print('\nStarting to collect {}.'.format(request_table.__tablename__.capitalize()), end="\n")
         logging.info('Starting to collect {}.'.format(request_table.__tablename__.capitalize()))
         start_time = datetime.utcnow()
         responses = await asyncio.gather(
@@ -269,8 +269,11 @@ class Scheduler:
 
         if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
             # In order to avoid requesting exchanges where all data points are already collected.
-            new_job = {ex: exchanges_with_pairs[ex] for ex in list(exchanges_with_pairs.keys())
-                       if ex in counter.keys() and counter[ex] > 0}
+
+            # for exchange in exchanges_with_pairs.keys():
+                # if exchanges_with_pairs[exchange]
+            new_job = {ex: counter[ex] for ex in list(exchanges_with_pairs.keys())
+                       if counter[ex]}
             return True, new_job
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")

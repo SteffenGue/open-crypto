@@ -6,9 +6,9 @@ general:
     password: 1234
     host: localhost
     port: 5432
-    db_name: historic
+    db_name: test
   operation_settings:
-    frequency: 0.1
+    frequency: once
     timeout: 10
   utilities:
     yaml_path: resources/running_exchanges/all/
@@ -16,24 +16,24 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: order_books
+    yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - all
-#      - bitfront
-#      - coindcx
-#      - hoo
-#      - alterdice
-#      - bibox
+#      - all
+      - hitbtc
+      - coindcx
+      - hoo
+      - alterdice
+      - bibox
     excluded:
 
     currency_pairs:
 #      - all
-#      - first: btc
-#        second: usd
+      - first: xrp
+        second: usd
 #      - first: btc
 #        second: usdt
-      - first: eth
+      - first: xrp
         second: btc
 #
     first_currencies:

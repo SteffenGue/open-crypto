@@ -502,6 +502,7 @@ class DatabaseHandler:
                     logging.exception(NotAllPrimaryKeysException(exchange.name, failed_columns))
                     continue
 
+                #ToDo: Speed that up.
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
                 query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
                     else False
@@ -540,7 +541,7 @@ class DatabaseHandler:
                       "Data will be persisted next time.".format(added_cp_counter, exchange.name.capitalize()))
                 logging.info("Added {} new currency pairs to {}".format(added_cp_counter, exchange.name.capitalize()))
 
-        return tuple_counter
+        return [item for item in exchanges_with_pairs[exchange] if item.id in counter_dict.keys()]
 
     def get_readable_query(self,
                            db_table: object,
