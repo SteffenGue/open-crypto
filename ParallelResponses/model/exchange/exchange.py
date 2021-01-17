@@ -271,7 +271,7 @@ class Exchange:
                         responses[cp] = []
 
                     except AssertionError:
-                        print("Failed request for {}. Status: {}".format(self.name.capitalize(), response.status))
+                        print("Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
 
                     except Exception:

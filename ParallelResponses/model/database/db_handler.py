@@ -502,10 +502,9 @@ class DatabaseHandler:
                     logging.exception(NotAllPrimaryKeysException(exchange.name, failed_columns))
                     continue
 
-                #ToDo: Speed that up.
                 p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
-                query_exists: bool = True if session.query(db_table).filter_by(**p_key_filter).count() > 0 \
-                    else False
+                query = session.query(db_table).filter_by(**p_key_filter)
+                query_exists = session.query(query.exists()).scalar()
 
                 if not query_exists:
                     if db_table.__name__ != Ticker.__name__:
