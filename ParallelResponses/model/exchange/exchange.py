@@ -343,9 +343,17 @@ class Exchange:
                                                  timeout=aiohttp.ClientTimeout(total=self.timeout))
                     response_json = await response.json(content_type=None)
 
+                    assert (response.status == 200)
+
                 except (ClientConnectionError, asyncio.TimeoutError):
                     print('No connection to {}. Timeout- or ConnectionError!'.format(self.name.capitalize()))
                     self.exception_counter += 1
+                    return self.name, None
+
+                except AssertionError:
+                    print("Failed request for {}. Status {}.".format(self.name.capitalize(), response.status))
+                    return self.name, None
+
                 except Exception:
                     print('Unable to read response from {}. Check exchange config file.\n'
                           'Url: {}, Parameters: {}'
@@ -354,7 +362,7 @@ class Exchange:
                                     'Url: {}, Parameters: {}'
                                     .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
                     self.exception_counter += 1
-
+                    return self.name, None
         else:
             logging.warning('{} has no currency pair request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no currency-pair request.".format(self.name))

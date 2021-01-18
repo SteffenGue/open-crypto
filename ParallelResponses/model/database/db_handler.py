@@ -389,14 +389,14 @@ class DatabaseHandler:
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             i = 0
             with self.session_scope() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 10)):
+                for cp in tqdm.tqdm(currency_pairs):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
                     is_exchange: bool = is_exchange
                     i += 1
 
-                    if exchange_name is None or first_currency_name is None or second_currency_name is None:
+                    if any([exchange_name, first_currency_name, second_currency_name]) is None:
                         continue
 
                     if first_currency_name == second_currency_name:
@@ -419,9 +419,11 @@ class DatabaseHandler:
                     existing_exchange_pair = session.query(ExchangeCurrencyPair).filter(
                         ExchangeCurrencyPair.exchange_id == exchange.id,
                         ExchangeCurrencyPair.first_id == first.id,
-                        ExchangeCurrencyPair.second_id == second.id).first()
+                        ExchangeCurrencyPair.second_id == second.id)
 
-                    if existing_exchange_pair is None:
+                    existing_exchange_pair = session.query(existing_exchange_pair.exists()).scalar()
+
+                    if not existing_exchange_pair:
                         exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
                         # ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)

@@ -81,9 +81,9 @@ class Scheduler:
 
         # ToDo: Name OHLVM Ändern
         possible_requests = {
-            "currency_pairs":
-                {'function': self.get_currency_pairs,
-                 'table': ExchangeCurrencyPair},
+            # "currency_pairs":
+            #     {'function': self.get_currency_pairs,
+            #      'table': ExchangeCurrencyPair},
             "tickers":
                 {'function': self.request_format_persist,
                  'table': Ticker},
@@ -184,9 +184,13 @@ class Scheduler:
 
             response = await ex.request_currency_pairs()
             if response[1]:
-                formatted_response = ex.format_currency_pairs(response)
-                self.database_handler.persist_exchange_currency_pairs(formatted_response,
-                                                                      is_exchange=ex.is_exchange)
+                try:
+                    formatted_response = ex.format_currency_pairs(response)
+                    self.database_handler.persist_exchange_currency_pairs(formatted_response,
+                                                                          is_exchange=ex.is_exchange)
+                except (MappingNotFoundException, TypeError, KeyError):
+                    logging.exception("Error updating currency_pairs for {}".format(ex.name.capitalize()))
+                    return []
             else:
                 return []
 
@@ -195,7 +199,7 @@ class Scheduler:
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
-            print("Checking and/or updating exchange currency pairs..")
+            print("Loading and/or updating exchange currency pairs..")
             for exchange in exchanges:
                 if job_params['update_cp'] or \
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
