@@ -249,6 +249,8 @@ class Exchange:
                         url_formatted = url
                     elif pair_template_dict:
                         url_formatted = url.format(currency_pair=pair_formatted[cp])
+                    else:
+                        url_formatted = url
                     params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
                     try:
                         response = await session.get(url=url_formatted,
@@ -256,7 +258,7 @@ class Exchange:
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         response_json = await response.json(content_type=None)
 
-                        #ToDo: Does every sucessfull response hase code 200?
+                        #ToDo: Does every sucessfull response has code 200?
                         assert (response.status == 200)
 
                         if pair_template_dict:

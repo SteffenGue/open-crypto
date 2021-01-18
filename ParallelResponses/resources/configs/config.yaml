@@ -11,7 +11,7 @@ general:
     frequency: once
     timeout: 10
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
@@ -20,21 +20,17 @@ jobs:
     update_cp: false
     exchanges:
 #      - all
-      - hitbtc
-      - coindcx
-      - hoo
-      - alterdice
-      - bibox
+      - nicehash
     excluded:
 
     currency_pairs:
 #      - all
-      - first: xrp
-        second: usd
-#      - first: btc
-#        second: usdt
-      - first: xrp
-        second: btc
+#      - first: xrp
+#        second: usd
+      - first: btc
+        second: usdt
+#      - first: xrp
+#        second: btc
 #
     first_currencies:
     second_currencies:
