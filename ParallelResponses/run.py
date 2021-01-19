@@ -4,7 +4,6 @@ from model.utilities.utilities import read_config
 from export import CsvExport
 import main as main
 import os
-import sys
 import shutil
 from typing import Dict
 
@@ -21,16 +20,17 @@ def check_path():
         update_maps()
 
 
-def update_maps(path: str = path):
+def update_maps(cwd: str = path):
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
+    @type cwd: Current working directory
     """
 
-    print(f"Copying resources to {path}..")
+    print(f"Copying resources to {cwd}..")
     source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
 
-    destination = path + "/resources"
+    destination = cwd + "/resources"
     for src_dir, dirs, files in os.walk(source):
         dst_dir = src_dir.replace(source, destination, 1)
         try:
@@ -71,7 +71,7 @@ def set_path():
 
 def get_session(filename: str = None):
     """
-    Returns an open SqlALchemy-Session. The session is obtained from the DatabaseHandler.
+    Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler.
     @param filename: Name of the configuration file to init the DatabaseHandler
     @return: SqlAlchemy-Session
     """
@@ -118,17 +118,14 @@ def export(file: str = None):
     CsvExport(file).create_csv()
 
 
-def run(path=path):
+def run(cwd=path):
     """
     Firstly checks if all necessary folder are available (i.e. config and yaml-maps) and runs the program.
-    @param path: The current working directory if not specified differently.
+    @param cwd: The current working directory if not specified differently.
     """
     check_path()
-    run(main.run(path))
-
+    run(main.run(cwd))
 
 
 if __name__ == '__main__':
     run(path)
-
-
