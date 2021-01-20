@@ -276,8 +276,7 @@ class Scheduler:
 
             # for exchange in exchanges_with_pairs.keys():
                 # if exchanges_with_pairs[exchange]
-            new_job = {ex: counter[ex] for ex in list(exchanges_with_pairs.keys())
-                       if counter[ex]}
+            new_job = {ex: counter[ex] for ex in list(counter.keys()) if bool(counter[ex])}
             return True, new_job
 
         print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
