@@ -1,14 +1,16 @@
 import calendar
 import datetime
 from datetime import timedelta
+import dateutil.parser
 import os
 from typing import List, Any, Dict
 import oyaml as yaml
 import pathlib
 from pathlib import Path
 import logging
+
 from resources.configs.GlobalConfig import GlobalConfig
-import dateutil.parser
+
 
 TYPE_CONVERSION = {
 

@@ -5,14 +5,16 @@ from contextlib import contextmanager
 import tqdm
 import psycopg2
 import sqlalchemy
-from model.utilities.exceptions import NotAllPrimaryKeysException
+import os
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect, func
 from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
+
 from model.database.tables import *
-import os
+from model.utilities.exceptions import NotAllPrimaryKeysException
+
 
 
 def _get_exchange_currency_pair(session: Session, exchange_name: str, first_currency_name: str,

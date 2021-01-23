@@ -1,13 +1,14 @@
-from model.utilities.utilities import read_config
-from model.database.tables import metadata
-from model.database import tables
-from model.database.db_handler import DatabaseHandler
 from dateutil import parser as dateparser
 from datetime import datetime
 from typing import Dict
 import pandas as pd
 import inspect
 import os
+
+from model.utilities.utilities import read_config
+from model.database.tables import metadata
+from model.database import tables
+from model.database.db_handler import DatabaseHandler
 
 
 class CsvExport:
@@ -69,7 +70,7 @@ class CsvExport:
         print(full_path)
         ticker_data.to_csv(full_path,
                            sep=self.options.get("delimiter", ","),
-                           decimal=self.options.get("decimal", "."),
+                           decimal=self.options.get("decimal", "../ParallelResponses"),
                            index=False)
 
 

@@ -1,0 +1,155 @@
+name:
+exchange: true
+
+rate_limit:
+  max:
+  unit:
+
+api_url:
+
+requests:
+  currency_pairs:
+    request:
+      template:
+      pair_template: null
+      params: null
+
+    response:
+      type:
+
+    mapping:
+      - key: currency_pair_first
+        path:
+        type:
+      - key: currency_pair_second
+        path:
+        type:
+
+  tickers:
+    request:
+      template:
+      pair_template: null
+      params: null
+    response:
+      type:
+
+    mapping:
+      - key: currency_pair_first
+        path:
+        type:
+      - key: currency_pair_second
+        path:
+        type:
+      - key: last_price
+        path:
+        type:
+      - key: time
+        path:
+        type:
+      - key: best_bid
+        path:
+        type:
+      - key: best_ask
+        path:
+        type:
+      - key: daily_volume
+        path:
+        type:
+
+  historic_rates:
+    request:
+      template:
+      pair_template:
+        template: "{first}{second}"
+        lower_case:
+        alias:
+      params: null
+    response:
+      type:
+
+    mapping:
+    - key: time
+      path:
+      type:
+    - key: open
+      path:
+      type:
+    - key: high
+      path:
+      type:
+    - key: low
+      path:
+      type:
+    - key: close
+      path:
+      type:
+    - key: volume
+      path:
+      type:
+
+
+  trades:
+    request:
+      template:
+      pair_template:
+        template: "{first}{second}"
+        lower_case:
+        alias:
+      params: null
+
+    response:
+      type:
+
+    mapping:
+    - key: time
+      path:
+      type:
+    - key: id
+      path:
+      type:
+    - key: direction
+      path:
+      type:
+    - key: price
+      path:
+      type:
+    - key: amount
+      path:
+      type:
+
+  order_books:
+    request:
+      template:
+      pair_template:
+        template: "{first}{second}"
+        lower_case:
+        alias:
+      params: null
+
+    response:
+      type:
+
+    mapping:
+    - key: time
+      path:
+      type:
+    - key: id
+      path:
+      type:
+    - key: position
+      path: []
+      type:
+        - none
+        - range
+    - key: bids_amount
+      path:
+      type:
+    - key: bids_price
+      path:
+      type:
+    - key: asks_amount
+      path:
+      type:
+    - key: asks_price
+      path:
+      type:

@@ -4,13 +4,16 @@ import os
 import sys
 from datetime import datetime
 from typing import Dict, List
+import signal
+
+
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
-import signal
+
 
 
 def signal_handler(signal, frame):

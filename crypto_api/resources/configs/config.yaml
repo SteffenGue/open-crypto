@@ -11,24 +11,24 @@ general:
     frequency: once
     timeout: 10
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
   Ticker:
-    yaml_request_name: trades
+    yaml_request_name: ohlcvm
     update_cp: false
     exchanges:
-#      - all
-      - bitforex
+      - coingecko
+#      - bitforex
     excluded:
 
     currency_pairs:
 #      - all
-#      - first: xrp
+      - first: litecoin
+        second: usd
+#      - first: btc
 #        second: usd
-      - first: btc
-        second: usdt
 #      - first: xrp
 #        second: btc
 #

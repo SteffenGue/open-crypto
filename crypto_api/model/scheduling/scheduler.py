@@ -1,13 +1,13 @@
+import sys
 import asyncio
 import logging
 from datetime import datetime
 from typing import List, Callable, Dict, Any
+
 from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
-import sys
-
 from model.utilities.exceptions import MappingNotFoundException
 
 

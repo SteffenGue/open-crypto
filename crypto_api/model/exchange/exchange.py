@@ -7,6 +7,7 @@ import aiohttp
 import asyncio
 from collections import deque
 from aiohttp import ClientConnectionError
+
 from model.exchange.Mapping import Mapping, convert_type
 from model.database.tables import ExchangeCurrencyPair
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
