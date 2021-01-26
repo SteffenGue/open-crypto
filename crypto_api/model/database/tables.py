@@ -91,7 +91,6 @@ class ExchangeCurrencyPair(Base):
     exchange_id = Column(Integer, ForeignKey('exchanges.id'))
     first_id = Column(Integer, ForeignKey('currencies.id'))
     second_id = Column(Integer, ForeignKey('currencies.id'))
-    intID = Column(Integer, nullable=True)
 
     exchange = relationship("Exchange", backref="exchanges_currency_pairs", lazy='joined')
     first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id", lazy='joined')
@@ -279,31 +278,6 @@ class OrderBook(Base):
     asks_price = Column(Float)
     asks_amount = Column(Float)
 
-# ToDo: In HR überführen und entfernen
-class OHLCVM(Base):
-    """
-    Table for the platform queries. Tables contains the exchange_currency_pair_id, gathered from the
-    foreign_keys.
-
-    Primary_keys are Exchange_Pair_id and the timestamp.
-
-    This table contains OHLCVM (Open-High-Low-Close-Volume-MarketCap) data gathered from platforms.
-    Data is on a daily basis and all quoted in US-Dollar. Volume is the 24 hour trading volume.
-    """
-
-    __tablename__ = 'ohlcvm'
-
-    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPair', backref="OHLCVM")
-    time = Column(DateTime, primary_key=True)
-
-    open = Column(Float)
-    high = Column(Float)
-    low = Column(Float)
-    close = Column(Float)
-    volume = Column(Float)
-    mcap = Column(Float)
-
 
 class ExchangeCurrencyPairView(Base):
     """
@@ -400,8 +374,6 @@ class TradeView(Base):
     )
 
 
-
-
 class OrderBookView(Base):
     """
     View for Order-Books.
@@ -470,39 +442,64 @@ class HistoricRateView(Base):
         metadata=Base.metadata
     )
 
-#ToDo: Entfernen wenn OHLCVM in HR überführt wurde
-class OHLCVMView(Base):
-    """
-    View for Historic-Rates.
-    Instead of only showing the ID of the ExchangeCurrencyPair the View displays
-    the exchange name and the name of the first and second currency.
-    """
-    first = aliased(Currency)
-    second = aliased(Currency)
-    __table__ = create_view(
-        name='ohlcvm_view',
-        selectable=select(
-            [
-                Exchange.name.label('exchange'),
-                first.name.label('first_currency'),
-                second.name.label('second_currency'),
-                OHLCVM.time,
-                OHLCVM.open,
-                OHLCVM.high,
-                OHLCVM.low,
-                OHLCVM.close,
-                OHLCVM.volume,
-                OHLCVM.mcap
-            ],
-            from_obj=(
-                OHLCVM.__table__.join(ExchangeCurrencyPair, OHLCVM.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
-            )
-        ),
-        metadata=Base.metadata
-    )
+#
+# class OHLCVMView(Base):
+#     """
+#     View for Historic-Rates.
+#     Instead of only showing the ID of the ExchangeCurrencyPair the View displays
+#     the exchange name and the name of the first and second currency.
+#     """
+#     first = aliased(Currency)
+#     second = aliased(Currency)
+#     __table__ = create_view(
+#         name='ohlcvm_view',
+#         selectable=select(
+#             [
+#                 Exchange.name.label('exchange'),
+#                 first.name.label('first_currency'),
+#                 second.name.label('second_currency'),
+#                 OHLCVM.time,
+#                 OHLCVM.open,
+#                 OHLCVM.high,
+#                 OHLCVM.low,
+#                 OHLCVM.close,
+#                 OHLCVM.volume,
+#                 OHLCVM.mcap
+#             ],
+#             from_obj=(
+#                 OHLCVM.__table__.join(ExchangeCurrencyPair, OHLCVM.exchange_pair_id == ExchangeCurrencyPair.id)
+#                     .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+#                     .join(first, ExchangeCurrencyPair.first_id == first.id)
+#                     .join(second, ExchangeCurrencyPair.second_id == second.id)
+#             )
+#         ),
+#         metadata=Base.metadata
+#     )
+
+
+# class OHLCVM(Base):
+#     """
+#     Table for the platform queries. Tables contains the exchange_currency_pair_id, gathered from the
+#     foreign_keys.
+#
+#     Primary_keys are Exchange_Pair_id and the timestamp.
+#
+#     This table contains OHLCVM (Open-High-Low-Close-Volume-MarketCap) data gathered from platforms.
+#     Data is on a daily basis and all quoted in US-Dollar. Volume is the 24 hour trading volume.
+#     """
+#
+#     __tablename__ = 'ohlcvm'
+#
+#     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
+#     exchange_pair = relationship('ExchangeCurrencyPair', backref="OHLCVM")
+#     time = Column(DateTime, primary_key=True)
+#
+#     open = Column(Float)
+#     high = Column(Float)
+#     low = Column(Float)
+#     close = Column(Float)
+#     volume = Column(Float)
+#     mcap = Column(Float)
 
 # Query for getting ecps with id
 # select ecp.id, ecp.exchange_id, e.name, ecp.first_id, c1.name as first, ecp.second_id, c2.name as second from exchange e join exchanges_currency_pairs ecp on e.id=ecp.exchange_id join currencies c1 on ecp.first_id=c1.id join currencies c2 on ecp.second_id=c2.id;
