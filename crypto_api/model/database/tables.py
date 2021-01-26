@@ -294,7 +294,6 @@ class ExchangeCurrencyPairView(Base):
                 Exchange.name.label('exchange_name'),
                 first.name.label('first_name'),
                 second.name.label('second_name'),
-                ExchangeCurrencyPair.intID
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)

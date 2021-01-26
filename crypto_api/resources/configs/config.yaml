@@ -11,7 +11,7 @@ general:
     frequency: once
     timeout: 10
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
@@ -19,18 +19,16 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - coingecko
+      - coinfield
 #      - bitforex
     excluded:
 
     currency_pairs:
 #      - all
-      - first: bitcoin
-        second: usd
       - first: btc
-        second: usdt
-      - first: btc
-        second: krw
-#
+        second: usdc
+#      - first: btc
+#        second: krw
+##
     first_currencies:
     second_currencies:

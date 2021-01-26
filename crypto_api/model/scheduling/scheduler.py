@@ -7,7 +7,7 @@ from typing import List, Callable, Dict, Any
 from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
-from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
+from model.database.tables import *
 from model.utilities.exceptions import MappingNotFoundException
 
 
@@ -96,9 +96,6 @@ class Scheduler:
             "trades":
                 {'function': self.request_format_persist,
                  'table': Trade},
-            "ohlcvm":
-                {'function': self.request_format_persist,
-                 'table': OHLCVM}
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
