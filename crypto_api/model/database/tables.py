@@ -91,6 +91,7 @@ class ExchangeCurrencyPair(Base):
     exchange_id = Column(Integer, ForeignKey('exchanges.id'))
     first_id = Column(Integer, ForeignKey('currencies.id'))
     second_id = Column(Integer, ForeignKey('currencies.id'))
+    intID = Column(Integer, nullable=True)
 
     exchange = relationship("Exchange", backref="exchanges_currency_pairs", lazy='joined')
     first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id", lazy='joined')
@@ -164,7 +165,7 @@ class Ticker(Base):
                                                   self.last_price,
                                                   self.time)
 
-
+#ToDo: OHLCVM aufnhemn und daher Mcap hinzufügen
 class HistoricRate(Base):
     """
     Table for the method historic_rates. Tables contains the exchange_currency_pair_id, gathered from the
@@ -190,6 +191,7 @@ class HistoricRate(Base):
     low = Column(Float)
     close = Column(Float)
     volume = Column(Float)
+    market_cap = Column(Float)
 
     def __repr__(self):
         return "ID {}, {}: {}-{}, close {} at {}".format(self.exchange_pair_id,
@@ -277,7 +279,7 @@ class OrderBook(Base):
     asks_price = Column(Float)
     asks_amount = Column(Float)
 
-
+# ToDo: In HR überführen und entfernen
 class OHLCVM(Base):
     """
     Table for the platform queries. Tables contains the exchange_currency_pair_id, gathered from the
@@ -317,7 +319,8 @@ class ExchangeCurrencyPairView(Base):
                 ExchangeCurrencyPair.id,
                 Exchange.name.label('exchange_name'),
                 first.name.label('first_name'),
-                second.name.label('second_name')
+                second.name.label('second_name'),
+                ExchangeCurrencyPair.intID
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
@@ -454,6 +457,7 @@ class HistoricRateView(Base):
                 HistoricRate.low,
                 HistoricRate.close,
                 HistoricRate.volume,
+                HistoricRate.market_cap,
             ],
             from_obj=(
                 HistoricRate.__table__.join(ExchangeCurrencyPair,
@@ -466,7 +470,7 @@ class HistoricRateView(Base):
         metadata=Base.metadata
     )
 
-
+#ToDo: Entfernen wenn OHLCVM in HR überführt wurde
 class OHLCVMView(Base):
     """
     View for Historic-Rates.

@@ -1,6 +1,6 @@
 name: coingecko
 exchange: false
-api_url: https://api.coingecko.com/api/v3/
+api_url: https://api.coingecko.com/api/v3
 
 requests:
   currency_pairs:
@@ -35,7 +35,7 @@ requests:
           - constant
           - USD
 
-  ohlcvm:
+  historic_rates:
     request:
       template: /coins/{currency_pair}/market_chart
       pair_template:
@@ -106,7 +106,7 @@ requests:
           - 1
         type:
           - float
-      - key: mcap
+      - key: market_cap
         path:
           - market_caps
           - 1

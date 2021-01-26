@@ -290,9 +290,8 @@ requests:
       values:
         type: list
         values:
-          0: # time
-            type:
-            - int
+          0: # start time
+            type: int
           1: # low
             type: float
           2: # high
@@ -308,8 +307,10 @@ requests:
       path:
       - 0
       type:
-      - int
       - utcfromtimestamp
+      - timedelta
+      - hours
+      - -23.99
     - key: low
       path:
       - 1

@@ -253,34 +253,32 @@ class Exchange:
                     else:
                         url_formatted = url
                     params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
+
                     try:
                         response = await session.get(url=url_formatted,
                                                      params=params,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         response_json = await response.json(content_type=None)
-
                         #ToDo: Does every sucessfull response has code 200?
                         assert (response.status == 200)
-
                         if pair_template_dict:
                             responses[cp] = response_json
                         else:  # when ticker data is returned for all available currency pairs at once
                             responses[None] = response_json
                             break
+
                     except (ClientConnectionError, asyncio.TimeoutError):
                         print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
                         logging.error('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
                         #ToDo: Changes for all exception: "return -> responses[cp]= []"
                         responses[cp] = []
-
                     except AssertionError:
                         print("Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
-
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
-                              .format(self.name, request_url_and_params['url'], request_url_and_params['params']))
+                              .format(self.name, url_formatted, request_url_and_params['params']))
 
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'

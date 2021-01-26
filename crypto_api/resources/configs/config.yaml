@@ -6,7 +6,7 @@ general:
     password: 1234
     host: localhost
     port: 5432
-    db_name: test
+    db_name: test2
   operation_settings:
     frequency: once
     timeout: 10
@@ -16,7 +16,7 @@ general:
 
 jobs:
   Ticker:
-    yaml_request_name: ohlcvm
+    yaml_request_name: historic_rates
     update_cp: false
     exchanges:
       - coingecko
@@ -25,12 +25,12 @@ jobs:
 
     currency_pairs:
 #      - all
-      - first: litecoin
+      - first: bitcoin
         second: usd
-#      - first: btc
-#        second: usd
-#      - first: xrp
-#        second: btc
+      - first: btc
+        second: usdt
+      - first: btc
+        second: krw
 #
     first_currencies:
     second_currencies:

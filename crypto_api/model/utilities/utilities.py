@@ -11,7 +11,6 @@ import logging
 
 from resources.configs.GlobalConfig import GlobalConfig
 
-
 TYPE_CONVERSION = {
 
     """
@@ -218,6 +217,11 @@ TYPE_CONVERSION = {
     ('datetime', 'timedelta'): {
         'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta)))),
         'params': 1
+    },
+    ('utcfromtimestamp', 'timedelta'): {
+        'function': lambda time, a, b: datetime.datetime.utcfromtimestamp(time) - timedelta(**{a:b}) if
+        isinstance(time, int) else dateutil.parser.parse(time) - timedelta(**{a:b}),
+        'params': 2
     },
     ('datetime', 'timedeltams'): {
         'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta)))) * 1000,

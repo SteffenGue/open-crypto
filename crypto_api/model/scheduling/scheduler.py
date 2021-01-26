@@ -79,7 +79,7 @@ class Scheduler:
             Method for the request name or a string that the request is false.
         """
 
-        # ToDo: Name OHLVM Ändern
+        # ToDo: OHLCVM in Historic_Rates aufnhemen
         possible_requests = {
             # "currency_pairs":
             #     {'function': self.get_currency_pairs,
