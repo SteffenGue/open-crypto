@@ -8,18 +8,18 @@ database:
   password:
   host: localhost
   port: 5432
-  db_name: hochfrequenz
+  db_name: test2
 
 
 query_options:
-  table_name: OrderBook
-  query_everything: true
+  table_name: HistoricRate
+  query_everything: True
   from_timestamp: 01-09-2020 13:20:00
   to_timestamp:
   exchanges:
 #    - kucoin
   first_currencies:
-#    - eth
+    - Ethereum
   second_currencies:
 #    - ngn
   currency_pairs:

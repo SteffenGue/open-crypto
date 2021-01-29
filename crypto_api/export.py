@@ -69,8 +69,8 @@ class CsvExport:
             full_path: str = os.path.join(self.path, '{}.csv'.format(self.filename))
         print(full_path)
         ticker_data.to_csv(full_path,
-                           sep=self.options.get("delimiter", ","),
-                           decimal=self.options.get("decimal", "../ParallelResponses"),
+                           sep=self.options.get("delimiter", ";"),
+                           decimal=self.options.get("decimal", "."),
                            index=False)
 
 

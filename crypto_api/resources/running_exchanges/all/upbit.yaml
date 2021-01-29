@@ -108,10 +108,10 @@ requests:
         - float
     - key: time
       path:
-      - timestamp
+      - candle_date_time_utc
       type:
-      - int
-      - fromtimestampms
+        - str
+        - dateparser
     - key: volume
       path:
       - candle_acc_trade_volume

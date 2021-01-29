@@ -1,6 +1,6 @@
 name: coingecko
 exchange: false
-api_url: https://api.coingecko.com/api/v3
+api_url: https://api.coingecko.com/api/v3/
 
 requests:
   currency_pairs:
@@ -37,7 +37,7 @@ requests:
 
   historic_rates:
     request:
-      template: /coins/{currency_pair}/market_chart
+      template: coins/{currency_pair}/market_chart
       pair_template:
         template: "{first}"
         lower_case: true
