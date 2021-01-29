@@ -1,4 +1,4 @@
-#TODO: keine moeglichkeit candles/historic_rates abzufragen
+#keine moeglichkeit candles/historic_rates abzufragen
 name: bitso
 exchange: true
 api_url: https://api.bitso.com/v3/

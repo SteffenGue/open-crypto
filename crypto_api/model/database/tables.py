@@ -164,7 +164,6 @@ class Ticker(Base):
                                                   self.last_price,
                                                   self.time)
 
-#ToDo: OHLCVM aufnhemn und daher Mcap hinzufügen
 class HistoricRate(Base):
     """
     Table for the method historic_rates. Tables contains the exchange_currency_pair_id, gathered from the

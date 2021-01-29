@@ -151,7 +151,7 @@ class DatabaseHandler:
         @return:
             List of all currency-pairs for the given exchange.
         """
-        # todo : session factory -> session scope
+
         with self.session_scope() as session:
             # session.expire_on_commit = False
             currency_pairs = list()

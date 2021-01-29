@@ -130,8 +130,7 @@ requests:
         - str
         - float
 
-  #TODO: funktioniert nicht, da requests mit mehr als 500 einträgen nicht returnt werden,
-  # keine ahnung, wie sichergestellt werden kann, dass dieser fall nicht eintritt
+
   historic_rates:
     request:
       template: symbols/kline

@@ -7,7 +7,7 @@ from typing import List, Callable, Dict, Any
 from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
-from model.database.tables import *
+from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
 from model.utilities.exceptions import MappingNotFoundException
 
 
@@ -79,7 +79,6 @@ class Scheduler:
             Method for the request name or a string that the request is false.
         """
 
-        # ToDo: OHLCVM in Historic_Rates aufnhemen
         possible_requests = {
             # "currency_pairs":
             #     {'function': self.get_currency_pairs,
@@ -162,6 +161,7 @@ class Scheduler:
                   "parameters in the configuration.")
             sys.exit(0)
 
+    # ToDo: Asynchronicity.
     async def get_currency_pairs(self, job_list: List[Job], *args) -> List[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
@@ -270,9 +270,6 @@ class Scheduler:
 
         if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
             # In order to avoid requesting exchanges where all data points are already collected.
-
-            # for exchange in exchanges_with_pairs.keys():
-                # if exchanges_with_pairs[exchange]
             new_job = {ex: counter[ex] for ex in list(counter.keys()) if bool(counter[ex])}
             return True, new_job
 
