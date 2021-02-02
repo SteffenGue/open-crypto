@@ -3,10 +3,10 @@ general:
     sqltype: sqlite
     client: psycopg2
     user_name: postgres
-    password: 1234
+    password: Thw_kiel
     host: localhost
     port: 5432
-    db_name: kimchi2
+    db_name: kimchi
   operation_settings:
     frequency: once
     timeout: 10
@@ -15,22 +15,31 @@ general:
     enable_logging: false
 
 jobs:
-  Ticker:
-    yaml_request_name: historic_rates
+  AAAA:
+    yaml_request_name: tickers
     update_cp: false
     exchanges:
-      - all
+      - huobi_korea
+      - huobi
+#      - upbit
+#      - korbit
+#      - huobi
+#      - bithumb
+#      - gopax
+#      - probit
     excluded:
-      - coingecko
+#      - bitfinex
 
     currency_pairs:
 #      - all
       - first: btc
         second: usdt
-      - first: btc
-        second: usd
 #      - first: btc
-#        second: krw
+#        second: usdt
+#      - first: krw
+#        second: usdt
+#      - first: krw
+#        second: usd
 ##
     first_currencies:
     second_currencies:

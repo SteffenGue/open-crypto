@@ -272,7 +272,7 @@ requests:
 
   historic_rates:
     request:
-      template: https://api-pub.bitfinex.com/v2/candles/trade:1D:{currency_pair}/hist
+      template: https://api-pub.bitfinex.com/v2/candles/trade:1m:{currency_pair}/hist
       pair_template: # i.e. tBTCUSD
         template: "t{first}{second}"
         lower_case: false

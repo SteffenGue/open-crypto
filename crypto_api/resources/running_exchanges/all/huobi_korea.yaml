@@ -1,6 +1,6 @@
-name: huobi
+name: huobi_korea
 exchange: true
-api_url: https://api.huobi.pro/
+api_url: https://api-cloud.huobi.co.kr/
 rate_limit:
   max: 100
   unit: 10
