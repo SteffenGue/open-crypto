@@ -62,6 +62,7 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
 class Exchange:
     """
     Attributes:
+        # ToDo: Docu check
         Embodies the characteristics of a crypto-currency-exchange.
         Each exchange is an Exchange-object.
         Each 'job' is in the end a method called on every exchange.
@@ -95,6 +96,7 @@ class Exchange:
     is_exchange: bool
     api_url: str
     rate_limit: float
+    interval: Any
     request_urls: dict
     response_mappings: dict
     exception_counter: int
@@ -103,7 +105,7 @@ class Exchange:
     timeout: int
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, db_handler, timeout):
+    def __init__(self, yaml_file: Dict, db_handler, timeout, interval: Any = 'days'):
         """
         Creates a new Exchange-object.
 
@@ -119,6 +121,7 @@ class Exchange:
         self.file = yaml_file
         self.timeout = timeout
         self.name = yaml_file['name']
+        self.interval = interval
         self.get_first_timestamp = db_handler
 
         self.api_url = yaml_file['api_url']
@@ -259,7 +262,7 @@ class Exchange:
                                                      params=params,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         response_json = await response.json(content_type=None)
-                        #ToDo: Does every sucessfull response has code 200?
+                        # ToDo: Does every sucessfull response has code 200?
                         assert (response.status == 200)
                         if pair_template_dict:
                             responses[cp] = response_json
@@ -270,10 +273,11 @@ class Exchange:
                     except (ClientConnectionError, asyncio.TimeoutError):
                         print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
                         logging.error('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
-                        #ToDo: Changes for all exception: "return -> responses[cp]= []"
+                        # ToDo: Changes for all exception: "return -> responses[cp]= []"
                         responses[cp] = []
                     except AssertionError:
-                        print("Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
+                        print(
+                            "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
@@ -282,8 +286,7 @@ class Exchange:
 
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'
-                                      .format(self.name, url_formatted,
-                                              request_url_and_params['params']))
+                                      .format(self.name, url_formatted, params))
                         responses[cp] = []
 
                     await asyncio.sleep(rate_limit)
@@ -459,18 +462,30 @@ class Exchange:
             request_parameters['pair_template'] = pair_template
 
             params = dict()
+            # ToDo: Make function from the below. That's one big ugly block of too many ifs
             if 'params' in request_dict.keys() and request_dict['params']:
                 for param in request_dict['params']:
-                    if 'default' in request_dict['params'][param]:
-                        params[param] = str(request_dict['params'][param]['default'])
 
-                    if "function" in request_dict['params'][param]:
+                    if 'allowed' in request_dict['params'][param]:
+                        if self.interval in request_dict['params'][param]['allowed'].keys():
+                            params[param] = str(request_dict['params'][param]['allowed'][self.interval])
+                            # request_dict['params'][param]['type'] = [x if x == 'interval' else x for x in
+                            #                                          request_dict['params'][param]['type']]
+
+                    if 'function' in request_dict['params'][param]:
                         params[param] = {cp: self.get_first_timestamp(request_table, cp.id) for cp in
                                          currency_pairs}
+
+                    if 'default' in request_dict['params'][param] and param not in params:
+                        params[param] = str(request_dict['params'][param]['default'])
 
                     if 'type' in request_dict['params'][param]:
                         value = params[param] if param in params.keys() else None
                         conv_params = request_dict['params'][param]['type']
+
+                        if 'interval' in conv_params:
+                            conv_params = [self.interval if x == 'interval' else x for x in conv_params]
+
                         if isinstance(value, dict):
                             params[param] = {cp: convert_type(value[cp], deque(conv_params)) for cp in
                                              currency_pairs}

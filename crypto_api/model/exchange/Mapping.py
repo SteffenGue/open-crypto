@@ -31,6 +31,9 @@ def convert_type(value, types_queue: deque):
         types_tuple = (current_type,
                        next_type)
 
+        if "continue" in types_tuple:
+            continue
+
         conversion = TYPE_CONVERSION[types_tuple]
 
         params = list()

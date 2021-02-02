@@ -215,12 +215,13 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ('datetime', 'timedelta'): {
-        'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta)))),
-        'params': 1
+        'function': lambda time, interval, delta: int(datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))),
+        'params': 2
     },
     ('utcfromtimestamp', 'timedelta'): {
-        'function': lambda time, a, b: datetime.datetime.utcfromtimestamp(time) - timedelta(**{a:b}) if
-        isinstance(time, int) else dateutil.parser.parse(time) - timedelta(**{a:b}),
+        'function': lambda time, interval, value: datetime.datetime.utcfromtimestamp(time) - timedelta(
+            **{interval: value}) if
+        isinstance(time, int) else dateutil.parser.parse(time) - timedelta(**{interval: value}),
         'params': 2
     },
     ('datetime', 'timedeltams'): {

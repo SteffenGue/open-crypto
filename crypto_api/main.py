@@ -27,7 +27,7 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler) -> List[Job]:
+async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: DatabaseHandler) -> List[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
@@ -35,6 +35,7 @@ async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler)
     @param db_handler: Instance of the DatabaseHandler to pass to the Exchange Class. This is to be able to
                         perform database queries for variable request parameters.
     @param timeout: Request timeout for the Exchange Class.
+    @param interval: Request Interval for HistoricRate (i.e. Daily, Minutes,..)
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
@@ -53,7 +54,8 @@ async def initialize_jobs(job_config: Dict, timeout, db_handler=DatabaseHandler)
 
         Exchanges = [Exchange(exchange_name,
                               db_handler.get_first_timestamp,
-                              timeout) for exchange_name in exchange_names]
+                              timeout,
+                              interval=interval) for exchange_name in exchange_names]
 
         exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(Exchanges)
 
@@ -91,9 +93,10 @@ async def main(database_handler: DatabaseHandler):
     config = read_config(file=None, section=None)
 
     logging.info('Loading jobs.')
-    jobs = await initialize_jobs(config['jobs'],
-                                 config['general']['operation_settings']['timeout'],
-                                 database_handler)
+    jobs = await initialize_jobs(job_config=config['jobs'],
+                                 timeout=config['general']['operation_settings']['timeout'],
+                                 interval=config['general']['operation_settings']['interval'],
+                                 db_handler=database_handler)
     frequency = config['general']['operation_settings']['frequency']
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
@@ -121,7 +124,7 @@ async def main(database_handler: DatabaseHandler):
 
 def run(path: str = None):
     init_logger(path)
-    # sys.excepthook = handler
+    sys.excepthook = handler
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
     logging.info('Establishing Database Connection')

@@ -326,12 +326,23 @@ requests:
         lower_case: false
       params:
         type:
-          default: d1
+          allowed:
+            days: d1
+            minutes: m1
+          default: m1
+        start:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1000
         end:
           function: last_timestamp
           type:
             - datetime
             - timestamp
+
     response:
       type: dict
       values:
