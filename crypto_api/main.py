@@ -6,14 +6,12 @@ from datetime import datetime
 from typing import Dict, List
 import signal
 
-
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
 from model.database.db_handler import DatabaseHandler
 from model.exchange.exchange import Exchange
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
-
 
 
 def signal_handler(signal, frame):
@@ -135,7 +133,7 @@ def run(path: str = None):
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    #ToDo: diese Methode genauso verlässlich? -> Try Except um scheduler.start()
+    # ToDo: diese Methode genauso verlässlich? -> Try Except um scheduler.start()
     asyncio.run(main(database_handler))
     # while True:
     #     try:

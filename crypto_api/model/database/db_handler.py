@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Tuple, Iterator, Iterable, Dict
 from contextlib import contextmanager
 import tqdm
@@ -14,7 +14,6 @@ from sqlalchemy_utils import database_exists, create_database
 
 from model.database.tables import *
 from model.utilities.exceptions import NotAllPrimaryKeysException
-
 
 
 def _get_exchange_currency_pair(session: Session, exchange_name: str, first_currency_name: str,
@@ -650,16 +649,20 @@ class DatabaseHandler:
 
     def get_first_timestamp(self, table: object, ExCuPair_id: int):
         """
-        Returns the first timestamp found in the database.
+        Returns the first timestamp found in the database if the last db-entry is older than 1 day.
         @param table: The database table to query.
         @param ExCuPair_id: The exchange_pair_id of interest
-        @return: datetime: First timestamp of database of datetime.now()
+        @return: datetime: First timestamp of database or datetime.now()
         """
 
         with self.session_scope() as session:
             (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
+            (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
 
-        return timestamp if timestamp else datetime.now()
+        if timestamp and ((datetime.now() - max_timestamp) < timedelta(days=1)):
+            return timestamp
+        else:
+            return datetime.now()
 
     # Methods that are currently not used but might be useful:
 
