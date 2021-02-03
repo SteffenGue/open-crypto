@@ -310,7 +310,12 @@ requests:
         alias: instrument_name
       params:
         timeframe:
-          type: str
+          allowed:
+#            minutes: 1M
+#            hours: 1H
+            days: 1D
+            weeks: 1W
+#            months: 1M
           default: 1D
         limit:
           default: 100

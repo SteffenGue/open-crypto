@@ -3,7 +3,7 @@ exchange: true
 api_url: https://openapi-exchange.coinbene.com/api/exchange/v2/market/
 rate_limit: 
   max: 15
-  units: 1
+  unit: 1
 requests:
   currency_pairs:
     request:
@@ -178,7 +178,12 @@ requests:
         alias: symbol
       params:
         period:
-          type: str
+          allowed:
+            minutes: 1
+            hours: 60
+            days: D
+            weeks: W
+            months: M
           default: D
         end:
           function: last_timestamp

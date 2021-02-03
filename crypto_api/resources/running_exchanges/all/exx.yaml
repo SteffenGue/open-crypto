@@ -1,5 +1,6 @@
 name: exx
 exchange: true
+api_docs: https://www.exx.com/help/restApi
 api_url: https://api.exx.com/data/v1/
 rate_limit: null
 requests:
@@ -270,25 +271,17 @@ requests:
         alias: market
       params:
         type:
-          type: str
           allowed:
-          - 1min
-          - 5min
-          - 15min
-          - 30min
-          - 1hour
-          - 1day
+            minutes: 1min
+            hours: 1hour
+            days: 1day
           default: 1day
         size:
           type: int
           required: false
           default: 10000
         assist:
-          type: str
-          allowed:
-          - cny
-          - usd
-          - none
+          type: str #usd, cny
           default: none
     response:
       type: dict

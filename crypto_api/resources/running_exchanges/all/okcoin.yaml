@@ -261,16 +261,21 @@ requests:
         lower_case: false
       params:
         granularity:
-          type: int
+          allowed:
+            minutes: 60
+            hours: 3600
+            days: 86400
+            weeks: 604800
           default: 86400 # 1 day
-        start: #returns only the last 200 entries until end or "today".
-          function: last_timestamp
-          type:
-            - datetime
-            - timedelta
-            - 200
-            - fromtimestamp
-            - "%Y-%m-%dT%H:%M:%S.%fZ"
+#        start: #returns only the last 200 entries until end or "today".
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timedelta
+#            - interval
+#            - 1000
+#            - fromtimestamp
+#            - "%Y-%m-%dT%H:%M:%S.%fZ"
         end:
           function: last_timestamp
           type:

@@ -1,6 +1,6 @@
 name: idex
 exchange: true
-
+api_docs: https://docs.idex.io/#introduction
 api_url: https://api.idex.io/
 rate_limit:
   max: 300
@@ -254,6 +254,10 @@ requests:
         alias: market
       params:
         interval:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
           default: 1d
         limit:
           max: 1000
@@ -263,6 +267,13 @@ requests:
           type:
             - datetime
             - timestampms
+#        start:
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timedeltams
+#            - interval
+#            - 1000
 
     response:
       type: list
@@ -316,7 +327,7 @@ requests:
           - float
       - key: volume
         path:
-          - baseVolume
+          - volume
         type:
           - str
           - float

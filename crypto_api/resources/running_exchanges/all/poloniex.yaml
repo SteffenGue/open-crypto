@@ -40,7 +40,7 @@ requests:
           - str
           - splitupper
           - "_"
-          - 0
+          - 1
       - key: currency_pair_second
         path:
           - dict_key
@@ -48,7 +48,7 @@ requests:
           - str
           - splitupper
           - "_"
-          - 1
+          - 0
 
   tickers:
     request:
@@ -129,10 +129,19 @@ requests:
         lower_case: false
       params:
         start:
-          type: int
-          default: 946684800 # 01.01.2000
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1000
+#          type: int
+#          default: 946684800 # 01.01.2000
         period:
-          type: int
+          allowed:
+            minutes: 300
+            hours: 7200
+            days: 86400
           default: 86400 #1 Day in Seconds
 
     response:
@@ -162,6 +171,11 @@ requests:
         type:
           - int
           - utcfromtimestamp
+      - key: close
+        path:
+          - close
+        type:
+          - float
       - key: open
         path:
           - open
@@ -169,17 +183,17 @@ requests:
           - float
       - key: high
         path:
-          - open
+          - high
         type:
           - float
       - key: low
         path:
-          - open
+          - low
         type:
           - float
       - key: volume
         path:
-          - open
+          - volume
         type:
           - float
 

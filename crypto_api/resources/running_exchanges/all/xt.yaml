@@ -1,7 +1,7 @@
 
 name: xt
 exchange: true
-
+api_docs: https://github.com/xtpub/api-doc/blob/master/rest-api-v1-en.md
 rate_limit:
   max: 1000
   unit: 60
@@ -115,10 +115,20 @@ requests:
         alias: market
       params:
         type:
-          type: str
+          allowed:
+            minutes: 1min
+            hours: 1hour
+            days: 1day
+            weeks: 7day
+            months: 30day
           default: 1day
         since:
-          default: 0
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1000
     response:
       type: dict
       values:

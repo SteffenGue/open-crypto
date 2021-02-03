@@ -108,12 +108,15 @@ requests:
         alias: symbol
       params:
         type:
-          type: int
+          allowed:
+            minutes: 3
+            hours: 2
+            days: 1
           default: 1 #day
         num:
           type: int
           max: 2880
-          default: 2880
+          default: 2000
         ts:
           function: last_timestamp
           type:

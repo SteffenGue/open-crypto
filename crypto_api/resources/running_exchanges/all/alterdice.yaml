@@ -92,6 +92,10 @@ requests:
         alias: t
       params:
         r:
+          allowed:
+            hours: 60
+            days: D
+            weeks: W
           default: D
         end:
           function: last_timestamp

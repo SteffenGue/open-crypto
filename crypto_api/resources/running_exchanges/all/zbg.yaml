@@ -148,11 +148,16 @@ requests:
         alias: marketName
       params:
         type:
-          type: str
+          allowed:
+            minutes: 1M
+            hours: 1H
+            days: 1D
+            weeks: 1W
           default: 1D
         dataSize:
           type: int
           default: 10000
+
     response:
       type: dict
       values:

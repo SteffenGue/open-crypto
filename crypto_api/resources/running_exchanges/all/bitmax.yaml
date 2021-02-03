@@ -117,6 +117,12 @@ requests:
         alias: symbol
       params:
         interval:
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1d
+            weeks: 1w
+            months: 1m
           type: str
           default: 1d
         n:

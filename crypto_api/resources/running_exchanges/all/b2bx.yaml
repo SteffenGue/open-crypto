@@ -117,12 +117,19 @@ requests:
           type:
             - datetime
             - timedelta
+            - interval
             - 1000
             - fromtimestamp
             - "%Y-%m-%dT%H:%M:%S"
         count:
           default: 1000 #max
         type:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            months: 1M
           default: 1d
     response:
       type: dict

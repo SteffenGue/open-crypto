@@ -1,5 +1,6 @@
 name: digifinex
 exchange: true
+api_doc: https://docs.digifinex.com/en-ww/v3/#market-data
 rate_limit: null
 api_url: https://openapi.digifinex.vip/v3/
 
@@ -141,20 +142,25 @@ requests:
         alias: symbol
       params:
         period:
-          type: int
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1D
+            weeks: 1W
           default: 1D
         start_time:
-          type: int
-          default: 1357038766 # 01.01.2013
-          # If start_time or end_time is defined is basically the same. Start_time gets all data with one query.
-#        end_time:
-#          function: last_timestamp
-#          type:
-#            - datetime
-#            - timestamp
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1000
+        end_time:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
 
-
-          
     response:
       type: dict
       values:

@@ -1,6 +1,6 @@
 name: hoo
 exchange: true
-
+api_docs: https://hoo.com/docs-en
 rate_limit:
   max: 300
   unit: 60
@@ -117,6 +117,11 @@ requests:
         alias: symbol
       params:
         type:
+          allowed:
+            minutes: 1Min
+            hours: 1Hour
+            days: 1Day
+            weeks: 1Week
           default: 1Day
     response:
       type: dict

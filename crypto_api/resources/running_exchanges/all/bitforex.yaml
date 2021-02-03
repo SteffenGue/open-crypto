@@ -114,6 +114,12 @@ requests:
           max: 600
           default: 600
         ktype:
+          allowed:
+            minutes: 1min
+            hours: 1hour
+            days: 1day
+            weeks: 1week
+            months: 1month
           default: 1day
 
     response:

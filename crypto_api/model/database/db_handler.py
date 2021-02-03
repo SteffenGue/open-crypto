@@ -658,8 +658,8 @@ class DatabaseHandler:
         with self.session_scope() as session:
             (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
             (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
-
-        if timestamp and ((datetime.now() - max_timestamp) < timedelta(days=1)):
+        # two days as some exchanges lag behind one day for historic_rates
+        if timestamp and ((datetime.now() - max_timestamp) < timedelta(days=2)):
             return timestamp
         else:
             return datetime.now()

@@ -141,9 +141,18 @@ requests:
           max: null
           default: 10000
         period:
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1440
           default: 1440 #daily
         timestamp:
-          default: 0 # data after that timestamp
+          function: last_timestamp # data after that timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 10000
     response:
       type: dict
       values:

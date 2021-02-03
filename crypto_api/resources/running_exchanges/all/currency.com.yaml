@@ -190,7 +190,11 @@ requests:
         alias: symbol
       params:
         interval:
-          type: str
+          allowed:
+            minutes: M1
+            hours: H1
+            days: D1
+            weeks: W1
           default: D1
         limit:
           type: int
@@ -205,6 +209,7 @@ requests:
           type:
             - datetime
             - timedeltams
+            - interval
             - 1000
 
 

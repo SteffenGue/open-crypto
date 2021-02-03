@@ -1,4 +1,5 @@
-#ToDO: HR implemented but not tested as endpoint is not responding. Try again later.
+#ToDO: HR endpoint is not really working. Frequently returning data is non-json format (status 503) which can not
+# be parsed.
 
 name: omgfin
 api_url: https://omgfin.com/api/v1/
@@ -128,15 +129,21 @@ requests:
         alias: symbol
       params:
         interval:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
           default: 1d
         limit:
           default: 300 # max: 300
-        startTime:
-          function: last_timestamp
-          type:
-            - datetime
-            - timedeltams
-            - 300
+#        startTime:
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timedeltams
+#            - interval
+#            - 300
         endTime:
           function: last_timestamp
           type:

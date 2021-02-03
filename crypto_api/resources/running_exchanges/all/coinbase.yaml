@@ -265,6 +265,7 @@ requests:
           type:
             - datetime
             - timedelta
+            - interval
             - 300
             - fromtimestamp
             - "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -277,13 +278,10 @@ requests:
         granularity: # Desired timeslice in seconds
           type: int
           allowed:
-          - 60    # 1m
-          - 300   # 5m
-          - 900   # 15m
-          - 3600  # 1h
-          - 21600 # 6h
-          - 86400 # 1d
-          required: false
+            minutes: 60
+            hours: 3600
+            days: 86400
+            weeks: 604800
           default: 86400
     response:
       type: list # TODO: Header Entry?

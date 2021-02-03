@@ -1,5 +1,6 @@
 name: hitbtc
 exchange: true
+api_docs: https://api.hitbtc.com/#market-data
 api_url: https://api.hitbtc.com/api/2/
 rate_limit:
   max: 100
@@ -141,16 +142,10 @@ requests:
       params:
         sort:
           type: str
-          allowed:
-          - ASC  # Ascending order
-          - DESC # Descending order
           default: DESC
         by: # Filtration definition. Accepted values: id, timestamp. Default timestamp
           type: str
           default: timestamp
-          allowed:
-          - id
-          - timestamp
           required: false
         from: # Number or Datetime
           required: false
@@ -179,9 +174,6 @@ requests:
             - float
           side: # Trade side "sell" or "buy"
             type: str
-            allowed:
-            - sell
-            - buy
           timestamp:
             type:
             - str
@@ -305,28 +297,21 @@ requests:
         period:
           type: str
           allowed:
-          - M1  # 1 minute
-          - M3  # 3 minutes
-          - M5  # 5 minutes
-          - M15 # 15 minutes
-          - M30 # 30 minutes
-          - H1  # 1 hour
-          - H4  # 4 hours
-          - D1  # 1 day
-          - D7  # 7 days / 1 week
-          - 1M  # 1 month
+            minutes: M1
+            hours: H1
+            days: D1
+            weeks: D7
+            months: 1M
           default: D1
         sort:
           type: str
-          allowed:
-          - ASC  # Ascending order
-          - DESC # Descending order
           default: ASC
         from:
           function: last_timestamp
           type:
             - datetime
             - timedelta
+            - interval
             - 1000
             - fromtimestamp
             - "%Y-%m-%dT%H:%M:%S.%fZ"

@@ -1,8 +1,7 @@
-# ToDo: Since Parameter in HR does not work.
 name: zb
 is_exchange: true
-
-api_url: https://api.zg.com/
+api_docs: https://www.zb.com/en/api
+api_url: http://api.zb.center/
 rate_limit:
   max: 1500
   unit: 60
@@ -10,109 +9,143 @@ rate_limit:
 requests:
   currency_pairs:
     request:
-      template: openapi/v1/brokerInfo
+      template: data/v1/markets
       pair_template: null
       params: null
 
     response:
       type: dict
       values:
-        symbols:
-          type: list
+        currency_pair:
+          type: dict
           values:
-            type: dict
-            values:
-              baseAsset:
-                type: str
-              quoteAsset:
-                type: str
+            priceScale:
+              type: int
 
     mapping:
     - key: currency_pair_first
       path:
-        - symbols
-        - baseAsset
+        - dict_key
       type:
         - str
+        - split
+        - "_"
+        - 0
     - key: currency_pair_second
       path:
-        - symbols
-        - quoteAsset
+        - dict_key
       type:
         - str
+        - split
+        - "_"
+        - 1
 
   tickers:
     request:
-      template: openapi/quote/v1/ticker/price
+      template: data/v1/ticker
       pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
+        template: "{first}_{second}"
+        lower_case: true
+        alias: market
       params: null
 
     response:
       type: dict
       values:
-        symbol:
-          type: str
-        price:
-          type: str
+        date:
+          type: int
+        ticker:
+          type: dict
+          values:
+            vol:
+              type: str
+            last:
+              type: str
+            buy:
+              type: str
+            sell:
+              type: str
     mapping:
       - key: time
-        path: []
+        path:
+          - date
         type:
-          - none
-          - now
+          - str
+          - int
+          - utcfromtimestampms
       - key: last_price
         path:
-          - price
+          - ticker
+          - last
+        type:
+          - str
+          - float
+      - key: best_ask
+        path:
+          - ticker
+          - sell
+        type:
+          - str
+          - float
+      - key: best_bid
+        path:
+          - ticker
+          - buy
+        type:
+          - str
+          - float
+      - key: daily_volume
+        path:
+          - ticker
+          - vol
         type:
           - str
           - float
 
+
   order_books:
     request:
-      template: openapi/quote/v1/depth
+      template: data/v1/depth
       pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
+        template: "{first}_{second}"
+        lower_case: true
+        alias: market
       params:
-        limit:
+        size:
           type: int
-          max: 100
-          default: 100
+          max: 50
+          default: 50
     response:
       type: dict
       values:
-        time:
+        timestamp:
           type: int
         bids:
           type: list
           values:
             type: list
             0: #price
-              type: str
+              type: float
             1: #qty
-              type: str
+              type: float
         asks:
           type: list
           values:
             type: list
             0:
-              type: str
+              type: float
             1:
-              type: str
+              type: float
     mapping:
-      - key: time
+      - key: timestamp
         path:
-          - time
+          - timestamp
         type:
           - int
-          - utcfromtimestampms
+          - utcfromtimestamp
       - key: id
         path:
-          - time
+          - timestamp
         type:
           - int
       - key: position
@@ -125,42 +158,34 @@ requests:
           - bids
           - 0
         type:
-          - str
           - float
       - key: bids_amount
         path:
           - bids
           - 1
         type:
-          - str
           - float
       - key: asks_price
         path:
           - asks
           - 0
         type:
-          - str
           - float
       - key: asks_amount
         path:
           - asks
           - 1
         type:
-          - str
           - float
 
   trades:
     request:
-      template: openapi/quote/v1/trades
+      template: data/v1/trades
       pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
-      params:
-        limit:
-          type: int
-          max: 60
-          default: 60
+        template: "{first}_{second}"
+        lower_case: true
+        alias: market
+      params: null
     response:
       type: list
       value:
@@ -168,32 +193,29 @@ requests:
         values:
           price:
             type: str
-          qty:
+          amount:
             typ: str
-          time:
+          date:
             type: int
-          isBuyerMaker:
-            type: bool
+          type:
+            type: str
+          tid:
+            type: int
     mapping:
       - key: time
         path:
-          - time
+          - date
         type:
           - int
-          - utcfromtimestampms
+          - utcfromtimestamp
       - key: direction
         path:
-          - isBuyerMaker
+          - type
         type:
-          - value
-          - map
-          - True
-          - sell
-          - False
-          - buy
+          - str
       - key: id
         path:
-          - time
+          - tid
         type:
           - int
       - key: price
@@ -204,89 +226,93 @@ requests:
           - float
       - key: amount
         path:
-          - qty
+          - amount
         type:
           - str
           - float
 
   historic_rates:
     request:
-      template: openapi/quote/v1/klines
+      template: data/v1/kline
       pair_template:
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
+        template: "{first}_{second}"
+        lower_case: true
+        alias: market
       params:
-        interval:
-          type: int
-          default: 1d
+        type:
+          allowed:
+            minutes: 1min
+            days: 1day
+            hours: 1hour
+            weeks: 1week
+          default: 1day
+        since:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedeltams
+            - interval
+            - 1000
         limit:
           type: int
           max: 1000
           default: 1000
 
+
     response:
-      type: list
+      type: dict
       values:
-        type: list
-        values:
-          0: #timestamp
-            type: int
-          1: #open
-            type: str
-          2: #high
-            type: str
-          3: #low
-            type: str
-          4: #close
-            type: str
-          5: #volume
-            type: str
-          6: #close time
-            type: int
-          7: # quote Asset volume
-            type: str
-          8: # number of trades
-            type: int
-          9: # taker buy base asset volume
-            type: str
-          10: # taker buy quote asset volume
-            type: str
+        data:
+          type: list
+          values:
+            0: #timestamp
+              type: int
+            1: #open
+              type: float
+            2: #high
+              type: float
+            3: #low
+              type: float
+            4: #close
+              type: float
+            5: #volume
+              type: float
 
     mapping:
       - key: time
         path:
+          - data
           - 0
         type:
           - int
           - utcfromtimestampms
       - key: open
         path:
+          - data
           - 1
         type:
-          - str
           - float
       - key: high
         path:
+          - data
           - 2
         type:
-          - str
           - float
       - key: low
         path:
+          - data
           - 3
         type:
-          - str
           - float
       - key: close
         path:
+          - data
           - 4
         type:
-          - str
           - float
       - key: volume
         path:
+          - data
           - 5
         type:
-          - str
           - float

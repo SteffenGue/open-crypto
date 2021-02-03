@@ -147,7 +147,11 @@ requests:
           type: int
           default: 500
         type:
-          type: str
+          allowed:
+            minutes: 1M
+            hours: 1H
+            days: 1D
+            weeks: 1W
           default: 1D
 
     response:

@@ -339,16 +339,11 @@ requests:
         resolution:
           type: str
           allowed:
-          - 1min
-          - 5min
-          - 15min
-          - 30min
-          - 60min
-          - 4hour
-          - 1day
-          - 5day
-          - 1week
-          - 1mon
+            minutes: 1min
+            hours: 60min
+            days: 1day
+            weeks: 1week
+            months: 1mon
           default: 1day
         size: # get number range: 1-300
           type: int

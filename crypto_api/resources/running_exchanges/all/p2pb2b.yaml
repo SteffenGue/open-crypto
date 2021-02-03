@@ -310,7 +310,10 @@ requests:
         alias: market
       params:
         interval:
-          type: str
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
           default: 1d
         limit:
           type: int

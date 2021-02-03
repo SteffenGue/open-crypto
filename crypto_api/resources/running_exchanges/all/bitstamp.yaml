@@ -139,18 +139,10 @@ requests:
         step:
           type: int
           allowed:
-            - 60
-            - 180
-            - 300
-            - 900
-            - 1800
-            - 3600
-            - 7200
-            - 14400
-            - 21600
-            - 43200
-            - 86400
-            - 259200
+            minutes: 60
+            hours: 3600
+            days: 86400
+            weeks: 259200
           default: 86400
         limit:
           type: int
@@ -215,11 +207,11 @@ requests:
         type:
           - str
           - float
-      - key: close
+      - key: low
         path:
           - data
           - ohlc
-          - close
+          - low
         type:
           - str
           - float

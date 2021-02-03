@@ -1,6 +1,6 @@
 name: maicoin
 exchange: true
-
+api_docs: https://max.maicoin.com/documents/api_list#!/public/getApiV2K
 rate_limit:
   max: 1200
   unit: 60
@@ -99,8 +99,20 @@ requests:
         alias: market
       params:
         limit:
-          default: 10000
+          default: 2000
+        timestamp:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 2000
         period:
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1440
+            weeks: 10080
           default: 1440
     response:
       type: list

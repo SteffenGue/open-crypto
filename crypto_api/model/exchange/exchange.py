@@ -125,11 +125,11 @@ class Exchange:
         self.get_first_timestamp = db_handler
 
         self.api_url = yaml_file['api_url']
-        if yaml_file.get('rate_limit') and yaml_file.get('units') and yaml_file.get('max'):
+        if yaml_file.get('rate_limit') and yaml_file['rate_limit'].get('unit') and yaml_file['rate_limit'].get('max'):
             if yaml_file['rate_limit']['max'] <= 0:
                 self.rate_limit = 0
             else:
-                self.rate_limit = yaml_file['rate_limit']['units'] / yaml_file['rate_limit']['max']
+                self.rate_limit = yaml_file['rate_limit']['unit'] / yaml_file['rate_limit']['max']
         else:
             self.rate_limit = 0
         self.response_mappings = extract_mappings(yaml_file['requests'])
@@ -238,7 +238,7 @@ class Exchange:
             pair_template_dict = request_url_and_params['pair_template']
             url: str = request_url_and_params['url']
 
-            rate_limit = 1 / self.rate_limit if self.rate_limit and len(currency_pairs) > self.rate_limit else 0
+            rate_limit = 1 / self.rate_limit if self.rate_limit and len(currency_pairs) >= self.rate_limit else 0
 
             # when there is no pair formatting section then all ticker data can be accessed with one request
             if pair_template_dict:
@@ -261,9 +261,9 @@ class Exchange:
                         response = await session.get(url=url_formatted,
                                                      params=params,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
-                        response_json = await response.json(content_type=None)
                         # ToDo: Does every sucessfull response has code 200?
                         assert (response.status == 200)
+                        response_json = await response.json(content_type=None)
                         if pair_template_dict:
                             responses[cp] = response_json
                         else:  # when ticker data is returned for all available currency pairs at once
@@ -289,7 +289,7 @@ class Exchange:
                                       .format(self.name, url_formatted, params))
                         responses[cp] = []
 
-                    await asyncio.sleep(rate_limit)
+                    # await asyncio.sleep(rate_limit)
 
             return datetime.utcnow(), self.name, responses
         else:
@@ -469,6 +469,9 @@ class Exchange:
                     if 'allowed' in request_dict['params'][param]:
                         if self.interval in request_dict['params'][param]['allowed'].keys():
                             params[param] = str(request_dict['params'][param]['allowed'][self.interval])
+                        else:
+                            self.interval = 'days'
+
                             # request_dict['params'][param]['type'] = [x if x == 'interval' else x for x in
                             #                                          request_dict['params'][param]['type']]
 

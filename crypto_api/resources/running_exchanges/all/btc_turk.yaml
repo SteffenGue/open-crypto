@@ -314,7 +314,20 @@ requests:
         template: "{first}_{second}"
         lower_case: false
         alias: pair
-      params: null # from and to params are available. But API returns every data point by default.
+      params:
+        to: # from and to params are available. But API returns every data point by default.
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
+        from:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1000
+
     response:
       type: list
       values:

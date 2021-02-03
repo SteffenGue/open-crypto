@@ -1,7 +1,10 @@
 name: exrates
 exchange: true
 api_url: ''
-rate_limit: null
+api_docs: https://docs.exrates.me/
+rate_limit:
+  max: 10
+  unit: 60
 
 requests:
   currency_pairs:
@@ -236,12 +239,21 @@ requests:
         lower_case: false
         alias: t
       params:
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
         r:
-          type: str
+          allowed:
+            minutes: 1
+            hours: 60
+            days: D
+            weeks: W
           default: D
         limit:
           type: int
-          default: 10000
+          default: 1000
 
     response:
       type: list

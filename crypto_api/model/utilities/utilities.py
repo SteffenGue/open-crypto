@@ -225,8 +225,8 @@ TYPE_CONVERSION = {
         'params': 2
     },
     ('datetime', 'timedeltams'): {
-        'function': lambda time, delta: int(datetime.datetime.timestamp(time - timedelta(days=int(delta)))) * 1000,
-        'params': 1
+        'function': lambda time, interval, delta: int(datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))) * 1000,
+        'params': 2
     },
     ('datetime', 'timestamp'): {
         'function': lambda time: int(time.timestamp()),

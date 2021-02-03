@@ -216,13 +216,25 @@ requests:
         alias: market
       params:
         start:
-          default: 1262304000 # 2010-01-01
-        end:
+          function: last_timestamp
           type:
-            - none
-            - now_timestamp
+            - datetime
+            - timedelta
+            - interval
+            - 1000
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
         interval:
-          type: int
+          allowed: #minimum is 86400
+#            minutes: 60
+#            hours: 3600
+            days: 86400
+            weeks: 604800
+            months: 18144000
+
           default: 86400 # 1day
     response:
       type: dict

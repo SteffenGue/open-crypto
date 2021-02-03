@@ -2,8 +2,8 @@ name: gopax
 exchange: true
 
 rate_limit:
-  max: 20
-  unit: 1
+  max: 1200
+  unit: 60
 
 api_url: https://api.gopax.com
 
@@ -93,13 +93,24 @@ requests:
         lower_case: false
       params:
         interval:
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1440
           default: 1440 # e.g. 1 day
         start:
-          default: 0
+          default: 0 # better as intervals up to 5000 can lead to zero new prices and the program exits.
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timedeltams
+#            - interval
+#            - 5000
         end:
+          function: last_timestamp
           type:
-            - none
-            - now_timestampms
+            - datetime
+            - timestampms
 
     response:
       type: list

@@ -109,14 +109,13 @@ requests:
         alias: symbol
       params: 
         period:
-          type: 
-          - str        
-          allowed: null
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
           default: 1d
         size:
-          type: 
-          - int
-          allowed: null
           default: 1000
         to:
           function: last_timestamp
@@ -128,6 +127,7 @@ requests:
           type:
             - datetime
             - timedeltams
+            - interval
             - 1000
 
 

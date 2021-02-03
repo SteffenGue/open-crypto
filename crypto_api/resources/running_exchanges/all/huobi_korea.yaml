@@ -73,15 +73,11 @@ requests:
         period:
           type: str
           allowed:
-          - 1min
-          - 5min
-          - 15min
-          - 30min
-          - 60min
-          - 1day
-          - 1week
-          - 1mon
-          - 1year
+            minutes: 1min
+            hours: 60min
+            days: 1day
+            weeks: 1week
+            months: 1mon
           default: 1day
         size:
           type: int

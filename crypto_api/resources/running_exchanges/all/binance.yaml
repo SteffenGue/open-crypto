@@ -287,12 +287,11 @@ requests:
         interval:
           type: str
           allowed:
-          - 1w
-          - 1m
-          - 5m
-          - 1d
-          - 1h
-          required: true
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            months: 1M
           default: 1d
         startTime:
           required: false

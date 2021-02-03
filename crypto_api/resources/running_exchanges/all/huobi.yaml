@@ -1,5 +1,6 @@
 name: huobi
 exchange: true
+api_docs: https://huobiapi.github.io/docs/spot/v1/en/
 api_url: https://api.huobi.pro/
 rate_limit:
   max: 100
@@ -60,8 +61,6 @@ requests:
         - str
         - upper
 
-
-
   historic_rates:
     request:
       template: market/history/kline
@@ -73,15 +72,11 @@ requests:
         period:
           type: str
           allowed:
-          - 1min
-          - 5min
-          - 15min
-          - 30min
-          - 60min
-          - 1day
-          - 1week
-          - 1mon
-          - 1year
+            minutes: 1min
+            hours: 60min
+            days: 1day
+            weeks: 1week
+            months: 1mon
           default: 1day
         size:
           type: int

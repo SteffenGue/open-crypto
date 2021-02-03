@@ -83,19 +83,24 @@ requests:
         lower_case: false
       params:
         limit:
-          type: int
           default: 1440
         start:
-          type: int
-          min: 1
-          default: 1
+          function: last_timestamp
+          type:
+            - datetime
+            - timedeltams
+            - interval
+            - 1400
         end:
           function: last_timestamp
           type:
             - datetime
             - timestampms
         interval:
-          type: str
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
           default: 1d
 
     response:

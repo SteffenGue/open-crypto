@@ -108,6 +108,12 @@ requests:
         lower_case: true
       params:
         resolution:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            month: 1M
           default: 1d
         to:
           function: last_timestamp
@@ -119,6 +125,7 @@ requests:
           type:
             - datetime
             - timedelta
+            - interval
             - 300
 
     response:

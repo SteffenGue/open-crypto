@@ -178,24 +178,19 @@ requests:
           type:
             - datetime
             - timedelta
+            - interval
             - 1000
-
         endAt:
           function: last_timestamp
           type:
             - datetime
-            - timestamp # 18.09.2019 HIER VARIABLER WERT!!
+            - timestamp
         type:
-          type: 
           allowed:
-          - 1min
-          - 5min
-          - 15min
-          - 30min
-          - 1hour
-          - 8hour
-          - 1day
-          - 1week
+            minutes: 1min
+            hours: 1hour
+            days: 1day
+            weeks: 1week
           default: 1day
 
     response:

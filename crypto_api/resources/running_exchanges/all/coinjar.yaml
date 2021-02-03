@@ -110,8 +110,15 @@ requests:
           type:
             - datetime
             - timedelta
+            - interval
             - 300
         interval:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            months: 1M
           default: 1d
 
     response:

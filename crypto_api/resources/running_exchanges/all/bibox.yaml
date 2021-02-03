@@ -80,8 +80,6 @@ requests:
       params:
         cmd:
           type: str
-          allowed:
-          - pairList
           default: pairList
     response:
       type: dict
@@ -131,24 +129,13 @@ requests:
       params:
         cmd:
           type: str
-          allowed:
-          - kline
           default: kline
         period: # k line period
-          type: str
           allowed:
-          - 1min
-          - 3min
-          - 5min
-          - 15min
-          - 30min
-          - 1hour
-          - 2hour
-          - 4hour
-          - 6hour
-          - 12hour
-          - day
-          - week
+            minutes: 1min
+            hours: 1hour
+            days: day
+            weeks: week
           default: day
         size: # how many, 1-1000, if not passed will return 1000
           type: int
@@ -243,8 +230,6 @@ requests:
        params:
          cmd:
            type: str
-           allowed:
-           - depth
            default: depth
          size: # how many, 1-200, if not passed will return 200
            type: int
@@ -353,8 +338,6 @@ requests:
       params:
         cmd:
           type: str
-          allowed:
-          - deals
           default: deals
         size: # how many, 1-200, if not passed will return 200
           type: int

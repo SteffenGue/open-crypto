@@ -140,19 +140,26 @@ requests:
         alias: symbol
       params:
         step: # in minutes
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1440
+            weeks: 10080
+            months: 43200
           default: 1440 # 1d
 
         from:
           function: last_timestamp
           type:
             - datetime
-            - timedeltams
+            - timedelta
+            - interval
             - 500
         to: # in milliseconds
           function: last_timestamp
           type:
             - datetime
-            - timestampms
+            - timestamp
 
     response:
       type: dict

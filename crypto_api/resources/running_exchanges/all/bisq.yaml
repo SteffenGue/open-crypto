@@ -121,21 +121,24 @@ requests:
         interval:
           type: str
           allowed:
-          - minute
-          - half_hour
-          - hour
-          - half_day
-          - day
-          - week
-          - month
-          - year
-          - auto
+#            minutes: minute #Minute is useless, periods are actually several hours
+            hours: hour
+            days: day
+            weeks: week
+            months: month
           default: day
-#        timestamp_to: # returns everything from 01.01.2016 by default.
-#          function: last_timestamp
-#          type:
-#            - datetime
-#            - timestamp
+        timestamp_to:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
+        timestamp_from: # returns everything from 01.01.2016 by default.
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1000
     response:
       type: list
       values:

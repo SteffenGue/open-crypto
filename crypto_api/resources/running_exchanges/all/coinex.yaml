@@ -333,19 +333,10 @@ requests:
         type:
           type: str
           allowed:
-          - 1min
-          - 3min
-          - 5min
-          - 15min
-          - 30min
-          - 1hour
-          - 2hour
-          - 4hour
-          - 6hour
-          - 12hour
-          - 1day
-          - 3day
-          - 1week
+            minutes: 1min
+            hours: 1hour
+            days: 1day
+            weeks: 1week
           default: 1day
         limit: # Less than or equal to 1000
           type: int

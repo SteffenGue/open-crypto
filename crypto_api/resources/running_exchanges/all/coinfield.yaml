@@ -114,6 +114,11 @@ requests:
         limit:
           default: 400
         period:
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1440
+            weeks: 10080
           default: 1440
         to:
           function: last_timestamp
@@ -125,6 +130,7 @@ requests:
           type:
             - datetime
             - timedelta
+            - interval
             - 400
     response:
       type: dict

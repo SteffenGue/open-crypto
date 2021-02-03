@@ -52,9 +52,18 @@ requests:
         alias: market
       params:
         resolution:
+          allowed:
+            minutes: 1
+            hours: 60
+            days: 1440
           default: 1440 # daily
         from:
-          default: 0
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 2000
         to:
           function: last_timestamp
           type:

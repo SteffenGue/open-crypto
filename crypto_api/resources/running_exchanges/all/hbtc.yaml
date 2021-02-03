@@ -223,7 +223,12 @@ requests:
           max: 1000
           default: 1000
         interval:
-          type: str
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            months: 1M
           default: 1d
     response:
       type: list

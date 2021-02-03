@@ -1,5 +1,6 @@
 name: lbank
 exchange: true
+api_docs: https://github.com/LBank-exchange/lbank-official-api-docs/tree/master/API-For-Spot-EN
 api_url: https://api.lbkex.com/v1/
 rate_limit: null
 
@@ -120,9 +121,6 @@ requests:
           default: 60
         merge:
           type: int
-          allowed:
-          - 0
-          - 1
           default: 0
     response:
       type: dict
@@ -264,22 +262,22 @@ requests:
           max: 2880
           default: 2880
         type:
-          type: str
           allowed:
-          - minute1
-          - minute5
-          - minute15
-          - minute30
-          - hour1
-          - hour4
-          - hour8
-          - hour12
-          - day1
-          - week1
+            minutes: minute1
+            hours: hour1
+            days: day1
+            weeks: week1
+            months: month1
           default: day1
         time:
-          type: int
-          default: 1325432318 #01.01.2012
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 2880
+#          type: int
+#          default: 1325432318 #01.01.2012
     response:
       type: list
       values:

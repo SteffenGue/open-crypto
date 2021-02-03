@@ -217,7 +217,12 @@ requests:
         alias: symbol
       params:
         interval:
-          type: int
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            months: 1M
           default: 1d
         limit:
           type: int

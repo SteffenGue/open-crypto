@@ -47,6 +47,12 @@ requests:
           type: str
           dafault: 1000
         interval:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+#            months: 1M
           default: 1d
         endTime:
           function: last_timestamp
@@ -58,6 +64,7 @@ requests:
           type:
             - datetime
             - timedeltams
+            - interval
             - 1000
     response:
       type: list

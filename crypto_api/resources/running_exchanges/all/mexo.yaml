@@ -1,6 +1,6 @@
 name: mexo
 is_exchange: true
-
+api_docs: https://github.com/mexo-tech/Mexo-OpenApi/blob/master/doc/rest-api.md
 api_url: https://api.mexo.io/
 rate_limit:
   max: 1500
@@ -217,7 +217,12 @@ requests:
         alias: symbol
       params:
         interval:
-          type: int
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
+            months: 1M
           default: 1d
         limit:
           type: int

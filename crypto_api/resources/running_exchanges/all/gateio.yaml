@@ -290,7 +290,11 @@ requests:
           type: int
           default: 1000
         interval:
-          type: str
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1d
+            weeks: 1w
           default: 1d
         to:
           function: last_timestamp
