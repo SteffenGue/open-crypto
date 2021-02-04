@@ -3,7 +3,7 @@
 
 name: gemini
 exchange: true
-
+api_docs: https://docs.gemini.com/rest-api/
 api_url: https://api.gemini.com/
 rate_limit: # For public API entry points, we limit requests to 120 requests per minute, and recommend that you do not exceed 1 request per second.
   max: 120 # recommended: 60
@@ -255,11 +255,17 @@ requests:
 
   historic_rates:
     request:
-      template: v2/candles/{currency_pair}/1day
+      template: v2/candles/{currency_pair}/{frequency}
       pair_template:
         template: "{first}{second}"
         lower_case: true
-      params: null
+      params:
+        frequency:
+          allowed:
+            minute: 1m
+            hours: 1h
+            days: 1day
+          default: 1day
     response:
       type: list
       values:

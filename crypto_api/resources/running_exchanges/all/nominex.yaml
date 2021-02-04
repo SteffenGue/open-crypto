@@ -3,7 +3,7 @@ name: nominex
 exchange: true
 
 rate_limit: null
-
+api_docs: https://developer.nominex.io/#parameters
 api_url: https://nominex.io/api/rest/v1/
 
 requests:
@@ -87,11 +87,19 @@ requests:
 
   historic_rates:
     request:
-      template: candles/{currency_pair}/TF1D
+      template: candles/{currency_pair}/{frequency}
       pair_template:
         template: "{first}/{second}"
         lower_case: false
       params:
+        frequency:
+          allowed:
+            minutes: TF1M
+            hours: TF1H
+            days: TF1D
+            weeks: TF7D
+            months: TF1MO
+          default: TF1D
         limit:
           default: 400 # max
         end:

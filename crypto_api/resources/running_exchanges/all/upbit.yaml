@@ -40,12 +40,19 @@ requests:
 
   historic_rates:
     request:
-      template: candles/days
+      template: candles/{frequency}
       pair_template: # e.g. KRW-BTC
         template: "{second}-{first}"
         lower_case: false
         alias: market
       params:
+        frequency:
+          allowed:
+            minutes: minutes/1
+            days: days
+            weeks: weeks
+            months: months
+          default: minutes
         to:
           function: last_timestamp
           type:

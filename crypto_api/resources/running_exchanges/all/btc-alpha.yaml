@@ -1,5 +1,5 @@
 name: btc-alpha
-terms: null
+api_docs: https://btc-alpha.github.io/api-docs/
 rate_limit: null
 
 api_url: https://btc-alpha.com/api/
@@ -33,15 +33,12 @@ requests:
 
   historic_rates:
     request:
-      template: charts/{currency_pair}/D/chart
+      template: charts/{currency_pair}/{frequency}/chart
       pair_template:
         template: "{first}_{second}"
         lower_case: false
       params:
         limit:
-          type:
-            - str
-            - int
           max: 720
           default: 720
         until:
@@ -49,7 +46,12 @@ requests:
           type:
             - datetime
             - timestamp
-
+        frequency:
+          allowed:
+            minutes: 5
+            hours: 60
+            days: D
+          default: D
 
     response:
       type: list

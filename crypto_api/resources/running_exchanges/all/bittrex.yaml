@@ -1,5 +1,6 @@
 name: bittrex
 exchange: true
+api_docs: https://bittrex.github.io/api/v3
 api_url: https://api.bittrex.com/v3/
 rate_limit: null
 requests:
@@ -229,12 +230,26 @@ requests:
 
   historic_rates:
     request:
-      template: markets/{currency_pair}/candles/DAY_1/recent
+      template: markets/{currency_pair}/candles/{frequency}/historical/{from}
       pair_template:
         template: "{first}-{second}"
         lower_case: false
         alias: null
-      params: null
+      params:
+        frequency:
+          allowed:
+            minutes: MINUTE_1
+          default: MINUTE_1
+
+        from:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 1440
+            - fromtimestamp
+            - "%Y/%m/%d"
 
     response:
       type: list

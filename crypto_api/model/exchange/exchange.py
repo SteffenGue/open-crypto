@@ -60,34 +60,39 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
     return response_mappings
 
 
-def format_request_url(url: str, pair_template: Dict, pair_formatted: str, params: Dict):
+def format_request_url(url: str, pair_template: Dict, pair_formatted: str, cp, parameter: Dict):
     # ToDo: Docu
     """
     @param pair_template:
     @param url:
     @param pair_formatted:
-    @param params:
+    @param parameter:
     @return:
     """
 
+    parameter.update({key: parameter[key][cp] for key, val in parameter.items() if isinstance(val, dict)})
+
     # Case 1: Currency-Pairs in request parameters: eg. www.test.com?market=BTC-USD
     if 'alias' in pair_template.keys() and pair_template['alias']:
-        params[pair_template['alias']] = pair_formatted
-        url_formatted = url
+        # add market=BTC-USD to parameters
+        parameter[pair_template['alias']] = pair_formatted
+        # params_adj = parameter
+        # url_formatted = url
 
     # Case 2: Currency-Pairs directly in URL: eg. www.test.com/BTC-USD
-    elif params and pair_formatted:
-        params.update({'currency_pair': pair_formatted})
-        # find placeholders in string
-        variables = [item[1] for item in string.Formatter().parse(url) if item[1] is not None]
-        url_formatted = url.format(**params)
-        # drop params who got filled directly into the url
-        params_adj = {k: v for k, v in params.items() if k not in variables}
+    elif parameter and pair_formatted:
+        parameter.update({'currency_pair': pair_formatted})
 
     else:
-        return url, params
+        return url, parameter
+        # find placeholders in string
 
-    return url_formatted, params_adj
+    variables = [item[1] for item in string.Formatter().parse(url) if item[1] is not None]
+    url_formatted = url.format(**parameter)
+    # drop params who got filled directly into the url
+    parameter = {k: v for k, v in parameter.items() if k not in variables}
+
+    return url_formatted, parameter
 
 
 class Exchange:
@@ -288,16 +293,16 @@ class Exchange:
                     #     url_formatted = url
 
                     # ToDO: Test method format_request_url
-                    url_formatted, params_adj = format_request_url(url, pair_template_dict, pair_formatted[cp], params)
+                    url_formatted, params_adj = format_request_url(url, pair_template_dict, pair_formatted[cp], cp, params)
 
-                    params_adj.update({key: params_adj[key][cp] for key, val in params_adj.items() if isinstance(val, dict)})
+                    # params_adj.update({key: params_adj[key][cp] for key, val in params_adj.items() if isinstance(val, dict)})
 
                     try:
                         response = await session.get(url=url_formatted,
                                                      params=params_adj,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         # ToDo: Does every successful response has code 200?
-                        assert (response.status == 200)
+                        # assert (response.status == 200)
                         response_json = await response.json(content_type=None)
                         if pair_template_dict:
                             responses[cp] = response_json
@@ -311,8 +316,8 @@ class Exchange:
                         # ToDo: Changes for all exception: "return -> responses[cp]= []"
                         responses[cp] = []
                     except AssertionError:
-                        print(
-                            "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
+                        # print(
+                        #     "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
