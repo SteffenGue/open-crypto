@@ -1,6 +1,7 @@
 import itertools
 import logging
 import traceback
+import string
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
@@ -57,6 +58,36 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
                 response_mappings[request] = mapping_list
 
     return response_mappings
+
+
+def format_request_url(url: str, pair_template: Dict, pair_formatted: str, params: Dict):
+    # ToDo: Docu
+    """
+    @param pair_template:
+    @param url:
+    @param pair_formatted:
+    @param params:
+    @return:
+    """
+
+    # Case 1: Currency-Pairs in request parameters: eg. www.test.com?market=BTC-USD
+    if 'alias' in pair_template.keys() and pair_template['alias']:
+        params[pair_template['alias']] = pair_formatted
+        url_formatted = url
+
+    # Case 2: Currency-Pairs directly in URL: eg. www.test.com/BTC-USD
+    elif params and pair_formatted:
+        params.update({'currency_pair': pair_formatted})
+        # find placeholders in string
+        variables = [item[1] for item in string.Formatter().parse(url) if item[1] is not None]
+        url_formatted = url.format(**params)
+        # drop params who got filled directly into the url
+        params_adj = {k: v for k, v in params.items() if k not in variables}
+
+    else:
+        return url, params
+
+    return url_formatted, params_adj
 
 
 class Exchange:
@@ -247,21 +278,25 @@ class Exchange:
             async with aiohttp.ClientSession() as session:
                 for cp in currency_pairs:
 
-                    # if formatted currency pair needs to be a parameter
-                    if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
-                        params[pair_template_dict['alias']] = pair_formatted[cp]
-                        url_formatted = url
-                    elif pair_template_dict:
-                        url_formatted = url.format(currency_pair=pair_formatted[cp])
-                    else:
-                        url_formatted = url
-                    params.update({key: params[key][cp] for key, val in params.items() if isinstance(val, dict)})
+                    # # if formatted currency pair needs to be a parameter
+                    # if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
+                    #     params[pair_template_dict['alias']] = pair_formatted[cp]
+                    #     url_formatted = url
+                    # elif pair_template_dict:
+                    #     url_formatted = url.format(currency_pair=pair_formatted[cp])
+                    # else:
+                    #     url_formatted = url
+
+                    # ToDO: Test method format_request_url
+                    url_formatted, params_adj = format_request_url(url, pair_template_dict, pair_formatted[cp], params)
+
+                    params_adj.update({key: params_adj[key][cp] for key, val in params_adj.items() if isinstance(val, dict)})
 
                     try:
                         response = await session.get(url=url_formatted,
-                                                     params=params,
+                                                     params=params_adj,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
-                        # ToDo: Does every sucessfull response has code 200?
+                        # ToDo: Does every successful response has code 200?
                         assert (response.status == 200)
                         response_json = await response.json(content_type=None)
                         if pair_template_dict:

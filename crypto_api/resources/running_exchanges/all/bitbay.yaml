@@ -283,7 +283,7 @@ requests:
 
   historic_rates:
     request:
-      template: candle/history/{currency_pair}/86400 #change resolution here
+      template: candle/history/{currency_pair}/{frequency}
       pair_template:
         template: "{first}-{second}"
         lower_case: false
@@ -293,7 +293,19 @@ requests:
             - none
             - now_timestampms
         from:
-          default: 1262304000000 # 01.01.2010
+          function: last_timestamp
+          type:
+            - datetime
+            - timedeltams
+            - interval
+            - 2000
+
+        frequency:
+          allowed:
+            minutes: 60
+            hours: 3600
+            days: 86400
+            weeks: 604800
     response:
       type: dict
       values:

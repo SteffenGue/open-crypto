@@ -272,7 +272,7 @@ requests:
 
   historic_rates:
     request:
-      template: https://api-pub.bitfinex.com/v2/candles/trade:1d:{currency_pair}/hist
+      template: https://api-pub.bitfinex.com/v2/candles/trade:{frequency}:{currency_pair}/hist
       pair_template: # i.e. tBTCUSD
         template: "t{first}{second}"
         lower_case: false
@@ -288,6 +288,16 @@ requests:
             - timestampms
         sort: # if = 1 it sorts results returned with old > new
           required: false
+
+        frequency:
+          allowed:
+            minutes: 1m
+            hours: 1h
+            days: 1D
+            weeks: 7D
+            months: 1M
+          default: 1D
+
     response:
       type: list
       values:

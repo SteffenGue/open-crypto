@@ -20,18 +20,18 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - xtheta_global
+      - bitfinex
     excluded:
 #      - bitfinex
 
     currency_pairs:
 #      - all
-#      - first: btc
-#        second: usd
+      - first: btc
+        second: usd
       - first: btc
         second: usdt
-#      - first: eth
-#        second: btc
+      - first: eth
+        second: btc
 #      - first: usdt
 #        second: btc
 #      - first: krw

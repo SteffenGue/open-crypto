@@ -119,7 +119,7 @@ class Mapping:
             path_queue:
                 The queue of path traversal instructions.
 
-            currency_pair:
+            currency_pair_info:
                 The formatted String of a currency pair.
                 For special case that the key of a dictionary is the formatted currency pair string.
 
@@ -163,7 +163,7 @@ class Mapping:
                       types_queue=None,
                       iterate=True,
                       currency_pair_info: (str, str, str) = (None, None, None)):  # TODO DOKU
-        """Extracts the value specfied by "self.path".
+        """Extracts the value specified by "self.path".
 
         Extracts the value specified by the path sequence and converts it
         using the "types" specified.
@@ -177,6 +177,8 @@ class Mapping:
                 The queue of type conversion instructions.
             iterate:
                 Whether still an auto-iteration is possible.
+            currency_pair_info:
+                The formatted String of a currency pair.
 
         Returns:
             The value specified by "path_queue" and converted
@@ -209,7 +211,7 @@ class Mapping:
                 # Iterate through list of results
                 result = list()
 
-                if len(response) == 1: #special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
+                if len(response) == 1: # special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
                     response = response[0]
                     continue  # because instance of response has to be checked
 
