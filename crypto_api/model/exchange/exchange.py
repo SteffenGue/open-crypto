@@ -238,7 +238,7 @@ class Exchange:
             pair_template_dict = request_url_and_params['pair_template']
             url: str = request_url_and_params['url']
 
-            rate_limit = 1 / self.rate_limit if self.rate_limit and len(currency_pairs) >= self.rate_limit else 0
+            self.rate_limit = self.rate_limit if self.rate_limit and len(currency_pairs) >= self.rate_limit else 0
 
             # when there is no pair formatting section then all ticker data can be accessed with one request
             if pair_template_dict:
@@ -289,7 +289,7 @@ class Exchange:
                                       .format(self.name, url_formatted, params))
                         responses[cp] = []
 
-                    # await asyncio.sleep(rate_limit)
+                    await asyncio.sleep(self.rate_limit)
 
             return datetime.utcnow(), self.name, responses
         else:

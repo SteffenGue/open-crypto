@@ -2,8 +2,8 @@ name: yobit
 
 api_url: https://yobit.net/api/3/
 rate_limit:
-  max: 1
-  unit: 2
+  max: 30
+  unit: 60
 requests:
   currency_pairs:
     request:
