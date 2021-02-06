@@ -2,7 +2,7 @@ name: currency.com
 exchange: true
 api_url: https://marketcap.backend.currency.com/api/v1/
 
-rate_limit: none
+rate_limit: null
 
 requests:
   currency_pairs:

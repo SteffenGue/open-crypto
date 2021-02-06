@@ -1,10 +1,7 @@
 name: catex
 exchange: true
 
-rate_limit:
-  max:
-  unit:
-
+rate_limit: null
 api_url: https://www.catex.io/api/
 
 requests:

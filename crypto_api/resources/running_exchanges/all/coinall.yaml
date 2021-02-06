@@ -3,7 +3,7 @@ exchange: true
 api_url: https://www.coinall.com/api/spot/v3/
 rate_limit:
   max: 6
-  units: 1
+  unit: 1
 
 requests:
   currency_pairs:

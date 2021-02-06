@@ -5,7 +5,7 @@ exchange: true
 api_url: https://braziliex.com/api/v1/
 rate_limit:
   max: 1
-  units: 1
+  unit: 1
 requests:
   currency_pairs:
     request:

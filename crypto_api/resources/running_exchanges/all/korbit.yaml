@@ -3,7 +3,7 @@ exchange: true
 api_url: https://api.korbit.co.kr/v1/
 
 rate_limit:
-  limit: 60
+  max: 60
   unit: 60
 
 requests:

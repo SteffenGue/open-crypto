@@ -1,7 +1,7 @@
 name: bitfront
 exchange: true
 
-rate_limit: none
+rate_limit: null
 
 api_url: https://openapi.bitfront.me/v1/market/public/
 

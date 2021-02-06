@@ -161,13 +161,14 @@ class Exchange:
         self.get_first_timestamp = db_handler
 
         self.api_url = yaml_file['api_url']
-        if yaml_file.get('rate_limit') and yaml_file['rate_limit'].get('unit') and yaml_file['rate_limit'].get('max'):
+        if yaml_file.get('rate_limit'):
             if yaml_file['rate_limit']['max'] <= 0:
                 self.rate_limit = 0
             else:
                 self.rate_limit = yaml_file['rate_limit']['unit'] / yaml_file['rate_limit']['max']
         else:
             self.rate_limit = 0
+
         self.response_mappings = extract_mappings(yaml_file['requests'])
 
         self.exception_counter = 0
@@ -293,9 +294,14 @@ class Exchange:
                     #     url_formatted = url
 
                     # ToDO: Test method format_request_url
-                    url_formatted, params_adj = format_request_url(url, pair_template_dict, pair_formatted[cp], cp, params)
-
-                    # params_adj.update({key: params_adj[key][cp] for key, val in params_adj.items() if isinstance(val, dict)})
+                    if pair_template_dict:
+                        url_formatted, params_adj = format_request_url(url,
+                                                                       pair_template_dict,
+                                                                       pair_formatted[cp],
+                                                                       cp,
+                                                                       params)
+                    else:
+                        url_formatted, params_adj = url, params
 
                     try:
                         response = await session.get(url=url_formatted,
@@ -503,6 +509,8 @@ class Exchange:
 
             params = dict()
             # ToDo: Make function from the below. That's one big ugly block of too many ifs
+            # ToDO: Bug if self.frequency is e.g. daily. Does not falls back to days for startTime
+            #  calculations with interval!
             if 'params' in request_dict.keys() and request_dict['params']:
                 for param in request_dict['params']:
 
@@ -511,9 +519,6 @@ class Exchange:
                             params[param] = str(request_dict['params'][param]['allowed'][self.interval])
                         else:
                             self.interval = 'days'
-
-                            # request_dict['params'][param]['type'] = [x if x == 'interval' else x for x in
-                            #                                          request_dict['params'][param]['type']]
 
                     if 'function' in request_dict['params'][param]:
                         params[param] = {cp: self.get_first_timestamp(request_table, cp.id) for cp in

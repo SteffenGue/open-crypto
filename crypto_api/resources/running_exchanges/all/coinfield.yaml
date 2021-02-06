@@ -1,9 +1,7 @@
 name: coinfield
 exchange: true
 
-rate_limit:
-  max:
-  unit:
+rate_limit: null
 
 api_url: https://api.coinfield.com/v1/
 

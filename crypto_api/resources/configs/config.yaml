@@ -10,9 +10,9 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: minutes
+    interval: weeks
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
@@ -20,18 +20,20 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - okcoin
-      - coinbase
-      - coinbene
+      - bankcex
+#      - bitvavo
+#      - okcoin
+#      - coinbase
+#      - coinbene
     excluded:
-#      - bitfinex
+      - coingecko
 
     currency_pairs:
 #      - all
-      - first: btc
-        second: usd
-      - first: btc
-        second: usdt
+#      - first: btc
+#        second: usd
+#      - first: btc
+#        second: usdt
       - first: eth
         second: btc
 #      - first: usdt
