@@ -308,7 +308,7 @@ class Exchange:
                                                      params=params_adj,
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         # ToDo: Does every successful response has code 200?
-                        # assert (response.status == 200)
+                        assert (response.status == 200)
                         response_json = await response.json(content_type=None)
                         if pair_template_dict:
                             responses[cp] = response_json
@@ -322,8 +322,8 @@ class Exchange:
                         # ToDo: Changes for all exception: "return -> responses[cp]= []"
                         responses[cp] = []
                     except AssertionError:
-                        # print(
-                        #     "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
+                        print(
+                            "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
                     except Exception:
                         print('Unable to read response from {}. Check exchange config file.\n'
