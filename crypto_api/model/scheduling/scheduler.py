@@ -123,6 +123,9 @@ class Scheduler:
 
         if jobs:
             for job in jobs:
+                if job.request_name == "currency_pairs":
+                    print("Done loading Currency-Pairs.")
+                    sys.exit(0)
 
                 if job.exchanges_with_pairs:
                     for exchange in job.exchanges_with_pairs.copy():
@@ -202,12 +205,13 @@ class Scheduler:
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                     await update_currency_pairs(exchange)
 
-                job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
-                    exchange.name,
-                    job_params['currency_pairs'],
-                    job_params['first_currencies'],
-                    job_params['second_currencies']
-                )
+                if job.request_name != 'currency_pairs':
+                    job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
+                        exchange.name,
+                        job_params['currency_pairs'],
+                        job_params['first_currencies'],
+                        job_params['second_currencies']
+                    )
         return job_list
 
     async def request_format_persist(self,
