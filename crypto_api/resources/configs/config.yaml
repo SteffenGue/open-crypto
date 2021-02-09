@@ -10,17 +10,17 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: weeks
+    interval: minutes
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
   AAAA:
-    yaml_request_name: historic_rates
+    yaml_request_name: currency_pairs
     update_cp: false
     exchanges:
-      - bankcex
+      - bitfinex
 #      - bitvavo
 #      - okcoin
 #      - coinbase

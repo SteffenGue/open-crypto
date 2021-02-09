@@ -80,9 +80,9 @@ class Scheduler:
         """
 
         possible_requests = {
-            # "currency_pairs":
-            #     {'function': self.get_currency_pairs,
-            #      'table': ExchangeCurrencyPair},
+            "currency_pairs":
+                {'function': self.get_currency_pairs,
+                 'table': ExchangeCurrencyPair},
             "tickers":
                 {'function': self.request_format_persist,
                  'table': Ticker},
@@ -198,7 +198,7 @@ class Scheduler:
 
             print("Loading and/or updating exchange currency pairs..")
             for exchange in exchanges:
-                if job_params['update_cp'] or \
+                if job_params['update_cp'] or job.request_name == 'currency_pairs' or\
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                     await update_currency_pairs(exchange)
 
