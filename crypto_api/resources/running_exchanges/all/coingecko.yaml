@@ -1,6 +1,9 @@
 name: coingecko
 exchange: false
 api_url: https://api.coingecko.com/api/v3/
+rate_limit:
+  max: 100
+  unit: 60
 
 requests:
   currency_pairs:
@@ -48,11 +51,6 @@ requests:
           default: USD
         days:
           type: int
-          allowed:
-            - 1
-            - 14
-            - 30
-            - max
           default: max
 
     reponse:

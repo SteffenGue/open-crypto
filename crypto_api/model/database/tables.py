@@ -150,7 +150,7 @@ class Ticker(Base):
     exchange_pair = relationship('ExchangeCurrencyPair', backref="tickers")
 
     start_time = Column(DateTime)
-    time = Column(DateTime, primary_key=True)
+    time = Column(DateTime(timezone='UTC'), primary_key=True)
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
@@ -163,6 +163,7 @@ class Ticker(Base):
                                                   self.exchange_pair.second.name,
                                                   self.last_price,
                                                   self.time)
+
 
 class HistoricRate(Base):
     """
@@ -182,7 +183,7 @@ class HistoricRate(Base):
 
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
     exchange_pair = relationship('ExchangeCurrencyPair', backref="historic_rates")
-    time = Column(DateTime, primary_key=True)
+    time = Column(DateTime(timezone='UTC'), primary_key=True)
 
     open = Column(Float)
     high = Column(Float)
@@ -216,7 +217,7 @@ class Trade(Base):
     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
     exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
     id = Column(Integer, primary_key=True)
-    time = Column(DateTime, primary_key=True)
+    time = Column(DateTime(timezone='UTC'), primary_key=True)
 
     amount = Column(Float, primary_key=True)
     best_bid = Column(Float)
@@ -271,7 +272,7 @@ class OrderBook(Base):
     id = Column(Integer, primary_key=True)
     position = Column(Integer, primary_key=True)
 
-    time = Column(DateTime)
+    time = Column(DateTime(timezone='UTC'))
     bids_price = Column(Float)
     bids_amount = Column(Float)
     asks_price = Column(Float)

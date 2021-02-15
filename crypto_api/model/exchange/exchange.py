@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
 import asyncio
+import tqdm
 from collections import deque
 from aiohttp import ClientConnectionError
 
@@ -80,7 +81,7 @@ def format_request_url(url: str, pair_template: Dict, pair_formatted: str, cp, p
         # url_formatted = url
 
     # Case 2: Currency-Pairs directly in URL: eg. www.test.com/BTC-USD
-    elif parameter and pair_formatted:
+    elif pair_formatted:
         parameter.update({'currency_pair': pair_formatted})
 
     else:
@@ -282,7 +283,7 @@ class Exchange:
                 pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
 
             async with aiohttp.ClientSession() as session:
-                for cp in currency_pairs:
+                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 10)):
 
                     # # if formatted currency pair needs to be a parameter
                     # if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
