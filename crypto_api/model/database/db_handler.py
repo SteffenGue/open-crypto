@@ -307,8 +307,16 @@ class DatabaseHandler:
             elif currency_pairs[0] is not None:
                 found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
 
-        found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
-        found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
+        if first_currencies and second_currencies:
+            import itertools
+            currency_pairs = list(itertools.product(first_currencies, second_currencies))
+            currency_pairs = [{'first': pair[0], 'second': pair[1]} for pair in currency_pairs]
+            found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+
+        elif first_currencies or second_currencies:
+            found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
+            found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
+
         result: List = list()
 
         for pair in found_currency_pairs:

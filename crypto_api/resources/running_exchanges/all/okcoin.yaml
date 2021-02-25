@@ -121,7 +121,7 @@ requests:
           default: 50
         merge:
           type: int
-          allowed:
+          possible:
           - 1
           - 0.1
           required: false

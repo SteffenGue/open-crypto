@@ -283,7 +283,7 @@ class Exchange:
                 pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
 
             async with aiohttp.ClientSession() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 10)):
+                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 1000)):
 
                     # # if formatted currency pair needs to be a parameter
                     # if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:

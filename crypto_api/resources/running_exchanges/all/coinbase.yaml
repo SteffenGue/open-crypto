@@ -115,7 +115,7 @@ requests:
        params:
          level:
            type: int
-           allowed:
+           possible:
            - 1 # Only the best bid and ask
            - 2 # Top 50 bids and asks (aggregated)
            - 3 # Full order book (non aggregated), Abuse of Level 3 via polling will cause your access to be limited or blocked.

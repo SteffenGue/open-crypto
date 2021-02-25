@@ -46,6 +46,7 @@ class Scheduler:
         The interval begins counting down at the start of the current iteration.
         """
         runs = [self.run(job) for job in self.job_list]
+        # runs.append(asyncio.BoundedSemaphore(20))
         if isinstance(self.frequency, (int, float)):
             runs.append(asyncio.sleep(self.frequency))
 
