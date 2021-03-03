@@ -117,9 +117,6 @@ requests:
         end: # Millisecond end time
           required: false
         sort: # if = 1 it sorts results returned with old > new
-          allowed:
-            - 1
-            - -1
           default: -1
     response:
       type: list
@@ -148,7 +145,7 @@ requests:
           - timestamp
         type:
           - int
-          - utcfromtimestampms
+          - utcfromtimestamp
       - key: id
         path:
           - tid
@@ -179,9 +176,6 @@ requests:
       params:
         group: # Level of price aggregation (P0, P1, P2, P3, P4, R0)
           type: str
-          allowed:
-            - 0 #not grouped by price
-            - 1 # grouped by price
           default: 1
         limit_bids: # Number of price points ("25", "100")
           type: int
