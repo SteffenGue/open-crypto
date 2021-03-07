@@ -1,11 +1,8 @@
-import sqlalchemy
-from sqlalchemy import join, Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select, \
-    Table, inspect
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, validates, aliased, mapper
-from sqlalchemy_utils import create_view
-from sqlalchemy_utils.functions import orm
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship, validates, aliased
+from sqlalchemy_utils import create_view
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -22,7 +19,7 @@ class Exchange(Base):
         The explicit name of the exchange defined in the .yaml-file.
     """
 
-    __tablename__ = 'exchanges'
+    __tablename__ = "exchanges"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True, )
     active = Column(Boolean, default=True)
@@ -31,9 +28,9 @@ class Exchange(Base):
     total_exceptions = Column(Integer, unique=False, nullable=True, default=0)
 
     def __repr__(self):
-        return "#{}: {}, Active: {}".format(self.id, self.name, self.active)
+        return f"#{self.id}: {self.name}, Active: {self.active}"
 
-    @validates('name')
+    @validates("name")
     def convert_upper(self, key, value):
         return value.upper()
 
@@ -50,16 +47,16 @@ class Currency(Base):
         Abbreviation of the currency
     """
 
-    __tablename__ = 'currencies'
+    __tablename__ = "currencies"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), unique=True, nullable=False)
     from_exchange = Column(Boolean, default=True)
 
     def __repr__(self):
-        return "#{}: {}".format(self.id, self.name)
+        return f"#{self.id}: {self.name}"
 
-    @validates('name')
+    @validates("name")
     def convert_upper(self, key, value):
         return value.upper()
 
@@ -85,30 +82,26 @@ class ExchangeCurrencyPair(Base):
         First ID must be unequal to Second ID.
     """
 
-    __tablename__ = 'exchanges_currency_pairs'
+    __tablename__ = "exchanges_currency_pairs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange_id = Column(Integer, ForeignKey('exchanges.id'))
-    first_id = Column(Integer, ForeignKey('currencies.id'))
-    second_id = Column(Integer, ForeignKey('currencies.id'))
+    exchange_id = Column(Integer, ForeignKey("exchanges.id"))
+    first_id = Column(Integer, ForeignKey("currencies.id"))
+    second_id = Column(Integer, ForeignKey("currencies.id"))
 
-    exchange = relationship("Exchange", backref="exchanges_currency_pairs", lazy='joined')
-    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id", lazy='joined')
-    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id", lazy='joined')
+    exchange = relationship("Exchange", backref="exchanges_currency_pairs", lazy="joined")
+    first = relationship("Currency", foreign_keys="ExchangeCurrencyPair.first_id", lazy="joined")
+    second = relationship("Currency", foreign_keys="ExchangeCurrencyPair.second_id", lazy="joined")
 
     __table_args__ = (CheckConstraint(first_id != second_id),)
 
     def __repr__(self):
-        return "#{}: {}({}), {}({})-{}({})".format(self.id,
-                                                   self.exchange.name, self.exchange_id,
-                                                   self.first.name, self.first_id,
-                                                   self.second.name, self.second_id)
+        return f"#{self.id}: {self.exchange.name}({self.exchange_id}), " \
+               f"{self.first.name}({self.first_id})-{self.second.name}({self.second_id})"
 
     def __str__(self):
-        return "#{}: {}({}), {}({})-{}({})".format(self.id,
-                                                   self.exchange.name, self.exchange_id,
-                                                   self.first.name, self.first_id,
-                                                   self.second.name, self.second_id)
+        return f"#{self.id}: {self.exchange.name}({self.exchange_id}), " \
+               f"{self.first.name}({self.first_id})-{self.second.name}({self.second_id})"
 
 
 class Ticker(Base):
@@ -146,23 +139,19 @@ class Ticker(Base):
 
     __tablename__ = "tickers"
 
-    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPair', backref="tickers")
+    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+    exchange_pair = relationship("ExchangeCurrencyPair", backref="tickers")
 
     start_time = Column(DateTime)
-    time = Column(DateTime(timezone='UTC'), primary_key=True)
+    time = Column(DateTime(timezone="UTC"), primary_key=True)
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
     daily_volume = Column(Float)
 
     def __repr__(self):
-        return "#{}, {}: {}-{}, ${} at {}".format(self.exchange_pair_id,
-                                                  self.exchange_pair.exchange.name,
-                                                  self.exchange_pair.first.name,
-                                                  self.exchange_pair.second.name,
-                                                  self.last_price,
-                                                  self.time)
+        return f"#{self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \
+               f"{self.exchange_pair.first.name}-{self.exchange_pair.second.name}, ${self.last_price} at {self.time}"
 
 
 class HistoricRate(Base):
@@ -179,11 +168,11 @@ class HistoricRate(Base):
     readability.
     """
 
-    __tablename__ = 'historic_rates'
+    __tablename__ = "historic_rates"
 
-    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPair', backref="historic_rates")
-    time = Column(DateTime(timezone='UTC'), primary_key=True)
+    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+    exchange_pair = relationship("ExchangeCurrencyPair", backref="historic_rates")
+    time = Column(DateTime(timezone="UTC"), primary_key=True)
 
     open = Column(Float)
     high = Column(Float)
@@ -193,12 +182,8 @@ class HistoricRate(Base):
     market_cap = Column(Float)
 
     def __repr__(self):
-        return "ID {}, {}: {}-{}, close {} at {}".format(self.exchange_pair_id,
-                                                         self.exchange_pair.exchange.name,
-                                                         self.exchange_pair.first.name,
-                                                         self.exchange_pair.second.name,
-                                                         self.close,
-                                                         self.time)
+        return f"ID {self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \
+               f"{self.exchange_pair.first.name}-{self.exchange_pair.second.name}, close {self.close} at {self.time}"
 
 
 class Trade(Base):
@@ -212,18 +197,18 @@ class Trade(Base):
     __repr__(self) describes the representation if queried.
 
     """
-    __tablename__ = 'trades'
+    __tablename__ = "trades"
 
-    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPair', backref="trades")
+    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+    exchange_pair = relationship("ExchangeCurrencyPair", backref="trades")
     id = Column(Integer, primary_key=True)
-    time = Column(DateTime(timezone='UTC'), primary_key=True)
+    time = Column(DateTime(timezone="UTC"), primary_key=True)
 
     amount = Column(Float, primary_key=True)
     best_bid = Column(Float)
     best_ask = Column(Float)
     price = Column(Float)
-    _direction = Column('direction', Integer)
+    _direction = Column("direction", Integer)
 
     @hybrid_property
     def direction(self):
@@ -232,22 +217,17 @@ class Trade(Base):
     @direction.setter
     def direction(self, direction):
         if isinstance(direction, str):
-            if direction.lower() == 'sell':
+            if direction.lower() == "sell":
                 self._direction = 0
-            elif direction.lower() == 'buy':
+            elif direction.lower() == "buy":
                 self._direction = 1
             else:
                 self._direction = direction
 
     def __repr__(self):
-        return "Last Transction: {}, {}-{}: {} for {} at {}".format(self.exchange_pair.exchange.name,
-                                                                    self.exchange_pair.first.name,
-                                                                    self.exchange_pair.second.name,
-                                                                    self.amount,
-                                                                    self.price,
-                                                                    self.time)
+        return f"Last Transaction: {self.exchange_pair.exchange.name}, {self.exchange_pair.first.name}-{self.exchange_pair.second.name}: {self.amount} for {self.price} at {self.time}"
 
-    @validates('direction')
+    @validates("direction")
     def convert_upper(self, key, value):
         return value.upper()
 
@@ -264,15 +244,15 @@ class OrderBook(Base):
     directly from the exchange and is used to identify to identify changes in the order-book.
     """
 
-    __tablename__ = 'order_books'
+    __tablename__ = "order_books"
 
-    exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-    exchange_pair = relationship('ExchangeCurrencyPair', backref="OrderBook")
+    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+    exchange_pair = relationship("ExchangeCurrencyPair", backref="OrderBook")
 
     id = Column(Integer, primary_key=True)
     position = Column(Integer, primary_key=True)
 
-    time = Column(DateTime(timezone='UTC'))
+    time = Column(DateTime(timezone="UTC"))
     bids_price = Column(Float)
     bids_amount = Column(Float)
     asks_price = Column(Float)
@@ -287,13 +267,13 @@ class ExchangeCurrencyPairView(Base):
     second = aliased(Currency)
 
     __table__ = create_view(
-        name='exchanges_currency_pairs_view',
-        selectable=sqlalchemy.select(
+        name="exchanges_currency_pairs_view",
+        selectable=select(
             [
                 ExchangeCurrencyPair.id,
-                Exchange.name.label('exchange_name'),
-                first.name.label('first_name'),
-                second.name.label('second_name'),
+                Exchange.name.label("exchange_name"),
+                first.name.label("first_name"),
+                second.name.label("second_name"),
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
@@ -314,12 +294,12 @@ class TickerView(Base):
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(
-        name='tickers_view',
+        name="tickers_view",
         selectable=select(
             [
-                Exchange.name.label('exchange'),
-                first.name.label('first_currency'),
-                second.name.label('second_currency'),
+                Exchange.name.label("exchange"),
+                first.name.label("first_currency"),
+                second.name.label("second_currency"),
                 Ticker.start_time,
                 Ticker.time,
                 Ticker.last_price,
@@ -348,12 +328,12 @@ class TradeView(Base):
     second = aliased(Currency)
 
     __table__ = create_view(
-        name='trades_view',
+        name="trades_view",
         selectable=select(
             [
-                Exchange.name.label('exchange'),
-                first.name.label('first_currency'),
-                second.name.label('second_currency'),
+                Exchange.name.label("exchange"),
+                first.name.label("first_currency"),
+                second.name.label("second_currency"),
                 Trade.id,
                 Trade.time,
                 Trade.amount,
@@ -382,12 +362,12 @@ class OrderBookView(Base):
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(
-        name='order_books_view',
+        name="order_books_view",
         selectable=select(
             [
-                Exchange.name.label('exchange'),
-                first.name.label('first_currency'),
-                second.name.label('second_currency'),
+                Exchange.name.label("exchange"),
+                first.name.label("first_currency"),
+                second.name.label("second_currency"),
                 OrderBook.id,
                 OrderBook.position,
                 OrderBook.time,
@@ -416,12 +396,12 @@ class HistoricRateView(Base):
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(
-        name='historic_rates_view',
+        name="historic_rates_view",
         selectable=select(
             [
-                Exchange.name.label('exchange'),
-                first.name.label('first_currency'),
-                second.name.label('second_currency'),
+                Exchange.name.label("exchange"),
+                first.name.label("first_currency"),
+                second.name.label("second_currency"),
                 HistoricRate.time,
                 HistoricRate.open,
                 HistoricRate.high,

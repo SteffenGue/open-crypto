@@ -1,23 +1,25 @@
 import logging
-from datetime import datetime, timedelta
-from typing import List, Tuple, Iterator, Iterable, Dict
-from contextlib import contextmanager
-import tqdm
-import psycopg2
-import sqlalchemy
 import os
+from contextlib import contextmanager
+from datetime import datetime, timedelta
+from typing import List, Tuple, Iterable, Dict, Optional
+
+import tqdm
 from pandas import read_sql_query as pd_read_sql_query
-from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, inspect, func
+from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, func, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import *
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker
 from model.utilities.exceptions import NotAllPrimaryKeysException
 
 
-def _get_exchange_currency_pair(session: Session, exchange_name: str, first_currency_name: str,
-                                second_currency_name: str) -> ExchangeCurrencyPair:
+def _get_exchange_currency_pair(
+        session: Session,
+        exchange_name: str,
+        first_currency_name: str,
+        second_currency_name: str) -> Optional[ExchangeCurrencyPair]:
     """
     Checks if there is a currency pair in the database with the given parameters and
     returns it if so.
@@ -42,10 +44,11 @@ def _get_exchange_currency_pair(session: Session, exchange_name: str, first_curr
     first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
     second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
 
-    cp = session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange.__eq__(ex),
-                                                    ExchangeCurrencyPair.first.__eq__(first),
-                                                    ExchangeCurrencyPair.second.__eq__(second)).first()
-    return cp
+    return session.query(ExchangeCurrencyPair).filter(
+        ExchangeCurrencyPair.exchange.__eq__(ex),
+        ExchangeCurrencyPair.first.__eq__(first),
+        ExchangeCurrencyPair.second.__eq__(second)
+    ).first()
 
 
 class DatabaseHandler:
@@ -62,17 +65,18 @@ class DatabaseHandler:
     """
     sessionFactory: sessionmaker
 
-    def __init__(self,
-                 metadata: MetaData,
-                 sqltype: str,
-                 client: str,
-                 user_name: str,
-                 password: str,
-                 host: str,
-                 port: str,
-                 db_name: str,
-                 path: str = None,
-                 debug: bool = False):
+    def __init__(
+            self,
+            metadata: MetaData,
+            sqltype: str,
+            client: str,
+            user_name: str,
+            password: str,
+            host: str,
+            port: str,
+            db_name: str,
+            path: str = None,
+            debug: bool = False):
         """
         Initializes the database-handler.
 
@@ -106,14 +110,14 @@ class DatabaseHandler:
         """
         if not path:
             path = os.getcwd()
-        if sqltype == 'sqlite':
-            conn_string = '{}:///{}/{}.db'.format(sqltype, path, db_name)
+        if sqltype == "sqlite":
+            conn_string = f"{sqltype}:///{path}/{db_name}.db"
         elif debug:
             conn_string = "sqlite://"
         else:
-            conn_string = '{}+{}://{}:{}@{}:{}/{}'.format(sqltype, client, user_name, password, host, port, db_name)
+            conn_string = f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"
 
-        logging.info('Connection String is: {}'.format(conn_string))
+        logging.info(f"Connection String is: {conn_string}")
         engine = create_engine(conn_string)
 
         if not database_exists(engine.url):
@@ -124,9 +128,9 @@ class DatabaseHandler:
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
-            print('View already exists.')
-            logging.warning('Views already exist. If you need to alter or recreate tables delete tickers_view '
-                            'and exchanges_currency_pair_view manually.')
+            print("View already exists.")
+            logging.warning("Views already exist. If you need to alter or recreate tables delete tickers_view "
+                            "and exchanges_currency_pair_view manually.")
             pass
         self.sessionFactory = sessionmaker(bind=engine)
 
