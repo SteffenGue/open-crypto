@@ -2,13 +2,12 @@
 
 """
 Setup module for installing dependencies of Crypto Data Collector.
-
 """
 
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.md", "r") as file:
+    long_description = file.read()
 
 setup(name="crypto-stguen",
       version="0.0.9",
