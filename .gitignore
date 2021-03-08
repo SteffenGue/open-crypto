@@ -7,3 +7,12 @@
 # Python
 __pycache__/
 venv/
+
+# Python setup files
+build/
+dist/
+*.egg-info
+
+# Crypto Output
+log/
+*.db
