@@ -1,37 +1,18 @@
 import calendar
 import datetime
-from datetime import timedelta
-import dateutil.parser
-import os
-from typing import List, Any, Dict
-import oyaml as yaml
-import pathlib
-from pathlib import Path
 import logging
+import os
+import pathlib
+from datetime import timedelta
+from pathlib import Path
+from typing import List, Any, Dict
+
+import dateutil.parser
+import oyaml as yaml
 
 from resources.configs.GlobalConfig import GlobalConfig
 
 TYPE_CONVERSION = {
-
-    """
-    Type Conversions used to convert extracted values from the API-Response into the desired type ("first", "second").
-    The values are specified in the .yaml-file of each exchange under the "mapping" of each method.
-    The function is called in the Mapping Class of utilities.py under the method convert_types().
-
-    "first":
-        The actual type extracted from the API-Request (.json)
-    "second":
-        The desired type to convert
-    "function":
-        the actual function to apply
-    "params":
-        the number of additional parameters needed
-    """
-
-    : {
-        "function": str,
-        "params": 0
-    },
     ("bool", "int"): {
         "function": int,
         "params": 0
@@ -215,7 +196,8 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ('datetime', 'timedelta'): {
-        'function': lambda time, interval, delta: int(datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))),
+        'function': lambda time, interval, delta: int(
+            datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))),
         'params': 2
     },
     ('utcfromtimestamp', 'timedelta'): {
@@ -225,7 +207,8 @@ TYPE_CONVERSION = {
         'params': 2
     },
     ('datetime', 'timedeltams'): {
-        'function': lambda time, interval, delta: int(datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))) * 1000,
+        'function': lambda time, interval, delta: int(
+            datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))) * 1000,
         'params': 2
     },
     ('datetime', 'timestamp'): {
@@ -245,6 +228,20 @@ TYPE_CONVERSION = {
         "params": 1
     },
 }
+"""
+    Type Conversions used to convert extracted values from the API-Response into the desired type ("first", "second").
+    The values are specified in the .yaml-file of each exchange under the "mapping" of each method.
+    The function is called in the Mapping Class of utilities.py under the method convert_types().
+
+    "first":
+        The actual type extracted from the API-Request (.json)
+    "second":
+        The desired type to convert
+    "function":
+        the actual function to apply
+    "params":
+        the number of additional parameters needed
+"""
 
 
 def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
@@ -264,11 +261,10 @@ def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
         try:
             filename = GlobalConfig().file
             config_yaml = open(filename)
+            break
         except FileNotFoundError:
             print("File not found. Retry!")
             GlobalConfig().set_file()
-        else:
-            break
 
     config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
     config_yaml.close()
@@ -284,7 +280,7 @@ def read_config(file: str = None, section: str = None) -> Dict[str, Any]:
             if section == nested_section:
                 return config_dict[general_section][nested_section]
 
-    Exception()
+    raise Exception()
 
 
 def yaml_loader(exchange: str):
@@ -297,17 +293,15 @@ def yaml_loader(exchange: str):
         returns a dict of the loaded data from the .yaml-file
     @exceptions Exception: the .yaml file could not be evaluated for a given exchange
     """
-
     path = read_config(file=None, section='utilities')['yaml_path']
     try:
-        with open(path + exchange + '.yaml', 'r') as f:
-            data = yaml.load(f, Loader=yaml.FullLoader)
-        return data
+        with open(path + exchange + '.yaml', 'r') as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
     except Exception as ex:
         print(f"Error loading yaml of {exchange}. Try validating the file or look in the log-files.")
         print(ex)
         logging.exception(f"Error loading yaml of {exchange}.\n", ex)
-        return
+        raise ex
 
 
 def get_exchange_names() -> List[str]:
@@ -321,11 +315,12 @@ def get_exchange_names() -> List[str]:
     @return: List[str]
         Names from all the exchange, which have a .yaml-file in
         the directory described in YAML_PATH.
-"""
+    """
     yaml_path = read_config(file=None, section='utilities')['yaml_path']
     path_to_resources: Path = pathlib.Path().parent.absolute()
-    exchanges_list = os.listdir(Path.joinpath(path_to_resources, yaml_path))
-    exchange_names = list([str(x.split(".yaml")[0]) for x in exchanges_list if ".yaml" in x])
-    exchanges = exchange_names
-    exchange_names.sort()
+
+    exchanges = os.listdir(Path.joinpath(path_to_resources, yaml_path))
+    exchanges = [x[:-5] for x in exchanges if x.endswith(".yaml")]
+    exchanges.sort()
+
     return exchanges

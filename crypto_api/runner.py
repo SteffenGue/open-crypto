@@ -1,13 +1,12 @@
-import main as main
 import os
 import shutil
 from typing import Dict
 
-from model.database.tables import *
-from model.database.db_handler import DatabaseHandler
-from model.utilities.utilities import read_config
+import main
 from export import CsvExport
-
+from model.database.db_handler import DatabaseHandler
+from model.database.tables import metadata
+from model.utilities.utilities import read_config
 
 path = os.getcwd()
 

@@ -1,20 +1,20 @@
-from dateutil import parser as dateparser
-from datetime import datetime
-from typing import Dict
-import pandas as pd
 import inspect
 import os
+from datetime import datetime
+from typing import Dict
 
-from model.utilities.utilities import read_config
-from model.database.tables import metadata
+import pandas as pd
+from dateutil import parser as dateparser
+
 from model.database import tables
 from model.database.db_handler import DatabaseHandler
+from model.database.tables import metadata
+from model.utilities.utilities import read_config
 
 
 class CsvExport:
 
-    def __init__(self,
-                 file: str = None):
+    def __init__(self, file: str = None):
 
         self.config: Dict = read_config(file=file, section=None)
         self.db_handler = DatabaseHandler(metadata, **self.config['database'])
@@ -24,7 +24,6 @@ class CsvExport:
 
         # extract and convert starting point
         self.from_timestamp: str = self.options.get('from_timestamp', None)
-        self.from_timestamp: str = self.options.get('from_timestamp', None)
         if self.from_timestamp:
             self.from_timestamp = dateparser.parse(self.from_timestamp, dayfirst=True)
         else:
@@ -32,7 +31,7 @@ class CsvExport:
 
         # extract and convert ending point
         self.to_timestamp: str = self.options.get('to_timestamp', None)
-        if self.to_timestamp is not None and self.to_timestamp != 'now':
+        if self.to_timestamp and self.to_timestamp != 'now':
             self.to_timestamp = dateparser.parse(self.to_timestamp, dayfirst=True)
         else:
             self.to_timestamp = datetime.utcnow()
@@ -64,11 +63,12 @@ class CsvExport:
         ticker_data = pd.DataFrame(ticker_data)
 
         if self.filename.endswith('.csv'):
-            full_path: str = os.path.join(self.path, self.filename)
+            output_path: str = os.path.join(self.path, self.filename)
         else:
-            full_path: str = os.path.join(self.path, '{}.csv'.format(self.filename))
-        print(full_path)
-        ticker_data.to_csv(full_path,
+            output_path: str = os.path.join(self.path, f'{self.filename}.csv')
+
+        print(output_path)
+        ticker_data.to_csv(output_path,
                            sep=self.options.get("delimiter", ";"),
                            decimal=self.options.get("decimal", "."),
                            index=False)

@@ -1,22 +1,22 @@
 import asyncio
 import logging
 import os
+import signal
 import sys
 from datetime import datetime
 from typing import Dict, List
-import signal
 
+from model.database.db_handler import DatabaseHandler
+from model.database.tables import metadata, ExchangeCurrencyPair
+from model.exchange.exchange import Exchange
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
-from model.database.db_handler import DatabaseHandler
-from model.exchange.exchange import Exchange
-from model.database.tables import metadata, ExchangeCurrencyPair
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 
 
 def signal_handler(signal, frame):
     """
-    Helper function to exit the program. When STRG+C is hit, the program will shut down with exit code(0)
+    Helper function to exit the program. When CTRL+C is hit, the program will shut down with exit code(0).
     """
     print("\nExiting program.")
     sys.exit(0)
@@ -37,9 +37,7 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
-
     jobs: [Job] = list()
-    Exchanges: [Exchange] = list()
 
     for job in job_config.keys():
         job_params: Dict = job_config[job]
@@ -50,15 +48,16 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
 
         exchange_names = [yaml_loader(exchange) for exchange in exchange_names if yaml_loader(exchange) is not None]
 
-        Exchanges = [Exchange(exchange_name,
-                              db_handler.get_first_timestamp,
-                              timeout,
-                              interval=interval) for exchange_name in exchange_names]
+        exchanges: [Exchange] = [Exchange(exchange_name,
+                                          db_handler.get_first_timestamp,
+                                          timeout,
+                                          interval=interval) for exchange_name in exchange_names]
 
-        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(Exchanges)
+        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
 
         new_job: Job = Job(job, job_params, exchanges_with_pairs)
         jobs.append(new_job)
+
     return jobs
 
 
@@ -69,13 +68,12 @@ def init_logger(path):
         if not os.path.exists(path + '/resources/log/'):
             os.makedirs('resources/log/')
         logging.basicConfig(
-            filename=path + '/resources/log/{}.log'.format(datetime.utcnow().strftime('%Y-%m-%d_%H-%M-%S')),
+            filename=path + f'/resources/log/{datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")}.log',
             level=logging.ERROR)
 
 
-def handler(type, value, tb):
-    logging.exception('Uncaught exception: {}: {}'.format(str(type), str(value)))
-    pass
+def handler(ex_type, ex_value, ex_traceback):
+    logging.exception(f'Uncaught exception: {str(ex_type)}: {str(ex_value)}')
 
 
 async def main(database_handler: DatabaseHandler):
@@ -87,7 +85,6 @@ async def main(database_handler: DatabaseHandler):
     As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
     """
-
     config = read_config(file=None, section=None)
 
     logging.info('Loading jobs.')
@@ -99,11 +96,11 @@ async def main(database_handler: DatabaseHandler):
     logging.info('Configuring Scheduler.')
     scheduler = Scheduler(database_handler, jobs, frequency)
     await scheduler.validate_job()
-    print('{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]),
-                                                                    frequency))
-    logging.info(
-        '{} were created and will run every {} minute(s).'.format(', '.join([job.name.capitalize() for job in jobs]),
-                                                                  frequency))
+
+    desc = f'{", ".join([job.name.capitalize() for job in jobs])} were created and will run every {frequency} minute(s).'
+
+    print(desc)
+    logging.info(desc)
 
     while True:
         if frequency == 'once':
@@ -121,10 +118,12 @@ async def main(database_handler: DatabaseHandler):
 
 
 def run(path: str = None):
-    init_logger(path)
     # sys.excepthook = handler
+    init_logger(path)
+
     logging.info('Reading Database Configuration')
     db_params = read_config(file=None, section='database')
+
     logging.info('Establishing Database Connection')
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
 
