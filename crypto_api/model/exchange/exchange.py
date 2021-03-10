@@ -142,7 +142,7 @@ class Exchange:
     timeout: int
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, db_handler, timeout, interval: Any = 'days'):
+    def __init__(self, yaml_file: Dict, db_last_timestamp, timeout, interval: Any = 'days'):
         """
         Creates a new Exchange-object.
 
@@ -159,7 +159,7 @@ class Exchange:
         self.timeout = timeout
         self.name = yaml_file['name']
         self.interval = interval
-        self.get_first_timestamp = db_handler
+        self.get_first_timestamp = db_last_timestamp
 
         self.api_url = yaml_file['api_url']
         if yaml_file.get('rate_limit'):

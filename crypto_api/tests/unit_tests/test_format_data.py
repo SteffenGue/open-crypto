@@ -19,7 +19,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = [Mapping('first_currency', ['data'], ['int'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
@@ -53,7 +53,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = [Mapping('first_currency', ['data'], ['int'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
@@ -84,7 +84,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = []
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
@@ -106,7 +106,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = []
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
@@ -124,7 +124,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
 
         method: str = 'ticker'
         # currency_pair_first missing
@@ -168,7 +168,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = [Mapping('currency_pair_first', ['first'], ['str']),
                     Mapping('currency_pair_second', ['second'], ['str']),
                     Mapping('value', ['value'], ['str', 'int'])]
@@ -202,7 +202,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = [Mapping('currency_pair_first', ['data', 'first'], ['str']),
                     Mapping('currency_pair_second', ['data', 'second'], ['str']),
                     Mapping('value', ['data', 'value'], ['str', 'int'])]
@@ -236,7 +236,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         mappings = [Mapping('currency_pair_first', ['data', 'first'], ['str']),
                     Mapping('currency_pair_second', ['data', 'second'], ['str']),
                     Mapping('value', ['data', 'value'], ['str', 'int'])]
@@ -271,7 +271,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['v1'], ['str', 'int']),
                     Mapping('value2', ['v2'], ['str']),
@@ -315,7 +315,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),
@@ -369,7 +369,7 @@ class TestFormatData(unittest.TestCase):
                                "exchange": True,
                                "api_url": 'https://url.to.api.com',
                                "requests": []}
-        exchange = Exchange(exchange_dict)
+        exchange = Exchange(exchange_dict, None, None)
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),

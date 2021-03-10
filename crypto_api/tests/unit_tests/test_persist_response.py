@@ -68,20 +68,6 @@ class TestPersistResponse(unittest.TestCase):
         self.assertEqual(response2, result)
         self.session.query(Ticker).delete()
 
-    def test_persist_ticker_with_no_pk(self):
-        response = [
-            (datetime.utcnow(), 1.0, 1.0, 1.0, 1.0, 1.0), ]
-        exchanges_with_pairs = {self.session.query(Exchange).first():
-                                    list(self.session.query(ExchangeCurrencyPair).limit(4))}
-
-        exchange = list(exchanges_with_pairs.keys())[0]
-        request_name = Ticker.__tablename__
-        mappings = ['start_time', 'best_ask', 'best_bid', 'last_price', 'daily_volume', 'exchange_pair_id']
-
-        self.assertRaises(NotAllPrimaryKeysException, self.db_handler.persist_response, exchanges_with_pairs,
-                          exchange, Ticker, response, mappings)
-        self.session.query(Ticker).delete()
-
     def test_persist_response_with_unknown_column(self):
         response = [
             (datetime.utcnow(), datetime.utcnow(), 1.0, 1.0, 1.0, 1.0, 1, None),
@@ -355,9 +341,9 @@ class TestPersistResponse(unittest.TestCase):
                                                                  ExchangeCurrencyPair.first_id.__eq__(1),
                                                                  ExchangeCurrencyPair.second_id.__eq__(6)).all()
         result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
-                                                                      ExchangeCurrencyPair.first_id.__eq__(4)).all())
-        result.extend(self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.exchange_id.__eq__(1),
+                                                                      ExchangeCurrencyPair.first_id.__eq__(4),
                                                                       ExchangeCurrencyPair.second_id.__eq__(2)).all())
+
         result = [(item.exchange_id,
                    item.first_id,
                    item.second_id) for item in result]
