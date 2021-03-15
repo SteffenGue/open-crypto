@@ -10,9 +10,9 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: days
+    interval: minutes
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: true
 
 jobs:
@@ -20,14 +20,14 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - bequant
+      - coinlist
     excluded:
 #      - coingecko
 
     currency_pairs:
 #      - all
-        - first: eth
-          second: btc
+        - first: btc
+          second: usdt
 
     first_currencies: null
     second_currencies: null
