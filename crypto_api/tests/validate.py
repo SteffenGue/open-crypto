@@ -1,4 +1,4 @@
-from tests.yaml_tests.api_map_validation import ApiMapFileValidator
+from crypto_api.tests.yaml_tests.api_map_validation import ApiMapFileValidator
 from model.utilities.utilities import YAML_PATH
 import os
 

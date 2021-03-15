@@ -9,7 +9,7 @@ from model.exchange.exchange import Exchange
 from model.utilities.utilities import read_config, get_exchange_names, yaml_loader
 
 job_name: str = 'historic_rates' #currency-pairs, historic-rates...
-yaml_path: str = '../crypto_api/resources/running_exchanges/all/'
+yaml_path: str = '../resources/running_exchanges/all/'
 saving_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'json_test_responses')
 
 db_params = read_config('database')

@@ -6,13 +6,13 @@ general:
     password: Thw_kiel
     host: localhost
     port: 5432
-    db_name: HR_Daily
+    db_name: test
   operation_settings:
     frequency: once
     timeout: 10
-    interval: minutes
+    interval: days
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: true
 
 jobs:
@@ -20,39 +20,16 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - crosstower
-#      - crex24
-#      - okcoin
-#      - coinbase
-#      - coinbene
+      - bequant
     excluded:
 #      - coingecko
 
     currency_pairs:
 #      - all
-#      - first: bitcoin
-#        second: usd
-#      - first: ethereum
-#        second: usd
         - first: eth
           second: btc
-#      - first: btc
-#        second: usdt
-#      - first: krw
-#        second: usd
-##
-    first_currencies:
-#      - btc
-#      - eth
-#      - xrp
-#      - ltc
-#      - ada
-#      - dot
-#      - bch
-#      - link
-#      - doge
-#      - xlm
-#      - atom
-    second_currencies:
+
+    first_currencies: null
+    second_currencies: null
 #      - usd
 #      - usdt

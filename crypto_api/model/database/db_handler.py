@@ -679,7 +679,7 @@ class DatabaseHandler:
         if timestamp and ((datetime.now() - max_timestamp) < timedelta(days=2)):
             return timestamp
         else:
-            return datetime.now()
+            return datetime.utcnow()
 
     # Methods that are currently not used but might be useful:
 
