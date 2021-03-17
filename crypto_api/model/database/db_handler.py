@@ -1,7 +1,7 @@
 import logging
 import os
 from contextlib import contextmanager
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Tuple, Iterable, Dict, Optional
 
 import tqdm
@@ -677,7 +677,7 @@ class DatabaseHandler:
             (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
             (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
         # two days as some exchanges lag behind one day for historic_rates
-        if timestamp and ((TimeHelper.now() - max_timestamp) < timedelta(days=2)):
+        if timestamp and ((TimeHelper.now() - max_timestamp.replace(tzinfo=timezone.utc)) < timedelta(days=2)):
             return timestamp
         else:
             return TimeHelper.now()
