@@ -156,7 +156,7 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("none", "now_format"): {
-        "function": lambda arg: (TimeHelper.now()).__format__(arg),
+        "function": lambda spec: format(TimeHelper.now(), spec),
         "params": 1
     },
     ("none", "constant"): {  # Returns the first argument
@@ -213,11 +213,11 @@ TYPE_CONVERSION = {
         'params': 0
     },
     ("datetime", "format"): {
-        "function": lambda time, arg: time.__format__(arg),
+        "function": lambda time, spec: format(time, spec),
         "params": 1
     },
     ("timedelta", "fromtimestamp"): {
-        "function": lambda time, arg: TimeHelper.from_timestamp(time).__format__(arg),
+        "function": lambda time, spec: format(TimeHelper.from_timestamp(time), spec),
         "params": 1
     },
 }
