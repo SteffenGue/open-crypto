@@ -148,7 +148,7 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ("none", "nowstrptime"): {
-        "function": lambda arg: datetime.datetime.strptime(TimeHelper.now().strftime("%Y-%m-%d"), "%Y-%m-%d"),
+        "function": lambda arg: TimeHelper.now().replace(hour=0, minute=0, second=0, microsecond=0),
         "params": 0
     },
     ("none", "now"): {
@@ -178,20 +178,19 @@ TYPE_CONVERSION = {
         'params': 3  # delimiter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
-        'function': lambda: int(datetime.datetime.timestamp(TimeHelper.now())),
+        'function': lambda: int(TimeHelper.now_timestamp()),
         'params': 0
     },
     ('none', 'now_timestampms'): {
-        'function': lambda: int(datetime.datetime.timestamp(TimeHelper.now()) * 1000),
+        'function': lambda: int(TimeHelper.now_timestamp(TimeUnit.MILLISECONDS)),
         'params': 0
     },
     ('now', 'timedelta'): {
-        'function': lambda delta: int(datetime.datetime.timestamp(TimeHelper.now() - timedelta(days=int(delta)))),
+        'function': lambda delta: int(TimeHelper.to_timestamp(TimeHelper.now() - timedelta(days=int(delta)))),
         'params': 1
     },
     ('datetime', 'timedelta'): {
-        'function': lambda time, interval, delta: int(
-            datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))),
+        'function': lambda time, interval, delta: int(TimeHelper.to_timestamp(time - timedelta(**{interval: int(delta)}))),
         'params': 2
     },
     ('utcfromtimestamp', 'timedelta'): {
@@ -202,15 +201,15 @@ TYPE_CONVERSION = {
     },
     ('datetime', 'timedeltams'): {
         'function': lambda time, interval, delta: int(
-            datetime.datetime.timestamp(time - timedelta(**{interval: int(delta)}))) * 1000,
+            TimeHelper.to_timestamp(time - timedelta(**{interval: int(delta)}))) * 1000,
         'params': 2
     },
     ('datetime', 'timestamp'): {
-        'function': lambda time: int(time.timestamp()),
+        'function': lambda time: int(TimeHelper.to_timestamp(time)),
         'params': 0
     },
     ('datetime', 'timestampms'): {
-        'function': lambda time: int(time.timestamp()) * 1000,
+        'function': lambda time: int(TimeHelper.to_timestamp(time)) * 1000,
         'params': 0
     },
     ("datetime", "format"): {
