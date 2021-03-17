@@ -10,6 +10,7 @@ from typing import List, Any, Dict
 import dateutil.parser
 import oyaml as yaml
 
+from model.utilities.time_helper import TimeHelper, TimeUnit
 from resources.configs.GlobalConfig import GlobalConfig
 
 TYPE_CONVERSION = {
@@ -30,45 +31,39 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ("int", "fromtimestamp"): {
-        "function": datetime.datetime.utcfromtimestamp,
+        "function": TimeHelper.from_timestamp,
         "params": 0
     },
     ("int", "utcfromtimestamp"): {
-        "function": lambda timestamp: datetime.datetime.utcfromtimestamp(
-            int(timestamp)),
+        "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp)),
         "params": 0
     },
     ("int", "utcfromtimestampms"): {
-        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
-            int(timestampms) / 1000),
+        "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp), TimeUnit.MILLISECONDS),
         "params": 0
     },
     ("int", "utcfromtimestampns"): {
-        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
-            int(timestampms) / 1000000),
+        "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp), TimeUnit.MICROSECONDS),
         "params": 0
     },
     ("int", "fromtimestampms"): {
-        "function": lambda timestampms: datetime.datetime.utcfromtimestamp(
-            timestampms / 1000),
+        "function": lambda timestamp: TimeHelper.from_timestamp(timestamp, TimeUnit.MILLISECONDS),
         "params": 0
     },
     ("int", "fromtimestampns"): {
-        "function": lambda timestampns: datetime.datetime.utcfromtimestamp(
-            timestampns / 1000000),
+        "function": lambda timestamp: TimeHelper.from_timestamp(timestamp, TimeUnit.MICROSECONDS),
         "params": 0
     },
     ("int", "utcfromtimestamp-9"): {
-        "function": lambda timestampns: datetime.datetime.utcfromtimestamp(
-            timestampns / 1000000000),
+        "function": lambda timestamp: TimeHelper.from_timestamp(timestamp, TimeUnit.NANOSECONDS),
         "params": 0
     },
     ("float", "fromtimestamp"): {
-        "function": datetime.datetime.fromtimestamp,
+        "function": TimeHelper.from_timestamp,
         "params": 0
     },
     ("float", "utcfromtimestamp"): {
-        "function": datetime.datetime.utcfromtimestamp,
+        "function": TimeHelper.from_timestamp,
         "params": 0
     },
     ("any", "value"): {
@@ -153,15 +148,15 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ("none", "nowstrptime"): {
-        "function": lambda arg: datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d"),
+        "function": lambda arg: datetime.datetime.strptime(TimeHelper.now().strftime("%Y-%m-%d"), "%Y-%m-%d"),
         "params": 0
     },
     ("none", "now"): {
-        "function": lambda: datetime.datetime.utcnow(),
+        "function": TimeHelper.now,
         "params": 0
     },
     ("none", "now_format"): {
-        "function": lambda arg: (datetime.datetime.utcnow()).__format__(arg),
+        "function": lambda arg: (TimeHelper.now()).__format__(arg),
         "params": 1
     },
     ("none", "constant"): {  # Returns the first argument
@@ -183,16 +178,15 @@ TYPE_CONVERSION = {
         'params': 3  # delimiter, index, 0 or 1 aka. left or right
     },
     ('none', 'now_timestamp'): {
-        'function': lambda: int(datetime.datetime.timestamp(datetime.datetime.utcnow())),
+        'function': lambda: int(datetime.datetime.timestamp(TimeHelper.now())),
         'params': 0
     },
     ('none', 'now_timestampms'): {
-        'function': lambda: int(datetime.datetime.timestamp(datetime.datetime.utcnow()) * 1000),
+        'function': lambda: int(datetime.datetime.timestamp(TimeHelper.now()) * 1000),
         'params': 0
     },
     ('now', 'timedelta'): {
-        'function': lambda delta: int(datetime.datetime.timestamp(datetime.datetime.utcnow() -
-                                                                  timedelta(days=int(delta)))),
+        'function': lambda delta: int(datetime.datetime.timestamp(TimeHelper.now() - timedelta(days=int(delta)))),
         'params': 1
     },
     ('datetime', 'timedelta'): {
@@ -201,7 +195,7 @@ TYPE_CONVERSION = {
         'params': 2
     },
     ('utcfromtimestamp', 'timedelta'): {
-        'function': lambda time, interval, value: datetime.datetime.utcfromtimestamp(time) - timedelta(
+        'function': lambda time, interval, value: TimeHelper.from_timestamp(time) - timedelta(
             **{interval: value}) if
         isinstance(time, int) else dateutil.parser.parse(time) - timedelta(**{interval: value}),
         'params': 2
@@ -224,7 +218,7 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ("timedelta", "fromtimestamp"): {
-        "function": lambda time, arg: datetime.datetime.fromtimestamp(time).__format__(arg),
+        "function": lambda time, arg: TimeHelper.from_timestamp(time).__format__(arg),
         "params": 1
     },
 }
