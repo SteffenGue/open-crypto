@@ -9,6 +9,7 @@ from dateutil import parser as dateparser
 from model.database import tables
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata
+from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config
 
 
@@ -19,7 +20,7 @@ class CsvExport:
         self.config: Dict = read_config(file=file, section=None)
         self.db_handler = DatabaseHandler(metadata, **self.config['database'])
         self.options: Dict = self.config['query_options']
-        self.filename = f"{self.options.get('table_name')}_{datetime.now().strftime('%Y-%m-%dT%H-%M-%S')}"
+        self.filename = f"{self.options.get('table_name')}_{TimeHelper.now().strftime('%Y-%m-%dT%H-%M-%S')}"
         self.path = os.getcwd()
 
         # extract and convert starting point
@@ -34,7 +35,7 @@ class CsvExport:
         if self.to_timestamp and self.to_timestamp != 'now':
             self.to_timestamp = dateparser.parse(self.to_timestamp, dayfirst=True)
         else:
-            self.to_timestamp = datetime.utcnow()
+            self.to_timestamp = TimeHelper.now()
 
         # get table object to pass over as an argument in self.create_csv()
         table_names = dict()

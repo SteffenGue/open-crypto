@@ -13,6 +13,7 @@ from sqlalchemy_utils import database_exists, create_database
 
 from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker
 from model.utilities.exceptions import NotAllPrimaryKeysException
+from model.utilities.time_helper import TimeHelper
 
 
 def _get_exchange_currency_pair(
@@ -566,7 +567,7 @@ class DatabaseHandler:
                            db_table: object,
                            query_everything: bool,
                            from_timestamp: datetime = None,
-                           to_timestamp: datetime = datetime.now(),
+                           to_timestamp: datetime = TimeHelper.now(),
                            exchanges: List[str] = None,
                            currency_pairs: List[Dict[str, str]] = None,
                            first_currencies: List[str] = None,
@@ -676,10 +677,10 @@ class DatabaseHandler:
             (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
             (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
         # two days as some exchanges lag behind one day for historic_rates
-        if timestamp and ((datetime.now() - max_timestamp) < timedelta(days=2)):
+        if timestamp and ((TimeHelper.now() - max_timestamp) < timedelta(days=2)):
             return timestamp
         else:
-            return datetime.utcnow()
+            return TimeHelper.now()
 
     # Methods that are currently not used but might be useful:
 

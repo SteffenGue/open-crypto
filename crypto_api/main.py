@@ -3,7 +3,6 @@ import logging
 import os
 import signal
 import sys
-from datetime import datetime
 from typing import Dict, List
 
 from model.database.db_handler import DatabaseHandler
@@ -11,6 +10,7 @@ from model.database.tables import metadata, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
 from model.scheduling.Job import Job
 from model.scheduling.scheduler import Scheduler
+from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 
 
@@ -68,7 +68,7 @@ def init_logger(path):
         if not os.path.exists(path + '/resources/log/'):
             os.makedirs('resources/log/')
         logging.basicConfig(
-            filename=path + f'/resources/log/{datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")}.log',
+            filename=path + f'/resources/log/{TimeHelper.now().strftime("%Y-%m-%d_%H-%M-%S")}.log',
             level=logging.ERROR)
 
 
@@ -113,7 +113,7 @@ async def main(database_handler: DatabaseHandler):
             try:
                 await scheduler.start()
             except Exception as e:
-                logging.exception(datetime.utcnow(), e)
+                logging.exception(TimeHelper.now(), e)
                 pass
 
 
