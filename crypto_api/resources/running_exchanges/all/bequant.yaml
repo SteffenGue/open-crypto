@@ -109,6 +109,7 @@ requests:
             days: D1
             weeks: D7
             months: 1M
+          default: D1
 
         till:
           function: last_timestamp
