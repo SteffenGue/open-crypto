@@ -431,8 +431,9 @@ requests:
       - time
       type:
       - str
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: open
       path:
       - data

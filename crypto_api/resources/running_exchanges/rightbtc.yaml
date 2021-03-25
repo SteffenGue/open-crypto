@@ -62,8 +62,9 @@ requests:
       path:
       - creates
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: best_ask
       path:
         - ask
@@ -107,8 +108,9 @@ requests:
             values:
               date:
                 type:
-                - int
-                - fromtimestampms
+                - float
+                - from_timestamp
+                - 1
               price: # should divide by 1E8.
                 type: int
               amount: # should divide by 1E8.
@@ -123,8 +125,9 @@ requests:
       - result
       - date
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: id
       path:
       type:

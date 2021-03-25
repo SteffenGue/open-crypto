@@ -183,8 +183,9 @@ requests:
       - result
       - time
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: open
       path:
       - result

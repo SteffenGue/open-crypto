@@ -105,8 +105,9 @@ requests:
           - tickers
           - timestamp
         type:
-          - int
-          - fromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: last_price
         path:
           - tickers
@@ -143,8 +144,9 @@ requests:
       values:
         timestamp:
           type:
-          - int
-          - fromtimestampms
+          - float
+          - from_timestamp
+          - 1
         asks:
           type: list
           values:
@@ -169,8 +171,9 @@ requests:
       path:
       - timestamp
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: asks_price
       path:
       - asks
@@ -246,8 +249,9 @@ requests:
       - trades
       - timestamp
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: direction
       path:
         - trades

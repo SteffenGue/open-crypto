@@ -114,8 +114,9 @@ requests:
       - data
       - time
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: currency_pair_first
       path:
       - data

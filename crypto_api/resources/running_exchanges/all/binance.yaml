@@ -17,8 +17,9 @@ requests:
           type: str # "UTC"
         serverTime:
           type:
-          - int
-          - fromtimestampms
+          - float
+          - from_timestamp
+          - 1
         rateLimits:
           type: list
         exchangeFilters:
@@ -235,8 +236,9 @@ requests:
             - float
           time:
             type:
-            - int
-            - fromtimestampms
+            - float
+            - from_timestamp
+            - 1
           isBuyerMaker:
             type: bool
           isBestMatch:
@@ -263,8 +265,9 @@ requests:
       path:
       - time
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: direction
       path:
         - isBuyerMaker
@@ -313,8 +316,9 @@ requests:
         values:
           0: # Open time
             type:
-            - int
-            - fromtimestampms
+            - float
+            - from_timestamp
+            - 1
           1: # open
             type:
             - str
@@ -337,8 +341,9 @@ requests:
             - float
           6: # close time
             type:
-            - int
-            - fromtimestampms
+            - float
+            - from_timestamp
+            - 1
           7: # Quote asset volume
             type:
             - str
@@ -390,7 +395,8 @@ requests:
       path:
       - 6
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
 
 
