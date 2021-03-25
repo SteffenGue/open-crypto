@@ -166,8 +166,9 @@ requests:
       path:
         - timestamp
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: direction
       path:
         - type

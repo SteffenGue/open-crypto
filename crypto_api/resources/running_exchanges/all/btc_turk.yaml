@@ -118,8 +118,9 @@ requests:
       - data
       - timestamp
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: best_bid
       path:
       - data
@@ -189,8 +190,9 @@ requests:
       - data
       - timestamp
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: id
       path:
         - data
@@ -277,8 +279,9 @@ requests:
       - data
       - date
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: id
       path:
         - data
@@ -356,8 +359,9 @@ requests:
       path:
       - time
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - open

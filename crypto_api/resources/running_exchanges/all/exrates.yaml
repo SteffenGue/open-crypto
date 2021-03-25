@@ -133,8 +133,9 @@ requests:
           - data
           - timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: direction
         path:
           - data
@@ -312,5 +313,6 @@ requests:
         path:
           - time
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0

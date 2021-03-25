@@ -137,8 +137,9 @@ requests:
           - trade_timestamp
         type:
           - str
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - trade_id
@@ -201,8 +202,9 @@ requests:
           - timestamp
         type:
           - str
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - timestamp

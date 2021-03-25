@@ -210,8 +210,9 @@ requests:
         values:
           date_ms:
             type:
-            - int
-            - fromtimestamp
+            - float
+            - from_timestamp
+            - 0
           amount:
             type: float
           price:
@@ -230,8 +231,9 @@ requests:
       path:
       - date_ms
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: amount
       path:
       - amount
@@ -301,8 +303,9 @@ requests:
       path:
       - 0
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - 1

@@ -149,8 +149,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: position
         path: []
         type:
@@ -234,8 +235,9 @@ requests:
           - []
           - 0
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - []
@@ -302,8 +304,9 @@ requests:
         path:
           - trade_timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: direction
         path:
           - type

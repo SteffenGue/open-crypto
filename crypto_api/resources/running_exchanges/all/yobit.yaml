@@ -116,8 +116,9 @@ requests:
       - dict_values
       - updated
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
 
   order_books:
     request:
@@ -253,8 +254,9 @@ requests:
       - dict_values
       - timestamp
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: id
       path:
         - dict_values

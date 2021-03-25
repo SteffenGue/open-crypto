@@ -251,8 +251,9 @@ requests:
       - create_time
       type:
       - str
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: amount
       path:
         - amount
@@ -326,8 +327,9 @@ requests:
       - 0
       type:
       - str
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: volume
       path:
       - 1

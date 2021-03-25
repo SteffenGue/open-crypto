@@ -35,8 +35,9 @@ requests:
               type: float
             date:
               type:
-              - int
-              - fromtimestamp
+              - float
+              - from_timestamp
+              - 0
     mapping:
     - key: ticker_daily_volume
       path:
@@ -67,8 +68,9 @@ requests:
       - ticker
       - date
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
 
   order_book:
     request:
@@ -159,8 +161,9 @@ requests:
         values:
           date:
             type:
-            - int
-            - fromtimestamp
+            - float
+            - from_timestamp
+            - 0
           price:
             type: float
           amount:
@@ -174,8 +177,9 @@ requests:
       path:
       - date
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: trade_last_price
       path:
       - price

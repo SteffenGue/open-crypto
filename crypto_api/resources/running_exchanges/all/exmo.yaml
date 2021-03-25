@@ -78,8 +78,9 @@ requests:
       - dict_values
       - updated
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: currency_pair_first
       path:
       - dict_key
@@ -169,8 +170,9 @@ requests:
           - dict_values
           - date
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: direction
         path:
           - dict_values

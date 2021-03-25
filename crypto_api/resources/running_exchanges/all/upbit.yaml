@@ -155,8 +155,9 @@ requests:
             - "%H:%M:%S"
           timestamp:
             type:
-            - int
-            - fromtimestamp
+            - float
+            - from_timestamp
+            - 0
           trade_price:
             type: float
           trade_volume:
@@ -172,8 +173,9 @@ requests:
       path:
       - timestamp
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: price
       path:
       - trade_price
@@ -228,8 +230,9 @@ requests:
         path:
           - trade_timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: last_price
         path:
           - trade_price
@@ -253,8 +256,9 @@ requests:
             type: str
           timestamp:
             type:
-            - int
-            - fromtimestamp
+            - float
+            - from_timestamp
+            - 0
           total_ask_size:
             type: float
           total_bid_size:
@@ -277,8 +281,9 @@ requests:
       path:
       - timestamp
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: id
       path:
         - timestamp

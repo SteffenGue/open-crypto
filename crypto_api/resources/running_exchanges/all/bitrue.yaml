@@ -111,8 +111,9 @@ requests:
         path:
           - time
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: amount
         path:
           - qty
@@ -181,8 +182,9 @@ requests:
         path:
           - lastUpdateId
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: id
         path:
           - lastUpdateId

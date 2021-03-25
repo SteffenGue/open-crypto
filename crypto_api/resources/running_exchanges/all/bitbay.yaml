@@ -93,8 +93,9 @@ requests:
         - time
       type:
       - str
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: last_price
       path:
       - items
@@ -158,8 +159,9 @@ requests:
       - t
       type:
       - str
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: id
       path:
         - items
@@ -239,8 +241,9 @@ requests:
          - timestamp
        type:
        - str
-       - int
-       - utcfromtimestampms
+       - float
+       - from_timestamp
+       - 1
      - key: id
        path:
          - seqNo
@@ -336,8 +339,9 @@ requests:
           - 0
         type:
           - str
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - items

@@ -14,34 +14,13 @@ from model.utilities.time_helper import TimeHelper, TimeUnit
 from resources.configs.GlobalConfig import GlobalConfig
 
 TYPE_CONVERSION = {
-    ("bool", "int"): {
-        "function": int,
-        "params": 0
+    ("float", "from_timestamp"): {
+        "function": lambda timestamp, unit: TimeHelper.from_timestamp(timestamp, unit),
+        "params": 1
     },
-    ('float', 'int'): {
-        "function": int,
-        "params": 0
-    },
-    ("int", "bool"): {
-        "function": bool,
-        "params": 0
-    },
-    ('int', 'div'): {
-        'function': lambda integer, div: integer / (1 * div),
-        'params': 1
-    },
-    ("int", "fromtimestamp"): {
-        "function": TimeHelper.from_timestamp,
-        "params": 0
-    },
-    ("int", "utcfromtimestamp"): {
-        "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp)),
-        "params": 0
-    },
-    ("int", "utcfromtimestampms"): {
-        "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp), TimeUnit.MILLISECONDS),
-        "params": 0
-    },
+
+
+
     ("int", "utcfromtimestampns"): {
         "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp), TimeUnit.MICROSECONDS),
         "params": 0
@@ -65,6 +44,29 @@ TYPE_CONVERSION = {
     ("float", "utcfromtimestamp"): {
         "function": TimeHelper.from_timestamp,
         "params": 0
+    },
+
+
+
+
+
+
+
+    ("bool", "int"): {
+        "function": int,
+        "params": 0
+    },
+    ('float', 'int'): {
+        "function": int,
+        "params": 0
+    },
+    ("int", "bool"): {
+        "function": bool,
+        "params": 0
+    },
+    ('int', 'div'): {
+        'function': lambda integer, div: integer / (1 * div),
+        'params': 1
     },
     ("any", "value"): {
         "function": lambda number: True if float(number) > 0 else False,
@@ -216,7 +218,7 @@ TYPE_CONVERSION = {
         "function": lambda time, spec: format(time, spec),
         "params": 1
     },
-    ("timedelta", "fromtimestamp"): {
+    ("timedelta", "from_timestamp"): {
         "function": lambda time, spec: format(TimeHelper.from_timestamp(time), spec),
         "params": 1
     },

@@ -94,8 +94,9 @@ requests:
           - dict_values
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: last_price
         path:
           - dict_values
@@ -171,8 +172,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: position
         path: []
         type:
@@ -242,8 +244,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: price
         path:
           - price

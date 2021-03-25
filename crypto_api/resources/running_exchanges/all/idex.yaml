@@ -79,8 +79,9 @@ requests:
       path:
         - time
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: best_ask
       path:
         - bid
@@ -215,8 +216,9 @@ requests:
       path:
       - time
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: id
       path:
         - sequence
@@ -299,8 +301,9 @@ requests:
         path:
           - start
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - open

@@ -123,8 +123,9 @@ requests:
       - data
       - id
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - data
@@ -214,8 +215,9 @@ requests:
       path:
       - ts
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: daily_volume
       path:
       - tick
@@ -297,8 +299,9 @@ requests:
        - tick
        - ts
        type:
-       - int
-       - utcfromtimestampms
+       - float
+       - from_timestamp
+       - 1
      - key: bids_price
        path:
        - tick
@@ -417,7 +420,7 @@ requests:
 #      - ts
 #      type:
 #      - int
-#      - utcfromtimestampms
+#      - Afrom_timestamp
 #    - key: id
 #      path:
 #      - data

@@ -76,8 +76,8 @@ requests:
         type:
           - str
           - float
-          - int
-          - utcfromtimestamp
+          - from_timestamp
+          - 0
       - key: best_bid
         path:
           - bid
@@ -144,8 +144,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - tid
@@ -230,8 +231,8 @@ requests:
         type:
           - str
           - float
-          - int
-          - utcfromtimestamp
+          - from_timestamp
+          - 0
 
       - key: asks_price
         path:

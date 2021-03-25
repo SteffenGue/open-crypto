@@ -190,8 +190,9 @@ requests:
       - []
       - 0    
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: volume
       path:
       - data

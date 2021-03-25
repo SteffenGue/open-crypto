@@ -180,8 +180,9 @@ requests:
       path:
       - period_start
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - open
@@ -371,5 +372,6 @@ requests:
       path:
       - trade_date
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
