@@ -22,14 +22,15 @@ TYPE_CONVERSION = {
 
 
 
-    ("int", "fromtimestampns"): {
-        "function": lambda timestamp: TimeHelper.from_timestamp(timestamp, TimeUnit.MICROSECONDS),
-        "params": 0
-    },
-    ("int", "utcfromtimestamp-9"): {
-        "function": lambda timestamp: TimeHelper.from_timestamp(timestamp, TimeUnit.NANOSECONDS),
-        "params": 0
-    },
+
+
+
+
+
+
+
+
+
     ("float", "fromtimestamp"): {
         "function": TimeHelper.from_timestamp,
         "params": 0

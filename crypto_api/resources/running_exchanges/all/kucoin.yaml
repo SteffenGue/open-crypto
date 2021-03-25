@@ -399,8 +399,9 @@ requests:
           - data
           - time
         type:
-          - int
-          - utcfromtimestamp-9
+          - float
+          - from_timestamp
+          - 3
       - key: price
         path:
           - data
