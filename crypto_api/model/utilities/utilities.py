@@ -21,10 +21,7 @@ TYPE_CONVERSION = {
 
 
 
-    ("int", "utcfromtimestampns"): {
-        "function": lambda timestamp: TimeHelper.from_timestamp(int(timestamp), TimeUnit.MICROSECONDS),
-        "params": 0
-    },
+
     ("int", "fromtimestampms"): {
         "function": lambda timestamp: TimeHelper.from_timestamp(timestamp, TimeUnit.MILLISECONDS),
         "params": 0
