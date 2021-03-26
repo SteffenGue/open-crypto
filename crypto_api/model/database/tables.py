@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, aliased
-from sqlalchemy_utils import create_view
+from sqlalchemy_utils import create_view, aggregated
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -40,7 +40,7 @@ class Currency(Base):
     Database ORM-Class storing all currencies.
 
     id: int
-        Autoincremented unique identifier.
+        Autoincrement unique identifier.
     name: str
         Name of the currency written out.
     symbol: str
@@ -148,6 +148,7 @@ class Ticker(Base):
     best_ask = Column(Float)
     best_bid = Column(Float)
     daily_volume = Column(Float)
+    daily_base_volume = Column(Float)
 
     def __repr__(self):
         return f"#{self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \
@@ -180,6 +181,7 @@ class HistoricRate(Base):
     close = Column(Float)
     volume = Column(Float)
     market_cap = Column(Float)
+    quote_volume = Column(Float)
 
     def __repr__(self):
         return f"ID {self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \

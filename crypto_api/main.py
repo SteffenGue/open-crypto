@@ -118,7 +118,7 @@ async def main(database_handler: DatabaseHandler):
 
 
 def run(path: str = None):
-    # sys.excepthook = handler
+    sys.excepthook = handler
     init_logger(path)
 
     logging.info('Reading Database Configuration')

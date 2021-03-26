@@ -1,3 +1,5 @@
+#https://github.com/openware/peatio/blob/2-3-stable/docs/api/peatio_user_api_v2.md
+
 name:
 exchange: true
 
@@ -10,7 +12,7 @@ api_url:
 requests:
   currency_pairs:
     request:
-      template:
+      template: /public/markets/tickers
       pair_template: null
       params: null
 
