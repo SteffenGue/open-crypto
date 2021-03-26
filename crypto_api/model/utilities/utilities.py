@@ -18,34 +18,6 @@ TYPE_CONVERSION = {
         "function": lambda timestamp, unit: TimeHelper.from_timestamp(timestamp, unit),
         "params": 1
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ("float", "fromtimestamp"): {
-        "function": TimeHelper.from_timestamp,
-        "params": 0
-    },
-    ("float", "utcfromtimestamp"): {
-        "function": TimeHelper.from_timestamp,
-        "params": 0
-    },
-
-
-
-
-
-
-
     ("bool", "int"): {
         "function": int,
         "params": 0
@@ -63,7 +35,7 @@ TYPE_CONVERSION = {
         'params': 1
     },
     ("any", "value"): {
-        "function": lambda number: True if float(number) > 0 else False,
+        "function": lambda number: float(number) > 0,
         "params": 0
     },
     ("str", "bool"): {
@@ -87,8 +59,7 @@ TYPE_CONVERSION = {
         "params": 0
     },
     ("str", "strptime"): {
-        "function": lambda string, *args:
-        datetime.datetime.strptime(string, args[0]),
+        "function": lambda string, *args: datetime.datetime.strptime(string, args[0]),
         "params": 1
     },
     ("strptime_w_f", 'strptime_wo_f'): {
