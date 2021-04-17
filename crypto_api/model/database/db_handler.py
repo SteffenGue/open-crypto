@@ -665,19 +665,19 @@ class DatabaseHandler:
             session.expunge_all()
         return result
 
-    def get_first_timestamp(self, table: object, ExCuPair_id: int):
+    def get_first_timestamp(self, table: object, exchange_pair_id: int):
         """
         Returns the first timestamp found in the database if the last db-entry is older than 1 day.
         @param table: The database table to query.
-        @param ExCuPair_id: The exchange_pair_id of interest
+        @param exchange_pair_id: The exchange_pair_id of interest
         @return: datetime: First timestamp of database or datetime.now()
         """
-
         with self.session_scope() as session:
-            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
-            (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == ExCuPair_id).first()
+            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == exchange_pair_id).first()
+            (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == exchange_pair_id).first()
+
         # two days as some exchanges lag behind one day for historic_rates
-        if timestamp and ((TimeHelper.now() - max_timestamp.replace(tzinfo=timezone.utc)) < timedelta(days=2)):
+        if timestamp and (TimeHelper.now() - max_timestamp) < timedelta(days=2):
             return timestamp
         else:
             return TimeHelper.now()
