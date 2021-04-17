@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, DateTime, select
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, aliased
 from sqlalchemy_utils import create_view
+
+from model.database.type_decorators import UnixTimestamp
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -21,7 +23,7 @@ class Exchange(Base):
 
     __tablename__ = "exchanges"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False, unique=True, )
+    name = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
     is_exchange = Column(Boolean, default=True)
     exceptions = Column(Integer, unique=False, nullable=True, default=0)
@@ -100,8 +102,7 @@ class ExchangeCurrencyPair(Base):
                f"{self.first.name}({self.first_id})-{self.second.name}({self.second_id})"
 
     def __str__(self):
-        return f"#{self.id}: {self.exchange.name}({self.exchange_id}), " \
-               f"{self.first.name}({self.first_id})-{self.second.name}({self.second_id})"
+        return self.__repr__()
 
 
 class Ticker(Base):
@@ -115,10 +116,10 @@ class Ticker(Base):
     exchange_pair: relationship
         The corresponding relationship table with ExchangeCurrencyPair
 
-    start_time: DateTime
+    start_time: UnixTimestamp
         Timestamp of the execution of an exchange request (UTC). Timestamps are unique for each exchange.
 
-    response_time: DateTime
+    response_time: UnixTimestamp
         Timestamp of the response. Timestamps are created by the OS, the delivered ones from the exchange are not used.
         Timestamps are equal for each exchange for one run (resulting in an error of approx. 5 seconds average)
          to ease data usage later.
@@ -142,8 +143,8 @@ class Ticker(Base):
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="tickers")
 
-    start_time = Column(DateTime)
-    time = Column(DateTime(timezone="UTC"), primary_key=True)
+    start_time = Column(UnixTimestamp)
+    time = Column(UnixTimestamp, primary_key=True)
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
@@ -172,7 +173,7 @@ class HistoricRate(Base):
 
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="historic_rates")
-    time = Column(DateTime(timezone="UTC"), primary_key=True)
+    time = Column(UnixTimestamp, primary_key=True)
 
     open = Column(Float)
     high = Column(Float)
@@ -202,7 +203,7 @@ class Trade(Base):
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="trades")
     id = Column(Integer, primary_key=True)
-    time = Column(DateTime(timezone="UTC"), primary_key=True)
+    time = Column(UnixTimestamp, primary_key=True)
 
     amount = Column(Float, primary_key=True)
     best_bid = Column(Float)
@@ -252,7 +253,7 @@ class OrderBook(Base):
     id = Column(Integer, primary_key=True)
     position = Column(Integer, primary_key=True)
 
-    time = Column(DateTime(timezone="UTC"))
+    time = Column(UnixTimestamp)
     bids_price = Column(Float)
     bids_amount = Column(Float)
     asks_price = Column(Float)
@@ -420,74 +421,3 @@ class HistoricRateView(Base):
         ),
         metadata=Base.metadata
     )
-
-#
-# class OHLCVMView(Base):
-#     """
-#     View for Historic-Rates.
-#     Instead of only showing the ID of the ExchangeCurrencyPair the View displays
-#     the exchange name and the name of the first and second currency.
-#     """
-#     first = aliased(Currency)
-#     second = aliased(Currency)
-#     __table__ = create_view(
-#         name='ohlcvm_view',
-#         selectable=select(
-#             [
-#                 Exchange.name.label('exchange'),
-#                 first.name.label('first_currency'),
-#                 second.name.label('second_currency'),
-#                 OHLCVM.time,
-#                 OHLCVM.open,
-#                 OHLCVM.high,
-#                 OHLCVM.low,
-#                 OHLCVM.close,
-#                 OHLCVM.volume,
-#                 OHLCVM.mcap
-#             ],
-#             from_obj=(
-#                 OHLCVM.__table__.join(ExchangeCurrencyPair, OHLCVM.exchange_pair_id == ExchangeCurrencyPair.id)
-#                     .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-#                     .join(first, ExchangeCurrencyPair.first_id == first.id)
-#                     .join(second, ExchangeCurrencyPair.second_id == second.id)
-#             )
-#         ),
-#         metadata=Base.metadata
-#     )
-
-
-# class OHLCVM(Base):
-#     """
-#     Table for the platform queries. Tables contains the exchange_currency_pair_id, gathered from the
-#     foreign_keys.
-#
-#     Primary_keys are Exchange_Pair_id and the timestamp.
-#
-#     This table contains OHLCVM (Open-High-Low-Close-Volume-MarketCap) data gathered from platforms.
-#     Data is on a daily basis and all quoted in US-Dollar. Volume is the 24 hour trading volume.
-#     """
-#
-#     __tablename__ = 'ohlcvm'
-#
-#     exchange_pair_id = Column(Integer, ForeignKey('exchanges_currency_pairs.id'), primary_key=True)
-#     exchange_pair = relationship('ExchangeCurrencyPair', backref="OHLCVM")
-#     time = Column(DateTime, primary_key=True)
-#
-#     open = Column(Float)
-#     high = Column(Float)
-#     low = Column(Float)
-#     close = Column(Float)
-#     volume = Column(Float)
-#     mcap = Column(Float)
-
-# Query for getting ecps with id
-# select ecp.id, ecp.exchange_id, e.name, ecp.first_id, c1.name as first, ecp.second_id, c2.name as second from exchange e join exchanges_currency_pairs ecp on e.id=ecp.exchange_id join currencies c1 on ecp.first_id=c1.id join currencies c2 on ecp.second_id=c2.id;
-
-# query for ecp-view
-# select ecp.id, e.name as exchange_name, c1.name as first_name, c2.name as second_name from exchange e join exchanges_currency_pairs ecp on e.id=ecp.exchange_id join currencies c1 on ecp.first_id=c1.id join currencies c2 on ecp.second_id=c2.id;
-
-# create ecp view
-# create view exchange_currency_pairs as select ecp.id, e.name as exchange_name, c1.name as first_name, c2.name as second_name from exchange e join exchanges_currency_pairs ecp on e.id=ecp.exchange_id join currencies c1 on ecp.first_id=c1.id join currencies c2 on ecp.second_id=c2.id;
-
-# ticker view query
-# select ecp.exchange_name, ecp.first_name, ecp.second_name, t.start_time, t.response_time, t.last_price, t.best_ask, t.best_bid, t.daily_volume from tickers t inner join exchange_currency_pairs ecp on t.exchange_pair_id=ecp.id;
