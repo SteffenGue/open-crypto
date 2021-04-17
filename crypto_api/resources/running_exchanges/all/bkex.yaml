@@ -209,7 +209,6 @@ requests:
           default: 50
         preicion:
           type: int
-          allowed: 1-10
           default: 4
     response:
       type: dict

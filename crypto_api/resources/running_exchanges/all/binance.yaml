@@ -119,14 +119,6 @@ requests:
       params:
         limit:
           max: 100
-          allowed:
-          - 5
-          - 10
-          - 20
-          - 50
-          - 100
-          - 500
-          - 1000
           default: 50
 
     response:

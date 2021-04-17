@@ -116,10 +116,6 @@ requests:
       params:
         type:
           type: str
-          allowed:
-            - BUY
-            - SELL
-            - ALL
           default: ALL
         depth:
           type: int

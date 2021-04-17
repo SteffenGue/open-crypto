@@ -277,9 +277,6 @@ requests:
           required: false
         sort:
           type: str
-          allowed:
-          - asc
-          - desc
           default: desc
         limit:
           type: int

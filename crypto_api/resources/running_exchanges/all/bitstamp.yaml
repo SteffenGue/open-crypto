@@ -246,10 +246,6 @@ requests:
        params:
          group:
            type: int
-           allowed:
-           - 0
-           - 1
-           - 2
            default: 1
      response:
        type: dict
@@ -344,10 +340,6 @@ requests:
       params:
         time:
           type: str
-          allowed:
-          - minute
-          - hour
-          - day
           default: hour
     response:
       type: list

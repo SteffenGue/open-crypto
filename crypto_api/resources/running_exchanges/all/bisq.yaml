@@ -58,9 +58,6 @@ requests:
       params:
         format:
           type: str
-          allowed:
-          - json
-          - jsonpretty
     response:
       type: dict
       values:
@@ -285,14 +282,11 @@ requests:
       params:
         format:
           type: str
-          allowed:
-          - json
-          - jsonpretty
           default: jsonpretty
         timestamp_from: # start time, in seconds since 1970
           default: 2016-01-01
         timestamp_to: # end time, in seconds since 1970
-          type:
+          # type:
           default: now
         trade_id_from: # identifies first trade to include
           type: str
@@ -302,9 +296,6 @@ requests:
           required: false
         direction: # trade direction: buy or sell. omit or leave null for both.
           type: str
-          allowed:
-          - buy
-          - sell
           required: false
         limit:
           type: int
@@ -312,9 +303,6 @@ requests:
           default: 100
         sort:
           type: str
-          allowed:
-          - asc
-          - desc
           default: desc
     response:
       type: list

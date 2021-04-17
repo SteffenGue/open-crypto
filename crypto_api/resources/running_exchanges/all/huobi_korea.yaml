@@ -250,13 +250,6 @@ requests:
       params:
         type:
           type: str
-          allowed:
-          - step0
-          - step1
-          - step2
-          - step3
-          - step4
-          - step5
           default: step0 #aggregation level (step5 -->max. aggregation)
     response:
       type: dict
