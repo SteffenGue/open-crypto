@@ -291,7 +291,7 @@ class TestMapping(unittest.TestCase):
 
         mapping = Mapping("time",
                           ["time"],
-                          ["int", "fromtimestamp"])
+                          ["float", "from_timestamp", "0"])
 
         result = mapping.extract_value({
             "time": 1538122622
@@ -306,7 +306,7 @@ class TestMapping(unittest.TestCase):
 
         mapping = Mapping("time",
                           ["time"],
-                          ["int", "utcfromtimestamp"])
+                          ["float", "from_timestamp", "1"])
 
         result = mapping.extract_value({
             "time": 1538122622
@@ -319,7 +319,7 @@ class TestMapping(unittest.TestCase):
 
         mapping = Mapping("time",
                           ["time"],
-                          ["int", "fromtimestampms"])
+                          ["float", "from_timestamp", "1"])
 
         result = mapping.extract_value({
             "time": 1538122622123
@@ -333,7 +333,7 @@ class TestMapping(unittest.TestCase):
 
         mapping = Mapping("time",
                           ["time"],
-                          ["float", "fromtimestamp"])
+                          ["float", "from_timestamp", "0"])
 
         result = mapping.extract_value({
             "time": 1538122622.123
@@ -347,7 +347,7 @@ class TestMapping(unittest.TestCase):
 
         mapping = Mapping("time",
                           ["time"],
-                          ["float", "utcfromtimestamp"])
+                          ["float", "from_timestamp", "0"])
 
         result = mapping.extract_value({
             "time": 1538122622.123
