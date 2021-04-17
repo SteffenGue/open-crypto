@@ -1,5 +1,7 @@
 from datetime import datetime
+from typing import Type, Optional
 
+from sqlalchemy.engine import Dialect
 from sqlalchemy.types import INTEGER, TypeDecorator
 
 from model.utilities.time_helper import TimeHelper, TimeUnit
@@ -14,13 +16,13 @@ class UnixTimestamp(TypeDecorator):
     impl = INTEGER
 
     @property
-    def python_type(self):
+    def python_type(self) -> Type[datetime]:
         return datetime
 
-    def process_bind_param(self, value, dialect):
-        return TimeHelper.to_timestamp(value, TimeUnit.SECONDS)
+    def process_bind_param(self, value: datetime, dialect: Dialect) -> int:
+        return int(TimeHelper.to_timestamp(value, TimeUnit.SECONDS))
 
-    def process_result_value(self, value, dialect):
+    def process_result_value(self, value: int, dialect: Dialect) -> Optional[datetime]:
         if value is None:
             return None
 
