@@ -218,9 +218,6 @@ requests:
       params:
         format:
           type: str
-          allowed:
-          - json
-          - jsonpretty
           default: jsonpretty
     response:
       type: dict
