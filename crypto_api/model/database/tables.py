@@ -16,7 +16,7 @@ class Exchange(Base):
     are listed in this table.
 
     id: int
-        Autoincremented unique identifier.
+        Auto incremented unique identifier.
     name: str
         The explicit name of the exchange defined in the .yaml-file.
     """
@@ -42,7 +42,7 @@ class Currency(Base):
     Database ORM-Class storing all currencies.
 
     id: int
-        Autoincremented unique identifier.
+        Auto incremented unique identifier.
     name: str
         Name of the currency written out.
     symbol: str
@@ -226,7 +226,8 @@ class Trade(Base):
                 self._direction = direction
 
     def __repr__(self):
-        return f"Last Transaction: {self.exchange_pair.exchange.name}, {self.exchange_pair.first.name}-{self.exchange_pair.second.name}: {self.amount} for {self.price} at {self.time}"
+        return f"Last Transaction: {self.exchange_pair.exchange.name}, {self.exchange_pair.first.name}-" \
+               f"{self.exchange_pair.second.name}: {self.amount} for {self.price} at {self.time}"
 
     @validates("direction")
     def convert_upper(self, key, value):
