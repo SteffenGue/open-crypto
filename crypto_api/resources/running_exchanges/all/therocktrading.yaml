@@ -125,7 +125,7 @@ requests:
             - timedelta
             - interval
             - 1000 #max interval 60 DAYS!
-            - fromtimestamp
+            - from_timestamp
             - "%Y-%m-%dT%H:%M:%S%Z"
 #          default: "2020-03-19T17:25:00.000Z"
         sort:
