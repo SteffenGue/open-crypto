@@ -420,7 +420,7 @@ class Exchange:
         return self.name, response_json
 
     def extract_request_urls(self,
-                             request: dict,
+                             request_dict: dict,
                              request_name: str,
                              request_table: object = None,
                              currency_pairs: list = None) -> Dict[str, Dict[str, Dict]]:
@@ -486,7 +486,7 @@ class Exchange:
         @param request_name: str
         @param currency_pairs: list
         @param request_table: object
-        @param request: Dict[str: Dict[param_name: value]]
+        @param request_dict: Dict[str: Dict[param_name: value]]
             requests-section from a exchange.yaml as dictionary.
             Viability of dict is not checked.
 
@@ -494,10 +494,10 @@ class Exchange:
             See example above.
         """
         urls = dict()
-        if request:
+        if request_dict:
             request_parameters = dict()
             url = self.api_url
-            request_dict = request['request']
+            request_dict = request_dict['request']
 
             if 'template' in request_dict.keys() and request_dict['template']:
                 url += '{}'.format(request_dict['template'])

@@ -92,7 +92,7 @@ requests:
       - str
       - splitupper
       - "_"
-      - 0
+      - 1
     - key: currency_pair_second
       path:
       - dict_key
@@ -100,7 +100,7 @@ requests:
       - str
       - splitupper
       - "_"
-      - 1
+      - 0
     - key: last_price
       path:
       - dict_values
@@ -119,6 +119,10 @@ requests:
       - lowestAsk
       type:
       - float
+    - key: daily_volume
+      path:
+        - dict_values
+        - base_volume
 
   historic_rates:
     request:

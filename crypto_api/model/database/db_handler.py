@@ -407,7 +407,7 @@ class DatabaseHandler:
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             i = 0
             with self.session_scope() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 1)):
+                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]
