@@ -69,8 +69,9 @@ requests:
         path:
           - at
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: best_bid
         path:
           - buy
@@ -137,8 +138,9 @@ requests:
       path:
         - 0
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: open
       path:
         - 1
@@ -198,8 +200,9 @@ requests:
       path:
         - created_at
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - id
@@ -268,8 +271,9 @@ requests:
       path:
         - timestamp
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - timestamp

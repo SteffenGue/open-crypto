@@ -53,13 +53,15 @@ requests:
                   - float
         time:
           type:
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
         microtime:
           type:
           - str
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
         source:
           type: str
     mapping:
@@ -142,8 +144,9 @@ requests:
       path:
       - time
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: position
       path: []
       type:
@@ -290,13 +293,15 @@ requests:
               - float
         time:
           type:
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
         microtime:
           type:
           - str
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
         source:
           type: str
     mapping:
@@ -325,8 +330,9 @@ requests:
       path:
       - time
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
 
   historic_rates:
     request:
@@ -425,8 +431,9 @@ requests:
       - time
       type:
       - str
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: open
       path:
       - data
@@ -516,8 +523,9 @@ requests:
       - data
       - T
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: price
       path:
       - data

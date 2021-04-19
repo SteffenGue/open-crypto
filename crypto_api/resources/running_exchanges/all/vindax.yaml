@@ -240,8 +240,9 @@ requests:
         path:
           - time
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: price
         path:
           - price
@@ -309,8 +310,9 @@ requests:
           - []
           - 6
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - []

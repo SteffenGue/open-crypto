@@ -166,8 +166,9 @@ requests:
           - data
           - ts
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - data
@@ -257,8 +258,9 @@ requests:
           - data
           - ts
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: direction
         path:
           - data
@@ -345,8 +347,9 @@ requests:
           - data
           - ts
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: position
         path: []
         type:

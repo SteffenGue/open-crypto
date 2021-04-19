@@ -204,8 +204,9 @@ requests:
       path:
       - timestamp
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
 
   trades:
     request:
@@ -222,8 +223,9 @@ requests:
         values:
           date:
             type:
-            - int
-            - fromtimestamp
+            - float
+            - from_timestamp
+            - 0
           amount:
             type: float
           price:
@@ -239,8 +241,9 @@ requests:
       path:
       - date
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: id
       path:
         - tid
@@ -317,8 +320,9 @@ requests:
       - data
       - 0
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: open
       path:
       - datas

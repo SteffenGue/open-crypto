@@ -1,0 +1,328 @@
+#Noch keine Möglichkeit im url string parameter außer das currency-pair einzufügen
+name: rightbtc
+exchange: true
+
+rate_limit:
+  max: 1200
+  unit: 60
+
+api_url: https://api.rightbtc.com/v1/
+
+requests:
+  currency_pairs:
+    request:
+      template: markets
+      pair_template: null
+      params: null
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          display:
+            type: str
+    mapping:
+    - key: currency_pair_first
+      path:
+      - display
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+    - key: currency_pair_second
+      path:
+      - display
+      type:
+      - str
+      - split
+      - "/"
+      - 0
+
+  tickers:
+    request:
+      template: ticker/{currency_pair}
+      pair_template:
+        template: "{first}{second}"
+        lower_case: false
+      params: null
+    response:
+      type: dict
+      values:
+        ask:
+          type: float
+        bid:
+          type: float
+        ticks:
+          type: float
+        created:
+          type: int
+    mapping:
+    - key: time
+      path:
+      - creates
+      type:
+      - float
+      - from_timestamp
+      - 1
+    - key: best_ask
+      path:
+        - ask
+      type:
+      - float
+    - key: best_bid
+      path:
+        - bid
+      type:
+      - float
+    - key: last_price
+      path:
+        - tick
+      type:
+      - float
+
+  trades:
+    request:
+      template: trades/{currency_pair}/{amount}/
+      pair_template: # e.g. RTBTC
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        amount:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        status:
+          type: dict
+          values:
+            success:
+              type: int
+            message:
+              type: str
+        result:
+          type: list
+          values:
+            type: dict
+            values:
+              date:
+                type:
+                - float
+                - from_timestamp
+                - 1
+              price: # should divide by 1E8.
+                type: int
+              amount: # should divide by 1E8.
+                type: int
+              tid:
+                type: int
+              side:
+                type: str
+    mapping:
+    - key: time
+      path:
+      - result
+      - date
+      type:
+      - float
+      - from_timestamp
+      - 1
+    - key: id
+      path:
+      type:
+    - key: price
+      path:
+      - result
+      - price
+      type:
+      - int
+    - key: amount
+      path:
+
+      type:
+      - int
+    - key: direction
+      path:
+
+      type:
+      - str
+
+
+  historic_rates:
+    request:
+      template:
+      pair_template: # e.g. RTBTC
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        interval:
+          type: str
+          allowed:
+          - min1
+          - min3
+          - min5
+          - min15
+          - min30
+          - hr1
+          - hr2
+          - hr4
+          - hr6
+          - hr12
+          - day1
+          - day3
+          - week
+          default: day1
+        amount:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        status:
+          type: dict
+          values:
+            success:
+              type: int
+            message:
+              type: str
+        result: # each price/quantity should divide by 1E8.
+          type: list
+          values:
+            type: list
+            values:
+              0: # time
+                type: int
+              1: # volume
+                type: int
+              2: # open
+                type: int
+              3: # high
+                type: int
+              4: # low
+                type: int
+              5: # close
+                type: int
+    mapping:
+    - key: historic_rates_time
+      path:
+      - result
+      - 0
+      type:
+      - int
+    - key: historic_rates_volume
+      path:
+      - result
+      - 1
+      type:
+      - int
+    - key: historic_rates_open
+      path:
+      - result
+      - 2
+      type:
+      - int
+    - key: historic_rates_high
+      path:
+      - result
+      - 3
+      type:
+      - int
+    - key: historic_rates_low
+      path:
+      - result
+      - 4
+      type:
+      - int
+    - key: historic_rates_close
+      path:
+      - result
+      - 5
+      type:
+      - int
+
+
+
+  order_book:
+    request:
+      template: depth/{currency_pair}/{amount}/
+      pair_template: # e.g. RTBTC
+        template: "{first}{second}"
+        lower_case: false
+      params:
+        amount:
+          type: int
+          required: false
+    response:
+      type: dict
+      values:
+        status:
+          type: dict
+          values:
+            success:
+              type: int
+            message:
+              type: str
+        result:
+          type: dict
+          values:
+            market:
+              type: str
+            ask: # each price/quantity should divide by 1E8.
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type: int
+                  1: # quantity
+                    type: int
+                  2: #total quantity
+                    type: int
+            bid:
+              type: list
+              values:
+                type: list
+                values:
+                  0: # price
+                    type: int
+                  1: # quantity
+                    type: int
+                  2: #total quantity
+                    type: int
+    mapping:
+    - key: order_book_time
+      path: []
+      type:
+      - none
+      - now
+    - key: order_book_asks_price
+      path:
+      - result
+      - ask
+      - 0
+      type:
+      - int
+    - key: order_book_asks_size
+      path:
+      - result
+      - ask
+      - 1
+      type:
+      - int
+    - key: order_book_bids_price
+      path:
+      - result
+      - bid
+      - 0
+      type:
+      - int
+    - key: order_book_bids_size
+      path:
+      - result
+      - bid
+      - 1
+      type:
+      - int
+
+

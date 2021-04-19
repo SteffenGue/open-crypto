@@ -122,8 +122,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: currency_pair_first
         path:
           - data
@@ -207,8 +208,9 @@ requests:
       path:
         - timestamp
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: bids_price
       path:
         - data
@@ -287,8 +289,9 @@ requests:
       - t
       type:
       - str
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: id
       path:
       - data
@@ -377,8 +380,9 @@ requests:
           - time
         type:
           - str
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: open
         path:
           - data

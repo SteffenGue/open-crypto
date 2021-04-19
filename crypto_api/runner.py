@@ -1,12 +1,7 @@
 import os
 import shutil
-from typing import Dict
 
 import main
-from export import CsvExport
-from model.database.db_handler import DatabaseHandler
-from model.database.tables import metadata
-from model.utilities.utilities import read_config
 
 path = os.getcwd()
 
@@ -51,71 +46,6 @@ def update_maps(cwd: str = path):
                 os.remove(dst_file)
             if not src_file.endswith('.py'):
                 shutil.copy(src_file, dst_dir)
-
-
-def get_path():
-    """
-    @return: Prints the path to the current working directory.
-    """
-    return os.getcwd()
-
-
-def set_path():
-    """
-    Sets the path if it should differ from the current working directory.
-    """
-    global path
-    path = input('New path: \n')
-    print(f"Path set to {path}.")
-
-
-def get_session(filename: str = None):
-    """
-    Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler.
-    @param filename: Name of the configuration file to init the DatabaseHandler
-    @return: SqlAlchemy-Session
-    """
-    db_handler = DatabaseHandler(metadata, path=path, **read_config(file=filename, section='database'))
-    return db_handler.sessionFactory()
-
-
-def get_config(filename: str = None) -> Dict:
-    """
-    Returns the actual config-file.
-    @param filename: name of the config file.
-    @return: Returns the current config.
-    """
-    return read_config(file=filename)
-
-
-def get_config_template(csv: bool = False):
-    """
-    Creates a copy of the config templates and puts it into the resources/configs folder.
-    @param csv: boolean: If True, create an csv-export config. Else create a config for the runner.
-    """
-    if csv:
-        filename = "csv_config_template.yaml"
-    else:
-        filename = "config_template.yaml"
-
-    source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates"
-    destination = os.getcwd() + "/resources/configs"
-
-    if os.path.exists(os.path.join(destination, filename)):
-        os.remove(os.path.join(destination, filename))
-
-    shutil.copy(os.path.join(source, filename),
-                os.path.join(destination, filename))
-    print("Created new config template.")
-
-
-def export(file: str = None):
-    """
-    Calls the imported module CsvExport and the respective method create_csv(). This will take a csv-export config as
-    input and write data into a csv-file depending on the configuration.
-    @param file: Name of the csv-export configuration file.
-    """
-    CsvExport(file).create_csv()
 
 
 def run(cwd=path):

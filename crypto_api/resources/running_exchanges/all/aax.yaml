@@ -84,8 +84,9 @@ requests:
         path:
           - t
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: position
         path: []
         type:
@@ -159,8 +160,9 @@ requests:
           - trades
           - t
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: price
         path:
           - trades

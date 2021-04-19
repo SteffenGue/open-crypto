@@ -92,8 +92,9 @@ requests:
           - dict_values
           - server_time
         type:
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: last_price
         path:
           - tickers
@@ -218,8 +219,9 @@ requests:
           - date
         type:
           - str
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - tid

@@ -128,8 +128,9 @@ requests:
       path:
         - time
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: open
       path:
         - open
@@ -200,8 +201,9 @@ requests:
         - data
         - timestamp
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - data

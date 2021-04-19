@@ -14,6 +14,7 @@ from model.exchange.Mapping import Mapping, convert_type
 from model.database.tables import ExchangeCurrencyPair
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
+from model.utilities.time_helper import TimeHelper
 
 
 def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
@@ -338,7 +339,7 @@ class Exchange:
 
                     await asyncio.sleep(self.rate_limit)
 
-            return datetime.utcnow(), self.name, responses
+            return TimeHelper.now(), self.name, responses
         else:
             logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
             print("{} has no {} request.".format(self.name, request_name))

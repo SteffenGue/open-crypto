@@ -150,8 +150,9 @@ requests:
             values:
               time:
                 type:
-                - int
-                - fromtimestamp
+                - float
+                - from_timestamp
+                - 0
               open:
                 type:
                 - str
@@ -182,8 +183,9 @@ requests:
       - result
       - time
       type:
-      - int
-      - fromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: open
       path:
       - result
@@ -242,8 +244,9 @@ requests:
            values:
              update_time:
                type:
-               - int
-               - fromtimestamp
+               - float
+               - from_timestamp
+               - 0
              asks:
                type: list
                values:
@@ -282,8 +285,9 @@ requests:
        - result
        - update_time
        type:
-       - int
-       - utcfromtimestampms
+       - float
+       - from_timestamp
+       - 1
      - key: asks_price
        path:
        - result
@@ -388,8 +392,9 @@ requests:
       - time
       type:
       - str
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: direction
       path:
       - result

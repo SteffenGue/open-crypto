@@ -99,8 +99,9 @@ requests:
           - data
           - t
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: last_price
         path:
           - result
@@ -173,8 +174,9 @@ requests:
           - data
           - t
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: id
         path:
           - result
@@ -254,8 +256,9 @@ requests:
           - data
           - t
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: id
         path:
           - result
@@ -349,8 +352,9 @@ requests:
           - data
           - t
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - result

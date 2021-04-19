@@ -90,8 +90,9 @@ requests:
           - prices
           - 0
         type:
-          - int
-          - fromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: close
         path:
           - prices

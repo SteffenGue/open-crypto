@@ -90,8 +90,9 @@ requests:
         timestamp:
           type:
           - str
-          - int
-          - fromtimestamp
+          - float
+          - from_timestamp
+          - 0
         open:
           type:
           - str
@@ -126,8 +127,9 @@ requests:
       - timestamp
       type:
       - str
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
 
   historic_rates:
     request:
@@ -168,8 +170,9 @@ requests:
                   - float
                 timestamp:
                   - str
-                  - int
-                  - fromtimestamp
+                  - float
+                  - from_timestamp
+                  - 0
                 volume:
                   - str
                   - float
@@ -230,8 +233,9 @@ requests:
           - timestamp
         type:
           - str
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
 
   order_books:
      request:
@@ -242,10 +246,6 @@ requests:
        params:
          group:
            type: int
-           allowed:
-           - 0
-           - 1
-           - 2
            default: 1
      response:
        type: dict
@@ -253,8 +253,9 @@ requests:
          timestamp:
            type:
            - str
-           - int
-           - fromtimestamp
+           - float
+           - from_timestamp
+           - 0
          bids:
            type: list
            values:
@@ -287,8 +288,9 @@ requests:
        - timestamp
        type:
        - str
-       - int
-       - utcfromtimestamp
+       - float
+       - from_timestamp
+       - 0
      - key: bids_price
        path:
        - bids
@@ -338,10 +340,6 @@ requests:
       params:
         time:
           type: str
-          allowed:
-          - minute
-          - hour
-          - day
           default: hour
     response:
       type: list
@@ -369,8 +367,9 @@ requests:
       - date
       type:
       - str
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: price
       path:
       - price

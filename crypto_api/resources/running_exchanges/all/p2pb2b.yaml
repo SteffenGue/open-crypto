@@ -85,8 +85,9 @@ requests:
       - dict_values
       - at
       type:
-      - int
-      - fromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: currency_pair_first
       path:
       - result
@@ -181,8 +182,9 @@ requests:
       - result
       - time
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: id
       path:
         - result
@@ -261,8 +263,8 @@ requests:
           - cache_time
         type:
           - float
-          - int
-          - utcfromtimestamp
+          - from_timestamp
+          - 0
       - key: position
         path: []
         type:
@@ -348,8 +350,9 @@ requests:
           - result
           - 0
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: open
         path:
           - result

@@ -76,8 +76,8 @@ requests:
         type:
           - str
           - float
-          - int
-          - utcfromtimestamp
+          - from_timestamp
+          - 0
       - key: best_bid
         path:
           - bid
@@ -144,8 +144,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - tid
@@ -230,8 +231,8 @@ requests:
         type:
           - str
           - float
-          - int
-          - utcfromtimestamp
+          - from_timestamp
+          - 0
 
       - key: asks_price
         path:
@@ -298,8 +299,9 @@ requests:
         # response with Section = "last"
         - 0: # MTS: millisecond time stamp
             type:
-              - int
-              - fromtimestampms
+              - float
+              - from_timestamp
+              - 1
           1: # OPEN: First execution during the time frame
             type: float
           2: # CLOSE: Last execution during the time frame
@@ -315,8 +317,9 @@ requests:
           values:
             0: # MTS: millisecond time stamp
               type:
-                - int
-                - fromtimestampms
+                - float
+                - from_timestamp
+                - 1
             1: # OPEN: First execution during the time frame
               type: float
             2: # CLOSE: Last execution during the time frame
@@ -332,8 +335,9 @@ requests:
         path:
           - 0
         type:
-          - int
-          - fromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - 1

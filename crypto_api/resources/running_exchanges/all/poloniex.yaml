@@ -173,8 +173,9 @@ requests:
         path:
           - date
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: close
         path:
           - close

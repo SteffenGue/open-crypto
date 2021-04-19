@@ -1,14 +1,14 @@
-import sys
 import asyncio
 import logging
-from datetime import datetime
+import sys
 from typing import List, Callable, Dict, Any
 
-from model.scheduling.Job import Job
 from model.database.db_handler import DatabaseHandler
-from model.exchange.exchange import Exchange
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
+from model.exchange.exchange import Exchange
+from model.scheduling.Job import Job
 from model.utilities.exceptions import MappingNotFoundException
+from model.utilities.time_helper import TimeHelper
 
 
 class Scheduler:
@@ -202,7 +202,7 @@ class Scheduler:
 
             print("Loading and/or updating exchange currency pairs..")
             for exchange in exchanges:
-                if job_params['update_cp'] or job.request_name == 'currency_pairs' or\
+                if job_params['update_cp'] or job.request_name == 'currency_pairs' or \
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                     await update_currency_pairs(exchange)
 
@@ -240,7 +240,7 @@ class Scheduler:
 
         print('\nStarting to collect {}.'.format(request_table.__tablename__.capitalize()), end="\n")
         logging.info('Starting to collect {}.'.format(request_table.__tablename__.capitalize()))
-        start_time = datetime.utcnow()
+        start_time = TimeHelper.now()
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )

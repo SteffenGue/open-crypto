@@ -107,8 +107,9 @@ requests:
         path:
           - time
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: id
         path:
           - time
@@ -178,8 +179,9 @@ requests:
         path:
           - time
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: direction
         path:
           - isBuyerMaker
@@ -268,8 +270,9 @@ requests:
         path:
           - 0
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - 1

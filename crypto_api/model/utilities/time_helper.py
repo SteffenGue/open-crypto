@@ -43,11 +43,23 @@ class TimeHelper:
         return datetime.now(tz=timezone.utc)
 
     @staticmethod
+    def now_timestamp(unit: TimeUnit = TimeUnit.SECONDS) -> float:
+        """
+        Get the timestamp of the current datetime (UTC+0).
+
+        @param unit: The desired time unit of the timestamp.
+
+        @return: The timestamp of the current datetime (UTC+0).
+        """
+        return TimeHelper.to_timestamp(TimeHelper.now(), unit)
+
+    @staticmethod
     def from_string(representation: str) -> datetime:
         """
         Get a datetime (UTC+0) from a given representation.
 
         @param representation: The string that represents a datetime.
+
         @return: The datetime (UTC+0) of the given representation.
         """
         return parse(representation).replace(tzinfo=timezone.utc)

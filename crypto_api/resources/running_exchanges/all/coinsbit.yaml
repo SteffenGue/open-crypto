@@ -92,8 +92,9 @@ requests:
           - dict_values
           - at
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: last
         path:
           - result
@@ -276,8 +277,9 @@ requests:
           - kline
           - time
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: open
         path:
           - result

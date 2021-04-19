@@ -119,7 +119,8 @@ requests:
             - timedelta
             - interval
             - 1000
-            - fromtimestamp
+            - from_timestamp
+            - 0
             - "%Y-%m-%dT%H:%M:%S"
         count:
           default: 1000 #max
@@ -227,8 +228,9 @@ requests:
         - trade_timestamp
       type:
         - str
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - tradeID

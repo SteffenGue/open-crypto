@@ -124,7 +124,8 @@ requests:
             - timedelta
             - interval
             - 1000
-            - fromtimestamp
+            - from_timestamp
+            - 0
             - "%Y-%m-%dT%H:%M:%S.%fZ"
         sort:
           default: DESC

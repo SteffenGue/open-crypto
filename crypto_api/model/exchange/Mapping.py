@@ -1,35 +1,28 @@
 from collections import deque
-from typing import Collection
+from typing import Collection, Dict, Optional
 
 from model.utilities.utilities import TYPE_CONVERSION
 
 
 def convert_type(value, types_queue: deque):
-    """Converts the value via type conversions.
-
-    Helper method to convert the given value via a queue of
-    type conversions .
-
-    Args:
-        value:
-            The value to get converted to another type.
-        types_queue:
-            The queue of type conversion instructions.
-
-    Returns:
-        The converted value.
     """
+    Converts the value via type conversions.
 
+    Helper method to convert the given value via a queue of type conversions.
+
+    @param value: The value to get converted to another type.
+    @param types_queue: The queue of type conversion instructions.
+
+    @return: The converted value.
+    """
     current_type = types_queue.popleft()
-    next_type = None
 
     result = value
 
     while types_queue:
         next_type = types_queue.popleft()
 
-        types_tuple = (current_type,
-                       next_type)
+        types_tuple = (current_type, next_type)
 
         if "continue" in types_tuple:
             continue
@@ -39,7 +32,6 @@ def convert_type(value, types_queue: deque):
         params = list()
 
         if conversion["params"]:
-            # pylint: disable=unused-variable
             for number in range(0, conversion["params"]):
                 params.append(types_queue.popleft())
 
@@ -50,8 +42,8 @@ def convert_type(value, types_queue: deque):
             if result is None:
                 result = conversion["function"](*params)
             else:
-                result = conversion["function"](result,
-                                                *params)
+                result = conversion["function"](result, *params)
+
             current_type = next_type
         except Exception:
             return None
@@ -60,7 +52,8 @@ def convert_type(value, types_queue: deque):
 
 
 class Mapping:
-    """Class representing mapping data and logic.
+    """
+    Class representing mapping data and logic.
 
     Class representing mapping data und further functionality provided
     with methods.
@@ -84,49 +77,38 @@ class Mapping:
                  key: str,
                  path: list,
                  types: list):
-        """Constructor of Mapping.
+        """
+        Constructor of Mapping.
 
         Constructor method for constructing method objects.
 
-        Args:
-            key:
-                String being the keyword indicating one or several
-                database table columns. See "database_column_mapping"
-                in "config.yaml".
-            path:
-                An ordered list of keys used for traversal through the
-                response dict with the intention of returning the value wanted
-                for the database.
-            types:
-                An ordered sequence of types and
-                additional parameters (if necessary). Is used to conduct
-                type conversions within the method "extract_value()".
+        @param key: String being the keyword indicating one or several
+                    database table columns. See "database_column_mapping"
+                    in "config.yaml".
+        @param path: An ordered list of keys used for traversal through the
+                     response dict with the intention of returning the value wanted
+                     for the database.
+        @param types: An ordered sequence of types and
+                      additional parameters (if necessary). Is used to conduct
+                      type conversions within the method "extract_value()".
         """
-
         self.key = key
         self.path = path
         self.types = types
 
-    def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: str = None) -> dict:
-        """Traverses the path on a response.
-
-        Helper method for traversing the path on the given
-        response dict (subset).
-
-        Args:
-            response:
-                The response dict (subset).
-            path_queue:
-                The queue of path traversal instructions.
-
-            currency_pair_info:
-                The formatted String of a currency pair.
-                For special case that the key of a dictionary is the formatted currency pair string.
-
-        Returns:
-            The traversed response dict.
+    def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: str = None) -> Optional[Dict]:
         """
+        Traverses the path on a response.
 
+        Helper method for traversing the path on the given response dict (subset).
+
+        @param response: The response dict (subset).
+        @param path_queue: The queue of path traversal instructions.
+        @param currency_pair_info: The formatted String of a currency pair.
+                                   For special case that the key of a dictionary is the formatted currency pair string.
+
+        @return: The traversed response dict.
+        """
         path_element = path_queue.popleft()
 
         if path_element == "dict_key":
@@ -155,6 +137,7 @@ class Mapping:
                     return None
             else:
                 traversed = response[path_element]
+
         return traversed
 
     def extract_value(self,
@@ -163,31 +146,23 @@ class Mapping:
                       types_queue=None,
                       iterate=True,
                       currency_pair_info: (str, str, str) = (None, None, None)):  # TODO DOKU
-        """Extracts the value specified by "self.path".
+        """
+        Extracts the value specified by "self.path".
 
         Extracts the value specified by the path sequence and converts it
         using the "types" specified.
 
-        Args:
-            response:
-                The response dict (JSON) returned by an API request.
-            path_queue:
-                The queue of path traversal instructions.
-            types_queue:
-                The queue of type conversion instructions.
-            iterate:
-                Whether still an auto-iteration is possible.
-            currency_pair_info:
-                The formatted String of a currency pair.
+        @param response: The response dict (JSON) returned by an API request.
+        @param path_queue: The queue of path traversal instructions.
+        @param types_queue: The queue of type conversion instructions.
+        @param iterate: Whether still an auto-iteration is possible.
+        @param currency_pair_info: The formatted String of a currency pair.
 
-        Returns:
-            The value specified by "path_queue" and converted
-            using "types_queue".
-            Can be a list of values which get extracted iteratively from
-            the response.
+        @return: The value specified by "path_queue" and converted
+                 using "types_queue".
+                 Can be a list of values which get extracted iteratively from
+                 the response.
         """
-        # print(types_queue)
-        # print(self.key)
         if path_queue is None:
             path_queue = deque(self.path)
 
@@ -211,7 +186,8 @@ class Mapping:
                 # Iterate through list of results
                 result = list()
 
-                if len(response) == 1: # special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
+                # special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
+                if len(response) == 1:
                     response = response[0]
                     continue  # because instance of response has to be checked
 
@@ -231,9 +207,6 @@ class Mapping:
                         )
                     )
 
-                # print(result)
-                # print("")
-                # print("")
                 return result
                 # bis hier war in else
 
@@ -250,7 +223,7 @@ class Mapping:
                 # Traverse path
                 response = self.traverse_path(response, path_queue, currency_pair_info=currency_pair_info)
 
-        if types_queue and response is not None: #hier zu None geändert, weil sonst nicht zu 0 zo Bool geändert werden kann
+        if types_queue and response is not None:  # hier zu None geändert, weil sonst nicht zu 0 zo Bool geändert werden kann
 
             if isinstance(response, list):
 
@@ -261,7 +234,8 @@ class Mapping:
                         convert_type(item, deque(types_queue))
                     )
 
-                if len(result) == 1: #for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
+                # for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
+                if len(result) == 1:
                     result = result[0]
 
                 response = result
@@ -273,7 +247,6 @@ class Mapping:
 
     def __str__(self) -> str:
         """String representation of a Mapping"""
-
         string_path = list()
 
         for item in self.path:
@@ -283,21 +256,17 @@ class Mapping:
 
 
 def is_scalar(value) -> bool:
-    """Whether a value is a scalar or not.
-
-    Convenience function returning a bool whether the provided value is
-    a single value or not.
-    Strings count as True although they are iterable.
-
-    Args:
-        value:
-            The value to evaluate concerning whether it is a single value
-            or multiple values (iterable).
-
-    Returns:
-        Bool indicating whether the provided value is a single value or not.
     """
+    Indicates whether a value is a scalar or not.
 
+    Convenience function returning a bool whether the provided value is a single value or not.
+    Strings count as scalar, although they are iterable.
+
+    @param value: The value to evaluate concerning whether it is a single value
+                  or multiple values (iterable).
+
+    @return: Bool indicating whether the provided value is a single value or not.
+    """
     if isinstance(value, str):
         return True
 

@@ -193,8 +193,9 @@ requests:
       - klines
       - timestamp
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - data
@@ -388,8 +389,9 @@ requests:
       - trades
       - order_time
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: price
       path:
       - data

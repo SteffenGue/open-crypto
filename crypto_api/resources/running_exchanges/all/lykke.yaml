@@ -88,8 +88,9 @@ requests:
           - payload
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: id
         path:
           - payload
@@ -165,8 +166,9 @@ requests:
           - payload
           - timestamp
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: direction
         path:
           - payload

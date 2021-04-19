@@ -137,8 +137,9 @@ requests:
         path:
           - trade_timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: amount
         path:
           - quote_volume
@@ -193,8 +194,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: position
         path: []
         type:

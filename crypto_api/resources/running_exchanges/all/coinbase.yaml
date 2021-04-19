@@ -267,7 +267,8 @@ requests:
             - timedelta
             - interval
             - 300
-            - fromtimestamp
+            - from_timestamp
+            - 0
             - "%Y-%m-%dT%H:%M:%S.%fZ"
         end: # End time in ISO 8601
           function: last_timestamp

@@ -84,8 +84,9 @@ requests:
           - dict_values
           - at
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: last_price
         path:
           - dict_values
@@ -154,8 +155,9 @@ requests:
           - timestamp
         type:
           - str
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - timestamp

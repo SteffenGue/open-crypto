@@ -102,8 +102,9 @@ requests:
           - dict_values
           - at
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: best_bid
         path:
           - data
@@ -180,8 +181,9 @@ requests:
         - data
         - 0
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: open
       path:
         - data
@@ -251,8 +253,9 @@ requests:
         - data
         - created_on
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - data
@@ -329,8 +332,9 @@ requests:
         - data
         - timestamp
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - data

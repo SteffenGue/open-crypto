@@ -248,7 +248,8 @@ requests:
             - timedelta
             - interval
             - 1440
-            - fromtimestamp
+            - from_timestamp
+            - 0
             - "%Y/%m/%d"
 
     response:

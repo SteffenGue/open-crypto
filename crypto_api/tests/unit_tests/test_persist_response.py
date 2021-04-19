@@ -4,6 +4,7 @@ from model.database.tables import *
 from itertools import permutations
 from datetime import datetime
 from model.utilities.exceptions import NotAllPrimaryKeysException
+from model.utilities.time_helper import TimeHelper
 
 
 class TestPersistResponse(unittest.TestCase):
@@ -34,10 +35,10 @@ class TestPersistResponse(unittest.TestCase):
 
     def test_persist_valid_ticker(self):
         response = [
-            (datetime.utcnow(), datetime.utcnow(), 1.0, 1.0, 1.0, 1.0, 1),
-            (datetime.utcnow(), datetime.utcnow(), 2.0, 2.0, 2.0, 2.0, 2),
-            (datetime.utcnow(), datetime.utcnow(), 3.0, 3.0, 3.0, 3.0, 3),
-            (datetime.utcnow(), datetime.utcnow(), 4.0, 4.0, 4.0, 4.0, 4), ]
+            (TimeHelper.now(), TimeHelper.now(), 1.0, 1.0, 1.0, 1.0, 1),
+            (TimeHelper.now(), TimeHelper.now(), 2.0, 2.0, 2.0, 2.0, 2),
+            (TimeHelper.now(), TimeHelper.now(), 3.0, 3.0, 3.0, 3.0, 3),
+            (TimeHelper.now(), TimeHelper.now(), 4.0, 4.0, 4.0, 4.0, 4), ]
         exchanges_with_pairs = {self.session.query(Exchange).first():
                                     list(self.session.query(ExchangeCurrencyPair).limit(4))}
 
@@ -70,10 +71,10 @@ class TestPersistResponse(unittest.TestCase):
 
     def test_persist_response_with_unknown_column(self):
         response = [
-            (datetime.utcnow(), datetime.utcnow(), 1.0, 1.0, 1.0, 1.0, 1, None),
-            (datetime.utcnow(), datetime.utcnow(), 2.0, 2.0, 2.0, 2.0, 2, None),
-            (datetime.utcnow(), datetime.utcnow(), 3.0, 3.0, 3.0, 3.0, 3, None),
-            (datetime.utcnow(), datetime.utcnow(), 4.0, 4.0, 4.0, 4.0, 4, None), ]
+            (TimeHelper.now(), TimeHelper.now(), 1.0, 1.0, 1.0, 1.0, 1, None),
+            (TimeHelper.now(), TimeHelper.now(), 2.0, 2.0, 2.0, 2.0, 2, None),
+            (TimeHelper.now(), TimeHelper.now(), 3.0, 3.0, 3.0, 3.0, 3, None),
+            (TimeHelper.now(), TimeHelper.now(), 4.0, 4.0, 4.0, 4.0, 4, None), ]
         exchanges_with_pairs = {self.session.query(Exchange).first():
                                     list(self.session.query(ExchangeCurrencyPair).limit(4))}
 
@@ -106,7 +107,7 @@ class TestPersistResponse(unittest.TestCase):
 
     def test_persist_response_with_unknown_currency_pair(self):
         response = [
-            ("TEST1", "TEST2", datetime.utcnow(), datetime.utcnow(), 1.0, 1.0, 1.0, 1.0, 1)]
+            ("TEST1", "TEST2", TimeHelper.now(), TimeHelper.now(), 1.0, 1.0, 1.0, 1.0, 1)]
         exchanges_with_pairs = {self.session.query(Exchange).first(): []}
 
         exchange = list(exchanges_with_pairs.keys())[0]
@@ -128,10 +129,10 @@ class TestPersistResponse(unittest.TestCase):
 
     def test_persist_response_with_none(self):
         response = [
-            (datetime.utcnow(), datetime.utcnow(), None, 1.0, 1.0, 1.0, 1),
-            (datetime.utcnow(), datetime.utcnow(), 2.0, None, 2.0, 2.0, 2),
-            (datetime.utcnow(), datetime.utcnow(), 3.0, 3.0, None, 3.0, 3),
-            (datetime.utcnow(), datetime.utcnow(), 4.0, 4.0, 4.0, None, 4), ]
+            (TimeHelper.now(), TimeHelper.now(), None, 1.0, 1.0, 1.0, 1),
+            (TimeHelper.now(), TimeHelper.now(), 2.0, None, 2.0, 2.0, 2),
+            (TimeHelper.now(), TimeHelper.now(), 3.0, 3.0, None, 3.0, 3),
+            (TimeHelper.now(), TimeHelper.now(), 4.0, 4.0, 4.0, None, 4), ]
         exchanges_with_pairs = {self.session.query(Exchange).first():
                                     list(self.session.query(ExchangeCurrencyPair).limit(4))}
 

@@ -137,24 +137,10 @@ requests:
       params:
         merge:
           type: float
-          allowed:
-          - 0
-          - 0.1
-          - 0.01
-          - 0.001
-          - 0.0001
-          - 0.00001
-          - 0.000001
-          - 0.0000001
-          - 0.00000001
           required: true
           default: 0
         limit:
           type: int
-          allowed:
-          - 5
-          - 10
-          - 20
           default: 50
     response:
       type: dict
@@ -197,8 +183,9 @@ requests:
         - data
         - time
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: id
       path:
         - data
@@ -306,8 +293,9 @@ requests:
       - data
       - date
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: price
       path:
       - data
@@ -383,8 +371,9 @@ requests:
       - data
       - 0
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - data

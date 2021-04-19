@@ -71,8 +71,9 @@ requests:
           - date
         type:
           - str
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: last_price
         path:
           - ticker
@@ -141,8 +142,9 @@ requests:
         path:
           - timestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: id
         path:
           - timestamp
@@ -206,8 +208,9 @@ requests:
         path:
           - date
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: direction
         path:
           - type
@@ -284,8 +287,9 @@ requests:
           - data
           - 0
         type:
-          - int
-          - utcfromtimestampms
+          - float
+          - from_timestamp
+          - 1
       - key: open
         path:
           - data

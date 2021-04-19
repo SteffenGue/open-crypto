@@ -123,8 +123,9 @@ requests:
       - data
       - id
       type:
-      - int
-      - utcfromtimestamp
+      - float
+      - from_timestamp
+      - 0
     - key: open
       path:
       - data
@@ -214,8 +215,9 @@ requests:
       path:
       - ts
       type:
-      - int
-      - utcfromtimestampms
+      - float
+      - from_timestamp
+      - 1
     - key: daily_volume
       path:
       - tick
@@ -247,13 +249,6 @@ requests:
       params:
         type:
           type: str
-          allowed:
-          - step0
-          - step1
-          - step2
-          - step3
-          - step4
-          - step5
           default: step0 #aggregation level (step5 -->max. aggregation)
     response:
       type: dict
@@ -297,8 +292,9 @@ requests:
        - tick
        - ts
        type:
-       - int
-       - utcfromtimestampms
+       - float
+       - from_timestamp
+       - 1
      - key: bids_price
        path:
        - tick
@@ -417,7 +413,7 @@ requests:
 #      - ts
 #      type:
 #      - int
-#      - utcfromtimestampms
+#      - Afrom_timestamp
 #    - key: id
 #      path:
 #      - data
