@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, aliased
 from sqlalchemy_utils import create_view
-
+import datetime
 from model.database.type_decorators import UnixTimestamp
 
 Base = declarative_base()  # pylint: disable=invalid-name
@@ -255,8 +255,8 @@ class OrderBook(Base):
     position = Column(Integer, primary_key=True)
 
     time = Column(UnixTimestamp)
-    bids_price = Column(Float)
     bids_amount = Column(Float)
+    bids_price = Column(Float)
     asks_price = Column(Float)
     asks_amount = Column(Float)
 
@@ -395,6 +395,7 @@ class HistoricRateView(Base):
     Instead of only showing the ID of the ExchangeCurrencyPair the View displays
     the exchange name and the name of the first and second currency.
     """
+    # time = listen(datetime.datetime.fromtimestamp(HistoricRate.time), retval=True)
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(
