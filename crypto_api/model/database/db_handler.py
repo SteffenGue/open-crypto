@@ -76,7 +76,7 @@ class DatabaseHandler:
             host: str,
             port: str,
             db_name: str,
-            path: str = os.getcwd(),
+            path: str,
             debug: bool = False):
         """
         Initializes the database-handler.
@@ -109,6 +109,9 @@ class DatabaseHandler:
         @param db_name: str
             Name of the database.
         """
+
+        if not path:
+            path = os.getcwd()
 
         conn_strings = {'debug': "sqlite://",
                         'sqlite': f"{sqltype}:///{path}/{db_name}.db",

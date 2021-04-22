@@ -3,24 +3,22 @@ import shutil
 from typing import Dict
 
 import main
-from export import CsvExport
-from model.database.db_handler import DatabaseHandler
-from model.database.tables import *
+from export import CsvExport, database_session
 from model.utilities.utilities import read_config
 
-path = os.getcwd()
+PATH = os.getcwd()
 
 
 def check_path():
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
     """
-    destination = path + "/resources"
+    destination = PATH + "/resources"
     if not os.path.exists(destination):
         update_maps()
 
 
-def update_maps(cwd: str = path):
+def update_maps(cwd: str = PATH):
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
@@ -64,19 +62,20 @@ def set_path():
     """
     Sets the path if it should differ from the current working directory.
     """
-    global path
-    path = input('New path: \n')
-    print(f"Path set to {path}.")
+    global PATH
+    PATH = input('New path: \n')
+    print(f"Path set to {PATH}.")
 
 
-def get_session(filename: str = None):
+#
+def get_session(filename: str = None, db_path: str = PATH):
     """
-    Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler.
+    Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
+    @param db_path: path to the database. Default: current working directory
     @param filename: Name of the configuration file to init the DatabaseHandler
     @return: SqlAlchemy-Session
     """
-    db_handler = DatabaseHandler(metadata, path=path, **read_config(file=filename, section='database'))
-    return db_handler.sessionFactory()
+    return database_session(filename=filename, db_path=db_path)
 
 
 def get_config(filename: str = None) -> Dict:
@@ -117,7 +116,8 @@ def export(file: str = None):
     """
     CsvExport(file).create_csv()
 
-def run(cwd=path):
+
+def run(cwd=PATH):
     """
     Firstly checks if all necessary folder are available (i.e. config and yaml-maps) and runs the program.
     @param cwd: The current working directory if not specified differently.
@@ -127,4 +127,4 @@ def run(cwd=path):
 
 
 if __name__ == '__main__':
-    run(path)
+    run(PATH)

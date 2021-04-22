@@ -2,21 +2,32 @@ import inspect
 import os
 from datetime import datetime
 from typing import Dict
-
 import pandas as pd
 from dateutil import parser as dateparser
 
 from model.database import tables
+from model.database.tables import metadata
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config
 
 
+def database_session(filename: str = None, db_path: str = None, Metadata: object = metadata):
+    """
+    Returns an open SqlAlchemy-Session. The session is retrieved from the DatabaseHandler.
+    @param Metadata: Database metadata
+    @param db_path: Path to the database. Default: current working directory
+    @param filename: Name of the configuration file to init the DatabaseHandler
+    @return: SqlAlchemy-Session
+    """
+    db_handler = DatabaseHandler(metadata=Metadata, path=db_path, **read_config(file=filename, section='database'))
+    return db_handler.sessionFactory()
+
+
 class CsvExport:
 
     def __init__(self, file: str = None):
-
         self.config: Dict = read_config(file=file, section=None)
         self.db_handler = DatabaseHandler(metadata, **self.config['database'])
         self.options: Dict = self.config['query_options']
@@ -74,6 +85,5 @@ class CsvExport:
                            decimal=self.options.get("decimal", "."),
                            index=False)
 
-
-if __name__ == '__main__':
-    CsvExport('csv_config').create_csv()
+# if __name__ == '__main__':
+#     CsvExport('csv_config').create_csv()
