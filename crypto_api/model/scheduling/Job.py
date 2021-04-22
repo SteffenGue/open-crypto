@@ -3,7 +3,6 @@ from typing import Dict, List
 from model.exchange.exchange import Exchange
 from model.database.tables import ExchangeCurrencyPair
 
-
 class Job:
     """
     Represents a job that is executed by the Scheduler based on the frequency set in config.yaml.

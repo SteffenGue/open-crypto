@@ -76,7 +76,7 @@ class DatabaseHandler:
             host: str,
             port: str,
             db_name: str,
-            path: str = None,
+            path: str = os.getcwd(),
             debug: bool = False):
         """
         Initializes the database-handler.
@@ -109,14 +109,16 @@ class DatabaseHandler:
         @param db_name: str
             Name of the database.
         """
-        if not path:
-            path = os.getcwd()
-        if sqltype == "sqlite":
-            conn_string = f"{sqltype}:///{path}/{db_name}.db"
-        elif debug:
-            conn_string = "sqlite://"
+
+        conn_strings = {'debug': "sqlite://",
+                        'sqlite': f"{sqltype}:///{path}/{db_name}.db",
+                        'postgresql': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
+                        'mariadb': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
+                        'mysql': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"}
+        if debug:
+            conn_string = conn_strings['debug']
         else:
-            conn_string = f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"
+            conn_string = conn_strings[sqltype]
 
         logging.info(f"Connection String is: {conn_string}")
         engine = create_engine(conn_string)
@@ -130,8 +132,7 @@ class DatabaseHandler:
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
             print("View already exists.")
-            logging.warning("Views already exist. If you need to alter or recreate tables delete tickers_view "
-                            "and exchanges_currency_pair_view manually.")
+            logging.warning("Views already exist. If you need to alter or recreate tables delete all views manually.")
             pass
         self.sessionFactory = sessionmaker(bind=engine)
 
@@ -145,7 +146,7 @@ class DatabaseHandler:
         except Exception as e:
             # ToDo: Changes here from raise -> pass and included Logging.
             #  Postgresql throw integrity errors which where not caught.
-            # Sqlite on the other hand not. For reproducibility: B2bx, BTC-USD
+            #  Sqlite on the other hand not. For reproducibility: B2bx, BTC-USD
             logging.exception(e)
             session.rollback()
             pass
@@ -673,8 +674,10 @@ class DatabaseHandler:
         @return: datetime: First timestamp of database or datetime.now()
         """
         with self.session_scope() as session:
-            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == exchange_pair_id).first()
-            (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == exchange_pair_id).first()
+            (timestamp,) = session.query(func.min(table.time)).filter(
+                table.exchange_pair_id == exchange_pair_id).first()
+            (max_timestamp,) = session.query(func.max(table.time)).filter(
+                table.exchange_pair_id == exchange_pair_id).first()
 
         # two days as some exchanges lag behind one day for historic_rates
         if timestamp and (TimeHelper.now() - max_timestamp) < timedelta(days=2):

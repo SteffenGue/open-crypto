@@ -25,11 +25,11 @@ class Scheduler:
         """
         Initializer for a Scheduler.
 
-        :param database_handler: DatabaseHandler
+        @param database_handler: DatabaseHandler
             Handler that is called for everything that needs information from the database.
-        :param job_list: List[Job]
+        @param job_list: List[Job]
             List of Jobs. A job can be created with the specific yaml-template in config.yaml
-        :param frequency: int
+        @param frequency: int
             The interval in minutes with that the run() method gets called.
         """
         self.database_handler = database_handler
@@ -55,7 +55,7 @@ class Scheduler:
     async def run(self, job: Job):
         """
         The method represents one execution of the given job.
-        :param job: Job
+        @param job: Job
             The job that will be executed.
         """
 
@@ -74,9 +74,9 @@ class Scheduler:
         """
         Returns the method that is to execute based on the given request name.
 
-        :param request_name: str
+        @param request_name: str
             Name of the request.
-        :return:
+        @return:
             Method for the request name or a string that the request is false.
         """
 
@@ -105,7 +105,7 @@ class Scheduler:
         any "exchange_with_pairs" or no currency_pair for an exchange, the job is removed from the list.
         This happens of the user specified currency-pairs in the config but an exchange does not offer that pair.
 
-        :return: New job_list without empty job and sets self.validated: True if the validation is successful.
+        @return: New job_list without empty job and sets self.validated: True if the validation is successful.
         """
 
         self.job_list = await self.get_currency_pairs(self.job_list)
@@ -118,8 +118,8 @@ class Scheduler:
         Method to clean up the job list. If the job list is empty, shut down program.
         Else the algorithm will go through every job specification and delete empty jobs or exchanges.
 
-        :param jobs: List of all jobs specified by the config
-        :return: List of jobs, cleaned by empty or invalid jobs
+        @param jobs: List of all jobs specified by the config
+        @return: List of jobs, cleaned by empty or invalid jobs
         """
 
         if jobs:
@@ -171,8 +171,8 @@ class Scheduler:
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
         api for all currency pairs is called.
 
-        :param job_list: list of all jobs, including Job-Objects
-        :return job_list with updated exchange_currency_pairs
+        @param job_list: list of all jobs, including Job-Objects
+        @return job_list with updated exchange_currency_pairs
         """
 
         async def update_currency_pairs(ex: Exchange):
