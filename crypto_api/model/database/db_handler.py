@@ -76,7 +76,7 @@ class DatabaseHandler:
             host: str,
             port: str,
             db_name: str,
-            path: str,
+            path: str = None,
             debug: bool = False):
         """
         Initializes the database-handler.
@@ -95,7 +95,7 @@ class DatabaseHandler:
             Information about the table-structure of the database.
             See tables.py for more information.
         @param sqltype: atr
-            Type of the database sql-dialect. ('postgresql, sqlite' for us)
+            Type of the database sql-dialect. ('postgresql, mariadb, mysql, sqlite' for us)
         @param client: str
             Name of the Client which is used to connect to the database.
         @param user_name: str
@@ -103,7 +103,7 @@ class DatabaseHandler:
         @param password: str
             Password for this username.
         @param host: str
-            Hostname or Hostaddress from the database.
+            Hostname or host-address from the database.
         @param port: str
             Connection-Port (usually 5432 for Postgres)
         @param db_name: str

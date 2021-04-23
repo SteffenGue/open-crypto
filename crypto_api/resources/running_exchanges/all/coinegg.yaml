@@ -87,7 +87,7 @@ requests:
             days: 1d
             weeks: 1w
             months: 1M
-          default: 1m
+          default: 1d
         endTime:
           function: last_timestamp
           type:
@@ -101,6 +101,8 @@ requests:
 #            - interval
 #            - 100
         limit:
+          type:
+            - int
           default: 1000
 
     response:

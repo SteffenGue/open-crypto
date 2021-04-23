@@ -4,6 +4,7 @@ from typing import Dict
 
 import main
 from export import CsvExport, database_session
+from model.database.tables import *
 from model.utilities.utilities import read_config
 
 PATH = os.getcwd()
@@ -67,7 +68,6 @@ def set_path():
     print(f"Path set to {PATH}.")
 
 
-#
 def get_session(filename: str = None, db_path: str = PATH):
     """
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
