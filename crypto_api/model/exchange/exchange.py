@@ -17,7 +17,7 @@ from model.utilities.exceptions import MappingNotFoundException, DifferentExchan
 from model.utilities.time_helper import TimeHelper
 
 
-def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
+def extract_mappings(exchange_name: str, requests: dict) -> Dict[str, List[Mapping]]:
     """
     Helper-Method which should be only called by the constructor.
     Extracts out of a given exchange .yaml-requests-section for each
@@ -32,11 +32,11 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
     by the response, the value will not be extracted later on because there won't
     be a Mapping-object for said value.
 
-    :param requests: Dict[str: List[Mapping]]
+    @param requests: Dict[str: List[Mapping]]
         Requests-section from a exchange.yaml as dictionary.
         Method does not check if dictionary contains viable information.
-
-    :return:
+    @exchange_name: str repr. of the exchange name
+    @return:
         Dictionary with the following structure:
             {'request_name': List[Mapping]}
     """
@@ -53,8 +53,8 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
                     for entry in mapping:
                         mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
                 except KeyError:
-                    print(f"Error loading mappings in {request}: {entry}")
-                    logging.error(f"Error loading mappings in {request}: {entry}")
+                    print(f"Error loading mappings of {exchange_name} in {request}: {entry}")
+                    logging.error(f"Error loading mappings of {exchange_name} in {request}: {entry}")
                     break
 
                 response_mappings[request] = mapping_list
@@ -171,7 +171,7 @@ class Exchange:
         else:
             self.rate_limit = 0
 
-        self.response_mappings = extract_mappings(yaml_file['requests'])
+        self.response_mappings = extract_mappings(self.name, yaml_file['requests'])
 
         self.exception_counter = 0
         self.active_flag = True
@@ -311,6 +311,8 @@ class Exchange:
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         # ToDo: Does every successful response has code 200?
                         assert (response.status == 200)
+                        # Changes here: deleted await response.json(...) as it throw a ClientPayloadError for extrates.
+                        # However the response.status was 200 and could be persisted into the DB...
                         response_json = await response.json(content_type=None)
                         if pair_template_dict:
                             responses[cp] = response_json
@@ -327,10 +329,11 @@ class Exchange:
                         print(
                             "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
-                    except Exception:
+                    except Exception as e:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
                               .format(self.name, url_formatted, request_url_and_params['params']))
+                        print(e.__traceback__)
 
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'
@@ -502,9 +505,14 @@ class Exchange:
             """
             Extract the configured value from all allowed values. If there is no match, return str "default".
             @param val: dict of allowed key, value pairs.
-            @return: value if key in dict, else "default".
+            @return: value if key in dict, else None.
             """
-            return val.get(self.interval, None)
+            value = val.get(self.interval, None)
+            # in order to change the Class interval to the later used default value. The KEY is needed, therefore
+            # is the dict-comprehension {v: k for k, v ...}.
+            if not bool(value):
+                self.interval = {v: k for k, v in val.items()}
+            return value
 
         def function(val: str, **kwargs) -> Any:
             """
@@ -524,7 +532,10 @@ class Exchange:
             @param kwargs: Parameter value. If None, return default value.
             @return: Default value as a string.
             """
-            return val.__str__() if not bool(kwargs.get('has_value')) else kwargs.get('has_value')
+            default_val = val.__str__() if not bool(kwargs.get('has_value')) else kwargs.get('has_value')
+            if isinstance(self.interval, dict):
+                self.interval = self.interval.get(default_val)
+            return default_val
 
         def type(val, **kwargs):
             """
@@ -540,21 +551,24 @@ class Exchange:
                 return param_value
             # replace the key "interval" with the interval specified in the configuration file.
             conv_params = [self.interval if x == 'interval' else x for x in conv_params]
-            return {cp: convert_type(param_value[cp], deque(conv_params)) for cp in currency_pairs}
+            # return {cp: convert_type(param_value[cp], deque(conv_params)) for cp in currency_pairs}
             # ToDo: Check if the above line works. The older version needed both if statements below.
-            # if isinstance(param_value, dict):
-            #     return {cp: convert_type(param_value[cp], deque(conv_params)) for cp in currency_pairs}
-            # elif isinstance(conv_params, list):
-            #     return convert_type(param_value, deque(conv_params))
+            if isinstance(param_value, dict):
+                return {cp: convert_type(param_value[cp], deque(conv_params)) for cp in currency_pairs}
+            elif isinstance(conv_params, list):
+                return convert_type(param_value, deque(conv_params))
 
         mapping: dict = {'allowed': allowed, 'function': function, 'default': default, 'type': type}
         # enumerate mapping dict to sort parameter values accordingly.
         mapping_index = {val: key for key, val in enumerate(mapping.keys())}
 
         for param, options in parameters.items():
+            # Kick out all option keys which are not in the mapping dict or where required: False.
             # Sort the dict options according to the mapping to ensure the right order of function calls.
+            options = {k: v for k,v in options.items() if k in mapping.keys()}
             options = OrderedDict(sorted(options.items(), key=lambda x: mapping_index.get(x[0])))
-
+            if not parameters[param].get('required', True):
+                continue
             # Iterate over the functions and fill the params dict with values. Kwargs are needed only partially.
             kwargs = {'has_value': None}
             for key, val in options.items():

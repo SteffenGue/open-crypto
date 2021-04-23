@@ -121,8 +121,10 @@ requests:
       - float
     - key: daily_volume
       path:
-        - dict_values
-        - base_volume
+      - dict_values
+      - base_volume
+      type:
+      - float
 
   historic_rates:
     request:

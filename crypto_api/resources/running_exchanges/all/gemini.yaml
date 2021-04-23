@@ -264,8 +264,8 @@ requests:
       params:
         frequency:
           allowed:
-            minute: 1m
-            hours: 1h
+            minutes: 1m
+            hours: 1hr
             days: 1day
           default: 1day
     response:
