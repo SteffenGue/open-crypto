@@ -1,157 +1,145 @@
-import unittest
-from datetime import datetime
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional
 from unittest.mock import Mock
+
+import pytest
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.Mapping import Mapping
 from model.exchange.exchange import Exchange
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
+from model.utilities.time_helper import TimeHelper
 
 
-class TestFormatData(unittest.TestCase):
-    def test_response_is_none(self):
+@pytest.fixture(name="exchange")
+def create_exchange() -> Exchange:
+    exchange_name = "test_exchange"
+    exchange_dict = {
+        "name": exchange_name,
+        "exchange": True,
+        "api_url": "https://url.to.api.com",
+        "requests": []
+    }
+    return Exchange(exchange_dict, None, None)
+
+
+class TestFormatData:
+
+    def test_response_is_none(self, exchange):
         """Testing the handling of a response with no data in it."""
         # setup
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
-        mappings = [Mapping('first_currency', ['data'], ['int'])]
-        method: str = 'ticker'
+        mappings = [Mapping("first_currency", ["data"], ["int"])]
+        method = "ticker"
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         # test for ticker-data for all available currency-pairs
-        response: Tuple[str, Dict[object, Optional[Dict]]] = (exchange_name, {None: None})
+        response: Tuple[str, Dict[object, Optional[Dict]]] = (exchange.name, {None: None})
         result = exchange.format_data(method, response, start_time, time)
-        self.assertEqual([], result[0])
-        self.assertEqual(['first_currency'], result[1])
+        assert [] == result[0]
+        assert ["first_currency"] == result[1]
 
         # test for multiple currency-pairs
         first_ecp_mock = Mock(spec=ExchangeCurrencyPair)
         second_ecp_mock = Mock(spec=ExchangeCurrencyPair)
         third_ecp_mock = Mock(spec=ExchangeCurrencyPair)
-        response = (exchange_name, {first_ecp_mock: None, second_ecp_mock: None, third_ecp_mock: None})
+        response = (exchange.name, {first_ecp_mock: None, second_ecp_mock: None, third_ecp_mock: None})
         result = exchange.format_data(method, response, start_time, time)
 
-        result = exchange.format_data(method, response, start_time, time)
-        self.assertEqual([], result[0])
-        self.assertEqual(['first_currency'], result[1])
+        assert [] == result[0]
+        assert ["first_currency"] == result[1]
 
-    def test_empty_response(self):
+    def test_empty_response(self, exchange):
         """Testing the handling of an empty response."""
         # todo: test for pairs and for all together
-
         # setup
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
-        mappings = [Mapping('first_currency', ['data'], ['int'])]
-        method: str = 'ticker'
+        mappings = [Mapping("first_currency", ["data"], ["int"])]
+        method = "ticker"
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         # test for ticker-data for all available currency-pairs
-        response: Tuple[str, Dict[object, Optional[Dict]]] = (exchange_name, {None: {}})
+        response: Tuple[str, Dict[object, Optional[Dict]]] = (exchange.name, {None: {}})
         result = exchange.format_data(method, response, start_time, time)
-        self.assertEqual([], result[0])
-        self.assertEqual(['first_currency'], result[1])
+        assert [] == result[0]
+        assert ["first_currency"] == result[1]
 
         # test for multiple currency-pairs
         first_ecp_mock = Mock(spec=ExchangeCurrencyPair)
         second_ecp_mock = Mock(spec=ExchangeCurrencyPair)
         third_ecp_mock = Mock(spec=ExchangeCurrencyPair)
-        response = (exchange_name, {first_ecp_mock: {}, second_ecp_mock: {}, third_ecp_mock: {}})
+        response = (exchange.name, {first_ecp_mock: {}, second_ecp_mock: {}, third_ecp_mock: {}})
 
         result = exchange.format_data(method, response, start_time, time)
-        self.assertEqual([], result[0])
-        self.assertEqual(['first_currency'], result[1])
+        assert [] == result[0]
+        assert ["first_currency"] == result[1]
 
-    def test_no_mapping_available(self):
+    def test_no_mapping_available(self, exchange):
         """Testing the case if the data is valid but there is no mapping available."""
         # Method is there but no mappings behind
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
         mappings = []
-        method: str = 'ticker'
+        method: str = "ticker"
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
-        response: Tuple[str, Dict[object, Optional[Dict]]] = (exchange_name, {None: {'response': 'Hello'}})
-        self.assertRaises(MappingNotFoundException, exchange.format_data, method, response, start_time, time)
+        response: Tuple[str, Dict[object, Optional[Dict]]] = (exchange.name, {None: {"response": "Hello"}})
+        with pytest.raises(MappingNotFoundException):
+            exchange.format_data(method, response, start_time, time)
 
         # No method available
         exchange.response_mappings = {}
-        self.assertRaises(MappingNotFoundException, exchange.format_data, method, response, start_time, time)
+        with pytest.raises(MappingNotFoundException):
+            exchange.format_data(method, response, start_time, time)
 
-    def test_response_from_diff_exchange(self):
+    def test_response_from_diff_exchange(self, exchange):
         """Testing the case where the given response-dict is from a different exchange.
            This is detected by the given name."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
         mappings = []
-        method: str = 'ticker'
+        method: str = "ticker"
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
-        response: Tuple[str, Dict[object, Optional[Dict]]] = ('other exchange', {None: {'response': 'Hello'}})
-        self.assertRaises(DifferentExchangeContentException, exchange.format_data, method, response, start_time, time)
+        response: Tuple[str, Dict[object, Optional[Dict]]] = ("other exchange", {None: {"response": "Hello"}})
+        with pytest.raises(DifferentExchangeContentException):
+            exchange.format_data(method, response, start_time, time)
 
-    def test_all_request_but_no_cp_first_or_second(self):
+    def test_all_request_but_no_cp_first_or_second(self, exchange):
         """ Testing special case where the response contains all the available data but
             there is no currency_pair_first or currency_pair_second as name for a mapping."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
 
-        method: str = 'ticker'
+        method: str = "ticker"
         # currency_pair_first missing
-        mappings = [Mapping('currency_pair_second', ['second'], ['str']),
-                    Mapping('value', ['value'], ['str', 'int'])]
+        mappings = [Mapping("currency_pair_second", ["second"], ["str"]),
+                    Mapping("value", ["value"], ["str", "int"])]
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
+            exchange.name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
                                    {'first': 'eth', 'second': 'xrp', 'value': 2},
                                    {'first': 'btc', 'second': 'usd', 'value': 3},
                                    {'first': 'eth', 'second': 'usdt', 'value': 4}]})
-        self.assertRaises(NoCurrencyPairProvidedException, exchange.format_data, method, response, start_time, time)
+        with pytest.raises(NoCurrencyPairProvidedException):
+            exchange.format_data(method, response, start_time, time)
 
         # currency_pair_second missing
         mappings = [Mapping('currency_pair_first', ['first'], ['str']),
                     Mapping('value', ['value'], ['str', 'int'])]
         exchange.response_mappings = {method: mappings}
-        self.assertRaises(NoCurrencyPairProvidedException, exchange.format_data, method, response, start_time, time)
+        with pytest.raises(NoCurrencyPairProvidedException):
+            exchange.format_data(method, response, start_time, time)
 
         # both msising
         mappings = [Mapping('value', ['value'], ['str', 'int'])]
         exchange.response_mappings = {method: mappings}
-        self.assertRaises(NoCurrencyPairProvidedException, exchange.format_data, method, response, start_time, time)
+        with pytest.raises(NoCurrencyPairProvidedException):
+            exchange.format_data(method, response, start_time, time)
 
     def test_all_request_guarding_cp(self):
         """ Testing format_data for a response that coontains all the available data.
@@ -159,27 +147,22 @@ class TestFormatData(unittest.TestCase):
         # todo: currently there is no way to get to this information lol
         pass
 
-    def test_all_request_list_dict(self):
+    def test_all_request_list_dict(self, exchange):
         """ Test for a request which contains all the available data.
             The mocked response is a list of dictionaries which contain the data that
             is to be formatted."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
+
         mappings = [Mapping('currency_pair_first', ['first'], ['str']),
                     Mapping('currency_pair_second', ['second'], ['str']),
                     Mapping('value', ['value'], ['str', 'int'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
+            exchange.name, {None: [{'first': 'btc', 'second': 'eth', 'value': 1},
                                    {'first': 'eth', 'second': 'xrp', 'value': 2},
                                    {'first': 'btc', 'second': 'usd', 'value': 3},
                                    {'first': 'eth', 'second': 'usdt', 'value': 4}]})
@@ -192,28 +175,22 @@ class TestFormatData(unittest.TestCase):
                       (start_time, time, 'eth', 'usdt', 4)}
         key_list = ['start_time', 'time', 'currency_pair_first', 'currency_pair_second', 'value']
 
-        self.assertEqual(value_list, set(result))
-        self.assertEqual(key_list, keys)
+        assert value_list == set(result)
+        assert key_list == keys
 
-    def test_all_request_list_dict_dict(self):
+    def test_all_request_list_dict_dict(self, exchange):
         """Test for a request which contains all the available data."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
         mappings = [Mapping('currency_pair_first', ['data', 'first'], ['str']),
                     Mapping('currency_pair_second', ['data', 'second'], ['str']),
                     Mapping('value', ['data', 'value'], ['str', 'int'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {None: [{'data': {'first': 'btc', 'second': 'eth', 'value': 5}},
+            exchange.name, {None: [{'data': {'first': 'btc', 'second': 'eth', 'value': 5}},
                                    {'data': {'first': 'eth', 'second': 'xrp', 'value': 6}},
                                    {'data': {'first': 'btc', 'second': 'usd', 'value': 7}},
                                    {'data': {'first': 'eth', 'second': 'usdt', 'value': 8}}]})
@@ -226,28 +203,23 @@ class TestFormatData(unittest.TestCase):
                       (start_time, time, 'eth', 'usdt', 8)}
         key_list = ['start_time', 'time', 'currency_pair_first', 'currency_pair_second', 'value']
 
-        self.assertEqual(value_list, set(result))
-        self.assertEqual(key_list, keys)
+        assert value_list == set(result)
+        assert key_list == keys
 
-    def test_all_request_dict_list_dict(self):
+    def test_all_request_dict_list_dict(self, exchange):
         """Test for a request which contains all the available data."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
+
         mappings = [Mapping('currency_pair_first', ['data', 'first'], ['str']),
                     Mapping('currency_pair_second', ['data', 'second'], ['str']),
                     Mapping('value', ['data', 'value'], ['str', 'int'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {None: {'data': [{'first': 'btc', 'second': 'eth', 'value': 1},
+            exchange.name, {None: {'data': [{'first': 'btc', 'second': 'eth', 'value': 1},
                                             {'first': 'eth', 'second': 'xrp', 'value': 2},
                                             {'first': 'btc', 'second': 'usd', 'value': 3},
                                             {'first': 'eth', 'second': 'usdt', 'value': 4}]}})
@@ -260,26 +232,20 @@ class TestFormatData(unittest.TestCase):
                       (start_time, time, 'eth', 'usdt', 4)}
         key_list = ['start_time', 'time', 'currency_pair_first', 'currency_pair_second', 'value']
 
-        self.assertEqual(value_list, set(result))
-        self.assertEqual(key_list, keys)
+        assert value_list == set(result)
+        assert key_list == keys
 
-    def test_cp_request_dict(self):
+    def test_cp_request_dict(self, exchange):
         """ Testing the formatting of individual responses for each currency pair.
             The data is contained in a dictionary."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['v1'], ['str', 'int']),
                     Mapping('value2', ['v2'], ['str']),
                     Mapping('value3', ['v3'], ['str'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         cp1_mock: ExchangeCurrencyPair = Mock(spec=ExchangeCurrencyPair)
         cp1_mock.id = 1
@@ -292,7 +258,7 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {cp1_mock: {'v1': '10', 'v2': 'a', 'v3': 'b'},
+            exchange.name, {cp1_mock: {'v1': '10', 'v2': 'a', 'v3': 'b'},
                             cp2_mock: {'v1': '11', 'v2': 'c', 'v3': 'd'},
                             cp3_mock: {'v1': '12', 'v2': 'e', 'v3': 'f'},
                             cp4_mock: {'v1': '13', 'v2': 'g', 'v3': 'h'}})
@@ -304,26 +270,20 @@ class TestFormatData(unittest.TestCase):
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
-        self.assertEqual(value_list, set(result))
-        self.assertEqual(key_list, keys)
+        assert value_list == set(result)
+        assert key_list == keys
 
-    def test_cp_request_dict_dict(self):
+    def test_cp_request_dict_dict(self, exchange):
         """ Testing the formatting of individual responses for each currency pair.
             The data is guarded by a dict before accessing the actual data-dict."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),
                     Mapping('value3', ['data', 'v3'], ['str'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         cp1_mock: ExchangeCurrencyPair = Mock(spec=ExchangeCurrencyPair)
         cp1_mock.id = 1
@@ -344,7 +304,7 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
+            exchange.name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
                             cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
                             cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
                             cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
@@ -356,28 +316,22 @@ class TestFormatData(unittest.TestCase):
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
-        self.assertEqual(value_list, set(result))
-        self.assertEqual(key_list, keys)
+        assert value_list == set(result)
+        assert key_list == keys
 
-    def test_cp_request_dict_cp_guard_dict(self):
+    def test_cp_request_dict_cp_guard_dict(self, exchange):
         """ Testing the formatting of individual responses for each currency pair.
             The desired data is guarded by the formatted currency pair string."""
         """ Testing the formatting of individual responses for each currency pair.
             The data is guarded by a dict before accessing the actual data-dict."""
-        exchange_name = 'test_exchange'
-        exchange_dict: Dict = {"name": exchange_name,
-                               "exchange": True,
-                               "api_url": 'https://url.to.api.com',
-                               "requests": []}
-        exchange = Exchange(exchange_dict, None, None)
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),
                     Mapping('value3', ['data', 'v3'], ['str'])]
         method: str = 'ticker'
         exchange.response_mappings = {method: mappings}
-        start_time = datetime.utcnow()
-        time = datetime.utcnow()
+        start_time = TimeHelper.now()
+        time = TimeHelper.now()
 
         cp1_mock: ExchangeCurrencyPair = Mock(spec=ExchangeCurrencyPair)
         cp1_mock.id = 1
@@ -390,7 +344,7 @@ class TestFormatData(unittest.TestCase):
 
         # noinspection PyTypeChecker
         response: Tuple[str, Dict[object, Optional[Dict]]] = (
-            exchange_name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
+            exchange.name, {cp1_mock: {'data': {'v1': '10', 'v2': 'a', 'v3': 'b'}},
                             cp2_mock: {'data': {'v1': '11', 'v2': 'c', 'v3': 'd'}},
                             cp3_mock: {'data': {'v1': '12', 'v2': 'e', 'v3': 'f'}},
                             cp4_mock: {'data': {'v1': '13', 'v2': 'g', 'v3': 'h'}}})
@@ -402,5 +356,5 @@ class TestFormatData(unittest.TestCase):
 
         result, keys = exchange.format_data(method, response, start_time, time)
 
-        self.assertEqual(value_list, set(result))
-        self.assertEqual(key_list, keys)
+        assert value_list == set(result)
+        assert key_list == keys

@@ -1,8 +1,8 @@
 import logging
 import os
 from contextlib import contextmanager
-from datetime import datetime, timedelta, timezone
-from typing import List, Tuple, Iterable, Dict, Optional
+from datetime import datetime, timedelta
+from typing import List, Tuple, Iterable, Dict, Optional, Union
 
 import tqdm
 from pandas import read_sql_query as pd_read_sql_query
@@ -11,7 +11,7 @@ from sqlalchemy.exc import ProgrammingError, OperationalError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, HistoricRate, Trade, OrderBook
 from model.utilities.exceptions import NotAllPrimaryKeysException
 from model.utilities.time_helper import TimeHelper
 
@@ -205,7 +205,7 @@ class DatabaseHandler:
                 session.expunge_all()
         return all_found_currency_pairs
 
-    def get_currency_pairs_with_second_currency(self, exchange_name: str, currency_names: str) \
+    def get_currency_pairs_with_second_currency(self, exchange_name: str, currency_names: [str]) \
             -> List[ExchangeCurrencyPair]:
         """
         Returns all currency-pairs for the given exchange that have any of the given currencies
@@ -263,8 +263,8 @@ class DatabaseHandler:
             with self.session_scope() as session:
                 if currency_pairs is not None:
                     for currency_pair in currency_pairs:
-                        first_currency = currency_pair['first']
-                        second_currency = currency_pair['second']
+                        first_currency = currency_pair["first"]
+                        second_currency = currency_pair["second"]
                         if first_currency and second_currency:
                             first_id: int = self.get_currency_id(first_currency)
                             second_id: int = self.get_currency_id(second_currency)
@@ -307,7 +307,7 @@ class DatabaseHandler:
         """
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
         if currency_pairs:
-            if 'all' in currency_pairs:
+            if "all" in currency_pairs:
                 found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
             elif currency_pairs[0] is not None:
                 found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
@@ -315,7 +315,7 @@ class DatabaseHandler:
         if first_currencies and second_currencies:
             import itertools
             currency_pairs = list(itertools.product(first_currencies, second_currencies))
-            currency_pairs = [{'first': pair[0], 'second': pair[1]} for pair in currency_pairs]
+            currency_pairs = [{"first": pair[0], "second": pair[1]} for pair in currency_pairs]
             found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
 
         elif first_currencies or second_currencies:
@@ -501,10 +501,10 @@ class DatabaseHandler:
             for data_tuple in data:
                 data_tuple = dict(zip(mappings, data_tuple))
 
-                if 'exchange_pair_id' not in data_tuple.keys():
-                    temp_currency_pair = {'exchange_name': exchange.name,
-                                          'first_currency_name': data_tuple['currency_pair_first'],
-                                          'second_currency_name': data_tuple['currency_pair_second']}
+                if "exchange_pair_id" not in data_tuple.keys():
+                    temp_currency_pair = {"exchange_name": exchange.name,
+                                          "first_currency_name": data_tuple["currency_pair_first"],
+                                          "second_currency_name": data_tuple["currency_pair_second"]}
 
                     currency_pair: ExchangeCurrencyPair = _get_exchange_currency_pair(session,
                                                                                       **temp_currency_pair)
@@ -512,7 +512,7 @@ class DatabaseHandler:
                         new_pairs.append(temp_currency_pair)
 
                     if currency_pair and (currency_pair.id in requested_cp_ids):
-                        data_tuple.update({'exchange_pair_id': currency_pair.id})
+                        data_tuple.update({"exchange_pair_id": currency_pair.id})
                     else:
                         continue
 
@@ -529,21 +529,19 @@ class DatabaseHandler:
 
                 if not query_exists:
                     if db_table.__name__ != Ticker.__name__:
-                        counter_list.append(data_tuple['exchange_pair_id'])
+                        counter_list.append(data_tuple["exchange_pair_id"])
                     tuple_counter += 1
                     add_tuple = db_table(**data_tuple)
                     session.add(add_tuple)
 
         counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
-        print('{} tuple(s) added to {} for {}.'.format(tuple_counter,
-                                                       db_table.__name__,
-                                                       exchange.name.capitalize()))
+        print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
+
         if counter_dict:
             for item in counter_dict.items():
-                print("CuPair-ID {}: {}".format(item[0], item[1]))
-        logging.info('{} tuple(s) added to {} for {}.'.format(tuple_counter,
-                                                              db_table.__name__,
-                                                              exchange.name.capitalize()))
+                print(f"CuPair-ID {item[0]}: {item[1]}")
+
+        logging.info(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
 
         # Persist currency_pairs if not already in the database. This can only happen if an response contains
         # all pairs at once. Problem: Some exchange return "derivatives" which include only a first-currency.
@@ -557,14 +555,14 @@ class DatabaseHandler:
                     self.persist_exchange_currency_pair(**item, is_exchange=exchange.is_exchange)
                     added_cp_counter += 1
             if added_cp_counter > 0:
-                print("Added {} new currency pairs to {} \n"
-                      "Data will be persisted next time.".format(added_cp_counter, exchange.name.capitalize()))
-                logging.info("Added {} new currency pairs to {}".format(added_cp_counter, exchange.name.capitalize()))
+                print(f"Added {added_cp_counter} new currency pairs to {exchange.name.capitalize()}\n"
+                      f"Data will be persisted next time.")
+                logging.info(f"Added {added_cp_counter} new currency pairs to {exchange.name.capitalize()}")
 
         return [item for item in exchanges_with_pairs[exchange] if item.id in counter_dict.keys()]
 
     def get_readable_query(self,
-                           db_table: object,
+                           db_table: Union[HistoricRate, OrderBook, Ticker, Trade],
                            query_everything: bool,
                            from_timestamp: datetime = None,
                            to_timestamp: datetime = TimeHelper.now(),
@@ -665,19 +663,28 @@ class DatabaseHandler:
             session.expunge_all()
         return result
 
-    def get_first_timestamp(self, table: object, exchange_pair_id: int):
+    def get_first_timestamp(self, table: Union[HistoricRate, OrderBook, Ticker, Trade], exchange_pair_id: int):
         """
-        Returns the first timestamp found in the database if the last db-entry is older than 1 day.
-        @param table: The database table to query.
-        @param exchange_pair_id: The exchange_pair_id of interest
-        @return: datetime: First timestamp of database or datetime.now()
+        Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old or
+        otherwise the timestamp from now.
+
+        @param table: The database table to be queried.
+        @param exchange_pair_id: The exchange_pair_id of interest.
+
+        @return: datetime: Earliest timestamp of specified table or timestamp from now.
         """
         with self.session_scope() as session:
-            (timestamp,) = session.query(func.min(table.time)).filter(table.exchange_pair_id == exchange_pair_id).first()
-            (max_timestamp,) = session.query(func.max(table.time)).filter(table.exchange_pair_id == exchange_pair_id).first()
+            (earliest_timestamp,) = session \
+                .query(func.min(table.time)) \
+                .filter(table.exchange_pair_id == exchange_pair_id) \
+                .first()
+            (oldest_timestamp,) = session \
+                .query(func.max(table.time)) \
+                .filter(table.exchange_pair_id == exchange_pair_id) \
+                .first()
 
         # two days as some exchanges lag behind one day for historic_rates
-        if timestamp and (TimeHelper.now() - max_timestamp) < timedelta(days=2):
-            return timestamp
+        if earliest_timestamp and (TimeHelper.now() - oldest_timestamp) < timedelta(days=2):
+            return earliest_timestamp
         else:
             return TimeHelper.now()

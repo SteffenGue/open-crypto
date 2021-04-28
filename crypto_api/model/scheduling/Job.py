@@ -1,7 +1,5 @@
-from typing import Dict, List
-
-from model.exchange.exchange import Exchange
 from model.database.tables import ExchangeCurrencyPair
+from model.exchange.exchange import Exchange
 
 
 class Job:
@@ -10,14 +8,11 @@ class Job:
     A job itself is 'created' in config.yaml.
     Should only be used to hold information for it tasks.
     """
-    name: str
-    job_params: Dict
-    exchanges_with_pairs: [Exchange, [ExchangeCurrencyPair]]
 
     def __init__(self,
                  name: str,
-                 job_params: Dict,
-                 exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+                 job_params: dict,
+                 exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]):
         """
         Initializer of a job.
 

@@ -33,6 +33,7 @@ setup(
         "oyaml",
         "pandas",
         "psycopg2-binary",
+        "pytest",
         "python-dateutil",
         "sqlalchemy",
         "sqlalchemy_utils",
