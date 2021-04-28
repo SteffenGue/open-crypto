@@ -92,8 +92,9 @@ requests:
           - dict_values
           - lastUpdateTimestamp
         type:
-          - int
-          - utcfromtimestamp
+          - float
+          - from_timestamp
+          - 0
       - key: best_bid
         path:
           - dict_values
@@ -160,8 +161,9 @@ requests:
       path:
         - timestamp
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: open
       path:
         - open
@@ -226,8 +228,9 @@ requests:
       path:
         - trade_timestamp
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - tradeID
@@ -287,8 +290,9 @@ requests:
       path:
         - timestamp
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: id
       path:
         - timestamp

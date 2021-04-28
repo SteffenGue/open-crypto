@@ -149,8 +149,9 @@ requests:
       path:
         - 0
       type:
-        - int
-        - utcfromtimestamp
+        - float
+        - from_timestamp
+        - 0
     - key: open
       path:
         - 1
