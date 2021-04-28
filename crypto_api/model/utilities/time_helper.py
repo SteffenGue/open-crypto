@@ -13,6 +13,7 @@ Enums:
 from datetime import datetime, timezone
 from enum import IntEnum
 
+from datetime_periods import period
 from dateutil.parser import parse
 
 
@@ -20,6 +21,7 @@ class TimeUnit(IntEnum):
     """
     An enumeration to indicate the unit of timestamps.
     """
+
     SECONDS = 0
     MILLISECONDS = 1
     MICROSECONDS = 2
@@ -31,7 +33,11 @@ class TimeHelper:
     A helper class to create/convert dates and times.
 
     It ensures that all dates and times are timezone aware (UTC+0).
+
+    freq_map is used to convert specific strings from plural into singular.
     """
+
+    freq_map: dict = {'minutes': 'minute', 'hours': 'hour', 'days': 'day', 'weeks': 'week', 'months': 'month'}
 
     @staticmethod
     def now() -> datetime:
@@ -88,3 +94,16 @@ class TimeHelper:
         @return: The timestamp of the given datetime in the desired time unit.
         """
         return date_time.replace(tzinfo=timezone.utc).timestamp() * (1000 ** int(unit))
+
+    @staticmethod
+    def start_end_conversion(date_time: datetime, frequency: str, to_end: bool = True) -> datetime:
+        """
+        Returns the beginning/end of a period.
+
+        @param date_time: The datetime object to be converted
+        @param frequency: The underlying period frequency
+        @param to_end: boolean, return end of period. Default: True
+        @return: datetime of start/end of period.
+        """
+        # Method creates a tuple with (start, end) of period.
+        return period(date_time, TimeHelper.freq_map[frequency])[to_end.__int__()]

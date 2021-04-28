@@ -1,14 +1,12 @@
 name: coincheck
-terms:
-  # terms_url: https://assets-coincheck.s3.amazonaws.com/uploads/agreement/document/japanese_file/__04_Coincheck______20181029.pdf
-  permission: null
-  search_targets:
-  - tag: div
-    class: page
-  - tag: div
-    class: textLayer
+exchange: true
+
+rate_limit:
+  max:
+  unit:
+
 api_url: https://coincheck.com/api/
-rate_limit: null
+
 requests:
   ticker:
     request:

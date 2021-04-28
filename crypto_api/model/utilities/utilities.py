@@ -127,7 +127,7 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ("none", "constant"): {  # Returns the first argument
-        "function": lambda *args: args[1],
+        "function": lambda *args: args[0],
         "params": 1
     },
     ('none', 'range'): {
@@ -187,6 +187,10 @@ TYPE_CONVERSION = {
         "function": lambda time, spec: format(TimeHelper.from_timestamp(time), spec),
         "params": 1
     },
+    # ("quote", "base"): {
+    #     "function": lambda value: (1, float(value)),
+    #     "params": 0
+    # },
 }
 """
     Type Conversions used to convert extracted values from the API-Response into the desired type ("first", "second").

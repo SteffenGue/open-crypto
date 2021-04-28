@@ -1,3 +1,5 @@
+#ToDo: Historic Rates time ist nur für Tage richtig. Die schicken die Opentime, wir benötigen aber die close time.
+
 name: coinbase
 exchange: true
 api_url: https://api.pro.coinbase.com/
@@ -268,7 +270,6 @@ requests:
             - interval
             - 300
             - from_timestamp
-            - 0
             - "%Y-%m-%dT%H:%M:%S.%fZ"
         end: # End time in ISO 8601
           function: last_timestamp

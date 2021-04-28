@@ -49,17 +49,17 @@ requests:
         frequency:
           allowed:
             minutes: minutes/1
+            hours: minutes/60
             days: days
             weeks: weeks
             months: months
-          default: minutes
+          default: days
         to:
           function: last_timestamp
           type:
           - datetime
           - format
           - "%Y-%m-%dT%H:%M:%S.%fZ"
-          required: false
         count:
           type: int
           max: 200

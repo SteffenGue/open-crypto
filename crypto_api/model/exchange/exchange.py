@@ -7,7 +7,7 @@ from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
 import asyncio
 import tqdm
-from collections import deque
+from collections import deque, OrderedDict
 from aiohttp import ClientConnectionError
 
 from model.exchange.Mapping import Mapping, convert_type
@@ -17,7 +17,7 @@ from model.utilities.exceptions import MappingNotFoundException, DifferentExchan
 from model.utilities.time_helper import TimeHelper
 
 
-def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
+def extract_mappings(exchange_name: str, requests: dict) -> Dict[str, List[Mapping]]:
     """
     Helper-Method which should be only called by the constructor.
     Extracts out of a given exchange .yaml-requests-section for each
@@ -32,11 +32,11 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
     by the response, the value will not be extracted later on because there won't
     be a Mapping-object for said value.
 
-    :param requests: Dict[str: List[Mapping]]
+    @param requests: Dict[str: List[Mapping]]
         Requests-section from a exchange.yaml as dictionary.
         Method does not check if dictionary contains viable information.
-
-    :return:
+    @exchange_name: str repr. of the exchange name
+    @return:
         Dictionary with the following structure:
             {'request_name': List[Mapping]}
     """
@@ -53,8 +53,8 @@ def extract_mappings(requests: dict) -> Dict[str, List[Mapping]]:
                     for entry in mapping:
                         mapping_list.append(Mapping(entry['key'], entry['path'], entry['type']))
                 except KeyError:
-                    print(f"Error loading mappings in {request}: {entry}")
-                    logging.error(f"Error loading mappings in {request}: {entry}")
+                    print(f"Error loading mappings of {exchange_name} in {request}: {entry}")
+                    logging.error(f"Error loading mappings of {exchange_name} in {request}: {entry}")
                     break
 
                 response_mappings[request] = mapping_list
@@ -171,7 +171,7 @@ class Exchange:
         else:
             self.rate_limit = 0
 
-        self.response_mappings = extract_mappings(yaml_file['requests'])
+        self.response_mappings = extract_mappings(self.name, yaml_file['requests'])
 
         self.exception_counter = 0
         self.active_flag = True
@@ -311,6 +311,8 @@ class Exchange:
                                                      timeout=aiohttp.ClientTimeout(total=self.timeout))
                         # ToDo: Does every successful response has code 200?
                         assert (response.status == 200)
+                        # Changes here: deleted await response.json(...) as it throw a ClientPayloadError for extrates.
+                        # However the response.status was 200 and could be persisted into the DB...
                         response_json = await response.json(content_type=None)
                         if pair_template_dict:
                             responses[cp] = response_json
@@ -327,10 +329,11 @@ class Exchange:
                         print(
                             "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
                         responses[cp] = []
-                    except Exception:
+                    except Exception as e:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
                               .format(self.name, url_formatted, request_url_and_params['params']))
+                        print(e.__traceback__)
 
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'
@@ -421,10 +424,10 @@ class Exchange:
         return self.name, response_json
 
     def extract_request_urls(self,
-                             request: dict,
+                             request_dict: dict,
                              request_name: str,
                              request_table: object = None,
-                             currency_pairs: list = None) -> Dict[str, Dict[str, Dict]]:
+                             currency_pairs: List[ExchangeCurrencyPair] = None) -> Dict[str, Dict[str, Dict]]:
         # ToDo: Doku der Variables
         # ToDo: Doku Update mit variablen request parametern.
         """
@@ -438,10 +441,6 @@ class Exchange:
             in bibox.yaml (request ticker):
                 api_url: https://api.bibox.com/v1/
                 requests:
-                    test_connection:
-                        request:
-                            template: mdata?cmd=ping
-                        ...
                     ticker:
                         request:
                             template: mdata?cmd=marketAll
@@ -449,9 +448,7 @@ class Exchange:
                             params: null
 
             Result:
-                request_urls = { 'ticker': ('https://api.bibox.com/v1/mdata?cmd=marketAll', {}) ,
-                                 'test_connection': ('https://api.bibox.com/v1/mdata?cmd=ping', {})
-                                }
+                request_urls = {'ticker': ('https://api.bibox.com/v1/mdata?cmd=marketAll', {}, {}) )}
 
         Example for one request:
             in bibox.yaml (request ticker):
@@ -483,69 +480,103 @@ class Exchange:
                          <func parameter>
                          ...
 
-
-        @param request_name: str
-        @param currency_pairs: list
-        @param request_table: object
-        @param request: Dict[str: Dict[param_name: value]]
-            requests-section from a exchange.yaml as dictionary.
-            Viability of dict is not checked.
-
-        @return:
+        @param request_name: str representation of the request method
+        @param currency_pairs: list of all exchange-currency-pairs
+        @param request_table: object of the database table
+        @param request_dict: Dict[str: Dict[param_name: value]] requests-section from the exchange.yaml
+        @return: dict of request url, pair template and parameters.
             See example above.
         """
+        request_dict = request_dict['request']
+
         urls = dict()
-        if request:
-            request_parameters = dict()
-            url = self.api_url
-            request_dict = request['request']
+        request_parameters = dict()
+        request_parameters['url'] = self.api_url + request_dict.get('template', "")
+        request_parameters['pair_template'] = request_dict.get('pair_template', None)
 
-            if 'template' in request_dict.keys() and request_dict['template']:
-                url += '{}'.format(request_dict['template'])
-            request_parameters['url'] = url
-
-            pair_template = dict()
-            if 'pair_template' in request_dict.keys() and request_dict['pair_template']:
-                pair_template = request_dict['pair_template']
-            request_parameters['pair_template'] = pair_template
-
-            params = dict()
-            # ToDo: Make function from the below. That's one big ugly block of too many ifs
-            # ToDO: Bug if self.frequency is e.g. daily. Does not falls back to days for startTime
-            #  calculations with interval!
-            if 'params' in request_dict.keys() and request_dict['params']:
-                for param in request_dict['params']:
-
-                    if 'allowed' in request_dict['params'][param]:
-                        if self.interval in request_dict['params'][param]['allowed'].keys():
-                            params[param] = str(request_dict['params'][param]['allowed'][self.interval])
-                        else:
-                            self.interval = 'days'
-
-                    if 'function' in request_dict['params'][param]:
-                        params[param] = {cp: self.get_first_timestamp(request_table, cp.id) for cp in
-                                         currency_pairs}
-
-                    if 'default' in request_dict['params'][param] and param not in params:
-                        params[param] = str(request_dict['params'][param]['default'])
-
-                    if 'type' in request_dict['params'][param]:
-                        value = params[param] if param in params.keys() else None
-                        conv_params = request_dict['params'][param]['type']
-
-                        if 'interval' in conv_params:
-                            conv_params = [self.interval if x == 'interval' else x for x in conv_params]
-
-                        if isinstance(value, dict):
-                            params[param] = {cp: convert_type(value[cp], deque(conv_params)) for cp in
-                                             currency_pairs}
-                        elif isinstance(conv_params, list):
-                            params[param] = convert_type(value, deque(conv_params))
-
-            request_parameters['params'] = params
-
+        params = dict()
+        parameters = request_dict.get('params', False)
+        if not parameters:
+            request_parameters['params'] = {}
             urls[request_name] = request_parameters
+            return urls
 
+        def allowed(val: dict, **kwargs):
+            """
+            Extract the configured value from all allowed values. If there is no match, return str "default".
+            @param val: dict of allowed key, value pairs.
+            @return: value if key in dict, else None.
+            """
+            value = val.get(self.interval, None)
+            # in order to change the Class interval to the later used default value. The KEY is needed, therefore
+            # is the dict-comprehension {v: k for k, v ...}.
+            if not bool(value):
+                self.interval = {v: k for k, v in val.items()}
+            return value
+
+        def function(val: str, **kwargs) -> Any:
+            """
+            Execute function for all currency-pairs. Function returns the first timestamp in the DB, or
+            datetime.now() if none exists.
+            @param kwargs: not used but needed for another function.
+            @param val: contains the function name as string.
+            @return:
+            """
+            if val == 'last_timestamp':
+                return {cp: self.get_first_timestamp(request_table, cp.id) for cp in currency_pairs}
+
+        def default(val: str, **kwargs) -> str:
+            """
+            Returns the default value if kwargs value (the parameter) is None.
+            @param val: Default value.
+            @param kwargs: Parameter value. If None, return default value.
+            @return: Default value as a string.
+            """
+            default_val = val.__str__() if not bool(kwargs.get('has_value')) else kwargs.get('has_value')
+            if isinstance(self.interval, dict):
+                self.interval = self.interval.get(default_val)
+            return default_val
+
+        def type(val, **kwargs):
+            """
+            Performs type conversions.
+            @param val: The conversion values specified under "type".
+            @param kwargs: The value to be converted.
+            @return: Converted value.
+            """
+            param_value = kwargs.get("has_value", None)
+            conv_params = val
+            # to avoid conversion when only a type declaration was done. If a parameter is of type "int".
+            if isinstance(conv_params, str) or len(conv_params) < 2:
+                return param_value
+            # replace the key "interval" with the interval specified in the configuration file.
+            conv_params = [self.interval if x == 'interval' else x for x in conv_params]
+            # return {cp: convert_type(param_value[cp], deque(conv_params)) for cp in currency_pairs}
+            # ToDo: Check if the above line works. The older version needed both if statements below.
+            if isinstance(param_value, dict):
+                return {cp: convert_type(param_value[cp], deque(conv_params)) for cp in currency_pairs}
+            elif isinstance(conv_params, list):
+                return convert_type(param_value, deque(conv_params))
+
+        mapping: dict = {'allowed': allowed, 'function': function, 'default': default, 'type': type}
+        # enumerate mapping dict to sort parameter values accordingly.
+        mapping_index = {val: key for key, val in enumerate(mapping.keys())}
+
+        for param, options in parameters.items():
+            # Kick out all option keys which are not in the mapping dict or where required: False.
+            # Sort the dict options according to the mapping to ensure the right order of function calls.
+            options = {k: v for k,v in options.items() if k in mapping.keys()}
+            options = OrderedDict(sorted(options.items(), key=lambda x: mapping_index.get(x[0])))
+            if not parameters[param].get('required', True):
+                continue
+            # Iterate over the functions and fill the params dict with values. Kwargs are needed only partially.
+            kwargs = {'has_value': None}
+            for key, val in options.items():
+                kwargs.update({'has_value': params.get(param, None)})
+                params[param] = mapping.get(key)(val, **kwargs)
+
+        request_parameters['params'] = params
+        urls[request_name] = request_parameters
         return urls
 
     def format_currency_pairs(self, response: Tuple[str, Dict]) -> Iterator[Tuple[str, str, str]]:
@@ -578,6 +609,11 @@ class Exchange:
                 results[mapping.key] = [results[mapping.key]]
 
         assert (len(results[0]) == len(result) for result in results)
+        len_results = {key: len(value) for key, value in results.items() if hasattr(value, '__iter__')}
+        len_results = max(len_results.values()) if bool(len_results) else 1
+        results.update({k: itertools.repeat(*v, len_results) for k, v in results.items() if len(v) == 1})
+
+
 
         return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
                                           results['currency_pair_first'],

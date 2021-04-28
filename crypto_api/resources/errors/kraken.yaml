@@ -16,12 +16,6 @@ requests:
         alias: pair
       params:
         info:
-          type: str
-          allowed:
-          - info
-          - leverage
-          - fees
-          - margin
           default: info
     response:
       type: dict

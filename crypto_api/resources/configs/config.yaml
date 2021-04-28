@@ -10,24 +10,24 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: minutes
+    interval: days
   utilities:
     yaml_path: resources/running_exchanges/
-    enable_logging: true
+    enable_logging: false
 
 jobs:
   AAAA:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - coinlist
+      - therocktrading
     excluded:
 #      - coingecko
 
     currency_pairs:
 #      - all
         - first: btc
-          second: usdt
+          second: eur
 
     first_currencies: null
     second_currencies: null

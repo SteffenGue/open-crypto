@@ -128,7 +128,7 @@ requests:
             minutes: 1m
             hours: 30m
             days: 30m #maximum
-          default: hours
+          default: 30m
 #        start_time:
 #          function: last_timestamp
 #          type:

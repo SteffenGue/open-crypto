@@ -249,7 +249,7 @@ requests:
             - interval
             - 1440
             - from_timestamp
-            - 0
+#            - 0
             - "%Y/%m/%d"
 
     response:

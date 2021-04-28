@@ -1,7 +1,6 @@
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
 
-
 class Job:
     """
     Represents a job that is executed by the Scheduler based on the frequency set in config.yaml.

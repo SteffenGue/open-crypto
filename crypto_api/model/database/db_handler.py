@@ -95,7 +95,7 @@ class DatabaseHandler:
             Information about the table-structure of the database.
             See tables.py for more information.
         @param sqltype: atr
-            Type of the database sql-dialect. ('postgresql, sqlite' for us)
+            Type of the database sql-dialect. ('postgresql, mariadb, mysql, sqlite' for us)
         @param client: str
             Name of the Client which is used to connect to the database.
         @param user_name: str
@@ -103,20 +103,25 @@ class DatabaseHandler:
         @param password: str
             Password for this username.
         @param host: str
-            Hostname or Hostaddress from the database.
+            Hostname or host-address from the database.
         @param port: str
             Connection-Port (usually 5432 for Postgres)
         @param db_name: str
             Name of the database.
         """
+
         if not path:
             path = os.getcwd()
-        if sqltype == "sqlite":
-            conn_string = f"{sqltype}:///{path}/{db_name}.db"
-        elif debug:
-            conn_string = "sqlite://"
+
+        conn_strings = {'debug': "sqlite://",
+                        'sqlite': f"{sqltype}:///{path}/{db_name}.db",
+                        'postgresql': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
+                        'mariadb': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
+                        'mysql': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"}
+        if debug:
+            conn_string = conn_strings['debug']
         else:
-            conn_string = f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"
+            conn_string = conn_strings[sqltype]
 
         logging.info(f"Connection String is: {conn_string}")
         engine = create_engine(conn_string)
@@ -130,8 +135,7 @@ class DatabaseHandler:
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
             print("View already exists.")
-            logging.warning("Views already exist. If you need to alter or recreate tables delete tickers_view "
-                            "and exchanges_currency_pair_view manually.")
+            logging.warning("Views already exist. If you need to alter or recreate tables delete all views manually.")
             pass
         self.sessionFactory = sessionmaker(bind=engine)
 
@@ -145,7 +149,7 @@ class DatabaseHandler:
         except Exception as e:
             # ToDo: Changes here from raise -> pass and included Logging.
             #  Postgresql throw integrity errors which where not caught.
-            # Sqlite on the other hand not. For reproducibility: B2bx, BTC-USD
+            #  Sqlite on the other hand not. For reproducibility: B2bx, BTC-USD
             logging.exception(e)
             session.rollback()
             pass
@@ -408,7 +412,7 @@ class DatabaseHandler:
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             i = 0
             with self.session_scope() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 1)):
+                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
                     exchange_name = cp[0]
                     first_currency_name = cp[1]
                     second_currency_name = cp[2]

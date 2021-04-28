@@ -1,21 +1,25 @@
 import os
 import shutil
+from typing import Dict
 
 import main
+from export import CsvExport, database_session
+from model.database.tables import *
+from model.utilities.utilities import read_config
 
-path = os.getcwd()
+PATH = os.getcwd()
 
 
 def check_path():
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
     """
-    destination = path + "/resources"
+    destination = PATH + "/resources"
     if not os.path.exists(destination):
         update_maps()
 
 
-def update_maps(cwd: str = path):
+def update_maps(cwd: str = PATH):
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
@@ -48,7 +52,72 @@ def update_maps(cwd: str = path):
                 shutil.copy(src_file, dst_dir)
 
 
-def run(cwd=path):
+def get_path():
+    """
+    @return: Prints the path to the current working directory.
+    """
+    return os.getcwd()
+
+
+def set_path():
+    """
+    Sets the path if it should differ from the current working directory.
+    """
+    global PATH
+    PATH = input('New path: \n')
+    print(f"Path set to {PATH}.")
+
+
+def get_session(filename: str = None, db_path: str = PATH):
+    """
+    Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
+    @param db_path: path to the database. Default: current working directory
+    @param filename: Name of the configuration file to init the DatabaseHandler
+    @return: SqlAlchemy-Session
+    """
+    return database_session(filename=filename, db_path=db_path)
+
+
+def get_config(filename: str = None) -> Dict:
+    """
+    Returns the actual config-file.
+    @param filename: name of the config file.
+    @return: Returns the current config.
+    """
+    return read_config(file=filename)
+
+
+def get_config_template(csv: bool = False):
+    """
+    Creates a copy of the config templates and puts it into the resources/configs folder.
+    @param csv: boolean: If True, create an csv-export config. Else create a config for the runner.
+    """
+    if csv:
+        filename = "csv_config_template.yaml"
+    else:
+        filename = "config_template.yaml"
+
+    source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates"
+    destination = os.getcwd() + "/resources/configs"
+
+    if os.path.exists(os.path.join(destination, filename)):
+        os.remove(os.path.join(destination, filename))
+
+    shutil.copy(os.path.join(source, filename),
+                os.path.join(destination, filename))
+    print("Created new config template.")
+
+
+def export(file: str = None):
+    """
+    Calls the imported module CsvExport and the respective method create_csv(). This will take a csv-export config as
+    input and write data into a csv-file depending on the configuration.
+    @param file: Name of the csv-export configuration file.
+    """
+    CsvExport(file).create_csv()
+
+
+def run(cwd=PATH):
     """
     Firstly checks if all necessary folder are available (i.e. config and yaml-maps) and runs the program.
     @param cwd: The current working directory if not specified differently.
@@ -58,4 +127,4 @@ def run(cwd=path):
 
 
 if __name__ == '__main__':
-    run(path)
+    run(PATH)
