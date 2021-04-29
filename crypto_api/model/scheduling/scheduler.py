@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import sys
-from typing import List, Callable, Dict, Any
+from typing import Callable, Any
 
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
@@ -17,11 +17,8 @@ class Scheduler:
     Every x minutes the scheduler will be called to run the jobs created by the user in config.yaml.
     Attributes like frequency or job_list can also be set by the user in config.yaml.
     """
-    database_handler: DatabaseHandler
-    job_list: List[Job]
-    frequency: Any
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job], frequency: Any):
+    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job], frequency: Any):
         """
         Initializer for a Scheduler.
 
@@ -35,7 +32,7 @@ class Scheduler:
         self.database_handler = database_handler
         self.job_list = job_list
         self.frequency = frequency * 60 if isinstance(frequency, (int, float)) else frequency
-        self.validated: bool = False
+        self.validated = False
 
     async def start(self):
         """
@@ -63,14 +60,14 @@ class Scheduler:
             await self.validate_job()
 
         request = self.determine_task(job.request_name)
-        request_fun = request.get('function')
-        request_table = request.get('table')
+        request_fun = request.get("function")
+        request_table = request.get("table")
 
         continue_run = True
         while continue_run:
             continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
-    def determine_task(self, request_name: str) -> Dict[Callable, object]:
+    def determine_task(self, request_name: str) -> dict[Callable, object]:
         """
         Returns the method that is to execute based on the given request name.
 
@@ -82,20 +79,20 @@ class Scheduler:
 
         possible_requests = {
             "currency_pairs":
-                {'function': self.get_currency_pairs,
-                 'table': ExchangeCurrencyPair},
+                {"function": self.get_currency_pairs,
+                 "table": ExchangeCurrencyPair},
             "tickers":
-                {'function': self.request_format_persist,
-                 'table': Ticker},
+                {"function": self.request_format_persist,
+                 "table": Ticker},
             "historic_rates":
-                {'function': self.request_format_persist,
-                 'table': HistoricRate},
+                {"function": self.request_format_persist,
+                 "table": HistoricRate},
             "order_books":
-                {'function': self.request_format_persist,
-                 'table': OrderBook},
+                {"function": self.request_format_persist,
+                 "table": OrderBook},
             "trades":
-                {'function': self.request_format_persist,
-                 'table': Trade},
+                {"function": self.request_format_persist,
+                 "table": Trade},
         }
         return possible_requests.get(request_name, lambda: "Invalid request name.")
 
@@ -113,7 +110,7 @@ class Scheduler:
         if self.job_list:
             self.validated = True
 
-    def remove_invalid_jobs(self, jobs: List[Job]):
+    def remove_invalid_jobs(self, jobs: list[Job]):
         """
         Method to clean up the job list. If the job list is empty, shut down program.
         Else the algorithm will go through every job specification and delete empty jobs or exchanges.
@@ -158,7 +155,7 @@ class Scheduler:
                 self.remove_invalid_jobs(jobs)
 
         else:
-            logging.error('No or invalid Jobs.')
+            logging.error("No or invalid Jobs.")
 
             print("\n No or invalid Jobs. This error occurs when the job list is empty due to no \n"
                   "matching currency pairs found for a all exchanges. Please check your \n"
@@ -166,7 +163,7 @@ class Scheduler:
             sys.exit(0)
 
     # ToDo: Asynchronicity.
-    async def get_currency_pairs(self, job_list: List[Job], *args) -> List[Job]:
+    async def get_currency_pairs(self, job_list: list[Job], *args) -> list[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
         api for all currency pairs is called.
@@ -217,7 +214,7 @@ class Scheduler:
 
     async def request_format_persist(self,
                                      request_table: object,
-                                     exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
+                                     exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]):
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -237,9 +234,11 @@ class Scheduler:
             - The DatabaseHandler will reject to persist new items if any primary key is emtpy.
             - For more detailed instructions, including an example, see into the handbook.
         """
+        table_name = request_table.__tablename__.capitalize()
 
-        print('\nStarting to collect {}.'.format(request_table.__tablename__.capitalize()), end="\n")
-        logging.info('Starting to collect {}.'.format(request_table.__tablename__.capitalize()))
+        print(f"\nStarting to collect {table_name}.")
+        logging.info(f"Starting to collect {table_name}.")
+
         start_time = TimeHelper.now()
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
@@ -270,15 +269,15 @@ class Scheduler:
                                                                                          formatted_response,
                                                                                          mappings)
                 except (MappingNotFoundException, TypeError, KeyError):
-                    logging.exception("Exception formatting or persisting data for {}".format(found_exchange.name))
+                    logging.exception(f"Exception formatting or persisting data for {found_exchange.name}")
                     continue
 
-        if request_table.__name__ == 'HistoricRate' and any(list(counter.values())) != 0:
+        if request_table.__name__ == "HistoricRate" and any(list(counter.values())) != 0:
             # In order to avoid requesting exchanges where all data points are already collected.
-            new_job = {ex: counter[ex] for ex in list(counter.keys()) if bool(counter[ex])}
+            new_job = {exchange: counter[exchange] for exchange in counter.keys() if bool(counter[exchange])}
             return True, new_job
 
-        print('Done collecting {}.'.format(request_table.__tablename__.capitalize()), end="\n\n")
-        logging.info('Done collecting {}.'.format(request_table.__tablename__.capitalize()))
+        print(f"Done collecting {table_name}.", end="\n\n")
+        logging.info(f"Done collecting {table_name}.")
 
         return False, exchanges_with_pairs
