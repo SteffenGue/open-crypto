@@ -613,8 +613,6 @@ class Exchange:
         len_results = max(len_results.values()) if bool(len_results) else 1
         results.update({k: itertools.repeat(*v, len_results) for k, v in results.items() if len(v) == 1})
 
-
-
         return list(itertools.zip_longest(itertools.repeat(self.name, len(results['currency_pair_first'])),
                                           results['currency_pair_first'],
                                           results['currency_pair_second']))

@@ -30,7 +30,7 @@ setup(
         "aiohttp[speedups]",
         "aioschedule",
         "datetime_periods",
-        "numpy < 1.19.4",
+        "numpy != 1.19.4",
         "oyaml",
         "pandas",
         "psycopg2-binary",
