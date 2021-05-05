@@ -17,7 +17,7 @@ from model.utilities.exceptions import MappingNotFoundException, DifferentExchan
 from model.utilities.time_helper import TimeHelper
 
 
-def extract_mappings(exchange_name: str, requests: dict) -> Dict[str, List[Mapping]]:
+def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mapping]]:
     """
     Helper-Method which should be only called by the constructor.
     Extracts out of a given exchange .yaml-requests-section for each
@@ -32,10 +32,12 @@ def extract_mappings(exchange_name: str, requests: dict) -> Dict[str, List[Mappi
     by the response, the value will not be extracted later on because there won't
     be a Mapping-object for said value.
 
+    @param exchange_name: str
+        String representation of the exchange name.
     @param requests: Dict[str: List[Mapping]]
         Requests-section from a exchange.yaml as dictionary.
         Method does not check if dictionary contains viable information.
-    @exchange_name: str repr. of the exchange name
+
     @return:
         Dictionary with the following structure:
             {'request_name': List[Mapping]}
@@ -62,9 +64,10 @@ def extract_mappings(exchange_name: str, requests: dict) -> Dict[str, List[Mappi
     return response_mappings
 
 
-def format_request_url(url: str, pair_template: Dict, pair_formatted: str, cp, parameter: Dict):
+def format_request_url(url: str, pair_template: dict, pair_formatted: str, cp, parameter: dict):
     # ToDo: Docu
     """
+    @param cp:
     @param pair_template:
     @param url:
     @param pair_formatted:
@@ -143,7 +146,7 @@ class Exchange:
     timeout: int
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, db_last_timestamp, timeout, interval: Any = 'days'):
+    def __init__(self, yaml_file: Dict, db_last_timestamp, timeout, interval: Any = "days"):
         """
         Creates a new Exchange-object.
 
@@ -158,25 +161,26 @@ class Exchange:
         """
         self.file = yaml_file
         self.timeout = timeout
-        self.name = yaml_file['name']
+        self.name = yaml_file["name"]
         self.interval = interval
+        self.base_interval = interval
         self.get_first_timestamp = db_last_timestamp
 
-        self.api_url = yaml_file['api_url']
-        if yaml_file.get('rate_limit'):
-            if yaml_file['rate_limit']['max'] <= 0:
+        self.api_url = yaml_file["api_url"]
+        if yaml_file.get("rate_limit"):
+            if yaml_file["rate_limit"]["max"] <= 0:
                 self.rate_limit = 0
             else:
-                self.rate_limit = yaml_file['rate_limit']['unit'] / yaml_file['rate_limit']['max']
+                self.rate_limit = yaml_file["rate_limit"]["unit"] / yaml_file["rate_limit"]["max"]
         else:
             self.rate_limit = 0
 
-        self.response_mappings = extract_mappings(self.name, yaml_file['requests'])
+        self.response_mappings = extract_mappings(self.name, yaml_file["requests"])
 
         self.exception_counter = 0
         self.active_flag = True
         self.consecutive_exception = False
-        self.is_exchange = yaml_file.get('exchange')
+        self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
     def add_exchange_currency_pairs(self, currency_pairs: list):
@@ -187,7 +191,7 @@ class Exchange:
             Pairs that should be added to exchange_currency_pairs.
         """
         for cp in currency_pairs:
-            if not self.exchange_currency_pairs.__contains__(cp):
+            if cp not in self.exchange_currency_pairs:
                 self.exchange_currency_pairs.append(cp)
 
     async def test_connection(self) -> Tuple[str, bool, Dict]:
@@ -210,9 +214,9 @@ class Exchange:
         :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
         """
-        if self.request_urls.get('test_connection'):
+        if self.request_urls.get("test_connection"):
             async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls['test_connection']
+                request_url_and_params = self.request_urls["test_connection"]
                 try:
                     response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
                     response_json = await response.json(content_type=None)
@@ -535,6 +539,7 @@ class Exchange:
             default_val = val.__str__() if not bool(kwargs.get('has_value')) else kwargs.get('has_value')
             if isinstance(self.interval, dict):
                 self.interval = self.interval.get(default_val)
+                self.base_interval = self.interval
             return default_val
 
         def type(val, **kwargs):
@@ -786,3 +791,21 @@ class Exchange:
                     result = list(itertools.zip_longest(*result))
                     results.extend(result)
         return results, list(temp_results.keys())
+
+    def increase_interval(self):
+        index = self.interval_strings.index(self.interval) + 1
+        index = min(index, len(self.interval_strings) - 1)
+
+        self.interval = self.interval_strings[index]
+
+    def decrease_interval(self):
+        # TODO: Not lower than base?
+        if self.interval is None or self.interval == self.base_interval:
+            return
+
+        index = self.interval_strings.index(self.interval) - 1
+        index = max(index, 0)
+
+        self.interval = self.interval_strings[index]
+
+    interval_strings = ["seconds", "minutes", "hours", "days"]

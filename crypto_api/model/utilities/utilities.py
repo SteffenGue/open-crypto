@@ -184,8 +184,8 @@ TYPE_CONVERSION = {
         "params": 1
     },
     ("timedelta", "from_timestamp"): {
-        "function": lambda time, spec: format(TimeHelper.from_timestamp(time), spec),
-        "params": 1
+        "function": lambda time, unit, spec: format(TimeHelper.from_timestamp(time, unit), spec),
+        "params": 2
     },
     # ("quote", "base"): {
     #     "function": lambda value: (1, float(value)),

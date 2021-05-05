@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import sys
-from typing import Callable, Any
+from typing import Callable, Any, Optional
 
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
@@ -247,7 +247,7 @@ class Scheduler:
         for response in responses:
             response_time = response[0]
             exchange_name = response[1]
-            found_exchange: Exchange = None
+            found_exchange: Optional[Exchange] = None
 
             for exchange in exchanges_with_pairs.keys():
                 # finding the right exchange object
@@ -272,10 +272,18 @@ class Scheduler:
                     logging.exception(f"Exception formatting or persisting data for {found_exchange.name}")
                     continue
 
-        if request_table.__name__ == "HistoricRate" and any(list(counter.values())) != 0:
-            # In order to avoid requesting exchanges where all data points are already collected.
-            new_job = {exchange: counter[exchange] for exchange in counter.keys() if bool(counter[exchange])}
-            return True, new_job
+        if request_table.__name__ == "HistoricRate":
+            updated_job: dict[Exchange, Any] = {}
+            for exchange, value in counter.items():
+                if value:  # TODO: Intervals are None if value in config is not allowed! Weird behavior I guess
+                    exchange.decrease_interval()
+                    updated_job[exchange] = value
+                elif exchange.interval != "days":  # if days had no results, kick out exchange
+                    exchange.increase_interval()
+                    updated_job[exchange] = value
+
+            if updated_job:
+                return True, updated_job
 
         print(f"Done collecting {table_name}.", end="\n\n")
         logging.info(f"Done collecting {table_name}.")
