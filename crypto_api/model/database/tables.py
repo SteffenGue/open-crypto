@@ -423,3 +423,4 @@ class HistoricRateView(Base):
         ),
         metadata=Base.metadata
     )
+

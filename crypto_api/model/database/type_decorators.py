@@ -30,3 +30,5 @@ class UnixTimestamp(TypeDecorator):
 
     def process_literal_param(self, value, dialect):
         pass  # TODO: Improve if this method causes any kind of trouble.
+
+

@@ -337,7 +337,7 @@ class Exchange:
                         print('Unable to read response from {}. Check exchange config file.\n'
                               'Url: {}, Parameters: {}'
                               .format(self.name, url_formatted, request_url_and_params['params']))
-                        print(e.__traceback__)
+                        print(e)
 
                         logging.error('Unable to read response from {}. Check config file.\n'
                                       'Url: {}, Parameters: {}'
@@ -536,7 +536,7 @@ class Exchange:
             @param kwargs: Parameter value. If None, return default value.
             @return: Default value as a string.
             """
-            default_val = val.__str__() if not bool(kwargs.get('has_value')) else kwargs.get('has_value')
+            default_val = val if not bool(kwargs.get('has_value')) else kwargs.get('has_value')
             if isinstance(self.interval, dict):
                 self.interval = self.interval.get(default_val)
                 self.base_interval = self.interval
