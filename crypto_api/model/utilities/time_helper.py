@@ -44,7 +44,7 @@ class TimeHelper:
 
         @return: The current datetime (UTC+0).
         """
-        return datetime.now(tz=timezone.utc)
+        return datetime.now(tz=timezone.utc).replace(microsecond=0)
 
     @staticmethod
     def now_timestamp(unit: TimeUnit = TimeUnit.SECONDS) -> float:
