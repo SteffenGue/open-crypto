@@ -263,8 +263,9 @@ requests:
         - data
         - ts
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: id
       path:
         - data
@@ -347,8 +348,9 @@ requests:
         - data
         - ts
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: id
       path:
         - data
