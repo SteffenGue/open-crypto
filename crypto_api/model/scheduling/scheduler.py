@@ -68,7 +68,7 @@ class Scheduler:
         while continue_run:
             continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
-    def determine_task(self, request_name: str) -> dict[Callable, object]:
+    def determine_task(self, request_name: str) -> dict[str, Callable]:
         """
         Returns the method that is to execute based on the given request name.
 
@@ -76,9 +76,8 @@ class Scheduler:
         @type request_name: str
 
         @return: Method for the request name or a string that the request is false.
-        @rtype: dict[Callable, object]
+        @rtype: dict[str, Callable]
         """
-
         possible_requests = {
             "currency_pairs":
                 {"function": self.get_currency_pairs,
@@ -96,7 +95,11 @@ class Scheduler:
                 {"function": self.request_format_persist,
                  "table": Trade},
         }
-        return possible_requests.get(request_name, lambda: "Invalid request name.")
+
+        return possible_requests.get(request_name, {
+            "function": lambda: "Invalid request name.",
+            "table": None
+        })
 
     async def validate_job(self):
         """

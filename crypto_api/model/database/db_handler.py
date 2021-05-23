@@ -574,10 +574,10 @@ class DatabaseHandler:
                            query_everything: bool,
                            from_timestamp: datetime = None,
                            to_timestamp: datetime = TimeHelper.now(),
-                           exchanges: List[str] = None,
-                           currency_pairs: List[Dict[str, str]] = None,
-                           first_currencies: List[str] = None,
-                           second_currencies: List[str] = None):
+                           exchanges: list[str] = None,
+                           currency_pairs: list[dict[str, str]] = None,
+                           first_currencies: list[str] = None,
+                           second_currencies: list[str] = None):
 
         """
              Queries based on the parameters readable database data and returns it.
@@ -596,29 +596,31 @@ class DatabaseHandler:
                  exchange AND (first OR second OR pair) AND from_time AND to_time
 
              See csv-config for details of how to write/give parameters.
-             @param db_table: object
-                 The respective object of the table to be queried (i.e. Ticker, Trade,...).
-             @param query_everything: bool
-                 If everything in the database should be queried.
-             @param from_timestamp: datetime
-                 Minimum date for the start of the request.
-             @param to_timestamp: datetime
-                 Maximum date for the start of the request.
-             @param exchanges: List[str]
-                 List of exchanges of which the tuple should be queried.
-             @param currency_pairs: List[Dict[str, str]]
-                 List of specific currency pairs that should be queried.
-                 Dict needs to have the following structure:
-                     - first: 'Name of the first currency'
-                       second: 'Name of the second currency'
-             @param first_currencies: List[str]
-                 List of viable currencies for the first currency in a currency pair.
-             @param second_currencies: List[str]
-                 List of viable currencies for the second currency in a currency pair.
-             @return:
-                 List of readable database tuple.
-                 List might be empty if database is empty or there where no ExchangeCurrencyPairs
-                 which fulfill the above stated requirements.
+
+             @param db_table: The respective object of the table to be queried.
+             @type db_table: Union[HistoricRate, OrderBook, Ticker, Trade]
+             @param query_everything: If everything in the database should be queried.
+             @type query_everything: bool
+             @param from_timestamp: Minimum date for the start of the request.
+             @type from_timestamp: datetime
+             @param to_timestamp: Maximum date for the start of the request.
+             @type to_timestamp: datetime
+             @param exchanges: List of exchanges of which the tuple should be queried.
+             @type exchanges: list[str]
+             @param currency_pairs: List of specific currency pairs that should be queried.
+                                    Dict needs to have the following structure:
+                                       - first: 'Name of the first currency'
+                                       - second: 'Name of the second currency'
+             @type currency_pairs: list[dict[str, str]]
+             @param first_currencies: List of viable currencies for the first currency in a currency pair.
+             @type first_currencies: list[str]
+             @param second_currencies: List of viable currencies for the second currency in a currency pair.
+             @type second_currencies: list[str]
+
+             @return: List of readable database tuple.
+                      List might be empty if database is empty or there where no ExchangeCurrencyPairs
+                      which fulfill the above stated requirements.
+             @rtype: TODO: Fill out
              """
 
         with self.session_scope() as session:
@@ -626,9 +628,9 @@ class DatabaseHandler:
             second = aliased(Currency)
             # col_names = [key.name for key in inspect(db_table).columns]
 
-            data: Query = session.query(Exchange.name.label('exchange'),
-                                        first.name.label('first_currency'),
-                                        second.name.label('second_currency'),
+            data: Query = session.query(Exchange.name.label("exchange"),
+                                        first.name.label("first_currency"),
+                                        second.name.label("second_currency"),
                                         db_table). \
                 join(ExchangeCurrencyPair, db_table.exchange_pair_id == ExchangeCurrencyPair.id). \
                 join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id). \
@@ -650,7 +652,7 @@ class DatabaseHandler:
                     if second_currencies:
                         second_currency_names = [name.upper() for name in second_currencies]
                     if currency_pairs:
-                        currency_pairs_names = [(pair['first'].upper(), pair['second'].upper()) for pair in
+                        currency_pairs_names = [(pair["first"].upper(), pair["second"].upper()) for pair in
                                                 currency_pairs]
 
                 result = data.filter(and_(
@@ -671,15 +673,19 @@ class DatabaseHandler:
             session.expunge_all()
         return result
 
-    def get_first_timestamp(self, table: Union[HistoricRate, OrderBook, Ticker, Trade], exchange_pair_id: int):
+    def get_first_timestamp(self, table: Union[HistoricRate, OrderBook, Ticker, Trade], exchange_pair_id: int) \
+            -> datetime:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old or
         otherwise the timestamp from now.
 
         @param table: The database table to be queried.
+        @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
         @param exchange_pair_id: The exchange_pair_id of interest.
+        @type exchange_pair_id: int
 
         @return: datetime: Earliest timestamp of specified table or timestamp from now.
+        @rtype: datetime
         """
         with self.session_scope() as session:
             (earliest_timestamp,) = session \

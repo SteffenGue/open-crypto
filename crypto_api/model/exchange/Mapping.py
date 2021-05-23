@@ -1,7 +1,7 @@
 from collections import deque, Iterable
 from typing import Collection, Optional
 
-from model.utilities.utilities import TYPE_CONVERSION
+from model.utilities.utilities import TYPE_CONVERSIONS
 
 
 def convert_type(value, types_queue: deque):
@@ -11,12 +11,12 @@ def convert_type(value, types_queue: deque):
     Helper method to convert the given value via a queue of type conversions.
 
     @param value: The value to get converted to another type.
-    @type value: TODO fill out appropriate type
+    @type value: Any
     @param types_queue: The queue of type conversion instructions.
     @type types_queue: deque
 
     @return: The converted value.
-    @rtype: TODO fill out appropriate type
+    @rtype: Any
     """
     current_type = types_queue.popleft()
 
@@ -30,7 +30,7 @@ def convert_type(value, types_queue: deque):
         if "continue" in types_tuple:
             continue
 
-        conversion = TYPE_CONVERSION[types_tuple]
+        conversion = TYPE_CONVERSIONS[types_tuple]
 
         params = list()
 
@@ -152,7 +152,7 @@ class Mapping:
                       path_queue: deque = None,
                       types_queue=None,
                       iterate=True,
-                      currency_pair_info: (str, str, str) = (None, None, None)):  # TODO DOKU
+                      currency_pair_info: tuple[str, str, str] = (None, None, None)):
         """
         Extracts the value specified by "self.path".
 
@@ -174,7 +174,7 @@ class Mapping:
                  using "types_queue".
                  Can be a list of values which get extracted iteratively from
                  the response.
-        @rtype: TODO: fill out
+        @rtype: Any
         """
         if path_queue is None:
             path_queue = deque(self.path)
@@ -273,11 +273,11 @@ def is_scalar(value) -> bool:
     Indicates whether a value is a scalar or not.
 
     Convenience function returning a bool whether the provided value is a single value or not.
-    Strings count as scalar, although they are iterable.
+    Strings count as scalar although they are iterable.
 
     @param value: The value to evaluate concerning whether it is a single value
                   or multiple values (iterable).
-    @type value: TODO fill out
+    @type value: Any
 
     @return: Bool indicating whether the provided value is a single value or not.
     @rtype: bool

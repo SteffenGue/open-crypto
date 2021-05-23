@@ -13,7 +13,7 @@ import oyaml as yaml
 from model.utilities.time_helper import TimeHelper, TimeUnit
 from resources.configs.GlobalConfig import GlobalConfig
 
-TYPE_CONVERSION = {
+TYPE_CONVERSIONS = {
     ("float", "from_timestamp"): {
         "function": lambda timestamp, unit: TimeHelper.from_timestamp(timestamp, unit),
         "params": 1
