@@ -507,7 +507,11 @@ class Exchange:
             @param val: dict of allowed key, value pairs.
             @return: value if key in dict, else None.
             """
-            value = val.get(self.interval, None)
+            if isinstance(self.interval, dict):
+                value = None  # TODO: Philipp: To fix hashable problem. Better solution?
+            else:
+                value = val.get(self.interval, None)
+
             # in order to change the Class interval to the later used default value. The KEY is needed, therefore
             # is the dict-comprehension {v: k for k, v ...}.
             if not bool(value):

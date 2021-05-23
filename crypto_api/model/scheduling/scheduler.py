@@ -22,12 +22,12 @@ class Scheduler:
         """
         Initializer for a Scheduler.
 
-        @param database_handler: DatabaseHandler
-            Handler that is called for everything that needs information from the database.
-        @param job_list: List[Job]
-            List of Jobs. A job can be created with the specific yaml-template in config.yaml
-        @param frequency: int
-            The interval in minutes with that the run() method gets called.
+        @param database_handler: Handler that is called for everything that needs information from the database.
+        @type database_handler: DatabaseHandler
+        @param job_list: List of Jobs. A job can be created with the specific yaml-template in config.yaml.
+        @type job_list: list[Job]
+        @param frequency: The interval in minutes with that the run() method gets called.
+        @type frequency: Any
         """
         self.database_handler = database_handler
         self.job_list = job_list
@@ -52,8 +52,9 @@ class Scheduler:
     async def run(self, job: Job):
         """
         The method represents one execution of the given job.
-        @param job: Job
-            The job that will be executed.
+
+        @param job: The job that will be executed.
+        @type job: Job
         """
 
         if not self.validated:
@@ -71,10 +72,11 @@ class Scheduler:
         """
         Returns the method that is to execute based on the given request name.
 
-        @param request_name: str
-            Name of the request.
-        @return:
-            Method for the request name or a string that the request is false.
+        @param request_name: Name of the request.
+        @type request_name: str
+
+        @return: Method for the request name or a string that the request is false.
+        @rtype: dict[Callable, object]
         """
 
         possible_requests = {
@@ -110,42 +112,43 @@ class Scheduler:
         if self.job_list:
             self.validated = True
 
-    def remove_invalid_jobs(self, jobs: list[Job]):
+    def remove_invalid_jobs(self, jobs: list[Job]) -> list[Job]:
         """
         Method to clean up the job list. If the job list is empty, shut down program.
         Else the algorithm will go through every job specification and delete empty jobs or exchanges.
 
         @param jobs: List of all jobs specified by the config
-        @return: List of jobs, cleaned by empty or invalid jobs
-        """
+        @type jobs: list[Job]
 
+        @return: List of jobs, cleaned by empty or invalid jobs
+        @rtype: list[Job]
+        """
         if jobs:
             for job in jobs:
                 if job.request_name == "currency_pairs":
                     print("Done loading Currency-Pairs.")
                     sys.exit(0)
 
+                # TODO: Philipp: Check out if loops work without continues.
                 if job.exchanges_with_pairs:
                     for exchange in job.exchanges_with_pairs.copy():
                         # Delete exchanges with no API for that request type
-                        if job.request_name not in list(exchange.file['requests'].keys()):
+                        if job.request_name not in list(exchange.file["requests"].keys()):
                             job.exchanges_with_pairs.pop(exchange)
                             print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
                                   f" removed.")
-                            continue
                         # Delete exchanges with no matching Currency_Pairs
-                        if not job.exchanges_with_pairs[exchange]:
+                        elif not job.exchanges_with_pairs[exchange]:
                             job.exchanges_with_pairs.pop(exchange)
                             print(f"{exchange.name.capitalize()} has no matching currency_pairs.")
-                            continue
-                        # Delete empty jobs, if the previous conditions removed all exchanges
+
+                    # Delete empty jobs, if the previous conditions removed all exchanges
                     if not job.exchanges_with_pairs:
                         jobs.remove(job)
-                        continue
+
                 else:
                     # remove job if initially empty
                     jobs.remove(job)
-                    continue
 
             if jobs:
                 # If there are jobs left, return them
@@ -168,18 +171,23 @@ class Scheduler:
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
         api for all currency pairs is called.
 
-        @param job_list: list of all jobs, including Job-Objects
-        @return job_list with updated exchange_currency_pairs
+        @param job_list: list of all jobs, including Job-Objects.
+        @type job_list: list[Job]
+
+        @return job_list with updated exchange_currency_pairs.
+        @rtype: list[Job]
         """
 
-        async def update_currency_pairs(ex: Exchange):
+        async def update_currency_pairs(ex: Exchange) -> list:
             """
             This method requests the currency_pairs.
 
             @param ex: Current exchange object.
-            @return: Empty list if no response from the exchange.
-            """
+            @type ex: Exchange
 
+            @return: Empty list if no response from the exchange.
+            @rtype: list
+            """
             response = await ex.request_currency_pairs()
             if response[1]:
                 try:
@@ -214,7 +222,8 @@ class Scheduler:
 
     async def request_format_persist(self,
                                      request_table: object,
-                                     exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]):
+                                     exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]) \
+            -> tuple[bool, dict[Exchange, list[ExchangeCurrencyPair]]]:
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -233,6 +242,14 @@ class Scheduler:
                 via **kwargs.
             - The DatabaseHandler will reject to persist new items if any primary key is emtpy.
             - For more detailed instructions, including an example, see into the handbook.
+
+        @param request_table: The database table storing the data.
+        @type request_table: object
+        @param exchanges_with_pairs: The exchanges including currency pairs to be queried and stored.
+        @type exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]
+
+        @return: A bool whether the job has to run again and a list of updated exchanges.
+        @rtype: tuple[bool, dict[Exchange, list[ExchangeCurrencyPair]]]
         """
         table_name = request_table.__tablename__.capitalize()
 

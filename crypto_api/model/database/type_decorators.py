@@ -29,4 +29,4 @@ class UnixTimestamp(TypeDecorator):
         return TimeHelper.from_timestamp(value, TimeUnit.SECONDS)
 
     def process_literal_param(self, value, dialect):
-        pass  # TODO: Improve if this method causes any kind of trouble.
+        pass  # TODO: Abstract method from super class. Fix if it causes trouble...

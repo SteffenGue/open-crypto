@@ -43,6 +43,7 @@ class TimeHelper:
         Get the current datetime (UTC+0).
 
         @return: The current datetime (UTC+0).
+        @rtype: datetime
         """
         return datetime.now(tz=timezone.utc).replace(microsecond=0)
 
@@ -52,8 +53,10 @@ class TimeHelper:
         Get the timestamp of the current datetime (UTC+0).
 
         @param unit: The desired time unit of the timestamp.
+        @type unit: TimeUnit
 
         @return: The timestamp of the current datetime (UTC+0).
+        @rtype: float
         """
         return TimeHelper.to_timestamp(TimeHelper.now(), unit)
 
@@ -63,8 +66,10 @@ class TimeHelper:
         Get a datetime (UTC+0) from a given representation.
 
         @param representation: The string that represents a datetime.
+        @type representation: str
 
         @return: The datetime (UTC+0) of the given representation.
+        @rtype: datetime
         """
         return parse(representation).replace(tzinfo=timezone.utc)
 
@@ -74,9 +79,12 @@ class TimeHelper:
         Get a datetime (UTC+0) from a given timestamp.
 
         @param timestamp: The timestamp whose datetime is to be obtained.
+        @type timestamp: float
         @param unit: The time unit in which the timestamp is given.
+        @type unit: TimeUnit
 
         @return: The datetime (UTC+0) of the given timestamp.
+        @rtype: datetime
         """
         timestamp_in_sec: float = timestamp / (1000 ** int(unit))
         return datetime.fromtimestamp(timestamp_in_sec, tz=timezone.utc)
@@ -87,9 +95,12 @@ class TimeHelper:
         Convert a datetime to a timestamp.
 
         @param date_time: The datetime to be converted.
+        @type date_time: datetime
         @param unit: The desired time unit of the timestamp.
+        @type unit: TimeUnit
 
         @return: The timestamp of the given datetime in the desired time unit.
+        @rtype: float
         """
         return date_time.replace(tzinfo=timezone.utc).timestamp() * (1000 ** int(unit))
 
@@ -99,10 +110,14 @@ class TimeHelper:
         Returns the beginning/end of a period.
 
         @param date_time: The datetime object to be converted.
+        @type date_time: datetime
         @param frequency: The underlying period frequency.
+        @type frequency: str
         @param to_end: boolean, return end of period. Default: True
+        @type to_end: bool
 
         @return: datetime of start/end of period.
+        @rtype: datetime
         """
         # Method creates a tuple with (start, end) of period.
         return period(date_time, TimeHelper.freq_map[frequency])[int(to_end)]

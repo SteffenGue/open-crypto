@@ -5,7 +5,7 @@ import os
 import pathlib
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import dateutil.parser
 import oyaml as yaml
@@ -207,13 +207,16 @@ TYPE_CONVERSION = {
 
 def read_config(file: str = None, section: str = None) -> dict[str, Any]:
     """
-    @param section: str
-        Name of the section the information is stored in.
-    @param file: str
-        Name of the config file.
-    @return: Dict
-        Parameters for the program as a dictionary.
-        Keys are the names of the parameters in the config-file.
+    @param file: Name of the config file.
+    @type file: str
+    @param section: Name of the section the information is stored in.
+    @type section: str
+
+    @return: Parameters for the program as a dictionary.
+             Keys are the names of the parameters in the config-file.
+    @rtype: dict[str, Any]
+
+    @raise KeyError: If the section does not exist in the config.
     """
     if file:
         GlobalConfig().set_file(file)
@@ -227,12 +230,13 @@ def read_config(file: str = None, section: str = None) -> dict[str, Any]:
             print("File not found. Retry!")
             GlobalConfig().set_file()
 
-    config_dict: Dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
+    config_dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
     config_yaml.close()
 
-    if not section:
+    if section is None:
         return config_dict
 
+    # TODO: Philipp: Make recursive function to find key so it works for any search depth?
     for general_section in config_dict.keys():
         if section == general_section:
             return config_dict[general_section]
@@ -241,20 +245,22 @@ def read_config(file: str = None, section: str = None) -> dict[str, Any]:
             if section == nested_section:
                 return config_dict[general_section][nested_section]
 
-    raise Exception()
+    raise KeyError()
 
 
 def yaml_loader(exchange: str):
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
-    @param exchange: str
-        the file name to load (exchange)
-    @return: data: dict
-        returns a dict of the loaded data from the .yaml-file
-    @exceptions Exception: the .yaml file could not be evaluated for a given exchange
+    @param exchange: The file name to load (exchange).
+    @type exchange: str
+
+    @return: Returns a dict of the loaded data from the .yaml-file.
+    @rtype: dict
+
+    @raise Exception: If the .yaml file could not be evaluated for a given exchange.
     """
-    path = read_config(file=None, section='utilities')['yaml_path']
+    path = read_config(file=None, section="utilities")["yaml_path"]
     try:
         with open(path + exchange + ".yaml", "r") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
@@ -271,11 +277,10 @@ def get_exchange_names() -> list[str]:
     requests to. This means if the name of a exchange is not part of the
     list that is returned, the program will not send any request to said
     exchange.
-    @param: session: orm_session
-        Connection to the Database in order to query all ACTIVE exchange.
-    @return: List[str]
-        Names from all the exchange, which have a .yaml-file in
-        the directory described in YAML_PATH.
+
+    @return: Names from all the exchange, which have a .yaml-file in
+             the directory described in YAML_PATH.
+    @rtype: list[str]
     """
     yaml_path = read_config(file=None, section="utilities")["yaml_path"]
     path_to_resources: Path = pathlib.Path().parent.absolute()
