@@ -21,7 +21,6 @@ class TimeUnit(IntEnum):
     """
     An enumeration to indicate the unit of timestamps.
     """
-
     SECONDS = 0
     MILLISECONDS = 1
     MICROSECONDS = 2
@@ -36,8 +35,7 @@ class TimeHelper:
 
     freq_map is used to convert specific strings from plural into singular.
     """
-
-    freq_map: dict = {'minutes': 'minute', 'hours': 'hour', 'days': 'day', 'weeks': 'week', 'months': 'month'}
+    freq_map: dict = {"minutes": "minute", "hours": "hour", "days": "day", "weeks": "week", "months": "month"}
 
     @staticmethod
     def now() -> datetime:
@@ -100,10 +98,11 @@ class TimeHelper:
         """
         Returns the beginning/end of a period.
 
-        @param date_time: The datetime object to be converted
-        @param frequency: The underlying period frequency
+        @param date_time: The datetime object to be converted.
+        @param frequency: The underlying period frequency.
         @param to_end: boolean, return end of period. Default: True
+
         @return: datetime of start/end of period.
         """
         # Method creates a tuple with (start, end) of period.
-        return period(date_time, TimeHelper.freq_map[frequency])[to_end.__int__()]
+        return period(date_time, TimeHelper.freq_map[frequency])[int(to_end)]

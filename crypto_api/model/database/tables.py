@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, aliased
 from sqlalchemy_utils import create_view
-import datetime
+
 from model.database.type_decorators import UnixTimestamp
 
 Base = declarative_base()  # pylint: disable=invalid-name
@@ -20,8 +20,8 @@ class Exchange(Base):
     name: str
         The explicit name of the exchange defined in the .yaml-file.
     """
-
     __tablename__ = "exchanges"
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
@@ -48,7 +48,6 @@ class Currency(Base):
     symbol: str
         Abbreviation of the currency
     """
-
     __tablename__ = "currencies"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -83,7 +82,6 @@ class ExchangeCurrencyPair(Base):
     __table_args__:
         First ID must be unequal to Second ID.
     """
-
     __tablename__ = "exchanges_currency_pairs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -137,7 +135,6 @@ class Ticker(Base):
     TODO: Describe __table_args__ as soon as the database structure is defined.
     __table_args__ = ??
     """
-
     __tablename__ = "tickers"
 
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
@@ -168,7 +165,6 @@ class HistoricRate(Base):
     object as normal, but print "ID, Exchange: First-Second, $ Close at time" in clear names for better
     readability.
     """
-
     __tablename__ = "historic_rates"
 
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
@@ -245,7 +241,6 @@ class OrderBook(Base):
     the order book at given time. I.e position 0 contains the highest Bid and the lowest Ask. The ID is gathered
     directly from the exchange and is used to identify to identify changes in the order-book.
     """
-
     __tablename__ = "order_books"
 
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
@@ -423,4 +418,3 @@ class HistoricRateView(Base):
         ),
         metadata=Base.metadata
     )
-

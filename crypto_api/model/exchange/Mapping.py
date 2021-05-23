@@ -1,5 +1,5 @@
 from collections import deque
-from typing import Collection, Dict, Optional
+from typing import Collection, Optional
 
 from model.utilities.utilities import TYPE_CONVERSION
 
@@ -31,9 +31,8 @@ def convert_type(value, types_queue: deque):
 
         params = list()
 
-        if conversion["params"]:
-            for number in range(0, conversion["params"]):
-                params.append(types_queue.popleft())
+        for number in range(conversion["params"]):
+            params.append(types_queue.popleft())
 
         # Change here to avoid "None" as result value in the params when no value to convert is needed (i.e. when
         # methods are called with ("none", ...).
@@ -96,7 +95,7 @@ class Mapping:
         self.path = path
         self.types = types
 
-    def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: str = None) -> Optional[Dict]:
+    def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: str = None) -> Optional[dict]:
         """
         Traverses the path on a response.
 
@@ -130,11 +129,8 @@ class Mapping:
         elif is_scalar(response):
             return None
         else:  # Hier editiert für Kraken sonderfall
-            if isinstance(response, dict):
-                if path_element in response.keys():
-                    traversed = response[path_element]
-                else:
-                    return None
+            if isinstance(response, dict) and path_element not in response.keys():
+                return None
             else:
                 traversed = response[path_element]
 
@@ -174,9 +170,9 @@ class Mapping:
 
         if not path_queue:
             # TODO: after integration tests, look if clause for first and second currency can be deleted!
-            if types_queue[0] == 'first_currency':
+            if types_queue[0] == "first_currency":
                 return currency_pair_info[0]
-            elif types_queue[0] == 'second_currency':
+            elif types_queue[0] == "second_currency":
                 return currency_pair_info[1]
             return convert_type(None, types_queue)
 
@@ -270,7 +266,7 @@ def is_scalar(value) -> bool:
     if isinstance(value, str):
         return True
 
-    try:
+    try:  # TODO: Check if return isinstance(value, Iterator) works
         iter(value)
         return False
     except TypeError:

@@ -187,7 +187,7 @@ class Scheduler:
                     self.database_handler.persist_exchange_currency_pairs(formatted_response,
                                                                           is_exchange=ex.is_exchange)
                 except (MappingNotFoundException, TypeError, KeyError):
-                    logging.exception("Error updating currency_pairs for {}".format(ex.name.capitalize()))
+                    logging.exception(f"Error updating currency_pairs for {ex.name.capitalize()}")
                     return []
             else:
                 return []
@@ -199,16 +199,16 @@ class Scheduler:
 
             print("Loading and/or updating exchange currency pairs..")
             for exchange in exchanges:
-                if job_params['update_cp'] or job.request_name == 'currency_pairs' or \
+                if job_params["update_cp"] or job.request_name == "currency_pairs" or \
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                     await update_currency_pairs(exchange)
 
-                if job.request_name != 'currency_pairs':
+                if job.request_name != "currency_pairs":
                     job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
                         exchange.name,
-                        job_params['currency_pairs'],
-                        job_params['first_currencies'],
-                        job_params['second_currencies']
+                        job_params["currency_pairs"],
+                        job_params["first_currencies"],
+                        job_params["second_currencies"]
                     )
         return job_list
 
