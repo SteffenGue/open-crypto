@@ -126,6 +126,7 @@ requests:
             - interval
             - 1000 #max interval 60 DAYS!
             - from_timestamp
+            - 0
             - "%Y-%m-%dT%H:%M:%S%Z"
 #          default: "2020-03-19T17:25:00.000Z"
         sort:

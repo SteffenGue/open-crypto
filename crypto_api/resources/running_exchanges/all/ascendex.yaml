@@ -179,8 +179,9 @@ requests:
         - data
         - ts
       type:
-        - int
-        - utcfromtimestampms
+        - float
+        - from_timestamp
+        - 1
     - key: open
       path:
         - data
