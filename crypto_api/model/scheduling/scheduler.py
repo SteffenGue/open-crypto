@@ -1,7 +1,8 @@
 import asyncio
 import logging
 import sys
-from typing import Callable, Any, Optional
+from asyncio import Future
+from typing import Callable, Any, Optional, Union, Coroutine
 
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
@@ -42,8 +43,8 @@ class Scheduler:
         Otherwise the scheduler will wait x minutes until it starts the jobs again.
         The interval begins counting down at the start of the current iteration.
         """
-        runs = [self.run(job) for job in self.job_list]
-        # runs.append(asyncio.BoundedSemaphore(20))
+        runs: list[Union[Coroutine, Future]] = [self.run(job) for job in self.job_list]
+
         if isinstance(self.frequency, (int, float)):
             runs.append(asyncio.sleep(self.frequency))
 
@@ -295,7 +296,7 @@ class Scheduler:
         if request_table.__name__ == "HistoricRate":
             updated_job: dict[Exchange, Any] = {}
             for exchange, value in counter.items():
-                if value:  # TODO: Intervals are None if value in config is not allowed! Weird behavior I guess
+                if value:
                     exchange.decrease_interval()
                     updated_job[exchange] = value
                 elif exchange.interval != "days":  # if days had no results, kick out exchange

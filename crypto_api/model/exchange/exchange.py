@@ -585,7 +585,6 @@ class Exchange:
         return urls
 
     def format_currency_pairs(self, response: Tuple[str, Dict]) -> Optional[Iterator[Tuple[str, str, str]]]:
-        # ToDo: Error Handling
         """
         Extracts the currency-pairs of out of the given json-response
         that was collected from the Rest-API of this exchange.

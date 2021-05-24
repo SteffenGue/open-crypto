@@ -35,7 +35,13 @@ class TimeHelper:
 
     freq_map is used to convert specific strings from plural into singular.
     """
-    freq_map: dict = {"minutes": "minute", "hours": "hour", "days": "day", "weeks": "week", "months": "month"}
+    freq_map: dict = {
+        "minutes": "minute",
+        "hours": "hour",
+        "days": "day",
+        "weeks": "week",
+        "months": "month"
+    }
 
     @staticmethod
     def now() -> datetime:
@@ -45,7 +51,7 @@ class TimeHelper:
         @return: The current datetime (UTC+0).
         @rtype: datetime
         """
-        return datetime.now(tz=timezone.utc).replace(microsecond=0)
+        return datetime.now(tz=timezone.utc)
 
     @staticmethod
     def now_timestamp(unit: TimeUnit = TimeUnit.SECONDS) -> float:
