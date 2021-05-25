@@ -298,7 +298,7 @@ requests:
           type: str
           allowed:
             minutes: M1
-            hours: H1
+#            hours: H1
             days: D1
             weeks: D7
             months: 1M
@@ -314,6 +314,7 @@ requests:
             - interval
             - 1000
             - from_timestamp
+            - 0
             - "%Y-%m-%dT%H:%M:%S.%fZ"
         till:
           function: last_timestamp

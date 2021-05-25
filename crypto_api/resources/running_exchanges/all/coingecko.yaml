@@ -31,8 +31,7 @@ requests:
         type:
           - str
       - key: currency_pair_second
-        path:
-          - []
+        path: []
         type:
           - none
           - constant

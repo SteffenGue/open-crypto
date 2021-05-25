@@ -124,10 +124,17 @@ requests:
             - datetime
             - timedelta
             - interval
-            - 1000 #max interval 60 DAYS!
+            - 1000
             - from_timestamp
-            - "%Y-%m-%dT%H:%M:%S%Z"
-#          default: "2020-03-19T17:25:00.000Z"
+            - 0
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
+#            - datetime
+#            - timedelta
+#            - interval
+#            - 1000 #max interval 60 DAYS!
+#            - from_timestamp
+#            - 0
+#            - "%Y-%m-%dT%H:%M:%S.%Z"
         sort:
           default: DESC
     response:
