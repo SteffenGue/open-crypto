@@ -25,19 +25,18 @@ def _get_exchange_currency_pair(
     Checks if there is a currency pair in the database with the given parameters and
     returns it if so.
 
-    @param session: Session
-        sqlalchemy-session.
-    @param exchange_name: str
-        Name of the exchange.
-    @param first_currency_name: str
-        Name of the first currency in the currency pair.
-    @param second_currency_name: str
-        Name of the second currency in the currency pair.
-    @return:
-        The ExchangeCurrencyPair which fulfills all the requirements or None
-        if no such ExchangeCurrencyPair exists.
+    @param session: sqlalchemy-session.
+    @type session: Session
+    @param exchange_name: Name of the exchange.
+    @type exchange_name: str
+    @param first_currency_name: Name of the first currency in the currency pair.
+    @type first_currency_name: str
+    @param second_currency_name: Name of the second currency in the currency pair.
+    @type second_currency_name: str
+    @return: The ExchangeCurrencyPair which fulfills all the requirements or None
+             if no such ExchangeCurrencyPair exists.
+    @rtype: Optional[ExchangeCurrencyPair]
     """
-
     if exchange_name is None or first_currency_name is None or second_currency_name is None:
         return None
 
@@ -91,35 +90,38 @@ class DatabaseHandler:
         Initializes the sessionFactory with the created engine.
         Engine variable is no attribute and currently only exists in the constructor.
 
-        @param metadata: Metadata
-            Information about the table-structure of the database.
-            See tables.py for more information.
-        @param sqltype: atr
-            Type of the database sql-dialect. ('postgresql, mariadb, mysql, sqlite' for us)
-        @param client: str
-            Name of the Client which is used to connect to the database.
-        @param user_name: str
-            Username under which this program connects to the database.
-        @param password: str
-            Password for this username.
-        @param host: str
-            Hostname or host-address from the database.
-        @param port: str
-            Connection-Port (usually 5432 for Postgres)
-        @param db_name: str
-            Name of the database.
+        @param metadata: Metadata Information about the table-structure of the database.
+                        See tables.py for more information.
+        @type metadata: MetaData
+        @param sqltype: Type of the database sql-dialect. ('postgresql, mariadb, mysql, sqlite' for us)
+        @type sqltype: str
+        @param client: Name of the Client which is used to connect to the database.
+        @type client: str
+        @param user_name: Username under which this program connects to the database.
+        @type user_name: str
+        @param password: Password for this username.
+        @type password: str
+        @param host: Hostname or host-address from the database.
+        @type host: str
+        @param port: Connection-Port (usually 5432 for Postgres)
+        @type port: str
+        @param db_name: Name of the database.
+        @type db_name: str
+        @param path: Path to the database directory.
+        @type path: str
+        @param debug: Indicates if the debug mode is on.
+        @type debug: bool
         """
-
         if not path:
             path = os.getcwd()
 
-        conn_strings = {'debug': "sqlite://",
-                        'sqlite': f"{sqltype}:///{path}/{db_name}.db",
-                        'postgresql': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
-                        'mariadb': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
-                        'mysql': f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"}
+        conn_strings = {"debug": "sqlite://",
+                        "sqlite": f"{sqltype}:///{path}/{db_name}.db",
+                        "postgresql": f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
+                        "mariadb": f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}",
+                        "mysql": f"{sqltype}+{client}://{user_name}:{password}@{host}:{port}/{db_name}"}
         if debug:
-            conn_string = conn_strings['debug']
+            conn_string = conn_strings["debug"]
         else:
             conn_string = conn_strings[sqltype]
 
@@ -157,14 +159,14 @@ class DatabaseHandler:
         finally:
             session.close()
 
-    def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
+    def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> list[ExchangeCurrencyPair]:
         """
-        @param exchange_name:
-            Name of the exchange that the currency-pairs should be queried for.
-        @return:
-            List of all currency-pairs for the given exchange.
-        """
+        @param exchange_name: Name of the exchange that the currency-pairs should be queried for.
+        @type exchange_name: str
 
+        @return: List of all currency-pairs for the given exchange.
+        @rtype: list[ExchangeCurrencyPair]
+        """
         with self.session_scope() as session:
             # session.expire_on_commit = False
             currency_pairs = list()
@@ -175,22 +177,23 @@ class DatabaseHandler:
                 session.expunge_all()
             return currency_pairs
 
-    def get_currency_pairs_with_first_currency(self, exchange_name: str, currency_names: [str]) \
-            -> List[ExchangeCurrencyPair]:
+    def get_currency_pairs_with_first_currency(self, exchange_name: str, currency_names: list[str]) \
+            -> list[ExchangeCurrencyPair]:
         """
         Returns all currency-pairs for the given exchange that have any of the given currencies
         as the first currency.
 
-        @param exchange_name: str
-            Name of the exchange.
-        @param currency_names: List[str]
-            List of the currency names that are viable as first-currencies.
-        @return:
-            List of the currency-pairs which start with any of the currencies in currency_names
-            on the given exchange.
-            List is empty if there are no currency pairs in the database which fulfill the requirements.
+        @param exchange_name: Name of the exchange.
+        @type exchange_name: str
+        @param currency_names: List of the currency names that are viable as first-currencies.
+        @type currency_names: list[str]
+
+        @return: List of the currency-pairs which start with any of the currencies in currency_names
+                 on the given exchange.
+                 List is empty if there are no currency pairs in the database which fulfill the requirements.
+        @rtype: list[ExchangeCurrencyPair]
         """
-        all_found_currency_pairs: List[ExchangeCurrencyPair] = list()
+        all_found_currency_pairs: list[ExchangeCurrencyPair] = list()
         if exchange_name is not None and exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
@@ -209,23 +212,23 @@ class DatabaseHandler:
                 session.expunge_all()
         return all_found_currency_pairs
 
-    def get_currency_pairs_with_second_currency(self, exchange_name: str, currency_names: [str]) \
-            -> List[ExchangeCurrencyPair]:
+    def get_currency_pairs_with_second_currency(self, exchange_name: str, currency_names: list[str]) \
+            -> list[ExchangeCurrencyPair]:
         """
         Returns all currency-pairs for the given exchange that have any of the given currencies
         as the second currency.
 
-        @param exchange_name: str
-            Name of the exchange.
-        @param currency_names: List[str]
-            List of the currency names that are viable as second currencies.
-        @return:
-            List of the currency-pairs which end with any of the currencies in currency_names
-            on the given exchange.
-            List is empty if there are no currency pairs in the database which fulfill the requirements.
-        """
+        @param exchange_name: Name of the exchange.
+        @type exchange_name: str
+        @param currency_names: List of the currency names that are viable as second currencies.
+        @type currency_names: list[str]
 
-        all_found_currency_pairs: List[ExchangeCurrencyPair] = list()
+        @return: List of the currency-pairs which end with any of the currencies in currency_names
+                 on the given exchange.
+                 List is empty if there are no currency pairs in the database which fulfill the requirements.
+        @rtype: list[ExchangeCurrencyPair]
+        """
+        all_found_currency_pairs: list[ExchangeCurrencyPair] = list()
         if exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
@@ -245,20 +248,21 @@ class DatabaseHandler:
                 session.expunge_all()
         return all_found_currency_pairs
 
-    def get_currency_pairs(self, exchange_name: str, currency_pairs: List[Dict[str, str]]) \
-            -> List[ExchangeCurrencyPair]:
+    def get_currency_pairs(self, exchange_name: str, currency_pairs: list[dict[str, str]]) \
+            -> list[ExchangeCurrencyPair]:
         """
         Returns all ExchangeCurrencyPairs for the given exchange if they fit any
         currency pairs in the given list of dictionaries.
 
-        @param exchange_name: str
-            Name of the exchange.
-        @param currency_pairs: str
-            List of the currency pairs that should be found.
-            Each dictionary should contain the keys 'first' and 'second'
-            which contain the names of the currencies.
-        @return:
-            List of all found currency pairs on this exchange based on the given pair combinations.
+        @param exchange_name: Name of the exchange.
+        @type exchange_name: str
+        @param currency_pairs: List of the currency pairs that should be found.
+                               Each dictionary should contain the keys 'first' and 'second'
+                               which contain the names of the currencies.
+        @type currency_pairs: list[dict[str, str]]
+
+        @return: List of all found currency pairs on this exchange based on the given pair combinations.
+        @rtype: list[ExchangeCurrencyPair]
         """
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
 
@@ -570,10 +574,10 @@ class DatabaseHandler:
                            query_everything: bool,
                            from_timestamp: datetime = None,
                            to_timestamp: datetime = TimeHelper.now(),
-                           exchanges: List[str] = None,
-                           currency_pairs: List[Dict[str, str]] = None,
-                           first_currencies: List[str] = None,
-                           second_currencies: List[str] = None):
+                           exchanges: list[str] = None,
+                           currency_pairs: list[dict[str, str]] = None,
+                           first_currencies: list[str] = None,
+                           second_currencies: list[str] = None):
 
         """
              Queries based on the parameters readable database data and returns it.
@@ -592,29 +596,31 @@ class DatabaseHandler:
                  exchange AND (first OR second OR pair) AND from_time AND to_time
 
              See csv-config for details of how to write/give parameters.
-             @param db_table: object
-                 The respective object of the table to be queried (i.e. Ticker, Trade,...).
-             @param query_everything: bool
-                 If everything in the database should be queried.
-             @param from_timestamp: datetime
-                 Minimum date for the start of the request.
-             @param to_timestamp: datetime
-                 Maximum date for the start of the request.
-             @param exchanges: List[str]
-                 List of exchanges of which the tuple should be queried.
-             @param currency_pairs: List[Dict[str, str]]
-                 List of specific currency pairs that should be queried.
-                 Dict needs to have the following structure:
-                     - first: 'Name of the first currency'
-                       second: 'Name of the second currency'
-             @param first_currencies: List[str]
-                 List of viable currencies for the first currency in a currency pair.
-             @param second_currencies: List[str]
-                 List of viable currencies for the second currency in a currency pair.
-             @return:
-                 List of readable database tuple.
-                 List might be empty if database is empty or there where no ExchangeCurrencyPairs
-                 which fulfill the above stated requirements.
+
+             @param db_table: The respective object of the table to be queried.
+             @type db_table: Union[HistoricRate, OrderBook, Ticker, Trade]
+             @param query_everything: If everything in the database should be queried.
+             @type query_everything: bool
+             @param from_timestamp: Minimum date for the start of the request.
+             @type from_timestamp: datetime
+             @param to_timestamp: Maximum date for the start of the request.
+             @type to_timestamp: datetime
+             @param exchanges: List of exchanges of which the tuple should be queried.
+             @type exchanges: list[str]
+             @param currency_pairs: List of specific currency pairs that should be queried.
+                                    Dict needs to have the following structure:
+                                       - first: 'Name of the first currency'
+                                       - second: 'Name of the second currency'
+             @type currency_pairs: list[dict[str, str]]
+             @param first_currencies: List of viable currencies for the first currency in a currency pair.
+             @type first_currencies: list[str]
+             @param second_currencies: List of viable currencies for the second currency in a currency pair.
+             @type second_currencies: list[str]
+
+             @return: List of readable database tuple.
+                      List might be empty if database is empty or there where no ExchangeCurrencyPairs
+                      which fulfill the above stated requirements.
+             @rtype: TODO: Fill out
              """
 
         with self.session_scope() as session:
@@ -622,9 +628,9 @@ class DatabaseHandler:
             second = aliased(Currency)
             # col_names = [key.name for key in inspect(db_table).columns]
 
-            data: Query = session.query(Exchange.name.label('exchange'),
-                                        first.name.label('first_currency'),
-                                        second.name.label('second_currency'),
+            data: Query = session.query(Exchange.name.label("exchange"),
+                                        first.name.label("first_currency"),
+                                        second.name.label("second_currency"),
                                         db_table). \
                 join(ExchangeCurrencyPair, db_table.exchange_pair_id == ExchangeCurrencyPair.id). \
                 join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id). \
@@ -646,7 +652,7 @@ class DatabaseHandler:
                     if second_currencies:
                         second_currency_names = [name.upper() for name in second_currencies]
                     if currency_pairs:
-                        currency_pairs_names = [(pair['first'].upper(), pair['second'].upper()) for pair in
+                        currency_pairs_names = [(pair["first"].upper(), pair["second"].upper()) for pair in
                                                 currency_pairs]
 
                 result = data.filter(and_(
@@ -667,15 +673,19 @@ class DatabaseHandler:
             session.expunge_all()
         return result
 
-    def get_first_timestamp(self, table: Union[HistoricRate, OrderBook, Ticker, Trade], exchange_pair_id: int):
+    def get_first_timestamp(self, table: Union[HistoricRate, OrderBook, Ticker, Trade], exchange_pair_id: int) \
+            -> datetime:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old or
         otherwise the timestamp from now.
 
         @param table: The database table to be queried.
+        @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
         @param exchange_pair_id: The exchange_pair_id of interest.
+        @type exchange_pair_id: int
 
         @return: datetime: Earliest timestamp of specified table or timestamp from now.
+        @rtype: datetime
         """
         with self.session_scope() as session:
             (earliest_timestamp,) = session \

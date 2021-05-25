@@ -2,12 +2,12 @@ import os
 import sys
 
 """
-Global config built after the Singelton principle. That is, there can only exists ONE instance of a class or,
+Global config built after the Singleton pattern. That is, there can only exists ONE instance of a class or,
 equivalently, all instances share the same state. 
 
 The config-file will be set and read only from utilities.read_config().
-
 """
+
 
 class GlobalConfig(object):
     class __GlobalConfig:
@@ -26,23 +26,29 @@ class GlobalConfig(object):
             """
             Sets self.__filename to either the variable given or an input string from the command prompt.
             The filename will be augmented with ".yaml" if needed.
-            :param file: name of the config
+
+            @param file: name of the config.
+            @type file: str
             """
             if not file:
                 file = input("Enter config file name: ").lower()
-                if file in ['quit', 'exit']:
+                if file in ["quit", "exit"]:
                     sys.exit(0)
-            if '.yaml' not in file:
-                file = file + '.yaml'
+            if ".yaml" not in file:
+                file = file + ".yaml"
             self.__filename = file
 
         @property
-        def file(self, file: str = None):
+        def file(self, file: str = None) -> str:
             """
             Returns the complete path to the config file. If the attribute self.__filename is not set yet,
             calls the method self.set_file.
-            :param file: name of the config-file
-            :return: str: compelete path to config-file
+
+            @param file: name of the config-file.
+            @type file: str
+
+            @return: complete path to config-file.
+            @rtype: str
             """
             if not self.__filename:
                 self.set_file(file=file)
@@ -59,5 +65,3 @@ class GlobalConfig(object):
         if not GlobalConfig.instance:
             GlobalConfig.instance = GlobalConfig.__GlobalConfig()
         return GlobalConfig.instance
-
-#
