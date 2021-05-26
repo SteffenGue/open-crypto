@@ -134,7 +134,7 @@ class DatabaseHandler:
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
-            print("View already exists.")
+            print("Database Views already exist. If you need to alter or recreate tables delete all views manually.")
             logging.warning("Views already exist. If you need to alter or recreate tables delete all views manually.")
             pass
         self.sessionFactory = sessionmaker(bind=engine)
