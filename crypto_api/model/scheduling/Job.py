@@ -16,12 +16,12 @@ class Job:
         """
         Initializer of a job.
 
-        @param name:
-            Name of the job taken out of config-file
-        @param job_params:
-            All job parameter from the config-file
-        @param exchanges_with_pairs:
-            Dictionary for each exchange and it's currency pairs that have to be queried from it.
+        @param name: Name of the job taken out of config-file
+        @type name: str
+        @param job_params: All job parameter from the config-file
+        @type job_params: dict
+        @param exchanges_with_pairs: Dict for each exchange and it's currency pairs that have to be queried from it.
+        @type exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]
         """
         self.name = name
         self.request_name = job_params["yaml_request_name"]

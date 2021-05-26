@@ -12,7 +12,7 @@ general:
     timeout: 10
     interval: days
   utilities:
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
     enable_logging: false
 
 jobs:
@@ -20,14 +20,65 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
+#      - coindcx
       - therocktrading
+      - hitbtc
+## Europa
+#      - bitstamp
+#      - cexio
+#      - btc-alpha
+#      - tidex
+#      - coinegg
+##      - coinfloor
+#      - hitbtc
+#      - coinfield
+#      - bitbay
+#      - p2pb2b
+#      - exrates
+#      - coinsbit
+## USA
+#      - bittrex
+#      - okcoin
+#      - poloniex
+#      - coinbase
+#      - gemini
+#      - gateio
+### Japan
+#      - zaif
+##      - bitbank
+## South Korea
+#      - korbit
+##      - coinone
+#      - upbit
+#      - gopax
+#      - bithumb
+## Hong Kong
+##      - rightbtc
+#      - zbg
+#      - coinall
+#      - bw
+## China
+#      - exx
+#      - kucoin
+#      - zb
+#      - lbank
+##      - cointiger
+#      - catex
+## Brazil
+#      - bleutrade
+#      - braziliex
+
     excluded:
 #      - coingecko
 
     currency_pairs:
 #      - all
         - first: btc
-          second: eur
+          second: usdt
+#        - first: btc
+#          second: usdt
+        - first: eth
+          second: btc
 
     first_currencies: null
     second_currencies: null
