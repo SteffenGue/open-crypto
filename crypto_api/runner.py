@@ -1,10 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 import os
 import shutil
 from typing import Dict
 
 import main
 from export import CsvExport, database_session
-from model.database.tables import *
 from model.utilities.utilities import read_config
 
 PATH = os.getcwd()
