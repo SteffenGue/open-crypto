@@ -1,0 +1,23 @@
+image: "python:3.7"
+
+before_script:
+  - python --version
+  - pip install pylint
+  - pip install pytest
+  - pip install .
+
+stages:
+  - static_analysis
+  - test
+
+linting:
+  stage: static_analysis
+  script:
+  - pylint -d C0301,W0511 ./**/*.py
+  allow_failure: true
+
+unit_testing:
+  stage: test
+  script:
+  - export PYTHONPATH="./crypto_api"
+  - pytest -v ./tests
