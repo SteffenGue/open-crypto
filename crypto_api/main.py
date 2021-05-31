@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 import asyncio
 import logging
 import os
@@ -41,10 +47,10 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
 
     for job in job_config.keys():
         job_params: Dict = job_config[job]
-        exchange_names = job_params['exchanges'] if job_params['exchanges'][0] != 'all' else get_exchange_names()
+        exchange_names = job_params["exchanges"] if job_params["exchanges"][0] != "all" else get_exchange_names()
 
-        if job_params.get('excluded'):
-            exchange_names = [item for item in exchange_names if item not in job_params.get('excluded', [])]
+        if job_params.get("excluded"):
+            exchange_names = [item for item in exchange_names if item not in job_params.get("excluded", [])]
 
         exchange_names = [yaml_loader(exchange) for exchange in exchange_names if yaml_loader(exchange) is not None]
 
@@ -62,18 +68,32 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
 
 
 def init_logger(path):
-    if not read_config(file=None, section='utilities')['enable_logging']:
+    """
+    TODO: Fill out
+
+    @param path:
+    @return:
+    """
+    if not read_config(file=None, section="utilities")["enable_logging"]:
         logging.disable()
     else:
-        if not os.path.exists(path + '/resources/log/'):
-            os.makedirs('resources/log/')
+        if not os.path.exists(path + "/resources/log/"):
+            os.makedirs("resources/log/")
         logging.basicConfig(
-            filename=path + f'/resources/log/{TimeHelper.now().strftime("%Y-%m-%d_%H-%M-%S")}.log',
+            filename=path + f"/resources/log/{TimeHelper.now().strftime('%Y-%m-%d_%H-%M-%S')}.log",
             level=logging.ERROR)
 
 
 def handler(ex_type, ex_value, ex_traceback):
-    logging.exception(f'Uncaught exception: {str(ex_type)}: {str(ex_value)}')
+    """
+    TODO: Fill out
+
+    @param ex_type:
+    @param ex_value:
+    @param ex_traceback:
+    @return:
+    """
+    logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
 
 async def main(database_handler: DatabaseHandler):
@@ -87,23 +107,23 @@ async def main(database_handler: DatabaseHandler):
     """
     config = read_config(file=None, section=None)
 
-    logging.info('Loading jobs.')
-    jobs = await initialize_jobs(job_config=config['jobs'],
-                                 timeout=config['general']['operation_settings']['timeout'],
-                                 interval=config['general']['operation_settings']['interval'],
+    logging.info("Loading jobs.")
+    jobs = await initialize_jobs(job_config=config["jobs"],
+                                 timeout=config["general"]["operation_settings"]["timeout"],
+                                 interval=config["general"]["operation_settings"]["interval"],
                                  db_handler=database_handler)
-    frequency = config['general']['operation_settings']['frequency']
-    logging.info('Configuring Scheduler.')
+    frequency = config["general"]["operation_settings"]["frequency"]
+    logging.info("Configuring Scheduler.")
     scheduler = Scheduler(database_handler, jobs, frequency)
     await scheduler.validate_job()
 
-    desc = f'{", ".join([job.name.capitalize() for job in jobs])} were created and will run every {frequency} minute(s).'
+    desc = f"{', '.join([job.name.capitalize() for job in jobs])} were created and will run every {frequency} minute(s)."
 
     print(desc)
     logging.info(desc)
 
     while True:
-        if frequency == 'once':
+        if frequency == "once":
             loop = asyncio.get_event_loop()
             try:
                 loop.run_until_complete(await scheduler.start())
@@ -112,24 +132,29 @@ async def main(database_handler: DatabaseHandler):
         else:
             try:
                 await scheduler.start()
-            except Exception as e:
-                logging.exception(TimeHelper.now(), e)
-                pass
+            except Exception as ex:
+                logging.exception(TimeHelper.now(), ex)
 
 
 def run(path: str = None):
+    """
+    TODO: Fill out.
+
+    @param path:
+    @return:
+    """
     sys.excepthook = handler
     init_logger(path)
 
-    logging.info('Reading Database Configuration')
-    db_params = read_config(file=None, section='database')
+    logging.info("Reading Database Configuration")
+    db_params = read_config(file=None, section="database")
 
-    logging.info('Establishing Database Connection')
+    logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
 
     # Windows Bug I don't really understand. See Github Issue:
     # https: // github.com / encode / httpx / issues / 914
-    if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
+    if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
     # ToDo: diese Methode genauso verlässlich? -> Try Except um scheduler.start()
