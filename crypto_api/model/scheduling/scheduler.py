@@ -127,47 +127,46 @@ class Scheduler:
         @return: List of jobs, cleaned by empty or invalid jobs
         @rtype: list[Job]
         """
-        if jobs:
-            for job in jobs:
-                if job.request_name == "currency_pairs":
-                    print("Done loading Currency-Pairs.")
-                    sys.exit(0)
-
-                # TODO: Philipp: Check out if loops work without continues.
-                if job.exchanges_with_pairs:
-                    for exchange in job.exchanges_with_pairs.copy():
-                        # Delete exchanges with no API for that request type
-                        if job.request_name not in list(exchange.file["requests"].keys()):
-                            job.exchanges_with_pairs.pop(exchange)
-                            print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
-                                  f" removed.")
-                        # Delete exchanges with no matching Currency_Pairs
-                        elif not job.exchanges_with_pairs[exchange]:
-                            job.exchanges_with_pairs.pop(exchange)
-                            print(f"{exchange.name.capitalize()} has no matching currency_pairs.")
-
-                    # Delete empty jobs, if the previous conditions removed all exchanges
-                    if not job.exchanges_with_pairs:
-                        jobs.remove(job)
-
-                else:
-                    # remove job if initially empty
-                    jobs.remove(job)
-
-            if jobs:
-                # If there are jobs left, return them
-                return jobs
-            else:
-                # Reentry the method to get into the first else (down) condition and shut down process
-                self.remove_invalid_jobs(jobs)
-
-        else:
+        if not jobs:
             logging.error("No or invalid Jobs.")
 
             print("\n No or invalid Jobs. This error occurs when the job list is empty due to no \n"
-                  "matching currency pairs found for a all exchanges. Please check your \n"
+                  "matching currency pairs found for all exchanges. Please check your \n"
                   "parameters in the configuration.")
             sys.exit(0)
+
+        for job in jobs:
+            if job.request_name == "currency_pairs":
+                print("Done loading Currency-Pairs.")
+                sys.exit(0)
+
+            # TODO: Philipp: Check out if loops work without continues.
+            if job.exchanges_with_pairs:
+                for exchange in job.exchanges_with_pairs.copy():
+                    # Delete exchanges with no API for that request type
+                    if job.request_name not in list(exchange.file["requests"].keys()):
+                        job.exchanges_with_pairs.pop(exchange)
+                        print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
+                              f" removed.")
+                    # Delete exchanges with no matching Currency_Pairs
+                    elif not job.exchanges_with_pairs[exchange]:
+                        job.exchanges_with_pairs.pop(exchange)
+                        print(f"{exchange.name.capitalize()} has no matching currency_pairs.")
+
+                # Delete empty jobs, if the previous conditions removed all exchanges
+                if not job.exchanges_with_pairs:
+                    jobs.remove(job)
+
+            else:
+                # remove job if initially empty
+                jobs.remove(job)
+
+        if jobs:
+            # If there are jobs left, return them
+            return jobs
+        else:
+            # Reentry the method to get into the first else (down) condition and shut down process
+            self.remove_invalid_jobs(jobs)
 
     # ToDo: Asynchronicity.
     async def get_currency_pairs(self, job_list: list[Job], *args) -> list[Job]:
@@ -278,17 +277,17 @@ class Scheduler:
 
             if found_exchange:
                 try:
-                    formatted_response, mappings = found_exchange.format_data(request_table.__tablename__,
-                                                                              response[1:],
-                                                                              start_time=start_time,
-                                                                              time=response_time)
+                    formatted_response = found_exchange.format_data(request_table.__tablename__,
+                                                                    response[1:],
+                                                                    start_time=start_time,
+                                                                    time=response_time)
 
                     if formatted_response:
                         counter[found_exchange] = self.database_handler.persist_response(exchanges_with_pairs,
                                                                                          found_exchange,
                                                                                          request_table,
-                                                                                         formatted_response,
-                                                                                         mappings)
+                                                                                         formatted_response)
+
                 except (MappingNotFoundException, TypeError, KeyError):
                     logging.exception(f"Exception formatting or persisting data for {found_exchange.name}")
                     continue

@@ -267,6 +267,8 @@ class Exchange:
         @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
         """
+        print("Requesting Data..")
+
         request_name = request_table.__tablename__
 
         self.request_urls = self.extract_request_urls(self.file["requests"][request_name],
@@ -274,81 +276,68 @@ class Exchange:
                                                       request_table=request_table,
                                                       currency_pairs=currency_pairs)
 
-        if request_name in self.request_urls.keys() and self.request_urls[request_name]:
-
-            request_url_and_params = self.request_urls[request_name]
-            responses = dict()
-            params = request_url_and_params["params"]
-            pair_template_dict = request_url_and_params["pair_template"]
-            url: str = request_url_and_params["url"]
-
-            self.rate_limit = self.rate_limit if self.rate_limit and len(currency_pairs) >= self.rate_limit else 0
-
-            # when there is no pair formatting section then all ticker data can be accessed with one request
-            if pair_template_dict:
-                pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
-
-            async with aiohttp.ClientSession() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 1000)):
-
-                    # # if formatted currency pair needs to be a parameter
-                    # if 'alias' in pair_template_dict.keys() and pair_template_dict['alias']:
-                    #     params[pair_template_dict['alias']] = pair_formatted[cp]
-                    #     url_formatted = url
-                    # elif pair_template_dict:
-                    #     url_formatted = url.format(currency_pair=pair_formatted[cp])
-                    # else:
-                    #     url_formatted = url
-
-                    # ToDO: Test method format_request_url
-                    if pair_template_dict:
-                        url_formatted, params_adj = format_request_url(url,
-                                                                       pair_template_dict,
-                                                                       pair_formatted[cp],
-                                                                       cp,
-                                                                       params)
-                    else:
-                        url_formatted, params_adj = url, params
-
-                    try:
-                        response = await session.get(url=url_formatted,
-                                                     params=params_adj,
-                                                     timeout=aiohttp.ClientTimeout(total=self.timeout))
-                        # ToDo: Does every successful response has code 200?
-                        assert (response.status == 200)
-                        # Changes here: deleted await response.json(...) as it throw a ClientPayloadError for extrates.
-                        # However the response.status was 200 and could be persisted into the DB...
-                        response_json = await response.json(content_type=None)
-                        if pair_template_dict:
-                            responses[cp] = response_json
-                        else:  # when ticker data is returned for all available currency pairs at once
-                            responses[None] = response_json
-                            break
-
-                    except (ClientConnectionError, asyncio.TimeoutError):
-                        print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
-                        logging.error(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
-                        # ToDo: Changes for all exception: "return -> responses[cp]= []"
-                        responses[cp] = []
-                    except AssertionError:
-                        print(f"Failed request for {self.name.capitalize()}: {cp}. Status {response.status}.")
-                        responses[cp] = []
-                    except Exception as e:
-                        print(f"Unable to read response from {self.name}. Check exchange config file.\n"
-                              f"Url: {url_formatted}, Parameters: {request_url_and_params['params']}")
-                        print(e)
-
-                        logging.error(f"Unable to read response from {self.name}. Check config file.\n"
-                                      f"Url: {url_formatted}, Parameters: {params}")
-                        responses[cp] = []
-
-                    await asyncio.sleep(self.rate_limit)
-
-            return TimeHelper.now(), self.name, responses
-        else:
-            logging.warning(f"{self.name} has no Ticker request. Check {self.name}.yaml if it should.")
+        if not all((request_name in self.request_urls.keys(), bool(self.request_urls[request_name]))):
+            logging.warning(f"{self.name} has no {request_name} request. Check {self.name}.yaml if it should.")
             print(f"{self.name} has no {request_name} request.")
             return None
+
+        request_url_and_params = self.request_urls[request_name]
+        responses = dict()
+        params = request_url_and_params["params"]
+        pair_template_dict = request_url_and_params["pair_template"]
+        url: str = request_url_and_params["url"]
+
+        self.rate_limit = self.rate_limit if self.rate_limit and len(currency_pairs) >= self.rate_limit else 0
+
+        # when there is no pair formatting section then all ticker data can be accessed with one request
+        if pair_template_dict:
+            pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
+
+        async with aiohttp.ClientSession() as session:
+            for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
+
+                # ToDO: Test method format_request_url
+                if pair_template_dict:
+                    url_formatted, params_adj = format_request_url(url,
+                                                                   pair_template_dict,
+                                                                   pair_formatted[cp],
+                                                                   cp,
+                                                                   params)
+                else:
+                    url_formatted, params_adj = url, params
+
+                try:
+                    response = await session.get(url=url_formatted,
+                                                 params=params_adj,
+                                                 timeout=aiohttp.ClientTimeout(total=self.timeout))
+                    assert (response.status == 200)
+                    # Changes here: deleted await response.json(...) as it throw a ClientPayloadError for extrates.
+                    # However the response.status was 200 and could be persisted into the DB...
+                    response_json = await response.json(content_type=None)
+                    if pair_template_dict:
+                        responses[cp] = response_json
+                    else:  # when ticker data is returned for all available currency pairs at once
+                        responses[None] = response_json
+                        break
+
+                except (ClientConnectionError, asyncio.TimeoutError):
+                    print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
+                    logging.error(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
+                    responses[cp] = []
+                except AssertionError:
+                    print(f"Failed request for {self.name.capitalize()}: {cp}. Status {response.status}.")
+                    responses[cp] = []
+                except Exception as e:
+                    print(f"Unable to read response from {self.name}. Check exchange config file.\n"
+                          f"Url: {url_formatted}, Parameters: {request_url_and_params['params']}")
+                    print(e)
+                    logging.error(f"Unable to read response from {self.name}. Check config file.\n"
+                                  f"Url: {url_formatted}, Parameters: {params}")
+                    responses[cp] = []
+
+                await asyncio.sleep(self.rate_limit)
+
+        return TimeHelper.now(), self.name, responses
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """
@@ -364,9 +353,9 @@ class Exchange:
             String of the formatted currency-pair.
             Example: BTC and ETH -> "btc_eth"
         """
-        request_url_and_params: Dict = self.request_urls[request_name]
-        pair_template_dict = request_url_and_params["pair_template"]
-        pair_template = pair_template_dict["template"]
+        request_url_and_params: dict = self.request_urls[request_name]
+        pair_template_dict: dict = request_url_and_params["pair_template"]
+        pair_template: dict = pair_template_dict["template"]
 
         formatted_string: str = pair_template.format(first=currency_pair.first.name, second=currency_pair.second.name)
 
@@ -703,7 +692,7 @@ class Exchange:
 
         for currency_pair in responses.keys():
             if currency_pair:  # responses had to be collected individually
-                current_response = responses[currency_pair]
+                current_response = responses.get(currency_pair)
             else:  # data for all currency_pairs in one response
                 current_response = responses[None]
 
@@ -785,8 +774,8 @@ class Exchange:
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
                     result = list(itertools.zip_longest(*result))
-                    results.extend(result)
-        return results, list(temp_results.keys())
+                    # results.extend(result)
+                    yield result, list(temp_results.keys())
 
     def increase_interval(self):
         index = self.interval_strings.index(self.interval) + 1

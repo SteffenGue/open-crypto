@@ -7,7 +7,7 @@ from typing import List, Tuple, Iterable, Dict, Optional, Union
 import tqdm
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, func, inspect
-from sqlalchemy.exc import ProgrammingError, OperationalError
+from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
@@ -148,8 +148,8 @@ class DatabaseHandler:
         try:
             yield session
             session.commit()
-        except Exception as e:
-            # ToDo: Changes here from raise -> pass and included Logging.
+        except SQLAlchemyError as e:
+            #  Changes here from raise -> pass and included Logging.
             #  Postgresql throw integrity errors which where not caught.
             #  Sqlite on the other hand not. For reproducibility: B2bx, BTC-USD
             logging.exception(e)
@@ -414,7 +414,7 @@ class DatabaseHandler:
         if currency_pairs is not None:
 
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
-            i = 0
+            i: int = 0
             with self.session_scope() as session:
                 for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
                     exchange_name = cp[0]
@@ -462,8 +462,7 @@ class DatabaseHandler:
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
                          exchange,
                          db_table,
-                         data: Iterable,
-                         mappings: List):
+                         formatted_response: Iterable):
         """
         This method persists the given tuples of data. The method currently works for all methods,
         despite currency_pairs. If the program is augmented with a new request-method, use this method to
@@ -492,62 +491,70 @@ class DatabaseHandler:
             The Exchange instance from a particular request.
         @param db_table: object
             The database table object for the respective method, i.e. Ticker, OrderBook
-        @param data: Iterable, Tuple
+        @param formatted_response: Iterable, Tuple
             The actual response values
-        @param mappings: List
-            The mapping keys from the .yaml-file, in the same order as the data-tuples.
         """
 
+        print(f"Formatting and writing Data into the database..")
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
-        counter_list = list()
-        tuple_counter = 0
-        new_pairs: List = list()
+        counter_dict = dict()
+        tuple_counter: int = 0
+        new_pairs: list = list()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
 
+
         with self.session_scope() as session:
-            for data_tuple in data:
-                data_tuple = dict(zip(mappings, data_tuple))
+            while True:
+                try:
+                    data, mappings = next(formatted_response)
+                    for data_tuple in data:
+                        data_tuple = dict(zip(mappings, data_tuple))
 
-                if "exchange_pair_id" not in data_tuple.keys():
-                    temp_currency_pair = {"exchange_name": exchange.name,
-                                          "first_currency_name": data_tuple["currency_pair_first"],
-                                          "second_currency_name": data_tuple["currency_pair_second"]}
+                        if "exchange_pair_id" not in data_tuple.keys():
+                            temp_currency_pair = {"exchange_name": exchange.name,
+                                                  "first_currency_name": data_tuple["currency_pair_first"],
+                                                  "second_currency_name": data_tuple["currency_pair_second"]}
 
-                    currency_pair: ExchangeCurrencyPair = _get_exchange_currency_pair(session,
-                                                                                      **temp_currency_pair)
-                    if not currency_pair:
-                        new_pairs.append(temp_currency_pair)
+                            currency_pair: ExchangeCurrencyPair = _get_exchange_currency_pair(session,
+                                                                                              **temp_currency_pair)
+                            if not currency_pair:
+                                new_pairs.append(temp_currency_pair)
 
-                    if currency_pair and (currency_pair.id in requested_cp_ids):
-                        data_tuple.update({"exchange_pair_id": currency_pair.id})
-                    else:
-                        continue
+                            if currency_pair and (currency_pair.id in requested_cp_ids):
+                                data_tuple.update({"exchange_pair_id": currency_pair.id})
+                            else:
+                                continue
+                        else:
+                            exchange_pair_id = data_tuple.get("exchange_pair_id")
 
-                data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
-                check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]
-                if not all(check_columns):
-                    failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
-                    logging.exception(NotAllPrimaryKeysException(exchange.name, failed_columns))
-                    continue
+                        data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
+                        check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]
+                        if not all(check_columns):
+                            failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
+                            logging.exception(NotAllPrimaryKeysException(exchange.name, failed_columns))
+                            continue
 
-                p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
-                query = session.query(db_table).filter_by(**p_key_filter)
-                query_exists = session.query(query.exists()).scalar()
+                        p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
+                        query = session.query(db_table).filter_by(**p_key_filter)
+                        query_exists = session.query(query.exists()).scalar()
 
-                if not query_exists:
-                    if db_table.__name__ != Ticker.__name__:
-                        counter_list.append(data_tuple["exchange_pair_id"])
-                    tuple_counter += 1
-                    add_tuple = db_table(**data_tuple)
-                    session.add(add_tuple)
+                        if not query_exists:
+                            if db_table.__name__ != Ticker.__name__:
+                                counter_dict[exchange_pair_id] = counter_dict.get(exchange_pair_id, 0) + 1
+                            tuple_counter += 1
+                            add_tuple = db_table(**data_tuple)
+                            session.add(add_tuple)
+                    print(f"CuPair-ID {exchange_pair_id}: {counter_dict.get(exchange_pair_id)} tuple(s)")
+                except StopIteration:
+                    break
 
-        counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
+        # counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
         print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
 
-        if counter_dict:
-            for item in counter_dict.items():
-                print(f"CuPair-ID {item[0]}: {item[1]}")
+        # if counter_dict:
+        #     for item in counter_dict.items():
+        #         print(f"CuPair-ID {item[0]}: {item[1]}")
 
         logging.info(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
 
@@ -557,7 +564,7 @@ class DatabaseHandler:
         # However, we do not have an instance of
         #
         if len(new_pairs) > 0:
-            added_cp_counter = 0
+            added_cp_counter: int = 0
             for item in new_pairs:
                 if all(item.values()):
                     self.persist_exchange_currency_pair(**item, is_exchange=exchange.is_exchange)
