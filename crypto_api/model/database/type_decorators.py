@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 from datetime import datetime
 from typing import Type, Optional
 

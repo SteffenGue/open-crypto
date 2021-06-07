@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 import asyncio
 import json
 import os
@@ -8,7 +14,7 @@ from model.database.tables import metadata
 from model.exchange.exchange import Exchange
 from model.utilities.utilities import read_config, get_exchange_names, yaml_loader
 
-job_name: str = 'historic_rates' #currency-pairs, historic-rates...
+job_name: str = 'historic_rates'  # currency-pairs, historic-rates...
 yaml_path: str = '../resources/running_exchanges/all/'
 saving_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'json_test_responses')
 
@@ -23,7 +29,7 @@ for exchange_name in exchange_names:
     exchanges.append(Exchange(yaml_loader(exchange_name, yaml_path)))
 
 for exchange in exchanges:
-    #Making sure every exchange has all the available currency-pairs
+    # Making sure every exchange has all the available currency-pairs
     # pair_response = asyncio.run(exchange.request_currency_pairs('currency_pairs'))
     # pairs = exchange.format_currency_pairs(pair_response)
     # database_handler.persist_exchange_currency_pairs(pairs, True)
@@ -37,9 +43,11 @@ for exchange in exchanges:
         if currency_pair:
             first_currency: str = currency_pair.first.name
             second_currency: str = currency_pair.second.name
-            json_file = open(os.path.join(full_saving_path, '{}_{}_{}'.format(exchange.name.upper(), first_currency, second_currency)), 'w')
+            json_file = open(os.path.join(full_saving_path,
+                                          f"{exchange.name.upper()}_{first_currency}_{second_currency}"),
+                             "w")
         else:
-            json_file = open(os.path.join(full_saving_path, '{}_ALL'.format(exchange.name.upper())), 'w')
+            json_file = open(os.path.join(full_saving_path, f"{exchange.name.upper()}_ALL"), "w")
 
         json.dump(responses[currency_pair], json_file, indent=4)
         json_file.close()

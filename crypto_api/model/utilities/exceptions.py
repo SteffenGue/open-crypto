@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
+
 class MappingNotFoundException(Exception):
     """
     Custom exception that is thrown when needed mappings could not be found. Most likely this happens when there is a

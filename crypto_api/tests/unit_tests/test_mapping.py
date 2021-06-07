@@ -1,5 +1,5 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """
 Test module for testing api_scheduling.Mapping class
 

@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 import asyncio
 import itertools
 import logging

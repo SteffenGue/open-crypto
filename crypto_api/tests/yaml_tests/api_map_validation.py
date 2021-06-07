@@ -1,8 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
+from sqlalchemy import inspect
 
 # pylint: disable=too-many-lines
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
-from sqlalchemy import inspect
 
 """
 Exchange API Map Validation

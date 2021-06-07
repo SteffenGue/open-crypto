@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, select
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property

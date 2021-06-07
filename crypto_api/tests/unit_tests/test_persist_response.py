@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 from itertools import permutations
 
 from model.database.db_handler import DatabaseHandler

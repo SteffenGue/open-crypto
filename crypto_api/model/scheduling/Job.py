@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
 

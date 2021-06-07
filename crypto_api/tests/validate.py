@@ -1,6 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
+import os
+
 from crypto_api.tests.yaml_tests.api_map_validation import ApiMapFileValidator
 from model.utilities.utilities import YAML_PATH
-import os
 
 
 class Validate:
@@ -43,11 +50,11 @@ class Validate:
         if report.__bool__():
             # if report is True, pass
             return report
-        #if report is False:
+        # if report is False:
         else:
             # look at nested reports,
             for nested_report in report.reports:
-               # if report is false
+                # if report is false
                 if not nested_report.__bool__():
                     try:
                         self.report_error(nested_report)
@@ -55,6 +62,7 @@ class Validate:
                     except AttributeError:
                         print(nested_report)
                         break
+
 
 if __name__ == '__main__':
     exchange = input("Enter 'Exchange Name' or 'all': \n")
@@ -65,6 +73,6 @@ if __name__ == '__main__':
         for exchange in exchanges:
             valid += Validate(exchange).validate()
 
-        print(f'Valid Exchanges: {round(valid/len(exchanges) *100, 2)} %')
+        print(f'Valid Exchanges: {round(valid / len(exchanges) * 100, 2)} %')
     else:
         Validate(exchange).validate()

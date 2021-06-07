@@ -13,7 +13,6 @@ from typing import Dict
 import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config
-from model.database.tables import *
 
 PATH = os.getcwd()
 
@@ -138,4 +137,3 @@ def run(cwd=PATH):
 
 if __name__ == '__main__':
     run(PATH)
-

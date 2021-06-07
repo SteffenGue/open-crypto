@@ -1,15 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+TODO: Fill out module docstring.
+"""
+
 import os
 import sys
 
-"""
-Global config built after the Singleton pattern. That is, there can only exists ONE instance of a class or,
-equivalently, all instances share the same state. 
-
-The config-file will be set and read only from utilities.read_config().
-"""
-
 
 class GlobalConfig(object):
+    """
+    Global config built after the Singleton pattern. That is, there can only exists ONE instance of a class or,
+    equivalently, all instances share the same state.
+
+    The config-file will be set and read only from utilities.read_config().
+    """
+
     class __GlobalConfig:
 
         def __init__(self):
