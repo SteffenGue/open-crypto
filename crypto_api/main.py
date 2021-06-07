@@ -20,7 +20,7 @@ from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
 
 
-def signal_handler(signal, frame):
+def signal_handler(signal_number, stack):
     """
     Helper function to exit the program. When CTRL+C is hit, the program will shut down with exit code(0).
     """
