@@ -11,7 +11,6 @@ from typing import Dict
 
 import pandas as pd
 from dateutil import parser as dateparser
-from sqlalchemy import MetaData
 
 from model.database import tables
 from model.database.db_handler import DatabaseHandler
@@ -20,7 +19,7 @@ from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config
 
 
-def database_session(filename: str = None, db_path: str = None, metadata: MetaData = metadata):
+def database_session(filename: str = None, db_path: str = None):
     """
     Returns an open SqlAlchemy-Session. The session is retrieved from the DatabaseHandler.
     @param metadata: Database metadata
