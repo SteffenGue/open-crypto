@@ -139,8 +139,3 @@ def run(cwd=PATH):
 if __name__ == '__main__':
     run(PATH)
 
-
-session.query(runner.HistoricRate)\
-    .join(runner.ExchangeCurrencyPair)\
-    .join(runner.Currency, runner.ExchangeCurrencyPair.first_id == runner.Currency.id)\
-    .filter(runner.Currency.name == 'USD').first()
