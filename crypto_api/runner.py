@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+This module is a wrapper around the whole package. Its main function is to export all relevant configuration files
+to the current working directory of the user, start the program, establish database connections and export data
+into csv-files.
 """
 
 import os
@@ -11,6 +13,7 @@ from typing import Dict
 import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config
+from model.database.tables import *
 
 PATH = os.getcwd()
 
@@ -76,6 +79,8 @@ def set_path():
 def get_session(filename: str = None, db_path: str = PATH):
     """
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
+    Furthermore this functions imports all database defining classes to work with.
+
     @param db_path: path to the database. Default: current working directory
     @param filename: Name of the configuration file to init the DatabaseHandler
     @return: SqlAlchemy-Session
@@ -133,3 +138,9 @@ def run(cwd=PATH):
 
 if __name__ == '__main__':
     run(PATH)
+
+
+session.query(runner.HistoricRate)\
+    .join(runner.ExchangeCurrencyPair)\
+    .join(runner.Currency, runner.ExchangeCurrencyPair.first_id == runner.Currency.id)\
+    .filter(runner.Currency.name == 'USD').first()

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from typing import List, Tuple, Iterable, Dict, Optional, Union
 
 import tqdm
+from pandas import DataFrame
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, func, inspect
 from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
@@ -144,7 +145,7 @@ class DatabaseHandler:
     @contextmanager
     def session_scope(self):
         """Provide a transactional scope around a series of operations."""
-        session = self.sessionFactory()
+        session = self.sessionFactory(autocommit=False)
         try:
             yield session
             session.commit()
@@ -456,11 +457,11 @@ class DatabaseHandler:
                         session.add(exchange_pair)
                     # persist data every 500 CPs in order to avoid slowing down
                     if i % 500 == 0:
-                        session.commit()
+                        session.flush()
 
     def persist_response(self,
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
-                         exchange,
+                         exchange: Exchange,
                          db_table,
                          formatted_response: Iterable):
         """
@@ -503,7 +504,6 @@ class DatabaseHandler:
         new_pairs: list = list()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
 
-
         with self.session_scope() as session:
             while True:
                 try:
@@ -545,18 +545,18 @@ class DatabaseHandler:
                             tuple_counter += 1
                             add_tuple = db_table(**data_tuple)
                             session.add(add_tuple)
-                    print(f"CuPair-ID {exchange_pair_id}: {counter_dict.get(exchange_pair_id)} tuple(s)")
+
+                    print(f"CuPair-ID {exchange_pair_id}: {counter_dict.get(exchange_pair_id, 0)} tuple(s)")
                 except StopIteration:
                     break
 
         # counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
         print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
+        logging.info(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
 
         # if counter_dict:
         #     for item in counter_dict.items():
         #         print(f"CuPair-ID {item[0]}: {item[1]}")
-
-        logging.info(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
 
         # Persist currency_pairs if not already in the database. This can only happen if an response contains
         # all pairs at once. Problem: Some exchange return "derivatives" which include only a first-currency.
@@ -584,7 +584,7 @@ class DatabaseHandler:
                            exchanges: list[str] = None,
                            currency_pairs: list[dict[str, str]] = None,
                            first_currencies: list[str] = None,
-                           second_currencies: list[str] = None):
+                           second_currencies: list[str] = None) -> DataFrame:
 
         """
              Queries based on the parameters readable database data and returns it.
@@ -624,10 +624,10 @@ class DatabaseHandler:
              @param second_currencies: List of viable currencies for the second currency in a currency pair.
              @type second_currencies: list[str]
 
-             @return: List of readable database tuple.
-                      List might be empty if database is empty or there where no ExchangeCurrencyPairs
+             @return: DataFrame of readable database tuple.
+                      DataFrame might be empty if database is empty or there where no ExchangeCurrencyPairs
                       which fulfill the above stated requirements.
-             @rtype: TODO: Fill out
+             @rtype: Pandas DataFrame
              """
 
         with self.session_scope() as session:
