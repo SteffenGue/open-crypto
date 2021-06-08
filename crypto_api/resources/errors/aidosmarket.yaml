@@ -10,56 +10,64 @@ rate_limit:
 requests:
   currency_pairs:
     request:
-      template: stats
+      template: public/markets
       pair_template: null
       params: null
     response:
       type: dict
       values:
-        stats:
-          type: dict
-          values:
-            market:
-              type: str
-            currency:
-              type: str
+        result:
+          type: list
+            values:
+              type: dict
+              values:
+                baseCurrencyCode:
+                  type: str
+                quoteCurrencyCode:
+                  type: str
     mapping:
       - key: currency_pair_first
         path:
-          - stats
-          - market
+          - result
+          - baseCurrencyCode
         type:
           - str
       - key: currency_pair_second
         path:
-          - stats
-          - currency
+          - result
+          - quoteCurrencyCode
         type:
           - str
 
   tickers:
     request:
-      template: stats
+      template: public/markets/summary
       pair_template: null
       params: null
     response:
       type: dict
       values:
-        stats:
-          type: dict
+        result:
+          type: list
           values:
-            market:
-              type: str
-            currency:
-              type: str
-            last_price:
-              type: float
-            bid:
-              type: float
-            ask:
-              type: float
-            24h_volume:
-              type: float
+            type: dict
+            values:
+              timestamp:
+                type: str
+              baseCurrencyCode:
+                type: str
+              quoteCurrencyCode:
+                type: str
+              last:
+                type: float
+              bid:
+                type: float
+              ask:
+                type: float
+              baseVolume:
+                type: float
+              quote_volume:
+                type: float
 
     mapping:
       - key: time
@@ -69,52 +77,64 @@ requests:
           - now
       - key: currency_pair_first
         path:
-          - stats
-          - market
+          - result
+          - baseCurrencyCode
         type:
           - str
       - key: currency_pair_second
         path:
-          - stats
-          - currency
+          - result
+          - quoteCurrencyCode
         type:
           - str
       - key: last_price
         path:
-          - stats
-          - last_price
+          - result
+          - price
         type:
           - float
       - key: best_bid
         path:
-          - stats
+          - result
           - bid
         type:
           - float
       - key: best_ask
         path:
-          - stats
+          - result
           - ask
         type:
           - float
       - key: daily_volume
         path:
-          - stats
-          - 24h_volume
+          - result
+          - base_volume
         type:
           - float
 
 
   historic_rates:
     request:
-      template: historical-prices
+      template: public/markets/ohlcv/{currency_pair}
       pair_template:
-        template: ""
+        template: "{first}_{second}"
         lower_case: false
       params:
-        timeframe:
-          type: str
-          default: 1year
+        Resolution:
+          allowed:
+            minutes:
+            hours:
+            days:
+            weeks:
+            months:
+          default:  #Wert nicht den Key!
+        FromTimestamp:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
+        Limit:
+          default: 2000
     response:
       type: dict
       values:

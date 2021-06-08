@@ -143,7 +143,7 @@ class Scheduler:
 
         for job in jobs:
             if job.request_name == "currency_pairs":
-                print("Done loading Currency-Pairs.")
+                print("\n\nDone loading Currency-Pairs.")
                 sys.exit(0)
 
             # TODO: Philipp: Check out if loops work without continues.
@@ -262,14 +262,15 @@ class Scheduler:
         """
         table_name = request_table.__tablename__.capitalize()
 
-        print(f"\nStarting to collect {table_name}.")
-        logging.info("Starting to collect %s.", table_name)
+        print(f"\nStarting to request {table_name}.")
+        logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
         counter = {}
+        print("Formatting and writing Data into the database..")
         for response in responses:
             response_time = response[0]
             exchange_name = response[1]
@@ -311,7 +312,7 @@ class Scheduler:
             if updated_job:
                 return True, updated_job
 
-        print(f"Done collecting {table_name}.", end="\n\n")
+        print(f"\nDone collecting {table_name}.", end="\n\n")
         logging.info("Done collecting %s.", table_name)
 
         return False, exchanges_with_pairs

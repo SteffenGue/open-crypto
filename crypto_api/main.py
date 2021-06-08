@@ -117,7 +117,7 @@ async def main(database_handler: DatabaseHandler):
     scheduler = Scheduler(database_handler, jobs, frequency)
     await scheduler.validate_job()
 
-    desc = f"{', '.join([job.name.capitalize() for job in jobs])} were created and will run every {frequency} minute(s)."
+    desc = f"\nJob(s) were created and will run with frequency: {frequency}."
 
     print(desc)
     logging.info(desc)

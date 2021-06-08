@@ -499,7 +499,7 @@ class DatabaseHandler:
         @param formatted_response: Iterable, Tuple
             The actual response values
         """
-        print("Formatting and writing Data into the database..")
+
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         counter_dict = dict()
@@ -549,12 +549,15 @@ class DatabaseHandler:
                             add_tuple = db_table(**data_tuple)
                             session.add(add_tuple)
 
-                    print(f"CuPair-ID {exchange_pair_id}: {counter_dict.get(exchange_pair_id, 0)} tuple(s)")
+                    print(f"Pair-ID {exchange_pair_id} - {exchange.name.capitalize()}: "
+                          f"{counter_dict.get(exchange_pair_id, 0)} tuple(s)")
                 except StopIteration:
                     break
+                except UnboundLocalError:
+                    pass
 
         # counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
-        print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
+        # print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
         logging.info("%s tuple(s) added to %s for %s.", tuple_counter, db_table.__name__, exchange.name.capitalize())
 
         # if counter_dict:

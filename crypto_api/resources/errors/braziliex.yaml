@@ -1,5 +1,5 @@
 #ToDO: api endpoint for historic rates does not respond...
-
+#ToDo: Exchange hat geschlossen.
 name: braziliex
 exchange: true
 api_url: https://braziliex.com/api/v1/

@@ -273,14 +273,17 @@ class Exchange:
         @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
                     Exception: the given response of an exchange could not be evaluated
         """
-        print("Requesting Data..")
 
         request_name = request_table.__tablename__
-
-        self.request_urls = self.extract_request_urls(self.file["requests"][request_name],
-                                                      request_name=request_name,
-                                                      request_table=request_table,
-                                                      currency_pairs=currency_pairs)
+        try:
+            self.request_urls = self.extract_request_urls(self.file["requests"][request_name],
+                                                          request_name=request_name,
+                                                          request_table=request_table,
+                                                          currency_pairs=currency_pairs)
+        except Exception as e:
+            print(f"Exception extracting request URLs for: {self.name}.")
+            logging.error(f"Exception extracting request URLs for: {self.name}.", e)
+            return None
 
         if not all((request_name in self.request_urls.keys(), bool(self.request_urls[request_name]))):
             logging.warning(f"{self.name} has no {request_name} request. Check {self.name}.yaml if it should.")
@@ -483,7 +486,6 @@ class Exchange:
             See example above.
         """
         request_dict = request_dict["request"]
-
         urls = dict()
         request_parameters = dict()
         request_parameters["url"] = self.api_url + request_dict.get("template", "")
