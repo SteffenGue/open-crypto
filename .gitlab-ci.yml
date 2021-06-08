@@ -15,8 +15,7 @@ linting:
   script:
   - export PYTHONPATH="./crypto_api"
   - shopt -s globstar
-  - pylint --disable=R,C0301,W0511,W0613,W0703 ./crypto_api/**/*.py
-  allow_failure: true
+  - pylint --disable=R,C0301,W0511,W0613,W0703,E1121 ./crypto_api/**/*.py
 
 unit_testing:
   stage: test

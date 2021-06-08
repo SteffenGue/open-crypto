@@ -273,7 +273,7 @@ def yaml_loader(exchange: str):
     except Exception as ex:
         print(f"Error loading yaml of {exchange}. Try validating the file or look in the log-files.")
         print(ex)
-        logging.exception(f"Error loading yaml of {exchange}.\n", ex)
+        logging.exception("Error loading yaml of %s.\n", exchange, ex)
         raise ex
 
 

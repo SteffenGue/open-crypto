@@ -204,7 +204,7 @@ class Scheduler:
                     self.database_handler.persist_exchange_currency_pairs(formatted_response,
                                                                           is_exchange=ex.is_exchange)
                 except (MappingNotFoundException, TypeError, KeyError):
-                    logging.exception(f"Error updating currency_pairs for {ex.name.capitalize()}")
+                    logging.exception("Error updating currency_pairs for %s", ex.name.capitalize())
                     return []
             else:
                 return []
@@ -263,7 +263,7 @@ class Scheduler:
         table_name = request_table.__tablename__.capitalize()
 
         print(f"\nStarting to collect {table_name}.")
-        logging.info(f"Starting to collect {table_name}.")
+        logging.info("Starting to collect %s.", table_name)
 
         start_time = TimeHelper.now()
         responses = await asyncio.gather(
@@ -295,7 +295,7 @@ class Scheduler:
                                                                                          formatted_response)
 
                 except (MappingNotFoundException, TypeError, KeyError):
-                    logging.exception(f"Exception formatting or persisting data for {found_exchange.name}")
+                    logging.exception("Exception formatting or persisting data for %s", found_exchange.name)
                     continue
 
         if request_table.__name__ == "HistoricRate":
@@ -312,6 +312,6 @@ class Scheduler:
                 return True, updated_job
 
         print(f"Done collecting {table_name}.", end="\n\n")
-        logging.info(f"Done collecting {table_name}.")
+        logging.info("Done collecting %s.", table_name)
 
         return False, exchanges_with_pairs

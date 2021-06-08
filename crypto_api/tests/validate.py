@@ -6,8 +6,8 @@ TODO: Fill out module docstring.
 
 import os
 
-from crypto_api.tests.yaml_tests.api_map_validation import ApiMapFileValidator
 from model.utilities.utilities import YAML_PATH
+from crypto_api.tests.yaml_tests.api_map_validation import ApiMapFileValidator
 
 
 class Validate:

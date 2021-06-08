@@ -8,6 +8,7 @@ import logging
 import os
 from contextlib import contextmanager
 from datetime import datetime, timedelta
+from itertools import product
 from typing import List, Tuple, Iterable, Dict, Optional, Union
 
 import tqdm
@@ -132,13 +133,13 @@ class DatabaseHandler:
         else:
             conn_string = conn_strings[sqltype]
 
-        logging.info(f"Connection String is: {conn_string}")
+        logging.info("Connection String is: %s", conn_string)
         engine = create_engine(conn_string)
 
         if not database_exists(engine.url):
             create_database(engine.url)
             print(f"Database '{db_name}' created", end="\n\n")
-            logging.info(f"Database '{db_name}' created")
+            logging.info("Database '%s' created", db_name)
 
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
@@ -326,8 +327,7 @@ class DatabaseHandler:
                 found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
 
         if first_currencies and second_currencies:
-            import itertools
-            currency_pairs = list(itertools.product(first_currencies, second_currencies))
+            currency_pairs = list(product(first_currencies, second_currencies))
             currency_pairs = [{"first": pair[0], "second": pair[1]} for pair in currency_pairs]
             found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
 
@@ -421,10 +421,10 @@ class DatabaseHandler:
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             i: int = 0
             with self.session_scope() as session:
-                for cp in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
-                    exchange_name = cp[0]
-                    first_currency_name = cp[1]
-                    second_currency_name = cp[2]
+                for currency_pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
+                    exchange_name = currency_pair[0]
+                    first_currency_name = currency_pair[1]
+                    second_currency_name = currency_pair[2]
                     is_exchange: bool = is_exchange
                     i += 1
 
@@ -555,7 +555,7 @@ class DatabaseHandler:
 
         # counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
         print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
-        logging.info(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
+        logging.info("%s tuple(s) added to %s for %s.", tuple_counter, db_table.__name__, exchange.name.capitalize())
 
         # if counter_dict:
         #     for item in counter_dict.items():
@@ -575,7 +575,7 @@ class DatabaseHandler:
             if added_cp_counter > 0:
                 print(f"Added {added_cp_counter} new currency pairs to {exchange.name.capitalize()}\n"
                       f"Data will be persisted next time.")
-                logging.info(f"Added {added_cp_counter} new currency pairs to {exchange.name.capitalize()}")
+                logging.info("Added %s new currency pairs to %s.", added_cp_counter, exchange.name.capitalize())
 
         return [item for item in exchanges_with_pairs[exchange] if item.id in counter_dict.keys()]
 
