@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module initializes the jobs, starts the logger and finally the asyncio event-loop. Furthermore the
+signal_handler adds the possibility to interrupt the process, the handler function to catch and log unexpected errors.
 """
 
 import asyncio
@@ -69,10 +70,9 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
 
 def init_logger(path):
     """
-    TODO: Fill out
+    Initializes the logger, specifies the path to the logging files, the logging massage as well as the logging level.
 
-    @param path:
-    @return:
+    @param path: Path to store the logging file. By default the CWD.
     """
     if not read_config(file=None, section="utilities")["enable_logging"]:
         logging.disable()
@@ -86,12 +86,11 @@ def init_logger(path):
 
 def handler(ex_type, ex_value, ex_traceback):
     """
-    TODO: Fill out
+    Method to catch and log unexpected exceptions.
 
-    @param ex_type:
-    @param ex_value:
-    @param ex_traceback:
-    @return:
+    @param ex_type: Exception type
+    @param ex_value: Values causing the exception
+    @param ex_traceback: Traceback attribute of the exception
     """
     logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
@@ -104,6 +103,9 @@ async def main(database_handler: DatabaseHandler):
         by await asyncio.gather(..)
     As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
+
+    @param: Instance of the DatabaseHandler
+    @type database_handler: object
     """
     config = read_config(file=None, section=None)
 
@@ -138,10 +140,9 @@ async def main(database_handler: DatabaseHandler):
 
 def run(path: str = None):
     """
-    TODO: Fill out.
+    Starts the program and initializes the asyncio-event-loop.
 
-    @param path:
-    @return:
+    @param path: String representation to the current working directory or any PATH specified in runner.py
     """
     sys.excepthook = handler
     init_logger(path)
@@ -156,12 +157,5 @@ def run(path: str = None):
     # https: // github.com / encode / httpx / issues / 914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-    # ToDo: diese Methode genauso verlässlich? -> Try Except um scheduler.start()
     asyncio.run(main(database_handler))
-    # while True:
-    #     try:
-    #         asyncio.run(main(database_handler))
-    #     except Exception:
-    #         logging.exception("Restarting Program. at {}".format(datetime.utcnow()))
-    #         pass
+
