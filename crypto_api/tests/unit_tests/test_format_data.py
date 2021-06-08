@@ -19,6 +19,9 @@ from model.utilities.time_helper import TimeHelper
 
 @pytest.fixture(name="exchange")
 def create_exchange() -> Exchange:
+    """
+    TODO: Fill out
+    """
     exchange_name = "test_exchange"
     exchange_dict = {
         "name": exchange_name,
@@ -30,6 +33,9 @@ def create_exchange() -> Exchange:
 
 
 class TestFormatData:
+    """
+    TODO: Fill out
+    """
 
     def test_response_is_none(self, exchange):
         """Testing the handling of a response with no data in it."""
@@ -151,7 +157,6 @@ class TestFormatData:
         """ Testing format_data for a response that coontains all the available data.
             The data for each currency pair is guarded by the formatted string from each pair."""
         # todo: currently there is no way to get to this information lol
-        pass
 
     def test_all_request_list_dict(self, exchange):
         """ Test for a request which contains all the available data.
@@ -328,8 +333,6 @@ class TestFormatData:
     def test_cp_request_dict_cp_guard_dict(self, exchange):
         """ Testing the formatting of individual responses for each currency pair.
             The desired data is guarded by the formatted currency pair string."""
-        """ Testing the formatting of individual responses for each currency pair.
-            The data is guarded by a dict before accessing the actual data-dict."""
         exchange.request_urls = {'ticker': {'pair_template': {'template': '{first}_{second}', 'lower_case': False}}}
         mappings = [Mapping('value1', ['data', 'v1'], ['str', 'int']),
                     Mapping('value2', ['data', 'v2'], ['str']),

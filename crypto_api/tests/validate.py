@@ -37,7 +37,9 @@ class Validate:
             return False
 
     def validate(self):
-
+        """
+        TODO: Fill out
+        """
         Map = self.__ValidateMapFile__()
         if Map:
             print(f"Exchange '{self.file_name}' valid: True")

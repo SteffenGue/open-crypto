@@ -143,9 +143,10 @@ class DatabaseHandler:
         try:  # this is done since one cant test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
-            print("Database Views already exist. If you need to alter or recreate tables delete all views manually.")
-            logging.warning("Views already exist. If you need to alter or recreate tables delete all views manually.")
-            pass
+            message = "Database Views already exist. If you need to alter or recreate tables delete all views manually."
+            print(message)
+            logging.warning(message)
+
         self.sessionFactory = sessionmaker(bind=engine)
 
     @contextmanager
@@ -155,14 +156,11 @@ class DatabaseHandler:
         try:
             yield session
             session.commit()
-        except SQLAlchemyError as e:
-            #  Changes here from raise -> pass and included Logging.
+        except SQLAlchemyError as ex:
             #  Postgresql throw integrity errors which where not caught.
             #  Sqlite on the other hand not. For reproducibility: B2bx, BTC-USD
-            logging.exception(e)
+            logging.exception(ex)
             session.rollback()
-            pass
-            # raise
         finally:
             session.close()
 
@@ -501,8 +499,7 @@ class DatabaseHandler:
         @param formatted_response: Iterable, Tuple
             The actual response values
         """
-
-        print(f"Formatting and writing Data into the database..")
+        print("Formatting and writing Data into the database..")
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         counter_dict = dict()

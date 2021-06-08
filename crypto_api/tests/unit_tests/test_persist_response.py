@@ -7,7 +7,7 @@ TODO: Fill out module docstring.
 from itertools import permutations
 
 from model.database.db_handler import DatabaseHandler
-from model.database.tables import *
+from model.database.tables import metadata, ExchangeCurrencyPairView, Exchange, ExchangeCurrencyPair, Ticker, Currency
 from model.utilities.time_helper import TimeHelper
 
 
@@ -33,12 +33,18 @@ class TestPersistResponse:
                                                is_exchange=True)
 
     def test_persist_exchange_currency_pairs(self):
+        """
+        TODO: Fill out
+        """
         result = self.session.query(ExchangeCurrencyPairView).all()
         result = [(item.exchange_name, item.first_name, item.second_name) for item in result]
 
         assert self.exchange_currency_pairs == result
 
     def test_persist_valid_ticker(self):
+        """
+        TODO: Fill out
+        """
         response = [
             (TimeHelper.now(), TimeHelper.now(), 1.0, 1.0, 1.0, 1.0, 1),
             (TimeHelper.now(), TimeHelper.now(), 2.0, 2.0, 2.0, 2.0, 2),
@@ -74,6 +80,9 @@ class TestPersistResponse:
         self.session.query(Ticker).delete()
 
     def test_persist_response_with_unknown_column(self):
+        """
+        TODO: Fill out
+        """
         response = [
             (TimeHelper.now(), TimeHelper.now(), 1.0, 1.0, 1.0, 1.0, 1, None),
             (TimeHelper.now(), TimeHelper.now(), 2.0, 2.0, 2.0, 2.0, 2, None),
@@ -109,6 +118,9 @@ class TestPersistResponse:
         self.session.query(Ticker).delete()
 
     def test_persist_response_with_unknown_currency_pair(self):
+        """
+        TODO: Fill out
+        """
         response = [
             ("TEST1", "TEST2", TimeHelper.now(), TimeHelper.now(), 1.0, 1.0, 1.0, 1.0, 1)]
         exchanges_with_pairs = {self.session.query(Exchange).first(): []}
@@ -130,6 +142,9 @@ class TestPersistResponse:
         self.session.query(Ticker).delete()
 
     def test_persist_response_with_none(self):
+        """
+        TODO: Fill out
+        """
         response = [
             (TimeHelper.now(), TimeHelper.now(), None, 1.0, 1.0, 1.0, 1),
             (TimeHelper.now(), TimeHelper.now(), 2.0, None, 2.0, 2.0, 2),

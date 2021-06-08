@@ -21,7 +21,7 @@ from resources.configs.GlobalConfig import GlobalConfig
 
 TYPE_CONVERSIONS = {
     ("float", "from_timestamp"): {
-        "function": lambda timestamp, unit: TimeHelper.from_timestamp(timestamp, unit),
+        "function": TimeHelper.from_timestamp,
         "params": 1
     },
     ("bool", "int"): {
@@ -93,7 +93,7 @@ TYPE_CONVERSIONS = {
         "params": 0
     },
     ("str", "dateparser"): {
-        "function": lambda string: dateutil.parser.parse(string),
+        "function": dateutil.parser.parse,
         "params": 0
     },
     ("datetime", "strftime"): {
@@ -187,7 +187,7 @@ TYPE_CONVERSIONS = {
         "params": 0
     },
     ("datetime", "format"): {
-        "function": lambda time, spec: format(time, spec),
+        "function": format,
         "params": 1
     },
     ("timedelta", "from_timestamp"): {

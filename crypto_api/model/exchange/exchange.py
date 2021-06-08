@@ -316,7 +316,7 @@ class Exchange:
                     response = await session.get(url=url_formatted,
                                                  params=params_adj,
                                                  timeout=aiohttp.ClientTimeout(total=self.timeout))
-                    assert (response.status == 200)
+                    assert response.status == 200
                     # Changes here: deleted await response.json(...) as it throw a ClientPayloadError for extrates.
                     # However the response.status was 200 and could be persisted into the DB...
                     response_json = await response.json(content_type=None)
@@ -395,7 +395,7 @@ class Exchange:
                                                  timeout=aiohttp.ClientTimeout(total=self.timeout))
                     response_json = await response.json(content_type=None)
 
-                    assert (response.status == 200)
+                    assert response.status == 200
 
                 except (ClientConnectionError, asyncio.TimeoutError):
                     print(f"No connection to {self.name.capitalize()}. Timeout- or ConnectionError!")
@@ -725,7 +725,7 @@ class Exchange:
                 except Exception:
                     print(f"Error while formatting {method}, {mapping.key}: {currency_pair}")
                     traceback.print_exc()
-                    pass
+
                 else:
                     # extracted_data_is_valid: bool = True
                     # for extracted_field in temp_results.keys():
@@ -784,12 +784,18 @@ class Exchange:
                     yield result, list(temp_results.keys())
 
     def increase_interval(self):
+        """
+        TODO: Fill out
+        """
         index = self.interval_strings.index(self.interval) + 1
         index = min(index, len(self.interval_strings) - 1)
 
         self.interval = self.interval_strings[index]
 
     def decrease_interval(self):
+        """
+        TODO: Fill out
+        """
         # TODO: Not lower than base?
         if self.interval is None or self.interval == self.base_interval:
             return

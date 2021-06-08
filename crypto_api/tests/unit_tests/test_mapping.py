@@ -37,7 +37,7 @@ class TestMapping:
         result = mapping.extract_value({
             "product_id": "BTC-ETH"
         })
-        assert "BTC" == result
+        assert result == "BTC"
 
     def test_extract_value_split_index_one(self):
         """Test of splitting a str and taking the index one."""
@@ -48,7 +48,7 @@ class TestMapping:
         result = mapping.extract_value({
             "product_id": "BTC-ETH"
         })
-        assert "ETH" == result
+        assert result == "ETH"
 
     def test_extract_value_split_index_two(self):
         """Test of splitting a str and taking the index two."""
@@ -59,7 +59,7 @@ class TestMapping:
         result = mapping.extract_value({
             "product_id": "BTC-ETH-USD"
         })
-        assert "USD" == result
+        assert result == "USD"
 
     def test_extract_value_slice_first_half(self):
         """Test of slicing a str and taking the first half."""
@@ -70,7 +70,7 @@ class TestMapping:
         result = mapping.extract_value({
             "product_id": "BTCETH"
         })
-        assert "BTC" == result
+        assert result == "BTC"
 
     def test_extract_value_slice_second_half(self):
         """Test of slicing a str and taking the second half."""
@@ -81,7 +81,7 @@ class TestMapping:
         result = mapping.extract_value({
             "product_id": "BTCETH"
         })
-        assert "ETH" == result
+        assert result == "ETH"
 
     # def test_extract_value_bool_to_str_true(self):
     #     """Test of conversion from bool to str in case of True."""
@@ -118,7 +118,7 @@ class TestMapping:
             "active": "True"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert result
 
     def test_extract_value_str_to_bool_true_lowercase(self):
@@ -132,7 +132,7 @@ class TestMapping:
             "active": "true"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert result
 
     def test_extract_value_str_to_bool_true_uppercase(self):
@@ -146,7 +146,7 @@ class TestMapping:
             "active": "TRUE"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert result
 
     def test_extract_value_str_to_bool_false(self):  #
@@ -160,7 +160,7 @@ class TestMapping:
             "active": "False"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert not result
 
     def test_extract_value_str_to_bool_false_lowercase(self):
@@ -174,7 +174,7 @@ class TestMapping:
             "active": "false"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert not result
 
     def test_extract_value_str_to_bool_false_uppercase(self):
@@ -188,7 +188,7 @@ class TestMapping:
             "active": "FALSE"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert not result
 
     def test_extract_value_str_to_bool_false_anything(self):
@@ -202,7 +202,7 @@ class TestMapping:
             "active": "anything"
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert not result
 
     def test_extract_value_bool_to_int_true(self):
@@ -216,7 +216,7 @@ class TestMapping:
             "active": True
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == 1
 
     def test_extract_value_bool_to_int_false(self):
@@ -230,7 +230,7 @@ class TestMapping:
             "active": False
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == 0
 
     def test_extract_value_int_to_bool_one(self):
@@ -244,7 +244,7 @@ class TestMapping:
             "active": 1
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert result
 
     def test_extract_value_int_to_bool_zero(self):
@@ -258,7 +258,7 @@ class TestMapping:
             "active": 0
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert not result
 
     def test_extract_value_int_to_bool_two(self):
@@ -272,7 +272,7 @@ class TestMapping:
             "active": 2
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert result
 
     def test_extract_value_int_to_bool_neg_two(self):
@@ -286,7 +286,7 @@ class TestMapping:
             "active": -2
         })
 
-        assert type(result) is bool
+        assert isinstance(result, bool)
         assert result
 
     def test_extract_value_int_fromtimestamp(self):
@@ -300,7 +300,7 @@ class TestMapping:
             "time": 1538122622
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
         # Different results depending on timezone
         # self.assertEqual(result, datetime.datetime(2018, 9, 28, 8, 17, 2))
 
@@ -315,7 +315,7 @@ class TestMapping:
             "time": 1538122622
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
 
     def test_extract_value_int_fromtimestampms(self):
         """Test of conversion from an int timestamp with ms to datetime."""
@@ -328,7 +328,7 @@ class TestMapping:
             "time": 1538122622123
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
         assert result.microsecond == 123000
 
     def test_extract_value_float_fromtimestamp(self):
@@ -342,7 +342,7 @@ class TestMapping:
             "time": 1538122622.123
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
         assert result.microsecond == 123000
 
     def test_extract_value_float_utcfromtimestamp(self):
@@ -356,7 +356,7 @@ class TestMapping:
             "time": 1538122622.123
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
         assert result.microsecond == 123000
 
     def test_extract_value_str_to_int_zero(self):
@@ -370,7 +370,7 @@ class TestMapping:
             "number": "0"
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == 0
 
     def test_extract_value_str_to_int_one(self):
@@ -384,7 +384,7 @@ class TestMapping:
             "number": "1"
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == 1
 
     def test_extract_value_str_to_int_two(self):
@@ -398,7 +398,7 @@ class TestMapping:
             "number": "2"
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == 2
 
     def test_extract_value_str_to_int_twelve(self):
@@ -412,7 +412,7 @@ class TestMapping:
             "number": "12"
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == 12
 
     def test_extract_value_str_to_int_neg_one(self):
@@ -426,7 +426,7 @@ class TestMapping:
             "number": "-1"
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         assert result == -1
 
     def test_extract_value_str_to_float_zero(self):
@@ -440,7 +440,7 @@ class TestMapping:
             "number": "0.0"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == 0.0
 
     def test_extract_value_str_to_float_one(self):
@@ -454,7 +454,7 @@ class TestMapping:
             "number": "1.0"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == 1.0
 
     def test_extract_value_str_to_float_two(self):
@@ -468,7 +468,7 @@ class TestMapping:
             "number": "2.0"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == 2.0
 
     def test_extract_value_str_to_float_twelve(self):
@@ -482,7 +482,7 @@ class TestMapping:
             "number": "12.0"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == 12.0
 
     def test_extract_value_str_to_float_pi(self):
@@ -496,7 +496,7 @@ class TestMapping:
             "number": "3.141592654"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == 3.141592654
 
     def test_extract_value_str_to_float_neg_one(self):
@@ -510,7 +510,7 @@ class TestMapping:
             "number": "-1.0"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == -1.0
 
     def test_extract_value_str_to_float_neg_pi(self):
@@ -524,7 +524,7 @@ class TestMapping:
             "number": "-3.141592654"
         })
 
-        assert type(result) is float
+        assert isinstance(result, float)
         assert result == -3.141592654
 
     def test_extract_value_datetime_totimestamp(self):
@@ -538,7 +538,7 @@ class TestMapping:
             "date": datetime.datetime(2018, 10, 11, 11, 20)
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         # Different results depending on timezone
         # self.assertEqual(result, 1539249600)
 
@@ -553,7 +553,7 @@ class TestMapping:
             "date": datetime.datetime(2018, 10, 11, 11, 20, 0, 123000)
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         # Different results depending on timezone
         # self.assertEqual(result, 1539249600123)
 
@@ -568,7 +568,7 @@ class TestMapping:
             "date": datetime.datetime(2018, 10, 11, 11, 20, 0)
         })
 
-        assert type(result) is int
+        assert isinstance(result, int)
         # Different results depending on timezone
 
     def test_extract_value_str_strptime_date(self):
@@ -582,7 +582,7 @@ class TestMapping:
             "date": "2018-10-11"
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
         assert result == datetime.datetime(2018, 10, 11)
 
     def test_extract_value_str_strptime_datetime(self):
@@ -596,7 +596,7 @@ class TestMapping:
             "date": "2018-10-11 12:06"
         })
 
-        assert type(result) is datetime.datetime
+        assert isinstance(result, datetime.datetime)
         assert result == datetime.datetime(2018, 10, 11, 12, 6)
 
     def test_extract_value_datetime_strftime_date(self):
@@ -610,7 +610,7 @@ class TestMapping:
             "date": datetime.datetime(2018, 10, 11)
         })
 
-        assert type(result) is str
+        assert isinstance(result, str)
         assert result == "2018-10-11"
 
     def test_extract_value_datetime_strftime_datetime(self):
@@ -624,7 +624,7 @@ class TestMapping:
             "date": datetime.datetime(2018, 10, 11, 12, 6)
         })
 
-        assert type(result) is str
+        assert isinstance(result, str)
         assert result == "2018-10-11 12:06"
 
     def test_extract_value_dict_key(self):
@@ -639,7 +639,7 @@ class TestMapping:
             "ETH_EUR": "value"
         })
 
-        assert type(result) is list
+        assert isinstance(result, list)
         assert result == ["BTC_USD", "ETH_EUR"]
 
     def test_extract_value_dict_key_split_index_zero(self):
@@ -654,7 +654,7 @@ class TestMapping:
             "ETH_EUR": "value"
         })
 
-        assert type(result) is list
+        assert isinstance(result, list)
         assert result == ["BTC", "ETH"]
 
     def test_extract_value_dict_key_split_index_one(self):
@@ -669,7 +669,7 @@ class TestMapping:
             "ETH_EUR": "value"
         })
 
-        assert type(result) is list
+        assert isinstance(result, list)
         assert result == ["USD", "EUR"]
 
     def test_extract_value_where_pair_can_not_be_split(self):

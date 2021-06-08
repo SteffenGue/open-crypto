@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
-"""
-
-from sqlalchemy import inspect
-
-# pylint: disable=too-many-lines
-from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
-
-"""
 Exchange API Map Validation
 
 Classes for validating the API yaml files of Exchanges and generating
@@ -56,8 +47,13 @@ import abc
 import re
 import textwrap
 from typing import Any, Dict, Iterable, List, Set, Text, Type, Union
-import validators
+
 import oyaml as yaml
+import validators
+from sqlalchemy import inspect
+
+# pylint: disable=too-many-lines
+from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, OHLCVM, Trade
 
 
 class Valid:
@@ -754,6 +750,9 @@ class ApiMapFileValidator(CompositeValidator):
         return can_continue
 
     def result(self) -> bool:
+        """
+        TODO: Fill out
+        """
         if not self.report:
             self.validate()
 
@@ -2047,7 +2046,7 @@ class TypeValidator(Validator):
 
 class RequestMappingValidator(Validator):
     """
-
+    TODO: Fill out
     """
     value: Dict[Text, Any]
 
@@ -2076,6 +2075,9 @@ class RequestMappingValidator(Validator):
         return possible_class.get(table_name, lambda: "Invalid request class.")
 
     def determine_primary_keys(self, table_name: str) -> List:
+        """
+        TODO: Fill out
+        """
         possible_primary_keys = {
             "currency_pairs":
                 [],

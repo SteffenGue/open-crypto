@@ -40,6 +40,9 @@ class Exchange(Base):
 
     @validates("name")
     def convert_upper(self, key, value):
+        """
+        TODO: Fill out
+        """
         return value.upper()
 
 
@@ -65,6 +68,9 @@ class Currency(Base):
 
     @validates("name")
     def convert_upper(self, key, value):
+        """
+        TODO: Fill out
+        """
         return value.upper()
 
 
@@ -215,6 +221,9 @@ class Trade(Base):
 
     @hybrid_property
     def direction(self):
+        """
+        TODO: Fill out
+        """
         return self._direction
 
     @direction.setter
@@ -233,6 +242,9 @@ class Trade(Base):
 
     @validates("direction")
     def convert_upper(self, key, value):
+        """
+        TODO: Fill out
+        """
         return value.upper()
 
 
