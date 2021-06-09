@@ -21,6 +21,10 @@ class UnixTimestamp(TypeDecorator):
     """
     impl = BIGINT
 
+    #ToDo Philipp: Check if setting this True is okay. Otherwise is produces a warning.
+    # Check out: https://groups.google.com/g/sqlalchemy/c/zCPZKTxM6b0
+    cache_ok = True
+
     @property
     def python_type(self) -> Type[datetime]:
         return datetime
