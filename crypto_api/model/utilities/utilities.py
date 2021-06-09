@@ -292,7 +292,7 @@ def get_exchange_names() -> list[str]:
     path_to_resources: Path = pathlib.Path().parent.absolute()
 
     exchanges = os.listdir(Path.joinpath(path_to_resources, yaml_path))
-    exchanges = [x[:-5] for x in exchanges if x.endswith(".yaml")]
+    exchanges = [x.removesuffix(".yaml") for x in exchanges if x.endswith(".yaml")]
     exchanges.sort()
 
     return exchanges

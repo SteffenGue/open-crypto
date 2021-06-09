@@ -34,6 +34,8 @@ setup(
         "oyaml",
         "pandas",
         "psycopg2-binary",
+        "mariadb",
+        "pymysql",
         "pytest",
         "python-dateutil",
         "sqlalchemy",

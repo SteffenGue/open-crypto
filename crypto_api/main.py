@@ -95,7 +95,7 @@ def handler(ex_type, ex_value, ex_traceback):
     logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
 
-async def main(database_handler: DatabaseHandler):
+async def main(database_handler: DatabaseHandler, file: str = None):
     """
     The model() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
@@ -104,6 +104,7 @@ async def main(database_handler: DatabaseHandler):
     As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.
 
+    @param file:
     @param: Instance of the DatabaseHandler
     @type database_handler: object
     """
@@ -130,7 +131,8 @@ async def main(database_handler: DatabaseHandler):
             try:
                 loop.run_until_complete(await scheduler.start())
             except RuntimeError:
-                sys.exit(0)
+                # sys.exit(0)
+                break
         else:
             try:
                 await scheduler.start()
@@ -138,17 +140,18 @@ async def main(database_handler: DatabaseHandler):
                 logging.exception(TimeHelper.now(), ex)
 
 
-def run(path: str = None):
+def run(file: str = None, path: str = None):
     """
     Starts the program and initializes the asyncio-event-loop.
 
+    @param file:
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
     sys.excepthook = handler
     init_logger(path)
 
     logging.info("Reading Database Configuration")
-    db_params = read_config(file=None, section="database")
+    db_params = read_config(file=file, section="database")
 
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata, path=path, **db_params)

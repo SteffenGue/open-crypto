@@ -13,6 +13,7 @@ from typing import Dict
 import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config
+from model.database.tables import *
 
 PATH = os.getcwd()
 
@@ -126,14 +127,15 @@ def export(file: str = None):
     CsvExport(file).create_csv()
 
 
-def run(cwd=PATH):
+def run(file: str = None, cwd=PATH):
     """
-    Firstly checks if all necessary folder are available (i.e. config and yaml-maps) and runs the program.
+    First checks if all necessary folder are available (i.e. config and yaml-maps) and starts the program.
+    @param file: configuration file-name
     @param cwd: The current working directory if not specified differently.
     """
     check_path()
-    run(main.run(cwd))
+    run(main.run(file, cwd))
 
 
 if __name__ == '__main__':
-    run(PATH)
+    run(cwd=PATH)

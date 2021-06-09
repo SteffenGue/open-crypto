@@ -436,3 +436,27 @@ class HistoricRateView(Base):
         ),
         metadata=Base.metadata
     )
+
+####################################### unused classes
+# class Blockchain(Base):
+#     __tablename__ = "blockchain"
+#
+#     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+#     exchange_pair = relationship("ExchangeCurrencyPair", backref="blockchain")
+#     time = Column(UnixTimestamp, primary_key=True)
+#
+#     zero_balance_addresses_all_time = Column(Float)
+#     unique_addresses_all_time = Column(Float)
+#     new_addresses = Column(Float)
+#     active_addresses = Column(Float)
+#     transaction_count = Column(Float)
+#     transaction_count_all_time = Column(Float)
+#     large_transaction_count = Column(Float)
+#     average_transaction_value = Column(Float)
+#     block_height = Column(Float)
+#     difficulty = Column(Float)
+#     block_time = Column(Float)
+#     block_size = Column(Float)
+#     current_supply = Column(Float)
+#     hash_rate = Column(Float)
+#

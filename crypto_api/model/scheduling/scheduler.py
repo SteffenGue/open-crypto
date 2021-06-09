@@ -100,7 +100,7 @@ class Scheduler:
                  "table": OrderBook},
             "trades":
                 {"function": self.request_format_persist,
-                 "table": Trade},
+                 "table": Trade}
         }
 
         return possible_requests.get(request_name, {
@@ -136,15 +136,13 @@ class Scheduler:
         if not jobs:
             logging.error("No or invalid Jobs.")
 
-            print("\n No or invalid Jobs. This error occurs when the job list is empty due to no \n"
+            print("\nNo or invalid Jobs. This error occurs when the job list is empty due to no \n"
                   "matching currency pairs found for all exchanges. Please check your \n"
                   "parameters in the configuration.")
-            sys.exit(0)
 
         for job in jobs:
             if job.request_name == "currency_pairs":
                 print("\n\nDone loading Currency-Pairs.")
-                sys.exit(0)
 
             # TODO: Philipp: Check out if loops work without continues.
             if job.exchanges_with_pairs:
