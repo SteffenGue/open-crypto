@@ -153,7 +153,7 @@ class DatabaseHandler:
     @contextmanager
     def session_scope(self):
         """Provide a transactional scope around a series of operations."""
-        session = self.sessionFactory(autocommit=False)
+        session = self.sessionFactory()
         try:
             yield session
             session.commit()
@@ -461,7 +461,7 @@ class DatabaseHandler:
                         session.add(exchange_pair)
                     # persist data every 500 CPs in order to avoid slowing down
                     if i % 500 == 0:
-                        session.flush()
+                        session.commit()
 
     def persist_response(self,
                          exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
