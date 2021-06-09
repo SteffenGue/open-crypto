@@ -4,24 +4,24 @@ export:
 
 database:
   sqltype: sqlite
-  client: psycopg2
+  client:
   user_name:
   password:
   host: localhost
   port: 5432
-  db_name:
+  db_name: ExampleDB
 
 query_options:
-  table_name: OrderBook
-  query_everything: true
+  table_name: HistoricRate
+  query_everything: true # if true, all filters below are ignored
   from_timestamp: 01-01-2020 13:20:00
   to_timestamp:
   exchanges:
-#    - kucoin
+#    - bitfinex
   first_currencies:
-#    - eth
+#    - btc
   second_currencies:
-#    - ngn
+#    - eth
   currency_pairs:
 #    - first: ltc
 #      second: usdt

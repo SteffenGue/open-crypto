@@ -1,33 +1,34 @@
 general:
   database:
-    sqltype: sqlite
-    client: psycopg2
+    sqltype: sqlite #sqlite, mariadb, mysql or postgres
+    client: null # mariadb, pymysql or psycopg2
     user_name:
     password:
     host: localhost
     port: 5432
-    db_name: crypto_database
-  export:
-    csv_dir: resources/csv
-    export_data_to_csv: false
+    db_name: ExampleDB
+
   operation_settings:
-    frequency: 0.1
+    frequency: 0.1 # once or any number in minutes
+    intervaL: days # minutes, hours, days, weeks, months
   utilities:
     enable_logging: false
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
 jobs:
-  ExampleTicker:
-    yaml_request_name: null # ticker, trades, order_books, historic_rates, ohlcvm
+  JobName:
+    yaml_request_name: null # ticker, trades, order_books, historic_rates
     update_cp: false
-    currency_pairs:
+    exchanges: # all or an arbitrary list of exchanges
+      - exchange1
+      - exchange2
+      - all
+    currency_pairs: # all or an arbitrary list of currency-pairs
       - all
 #      - first: null
 #        second: null
-    exchanges:
+    first_currencies: # filter database by the first currency and take all
       - null
-    first_currencies:
-      - null
-    second_currencies:
+    second_currencies: # filter database by the second currency and take all.
       - null
 
 
