@@ -131,8 +131,8 @@ async def main(database_handler: DatabaseHandler, file: str = None):
             try:
                 loop.run_until_complete(await scheduler.start())
             except RuntimeError:
-                # sys.exit(0)
-                break
+                sys.exit(0)
+
         else:
             try:
                 await scheduler.start()

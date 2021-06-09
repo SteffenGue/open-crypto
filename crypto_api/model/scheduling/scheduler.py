@@ -165,6 +165,7 @@ class Scheduler:
                 # remove job if initially empty
                 jobs.remove(job)
 
+
         if jobs:
             # If there are jobs left, return them
             return jobs
