@@ -41,7 +41,7 @@ class Exchange(Base):
     @validates("name")
     def convert_upper(self, key, value):
         """
-        TODO: Fill out
+        Converts strings into upper cases.
         """
         return value.upper()
 
@@ -69,7 +69,7 @@ class Currency(Base):
     @validates("name")
     def convert_upper(self, key, value):
         """
-        TODO: Fill out
+        Converts strings into upper cases.
         """
         return value.upper()
 
@@ -157,7 +157,7 @@ class Ticker(Base):
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
-    daily_volume = Column(Float)
+    # daily_volume = Column(Float)
 
     def __repr__(self):
         return f"#{self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \
@@ -188,6 +188,7 @@ class HistoricRate(Base):
     low = Column(Float)
     close = Column(Float)
     volume = Column(Float)
+    base_volume = Column(Float)
     market_cap = Column(Float)
 
     def __repr__(self):
@@ -222,12 +223,17 @@ class Trade(Base):
     @hybrid_property
     def direction(self):
         """
-        TODO: Fill out
+        Returns the attribute _direction.
         """
         return self._direction
 
     @direction.setter
     def direction(self, direction):
+        """
+        Converts the string representation of the trade direction, i.e. 'sell' or 'buy', into an integer.
+        @param: String representation of the direction.
+        @return: 0 or 1.
+        """
         if isinstance(direction, str):
             if direction.lower() == "sell":
                 self._direction = 0
@@ -243,7 +249,7 @@ class Trade(Base):
     @validates("direction")
     def convert_upper(self, key, value):
         """
-        TODO: Fill out
+        Converts strings into upper cases.
         """
         return value.upper()
 
@@ -292,8 +298,8 @@ class ExchangeCurrencyPairView(Base):
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                              .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                              .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -320,13 +326,13 @@ class TickerView(Base):
                 Ticker.last_price,
                 Ticker.best_ask,
                 Ticker.best_bid,
-                Ticker.daily_volume
+                # Ticker.daily_volume
             ],
             from_obj=(
                 Ticker.__table__.join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                                .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -359,9 +365,9 @@ class TradeView(Base):
             ],
             from_obj=(
                 Trade.__table__.join(ExchangeCurrencyPair, Trade.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                               .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                               .join(first, ExchangeCurrencyPair.first_id == first.id)
+                               .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -393,9 +399,9 @@ class OrderBookView(Base):
             ],
             from_obj=(
                 OrderBook.__table__.join(ExchangeCurrencyPair, OrderBook.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                   .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                                   .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                   .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -408,7 +414,7 @@ class HistoricRateView(Base):
     Instead of only showing the ID of the ExchangeCurrencyPair the View displays
     the exchange name and the name of the first and second currency.
     """
-    # time = listen(datetime.datetime.fromtimestamp(HistoricRate.time), retval=True)
+
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(
@@ -424,14 +430,15 @@ class HistoricRateView(Base):
                 HistoricRate.low,
                 HistoricRate.close,
                 HistoricRate.volume,
+                HistoricRate.base_volume,
                 HistoricRate.market_cap,
             ],
             from_obj=(
                 HistoricRate.__table__.join(ExchangeCurrencyPair,
                                             HistoricRate.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                      .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                                      .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                      .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata

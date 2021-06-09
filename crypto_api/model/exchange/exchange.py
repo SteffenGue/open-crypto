@@ -24,6 +24,20 @@ from model.utilities.exceptions import MappingNotFoundException, DifferentExchan
 from model.utilities.time_helper import TimeHelper
 
 
+def replace_list_item(replace_list: list, condition: str, value: str) -> list:
+    """
+    Replaces a specific value from a list.
+    @param replace_list: The list in which the value needs to be replaced
+    @param condition: The value to be updated
+    @param value: The new value
+    @return: Updated list
+    """
+    for n, item in enumerate(replace_list):
+        if item == condition:
+            replace_list[n] = value
+    return replace_list
+
+
 def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mapping]]:
     """
     Helper-Method which should be only called by the constructor.
@@ -708,6 +722,10 @@ class Exchange:
                 try:
                     # extraction of actual values; note that currencies might not be in mappings (later important)
                     for mapping in mappings:
+
+                        if 'interval' in mapping.types:
+                            mapping.types = replace_list_item(mapping.types, 'interval', self.interval)
+
                         if currency_pair:
                             temp_results[mapping.key]: List = mapping.extract_value(current_response,
                                                                                     currency_pair_info=(

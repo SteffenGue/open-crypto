@@ -1,5 +1,3 @@
-#ToDo: Historic Rates time ist nur für Tage richtig. Die schicken die Opentime, wir benötigen aber die close time.
-
 name: coinegg
 exchange: true
 
@@ -130,11 +128,13 @@ requests:
     mapping:
     - key: time
       path:
-        - 0 # close time is unfort. always 0
+      - 0
       type:
-        - float
-        - from_timestamp
-        - 1
+      - float
+      - from_timestamp
+      - 1
+      - to_end
+      - interval
     - key: open
       path:
         - 1

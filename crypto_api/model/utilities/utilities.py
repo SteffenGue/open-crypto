@@ -194,6 +194,14 @@ TYPE_CONVERSIONS = {
         "function": lambda time, unit, spec: format(TimeHelper.from_timestamp(time, unit), spec),
         "params": 2
     },
+    ("from_timestamp", "to_start"): {
+        "function": lambda time, interval: TimeHelper.start_end_conversion(time, interval, 0),
+        "params": 1
+    },
+    ("from_timestamp", "to_end"): {
+        "function": lambda time, interval: TimeHelper.start_end_conversion(time, interval, 1),
+        "params": 1
+    }
 }
 """
     Type Conversions used to convert extracted values from the API-Response into the desired type ("first", "second").
