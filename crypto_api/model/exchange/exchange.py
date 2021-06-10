@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+The Exchange class represents crypto-currency exchanges. In particular,this module is responsible for:
+    - preparing,
+    - executing,
+    - and formatting requests.
+The exchange class is build upon the specific exchange.yaml file and several inputs from the configuration file.
+While an exchange-object itself provides all necessary methods for an API-request, the execution itself is scheduled
+within the module scheduler.
 """
 
 import asyncio
@@ -88,6 +94,7 @@ def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mappi
 def format_request_url(url: str, pair_template: dict, pair_formatted: str, cp, parameter: dict):
     # ToDo: Docu
     """
+
     @param cp:
     @param pair_template:
     @param url:
@@ -529,7 +536,7 @@ class Exchange:
                 self.interval = {v: k for k, v in val.items()}
             return value
 
-        def function(val: str, **kwargs) -> Any:
+        def function(val: str, **kwargs) -> dict[ExchangeCurrencyPair: datetime]:
             """
             Execute function for all currency-pairs. Function returns the first timestamp in the DB, or
             datetime.now() if none exists.
@@ -553,7 +560,7 @@ class Exchange:
                 self.base_interval = self.interval
             return default_val
 
-        def type(val, **kwargs):
+        def type(val, **kwargs) -> Any:
             """
             Performs type conversions.
             @param val: The conversion values specified under "type".
@@ -826,3 +833,4 @@ class Exchange:
         self.interval = self.interval_strings[index]
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
+
