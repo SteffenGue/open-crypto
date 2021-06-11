@@ -1,0 +1,178 @@
+# ToDo: Tickers fehlerhaft
+name: coinpaprika
+exchange: true
+
+rate_limit:
+  max: 600
+  unit: 60
+
+api_url: https://api.coinpaprika.com/v1/
+
+requests:
+  currency_pairs:
+    request:
+      template: coins
+      pair_template: null
+      params: null
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          id:
+            type: str
+          name:
+            type: str
+          symbol:
+            type: str
+
+
+    mapping:
+      - key: currency_pair_first
+        path:
+          - id
+        type:
+          - str
+      - key: currency_pair_second
+        path: []
+        type:
+          - none
+          - constant
+          - 'USD'
+
+#  tickers:
+#    request:
+#      template: tickers
+#      pair_template: null
+#      params: null
+#    response:
+#      type: list
+#      values:
+#        type: dict
+#        values:
+#          id:
+#            type: str
+#          last_updated:
+#            type: str
+#          quotes:
+#            type: dict
+#            values:
+#              USD:
+#                type: dict
+#                values:
+#                  price:
+#                    type: float
+#                  volume_24h:
+#                    type: float
+#
+#    mapping:
+#      - key: currency_pair_first
+#        path:
+#          - id
+#        type:
+#          - str
+#      - key: currency_pair_second
+#        path: []
+#        type:
+#          - none
+#          - constant
+#          - 'USD'
+#      - key: last_price
+#        path:
+#          - quotes
+#          - price
+#        type:
+#          - float
+#      - key: time
+#        path:
+#          - last_updated
+#        type:
+#          - str
+#          - dateparser
+#      - key: daily_volume
+#        path:
+#          - quotes
+#          - volume_24h
+#        type:
+#          - float
+
+  historic_rates:
+    request:
+      template: coins/{currency_pair}/ohlcv/historical
+      pair_template:
+        template: "{first}"
+        lower_case: true
+      params:
+        start:
+          function: last_timestamp
+          type:
+            - datetime
+            - timedelta
+            - interval
+            - 366
+        limit:
+          default: 366 # max value
+        quote:
+          default: usd # or 'btc'
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          time_open:
+            type: str
+          time_close:
+            type: str
+          open:
+            type: float
+          high:
+            type: float
+          low:
+            type: float
+          close:
+            type: float
+          volume:
+            type: float
+          market_cap:
+            type: float
+
+
+    mapping:
+    - key: time
+      path:
+        - time_close
+      type:
+        - str
+        - dateparser
+    - key: open
+      path:
+        - open
+      type:
+        - float
+    - key: high
+      path:
+        - high
+      type:
+        - float
+    - key: low
+      path:
+        - low
+      type:
+        - float
+    - key: close
+      path:
+        - close
+      type:
+        - float
+    - key: volume
+      path:
+        - volume
+      type:
+        - float
+    - key: market_cap
+      path:
+        - market_cap
+      type:
+        - float

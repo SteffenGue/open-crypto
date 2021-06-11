@@ -12,27 +12,27 @@ general:
     timeout: 10
     interval: days
   utilities:
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
     enable_logging: false
 
 jobs:
   AAAA:
-    yaml_request_name: historic_rates
+    yaml_request_name: tickers
     update_cp: false
     exchanges:
-      - exrates
-      - omgfin
+      - coinpaprika
+#      - omgfin
 
     excluded: null
 
     currency_pairs:
-#      - all
+      - all
 #        - first: btc
 #          second: usdt
 #        - first: btc
 #          second: usdt
-        - first: eth
-          second: btc
+#        - first: btc-bitcoin
+#          second: usd
 
     first_currencies: null
     second_currencies: null
