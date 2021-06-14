@@ -15,7 +15,7 @@ from typing import Dict, List
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
-from model.scheduling.Job import Job
+from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names

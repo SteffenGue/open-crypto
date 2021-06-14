@@ -135,7 +135,7 @@ def run(file: str = None, cwd=PATH):
     @param cwd: The current working directory if not specified differently.
     """
     check_path()
-    run(main.run(file, cwd))
+    run(main.run(file, cwd))  # TODO: Make better
 
 
 if __name__ == '__main__':

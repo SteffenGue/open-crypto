@@ -30,7 +30,7 @@ class TestPersistResponse:
     }
 
     db_handler = DatabaseHandler(metadata, debug=True, **db_config)
-    session = db_handler.sessionFactory()
+    session = db_handler.session_factory()
     currencies = ["BTC", "ETH", "LTC", "XRP", "DIO", "DASH"]
     currency_pairs = permutations(currencies, 2)
     exchange_currency_pairs = [("TESTEXCHANGE",) + pair for pair in currency_pairs]

@@ -10,8 +10,8 @@ from unittest.mock import Mock
 import pytest
 
 from model.database.tables import ExchangeCurrencyPair
-from model.exchange.Mapping import Mapping
 from model.exchange.exchange import Exchange
+from model.exchange.mapping import Mapping
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
 from model.utilities.time_helper import TimeHelper
@@ -288,11 +288,9 @@ class TestFormatData:
 
         result = exchange.format_data(method, response, start_time, time)
 
-        i = 0
-        for got in result:
+        for i, got in enumerate(result):
             assert value_list[i] == got[0][0]
             assert key_list == got[1]
-            i += 1
 
     def test_cp_request_dict_dict(self, exchange):
         """ Testing the formatting of individual responses for each currency pair.
@@ -337,11 +335,9 @@ class TestFormatData:
 
         result = exchange.format_data(method, response, start_time, time)
 
-        i = 0
-        for got in result:
+        for i, got in enumerate(result):
             assert value_list[i] == got[0][0]
             assert key_list == got[1]
-            i += 1
 
     def test_cp_request_dict_cp_guard_dict(self, exchange):
         """ Testing the formatting of individual responses for each currency pair.
@@ -378,8 +374,6 @@ class TestFormatData:
 
         result = exchange.format_data(method, response, start_time, time)
 
-        i = 0
-        for got in result:
+        for i, got in enumerate(result):
             assert value_list[i] == got[0][0]
             assert key_list == got[1]
-            i += 1

@@ -27,7 +27,7 @@ def database_session(filename: str = None, db_path: str = None):
     @return: SqlAlchemy-Session
     """
     db_handler = DatabaseHandler(metadata=metadata, path=db_path, **read_config(file=filename, section="database"))
-    return db_handler.sessionFactory()
+    return db_handler.session_factory()
 
 
 class CsvExport:

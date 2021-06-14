@@ -4,7 +4,8 @@
 TODO: Fill out module docstring.
 """
 
-from collections import deque, Iterable
+from collections import deque
+from collections.abc import Iterable
 from typing import Collection, Optional
 
 from model.utilities.utilities import TYPE_CONVERSIONS
@@ -40,7 +41,7 @@ def convert_type(value, types_queue: deque):
 
         params = list()
 
-        for number in range(conversion["params"]):
+        for _ in range(conversion["params"]):
             params.append(types_queue.popleft())
 
         # Change here to avoid "None" as result value in the params when no value to convert is needed (i.e. when
