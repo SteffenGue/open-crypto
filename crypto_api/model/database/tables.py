@@ -10,7 +10,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, aliased
 from sqlalchemy_utils import create_view
 
-from model.database.type_decorators import UnixTimestamp
+from model.database.type_decorators import UnixTimestampMs
 
 Base = declarative_base()  # pylint: disable=invalid-name
 metadata = Base.metadata
@@ -152,8 +152,8 @@ class Ticker(Base):
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="tickers")
 
-    start_time = Column(UnixTimestamp)
-    time = Column(UnixTimestamp, primary_key=True)
+    start_time = Column(UnixTimestampMs)
+    time = Column(UnixTimestampMs, primary_key=True)
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
@@ -181,7 +181,7 @@ class HistoricRate(Base):
 
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="historic_rates")
-    time = Column(UnixTimestamp, primary_key=True)
+    time = Column(UnixTimestampMs, primary_key=True)
 
     open = Column(Float)
     high = Column(Float)
@@ -212,7 +212,7 @@ class Trade(Base):
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="trades")
     id = Column(Integer, primary_key=True)
-    time = Column(UnixTimestamp, primary_key=True)
+    time = Column(UnixTimestampMs, primary_key=True)
 
     amount = Column(Float, primary_key=True)
     best_bid = Column(Float)
@@ -273,7 +273,7 @@ class OrderBook(Base):
     id = Column(Integer, primary_key=True)
     position = Column(Integer, primary_key=True)
 
-    time = Column(UnixTimestamp)
+    time = Column(UnixTimestampMs)
     bids_amount = Column(Float)
     bids_price = Column(Float)
     asks_price = Column(Float)
