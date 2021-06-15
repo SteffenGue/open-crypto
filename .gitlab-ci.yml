@@ -5,8 +5,6 @@ variables:
 
 before_script:
   - python --version
-  - pip install pylint
-  - pip install pytest
   - pip install .
   - export PYTHONPATH="$MODULE_PATH"
 
@@ -17,10 +15,12 @@ stages:
 linting:
   stage: static_analysis
   script:
+    - pip install pylint
     - shopt -s globstar
     - pylint --disable=R,C0301,W0511,W0613,W0703,E1121,W0614,C0302,E1101,W0401,W1113,W0603 $MODULE_PATH/**/*.py
 
 unit_testing:
   stage: test
   script:
+    - pip install pytest
     - pytest -v $MODULE_PATH/tests
