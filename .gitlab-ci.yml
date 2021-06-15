@@ -1,7 +1,6 @@
 image: "python:3.9.5"
 
 variables:
-  MIN_TEST_COVERAGE: 60
   MODULE_PATH: "./crypto_api"
 
 before_script:
@@ -28,9 +27,11 @@ unit_testing:
 
 unit_testing_coverage:
   stage: test
+  variables:
+    MIN_COVERAGE: 60
   script:
     - pip install pytest
     - pip install coverage
     - coverage run -m pytest -v
-    - coverage report --fail-under=$MIN_TEST_COVERAGE --include=$MODULE_PATH/* --omit=$MODULE_PATH/tests/*
+    - coverage report --show-missing --fail-under=$MIN_COVERAGE --include=$MODULE_PATH/* --omit=$MODULE_PATH/tests/*
 
