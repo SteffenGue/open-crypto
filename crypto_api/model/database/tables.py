@@ -94,6 +94,7 @@ class ExchangeCurrencyPair(Base):
     __table_args__:
         First ID must be unequal to Second ID.
     """
+
     __tablename__ = "exchanges_currency_pairs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

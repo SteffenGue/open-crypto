@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module for data exporting into .csv or hdf5 format. The module is called from runner.py, reads-in a
+configuration file and exports data into one of both mentioned formats.
 """
 
 import inspect
@@ -32,7 +33,8 @@ def database_session(filename: str = None, db_path: str = None):
 
 class CsvExport:
     """
-    TODO: Fill out
+    Class to actually query and save data. The file-format is given as input parameter, along with *args and
+    **kwargs for the pd.to_csv(*args, **kwargs) and pd.to_hdf(*args, **kwargs).
     """
 
     def __init__(self, file: str = None):
