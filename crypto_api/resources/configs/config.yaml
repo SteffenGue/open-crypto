@@ -1,16 +1,16 @@
 general:
   database:
-    sqltype: sqlite
+    sqltype: postgresql
     client: psycopg2
-    user_name: postgres
-    password: Thw_kiel
+    user_name: bjarne
+    password:
     host: localhost
     port: 5432
-    db_name: test
+    db_name: cr
   operation_settings:
     frequency: once
     timeout: 10
-    interval: days
+    interval: minutes
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: false
@@ -18,23 +18,12 @@ general:
 jobs:
   AAAA:
     yaml_request_name: historic_rates
-    update_cp: false
+    update_cp: true
     exchanges:
-      - exrates
-      - omgfin
-
+      - binance-futures
     excluded: null
-
     currency_pairs:
-#      - all
-#        - first: btc
-#          second: usdt
-#        - first: btc
-#          second: usdt
-        - first: eth
-          second: btc
-
+        - first: btc
+          second: usdt
     first_currencies: null
     second_currencies: null
-#      - usd
-#      - usdt
