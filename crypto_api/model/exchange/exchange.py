@@ -345,7 +345,6 @@ class Exchange:
                     # However the response.status was 200 and could be persisted into the DB...
                     response_json = await response.json(content_type=None)
                     if pair_template_dict:
-<<<<<<< Updated upstream
                         responses[pair] = response_json
                     else:  # when ticker data is returned for all available currency pairs at once
                         responses[None] = response_json
@@ -368,58 +367,7 @@ class Exchange:
 
                 await asyncio.sleep(self.rate_limit)
 
-        return TimeHelper.now(), self.name, responses
-=======
-                        url_formatted, params_adj = format_request_url(url,
-                                                                       pair_template_dict,
-                                                                       pair_formatted[cp],
-                                                                       cp,
-                                                                       params)
-                    else:
-                        url_formatted, params_adj = url, params
-
-                    try:
-                        response = await session.get(url=url_formatted,
-                                                     params=params_adj,
-                                                     timeout=aiohttp.ClientTimeout(total=self.timeout))
-                        # print(params_adj)
-                        # print(await response.json(content_type=None))
-                        # ToDo: Does every successful response has code 200?
-                        assert (response.status == 200)
-                        response_json = await response.json(content_type=None)
-                        if pair_template_dict:
-                            responses[cp] = response_json
-                        else:  # when ticker data is returned for all available currency pairs at once
-                            responses[None] = response_json
-                            break
-
-                    except (ClientConnectionError, asyncio.TimeoutError):
-                        print('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
-                        logging.error('No connection to {}. Timeout or ConnectionError!'.format(self.name.capitalize()))
-                        # ToDo: Changes for all exception: "return -> responses[cp]= []"
-                        responses[cp] = []
-                    except AssertionError:
-                        print(
-                            "Failed request for {}: {}. Status {}.".format(self.name.capitalize(), cp, response.status))
-                        responses[cp] = []
-                    except Exception:
-                        print('Unable to read response from {}. Check exchange config file.\n'
-                              'Url: {}, Parameters: {}'
-                              .format(self.name, url_formatted, request_url_and_params['params']))
-
-                        logging.error('Unable to read response from {}. Check config file.\n'
-                                      'Url: {}, Parameters: {}'
-                                      .format(self.name, url_formatted, params))
-                        responses[cp] = []
-
-                    await asyncio.sleep(self.rate_limit)
-
             return TimeHelper.now(), self.name, responses
-        else:
-            logging.warning('{} has no Ticker request. Check {}.yaml if it should.'.format(self.name, self.name))
-            print("{} has no {} request.".format(self.name, request_name))
-            return None
->>>>>>> Stashed changes
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """

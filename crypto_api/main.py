@@ -144,15 +144,10 @@ def run(file: str = None, path: str = None):
     """
     Starts the program and initializes the asyncio-event-loop.
 
-<<<<<<< Updated upstream
     @param file:
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
-    sys.excepthook = handler
-=======
-def run(path: str = None):
     # sys.excepthook = handler
->>>>>>> Stashed changes
     init_logger(path)
 
     logging.info("Reading Database Configuration")
