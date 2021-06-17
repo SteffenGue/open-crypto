@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Contains custom database types.
+
+Classes:
+ - UnixTimestampMs: Database type to store dates and times as Unix timestamps in milliseconds (UTC+0).
 """
 
 from datetime import datetime
@@ -13,16 +16,14 @@ from sqlalchemy.types import BIGINT, TypeDecorator
 from model.utilities.time_helper import TimeHelper, TimeUnit
 
 
-class UnixTimestamp(TypeDecorator):
+class UnixTimestampMs(TypeDecorator):
     """
-    Datatype to store Unix timestamps in a database.
+    Database type to store Unix timestamps in milliseconds (UTC+0).
 
-    Although it's stored as BIGINT internally, it's returned as timezone aware (UTC+0) datetime.
+    Although it is stored as an integer internally, it is used like a timezone aware (UTC+0) datetime.
     """
     impl = BIGINT
 
-    #ToDo Philipp: Check if setting this True is okay. Otherwise is produces a warning.
-    # Check out: https://groups.google.com/g/sqlalchemy/c/zCPZKTxM6b0
     cache_ok = True
 
     @property

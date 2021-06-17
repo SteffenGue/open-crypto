@@ -21,12 +21,12 @@ saving_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jso
 db_params = read_config('database')
 database_handler = DatabaseHandler(metadata, **db_params)
 
-exchange_names = get_exchange_names(yaml_path)
+exchange_names = get_exchange_names()
 
 print(saving_path)
 exchanges: List[Exchange] = list()
 for exchange_name in exchange_names:
-    exchanges.append(Exchange(yaml_loader(exchange_name, yaml_path)))
+    exchanges.append(Exchange(yaml_loader(exchange_name), None, None))
 
 for exchange in exchanges:
     # Making sure every exchange has all the available currency-pairs

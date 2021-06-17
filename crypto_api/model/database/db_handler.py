@@ -68,10 +68,9 @@ class DatabaseHandler:
     For querying and storing values the library sqlalchemy is used.
 
     Attributes:
-        sessionFactory: sessionmaker
+        session_factory: sessionmaker
            Factory for connections to the database.
     """
-    sessionFactory: sessionmaker
 
     def __init__(
             self,
@@ -148,12 +147,12 @@ class DatabaseHandler:
             print(message)
             logging.warning(message)
 
-        self.sessionFactory = sessionmaker(bind=engine)
+        self.session_factory: sessionmaker = sessionmaker(bind=engine)
 
     @contextmanager
     def session_scope(self):
         """Provide a transactional scope around a series of operations."""
-        session = self.sessionFactory()
+        session = self.session_factory()
         try:
             yield session
             session.commit()

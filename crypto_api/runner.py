@@ -118,13 +118,14 @@ def get_config_template(csv: bool = False):
     print("Created new config template.")
 
 
-def export(file: str = None):
+def export(file: str = None, data_type: str = 'csv', *args, **kwargs):
     """
     Calls the imported module CsvExport and the respective method create_csv(). This will take a csv-export config as
     input and write data into a csv-file depending on the configuration.
+    @param data_type:
     @param file: Name of the csv-export configuration file.
     """
-    CsvExport(file).create_csv()
+    CsvExport(file).export(data_type=data_type, *args, **kwargs)
 
 
 def run(file: str = None, cwd=PATH):
@@ -134,7 +135,7 @@ def run(file: str = None, cwd=PATH):
     @param cwd: The current working directory if not specified differently.
     """
     check_path()
-    run(main.run(file, cwd))
+    run(main.run(file, cwd))  # TODO: Make better
 
 
 if __name__ == '__main__':

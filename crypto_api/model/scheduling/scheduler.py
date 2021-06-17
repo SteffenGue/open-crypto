@@ -6,14 +6,13 @@ TODO: Fill out module docstring.
 
 import asyncio
 import logging
-import sys
 from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
 
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
-from model.scheduling.Job import Job
+from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
 from model.utilities.time_helper import TimeHelper
 
@@ -165,7 +164,6 @@ class Scheduler:
             else:
                 # remove job if initially empty
                 jobs.remove(job)
-
 
         if jobs:
             # If there are jobs left, return them

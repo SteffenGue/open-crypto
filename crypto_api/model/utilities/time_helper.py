@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Module that contains helper classes to manage dates and times.
+Contains helper classes to manage dates and times.
 
 Classes:
 - TimeHelper: Used to create/convert timezone aware (UTC+0) dates and times.
@@ -48,10 +48,13 @@ class TimeHelper:
         """
         Get the current datetime (UTC+0).
 
+        The accuracy is limited to milliseconds and the remaining microseconds are cleared.
+
         @return: The current datetime (UTC+0).
         @rtype: datetime
         """
-        return datetime.now(tz=timezone.utc)
+        now = datetime.now(tz=timezone.utc)
+        return now.replace(microsecond=now.microsecond - now.microsecond % 1000)
 
     @staticmethod
     def now_timestamp(unit: TimeUnit = TimeUnit.SECONDS) -> float:

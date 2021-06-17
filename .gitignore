@@ -8,11 +8,15 @@
 __pycache__/
 venv/
 
-# Python setup files
+# Python setup
 build/
 dist/
 *.egg-info
 
+# Python coverage
+.coverage
+
 # Crypto Output
 log/
 *.db
+*.db-journal

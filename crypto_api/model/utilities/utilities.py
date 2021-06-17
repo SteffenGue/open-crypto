@@ -17,7 +17,7 @@ import dateutil.parser
 import oyaml as yaml
 
 from model.utilities.time_helper import TimeHelper, TimeUnit
-from resources.configs.GlobalConfig import GlobalConfig
+from resources.configs.global_config import GlobalConfig
 
 TYPE_CONVERSIONS = {
     ("float", "from_timestamp"): {
@@ -281,7 +281,7 @@ def yaml_loader(exchange: str):
     except Exception as ex:
         print(f"Error loading yaml of {exchange}. Try validating the file or look in the log-files.")
         print(ex)
-        logging.exception("Error loading yaml of %s.\n", exchange, ex)
+        logging.exception("Error loading yaml of %s.\n", exchange)
         raise ex
 
 

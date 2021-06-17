@@ -1,10 +1,12 @@
-image: "python:3.7"
+image: "python:3.9.5"
+
+variables:
+  MODULE_PATH: "./crypto_api"
 
 before_script:
   - python --version
-  - pip install pylint
-  - pip install pytest
   - pip install .
+  - export PYTHONPATH="$MODULE_PATH"
 
 stages:
   - static_analysis
@@ -13,12 +15,23 @@ stages:
 linting:
   stage: static_analysis
   script:
-  - export PYTHONPATH="./crypto_api"
-  - shopt -s globstar
-  - pylint --disable=R,C0301,W0511,W0613,W0703,E1121 ./crypto_api/**/*.py
+    - pip install pylint
+    - shopt -s globstar
+    - pylint --disable=R,C0301,W0511,W0613,W0703,E1121,W0614,C0302,E1101,W0401,W1113,W0603 $MODULE_PATH/**/*.py
 
 unit_testing:
   stage: test
   script:
-  - export PYTHONPATH="./crypto_api"
-  - pytest -v ./tests
+    - pip install pytest
+    - pytest -v
+
+unit_testing_coverage:
+  stage: test
+  variables:
+    MIN_COVERAGE: 60
+  script:
+    - pip install pytest
+    - pip install coverage
+    - coverage run -m pytest -v
+    - coverage report --show-missing --fail-under=$MIN_COVERAGE --include=$MODULE_PATH/* --omit=$MODULE_PATH/tests/*
+

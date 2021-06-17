@@ -20,7 +20,7 @@ import datetime
 
 import pytest
 
-from model.exchange.Mapping import Mapping
+from model.exchange.mapping import Mapping
 
 
 class TestMapping:

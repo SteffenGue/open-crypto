@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module for data exporting into .csv or hdf5 format. The module is called from runner.py, reads-in a
+configuration file and exports data into one of both mentioned formats.
 """
 
 import inspect
@@ -22,18 +23,18 @@ from model.utilities.utilities import read_config
 def database_session(filename: str = None, db_path: str = None):
     """
     Returns an open SqlAlchemy-Session. The session is retrieved from the DatabaseHandler.
-    @param metadata: Database metadata
-    @param db_path: Path to the database. Default: current working directory
     @param filename: Name of the configuration file to init the DatabaseHandler
+    @param db_path: Path to the database. Default: current working directory
     @return: SqlAlchemy-Session
     """
     db_handler = DatabaseHandler(metadata=metadata, path=db_path, **read_config(file=filename, section="database"))
-    return db_handler.sessionFactory()
+    return db_handler.session_factory()
 
 
 class CsvExport:
     """
-    TODO: Fill out
+    Class to actually query and save data. The file-format is given as input parameter, along with *args and
+    **kwargs for the pd.to_csv(*args, **kwargs) and pd.to_hdf(*args, **kwargs).
     """
 
     def __init__(self, file: str = None):
@@ -64,7 +65,7 @@ class CsvExport:
                 table_names.update({name: obj})
         self.table = table_names[self.options.get("table_name", None)]
 
-    def create_csv(self):
+    def load_data(self) -> pd.DataFrame:
         """
         Receives from the DatabaseHandler the tuples that should be exported.
         The received tuples are based on the parameters set by the user in csv-config.yaml.
@@ -81,15 +82,34 @@ class CsvExport:
                                                          self.options.get("first_currencies", None),
                                                          self.options.get("second_currencies", None)
                                                          )
-        ticker_data = pd.DataFrame(ticker_data)
+        return pd.DataFrame(ticker_data)
 
+    def export(self, data_type: str, *args, **kwargs):
+        """
+        Exports the data in the specified format.
+        @param data_type: String representation of the export format. Default: csv.
+        """
+
+        ticker_data = self.load_data()
         if self.filename.endswith(".csv"):
             output_path: str = os.path.join(self.path, self.filename)
         else:
             output_path: str = os.path.join(self.path, f"{self.filename}.csv")
 
+        export_format = {'csv': ticker_data.to_csv,
+                         'hdf': ticker_data.to_hdf,
+                         'excel': ticker_data.to_excel}
+
+        parameters = {'path_or_buf': output_path,
+                      'sep': self.options.get("delimiter", ";"),
+                      'decimal': self.options.get("decimal", "."),
+                      'index': False,
+                      }
+
+        parameters.update(**kwargs)
+
+        if data_type not in export_format:
+            print(f"Format not supported. Choose between: {list(export_format.keys())}.")
+
+        export_format.get(data_type)(*args, **parameters)
         print(output_path)
-        ticker_data.to_csv(output_path,
-                           sep=self.options.get("delimiter", ";"),
-                           decimal=self.options.get("decimal", "."),
-                           index=False)
