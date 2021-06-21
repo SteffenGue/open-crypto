@@ -12,7 +12,6 @@ within the module scheduler.
 import ssl
 import os
 import platform
-import certifi
 import asyncio
 import itertools
 import logging
@@ -21,10 +20,10 @@ import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
-
 import aiohttp
-import tqdm
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
+import tqdm
+import certifi
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.mapping import Mapping, convert_type
@@ -275,7 +274,7 @@ class Exchange:
 
         except AssertionError:
             print(f"Failed request for {self.name.capitalize()}. Status {resp.status}.")
-            logging.error(f"Failed request for %s. Status %f.", self.name.capitalize(), resp.status)
+            logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
             return None
 
         except Exception:
