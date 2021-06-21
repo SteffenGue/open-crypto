@@ -12,6 +12,7 @@ within the module scheduler.
 import ssl
 import os
 import platform
+import certifi
 import asyncio
 import itertools
 import logging
@@ -23,7 +24,7 @@ from typing import Iterator, Dict, List, Tuple, Optional, Any
 
 import aiohttp
 import tqdm
-from aiohttp import ClientConnectionError, ClientConnectorSSLError, ClientConnectorCertificateError
+from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.mapping import Mapping, convert_type
@@ -144,7 +145,6 @@ def provide_ssl_context() -> ssl.SSLContext:
     ssl_context.load_default_certs()
 
     if platform.system().lower() == 'darwin':
-        import certifi
         ssl_context.load_verify_locations(
             cafile=os.path.relpath(certifi.where()),
             capath=None,
@@ -404,15 +404,15 @@ class Exchange:
             for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
             # ToDO: Test method format_request_url
                 if pair_template_dict:
-                        url_formatted, params_adj = format_request_url(url,
-                                                                       pair_template_dict,
-                                                                       pair_formatted[pair],
-                                                                       pair,
-                                                                       params)
+                    url_formatted, params_adj = format_request_url(url,
+                                                                   pair_template_dict,
+                                                                   pair_formatted[pair],
+                                                                   pair,
+                                                                   params)
 
-                        response_json = await self.fetch(session, url=url_formatted, params=params_adj)
-                        if response_json:
-                            responses[pair] = response_json
+                    response_json = await self.fetch(session, url=url_formatted, params=params_adj)
+                    if response_json:
+                        responses[pair] = response_json
                 else:
                     url_formatted, params_adj = url, params
                     response_json = await self.fetch(session, url=url_formatted, params=params_adj)
