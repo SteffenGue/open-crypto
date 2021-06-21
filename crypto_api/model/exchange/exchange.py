@@ -367,7 +367,7 @@ class Exchange:
 
                 await asyncio.sleep(self.rate_limit)
 
-        return TimeHelper.now(), self.name, responses
+            return TimeHelper.now(), self.name, responses
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """

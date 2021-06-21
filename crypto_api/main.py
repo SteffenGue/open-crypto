@@ -147,7 +147,7 @@ def run(file: str = None, path: str = None):
     @param file:
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
-    sys.excepthook = handler
+    # sys.excepthook = handler
     init_logger(path)
 
     logging.info("Reading Database Configuration")
