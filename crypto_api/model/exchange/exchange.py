@@ -9,7 +9,9 @@ The exchange class is build upon the specific exchange.yaml file and several inp
 While an exchange-object itself provides all necessary methods for an API-request, the execution itself is scheduled
 within the module scheduler.
 """
-
+import ssl
+import os
+import platform
 import asyncio
 import itertools
 import logging
@@ -21,7 +23,7 @@ from typing import Iterator, Dict, List, Tuple, Optional, Any
 
 import aiohttp
 import tqdm
-from aiohttp import ClientConnectionError
+from aiohttp import ClientConnectionError, ClientConnectorSSLError, ClientConnectorCertificateError
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.mapping import Mapping, convert_type
@@ -128,6 +130,28 @@ def format_request_url(url: str, pair_template: dict, pair_formatted: str, pair,
     return url_formatted, parameter
 
 
+def provide_ssl_context() -> ssl.SSLContext:
+    """
+    Provides an SSL-Context if none is found beforehand. Especially UNIX machine with kernel "Darwin" may not
+    provide an SSL-context for Python. To avoid connections without ssl-verification, this method returns a new
+    default SSL-Context plugged into the request method.
+    @return: SSLContext
+    """
+
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    ssl_context.verify_mode = ssl.CERT_REQUIRED
+    ssl_context.check_hostname = True
+    ssl_context.load_default_certs()
+
+    if platform.system().lower() == 'darwin':
+        import certifi
+        ssl_context.load_verify_locations(
+            cafile=os.path.relpath(certifi.where()),
+            capath=None,
+            cadata=None)
+    return ssl_context
+
+
 class Exchange:
     """
     Attributes:
@@ -210,6 +234,58 @@ class Exchange:
         self.consecutive_exception = False
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
+
+    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict) -> Any:
+        """
+        Executes the actual request and exception handling.
+
+        @param session: Request session
+        @type: aiohttp.ClientSession
+        @param url: Api-url
+        @type: str
+        @param params: Request parameters
+        @return: Response
+        @rtype: dict
+        """
+
+        timeout = aiohttp.ClientTimeout(total=self.timeout)
+        try:
+            async with session.get(url=url, params=params, timeout=timeout) as resp:
+                assert resp.status == 200
+                return await resp.json(content_type=None)
+
+        except ClientConnectorCertificateError:
+            print("No SSL-Certificate. Providing new SSL-Context instance.")
+            try:
+                ssl_context = provide_ssl_context()
+                async with session.get(url=url, params=params, timeout=timeout, ssl=ssl_context) as resp:
+                    assert resp.status == 200
+                    return await resp.json(content_type=None)
+
+            except ClientConnectorCertificateError:
+                print("Retry with no SSL-Verification..")
+                async with session.get(url=url, params=params, timeout=timeout, verify_ssl=False) as resp:
+                    assert resp.status == 200
+                    return await resp.json(content_type=None)
+
+        except (asyncio.TimeoutError, ClientConnectionError):
+            print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError! Status: {resp.status}.")
+            logging.error("No connection to %s. Timeout or ConnectionError!", self.name.capitalize())
+            return None
+
+        except AssertionError:
+            print(f"Failed request for {self.name.capitalize()}. Status {resp.status}.")
+            logging.error(f"Failed request for %s. Status %f.", self.name.capitalize(), resp.status)
+            return None
+
+        except Exception:
+            print(f"Unable to perform request for {self.name}. \n"
+                  f"Url: {url}, Parameters: {params}. \n"
+                  f"Response: {resp.text()}.")
+            logging.error("Unable to perform request for {self.name}. \n"
+                          "Url: %s, Parameters: %s. \n"
+                          "Response: %s.", url, params, resp.text())
+            return None
 
     def add_exchange_currency_pairs(self, currency_pairs: list):
         """
@@ -324,46 +400,24 @@ class Exchange:
             pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
 
         async with aiohttp.ClientSession() as session:
-            for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
 
-                # ToDO: Test method format_request_url
+            for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
+            # ToDO: Test method format_request_url
                 if pair_template_dict:
-                    url_formatted, params_adj = format_request_url(url,
-                                                                   pair_template_dict,
-                                                                   pair_formatted[pair],
-                                                                   pair,
-                                                                   params)
+                        url_formatted, params_adj = format_request_url(url,
+                                                                       pair_template_dict,
+                                                                       pair_formatted[pair],
+                                                                       pair,
+                                                                       params)
+
+                        response_json = await self.fetch(session, url=url_formatted, params=params_adj)
+                        if response_json:
+                            responses[pair] = response_json
                 else:
                     url_formatted, params_adj = url, params
-
-                try:
-                    response = await session.get(url=url_formatted,
-                                                 params=params_adj,
-                                                 timeout=aiohttp.ClientTimeout(total=self.timeout))
-                    assert response.status == 200
-                    # Changes here: deleted await response.json(...) as it throw a ClientPayloadError for extrates.
-                    # However the response.status was 200 and could be persisted into the DB...
-                    response_json = await response.json(content_type=None)
-                    if pair_template_dict:
-                        responses[pair] = response_json
-                    else:  # when ticker data is returned for all available currency pairs at once
+                    response_json = await self.fetch(session, url=url_formatted, params=params_adj)
+                    if response_json:
                         responses[None] = response_json
-                        break
-
-                except (ClientConnectionError, asyncio.TimeoutError):
-                    print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
-                    logging.error("No connection to %s. Timeout or ConnectionError!", self.name.capitalize())
-                    responses[pair] = []
-                except AssertionError:
-                    print(f"Failed request for {self.name.capitalize()}: {pair}. Status {response.status}.")
-                    responses[pair] = []
-                except Exception as ex:
-                    print(f"Unable to read response from {self.name}. Check exchange config file.\n"
-                          f"Url: {url_formatted}, Parameters: {request_url_and_params['params']}")
-                    print(ex)
-                    logging.error("Unable to read response from %s. Check config file.\nUrl: %s, Parameters: %s",
-                                  self.name, url_formatted, params)
-                    responses[pair] = []
 
                 await asyncio.sleep(self.rate_limit)
 
@@ -411,36 +465,19 @@ class Exchange:
                                                       request_name=request_name)
         response_json = None
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
+            request_url_and_params = self.request_urls[request_name]
+
             async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls[request_name]
-                try:
-                    response = await session.get(request_url_and_params["url"],
-                                                 params=request_url_and_params["params"],
-                                                 timeout=aiohttp.ClientTimeout(total=self.timeout))
-                    response_json = await response.json(content_type=None)
+                response_json = await self.fetch(session,
+                                                 url=request_url_and_params["url"],
+                                                 params=request_url_and_params["params"])
 
-                    assert response.status == 200
+                if response_json:
+                    return self.name, response_json
 
-                except (ClientConnectionError, asyncio.TimeoutError):
-                    print(f"No connection to {self.name.capitalize()}. Timeout- or ConnectionError!")
-                    self.exception_counter += 1
+                else:
                     return self.name, None
 
-                except AssertionError:
-                    print(f"Failed request for {self.name.capitalize()}. Status {response.status}.")
-                    return self.name, None
-
-                except Exception:
-                    print(f"Unable to read response from {self.name}. Check exchange config file.\n"
-                          f"Url: {request_url_and_params['url']}, Parameters: {request_url_and_params['params']}")
-                    logging.warning("Unable to read response from %s. Check config file.\nUrl: %s, Parameters: %s",
-                                    self.name, request_url_and_params['url'], request_url_and_params['params'])
-                    self.exception_counter += 1
-                    return self.name, None
-        else:
-            logging.warning("%s has no currency pair request. Check %s.yaml if it should.", self.name, self.name)
-            print(f"{self.name} has no currency-pair request.")
-        return self.name, response_json
 
     def extract_request_urls(self,
                              request_dict: dict,
