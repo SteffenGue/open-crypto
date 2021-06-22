@@ -10,6 +10,7 @@ import logging
 import os
 import pathlib
 from datetime import timedelta
+import pandas as pd
 from pathlib import Path
 from typing import Any
 import platform
@@ -357,3 +358,29 @@ def get_all_exchanges_and_methods() -> dict[str, dict]:
         result_dict.update({exchange: {method: True for method in list(file.get('requests').keys())}})
 
     return result_dict
+
+
+def prepend_spaces_to_columns(dataframe: pd.DataFrame, spaces: int = 3) -> pd.DataFrame:
+    """
+    Adds spaced between pd.DataFrame columns for easy readability.
+    @param dataframe: Dataframe to append spaced to
+    @type: pd.DataFrame
+    @param spaces: Number of spaces
+    @type: int
+    @return: DataFrame with appended spaced.
+    @rtype: pd.DataFrame
+    """
+
+    spaces = ' ' * spaces
+    # ensure every column name has the leading spaces:
+    if isinstance(dataframe.columns, pd.MultiIndex):
+        for i in range(dataframe.columns.nlevels):
+            level_new = [spaces + str(s) for s in dataframe.columns.levels[i]]
+            dataframe.columns.set_levels(level_new, level=i, inplace=True)
+    else:
+        dataframe.columns = spaces + dataframe.columns
+
+    # ensure every element has the leading spaces:
+    df = dataframe.astype(str)
+    df = spaces + df
+    return df
