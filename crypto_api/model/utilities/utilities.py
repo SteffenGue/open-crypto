@@ -12,6 +12,9 @@ import pathlib
 from datetime import timedelta
 from pathlib import Path
 from typing import Any
+import platform
+import ssl
+import certifi
 
 import dateutil.parser
 import oyaml as yaml
@@ -304,3 +307,38 @@ def get_exchange_names() -> list[str]:
     exchanges.sort()
 
     return exchanges
+
+
+def provide_ssl_context() -> ssl.SSLContext:
+    """
+    Provides an SSL-Context if none is found beforehand. Especially UNIX machine with kernel "Darwin" may not
+    provide an SSL-context for Python. To avoid connections without ssl-verification, this method returns a new
+    default SSL-Context plugged into the request method.
+    @return: SSLContext
+    """
+
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    ssl_context.verify_mode = ssl.CERT_REQUIRED
+    ssl_context.check_hostname = True
+    ssl_context.load_default_certs()
+
+    if platform.system().lower() == 'darwin':
+        ssl_context.load_verify_locations(
+            cafile=os.path.relpath(certifi.where()),
+            capath=None,
+            cadata=None)
+    return ssl_context
+
+
+def replace_list_item(replace_list: list, condition: str, value: str) -> list:
+    """
+    Replaces a specific value from a list.
+    @param replace_list: The list in which the value needs to be replaced
+    @param condition: The value to be updated
+    @param value: The new value
+    @return: Updated list
+    """
+    for i, item in enumerate(replace_list):
+        if item == condition:
+            replace_list[i] = value
+    return replace_list

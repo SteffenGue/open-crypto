@@ -268,6 +268,8 @@ class Scheduler:
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
         counter = {}
+
+        # ToDo: Print Statement too often if interval != days.
         print("Formatting and writing Data into the database..")
         for response in responses:
             response_time = response[0]

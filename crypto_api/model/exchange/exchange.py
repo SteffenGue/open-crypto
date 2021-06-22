@@ -9,9 +9,6 @@ The exchange class is build upon the specific exchange.yaml file and several inp
 While an exchange-object itself provides all necessary methods for an API-request, the execution itself is scheduled
 within the module scheduler.
 """
-import ssl
-import os
-import platform
 import asyncio
 import itertools
 import logging
@@ -23,74 +20,14 @@ from typing import Iterator, Dict, List, Tuple, Optional, Any
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 import tqdm
-import certifi
 
 from model.database.tables import ExchangeCurrencyPair
-from model.exchange.mapping import Mapping, convert_type
+from model.exchange.mapping import convert_type, extract_mappings
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
 from model.utilities.time_helper import TimeHelper
-
-
-def replace_list_item(replace_list: list, condition: str, value: str) -> list:
-    """
-    Replaces a specific value from a list.
-    @param replace_list: The list in which the value needs to be replaced
-    @param condition: The value to be updated
-    @param value: The new value
-    @return: Updated list
-    """
-    for i, item in enumerate(replace_list):
-        if item == condition:
-            replace_list[i] = value
-    return replace_list
-
-
-def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mapping]]:
-    """
-    Helper-Method which should be only called by the constructor.
-    Extracts out of a given exchange .yaml-requests-section for each
-    request the necessary mappings so the values can be extracted from
-    the response for said request.
-
-    The key-value in the dictionary is the same as the key for the request.
-    i.e. behind 'ticker' are all the mappings stored which are necessary for
-    extracting the values out of a ticker-response.
-
-    If there is no mapping specified in the .yaml for a value which is contained
-    by the response, the value will not be extracted later on because there won't
-    be a Mapping-object for said value.
-
-    @param exchange_name: str
-        String representation of the exchange name.
-    @param requests: Dict[str: List[Mapping]]
-        Requests-section from a exchange.yaml as dictionary.
-        Method does not check if dictionary contains viable information.
-
-    @return:
-        Dictionary with the following structure:
-            {'request_name': List[Mapping]}
-    """
-    response_mappings = dict()
-    if requests:
-        for request in requests:
-            request_mapping: dict = requests[request]
-
-            if "mapping" in request_mapping.keys():
-                mapping = request_mapping["mapping"]
-                mapping_list = list()
-
-                try:
-                    for entry in mapping:
-                        mapping_list.append(Mapping(entry["key"], entry["path"], entry["type"]))
-                except KeyError:
-                    print(f"Error loading mappings of {exchange_name} in {request}: {entry}")
-                    logging.error("Error loading mappings of %s in %s: %s", exchange_name, request, entry)
-                    break
-
-                response_mappings[request] = mapping_list
-
-    return response_mappings
+from model.utilities.utilities import provide_ssl_context
+from model.utilities.utilities import replace_list_item
 
 
 def format_request_url(url: str, pair_template: dict, pair_formatted: str, pair, parameter: dict):
@@ -128,27 +65,6 @@ def format_request_url(url: str, pair_template: dict, pair_formatted: str, pair,
     parameter = {k: v for k, v in parameter.items() if k not in variables}
 
     return url_formatted, parameter
-
-
-def provide_ssl_context() -> ssl.SSLContext:
-    """
-    Provides an SSL-Context if none is found beforehand. Especially UNIX machine with kernel "Darwin" may not
-    provide an SSL-context for Python. To avoid connections without ssl-verification, this method returns a new
-    default SSL-Context plugged into the request method.
-    @return: SSLContext
-    """
-
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-    ssl_context.verify_mode = ssl.CERT_REQUIRED
-    ssl_context.check_hostname = True
-    ssl_context.load_default_certs()
-
-    if platform.system().lower() == 'darwin':
-        ssl_context.load_verify_locations(
-            cafile=os.path.relpath(certifi.where()),
-            capath=None,
-            cadata=None)
-    return ssl_context
 
 
 class Exchange:
@@ -197,7 +113,7 @@ class Exchange:
     timeout: int
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, db_last_timestamp, timeout, interval: Any = "days"):
+    def __init__(self, yaml_file: Dict, db_first_timestamp, timeout, interval: Any = "days"):
         """
         Creates a new Exchange-object.
 
@@ -215,7 +131,7 @@ class Exchange:
         self.name = yaml_file["name"]
         self.interval = interval
         self.base_interval = interval
-        self.get_first_timestamp = db_last_timestamp
+        self.get_first_timestamp = db_first_timestamp
 
         self.api_url = yaml_file["api_url"]
         if yaml_file.get("rate_limit"):
@@ -254,8 +170,11 @@ class Exchange:
                 return await resp.json(content_type=None)
 
         except ClientConnectorCertificateError:
-            print("No SSL-Certificate. Providing new SSL-Context instance.")
             try:
+                print("No SSL-Certification found. Providing new SSL-context instance in the meantime. \n"
+                      "To avoid this warning in the future: If you are running on MacOS, \n"
+                      "try to install certification by executing: \n"
+                      "/Applications/Python [version/number]/Install Certificates.command.")
                 ssl_context = provide_ssl_context()
                 async with session.get(url=url, params=params, timeout=timeout, ssl=ssl_context) as resp:
                     assert resp.status == 200
@@ -401,7 +320,7 @@ class Exchange:
         async with aiohttp.ClientSession() as session:
 
             for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
-            # ToDO: Test method format_request_url
+                # ToDO: Test method format_request_url
                 if pair_template_dict:
                     url_formatted, params_adj = format_request_url(url,
                                                                    pair_template_dict,
@@ -476,7 +395,6 @@ class Exchange:
 
                 else:
                     return self.name, None
-
 
     def extract_request_urls(self,
                              request_dict: dict,
