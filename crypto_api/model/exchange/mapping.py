@@ -7,6 +7,7 @@ TODO: Fill out module docstring.
 from collections import deque
 from collections.abc import Iterable
 from typing import Collection, Optional
+import logging
 
 from model.utilities.utilities import TYPE_CONVERSIONS
 
@@ -320,7 +321,6 @@ def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mappi
                 response_mappings[request] = mapping_list
 
     return response_mappings
-
 
 
 def is_scalar(value) -> bool:
