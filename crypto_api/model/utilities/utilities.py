@@ -265,7 +265,7 @@ def read_config(file: str = None, section: str = None) -> dict[str, Any]:
     raise KeyError()
 
 
-def yaml_loader(exchange: str):
+def yaml_loader(exchange: str) -> dict:
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 

@@ -24,7 +24,7 @@ class Scheduler:
     Attributes like frequency or job_list can also be set by the user in config.yaml.
     """
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job], frequency: Any):
+    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job], frequency: Union[str, int, float]):
         """
         Initializer for a Scheduler.
 
