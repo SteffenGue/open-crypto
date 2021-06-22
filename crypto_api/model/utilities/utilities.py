@@ -10,13 +10,12 @@ import logging
 import os
 import pathlib
 from datetime import timedelta
-import pandas as pd
 from pathlib import Path
 from typing import Any
 import platform
 import ssl
+import pandas as pd
 import certifi
-
 import dateutil.parser
 import oyaml as yaml
 
@@ -381,6 +380,6 @@ def prepend_spaces_to_columns(dataframe: pd.DataFrame, spaces: int = 3) -> pd.Da
         dataframe.columns = spaces + dataframe.columns
 
     # ensure every element has the leading spaces:
-    df = dataframe.astype(str)
-    df = spaces + df
-    return df
+    dataframe = dataframe.astype(str)
+    dataframe = spaces + dataframe
+    return dataframe

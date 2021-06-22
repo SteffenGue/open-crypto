@@ -96,10 +96,10 @@ def exchanges_and_methods():
     @return: Dataframe of all exchanges and Methods
     @rtype: pd.DataFrame
     """
-    df = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
+    dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
     pd.set_option('display.max_rows', 500)
 
-    print(prepend_spaces_to_columns(df.transpose(), 3))
+    print(prepend_spaces_to_columns(dataframe.transpose(), 3))
 
 
 def get_config(filename: str = None) -> Dict:
