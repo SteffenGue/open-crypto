@@ -342,3 +342,18 @@ def replace_list_item(replace_list: list, condition: str, value: str) -> list:
         if item == condition:
             replace_list[i] = value
     return replace_list
+
+
+def get_all_exchanges_and_methods() -> dict[str, dict]:
+    """
+    Returns the exchange names and all supported methods.
+    @return: List of exchanges with supported request methods.
+    @rtype: list
+    """
+    result_dict = dict()
+    exchanges = get_exchange_names()
+    for exchange in exchanges:
+        file = yaml_loader(exchange)
+        result_dict.update({exchange: {method: True for method in list(file.get('requests').keys())}})
+
+    return result_dict

@@ -10,9 +10,11 @@ import os
 import shutil
 from typing import Dict
 
+import pandas as pd
+
 import main
 from export import CsvExport, database_session
-from model.utilities.utilities import read_config
+from model.utilities.utilities import read_config, get_all_exchanges_and_methods
 from model.database.tables import *
 
 PATH = os.getcwd()
@@ -86,6 +88,45 @@ def get_session(filename: str = None, db_path: str = PATH):
     @return: SqlAlchemy-Session
     """
     return database_session(filename=filename, db_path=db_path)
+
+
+def __prependSpacesToColumns(df: pd.DataFrame, n: int = 3) -> pd.DataFrame:
+    """
+    Adds spaced between pd.DataFrame columns for easy readability.
+    @param df: Dataframe to append spaced to
+    @type: pd.DataFrame
+    @param n: Number of spaces
+    @type: int
+    @return: DataFrame with appended spaced.
+    @rtype: pd.DataFrame
+    """
+
+    spaces = ' ' * n
+    # ensure every column name has the leading spaces:
+    if isinstance(df.columns, pd.MultiIndex):
+        for i in range(df.columns.nlevels):
+            levelNew = [spaces + str(s) for s in df.columns.levels[i]]
+            df.columns.set_levels(levelNew, level=i, inplace=True)
+    else:
+        df.columns = spaces + df.columns
+
+    # ensure every element has the leading spaces:
+    df = df.astype(str)
+    df = spaces + df
+
+    return df
+
+
+def exchanges_and_methods():
+    """
+    Lists all exchanges and methods.
+    @return: Dataframe of all exchanges and Methods
+    @rtype: pd.DataFrame
+    """
+    df = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
+    pd.set_option('display.max_rows', 500)
+
+    print(__prependSpacesToColumns(df.transpose(), 3))
 
 
 def get_config(filename: str = None) -> Dict:
