@@ -172,8 +172,30 @@ class Scheduler:
             # Reentry the method to get into the first else (down) condition and shut down process
             self.remove_invalid_jobs(jobs)
 
+    async def update_currency_pairs(self, ex: Exchange) -> list:
+        """
+        This method requests the currency_pairs.
+
+        @param ex: Current exchange object.
+        @type ex: Exchange
+
+        @return: Empty list if no response from the exchange.
+        @rtype: list
+        """
+        response = await ex.request_currency_pairs()
+        if response[1]:
+            try:
+                formatted_response = ex.format_currency_pairs(response)
+                self.database_handler.persist_exchange_currency_pairs(formatted_response,
+                                                                      is_exchange=ex.is_exchange)
+            except (MappingNotFoundException, TypeError, KeyError):
+                logging.exception("Error updating currency_pairs for %s", ex.name.capitalize())
+                return []
+        else:
+            return []
+
     # ToDo: Asynchronicity.
-    async def get_currency_pairs(self, job_list: list[Job], *args) -> list[Job]:
+    async def get_currency_pairs(self, job_list: list[Job]) -> list[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
         api for all currency pairs is called.
@@ -185,28 +207,6 @@ class Scheduler:
         @rtype: list[Job]
         """
 
-        async def update_currency_pairs(ex: Exchange) -> list:
-            """
-            This method requests the currency_pairs.
-
-            @param ex: Current exchange object.
-            @type ex: Exchange
-
-            @return: Empty list if no response from the exchange.
-            @rtype: list
-            """
-            response = await ex.request_currency_pairs()
-            if response[1]:
-                try:
-                    formatted_response = ex.format_currency_pairs(response)
-                    self.database_handler.persist_exchange_currency_pairs(formatted_response,
-                                                                          is_exchange=ex.is_exchange)
-                except (MappingNotFoundException, TypeError, KeyError):
-                    logging.exception("Error updating currency_pairs for %s", ex.name.capitalize())
-                    return []
-            else:
-                return []
-
         for job in job_list:
 
             job_params = job.job_params
@@ -216,7 +216,7 @@ class Scheduler:
             for exchange in exchanges:
                 if job_params["update_cp"] or job.request_name == "currency_pairs" or \
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
-                    await update_currency_pairs(exchange)
+                    await self.update_currency_pairs(exchange)
 
                 if job.request_name != "currency_pairs":
                     job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(

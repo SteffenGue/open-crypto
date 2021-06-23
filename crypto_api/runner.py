@@ -9,7 +9,6 @@ into csv-files.
 import os
 import shutil
 from typing import Dict
-
 import pandas as pd
 
 import main
@@ -90,16 +89,21 @@ def get_session(filename: str = None, db_path: str = PATH):
     return database_session(filename=filename, db_path=db_path)
 
 
-def exchanges_and_methods():
+def exchanges_and_methods(return_dataframe: bool = False) -> pd.DataFrame:
     """
     Lists all exchanges and methods.
-    @return: Dataframe of all exchanges and Methods
-    @rtype: pd.DataFrame
+    as_dataframe: Specify if results are returned as pd.DataFrame.
+    @type return_dataframe: boolean
+    @return: Print or return dataframe
+    @rtype: None or pd.DataFrame
     """
     dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
     pd.set_option('display.max_rows', 500)
 
-    print(prepend_spaces_to_columns(dataframe.transpose(), 3))
+    if return_dataframe:
+        return dataframe.transpose()
+    else:
+        print(prepend_spaces_to_columns(dataframe.transpose(), 3))
 
 
 def get_config(filename: str = None) -> Dict:

@@ -34,7 +34,7 @@ class GlobalConfig(object):
             self.path = os.path.dirname(os.path.realpath(__file__))
             GlobalConfig.__is_initialized = True
 
-        # The first is used normally. The second (os.getcwd()) is needed when the directory
+        # The first path is used normally. The second (os.getcwd()) is needed when the directory
         # of the program and the resources differs. That is the case for the Python Package as
         # we want the User to manipulate the resources (i.e. config files and exchange mappings). The resources
         # will be copied into the current working directory and taken by the program from there.

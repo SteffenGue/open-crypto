@@ -1,6 +1,7 @@
 name: coingecko
 exchange: false
 api_url: https://api.coingecko.com/api/v3/
+#api_url: https://api.coingecko.com/api/v2/
 rate_limit:
   max: 100
   unit: 60

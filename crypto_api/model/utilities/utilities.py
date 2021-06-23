@@ -383,3 +383,4 @@ def prepend_spaces_to_columns(dataframe: pd.DataFrame, spaces: int = 3) -> pd.Da
     dataframe = dataframe.astype(str)
     dataframe = spaces + dataframe
     return dataframe
+
