@@ -579,8 +579,7 @@ class DatabaseHandler:
                       f"Data will be persisted next time.")
                 logging.info("Added %s new currency pairs to %s.", added_cp_counter, exchange.name.capitalize())
 
-        return [item for item in exchanges_with_pairs[exchange] if all((item.id in counter_dict.keys(),
-                                                                        counter_dict.get(item.id) > 1))]
+        return [item for item in exchanges_with_pairs[exchange] if (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
 
     def get_readable_query(self,
                            db_table: Union[HistoricRate, OrderBook, Ticker, Trade],
