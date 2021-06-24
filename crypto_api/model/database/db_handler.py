@@ -527,8 +527,8 @@ class DatabaseHandler:
                                 data_tuple.update({"exchange_pair_id": currency_pair.id})
                             else:
                                 continue
-                        else:
-                            exchange_pair_id = data_tuple.get("exchange_pair_id")
+                        # else:
+                        exchange_pair_id = data_tuple.get("exchange_pair_id")
 
                         data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
                         check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]

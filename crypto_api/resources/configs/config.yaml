@@ -10,7 +10,7 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: minutes  #minutes, hours, days, weeks, months
+    interval: hours  #minutes, hours, days, weeks, months
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: false
@@ -20,12 +20,13 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - bibox
+      - binance
 #      - bitfinex
 #      - gemini
 #      - omgfin
 
-    excluded: null
+    excluded:
+      - bittrex
 
     currency_pairs:
       - first: btc
