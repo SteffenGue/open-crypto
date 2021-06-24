@@ -548,8 +548,8 @@ class DatabaseHandler:
                             add_tuple = db_table(**data_tuple)
                             session.add(add_tuple)
 
-                    print(f"Pair-ID {exchange_pair_id} - {exchange.name.capitalize()}: "
-                          f"{counter_dict.get(exchange_pair_id, 0)} tuple(s)")
+                    print(f"Pair-ID {exchange_pair_id if counter_dict else 'ALL'} - {exchange.name.capitalize()}: "
+                          f"{counter_dict.get(exchange_pair_id, tuple_counter)} tuple(s)")
                 except StopIteration:
                     break
                 except UnboundLocalError:
