@@ -189,7 +189,7 @@ class HistoricRate(Base):
     low = Column(Float)
     close = Column(Float)
     volume = Column(Float)
-    base_volume = Column(Float)
+    base_volume = Column(Float)  # ToDo: check if base_volume is correct.
     market_cap = Column(Float)
 
     def __repr__(self):
