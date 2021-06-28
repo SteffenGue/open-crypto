@@ -6,6 +6,11 @@ to the current working directory of the user, start the program, establish datab
 into csv-files.
 """
 
+# Append path
+import sys
+from os.path import dirname
+sys.path.append(dirname(__file__))
+
 import os
 import shutil
 from typing import Dict
