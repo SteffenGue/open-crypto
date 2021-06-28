@@ -27,8 +27,7 @@ setup(
     python_requires='>=3.7',
     install_requires=[
         "aiohttp",
-        "aiohttp",
-		"certifi",
+        "certifi",
         "aioschedule",
         "datetime_periods",
         "numpy != 1.19.4",

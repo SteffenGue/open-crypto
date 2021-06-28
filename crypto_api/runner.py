@@ -16,29 +16,27 @@ from export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
 from model.database.tables import *
 
-PATH = os.getcwd()
 
-
-def check_path():
+def check_path(path: str):
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
     """
-    destination = PATH + "/resources"
+    destination = path + "/resources"
     if not os.path.exists(destination):
-        update_maps()
+        update_maps(path)
 
 
-def update_maps(cwd: str = PATH):
+def update_maps(directory: str):
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
-    @type cwd: Current working directory
+    @type directory: Current working directory
     """
 
-    print(f"Copying resources to {cwd}..")
+    print(f"Copying resources to {directory} ...")
     source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
 
-    destination = cwd + "/resources"
+    destination = directory + "/resources"
     for src_dir, dirs, files in os.walk(source):
         dst_dir = src_dir.replace(source, destination, 1)
         try:
@@ -61,23 +59,7 @@ def update_maps(cwd: str = PATH):
                 shutil.copy(src_file, dst_dir)
 
 
-def get_path():
-    """
-    @return: Prints the path to the current working directory.
-    """
-    return os.getcwd()
-
-
-def set_path():
-    """
-    Sets the path if it should differ from the current working directory.
-    """
-    global PATH
-    PATH = input('New path: \n')
-    print(f"Path set to {PATH}.")
-
-
-def get_session(filename: str = None, db_path: str = PATH):
+def get_session(filename: str, db_path: str):
     """
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
     Furthermore this functions imports all database defining classes to work with.
@@ -146,15 +128,16 @@ def export(file: str = None, data_type: str = 'csv', *args, **kwargs):
     CsvExport(file).export(data_type=data_type, *args, **kwargs)
 
 
-def run(file: str = None, cwd=PATH):
+def run():
     """
     First checks if all necessary folder are available (i.e. config and yaml-maps) and starts the program.
-    @param file: configuration file-name
-    @param cwd: The current working directory if not specified differently.
     """
-    check_path()
-    run(main.run(file, cwd))  # TODO: Make better
+    configuration_file = None
+    working_directory = os.getcwd()
+
+    check_path(working_directory)
+    main.run(configuration_file, working_directory)
 
 
-if __name__ == '__main__':
-    run(cwd=PATH)
+if __name__ == "__main__":
+    run()

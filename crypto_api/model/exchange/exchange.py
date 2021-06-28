@@ -187,7 +187,7 @@ class Exchange:
                     return await resp.json(content_type=None)
 
         except (asyncio.TimeoutError, ClientConnectionError):
-            print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError! Status: {resp.status}.")
+            print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!.")
             logging.error("No connection to %s. Timeout or ConnectionError!", self.name.capitalize())
             return None
 
@@ -198,11 +198,9 @@ class Exchange:
 
         except Exception:
             print(f"Unable to perform request for {self.name}. \n"
-                  f"Url: {url}, Parameters: {params}. \n"
-                  f"Response: {resp.text()}.")
+                  f"Url: {url}, Parameters: {params}.")
             logging.error("Unable to perform request for {self.name}. \n"
-                          "Url: %s, Parameters: %s. \n"
-                          "Response: %s.", url, params, resp.text())
+                          "Url: %s, Parameters: %s.", url, params)
             return None
 
     def add_exchange_currency_pairs(self, currency_pairs: list):
@@ -318,10 +316,9 @@ class Exchange:
             pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
 
         async with aiohttp.ClientSession() as session:
-
-            for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
-                # ToDO: Test method format_request_url
-                if pair_template_dict:
+            # ToDO: Test method format_request_url
+            if pair_template_dict:
+                for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
                     url_formatted, params_adj = format_request_url(url,
                                                                    pair_template_dict,
                                                                    pair_formatted[pair],
@@ -331,15 +328,15 @@ class Exchange:
                     response_json = await self.fetch(session, url=url_formatted, params=params_adj)
                     if response_json:
                         responses[pair] = response_json
-                else:
-                    url_formatted, params_adj = url, params
-                    response_json = await self.fetch(session, url=url_formatted, params=params_adj)
-                    if response_json:
-                        responses[None] = response_json
+            else:
+                url_formatted, params_adj = url, params
+                response_json = await self.fetch(session, url=url_formatted, params=params_adj)
+                if response_json:
+                    responses[None] = response_json
 
-                await asyncio.sleep(self.rate_limit)
+            await asyncio.sleep(self.rate_limit)
 
-            return TimeHelper.now(), self.name, responses
+        return TimeHelper.now(), self.name, responses
 
     def apply_currency_pair_format(self, request_name: str, currency_pair: ExchangeCurrencyPair) -> str:
         """
