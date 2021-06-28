@@ -5,14 +5,16 @@ This module is a wrapper around the whole package. Its main function is to expor
 to the current working directory of the user, start the program, establish database connections and export data
 into csv-files.
 """
+
 import sys
+import os
+# # Append path
+# sys.path.append(os.path.dirname(__file__))
+
 import os
 import shutil
 from typing import Dict
 import pandas as pd
-
-# Append path
-sys.path.append(os.path.dirname(__file__))
 
 import main
 from export import CsvExport, database_session
