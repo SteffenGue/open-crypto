@@ -323,7 +323,7 @@ class Exchange:
                                                                    pair_template_dict,
                                                                    pair_formatted[pair],
                                                                    pair,
-                                                                   params)
+                                                                   params.copy())
 
                     response_json = await self.fetch(session, url=url_formatted, params=params_adj)
                     if response_json:
