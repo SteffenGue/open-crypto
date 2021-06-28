@@ -12,7 +12,10 @@ import pathlib
 from datetime import timedelta
 from pathlib import Path
 from typing import Any
-
+import platform
+import ssl
+import pandas as pd
+import certifi
 import dateutil.parser
 import oyaml as yaml
 
@@ -262,7 +265,7 @@ def read_config(file: str = None, section: str = None) -> dict[str, Any]:
     raise KeyError()
 
 
-def yaml_loader(exchange: str):
+def yaml_loader(exchange: str) -> dict:
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
@@ -304,3 +307,79 @@ def get_exchange_names() -> list[str]:
     exchanges.sort()
 
     return exchanges
+
+
+def provide_ssl_context() -> ssl.SSLContext:
+    """
+    Provides an SSL-Context if none is found beforehand. Especially UNIX machine with kernel "Darwin" may not
+    provide an SSL-context for Python. To avoid connections without ssl-verification, this method returns a new
+    default SSL-Context plugged into the request method.
+    @return: SSLContext
+    """
+
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    ssl_context.verify_mode = ssl.CERT_REQUIRED
+    ssl_context.check_hostname = True
+    ssl_context.load_default_certs()
+
+    if platform.system().lower() == 'darwin':
+        ssl_context.load_verify_locations(
+            cafile=os.path.relpath(certifi.where()),
+            capath=None,
+            cadata=None)
+    return ssl_context
+
+
+def replace_list_item(replace_list: list, condition: str, value: str) -> list:
+    """
+    Replaces a specific value from a list.
+    @param replace_list: The list in which the value needs to be replaced
+    @param condition: The value to be updated
+    @param value: The new value
+    @return: Updated list
+    """
+    for i, item in enumerate(replace_list):
+        if item == condition:
+            replace_list[i] = value
+    return replace_list
+
+
+def get_all_exchanges_and_methods() -> dict[str, dict]:
+    """
+    Returns the exchange names and all supported methods.
+    @return: List of exchanges with supported request methods.
+    @rtype: list
+    """
+    result_dict = dict()
+    exchanges = get_exchange_names()
+    for exchange in exchanges:
+        file = yaml_loader(exchange)
+        result_dict.update({exchange: {method: True for method in list(file.get('requests').keys())}})
+
+    return result_dict
+
+
+def prepend_spaces_to_columns(dataframe: pd.DataFrame, spaces: int = 3) -> pd.DataFrame:
+    """
+    Adds spaced between pd.DataFrame columns for easy readability.
+    @param dataframe: Dataframe to append spaced to
+    @type: pd.DataFrame
+    @param spaces: Number of spaces
+    @type: int
+    @return: DataFrame with appended spaced.
+    @rtype: pd.DataFrame
+    """
+
+    spaces = ' ' * spaces
+    # ensure every column name has the leading spaces:
+    if isinstance(dataframe.columns, pd.MultiIndex):
+        for i in range(dataframe.columns.nlevels):
+            level_new = [spaces + str(s) for s in dataframe.columns.levels[i]]
+            dataframe.columns.set_levels(level_new, level=i, inplace=True)
+    else:
+        dataframe.columns = spaces + dataframe.columns
+
+    # ensure every element has the leading spaces:
+    dataframe = dataframe.astype(str)
+    dataframe = spaces + dataframe
+    return dataframe

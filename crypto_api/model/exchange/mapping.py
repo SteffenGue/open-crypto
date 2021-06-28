@@ -7,6 +7,7 @@ TODO: Fill out module docstring.
 from collections import deque
 from collections.abc import Iterable
 from typing import Collection, Optional
+import logging
 
 from model.utilities.utilities import TYPE_CONVERSIONS
 
@@ -273,6 +274,53 @@ class Mapping:
             string_path.append(str(item))
 
         return " / ".join(string_path) + " -> " + str(self.key)
+
+
+def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mapping]]:
+    """
+    Helper-Method which should be only called by the constructor.
+    Extracts out of a given exchange .yaml-requests-section for each
+    request the necessary mappings so the values can be extracted from
+    the response for said request.
+
+    The key-value in the dictionary is the same as the key for the request.
+    i.e. behind 'ticker' are all the mappings stored which are necessary for
+    extracting the values out of a ticker-response.
+
+    If there is no mapping specified in the .yaml for a value which is contained
+    by the response, the value will not be extracted later on because there won't
+    be a Mapping-object for said value.
+
+    @param exchange_name: str
+        String representation of the exchange name.
+    @param requests: Dict[str: List[Mapping]]
+        Requests-section from a exchange.yaml as dictionary.
+        Method does not check if dictionary contains viable information.
+
+    @return:
+        Dictionary with the following structure:
+            {'request_name': List[Mapping]}
+    """
+    response_mappings = dict()
+    if requests:
+        for request in requests:
+            request_mapping: dict = requests[request]
+
+            if "mapping" in request_mapping.keys():
+                mapping = request_mapping["mapping"]
+                mapping_list = list()
+
+                try:
+                    for entry in mapping:
+                        mapping_list.append(Mapping(entry["key"], entry["path"], entry["type"]))
+                except KeyError:
+                    print(f"Error loading mappings of {exchange_name} in {request}: {entry}")
+                    logging.error("Error loading mappings of %s in %s: %s", exchange_name, request, entry)
+                    break
+
+                response_mappings[request] = mapping_list
+
+    return response_mappings
 
 
 def is_scalar(value) -> bool:

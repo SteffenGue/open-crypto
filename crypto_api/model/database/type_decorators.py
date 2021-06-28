@@ -30,7 +30,9 @@ class UnixTimestampMs(TypeDecorator):
     def python_type(self) -> Type[datetime]:
         return datetime
 
-    def process_bind_param(self, value: datetime, dialect: Dialect) -> int:
+    def process_bind_param(self, value: datetime, dialect: Dialect) -> Optional[int]:
+        if value is None:
+            return None
         return int(TimeHelper.to_timestamp(value, TimeUnit.MILLISECONDS))
 
     def process_result_value(self, value: int, dialect: Dialect) -> Optional[datetime]:

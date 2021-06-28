@@ -10,9 +10,11 @@ import os
 import shutil
 from typing import Dict
 
+import pandas as pd
+
 import main
 from export import CsvExport, database_session
-from model.utilities.utilities import read_config
+from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
 from model.database.tables import *
 
 
@@ -68,6 +70,18 @@ def get_session(filename: str, db_path: str):
     @return: SqlAlchemy-Session
     """
     return database_session(filename=filename, db_path=db_path)
+
+
+def exchanges_and_methods():
+    """
+    Lists all exchanges and methods.
+    @return: Dataframe of all exchanges and Methods
+    @rtype: pd.DataFrame
+    """
+    dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
+    pd.set_option('display.max_rows', 500)
+
+    print(prepend_spaces_to_columns(dataframe.transpose(), 3))
 
 
 def get_config(filename: str = None) -> Dict:

@@ -1,16 +1,16 @@
 general:
   database:
-    sqltype: postgresql
+    sqltype: sqlite
     client: psycopg2
-    user_name: bjarne
-    password:
+    user_name: postgres
+    password: Thw_kiel
     host: localhost
     port: 5432
-    db_name: cr
+    db_name: coinpaprika
   operation_settings:
     frequency: once
     timeout: 10
-    interval: minutes
+    interval: hours  #minutes, hours, days, weeks, months
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: false
@@ -18,12 +18,33 @@ general:
 jobs:
   AAAA:
     yaml_request_name: historic_rates
-    update_cp: true
+    update_cp: false
     exchanges:
-      - binance-futures
-    excluded: null
+      - binance
+#      - bitfinex
+#      - gemini
+#      - omgfin
+
+    excluded:
+      - bittrex
+
     currency_pairs:
-        - first: btc
-          second: usdt
+      - first: btc
+        second: usd
+      - first: btc
+        second: usdt
+#      - all
+#        - first: bitcoin
+#          second: usd
+#        - first: dogecoin
+#          second: usd
+#        - first: ethereum
+#          second: usd
+#        - first: btc-bitcoin
+#          second: usd
+
     first_currencies: null
     second_currencies: null
+#      - usd
+#      - usdt
+

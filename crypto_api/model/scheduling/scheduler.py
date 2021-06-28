@@ -24,7 +24,7 @@ class Scheduler:
     Attributes like frequency or job_list can also be set by the user in config.yaml.
     """
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job], frequency: Any):
+    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job], frequency: Union[str, int, float]):
         """
         Initializer for a Scheduler.
 
@@ -268,6 +268,8 @@ class Scheduler:
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
         counter = {}
+
+        # ToDo: Print Statement too often if interval != days.
         print("Formatting and writing Data into the database..")
         for response in responses:
             response_time = response[0]

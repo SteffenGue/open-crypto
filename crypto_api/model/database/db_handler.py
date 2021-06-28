@@ -527,8 +527,8 @@ class DatabaseHandler:
                                 data_tuple.update({"exchange_pair_id": currency_pair.id})
                             else:
                                 continue
-                        else:
-                            exchange_pair_id = data_tuple.get("exchange_pair_id")
+                        # else:
+                        exchange_pair_id = data_tuple.get("exchange_pair_id")
 
                         data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
                         check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]
@@ -548,8 +548,8 @@ class DatabaseHandler:
                             add_tuple = db_table(**data_tuple)
                             session.add(add_tuple)
 
-                    print(f"Pair-ID {exchange_pair_id} - {exchange.name.capitalize()}: "
-                          f"{counter_dict.get(exchange_pair_id, 0)} tuple(s)")
+                    print(f"Pair-ID {exchange_pair_id if counter_dict else 'ALL'} - {exchange.name.capitalize()}: "
+                          f"{counter_dict.get(exchange_pair_id, tuple_counter)} tuple(s)")
                 except StopIteration:
                     break
                 except UnboundLocalError:
@@ -579,7 +579,7 @@ class DatabaseHandler:
                       f"Data will be persisted next time.")
                 logging.info("Added %s new currency pairs to %s.", added_cp_counter, exchange.name.capitalize())
 
-        return [item for item in exchanges_with_pairs[exchange] if item.id in counter_dict.keys()]
+        return [item for item in exchanges_with_pairs[exchange] if (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
 
     def get_readable_query(self,
                            db_table: Union[HistoricRate, OrderBook, Ticker, Trade],
