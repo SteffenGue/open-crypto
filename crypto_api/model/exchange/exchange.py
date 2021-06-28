@@ -14,6 +14,7 @@ import itertools
 import logging
 import string
 import traceback
+import platform
 from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
@@ -151,7 +152,7 @@ class Exchange:
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
-    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict, **kwargs: object) -> Any:
+    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict, **kwargs: object) -> Optional[Dict]:
         """
         Executes the actual request and exception handling.
 
@@ -174,10 +175,9 @@ class Exchange:
             try:
                 kwargs = dict()
                 kwargs['ssl_context'] = provide_ssl_context()
-                if kwargs:
-                    return await self.fetch(url=url, params=params, **kwargs)
-                else:
-                    return await self.fetch(url=url, params=params)
+                if not kwargs.get('ssl_context'):
+                    kwargs.pop('ssl_context')
+                return await self.fetch(url=url, params=params, **kwargs)
 
             except ClientConnectorCertificateError:
                 print("SSL-ClientConnectorCertificateError. No SSL-Certification found. "

@@ -20,7 +20,7 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     exchanges:
-      - binance
+      - coinpaprika
 #      - bitfinex
 #      - gemini
 #      - omgfin
@@ -29,11 +29,11 @@ jobs:
       - bittrex
 
     currency_pairs:
-      - first: btc
-        second: usd
-      - first: btc
-        second: usdt
-#      - all
+#      - first: btc
+#        second: usd
+#      - first: btc
+#        second: usdt
+      - all
 #        - first: bitcoin
 #          second: usd
 #        - first: dogecoin
