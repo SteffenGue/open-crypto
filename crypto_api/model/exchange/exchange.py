@@ -30,41 +30,42 @@ from model.utilities.utilities import provide_ssl_context
 from model.utilities.utilities import replace_list_item
 
 
-def format_request_url(url: str, pair_template: dict, pair_formatted: str, pair, parameter: dict):
-    # ToDo: Docu
+def format_request_url(url: str, pair_template: dict, pair_formatted: str, pair, parameters: dict) -> tuple[str, dict]:
+    """
+    Formats the request url, inserts the currency-pair representation and/or extracts the parameters
+    specified for the exchange and request.
+
+    @param url: Base api-url
+    @param pair_template: Template of the currency-pair representation (e.g. BTC-USD, BTC/USD,..)
+    @param pair_formatted: The formatted currency-pair representation
+    @param pair: The actual currency-pair
+    @param parameters: Further parameters for the request
+    @return: Formatted url and parameters
     """
 
-    @param pair:
-    @param pair_template:
-    @param url:
-    @param pair_formatted:
-    @param parameter:
-    @return:
-    """
-
-    parameter.update({key: parameter[key][pair] for key, val in parameter.items() if isinstance(val, dict)})
+    parameters.update({key: parameters[key][pair] for key, val in parameters.items() if isinstance(val, dict)})
 
     # Case 1: Currency-Pairs in request parameters: eg. www.test.com?market=BTC-USD
     if "alias" in pair_template.keys() and pair_template["alias"]:
         # add market=BTC-USD to parameters
-        parameter[pair_template["alias"]] = pair_formatted
+        parameters[pair_template["alias"]] = pair_formatted
         # params_adj = parameter
         # url_formatted = url
 
     # Case 2: Currency-Pairs directly in URL: eg. www.test.com/BTC-USD
     elif pair_formatted:
-        parameter.update({"currency_pair": pair_formatted})
+        parameters.update({"currency_pair": pair_formatted})
 
     else:
-        return url, parameter
+        return url, parameters
         # find placeholders in string
 
     variables = [item[1] for item in string.Formatter().parse(url) if item[1] is not None]
-    url_formatted = url.format(**parameter)
+    url_formatted = url.format(**parameters)
     # drop params who got filled directly into the url
-    parameter = {k: v for k, v in parameter.items() if k not in variables}
+    parameters = {k: v for k, v in parameters.items() if k not in variables}
 
-    return url_formatted, parameter
+    return url_formatted, parameters
 
 
 class Exchange:
@@ -150,7 +151,7 @@ class Exchange:
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
-    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict) -> Any:
+    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict, **kwargs: object) -> Any:
         """
         Executes the actual request and exception handling.
 
@@ -165,26 +166,26 @@ class Exchange:
 
         timeout = aiohttp.ClientTimeout(total=self.timeout)
         try:
-            async with session.get(url=url, params=params, timeout=timeout) as resp:
+            async with session.get(url=url, params=params, timeout=timeout, **kwargs) as resp:
                 assert resp.status == 200
                 return await resp.json(content_type=None)
 
         except ClientConnectorCertificateError:
             try:
-                print("No SSL-Certification found. Providing new SSL-context instance in the meantime. \n"
-                      "To avoid this warning in the future: If you are running on MacOS, \n"
-                      "try to install certification by executing: \n"
-                      "/Applications/Python [version/number]/Install Certificates.command.")
-                ssl_context = provide_ssl_context()
-                async with session.get(url=url, params=params, timeout=timeout, ssl=ssl_context) as resp:
-                    assert resp.status == 200
-                    return await resp.json(content_type=None)
+                kwargs = dict()
+                kwargs['ssl_context'] = provide_ssl_context()
+                if kwargs:
+                    return await self.fetch(url=url, params=params, **kwargs)
+                else:
+                    return await self.fetch(url=url, params=params)
 
             except ClientConnectorCertificateError:
-                print("Retry with no SSL-Verification..")
-                async with session.get(url=url, params=params, timeout=timeout, verify_ssl=False) as resp:
-                    assert resp.status == 200
-                    return await resp.json(content_type=None)
+                print("SSL-ClientConnectorCertificateError. No SSL-Certification found. "
+                      "Providing new SSL-context instance in the meantime failed. \n"
+                      "To avoid this error in the future: If you are running on MacOS, \n"
+                      "try to install certification by executing: \n"
+                      "/Applications/Python [version/number]/Install Certificates.command.")
+                logging.error("ClientConnectorCertificateError")
 
         except (asyncio.TimeoutError, ClientConnectionError):
             print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!.")

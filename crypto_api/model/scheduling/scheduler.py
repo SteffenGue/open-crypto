@@ -52,7 +52,6 @@ class Scheduler:
 
         if isinstance(self.frequency, (int, float)):
             runs.append(asyncio.sleep(self.frequency))
-
         await asyncio.gather(*runs)
 
     async def run(self, job: Job):

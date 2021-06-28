@@ -323,11 +323,14 @@ def provide_ssl_context() -> ssl.SSLContext:
     ssl_context.load_default_certs()
 
     if platform.system().lower() == 'darwin':
-        ssl_context.load_verify_locations(
-            cafile=os.path.relpath(certifi.where()),
-            capath=None,
-            cadata=None)
-    return ssl_context
+        try:
+            os.system("/Application/Python " + platform.python_version()[0:3] + "/Install Certificate.command")
+        except (FileNotFoundError, Exception):
+            ssl_context.load_verify_locations(
+                cafile=os.path.relpath(certifi.where()),
+                capath=None,
+                cadata=None)
+            return ssl_context
 
 
 def replace_list_item(replace_list: list, condition: str, value: str) -> list:
