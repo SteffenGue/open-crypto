@@ -14,11 +14,13 @@ import os
 import os
 import shutil
 from typing import Dict
+
 import pandas as pd
 
 import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
+import resources.examples.examples as examples
 from model.database.tables import *
 
 
@@ -64,7 +66,7 @@ def update_maps(directory: str):
                 shutil.copy(src_file, dst_dir)
 
 
-def get_session(filename: str, db_path: str):
+def get_session(filename: str, db_path: str = os.getcwd()):
     """
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
     Furthermore this functions imports all database defining classes to work with.
@@ -133,11 +135,11 @@ def export(file: str = None, data_type: str = 'csv', *args, **kwargs):
     CsvExport(file).export(data_type=data_type, *args, **kwargs)
 
 
-def run():
+def run(configuration_file: str = None):
     """
     First checks if all necessary folder are available (i.e. config and yaml-maps) and starts the program.
     """
-    configuration_file = None
+    # configuration_file = None
     working_directory = os.getcwd()
 
     check_path(working_directory)

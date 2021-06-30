@@ -144,7 +144,7 @@ class DatabaseHandler:
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
             message = "Database Views already exist. If you need to alter or recreate tables delete all views manually."
-            print(message)
+            # print(message)
             logging.warning(message)
 
         self.session_factory: sessionmaker = sessionmaker(bind=engine)

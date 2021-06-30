@@ -109,7 +109,7 @@ async def main(database_handler: DatabaseHandler, file: str = None):
     @type database_handler: object
     """
     config = read_config(file=None, section=None)
-
+    # ToDo YAML loading exception handling
     logging.info("Loading jobs.")
     jobs = await initialize_jobs(job_config=config["jobs"],
                                  timeout=config["general"]["operation_settings"]["timeout"],
@@ -131,7 +131,7 @@ async def main(database_handler: DatabaseHandler, file: str = None):
             try:
                 loop.run_until_complete(await scheduler.start())
             except RuntimeError:
-                sys.exit(0)
+                raise SystemExit
 
         else:
             try:

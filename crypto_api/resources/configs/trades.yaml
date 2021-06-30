@@ -9,24 +9,23 @@ general:
     db_name: ExampleDB
 
   operation_settings:
-    frequency: 0.1 # once or any number in minutes
+    frequency: once # once or any number in minutes
     interval: days # minutes, hours, days, weeks, months
     timeout: 10
   utilities:
     enable_logging: false
-    yaml_path: resources/running_exchanges/
+    yaml_path: resources/running_exchanges/all/
+    timeout: 10
 jobs:
   JobName:
-    yaml_request_name: null # ticker, trades, order_books, historic_rates
+    yaml_request_name: trades # ticker, trades, order_books, historic_rates
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
-      - exchange1
-      - exchange2
-      - all
+      - coinbase
     currency_pairs: # all or an arbitrary list of currency-pairs
-      - all
-#      - first: null
-#        second: null
+#      - all
+      - first: eth
+        second: btc
     first_currencies: # filter database by the first currency and take all
       - null
     second_currencies: # filter database by the second currency and take all.
