@@ -6,21 +6,20 @@ to the current working directory of the user, start the program, establish datab
 into csv-files.
 """
 
-import sys
-import os
 # # Append path
 # sys.path.append(os.path.dirname(__file__))
 
 import os
 import shutil
 from typing import Dict
-
+import matplotlib.pyplot as plt
 import pandas as pd
+from sqlalchemy import func
 
 import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
-import resources.examples.examples as examples
+
 from model.database.tables import *
 
 
@@ -145,6 +144,129 @@ def run(configuration_file: str = None):
     check_path(working_directory)
     main.run(configuration_file, working_directory)
 
+
+class Examples:
+    """
+    Helper class imported by the runner-module providing all methods for illustrations.
+    """
+
+    plt.style.use('ggplot')
+
+    @classmethod
+    def _start_except(cls, configuration_file: str):
+        try:
+            run(configuration_file)
+        except SystemExit:
+            pass
+
+    @staticmethod
+    def platform() -> plt.plot:
+        """
+        Request Bitcoin - USD data from the platform 'www.coingecko.com' and create a plot.
+        The configuration file called "platform.yaml" can be found within the resources folder.
+        """
+        configuration_file = 'config'
+
+        Examples._start_except(configuration_file)
+
+        session = get_session(configuration_file)
+        query = session.query(HistoricRate)
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+
+        plt.plot(dataframe.close, label="Bitcoin/USD")
+        plt.title("Coingecko Daily Close Candles")
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
+    @staticmethod
+    def historic_rates() -> plt.plot:
+        """
+        Request BTC-USD(T) data from several exchanges and plot them simultaneously.
+        """
+        configuration_file = 'historic'
+
+        Examples._start_except(configuration_file)
+
+        exchanges = ('BITFINEX', 'BINANCE', 'COINBASE')
+        session = get_session(configuration_file)
+        query = session.query(HistoricRateView)
+        query = query.filter(HistoricRateView.exchange.in_(exchanges))
+
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        dataframe = pd.pivot_table(dataframe, columns=dataframe.exchange, index=dataframe.index)
+        dataframe = dataframe.resample("d").last()
+
+        plt.plot(dataframe.close, linestyle="dotted", label=dataframe.close.columns)
+        plt.title("ETH/BTC - Daily Candles")
+        plt.xlabel("Time in Days")
+        plt.ylabel("Price in US-Dollar")
+        plt.legend()
+        plt.show()
+
+    @staticmethod
+    def trades() -> plt.plot:
+        """
+        Request ETH/BTC transaction data from Coinbase and plot the price series.
+        """
+        configuration_file = 'trades'
+
+        Examples._start_except(configuration_file)
+
+        exchange = "COINBASE"
+        session = get_session(configuration_file)
+        query = session.query(TradeView).filter(TradeView.exchange == exchange)
+
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        dataframe.sort_index(inplace=True)
+
+        plt.plot(dataframe[dataframe.direction == 0].loc[:, "price"], linestyle="dotted",
+                 color="red", label="Sells", linewidth=1.5)
+        plt.plot(dataframe[dataframe.direction == 1].loc[:, "price"], linestyle="dotted",
+                 color="green", label="Buys", linewidth=1.5)
+
+        plt.xticks(rotation=45)
+        plt.legend()
+        plt.title("ETH/BTC Trades from Coinbase")
+        plt.xlabel("Timestamp")
+        plt.ylabel("Price in BTC")
+        plt.tight_layout()
+        plt.show()
+
+    @staticmethod
+    def order_books() -> plt.plot:
+        """
+        Requests the current order-book snapshot from Coinbase and plot the market depth.
+        """
+        configuration_file = 'order_books'
+        exchange = 'COINBASE'
+        session = get_session(configuration_file)
+        try:
+            run(configuration_file)
+        except SystemExit:
+            pass
+
+        (timestamp,) = session.query(func.max(OrderBookView.time)).first()
+        query = session.query(OrderBookView).filter(OrderBookView.exchange == exchange,
+                                                    OrderBookView.time == timestamp)
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+
+        bids = dataframe.groupby(pd.cut(dataframe.bids_price, bins=10))['bids_amount'].sum() \
+            .sort_index(ascending=False).cumsum()
+        asks = dataframe.groupby(pd.cut(dataframe.asks_price, bins=10))['asks_amount'].sum() \
+            .sort_index(ascending=True).cumsum()
+
+        index1 = [item.right.__round__() for item in bids.index]
+        index2 = [item.left.__round__() for item in asks.index]
+
+        plt.step(index1, bids.values, color='green', label="Bids")
+        plt.step(index2, asks.values, color="red", label="Asks")
+        plt.title("Market Depth BTC/USD(T)")
+        plt.xlabel("Price in USD(T)")
+        plt.ylabel("Size in BTC")
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
 
 if __name__ == "__main__":
     run()

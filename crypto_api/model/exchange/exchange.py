@@ -14,7 +14,6 @@ import itertools
 import logging
 import string
 import traceback
-import platform
 from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Dict, List, Tuple, Optional, Any
@@ -145,7 +144,6 @@ class Exchange:
             self.rate_limit = 0
 
         self.response_mappings = extract_mappings(self.name, yaml_file["requests"])
-
         self.exception_counter = 0
         self.active_flag = True
         self.consecutive_exception = False
@@ -379,7 +377,7 @@ class Exchange:
 
         self.request_urls = self.extract_request_urls(self.file["requests"][request_name],
                                                       request_name=request_name)
-        response_json = None
+        # response_json = None
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             request_url_and_params = self.request_urls[request_name]
 
