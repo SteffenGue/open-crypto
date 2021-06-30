@@ -130,8 +130,8 @@ async def main(database_handler: DatabaseHandler, file: str = None):
             loop = asyncio.get_event_loop()
             try:
                 loop.run_until_complete(await scheduler.start())
-            except RuntimeError:
-                raise SystemExit
+            except RuntimeError as exc:
+                raise SystemExit from exc
 
         else:
             try:
