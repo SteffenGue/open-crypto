@@ -9,7 +9,7 @@ import os
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
-from typing import List, Iterable, Optional, Union
+from typing import List, Iterable, Optional
 
 import tqdm
 from pandas import DataFrame
@@ -19,8 +19,7 @@ from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, HistoricRate, Trade, OrderBook, \
-    DatabaseTable
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, DatabaseTable
 from model.utilities.exceptions import NotAllPrimaryKeysException
 from model.utilities.time_helper import TimeHelper
 
