@@ -32,7 +32,7 @@ def signal_handler(signal_number, stack):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: DatabaseHandler) -> List[Job]:
+async def initialize_jobs(job_config: dict, timeout, interval, db_handler: DatabaseHandler) -> list[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict

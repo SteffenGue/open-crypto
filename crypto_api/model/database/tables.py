@@ -3,6 +3,7 @@
 """
 TODO: Fill out module docstring.
 """
+from typing import Union
 
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, select
 from sqlalchemy.ext.declarative import declarative_base
@@ -158,6 +159,7 @@ class Ticker(Base):
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
+
     # daily_volume = Column(Float)
 
     def __repr__(self):
@@ -299,8 +301,8 @@ class ExchangeCurrencyPairView(Base):
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                                              .join(first, ExchangeCurrencyPair.first_id == first.id)
-                                              .join(second, ExchangeCurrencyPair.second_id == second.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -331,9 +333,9 @@ class TickerView(Base):
             ],
             from_obj=(
                 Ticker.__table__.join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id)
-                                .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                                .join(first, ExchangeCurrencyPair.first_id == first.id)
-                                .join(second, ExchangeCurrencyPair.second_id == second.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -366,9 +368,9 @@ class TradeView(Base):
             ],
             from_obj=(
                 Trade.__table__.join(ExchangeCurrencyPair, Trade.exchange_pair_id == ExchangeCurrencyPair.id)
-                               .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                               .join(first, ExchangeCurrencyPair.first_id == first.id)
-                               .join(second, ExchangeCurrencyPair.second_id == second.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -400,9 +402,9 @@ class OrderBookView(Base):
             ],
             from_obj=(
                 OrderBook.__table__.join(ExchangeCurrencyPair, OrderBook.exchange_pair_id == ExchangeCurrencyPair.id)
-                                   .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                                   .join(first, ExchangeCurrencyPair.first_id == first.id)
-                                   .join(second, ExchangeCurrencyPair.second_id == second.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -437,13 +439,14 @@ class HistoricRateView(Base):
             from_obj=(
                 HistoricRate.__table__.join(ExchangeCurrencyPair,
                                             HistoricRate.exchange_pair_id == ExchangeCurrencyPair.id)
-                                      .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                                      .join(first, ExchangeCurrencyPair.first_id == first.id)
-                                      .join(second, ExchangeCurrencyPair.second_id == second.id)
+                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                    .join(first, ExchangeCurrencyPair.first_id == first.id)
+                    .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
     )
+
 
 ####################################### unused classes
 # class Blockchain(Base):
@@ -468,3 +471,5 @@ class HistoricRateView(Base):
 #     current_supply = Column(Float)
 #     hash_rate = Column(Float)
 #
+
+DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook]

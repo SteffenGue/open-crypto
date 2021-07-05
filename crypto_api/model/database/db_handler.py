@@ -19,7 +19,8 @@ from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, HistoricRate, Trade, OrderBook
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, HistoricRate, Trade, OrderBook, \
+    DatabaseTable
 from model.utilities.exceptions import NotAllPrimaryKeysException
 from model.utilities.time_helper import TimeHelper
 
@@ -293,8 +294,11 @@ class DatabaseHandler:
 
         return found_currency_pairs
 
-    def get_exchanges_currency_pairs(self, exchange_name: str, currency_pairs: [Dict[str, str]],
-                                     first_currencies: [str], second_currencies: [str]) -> [ExchangeCurrencyPair]:
+    def get_exchanges_currency_pairs(self,
+                                     exchange_name: str,
+                                     currency_pairs: list[dict[str, str]],
+                                     first_currencies: list[str],
+                                     second_currencies: list[str]) -> [ExchangeCurrencyPair]:
 
         """
         Collects and returns all currency pairs for the given exchange that either have any
@@ -386,8 +390,11 @@ class DatabaseHandler:
 
         # NEVER CALL THIS OUTSIDE OF THIS CLASS
 
-    def persist_exchange_currency_pair(self, exchange_name: str, first_currency_name: str,
-                                       second_currency_name: str, is_exchange: bool):
+    def persist_exchange_currency_pair(self,
+                                       exchange_name: str,
+                                       first_currency_name: str,
+                                       second_currency_name: str,
+                                       is_exchange: bool):
         """
         Adds a single ExchangeCurrencyPair to the database is it does not already exist.
 
@@ -402,7 +409,7 @@ class DatabaseHandler:
         self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
                                              is_exchange=is_exchange)
 
-    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]], is_exchange: bool):
+    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[tuple[str, str, str]], is_exchange: bool):
         """
         Persists the given already formatted ExchangeCurrencyPair-tuple if they not already exist.
         The formatting ist done in @see{Exchange.format_currency_pairs()}.
@@ -463,9 +470,9 @@ class DatabaseHandler:
                         session.commit()
 
     def persist_response(self,
-                         exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
+                         exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]],
                          exchange: Exchange,
-                         db_table,
+                         db_table: DatabaseTable,
                          formatted_response: Iterable):
         """
         This method persists the given tuples of data. The method currently works for all methods,
@@ -582,7 +589,7 @@ class DatabaseHandler:
         return [item for item in exchanges_with_pairs[exchange] if (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
 
     def get_readable_query(self,
-                           db_table: Union[HistoricRate, OrderBook, Ticker, Trade],
+                           db_table: DatabaseTable,
                            query_everything: bool,
                            from_timestamp: datetime = None,
                            to_timestamp: datetime = TimeHelper.now(),
@@ -685,7 +692,7 @@ class DatabaseHandler:
             session.expunge_all()
         return result
 
-    def get_first_timestamp(self, table: Union[HistoricRate, OrderBook, Ticker, Trade], exchange_pair_id: int) \
+    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int) \
             -> datetime:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old or

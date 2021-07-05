@@ -24,7 +24,7 @@ setup(
         "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.9',
     install_requires=[
         "aiohttp",
         "certifi",
@@ -41,6 +41,6 @@ setup(
         "sqlalchemy",
         "sqlalchemy_utils",
         "tqdm",
-	"matplotlib"
+        "matplotlib"
     ]
 )
