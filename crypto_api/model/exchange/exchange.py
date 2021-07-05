@@ -16,7 +16,7 @@ import string
 import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
-from typing import Iterator, Dict, List, Tuple, Optional, Any
+from typing import Iterator, List, Optional, Any
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 import tqdm

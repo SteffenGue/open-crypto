@@ -9,7 +9,7 @@ import os
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
-from typing import List, Tuple, Iterable, Dict, Optional, Union
+from typing import List, Iterable, Optional, Union
 
 import tqdm
 from pandas import DataFrame
