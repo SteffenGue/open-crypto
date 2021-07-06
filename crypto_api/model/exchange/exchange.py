@@ -486,7 +486,7 @@ class Exchange:
                 self.interval = {v: k for k, v in val.items()}
             return value
 
-        def function(val: str, **kwargs) -> dict[ExchangeCurrencyPair: datetime]:
+        def function(val: str, **kwargs) -> dict[ExchangeCurrencyPair, datetime]:
             """
             Execute function for all currency-pairs. Function returns the first timestamp in the DB, or
             datetime.now() if none exists.
