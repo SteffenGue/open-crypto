@@ -12,6 +12,7 @@ from typing import Any
 
 import pandas as pd
 from dateutil import parser as dateparser
+from sqlalchemy.orm.session import Session
 
 from model.database import tables
 from model.database.db_handler import DatabaseHandler
@@ -20,7 +21,7 @@ from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config
 
 
-def database_session(filename: str = None, db_path: str = None) -> object:
+def database_session(filename: str = None, db_path: str = None) -> Session:
     """
     Returns an open SqlAlchemy-Session. The session is retrieved from the DatabaseHandler.
     @param filename: Name of the configuration file to init the DatabaseHandler
@@ -38,9 +39,9 @@ class CsvExport:
     """
 
     def __init__(self, file: str = None):
-        self.config: dict = read_config(file=file, section=None)
+        self.config = read_config(file=file, section=None)
         self.db_handler = DatabaseHandler(metadata, **self.config["database"])
-        self.options: dict = self.config["query_options"]
+        self.options = self.config["query_options"]
         self.filename = f"{self.options.get('table_name')}_{TimeHelper.now().strftime('%Y-%m-%dT%H-%M-%S')}"
         self.path = os.getcwd()
 
@@ -84,7 +85,7 @@ class CsvExport:
                                                          )
         return pd.DataFrame(ticker_data)
 
-    def export(self, data_type: str = 'csv', *args, **kwargs) -> Any:
+    def export(self, data_type: str = 'csv', *args: Any, **kwargs: Any) -> Any:
         """
         Exports the data in the specified format.
         @param data_type: String representation of the export format. Default: csv.

@@ -13,7 +13,7 @@ import platform
 import ssl
 from datetime import timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import certifi
 import dateutil.parser
@@ -223,7 +223,7 @@ TYPE_CONVERSIONS = {
 """
 
 
-def read_config(file: str = None, section: str = None) -> dict[str, Any]:
+def read_config(file: Optional[str] = None, section: Optional[str] = None) -> dict[str, Any]:
     """
     @param file: Name of the config file.
     @type file: str
@@ -266,7 +266,7 @@ def read_config(file: str = None, section: str = None) -> dict[str, Any]:
     raise KeyError()
 
 
-def yaml_loader(exchange: str) -> dict:
+def yaml_loader(exchange: str) -> dict[str, Any]:
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
@@ -363,18 +363,18 @@ def get_all_exchanges_and_methods() -> dict[str, dict]:
     return result_dict
 
 
-def prepend_spaces_to_columns(dataframe: pd.DataFrame, spaces: int = 3) -> pd.DataFrame:
+def prepend_spaces_to_columns(dataframe: pd.DataFrame, space_count: int = 3) -> pd.DataFrame:
     """
     Adds spaced between pd.DataFrame columns for easy readability.
     @param dataframe: Dataframe to append spaced to
     @type: pd.DataFrame
-    @param spaces: Number of spaces
+    @param space_count: Number of spaces
     @type: int
     @return: DataFrame with appended spaced.
     @rtype: pd.DataFrame
     """
 
-    spaces = ' ' * spaces
+    spaces = ' ' * space_count
     # ensure every column name has the leading spaces:
     if isinstance(dataframe.columns, pd.MultiIndex):
         for i in range(dataframe.columns.nlevels):
