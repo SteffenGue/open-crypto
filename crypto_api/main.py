@@ -32,7 +32,7 @@ def signal_handler(signal_number, stack):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: DatabaseHandler) -> List[Job]:
+async def initialize_jobs(job_config: dict, timeout, interval, db_handler: DatabaseHandler) -> list[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
@@ -47,7 +47,7 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
     jobs: [Job] = list()
 
     for job in job_config.keys():
-        job_params: Dict = job_config[job]
+        job_params: dict = job_config[job]
         exchange_names = job_params["exchanges"] if job_params["exchanges"][0] != "all" else get_exchange_names()
 
         if job_params.get("excluded"):
@@ -60,7 +60,7 @@ async def initialize_jobs(job_config: Dict, timeout, interval, db_handler: Datab
                                           timeout,
                                           interval=interval) for exchange_name in exchange_names]
 
-        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
+        exchanges_with_pairs: [Exchange, list[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
 
         new_job: Job = Job(job, job_params, exchanges_with_pairs)
         jobs.append(new_job)
@@ -109,11 +109,11 @@ async def main(database_handler: DatabaseHandler, file: str = None):
     @type database_handler: object
     """
     config = read_config(file=None, section=None)
-    # ToDo YAML loading exception handling
+
     logging.info("Loading jobs.")
     jobs = await initialize_jobs(job_config=config["jobs"],
-                                 timeout=config["general"]["operation_settings"]["timeout"],
-                                 interval=config["general"]["operation_settings"]["interval"],
+                                 timeout=config["general"]["operation_settings"].get("timeout", 10),
+                                 interval=config["general"]["operation_settings"].get("interval", "days"),
                                  db_handler=database_handler)
     frequency = config["general"]["operation_settings"]["frequency"]
     logging.info("Configuring Scheduler.")

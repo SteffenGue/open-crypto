@@ -8,7 +8,7 @@ configuration file and exports data into one of both mentioned formats.
 import inspect
 import os
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Any
 
 import pandas as pd
 from dateutil import parser as dateparser
@@ -20,7 +20,7 @@ from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config
 
 
-def database_session(filename: str = None, db_path: str = None):
+def database_session(filename: str = None, db_path: str = None) -> object:
     """
     Returns an open SqlAlchemy-Session. The session is retrieved from the DatabaseHandler.
     @param filename: Name of the configuration file to init the DatabaseHandler
@@ -38,9 +38,9 @@ class CsvExport:
     """
 
     def __init__(self, file: str = None):
-        self.config: Dict = read_config(file=file, section=None)
+        self.config: dict = read_config(file=file, section=None)
         self.db_handler = DatabaseHandler(metadata, **self.config["database"])
-        self.options: Dict = self.config["query_options"]
+        self.options: dict = self.config["query_options"]
         self.filename = f"{self.options.get('table_name')}_{TimeHelper.now().strftime('%Y-%m-%dT%H-%M-%S')}"
         self.path = os.getcwd()
 
@@ -84,7 +84,7 @@ class CsvExport:
                                                          )
         return pd.DataFrame(ticker_data)
 
-    def export(self, data_type: str, *args, **kwargs):
+    def export(self, data_type: str = 'csv', *args, **kwargs) -> Any:
         """
         Exports the data in the specified format.
         @param data_type: String representation of the export format. Default: csv.
@@ -108,8 +108,8 @@ class CsvExport:
 
         parameters.update(**kwargs)
 
-        if data_type not in export_format:
-            print(f"Format not supported. Choose between: {list(export_format.keys())}.")
+        # if data_type not in export_format:
+        #     print(f"Format not supported. Choose between: {list(export_format.keys())}.")
 
-        export_format.get(data_type)(*args, **parameters)
+        export_format.get(data_type, 'csv')(*args, **parameters)
         print(output_path)

@@ -17,10 +17,10 @@ general:
 
 jobs:
   AAAA:
-    yaml_request_name: historic_rates
+    yaml_request_name: trades
     update_cp: false
     exchanges:
-      - coingecko
+      - coinbase
 #      - bitfinex
 #      - gemini
 #      - omgfin
@@ -29,8 +29,8 @@ jobs:
       - bittrex
 
     currency_pairs:
-      - first: bitcoin
-        second: usd
+      - first: eth
+        second: btc
 #      - first: btc
 #        second: usdt
 #      - all

@@ -142,6 +142,7 @@ class Scheduler:
         for job in jobs:
             if job.request_name == "currency_pairs":
                 print("\n\nDone loading Currency-Pairs.")
+                raise SystemExit
 
             # TODO: Philipp: Check out if loops work without continues.
             if job.exchanges_with_pairs:

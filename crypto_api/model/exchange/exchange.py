@@ -186,7 +186,7 @@ class Exchange:
                 logging.error("ClientConnectorCertificateError")
 
         except (asyncio.TimeoutError, ClientConnectionError):
-            print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!.")
+            print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
             logging.error("No connection to %s. Timeout or ConnectionError!", self.name.capitalize())
             return None
 
