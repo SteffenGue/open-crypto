@@ -8,7 +8,7 @@ configuration file and exports data into one of both mentioned formats.
 import inspect
 import os
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any
 
 import pandas as pd
 from dateutil import parser as dateparser

@@ -11,7 +11,6 @@ into csv-files.
 
 import os
 import shutil
-import time
 from typing import Dict
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import GridSpec
