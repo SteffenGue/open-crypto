@@ -3,6 +3,7 @@
 """
 TODO: Fill out module docstring.
 """
+from typing import Any
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
@@ -17,7 +18,7 @@ class Job:
 
     def __init__(self,
                  name: str,
-                 job_params: dict,
+                 job_params: dict[str, Any],
                  exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]):
         """
         Initializer of a job.
