@@ -7,7 +7,7 @@ TODO: Fill out module docstring.
 import logging
 from collections import deque
 from collections.abc import Iterable
-from typing import Collection, Optional, Any
+from typing import Any
 
 from model.utilities.utilities import TYPE_CONVERSIONS
 
