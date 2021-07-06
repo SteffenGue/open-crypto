@@ -16,7 +16,7 @@ import string
 import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
-from typing import Iterator, Dict, List, Tuple, Optional, Any
+from typing import Iterator, List, Optional, Any
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 import tqdm
@@ -114,7 +114,7 @@ class Exchange:
     timeout: int
     exchange_currency_pairs: List[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: Dict, db_first_timestamp, timeout, interval: Any = "days"):
+    def __init__(self, yaml_file: dict, db_first_timestamp, timeout, interval: Any = "days"):
         """
         Creates a new Exchange-object.
 
@@ -150,7 +150,7 @@ class Exchange:
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
-    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict, **kwargs: object) -> Optional[Dict]:
+    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict, **kwargs: object) -> Optional[dict]:
         """
         Executes the actual request and exception handling.
 
@@ -213,7 +213,7 @@ class Exchange:
             if pair not in self.exchange_currency_pairs:
                 self.exchange_currency_pairs.append(pair)
 
-    async def test_connection(self) -> Tuple[str, bool, Dict]:
+    async def test_connection(self) -> tuple[str, bool, dict]:
         """
         This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
         or, if no calls like this are available or exist in the public web api, a ticker request will be send.
@@ -247,8 +247,8 @@ class Exchange:
 
     async def request(self,
                       request_table: object,
-                      currency_pairs: List[ExchangeCurrencyPair]) -> \
-            Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
+                      currency_pairs: list[ExchangeCurrencyPair]) -> \
+            Optional[tuple[datetime, str, dict[Optional[ExchangeCurrencyPair], Any]]]:
 
         """
         Method tries to request data for all given methods and currency pairs.
@@ -362,7 +362,7 @@ class Exchange:
 
         return formatted_string
 
-    async def request_currency_pairs(self, request_name: str = "currency_pairs") -> Tuple[str, Optional[Dict]]:
+    async def request_currency_pairs(self, request_name: str = "currency_pairs") -> tuple[str, Optional[dict]]:
         """
         Tries to retrieve all available currency-pairs that are traded on this exchange.
 
@@ -396,7 +396,7 @@ class Exchange:
                              request_dict: dict,
                              request_name: str,
                              request_table: object = None,
-                             currency_pairs: List[ExchangeCurrencyPair] = None) -> Dict[str, Dict[str, Dict]]:
+                             currency_pairs: list[ExchangeCurrencyPair] = None) -> dict[str, dict[str, dict]]:
         # ToDo: Doku der Variables
         # ToDo: Doku Update mit variablen request parametern.
         """
@@ -552,7 +552,7 @@ class Exchange:
         urls[request_name] = request_parameters
         return urls
 
-    def format_currency_pairs(self, response: Tuple[str, Dict]) -> Optional[Iterator[Tuple[str, str, str]]]:
+    def format_currency_pairs(self, response: tuple[str, dict]) -> Optional[Iterator[tuple[str, str, str]]]:
         """
         Extracts the currency-pairs of out of the given json-response
         that was collected from the Rest-API of this exchange.
@@ -591,7 +591,7 @@ class Exchange:
 
     def format_data(self,
                     method: str,
-                    response: Tuple[str, Dict[object, Dict]],
+                    response: tuple[str, dict[object, dict]],
                     start_time: datetime,
                     time: datetime):
         """
