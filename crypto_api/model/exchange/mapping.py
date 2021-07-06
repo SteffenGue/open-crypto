@@ -4,15 +4,15 @@
 TODO: Fill out module docstring.
 """
 
+import logging
 from collections import deque
 from collections.abc import Iterable
-from typing import Collection, Optional
-import logging
+from typing import Collection, Optional, Any
 
 from model.utilities.utilities import TYPE_CONVERSIONS
 
 
-def convert_type(value, types_queue: deque):
+def convert_type(value: Any, types_queue: deque[str]) -> Any:
     """
     Converts the value via type conversions.
 
@@ -85,8 +85,8 @@ class Mapping:
 
     def __init__(self,
                  key: str,
-                 path: list,
-                 types: list):
+                 path: list[str],
+                 types: list[str]):
         """
         Constructor of Mapping.
 
@@ -109,8 +109,9 @@ class Mapping:
         self.path = path
         self.types = types
 
-    def traverse_path(self, response: dict, path_queue: deque, currency_pair_info: tuple[str, str, str] = None) \
-            -> Optional[dict]:
+    def traverse_path(self, response: dict[str, Any], path_queue: deque[str],
+                      currency_pair_info: tuple[str, str, str] = None) \
+            -> Any:
         """
         Traverses the path on a response.
 
@@ -156,11 +157,11 @@ class Mapping:
         return traversed
 
     def extract_value(self,
-                      response: Collection,
-                      path_queue: deque = None,
-                      types_queue=None,
-                      iterate=True,
-                      currency_pair_info: tuple[str, str, str] = (None, None, None)):
+                      response: list[dict[str, Any]],
+                      path_queue: deque[str] = None,
+                      types_queue: deque[str] = None,
+                      iterate: bool = True,
+                      currency_pair_info: tuple[str, str, str] = (None, None, None)) -> Any:
         """
         Extracts the value specified by "self.path".
 
@@ -276,7 +277,7 @@ class Mapping:
         return " / ".join(string_path) + " -> " + str(self.key)
 
 
-def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mapping]]:
+def extract_mappings(exchange_name: str, requests: dict[str, Any]) -> dict[str, list[Mapping]]:
     """
     Helper-Method which should be only called by the constructor.
     Extracts out of a given exchange .yaml-requests-section for each
@@ -304,7 +305,7 @@ def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mappi
     response_mappings = dict()
     if requests:
         for request in requests:
-            request_mapping: dict = requests[request]
+            request_mapping = requests[request]
 
             if "mapping" in request_mapping.keys():
                 mapping = request_mapping["mapping"]
@@ -323,7 +324,7 @@ def extract_mappings(exchange_name: str, requests: dict) -> dict[str, list[Mappi
     return response_mappings
 
 
-def is_scalar(value) -> bool:
+def is_scalar(value: Any) -> bool:
     """
     Indicates whether a value is a scalar or not.
 
