@@ -3,9 +3,11 @@
 """
 TODO: Fill out module docstring.
 """
+from __future__ import annotations
 
 import os
 import sys
+from typing import Optional
 
 
 class GlobalConfig(object):
@@ -15,10 +17,10 @@ class GlobalConfig(object):
 
     The config-file will be set and read only from utilities.read_config().
     """
-    __instance = None
+    __instance: Optional[GlobalConfig] = None
     __is_initialized = False
 
-    def __new__(cls):
+    def __new__(cls) -> GlobalConfig:
         """
         Create a new instance of __GlobalConfig if and only if none exists. Else returns the existing instance.
         That ensures that all instances of the class share the same state.
@@ -28,9 +30,9 @@ class GlobalConfig(object):
 
         return cls.__instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         if not GlobalConfig.__is_initialized:
-            self.__filename = None
+            self.__filename: Optional[str] = None
             self.path = os.path.dirname(os.path.realpath(__file__))
             GlobalConfig.__is_initialized = True
 
@@ -41,7 +43,7 @@ class GlobalConfig(object):
 
         # self.path = os.getcwd() + "/resources/configs/"
 
-    def set_file(self, file: str = None):
+    def set_file(self, file: Optional[str] = None) -> None:
         """
         Sets self.__filename to either the variable given or an input string from the command prompt.
         The filename will be augmented with ".yaml" if needed.
@@ -57,8 +59,8 @@ class GlobalConfig(object):
             file = file + ".yaml"
         self.__filename = file
 
-    @property
-    def file(self, file: str = None) -> str:
+    @property  # TODO: Wrong use of property. Fix later with Steffen.
+    def file(self, file: Optional[str] = None) -> str:
         """
         Returns the complete path to the config file. If the attribute self.__filename is not set yet,
         calls the method self.set_file.
