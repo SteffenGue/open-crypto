@@ -11,6 +11,7 @@ into csv-files.
 
 import os
 import shutil
+import time
 from typing import Dict
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import GridSpec
@@ -175,9 +176,9 @@ class Examples:
         Examples.__start_with_except(configuration_file)
 
         query = session.query(ExchangeCurrencyPairView)
-        df = pd.read_sql(query.statement, con=session.bind)
+        dataframe = pd.read_sql(query.statement, con=session.bind)
 
-        df.exchange_name.value_counts().hist(bins=len(set(df.exchange_name)))
+        dataframe.exchange_name.value_counts().hist(bins=len(set(dataframe.exchange_name)))
         plt.title("Traded Pairs on Exchanges")
         plt.ylabel("Number of Exchanges")
         plt.xlabel("Number of Traded Pairs")
@@ -199,16 +200,16 @@ class Examples:
         dataframe.sort_index(inplace=True)
 
         fig = plt.figure(constrained_layout=True, figsize=(8, 6))
-        gs = GridSpec(4, 4, figure=fig)
+        grid_spec = GridSpec(4, 4, figure=fig)
         plt.rc('grid', linestyle=":", color='black')
 
-        ax0 = fig.add_subplot(gs[0:2, :])
+        ax0 = fig.add_subplot(grid_spec[0:2, :])
         ax0.plot(dataframe.close, label="Close")
         plt.setp(ax0.get_xticklabels(), visible=False)
         plt.title("Bitcoin Daily Close in US-Dollar")
         ax0.grid(True)
 
-        ax1 = fig.add_subplot(gs[2:3, :])
+        ax1 = fig.add_subplot(grid_spec[2:3, :])
         ax1.bar(dataframe.volume[dataframe.volume < 150 * 1e9].index,
                 dataframe.volume[dataframe.volume < 150 * 1e9] / 1e9, label="Volume")
         plt.setp(ax1.get_xticklabels(), visible=False)
@@ -216,7 +217,7 @@ class Examples:
         ax1.set_ylabel("Billion")
         plt.title("Bitcoin Daily Volume in US-Dollar")
 
-        ax2 = fig.add_subplot(gs[3:4, :])
+        ax2 = fig.add_subplot(grid_spec[3:4, :])
         ax2.plot((dataframe.market_cap / dataframe.close) / 1e6, label="Supply")
         ax2.grid(True)
         ax2.set_ylabel("Million")

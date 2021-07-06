@@ -10,7 +10,6 @@ import logging
 import os
 import signal
 import sys
-from typing import Dict, List
 
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata, ExchangeCurrencyPair
