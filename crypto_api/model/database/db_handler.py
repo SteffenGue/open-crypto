@@ -9,7 +9,7 @@ import os
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
-from typing import List, Iterable, Optional
+from typing import List, Iterable, Optional, Generator, Any
 
 import tqdm
 from pandas import DataFrame
@@ -150,7 +150,7 @@ class DatabaseHandler:
         self.session_factory: sessionmaker = sessionmaker(bind=engine)
 
     @contextmanager
-    def session_scope(self):
+    def session_scope(self) -> Generator[Session, None, None]:
         """Provide a transactional scope around a series of operations."""
         session = self.session_factory()
         try:
@@ -297,7 +297,7 @@ class DatabaseHandler:
                                      exchange_name: str,
                                      currency_pairs: list[dict[str, str]],
                                      first_currencies: list[str],
-                                     second_currencies: list[str]) -> [ExchangeCurrencyPair]:
+                                     second_currencies: list[str]) -> list[ExchangeCurrencyPair]:
 
         """
         Collects and returns all currency pairs for the given exchange that either have any
@@ -337,7 +337,7 @@ class DatabaseHandler:
             found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
             found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
 
-        result: List = list()
+        result: list[ExchangeCurrencyPair] = list()
 
         for pair in found_currency_pairs:
             if not any(pair.id == result_pair.id for result_pair in result):
@@ -358,7 +358,7 @@ class DatabaseHandler:
         with self.session_scope() as session:
             return session.query(Exchange.id).filter(Exchange.name == exchange_name.upper()).scalar()
 
-    def get_currency_id(self, currency_name: str):
+    def get_currency_id(self, currency_name: str) -> Optional[int]:
         """
         Gets the id of a currency.
 
@@ -372,7 +372,7 @@ class DatabaseHandler:
         with self.session_scope() as session:
             return session.query(Currency.id).filter(Currency.name == currency_name.upper()).scalar()
 
-    def persist_exchange(self, exchange_name: str, is_exchange: bool):
+    def persist_exchange(self, exchange_name: str, is_exchange: bool) -> None:
         """
         Persists the given exchange-name if it's not already in the database.
 
@@ -393,7 +393,7 @@ class DatabaseHandler:
                                        exchange_name: str,
                                        first_currency_name: str,
                                        second_currency_name: str,
-                                       is_exchange: bool):
+                                       is_exchange: bool) -> None:
         """
         Adds a single ExchangeCurrencyPair to the database is it does not already exist.
 
@@ -408,7 +408,8 @@ class DatabaseHandler:
         self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
                                              is_exchange=is_exchange)
 
-    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[tuple[str, str, str]], is_exchange: bool):
+    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[tuple[str, str, str]],
+                                        is_exchange: bool) -> None:
         """
         Persists the given already formatted ExchangeCurrencyPair-tuple if they not already exist.
         The formatting ist done in @see{Exchange.format_currency_pairs()}.
@@ -472,7 +473,7 @@ class DatabaseHandler:
                          exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]],
                          exchange: Exchange,
                          db_table: DatabaseTable,
-                         formatted_response: Iterable):
+                         formatted_response: Iterable[Any]) -> list[ExchangeCurrencyPair]:
         """
         This method persists the given tuples of data. The method currently works for all methods,
         despite currency_pairs. If the program is augmented with a new request-method, use this method to
@@ -507,9 +508,9 @@ class DatabaseHandler:
 
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
-        counter_dict = dict()
+        counter_dict: dict[int, int] = dict()
         tuple_counter: int = 0
-        new_pairs: list = list()
+        new_pairs: list[dict[str, Any]] = list()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
 
         with self.session_scope() as session:
@@ -585,7 +586,8 @@ class DatabaseHandler:
                       f"Data will be persisted next time.")
                 logging.info("Added %s new currency pairs to %s.", added_cp_counter, exchange.name.capitalize())
 
-        return [item for item in exchanges_with_pairs[exchange] if (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
+        return [item for item in exchanges_with_pairs[exchange] if
+                (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
 
     def get_readable_query(self,
                            db_table: DatabaseTable,
