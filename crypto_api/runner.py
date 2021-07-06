@@ -11,20 +11,21 @@ into csv-files.
 
 import os
 import shutil
-from typing import Dict
+from typing import Any, Optional
+
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import GridSpec
 import pandas as pd
+from matplotlib.pyplot import GridSpec
 from sqlalchemy import func
+from sqlalchemy.orm.session import Session
 
 import main
 from export import CsvExport, database_session
+from model.database.tables import *
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
 
-from model.database.tables import *
 
-
-def check_path(path: str):
+def check_path(path: str) -> None:
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
     """
@@ -33,7 +34,7 @@ def check_path(path: str):
         update_maps(path)
 
 
-def update_maps(directory: str):
+def update_maps(directory: str) -> None:
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
@@ -66,7 +67,7 @@ def update_maps(directory: str):
                 shutil.copy(src_file, dst_dir)
 
 
-def get_session(filename: str, db_path: str = os.getcwd()):
+def get_session(filename: str, db_path: str = os.getcwd()) -> Session:
     """
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
     Furthermore this functions imports all database defining classes to work with.
@@ -95,7 +96,7 @@ def exchanges_and_methods(return_dataframe: bool = False) -> pd.DataFrame:
         print(prepend_spaces_to_columns(dataframe.transpose(), 3))
 
 
-def get_config(filename: str = None) -> Dict:
+def get_config(filename: str = None) -> dict[str, Any]:
     """
     Returns the actual config-file.
     @param filename: name of the config file.
@@ -104,7 +105,7 @@ def get_config(filename: str = None) -> Dict:
     return read_config(file=filename)
 
 
-def get_config_template(csv: bool = False):
+def get_config_template(csv: bool = False) -> None:
     """
     Creates a copy of the config templates and puts it into the resources/configs folder.
     @param csv: boolean: If True, create an csv-export config. Else create a config for the runner.
@@ -125,7 +126,7 @@ def get_config_template(csv: bool = False):
     print("Created new config template.")
 
 
-def export(file: str = None, data_type: str = 'csv', *args, **kwargs):
+def export(file: Optional[str] = None, data_type: str = 'csv', *args: Any, **kwargs: Any) -> None:
     """
     Calls the imported module CsvExport and the respective method create_csv(). This will take a csv-export config as
     input and write data into a csv-file depending on the configuration.
@@ -135,7 +136,7 @@ def export(file: str = None, data_type: str = 'csv', *args, **kwargs):
     CsvExport(file).export(data_type=data_type, *args, **kwargs)
 
 
-def run(configuration_file: str = None):
+def run(configuration_file: Optional[str] = None) -> None:
     """
     First checks if all necessary folder are available (i.e. config and yaml-maps) and starts the program.
     """
@@ -158,7 +159,7 @@ class Examples:
     pd.set_option('display.max_columns', None)
 
     @classmethod
-    def __start_with_except(cls, configuration_file: str):
+    def __start_with_except(cls, configuration_file: str) -> None:
         try:
             run(configuration_file)
         except SystemExit:
