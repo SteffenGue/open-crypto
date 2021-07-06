@@ -9,6 +9,7 @@ The exchange class is build upon the specific exchange.yaml file and several inp
 While an exchange-object itself provides all necessary methods for an API-request, the execution itself is scheduled
 within the module scheduler.
 """
+
 import asyncio
 import itertools
 import logging
@@ -16,13 +17,14 @@ import string
 import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
-from typing import Iterator, List, Optional, Any
-import aiohttp
-from aiohttp import ClientConnectionError, ClientConnectorCertificateError
-import tqdm
+from typing import Iterator, Optional, Any, Generator, Callable
 
-from model.database.tables import ExchangeCurrencyPair
-from model.exchange.mapping import convert_type, extract_mappings
+import aiohttp
+import tqdm
+from aiohttp import ClientConnectionError, ClientConnectorCertificateError
+
+from model.database.tables import ExchangeCurrencyPair, DatabaseTable
+from model.exchange.mapping import convert_type, extract_mappings, Mapping
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
 from model.utilities.time_helper import TimeHelper
@@ -30,7 +32,11 @@ from model.utilities.utilities import provide_ssl_context
 from model.utilities.utilities import replace_list_item
 
 
-def format_request_url(url: str, pair_template: dict, pair_formatted: str, pair, parameters: dict) -> tuple[str, dict]:
+def format_request_url(url: str,
+                       pair_template: dict[str, Any],
+                       pair_formatted: str,
+                       pair: ExchangeCurrencyPair,
+                       parameters: dict[str, Any]) -> tuple[str, dict[str, Any]]:
     """
     Formats the request url, inserts the currency-pair representation and/or extracts the parameters
     specified for the exchange and request.
@@ -106,15 +112,19 @@ class Exchange:
     api_url: str
     rate_limit: float
     interval: Any
-    request_urls: dict
-    response_mappings: dict
+    request_urls: dict[str, Any]
+    response_mappings: dict[str, list[Mapping]]
     exception_counter: int
     consecutive_exception: bool
     active_flag: bool
     timeout: int
-    exchange_currency_pairs: List[ExchangeCurrencyPair]
+    exchange_currency_pairs: list[ExchangeCurrencyPair]
 
-    def __init__(self, yaml_file: dict, db_first_timestamp, timeout, interval: Any = "days"):
+    def __init__(self,
+                 yaml_file: dict[str, Any],
+                 db_first_timestamp: Callable[[DatabaseTable, int], datetime],
+                 timeout: int,
+                 interval: Any = "days"):
         """
         Creates a new Exchange-object.
 
@@ -150,7 +160,8 @@ class Exchange:
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
-    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict, **kwargs: object) -> Optional[dict]:
+    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict[str, Any], **kwargs: object) -> \
+            Optional[dict]:
         """
         Executes the actual request and exception handling.
 
@@ -184,6 +195,7 @@ class Exchange:
                       "try to install certification by executing: \n"
                       "/Applications/Python [version/number]/Install Certificates.command.")
                 logging.error("ClientConnectorCertificateError")
+                return None
 
         except (asyncio.TimeoutError, ClientConnectionError):
             print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
@@ -202,7 +214,7 @@ class Exchange:
                           "Url: %s, Parameters: %s.", url, params)
             return None
 
-    def add_exchange_currency_pairs(self, currency_pairs: list):
+    def add_exchange_currency_pairs(self, currency_pairs: list[ExchangeCurrencyPair]) -> None:
         """
         Method that adds the given currency-pairs to exchange-currency-pairs.
         TODO: check if contains is enough to prevent duplicates of pairs
@@ -213,7 +225,7 @@ class Exchange:
             if pair not in self.exchange_currency_pairs:
                 self.exchange_currency_pairs.append(pair)
 
-    async def test_connection(self) -> tuple[str, bool, dict]:
+    async def test_connection(self) -> tuple[str, bool, dict[str, Any]]:
         """
         This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
         or, if no calls like this are available or exist in the public web api, a ticker request will be send.
@@ -351,9 +363,9 @@ class Exchange:
             String of the formatted currency-pair.
             Example: BTC and ETH -> "btc_eth"
         """
-        request_url_and_params: dict = self.request_urls[request_name]
-        pair_template_dict: dict = request_url_and_params["pair_template"]
-        pair_template: dict = pair_template_dict["template"]
+        request_url_and_params = self.request_urls[request_name]
+        pair_template_dict = request_url_and_params["pair_template"]
+        pair_template = pair_template_dict["template"]
 
         formatted_string: str = pair_template.format(first=currency_pair.first.name, second=currency_pair.second.name)
 
@@ -593,7 +605,7 @@ class Exchange:
                     method: str,
                     response: tuple[str, dict[object, dict]],
                     start_time: datetime,
-                    time: datetime):
+                    time: datetime) -> Generator[Any, None, None]:
         """
         Extracts from the response-dictionary, with help of the suitable Mapping-Objects,
         the requested values and formats them to fitting tuples for persist_response() in db_handler.
@@ -684,15 +696,15 @@ class Exchange:
                             mapping.types = replace_list_item(mapping.types, 'interval', self.interval)
 
                         if currency_pair:
-                            temp_results[mapping.key]: List = mapping.extract_value(current_response,
-                                                                                    currency_pair_info=(
-                                                                                        currency_pair.first.name,
-                                                                                        currency_pair.second.name,
-                                                                                        self.apply_currency_pair_format(
-                                                                                            method,
-                                                                                            currency_pair)))
+                            temp_results[mapping.key] = mapping.extract_value(current_response,
+                                                                              currency_pair_info=(
+                                                                                  currency_pair.first.name,
+                                                                                  currency_pair.second.name,
+                                                                                  self.apply_currency_pair_format(
+                                                                                      method,
+                                                                                      currency_pair)))
                         else:
-                            temp_results[mapping.key]: List = mapping.extract_value(current_response)
+                            temp_results[mapping.key] = mapping.extract_value(current_response)
 
                         if isinstance(temp_results[mapping.key], str):
                             # Bugfix: if value is a single string, it is an iterable, and the string will
@@ -760,7 +772,7 @@ class Exchange:
                     # results.extend(result)
                     yield result, list(temp_results.keys())
 
-    def increase_interval(self):
+    def increase_interval(self) -> None:
         """
         TODO: Fill out
         """
@@ -769,7 +781,7 @@ class Exchange:
 
         self.interval = self.interval_strings[index]
 
-    def decrease_interval(self):
+    def decrease_interval(self) -> None:
         """
         TODO: Fill out
         """
