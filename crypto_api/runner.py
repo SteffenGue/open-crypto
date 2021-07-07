@@ -23,6 +23,9 @@ from model.utilities.utilities import read_config, get_all_exchanges_and_methods
 def check_path(path: str) -> None:
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
+
+    @param path: The path.
+    @type path: str
     """
     destination = path + "/resources"
     if not os.path.exists(destination):
@@ -33,6 +36,8 @@ def update_maps(directory: str) -> None:
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
+
+    @param directory: The directory.
     @type directory: Current working directory
     """
 
@@ -67,21 +72,28 @@ def get_session(filename: str, db_path: str = os.getcwd()) -> Session:
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
     Furthermore this functions imports all database defining classes to work with.
 
-    @param db_path: path to the database. Default: current working directory
     @param filename: Name of the configuration file to init the DatabaseHandler
-    @return: SqlAlchemy-Session
+    @type filename: str
+    @param db_path: path to the database. Default: current working directory
+    @type db_path: str
+
+    @return: A database session.
+    @rtype: Session
     """
     return database_session(filename=filename, db_path=db_path)
 
 
-def exchanges_and_methods(return_dataframe: bool = False) -> pd.DataFrame:
+def exchanges_and_methods(return_dataframe: bool = False) -> Optional[pd.DataFrame]:
     """
     Lists all exchanges and methods.
-    as_dataframe: Specify if results are returned as pd.DataFrame.
+
+    @param return_dataframe: If True, the dataframe is returned.
     @type return_dataframe: boolean
+
     @return: Print or return dataframe
-    @rtype: None or pd.DataFrame
+    @rtype: Optional[pd.DataFrame]
     """
+    # TODO: Print or return is strange behaviour! Always return and let the caller print?
     dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
     pd.set_option('display.max_rows', 500)
 
@@ -91,11 +103,15 @@ def exchanges_and_methods(return_dataframe: bool = False) -> pd.DataFrame:
         print(prepend_spaces_to_columns(dataframe.transpose(), 3))
 
 
-def get_config(filename: str = None) -> dict[str, Any]:
+def get_config(filename: Optional[str] = None) -> dict[str, Any]:
     """
-    Returns the actual config-file.
-    @param filename: name of the config file.
-    @return: Returns the current config.
+    Parses the specified configuration file.
+
+    @param filename: The name of the configuration file.
+    @type filename: Optional[str]
+
+    @return: Returns the parsed configuration.
+    @rtype: dict[str, Any]
     """
     return read_config(file=filename)
 
@@ -103,7 +119,9 @@ def get_config(filename: str = None) -> dict[str, Any]:
 def get_config_template(csv: bool = False) -> None:
     """
     Creates a copy of the config templates and puts it into the resources/configs folder.
-    @param csv: boolean: If True, create an csv-export config. Else create a config for the runner.
+
+    @param csv: If True, create an csv-export config. Else create a config for the runner.
+    @type csv: bool
     """
     if csv:
         filename = "csv_config_template.yaml"
@@ -121,21 +139,26 @@ def get_config_template(csv: bool = False) -> None:
     print("Created new config template.")
 
 
-def export(file: Optional[str] = None, data_type: str = 'csv', *args: Any, **kwargs: Any) -> None:
+def export(file: Optional[str] = None, file_format: str = "csv", *args: Any, **kwargs: Any) -> None:
     """
     Calls the imported module CsvExport and the respective method create_csv(). This will take a csv-export config as
     input and write data into a csv-file depending on the configuration.
-    @param data_type:
-    @param file: Name of the csv-export configuration file.
+
+    @param file: The name of the export file.
+    @type file: Optional[str]
+    @param file_format: The file format of the export file.
+    @type file_format: str
     """
-    CsvExport(file).export(data_type=data_type, *args, **kwargs)
+    CsvExport(file).export(data_type=file_format, *args, **kwargs)
 
 
 def run(configuration_file: Optional[str] = None) -> None:
     """
     First checks if all necessary folder are available (i.e. config and yaml-maps) and starts the program.
+
+    @param configuration_file: The configuration file.
+    @type configuration_file: Optional[str]
     """
-    # configuration_file = None
     working_directory = os.getcwd()
 
     check_path(working_directory)
