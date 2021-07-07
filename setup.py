@@ -27,20 +27,20 @@ setup(
     python_requires='>=3.9',
     install_requires=[
         "aiohttp",
-        "certifi",
         "aioschedule",
+        "certifi",
         "datetime_periods",
+        "mariadb",
+        "matplotlib",
         "numpy != 1.19.4",
         "oyaml",
         "pandas",
         "psycopg2-binary",
-        "mariadb",
         "pymysql",
         "pytest",
         "python-dateutil",
         "sqlalchemy",
         "sqlalchemy_utils",
-        "tqdm",
-        "matplotlib"
+        "tqdm"
     ]
 )

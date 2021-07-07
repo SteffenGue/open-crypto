@@ -19,7 +19,6 @@ hinting:
     - shopt -s globstar
     - mypy --strict --show-error-codes --ignore-missing-imports --disallow-untyped-defs --disable-error-code valid-type --disable-error-code misc --disable-error-code no-redef --disable-error-code import --disable-error-code assignment --disable-error-code no-any-return --disable-error-code name-defined --disable-error-code comparison-overlap --disable-error-code arg-type --disable-error-code operator --disable-error-code call-overload --disable-error-code index --disable-error-code attr-defined --disable-error-code return --disable-error-code no-untyped-call --disable-error-code union-attr --disable-error-code type-arg --disable-error-code var-annotated --disable-error-code dict-item --disable-error-code return-value $MODULE_PATH/**/*.py
 
-
 linting:
   stage: static_analysis
   script:
@@ -42,4 +41,3 @@ unit_testing_coverage:
     - pip install coverage
     - coverage run -m pytest -v
     - coverage report --show-missing --fail-under=$MIN_COVERAGE --include=$MODULE_PATH/* --omit=$MODULE_PATH/tests/*
-
