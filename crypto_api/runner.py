@@ -5,10 +5,7 @@ This module is a wrapper around the whole package. Its main function is to expor
 to the current working directory of the user, start the program, establish database connections and export data
 into csv-files.
 """
-
-# # Append path
-# sys.path.append(os.path.dirname(__file__))
-
+import _paths
 import os
 import shutil
 from typing import Any, Optional
