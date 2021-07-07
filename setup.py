@@ -31,7 +31,7 @@ setup(
         "certifi",
         "datetime_periods",
         "mariadb",
-        "matplotlib"
+        "matplotlib",
         "numpy != 1.19.4",
         "oyaml",
         "pandas",
@@ -41,6 +41,6 @@ setup(
         "python-dateutil",
         "sqlalchemy",
         "sqlalchemy_utils",
-        "tqdm",
+        "tqdm"
     ]
 )
