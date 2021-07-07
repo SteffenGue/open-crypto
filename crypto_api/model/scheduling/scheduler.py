@@ -40,7 +40,7 @@ class Scheduler:
         self.frequency = frequency * 60 if isinstance(frequency, (int, float)) else frequency
         self.validated = False
 
-    async def start(self):
+    async def start(self) -> None:
         """
         Starts the process of requesting, filtering and persisting data for each job every x minutes.
         If a job takes longer than the frequency. The scheduler will wait until the job is finished
@@ -48,13 +48,13 @@ class Scheduler:
         Otherwise the scheduler will wait x minutes until it starts the jobs again.
         The interval begins counting down at the start of the current iteration.
         """
-        runs: list[Union[Coroutine, Future]] = [self.run(job) for job in self.job_list]
+        runs: list[Union[Coroutine[Any, Any, None], Future[Any]]] = [self.run(job) for job in self.job_list]
 
         if isinstance(self.frequency, (int, float)):
             runs.append(asyncio.sleep(self.frequency))
         await asyncio.gather(*runs)
 
-    async def run(self, job: Job):
+    async def run(self, job: Job) -> None:
         """
         The method represents one execution of the given job.
 
@@ -73,7 +73,7 @@ class Scheduler:
         while continue_run:
             continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
-    def determine_task(self, request_name: str) -> dict[str, Callable]:
+    def determine_task(self, request_name: str) -> dict[str, Callable[..., None]]:
         """
         Returns the method that is to execute based on the given request name.
 
@@ -106,7 +106,7 @@ class Scheduler:
             "table": None
         })
 
-    async def validate_job(self):
+    async def validate_job(self) -> None:
         """
         This methods validates the job_list given to the scheduler instance. If the job-list does not contain
         any "exchange_with_pairs" or no currency_pair for an exchange, the job is removed from the list.
@@ -172,7 +172,7 @@ class Scheduler:
             # Reentry the method to get into the first else (down) condition and shut down process
             self.remove_invalid_jobs(jobs)
 
-    async def update_currency_pairs(self, ex: Exchange) -> list:
+    async def update_currency_pairs(self, ex: Exchange) -> list[None]:  # TODO: Make the return value nicer?
         """
         This method requests the currency_pairs.
 

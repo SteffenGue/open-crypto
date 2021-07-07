@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# type: ignore[no-untyped-def]
 """
 Test module for testing api_scheduling.Mapping class
 

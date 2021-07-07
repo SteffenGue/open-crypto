@@ -35,7 +35,7 @@ class TimeHelper:
 
     freq_map is used to convert specific strings from plural into singular.
     """
-    freq_map: dict = {
+    freq_map = {
         "minutes": "minute",
         "hours": "hour",
         "days": "day",

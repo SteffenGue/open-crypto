@@ -36,11 +36,11 @@ class Exchange(Base):
     exceptions = Column(Integer, unique=False, nullable=True, default=0)
     total_exceptions = Column(Integer, unique=False, nullable=True, default=0)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"#{self.id}: {self.name}, Active: {self.active}"
 
     @validates("name")
-    def convert_upper(self, key, value):
+    def convert_upper(self, key: str, value: str) -> str:
         """
         Converts strings into upper cases.
         """
@@ -64,11 +64,11 @@ class Currency(Base):
     name = Column(String(50), unique=True, nullable=False)
     from_exchange = Column(Boolean, default=True)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"#{self.id}: {self.name}"
 
     @validates("name")
-    def convert_upper(self, key, value):
+    def convert_upper(self, key: str, value: str) -> str:
         """
         Converts strings into upper cases.
         """
@@ -109,11 +109,11 @@ class ExchangeCurrencyPair(Base):
 
     __table_args__ = (CheckConstraint(first_id != second_id),)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"#{self.id}: {self.exchange.name}({self.exchange_id}), " \
                f"{self.first.name}({self.first_id})-{self.second.name}({self.second_id})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
 
 
@@ -162,7 +162,7 @@ class Ticker(Base):
 
     # daily_volume = Column(Float)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"#{self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \
                f"{self.exchange_pair.first.name}-{self.exchange_pair.second.name}, ${self.last_price} at {self.time}"
 
@@ -194,7 +194,7 @@ class HistoricRate(Base):
     base_volume = Column(Float)  # ToDo: check if base_volume is correct.
     market_cap = Column(Float)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"ID {self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \
                f"{self.exchange_pair.first.name}-{self.exchange_pair.second.name}, close {self.close} at {self.time}"
 
@@ -224,14 +224,14 @@ class Trade(Base):
     _direction = Column("direction", Integer)
 
     @hybrid_property
-    def direction(self):
+    def direction(self) -> str:
         """
         Returns the attribute _direction.
         """
         return self._direction
 
     @direction.setter
-    def direction(self, direction):
+    def direction(self, direction: str) -> None:
         """
         Converts the string representation of the trade direction, i.e. 'sell' or 'buy', into an integer.
         @param: String representation of the direction.
@@ -245,12 +245,12 @@ class Trade(Base):
             else:
                 self._direction = direction
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Last Transaction: {self.exchange_pair.exchange.name}, {self.exchange_pair.first.name}-" \
                f"{self.exchange_pair.second.name}: {self.amount} for {self.price} at {self.time}"
 
     @validates("direction")
-    def convert_upper(self, key, value):
+    def convert_upper(self, key: str, value: str) -> str:
         """
         Converts strings into upper cases.
         """

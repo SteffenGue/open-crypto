@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# type: ignore[no-untyped-def]
 """
 Contain test cases to test the persistence functionality.
 
