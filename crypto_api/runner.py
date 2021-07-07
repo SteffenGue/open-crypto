@@ -5,7 +5,7 @@ This module is a wrapper around the whole package. Its main function is to expor
 to the current working directory of the user, start the program, establish database connections and export data
 into csv-files.
 """
-import _paths
+
 import os
 import shutil
 from typing import Any, Optional
@@ -16,6 +16,7 @@ from matplotlib.pyplot import GridSpec
 from sqlalchemy import func
 from sqlalchemy.orm.session import Session
 
+import _paths  # pylint: disable=unused-import
 import main
 from export import CsvExport, database_session
 from model.database.tables import *
