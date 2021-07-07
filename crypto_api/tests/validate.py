@@ -4,78 +4,71 @@
 TODO: Fill out module docstring.
 """
 
-# TODO: This module uses imports that does not exits anymore. Need to be fixed ...
-# import os
-#
-# from model.utilities.utilities import YAML_PATH
-# from crypto_api.tests.yaml_tests.api_map_validation import ApiMapFileValidator
-#
-#
-# class Validate:
-#     """
-#     This class will validate a single exchange yaml-file. The first method ValidateMapFile checks the yaml-file
-#     if in the right format, i.e. performs unit-testing.
-#     The second methods ValidateYAML plugs the yaml-file in a cooked-down version of the main program and checks
-#     the functionality.
-#     """
-#
-#     def __init__(self, file_name: str):
-#         self.file_name = file_name
-#
-#     def __ValidateMapFile__(self) -> bool:
-#         api_map = ApiMapFileValidator(YAML_PATH + self.file_name + '.yaml')
-#
-#         api_map.validate()
-#         if api_map.report.__bool__():
-#             return True
-#         else:
-#             with open('tests/yaml_tests/reports/report_' + self.file_name + '.txt', 'w') as report:
-#                 report.writelines(api_map.report.indented_report())
-#                 report.close()
-#             print("API Map is Invalid! \n"
-#                   f"Inspect report: {'~/reports/report_' + self.file_name + '.txt'}")
-#             self.report_error(api_map.report)
-#             return False
-#
-#     def validate(self):
-#         """
-#         TODO: Fill out
-#         """
-#         Map = self.__ValidateMapFile__()
-#         if Map:
-#             print(f"Exchange '{self.file_name}' valid: True")
-#             return True
-#         else:
-#             return False
-#
-#     def report_error(self, report):
-#         """Recursive method to find the lowest False in a nested list"""
-#         if report.__bool__():
-#             # if report is True, pass
-#             return report
-#         # if report is False:
-#         else:
-#             # look at nested reports,
-#             for nested_report in report.reports:
-#                 # if report is false
-#                 if not nested_report.__bool__():
-#                     try:
-#                         self.report_error(nested_report)
-#                     # break if no further nested reports can be found, i.e. AttributeError
-#                     except AttributeError:
-#                         print(nested_report)
-#                         break
-#
-#
-# if __name__ == '__main__':
-#     exchange = input("Enter 'Exchange Name' or 'all': \n")
-#     if exchange == 'all':
-#         exchanges = os.listdir(YAML_PATH)
-#         exchanges = [exchange.split('.yaml')[0] for exchange in exchanges]
-#         valid = 0
-#         for exchange in exchanges:
-#             valid += Validate(exchange).validate()
-#
-#         print(f'Valid Exchanges: {round(valid / len(exchanges) * 100, 2)} %')
-#     else:
-#         Validate(exchange).validate()
+import os
+from typing import Optional
+
+from tests.yaml_tests.api_map_validation import ApiMapFileValidator, Report
+
+YAML_PATH = "../resources/running_exchanges/all/"
+
+
+class Validate:
+    """
+    This class will validate a single exchange yaml-file. The first method ValidateMapFile checks the yaml-file
+    if in the right format, i.e. performs unit-testing.
+    The second methods ValidateYAML plugs the yaml-file in a cooked-down version of the main program and checks
+    the functionality.
+    """
+
+    def __init__(self, exchange_name: str):
+        self.exchange_name = exchange_name
+
+    def validate(self) -> bool:
+        """
+        TODO: Fill out
+        @return:
+        """
+        api_map = ApiMapFileValidator(YAML_PATH + self.exchange_name + ".yaml")
+        api_map.validate()
+
+        if bool(api_map.report):
+            return True
+        else:
+            os.makedirs("reports/", exist_ok=True)
+            with open("reports/report_" + self.exchange_name + ".txt", "w") as report:
+                report.writelines(api_map.report.indented_report())
+
+            print("API Map is Invalid! \n"
+                  f"Inspect report: {'~/reports/report_' + self.exchange_name + '.txt'}")
+            self.report_error(api_map.report)
+            return False
+
+    def report_error(self, report: Report) -> Optional[Report]:
+        """
+        Recursive method to find the lowest False in a nested list
+        """
+        if bool(report):
+            return report
+        else:
+            for nested_report in report.reports:
+                if not bool(nested_report):
+                    try:
+                        self.report_error(nested_report)
+                    except AttributeError:
+                        print(nested_report)
+                        break
+
+
+if __name__ == "__main__":
+    exchange = input("Enter the exchange to validate (or 'all'): ")
+
+    if exchange == "all":
+        exchanges = [os.path.splitext(file)[0] for file in os.listdir(YAML_PATH) if file.endswith(".yaml")]
+
+        valid_count = 0  # pylint: disable=C0103
+        for exchange in exchanges:
+            valid_count += Validate(exchange).validate()
+
+        print(f"Valid Exchanges: {round(valid_count / len(exchanges) * 100, 2)} %")
+    else:
+        Validate(exchange).validate()
