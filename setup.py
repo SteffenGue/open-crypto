@@ -41,6 +41,7 @@ setup(
         "python-dateutil",
         "sqlalchemy",
         "sqlalchemy_utils",
-        "tqdm"
+        "tqdm",
+        "validators"
     ]
 )
