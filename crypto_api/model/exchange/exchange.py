@@ -160,8 +160,12 @@ class Exchange:
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
-    async def fetch(self, session: aiohttp.ClientSession, url: str, params: dict[str, Any], **kwargs: object) -> \
-            Optional[dict]:
+    async def fetch(self,
+                    session: aiohttp.ClientSession,
+                    url: str,
+                    params: dict[str, Any],
+                    retry: bool = False,
+                    **kwargs: object) -> Optional[dict]:
         """
         Executes the actual request and exception handling.
 
@@ -170,6 +174,8 @@ class Exchange:
         @param url: Api-url
         @type: str
         @param params: Request parameters
+        @param retry: Retry request if rate-limit exceeded
+        @type: bool
         @return: Response
         @rtype: dict
         """
@@ -186,7 +192,7 @@ class Exchange:
                 kwargs['ssl_context'] = provide_ssl_context()
                 if not kwargs.get('ssl_context'):
                     kwargs.pop('ssl_context')
-                return await self.fetch(url=url, params=params, **kwargs)
+                return await self.fetch(session=session, url=url, params=params, **kwargs)
 
             except ClientConnectorCertificateError:
                 print("SSL-ClientConnectorCertificateError. No SSL-Certification found. "
@@ -203,6 +209,9 @@ class Exchange:
             return None
 
         except AssertionError:
+            if resp.status == 429 and retry:
+                return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
+
             print(f"Failed request for {self.name.capitalize()}. Status {resp.status}.")
             logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
             return None
