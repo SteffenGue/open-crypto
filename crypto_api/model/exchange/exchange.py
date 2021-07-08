@@ -210,8 +210,8 @@ class Exchange:
 
         except AssertionError:
             if resp.status == 429 and retry:
-                await asyncio.sleep(self.rate_limit)
-                return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
+                await asyncio.sleep(self.rate_limit) * 2
+                return await self.fetch(session=session, url=url, params=params, **kwargs)
 
             print(f"Failed request for {self.name.capitalize()}. Status {resp.status}.")
             logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
@@ -349,13 +349,13 @@ class Exchange:
                     response_json = await self.fetch(session, url=url_formatted, params=params_adj)
                     if response_json:
                         responses[pair] = response_json
+                    await asyncio.sleep(self.rate_limit)
+
             else:
                 url_formatted, params_adj = url, params
                 response_json = await self.fetch(session, url=url_formatted, params=params_adj)
                 if response_json:
                     responses[None] = response_json
-
-            await asyncio.sleep(self.rate_limit)
 
         return TimeHelper.now(), self.name, responses
 
