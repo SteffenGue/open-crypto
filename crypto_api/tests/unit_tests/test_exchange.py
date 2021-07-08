@@ -13,8 +13,6 @@ Version:
     07.07.2021
 """
 
-import pytest
-import os
 import oyaml as yaml
 from model.exchange.exchange import Exchange
 
@@ -64,20 +62,38 @@ class TestExchange:
         self.Exchange.decrease_interval()
         assert self.Exchange.interval == self.Exchange.interval_strings[index]
 
-    def test_format_request_url(self):
-        pass
-
-    def test_extract_request_urls(self):
-        pass
-
-    def test_apply_currency_pair_format(self):
-        pass
-
-    def test_format_currency_pairs(self):
-        pass
-
-    def test_format_data(self):
-        pass
-
-    def test_request(self):
-        pass
+    # def test_format_request_url(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_extract_request_urls(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_apply_currency_pair_format(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_format_currency_pairs(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_format_data(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_request(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass

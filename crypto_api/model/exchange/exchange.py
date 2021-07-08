@@ -210,6 +210,7 @@ class Exchange:
 
         except AssertionError:
             if resp.status == 429 and retry:
+                await asyncio.sleep(self.rate_limit)
                 return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
 
             print(f"Failed request for {self.name.capitalize()}. Status {resp.status}.")
