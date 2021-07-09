@@ -34,9 +34,6 @@ requests:
           - id
         type:
           - str
-          - split
-          - "-"
-          - 0
       - key: currency_pair_second
         path: []
         type:
@@ -44,65 +41,37 @@ requests:
           - constant
           - 'USD'
 
-#  tickers:
-#    request:
-#      template: tickers
-#      pair_template: null
-#      params: null
-#    response:
-#      type: list
-#      values:
-#        type: dict
-#        values:
-#          id:
-#            type: str
-#          last_updated:
-#            type: str
-#          quotes:
-#            type: dict
-#            values:
-#              USD:
-#                type: dict
-#                values:
-#                  price:
-#                    type: float
-#                  volume_24h:
-#                    type: float
-#
-#    mapping:
-#      - key: currency_pair_first
-#        path:
-#          - id
-#        type:
-#          - str
-#      - key: currency_pair_second
-#        path: []
-#        type:
-#          - none
-#          - constant
-#          - 'USD'
-#      - key: last_price
-#        path:
-#          - quotes
-#          - price
-#        type:
-#          - float
-#      - key: time
-#        path:
-#          - last_updated
-#        type:
-#          - str
-#          - dateparser
-#      - key: daily_volume
-#        path:
-#          - quotes
-#          - volume_24h
-#        type:
-#          - float
+  pair_infos:
+    request:
+      template: coins/{currency_pair}
+      pair_template:
+        template: "{first}"
+        lower_case: true
+      params: null
+    response:
+      type: dict
+      values:
+        first_data_at:
+          type: str
+        last_data_at:
+          type: str
+    mapping:
+      - key: start
+        path:
+          - first_data_at
+        type:
+          - str
+          - dateparser
+      - key: end
+        path:
+          - last_data_at
+        type:
+          - str
+          - dateparser
 
   historic_rates:
     request:
-      template: coins/{currency_pair}/ohlcv/historical
+      template: tickers/{currency_pair}/historical
       pair_template:
         template: "{first}"
         lower_case: true
@@ -113,69 +82,136 @@ requests:
             - datetime
             - timedelta
             - interval
-            - 366
+            - 100
+        end:
+          function: last_timestamp
+          type:
+            - datetime
+            - timestamp
         limit:
-          default: 366 # max value
-        quote:
-          default: usd # or 'btc'
+          default: 100 # max!
+        interval:
+          allowed:
+            minutes: 5m
+            hours: 1h
+            days: 1d
+            weeks: 7d
+            months: 30d
+          default: 1d
 
     response:
       type: list
       values:
         type: dict
         values:
-          time_open:
+          timestamp:
             type: str
-          time_close:
-            type: str
-          open:
+          price:
             type: float
-          high:
-            type: float
-          low:
-            type: float
-          close:
-            type: float
-          volume:
+          volume_24h:
             type: float
           market_cap:
             type: float
 
-
     mapping:
-    - key: time
-      path:
-        - time_close
-      type:
-        - str
-        - dateparser
-    - key: open
-      path:
-        - open
-      type:
-        - float
-    - key: high
-      path:
-        - high
-      type:
-        - float
-    - key: low
-      path:
-        - low
-      type:
-        - float
-    - key: close
-      path:
-        - close
-      type:
-        - float
-    - key: volume
-      path:
-        - volume
-      type:
-        - float
-    - key: market_cap
-      path:
-        - market_cap
-      type:
-        - float
+      - key: time
+        path:
+          - timestamp
+        type:
+          - str
+          - dateparser
+      - key: close
+        path:
+          - price
+        type:
+          - float
+      - key: volume
+        path:
+          - volume_24h
+        type:
+          - float
+      - key: market_cap
+        path:
+          - market_cap
+        type:
+          - float
+
+#  historic_rates:
+#    request:
+#      template: coins/{currency_pair}/ohlcv/historical
+#      pair_template:
+#        template: "{first}"
+#        lower_case: true
+#      params:
+#        start:
+#          function: last_timestamp
+#          type:
+#            - datetime
+#            - timedelta
+#            - interval
+#            - 366
+#        limit:
+#          default: 366 # max value
+#        quote:
+#          default: usd # or 'btc'
+#
+#    response:
+#      type: list
+#      values:
+#        type: dict
+#        values:
+#          time_open:
+#            type: str
+#          time_close:
+#            type: str
+#          open:
+#            type: float
+#          high:
+#            type: float
+#          low:
+#            type: float
+#          close:
+#            type: float
+#          volume:
+#            type: float
+#          market_cap:
+#            type: float
+#
+#
+#    mapping:
+#    - key: time
+#      path:
+#        - time_close
+#      type:
+#        - str
+#        - dateparser
+#    - key: open
+#      path:
+#        - open
+#      type:
+#        - float
+#    - key: high
+#      path:
+#        - high
+#      type:
+#        - float
+#    - key: low
+#      path:
+#        - low
+#      type:
+#        - float
+#    - key: close
+#      path:
+#        - close
+#      type:
+#        - float
+#    - key: volume
+#      path:
+#        - volume
+#      type:
+#        - float
+#    - key: market_cap
+#      path:
+#        - market_cap
+#      type:
+#        - float

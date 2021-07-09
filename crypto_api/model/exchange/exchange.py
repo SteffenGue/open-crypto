@@ -216,10 +216,10 @@ class Exchange:
                 return await self.fetch(session=session, url=url, params=params, **kwargs)
 
             if resp.status in range(400, 500):
-                print(f"Failed request for {self.name.capitalize()}. Client-side error. Status {resp.status}.")
+                print(f"Failed request for {self.name.capitalize()}. Client-side error: Status {resp.status}.")
                 return None
             elif resp.status in range(500, 600):
-                print(f"Failed request for {self.name.capitalize()}. Server-side error. Status {resp.status}.")
+                print(f"Failed request for {self.name.capitalize()}. Server-side error: Status {resp.status}.")
                 return None
 
         except Exception:
@@ -741,7 +741,7 @@ class Exchange:
                     # CHANGE: One filed invalid -> all fields invalid.
                     # changed this in order to avoid responses kicked out just because of one invalid field.
                     # The response will be filtered out in the DB-Handler if the primary-keys are missing anyways.
-                    if all(value is None for value in list(temp_results.values()) if not isinstance(value, datetime)):
+                    if all(value is None and not isinstance(value, datetime) for value in list(temp_results.values())):
                         continue
 
                     # asserting that the extracted lists for each mapping are having the same length

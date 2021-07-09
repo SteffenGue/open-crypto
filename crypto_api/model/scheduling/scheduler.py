@@ -10,7 +10,7 @@ from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
 
 from model.database.db_handler import DatabaseHandler
-from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
+from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
@@ -87,6 +87,9 @@ class Scheduler:
             "currency_pairs":
                 {"function": self.get_currency_pairs,
                  "table": ExchangeCurrencyPair},
+            "pair_infos":
+                {"function": self.request_format_persist,
+                 "table": PairInfo},
             "tickers":
                 {"function": self.request_format_persist,
                  "table": Ticker},

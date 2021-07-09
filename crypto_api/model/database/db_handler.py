@@ -19,7 +19,7 @@ from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, DatabaseTable
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, PairInfo, DatabaseTable
 from model.utilities.exceptions import NotAllPrimaryKeysException
 from model.utilities.time_helper import TimeHelper
 
@@ -509,15 +509,14 @@ class DatabaseHandler:
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         new_pairs: list[dict[str, Any]] = list()
+        tuple_counter: int = 0
+        counter_dict: dict[int, int] = dict()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
 
         with self.session_scope() as session:
             while True:
                 try:
                     data, mappings = next(formatted_response)
-
-                    counter_dict: dict[int, int] = dict()
-                    tuple_counter: int = 0
 
                     for data_tuple in data:
                         data_tuple = dict(zip(mappings, data_tuple))
@@ -554,8 +553,8 @@ class DatabaseHandler:
                             if db_table.__name__ != Ticker.__name__:
                                 counter_dict[exchange_pair_id] = counter_dict.get(exchange_pair_id, 0) + 1
                             tuple_counter += 1
-                            add_tuple = db_table(**data_tuple)
-                            session.add(add_tuple)
+                            # add_tuple =
+                            session.add(db_table(**data_tuple))
 
                     print(f"Pair-ID {exchange_pair_id if counter_dict else 'ALL'} - {exchange.name.capitalize()}: "
                           f"{counter_dict.get(exchange_pair_id, tuple_counter)} tuple(s)")
@@ -695,11 +694,35 @@ class DatabaseHandler:
             session.expunge_all()
         return result
 
+    # def delete_all_than_first_entry(self, table: DatabaseTable, exchange_pair_id: int):
+    #     """
+    #     Delete every entry except the most recent one. This method is used by the scheduler when increasing
+    #     the interval for iterative requests. If, for example, the interval is increased from hours to days,
+    #     and decreased afterwards (in order to overcome null-trade periods), the program would take the oldest
+    #     timestamp from the DB for further requests. That would leave a certain period without data in the requested
+    #     period.
+    #
+    #     @param table: The database table to be queried.
+    #     @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
+    #     @param exchange_pair_id: The exchange_pair_id of interest.
+    #     @type exchange_pair_id: int
+    #     """
+    #
+    #     with self.session_scope() as session:
+    #         (max_timestamp,) = session \
+    #             .query(func.max(table.time)) \
+    #             .filter(table.exchange_pair_id == exchange_pair_id) \
+    #             .first()
+    #         session.query(table).filter(table.exchange_pair_id == exchange_pair_id,
+    #                                     table.time < max_timestamp).delete()
+
     def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int) \
             -> datetime:
         """
-        Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old or
-        otherwise the timestamp from now.
+        Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old.
+        If the table is empty, the method trys to catch information from the helper table PairInfo.
+        Otherwise the timestamp from now.
+
 
         @param table: The database table to be queried.
         @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
@@ -709,6 +732,7 @@ class DatabaseHandler:
         @return: datetime: Earliest timestamp of specified table or timestamp from now.
         @rtype: datetime
         """
+
         with self.session_scope() as session:
             (earliest_timestamp,) = session \
                 .query(func.min(table.time)) \
@@ -719,8 +743,17 @@ class DatabaseHandler:
                 .filter(table.exchange_pair_id == exchange_pair_id) \
                 .first()
 
+        last_ts_query = session.query(PairInfo.end).filter(PairInfo.exchange_pair_id == exchange_pair_id)
+
         # two days as some exchanges lag behind one day for historic_rates
         if earliest_timestamp and (TimeHelper.now() - oldest_timestamp) < timedelta(days=2):
             return earliest_timestamp
+
+        elif earliest_timestamp and session.query(last_ts_query.exists()).scalar():
+            return earliest_timestamp
+
+        elif last_ts := last_ts_query.first():
+            return last_ts[0]
+
         else:
             return TimeHelper.now()

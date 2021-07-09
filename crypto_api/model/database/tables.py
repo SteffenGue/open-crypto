@@ -117,6 +117,19 @@ class ExchangeCurrencyPair(Base):
         return self.__repr__()
 
 
+class PairInfo(Base):
+    """
+    # ToDo
+    """
+    __tablename__ = "pair_infos"
+
+    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+    exchange_pair = relationship("ExchangeCurrencyPair", backref="pair_infos")
+
+    start = Column(UnixTimestampMs)
+    end = Column(UnixTimestampMs)
+
+
 class Ticker(Base):
     """
     Database ORM-Class storing the ticker data.
@@ -472,4 +485,4 @@ class HistoricRateView(Base):
 #     hash_rate = Column(Float)
 #
 
-DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook]
+DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook, PairInfo]
