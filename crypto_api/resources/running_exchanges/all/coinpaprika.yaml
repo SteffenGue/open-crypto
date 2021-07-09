@@ -34,6 +34,9 @@ requests:
           - id
         type:
           - str
+          - split
+          - "-"
+          - 0
       - key: currency_pair_second
         path: []
         type:

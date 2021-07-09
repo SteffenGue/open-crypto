@@ -11,7 +11,7 @@ requests:
       params:
         isUseMarketName:
           type: bool
-          default: True
+          default: "True"
     response:
       type: dict
       values:

@@ -183,7 +183,7 @@ class Exchange:
         timeout = aiohttp.ClientTimeout(total=self.timeout)
         try:
             async with session.get(url=url, params=params, timeout=timeout, **kwargs) as resp:
-                assert resp.status == 200
+                assert resp.status in range(200, 300)
                 return await resp.json(content_type=None)
 
         except ClientConnectorCertificateError:
@@ -209,13 +209,18 @@ class Exchange:
             return None
 
         except AssertionError:
-            if resp.status == 429 and retry:
+            logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
+
+            if resp.status == 429:
                 await asyncio.sleep(self.rate_limit * 2)
                 return await self.fetch(session=session, url=url, params=params, **kwargs)
 
-            print(f"Failed request for {self.name.capitalize()}. Status {resp.status}.")
-            logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
-            return None
+            if resp.status in range(400, 500):
+                print(f"Failed request for {self.name.capitalize()}. Client-side error. Status {resp.status}.")
+                return None
+            elif resp.status in range(500, 600):
+                print(f"Failed request for {self.name.capitalize()}. Server-side error. Status {resp.status}.")
+                return None
 
         except Exception:
             print(f"Unable to perform request for {self.name}. \n"

@@ -508,8 +508,6 @@ class DatabaseHandler:
 
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
-        counter_dict: dict[int, int] = dict()
-        tuple_counter: int = 0
         new_pairs: list[dict[str, Any]] = list()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
 
@@ -517,6 +515,10 @@ class DatabaseHandler:
             while True:
                 try:
                     data, mappings = next(formatted_response)
+
+                    counter_dict: dict[int, int] = dict()
+                    tuple_counter: int = 0
+
                     for data_tuple in data:
                         data_tuple = dict(zip(mappings, data_tuple))
 

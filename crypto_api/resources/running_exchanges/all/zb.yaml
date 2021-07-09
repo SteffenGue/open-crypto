@@ -1,9 +1,9 @@
 name: zb
 is_exchange: true
 api_docs: https://www.zb.com/en/api
-api_url: http://api.zb.center/
+api_url: http://api.zb.land/
 rate_limit:
-  max: 1500
+  max: 60
   unit: 60
 
 requests:
