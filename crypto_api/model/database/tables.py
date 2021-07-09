@@ -119,7 +119,7 @@ class ExchangeCurrencyPair(Base):
 
 class PairInfo(Base):
     """
-    # ToDo
+    Table for additional information for each exchange-currency-pair.
     """
     __tablename__ = "pair_infos"
 
