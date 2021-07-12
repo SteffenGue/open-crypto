@@ -9,6 +9,8 @@ import logging
 from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
 
+import tqdm
+
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
 from model.exchange.exchange import Exchange
@@ -69,9 +71,17 @@ class Scheduler:
         request_fun = request.get("function")
         request_table = request.get("table")
 
-        continue_run = True
-        while continue_run:
-            continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
+        for key, value in job.exchanges_with_pairs.items():
+            for item in tqdm.tqdm(value):
+                continue_run = True
+                while continue_run:
+                    continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+                    if not continue_run:
+                        continue
+
+        # continue_run = True
+        # while continue_run:
+        #     continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> dict[str, Callable[..., None]]:
         """
@@ -263,7 +273,7 @@ class Scheduler:
         """
         table_name = request_table.__tablename__.capitalize()
 
-        print(f"\nStarting to request {table_name}.")
+        # print(f"\nStarting to request {table_name}.")
         logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
@@ -273,7 +283,7 @@ class Scheduler:
         counter = {}
 
         # ToDo: Print Statement too often if interval != days.
-        print("Formatting and writing Data into the database..")
+        # print("Formatting and writing Data into the database..")
         for response in responses:
             response_time = response[0]
             exchange_name = response[1]
@@ -308,14 +318,15 @@ class Scheduler:
                 if value:
                     exchange.decrease_interval()
                     updated_job[exchange] = value
-                elif exchange.interval != "days":  # if days had no results, kick out exchange
-                    exchange.increase_interval()
-                    updated_job[exchange] = value
+                # ToDo: Bug - Interval needs to be reset with new currency-pair!
+                # elif exchange.interval != "days":  # if days had no results, kick out exchange
+                #     exchange.increase_interval()
+                #     updated_job[exchange] = value
 
             if updated_job:
                 return True, updated_job
 
-        print(f"\nDone collecting {table_name}.", end="\n\n")
+        # print(f"\nDone collecting {table_name}.", end="\n\n")
         logging.info("Done collecting %s.", table_name)
 
         return False, exchanges_with_pairs
