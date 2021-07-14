@@ -21,7 +21,7 @@ class TestPersistResponse:
     """
 
     db_config = {
-        "sqltype": None,
+        "sqltype": "sqlite",
         "client": None,
         "user_name": None,
         "password": None,
@@ -158,6 +158,7 @@ class TestPersistResponse:
             (TimeHelper.now(), TimeHelper.now(), 2.0, None, 2.0, 2),
             (TimeHelper.now(), TimeHelper.now(), 3.0, 3.0, None, 3),
             (TimeHelper.now(), TimeHelper.now(), 4.0, 4.0, 4.0, 4), ]
+
         exchanges_with_pairs = {self.session.query(Exchange).first():
                                     list(self.session.query(ExchangeCurrencyPair).limit(4))}
 

@@ -503,7 +503,7 @@ class DatabaseHandler:
                          exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]],
                          exchange: Exchange,
                          db_table: DatabaseTable,
-                         formatted_response: Generator[Any],
+                         formatted_response: Iterable[Any],
                          update_on_conflict: bool = False) -> list[ExchangeCurrencyPair]:
         """
         Method to persist the formatted response into the database. Every data tuple get is inspected for
@@ -551,7 +551,8 @@ class DatabaseHandler:
                             continue
 
                     exchange_pair_id = data_tuple.get("exchange_pair_id")
-                    data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
+                    # data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
+                    data_tuple = {key: data_tuple.get(key, None) for key in col_names}
                     data_to_persist.append(data_tuple)
 
                 with self.session_scope() as session:
@@ -559,7 +560,7 @@ class DatabaseHandler:
                     stmt = self.insert.insert(db_table).values(data_to_persist)
 
                     if update_on_conflict is False:
-                        stmt.on_conflict_do_nothing(index_elements=primary_keys)
+                        stmt = stmt.on_conflict_do_nothing(index_elements=primary_keys)
                     else:
                         stmt.on_conflict_do_update(index_elements=primary_keys)  # ToDo: check if correctly specified
 
