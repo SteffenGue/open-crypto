@@ -10,7 +10,7 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
 import importlib
-from typing import List, Iterable, Optional, Generator, Any, Union
+from typing import List, Iterable, Optional, Generator, Any
 
 import tqdm
 from pandas import DataFrame
@@ -20,8 +20,7 @@ from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, Ticker, PairInfo, DatabaseTable
-from model.utilities.exceptions import NotAllPrimaryKeysException
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, PairInfo, DatabaseTable
 from model.utilities.time_helper import TimeHelper
 
 
@@ -473,12 +472,14 @@ class DatabaseHandler:
 
     def get_or_create_exchange_pair_id(self, exchange: str, first: str, second: str, is_exchange: bool) -> int:
         """
+        Returns an existing exchange-currency-pair id or creates a new instance and returns the id.
 
-        @param is_exchange:
-        @param exchange:
-        @param first:
-        @param second:
-        @return:
+        @param exchange: Exchange name
+        @param first: First currency name
+        @param second: Second currency name
+        @param is_exchange: Is from exchange or platform
+
+        @return: Id of the existing or newly created exchange currency pair
         """
 
         temp_currency_pair = {"exchange_name": exchange,
