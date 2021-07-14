@@ -470,29 +470,32 @@ class DatabaseHandler:
                     if i % 500 == 0:
                         session.commit()
 
-    def get_or_create_exchange_pair_id(self, exchange: str, first: str, second: str, is_exchange: bool) -> int:
+    def get_or_create_exchange_pair_id(self,
+                                       exchange_name: str,
+                                       first_currency_name: str,
+                                       second_currency_name: str,
+                                       is_exchange: bool) -> int:
         """
         Returns an existing exchange-currency-pair id or creates a new instance and returns the id.
 
-        @param exchange: Exchange name
-        @param first: First currency name
-        @param second: Second currency name
+        @param exchange_name: Exchange name
+        @param first_currency_name: First currency name
+        @param second_currency_name: Second currency name
         @param is_exchange: Is from exchange or platform
 
         @return: Id of the existing or newly created exchange currency pair
         """
 
-        temp_currency_pair = {"exchange_name": exchange,
-                              "first_currency_name": first,
-                              "second_currency_name": second,
-                              "is_exchange": is_exchange}
+        temp_currency_pair = {"exchange_name": exchange_name,
+                              "first_currency_name": first_currency_name,
+                              "second_currency_name": second_currency_name}
 
         with self.session_scope() as session:
             currency_pair: ExchangeCurrencyPair = _get_exchange_currency_pair(session, **temp_currency_pair)
 
-            if not currency_pair and all([exchange, first, second, is_exchange]):
-                self.persist_exchange_currency_pair(**temp_currency_pair)
-                return self.get_or_create_exchange_pair_id(**temp_currency_pair)
+            if not currency_pair and all([exchange_name, first_currency_name, second_currency_name, is_exchange]):
+                self.persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
+                return self.get_or_create_exchange_pair_id(is_exchange=is_exchange, **temp_currency_pair)
             else:
                 return currency_pair.id
 
@@ -849,15 +852,15 @@ class DatabaseHandler:
 
         last_ts_query = session.query(PairInfo.end).filter(PairInfo.exchange_pair_id == exchange_pair_id)
 
+        # ToDo: Check if correctly working
         # two days as some exchanges lag behind one day for historic_rates
         if earliest_timestamp and (TimeHelper.now() - oldest_timestamp) < timedelta(days=2):
             return earliest_timestamp
 
-        elif earliest_timestamp and session.query(last_ts_query.exists()).scalar():
+        if earliest_timestamp and session.query(last_ts_query.exists()).scalar():
             return earliest_timestamp
 
-        elif last_ts := last_ts_query.first():
+        if last_ts := last_ts_query.first():
             return last_ts[0]
 
-        else:
-            return TimeHelper.now()
+        return TimeHelper.now()
