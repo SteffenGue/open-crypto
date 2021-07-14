@@ -69,6 +69,13 @@ class Scheduler:
         request_fun = request.get("function")
         request_table = request.get("table")
 
+        # for key, value in job.exchanges_with_pairs.items():
+        #     for item in value:
+        #         continue_run = True
+        #         while continue_run:
+        #             continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+        #             if not continue_run:
+        #                 continue
         continue_run = True
         while continue_run:
             continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
@@ -270,6 +277,7 @@ class Scheduler:
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
+
         counter = {}
 
         # ToDo: Print Statement too often if interval != days.

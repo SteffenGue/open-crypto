@@ -557,7 +557,7 @@ class DatabaseHandler:
                     if update_on_conflict is False:
                         stmt.on_conflict_do_nothing(index_elements=primary_keys)
                     else:
-                        stmt.on_conflict_do_update(index_elements=primary_keys)
+                        stmt.on_conflict_do_update(index_elements=primary_keys)  # ToDo: check if correctly specified
 
                     row_count = session.execute(stmt)
                     counter_dict.update({exchange_pair_id: row_count.rowcount})
