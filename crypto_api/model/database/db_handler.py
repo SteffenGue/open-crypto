@@ -10,7 +10,7 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
 import importlib
-from typing import List, Iterable, Optional, Generator, Any
+from typing import List, Iterable, Optional, Generator, Any, Iterator
 
 import tqdm
 from pandas import DataFrame
@@ -503,7 +503,7 @@ class DatabaseHandler:
                          exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]],
                          exchange: Exchange,
                          db_table: DatabaseTable,
-                         formatted_response: Iterable[Any],
+                         formatted_response: Iterator[Any],
                          update_on_conflict: bool = False) -> list[ExchangeCurrencyPair]:
         """
         Method to persist the formatted response into the database. Every data tuple get is inspected for
@@ -529,10 +529,10 @@ class DatabaseHandler:
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         counter_dict: dict[int, int] = dict()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
-        data_to_persist: list[dict, ...] = list()
 
         while True:
             try:
+                data_to_persist: list[dict, ...] = list()
                 data, mappings = next(formatted_response)
 
                 for data_tuple in data:
@@ -555,6 +555,9 @@ class DatabaseHandler:
                     data_tuple = {key: data_tuple.get(key, None) for key in col_names}
                     data_to_persist.append(data_tuple)
 
+                if not data_to_persist:
+                    continue
+
                 with self.session_scope() as session:
 
                     stmt = self.insert.insert(db_table).values(data_to_persist)
@@ -565,6 +568,7 @@ class DatabaseHandler:
                         stmt.on_conflict_do_update(index_elements=primary_keys)  # ToDo: check if correctly specified
 
                     row_count = session.execute(stmt)
+
                     counter_dict.update({exchange_pair_id: row_count.rowcount})
 
                     print(f"Pair-ID {exchange_pair_id if counter_dict else 'ALL'} - {exchange.name.capitalize()}: "
