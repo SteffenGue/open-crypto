@@ -63,8 +63,8 @@ if __name__ == "__main__":
     exchange = input("Enter the exchange to validate (or 'all'): ")
 
     if exchange != "all":
-        is_valid = ExchangeValidator(exchange).validate()
-        print(f"Exchange: {exchange}, Valid: {is_valid}")
+        IsValid = ExchangeValidator(exchange).validate()
+        print(f"Exchange: {exchange}, Valid: {IsValid}")
     else:
         exchanges = [os.path.splitext(file)[0] for file in os.listdir(YAML_PATH) if file.endswith(".yaml")]
 
