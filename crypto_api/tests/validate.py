@@ -12,7 +12,7 @@ from tests.yaml_tests.api_map_validation import ApiMapFileValidator, Report
 YAML_PATH = "../resources/running_exchanges/all/"
 
 
-class Validate:
+class ExchangeValidator:
     """
     This class will validate a single exchange yaml-file. The first method ValidateMapFile checks the yaml-file
     if in the right format, i.e. performs unit-testing.
@@ -28,19 +28,19 @@ class Validate:
         TODO: Fill out
         @return:
         """
-        api_map = ApiMapFileValidator(YAML_PATH + self.exchange_name + ".yaml")
-        api_map.validate()
+        validator = ApiMapFileValidator(f"{YAML_PATH}{self.exchange_name}.yaml")
+        validator.validate()
 
-        if bool(api_map.report):
+        if bool(validator.report):
             return True
         else:
             os.makedirs("reports/", exist_ok=True)
             with open("reports/report_" + self.exchange_name + ".txt", "w") as report:
-                report.writelines(api_map.report.indented_report())
+                report.writelines(validator.report.indented_report())
 
             print("API Map is Invalid! \n"
                   f"Inspect report: {'~/reports/report_' + self.exchange_name + '.txt'}")
-            self.report_error(api_map.report)
+            self.report_error(validator.report)
             return False
 
     def report_error(self, report: Report) -> Optional[Report]:
@@ -62,13 +62,17 @@ class Validate:
 if __name__ == "__main__":
     exchange = input("Enter the exchange to validate (or 'all'): ")
 
-    if exchange == "all":
+    if exchange != "all":
+        is_valid = ExchangeValidator(exchange).validate()
+        print(f"Exchange: {exchange}, Valid: {is_valid}")
+    else:
         exchanges = [os.path.splitext(file)[0] for file in os.listdir(YAML_PATH) if file.endswith(".yaml")]
 
         valid_count = 0  # pylint: disable=C0103
         for exchange in exchanges:
-            valid_count += Validate(exchange).validate()
+            is_valid = ExchangeValidator(exchange).validate()
+            print(f"Exchange: {exchange}, Valid: {is_valid}")
 
-        print(f"Valid Exchanges: {round(valid_count / len(exchanges) * 100, 2)} %")
-    else:
-        Validate(exchange).validate()
+            valid_count += int(is_valid)
+
+        print(f"Valid Exchanges: {valid_count}/{len(exchanges)} ({valid_count / len(exchanges):.2f} %)")

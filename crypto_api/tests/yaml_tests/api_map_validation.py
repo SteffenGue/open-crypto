@@ -42,11 +42,12 @@ Since:
 Version:
     26.04.2019
 """
+from __future__ import annotations
 
 import abc
 import re
 import textwrap
-from typing import Any, Dict, Iterable, List, Set, Text, Type, Union
+from typing import Any, Iterable, Text, Type, Union
 
 import oyaml as yaml
 import validators
@@ -115,7 +116,7 @@ class Report:
             List of wrapped Exceptions or Messages.
     """
 
-    messages: List[Valid]
+    messages: list[Valid]
 
     def __init__(self, *messages: Any):
         """Constructor of Report.
@@ -202,7 +203,7 @@ class CompositeReport(Report):
             A list of child Reports.
     """
 
-    reports: List[Report]
+    reports: list[Report]
 
     def __init__(self, *reports: Any):
         """Constructor of CompositeReport.
@@ -216,7 +217,7 @@ class CompositeReport(Report):
 
         self.reports = list(reports)
 
-    def append_report(self, report: Union[Report, "Validator"]) -> None:
+    def append_report(self, report: Union[Report, Validator]) -> None:
         """Appends a Report to reports.
 
         Appends a Report or a Validator's Report to children reports.
@@ -272,9 +273,9 @@ class KeyNotInDictError(ValidationError):
     """
 
     missing_key: Text
-    inspected_dict: Dict[Text, Any]
+    inspected_dict: dict[Text, Any]
 
-    def __init__(self, missing_key: Text, inspected_dict: Dict[Text, Any]):
+    def __init__(self, missing_key: Text, inspected_dict: dict[Text, Any]):
         """Constructor of KeyNotInDictError.
 
         Args:
@@ -298,10 +299,7 @@ class KeyNotInDictError(ValidationError):
             A Text.
         """
 
-        return "Key {missing_key} not in keys {keys}".format(
-            missing_key=repr(self.missing_key),
-            keys=repr(list(self.inspected_dict.keys()))
-        )
+        return f"Key {repr(self.missing_key)} not in keys {repr(list(self.inspected_dict.keys()))}"
 
 
 class KeyNotIntendedError(ValidationError):
@@ -314,7 +312,7 @@ class KeyNotIntendedError(ValidationError):
             A key, which is not intended to be in a dict.
     """
 
-    intended_keys: Set[Text]
+    intended_keys: set[Text]
     actual_key: Text
 
     def __init__(self, intended_keys: Iterable[Text], actual_key: Text):
@@ -341,9 +339,7 @@ class KeyNotIntendedError(ValidationError):
         Returns:
             A Text.
         """
-        return ("Key {actual} not intended to be in Dict, "
-                "Allowed: {intended}.").format(actual=self.actual_key,
-                                               intended=self.intended_keys)
+        return f"Key {self.actual_key} not intended to be in Dict, Allowed: {self.intended_keys}."
 
 
 class SubstringNotInStringError(ValidationError):
@@ -463,7 +459,7 @@ class UrlValidationError(ValidationError):
         Returns:
             A Text.
         """
-        return "URL {url} is not valid.".format(url=repr(self.url))
+        return f"URL {repr(self.url)} is not valid."
 
 
 class NamingConventionError(ValidationError):
@@ -494,9 +490,7 @@ class NamingConventionError(ValidationError):
         Returns:
             A Text.
         """
-        return ("'{name}' did not match naming convention's Regex Pattern "
-                "{pattern}.").format(pattern=self.naming_pattern,
-                                     name=self.name)
+        return f"'{self.name}' did not match naming convention's Regex Pattern {self.naming_pattern}."
 
 
 class Validator(abc.ABC):
@@ -514,7 +508,7 @@ class Validator(abc.ABC):
     value: Any
     report: Report
 
-    def __init__(self, value: Union[Any, "Validator"]):
+    def __init__(self, value: Union[Any, Validator]):
         """Constructor of Validator Base class.
 
         Args:
@@ -567,7 +561,7 @@ class CompositeValidator(Validator):
             A List of children Validators.
     """
 
-    validators: List[Validator]
+    validators: list[Validator]
 
     def __init__(self, value: Any, *child_validators: Any):
         """Constructor of CompositeValidator.
@@ -800,7 +794,7 @@ class LoadYamlValidator(ProcessingValidator):
     Validator for loading a YAML String.
     """
 
-    def process(self) -> Dict:
+    def process(self) -> dict:
         """Processes the value.
 
         Returns the result value from processing the initial value.
@@ -834,7 +828,7 @@ class ApiMapValidator(CompositeValidator):
     Validator for calling the other required Validators.
     """
 
-    def __init__(self, value: Dict[Text, Any]):
+    def __init__(self, value: dict[Text, Any]):
         """Constructor of ApiMapValidator.
 
         Args:
@@ -974,7 +968,7 @@ class ApiUrlValidator(Validator):
             The root dict that should contain the 'api_url' field.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1124,7 +1118,7 @@ class RequestsValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1204,7 +1198,7 @@ class RequestValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def __init__(self, value: Any):
         """Constructor of RequestValidator.
@@ -1214,7 +1208,7 @@ class RequestValidator(CompositeValidator):
                 The value to get validated.
         """
 
-        request: Dict[Text, Any] = value.get("request")
+        request: dict[Text, Any] = value.get("request")
         super().__init__(
             value,
             # TODO: Validate whether all keys of 'template' are in 'pair_template' or 'params'
@@ -1275,7 +1269,7 @@ class TemplateValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1328,7 +1322,7 @@ class PairTemplateValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1714,7 +1708,7 @@ class ResponseValidator(ProcessingValidator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def process(self) -> Any:
         """Processes the value.
@@ -1776,7 +1770,7 @@ class MappingValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1835,7 +1829,7 @@ class MappingEntryValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def __init__(self, value: Any):
         """Constructor of MappingEntryValidator.
@@ -1892,7 +1886,7 @@ class KeyValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1946,7 +1940,7 @@ class PathValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -2001,7 +1995,7 @@ class TypeValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -2048,13 +2042,13 @@ class RequestMappingValidator(Validator):
     """
     TODO: Fill out
     """
-    value: Dict[Text, Any]
+    value: dict[Text, Any]
 
-    def determine_table(self, table_name: str) -> Dict:
+    def determine_table(self, table_name: str) -> dict:
         """
         Returns the method that is to execute based on the given request name.
 
-        @param request_name: str
+        @param table_name: str
             Name of the request.
         @return:
             Method for the request name or a string that the request is false.
@@ -2073,7 +2067,7 @@ class RequestMappingValidator(Validator):
         }
         return possible_class.get(table_name, lambda: "Invalid request class.")
 
-    def determine_primary_keys(self, table_name: str) -> List:
+    def determine_primary_keys(self, table_name: str) -> list:
         """
         TODO: Fill out
         """
@@ -2096,7 +2090,12 @@ class RequestMappingValidator(Validator):
     def validate(self) -> bool:
         requests = self.value
         for request in requests.keys():
-            match_table = self.determine_table(request)['table']
+            table = self.determine_table(request)
+
+            if not isinstance(table, dict):
+                return False
+
+            match_table = table['table']
             class_keys = [key.name for key in inspect(match_table).columns]
             for mapping in requests[request]['mapping']:
                 mapping_key = mapping['key']
