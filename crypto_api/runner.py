@@ -5,7 +5,6 @@ This module is a wrapper around the whole package. Its main function is to expor
 to the current working directory of the user, start the program, establish database connections and export data
 into csv-files.
 """
-
 import os
 import shutil
 from typing import Any, Optional
@@ -19,6 +18,7 @@ import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
 from model.database.tables import *  # pylint: disable=unused-import
+from examples import Examples  # pylint: disable=unused-import
 
 
 def check_path(path: str) -> None:
@@ -155,7 +155,7 @@ def export(file: Optional[str] = None, file_format: str = "csv", *args: Any, **k
 
 def run(configuration_file: Optional[str] = None) -> None:
     """
-    First checks if all necessary folder are available (i.e. config and yaml-maps) and starts the program.
+   Starts the program after checking if all necessary folder are available (i.e. config and yaml-maps).
 
     @param configuration_file: The configuration file.
     @type configuration_file: Optional[str]

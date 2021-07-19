@@ -93,6 +93,8 @@ requests:
           - float
           - from_timestamp
           - 1
+          - to_end
+          - interval
       - key: close
         path:
           - prices

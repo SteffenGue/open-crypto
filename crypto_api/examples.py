@@ -16,7 +16,7 @@ from sqlalchemy import func
 import _paths  # pylint: disable=unused-import
 from main import run
 from model.database.tables import *
-from runner import get_session
+from export import database_session as get_session
 
 
 class Examples:
@@ -166,17 +166,6 @@ class Examples:
         query = session.query(OrderBookView).filter(OrderBookView.exchange == exchange,
                                                     OrderBookView.time == timestamp)
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
-        #
-        # bids = dataframe.groupby(pd.cut(dataframe.bids_price, bins=10))['bids_amount'].sum() \
-        #     .sort_index(ascending=False).cumsum()
-        # asks = dataframe.groupby(pd.cut(dataframe.asks_price, bins=10))['asks_amount'].sum() \
-        #     .sort_index(ascending=True).cumsum()
-        #
-        # index1 = [item.right.__round__() for item in bids.index]
-        # index2 = [item.left.__round__() for item in asks.index]
-        #
-        # # plt.step(index1, bids.values, color='green', label="Bids")
-        # # plt.step(index2, asks.values, color="red", label="Asks")
         plt.step(dataframe.bids_price, dataframe.bids_amount.cumsum(), color='green', label='bids')
         plt.step(dataframe.asks_price, dataframe.asks_amount.cumsum(), color='red', label='asks')
 

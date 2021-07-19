@@ -33,15 +33,15 @@ class ExchangeValidator:
 
         if bool(validator.report):
             return True
-        else:
-            os.makedirs("reports/", exist_ok=True)
-            with open("reports/report_" + self.exchange_name + ".txt", "w") as report:
-                report.writelines(validator.report.indented_report())
 
-            print("API Map is Invalid! \n"
-                  f"Inspect report: {'~/reports/report_' + self.exchange_name + '.txt'}")
-            self.report_error(validator.report)
-            return False
+        os.makedirs("reports/", exist_ok=True)
+        with open("reports/report_" + self.exchange_name + ".txt", "w") as report:
+            report.writelines(validator.report.indented_report())
+
+        print("API Map is Invalid! \n"
+              f"Inspect report: {'~/reports/report_' + self.exchange_name + '.txt'}")
+        self.report_error(validator.report)
+        return False
 
     def report_error(self, report: Report) -> Optional[Report]:
         """
@@ -49,30 +49,29 @@ class ExchangeValidator:
         """
         if bool(report):
             return report
-        else:
-            for nested_report in report.reports:
-                if not bool(nested_report):
-                    try:
-                        self.report_error(nested_report)
-                    except AttributeError:
-                        print(nested_report)
-                        break
+        for nested_report in report.reports:
+            if not bool(nested_report):
+                try:
+                    self.report_error(nested_report)
+                except AttributeError:
+                    print(nested_report)
+                    break
 
 
 if __name__ == "__main__":
     exchange = input("Enter the exchange to validate (or 'all'): ")
 
     if exchange != "all":
-        IsValid = ExchangeValidator(exchange).validate()
-        print(f"Exchange: {exchange}, Valid: {IsValid}")
+        VALID = ExchangeValidator(exchange).validate()
+        print(f"Exchange: {exchange}, Valid: {VALID}")
     else:
         exchanges = [os.path.splitext(file)[0] for file in os.listdir(YAML_PATH) if file.endswith(".yaml")]
 
         valid_count = 0  # pylint: disable=C0103
         for exchange in exchanges:
-            is_valid = ExchangeValidator(exchange).validate()
-            print(f"Exchange: {exchange}, Valid: {is_valid}")
+            VALID = ExchangeValidator(exchange).validate()
+            print(f"Exchange: {exchange}, Valid: {VALID}")
 
-            valid_count += int(is_valid)
+            valid_count += int(VALID)
 
         print(f"Valid Exchanges: {valid_count}/{len(exchanges)} ({valid_count / len(exchanges):.2f} %)")

@@ -158,7 +158,7 @@ def run(file: str = None, path: str = None) -> None:
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata, path=path, **db_params)
 
-    # Windows Bug I don't really understand. See Github Issue:
+    # See Github Issue for bug and work-around:
     # https://github.com/encode/httpx/issues/914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
