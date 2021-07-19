@@ -144,6 +144,7 @@ class Exchange:
         self.base_interval = interval
         self.get_first_timestamp = db_first_timestamp
 
+
         self.api_url = yaml_file["api_url"]
         if yaml_file.get("rate_limit"):
             if yaml_file["rate_limit"]["max"] <= 0:

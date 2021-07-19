@@ -82,14 +82,14 @@ requests:
             - datetime
             - timedelta
             - interval
-            - 100
+            - 5000
         end:
           function: last_timestamp
           type:
             - datetime
             - timestamp
         limit:
-          default: 100 # max!
+          default: 5000 # max!
         interval:
           allowed:
             minutes: 5m

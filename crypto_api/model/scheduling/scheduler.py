@@ -69,9 +69,16 @@ class Scheduler:
         request_fun = request.get("function")
         request_table = request.get("table")
 
-        continue_run = True
-        while continue_run:
-            continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
+        for key, value in job.exchanges_with_pairs.items():
+            for item in value:
+                continue_run = True
+                while continue_run:
+                    continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+                    if not continue_run:
+                        continue
+        # continue_run = True
+        # while continue_run:
+        #     continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> dict[str, Callable[..., None]]:
         """
@@ -263,17 +270,18 @@ class Scheduler:
         """
         table_name = request_table.__tablename__.capitalize()
 
-        print(f"\nStarting to request {table_name}.")
+        # print(f"\nStarting to request {table_name}.")
         logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
+
         counter = {}
 
         # ToDo: Print Statement too often if interval != days.
-        print("Formatting and writing Data into the database..")
+        # print("Formatting and writing Data into the database..")
         for response in responses:
             response_time = response[0]
             exchange_name = response[1]
@@ -315,7 +323,7 @@ class Scheduler:
             if updated_job:
                 return True, updated_job
 
-        print(f"\nDone collecting {table_name}.", end="\n\n")
+        # print(f"\nDone collecting {table_name}.", end="\n\n")
         logging.info("Done collecting %s.", table_name)
 
         return False, exchanges_with_pairs
