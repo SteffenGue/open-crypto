@@ -18,10 +18,10 @@ import oyaml as yaml
 from model.exchange.exchange import Exchange
 import _paths  # pylint: disable=unused-import
 
-os.chdir(path=os.getcwd() + "/crypto_api/test/unit_tests")
+path = os.getcwd() + "/crypto_api/test/unit_tests"
 
 
-with open("test_file.yaml", "r") as file:
+with open(path + "/test_file.yaml", "r") as file:
     test_file: dict = yaml.load(file, Loader=yaml.FullLoader)
 
 
