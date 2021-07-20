@@ -31,8 +31,8 @@ class Examples:
     plt.style.use("ggplot")
     pd.set_option("display.max_columns", None)
 
-    @classmethod
-    def __start_with_except(cls, configuration_file: str) -> None:
+    @staticmethod
+    def __start_with_except(configuration_file: str) -> None:
         try:
             run(configuration_file)
         except SystemExit:
@@ -139,9 +139,9 @@ class Examples:
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
         dataframe.sort_index(inplace=True)
 
-        plt.plot(dataframe[dataframe.direction == 0].loc[:, "price"], linestyle="dotted",
+        plt.plot(dataframe[dataframe.direction == "sell"].loc[:, "price"], linestyle="dotted",
                  color="red", label="Sells", linewidth=1.5)
-        plt.plot(dataframe[dataframe.direction == 1].loc[:, "price"], linestyle="dotted",
+        plt.plot(dataframe[dataframe.direction == "buy"].loc[:, "price"], linestyle="dotted",
                  color="green", label="Buys", linewidth=1.5)
 
         plt.xticks(rotation=45)
