@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module to schedule the program. The scheduler receives a job list, validates it and calls the methods
+to request, extract and persist data asynchronously. The scheduler is programmed to request several currency-pairs
+at once, however it can be changed to an vertical requesting (i.e. on currency-pair at a time). This may be useful
+for a high amount of currency-pairs, to avoid filling the RAM.
 """
 
 import asyncio
@@ -80,7 +83,7 @@ class Scheduler:
         # while continue_run:
         #     continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
-    def determine_task(self, request_name: str) -> dict[str, Callable[..., None]]:
+    def determine_task(self, request_name: str) -> dict[str, Union[Callable[..., None]]]:
         """
         Returns the method that is to execute based on the given request name.
 
