@@ -811,3 +811,9 @@ class Exchange:
         self.interval = self.interval_strings[index]
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
