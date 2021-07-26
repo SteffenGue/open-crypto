@@ -9,7 +9,7 @@ The exchange class is build upon the specific exchange.yaml file and several inp
 While an exchange-object itself provides all necessary methods for an API-request, the execution itself is scheduled
 within the module scheduler.
 """
-
+# Third party packages and modules
 import asyncio
 import itertools
 import logging
@@ -18,11 +18,11 @@ import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Optional, Any, Generator, Callable
-
 import aiohttp
 import tqdm
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 
+# Own modules
 from model.database.tables import ExchangeCurrencyPair, DatabaseTable
 from model.exchange.mapping import convert_type, extract_mappings, Mapping
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
@@ -608,12 +608,17 @@ class Exchange:
                 # To avoid this, put it into a list.
                 results[mapping.key] = [results[mapping.key]]
 
-        assert (len(results[0]) == len(result) for result in results)
+        # Check if all dict values do have the same length
+        values = list(results.values())
+        # Get the max length from all dict values
         len_results = {key: len(value) for key, value in results.items() if hasattr(value, "__iter__")}
         len_results = max(len_results.values()) if bool(len_results) else 1
-        results.update({k: itertools.repeat(*v, len_results) for k, v in results.items() if len(v) == 1})
 
-        return list(itertools.zip_longest(itertools.repeat(self.name, len(results["currency_pair_first"])),
+        if not all(len(value) == len_results for value in values):
+            # Update all dict values with equal length
+            results.update({k: itertools.repeat(*v, len_results) for k, v in results.items() if len(v) == 1})
+
+        return list(itertools.zip_longest(itertools.repeat(self.name, len_results),
                                           results["currency_pair_first"],
                                           results["currency_pair_second"]))
 
