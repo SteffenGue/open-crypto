@@ -31,10 +31,10 @@ class GlobalConfig(object):
         return cls.__instance
 
     def __init__(self) -> None:
-        if not GlobalConfig.__is_initialized:
+        if not self.__is_initialized:
             self.__filename: Optional[str] = None
             self.path = os.path.dirname(os.path.realpath(__file__))
-            GlobalConfig.__is_initialized = True
+            self.__is_initialized = True
 
         # The first path is used normally. The second (os.getcwd()) is needed when the directory
         # of the program and the resources differs. That is the case for the Python Package as
