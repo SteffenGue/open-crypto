@@ -98,11 +98,11 @@ def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
     logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
 
-async def main(database_handler: DatabaseHandler) -> None:
+async def main(database_handler: DatabaseHandler) -> Scheduler.start:
     """
     The model() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
-    In an asynchronous manner it is iterated over the exchange and and the responses are awaited and collected
+    In an asynchronous manner it is iterated over the exchange and the responses are awaited and collected
         by await asyncio.gather(..)
     As soon as all responses from the exchange are returned, the values get extracted, formatted into tuples
         by the exchange.get_ticker(..) method and persisted by the into the database by the database_handler.

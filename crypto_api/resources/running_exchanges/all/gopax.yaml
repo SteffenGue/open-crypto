@@ -5,7 +5,7 @@ rate_limit:
   max: 1200
   unit: 60
 
-api_url: https://api.gopax.com
+api_url: https://api.gopax.co.kr
 
 requests:
   currency_pairs:

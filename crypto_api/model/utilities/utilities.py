@@ -325,6 +325,7 @@ def provide_ssl_context() -> ssl.SSLContext:
 
     if platform.system().lower() == 'darwin':
         try:
+            # ToDo: Check PATH on MAC if correctly specified
             os.system("/Application/Python " + platform.python_version()[0:3] + "/Install Certificate.command")
         except (FileNotFoundError, Exception):
             ssl_context.load_verify_locations(
