@@ -74,6 +74,34 @@ def format_request_url(url: str,
     return url_formatted, parameters
 
 
+def sort_order_book(temp_results: dict[str, list[Any, ...], ...],
+                    len_results: int) -> dict[str, list[Any, ...], ...]:
+    """
+    Sorts the order-book result according to the bid and ask prices.
+    @param temp_results: Exchange response and extracted values
+    @param len_results: Max length of extracted values
+    @return: Sorted dict with matching bid-ask pairs sorted by price.
+    """
+
+    bids = [(price, amount) for (price, amount) in
+            sorted(zip(temp_results["bids_price"], temp_results["bids_amount"]),
+                   reverse=True,
+                   key=lambda pair: pair[0])]
+    asks = [(price, amount) for (price, amount) in
+            sorted(zip(temp_results["asks_price"], temp_results["asks_amount"]),
+                   reverse=False,
+                   key=lambda pair: pair[0])]
+
+    temp_results.update({"bids_price": [bid[0] for bid in bids]})
+    temp_results.update({"bids_amount": [bid[1] for bid in bids]})
+    temp_results.update({"asks_price": [ask[0] for ask in asks]})
+    temp_results.update({"asks_amount": [ask[1] for ask in asks]})
+
+    # Implement the order-book position for easy query afterwards.
+    temp_results["position"] = range(len_results)
+    return temp_results
+
+
 class Exchange:
     """
     Attributes:
@@ -699,6 +727,7 @@ class Exchange:
         mapping_keys = [mapping.key for mapping in mappings]
 
         # creating dictionary where key is the name of the mapping which holds an empty list
+        # temp_results = dict.fromkeys(mapping_keys, [])
         temp_results = dict(zip((key for key in mapping_keys),
                                 itertools.repeat([], len(mappings))))
 
@@ -737,13 +766,6 @@ class Exchange:
                     traceback.print_exc()
 
                 else:
-                    # extracted_data_is_valid: bool = True
-                    # for extracted_field in temp_results.keys():
-                    #     if temp_results[extracted_field] is None:
-                    #         print("{} has no valid data in {}".format(currency_pair, extracted_field))
-                    # extracted_data_is_valid = False
-                    # continue
-
                     # CHANGE: One filed invalid -> all fields invalid.
                     # changed this in order to avoid responses kicked out just because of one invalid field.
                     # The response will be filtered out in the DB-Handler if the primary-keys are missing anyways.
@@ -758,22 +780,7 @@ class Exchange:
 
                     if (method == "order_books") and ("position" in temp_results.keys()):
                         # Sort the order_books by price. I.e. asks ascending, Bids descending.
-                        bids = [(price, amount) for (price, amount) in
-                                sorted(zip(temp_results["bids_price"], temp_results["bids_amount"]),
-                                       reverse=True,
-                                       key=lambda pair: pair[0])]
-                        asks = [(price, amount) for (price, amount) in
-                                sorted(zip(temp_results["asks_price"], temp_results["asks_amount"]),
-                                       reverse=False,
-                                       key=lambda pair: pair[0])]
-
-                        temp_results.update({"bids_price": [bid[0] for bid in bids]})
-                        temp_results.update({"bids_amount": [bid[1] for bid in bids]})
-                        temp_results.update({"asks_price": [ask[0] for ask in asks]})
-                        temp_results.update({"asks_amount": [ask[1] for ask in asks]})
-
-                        # Implement the order-book position for easy query afterwards.
-                        temp_results["position"] = range(len_results)
+                        temp_results = sort_order_book(temp_results, len_results)
 
                     # adding pair id when we don't have currencies in mapping
                     if "currency_pair_first" not in mapping_keys and "currency_pair_second" not in mapping_keys:
@@ -790,7 +797,7 @@ class Exchange:
                               else itertools.repeat(v, len_results) for k, v in temp_results.items()]
 
                     result = list(itertools.zip_longest(*result))
-                    # results.extend(result)
+
                     yield result, list(temp_results.keys())
 
     def increase_interval(self) -> None:

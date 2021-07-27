@@ -140,11 +140,10 @@ class DatabaseHandler:
             print(f"Database '{db_name}' created", end="\n\n")
             logging.info("Database '%s' created", db_name)
 
-        try:  # this is done since one cant test if view-table exists already. if it does an error occurs
+        try:  # this is done since one can't test if view-table exists already. if it does an error occurs
             metadata.create_all(engine)
         except (ProgrammingError, OperationalError):
             message = "Database Views already exist. If you need to alter or recreate tables delete all views manually."
-            # print(message)
             logging.warning(message)
 
         self.session_factory: sessionmaker = sessionmaker(bind=engine)
