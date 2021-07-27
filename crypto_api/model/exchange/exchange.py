@@ -17,7 +17,7 @@ import string
 import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
-from typing import Iterator, Optional, Any, Generator, Callable
+from typing import Iterator, Optional, Any, Generator, Callable, Union
 import aiohttp
 import tqdm
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
@@ -75,7 +75,7 @@ def format_request_url(url: str,
 
 
 def sort_order_book(temp_results: dict[str, list[Any, ...], ...],
-                    len_results: int) -> dict[str, list[Any, ...], ...]:
+                    len_results: int) -> dict[str, Union[datetime, str, int, range, list], ...]:
     """
     Sorts the order-book result according to the bid and ask prices.
     @param temp_results: Exchange response and extracted values
@@ -268,38 +268,6 @@ class Exchange:
         for pair in currency_pairs:
             if pair not in self.exchange_currency_pairs:
                 self.exchange_currency_pairs.append(pair)
-
-    async def test_connection(self) -> tuple[str, bool, dict[str, Any]]:
-        """
-        This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
-        or, if no calls like this are available or exist in the public web api, a ticker request will be send.
-        Exceptions will be caught and in this case the connectivity test failed.
-
-        The Method is asynchronous so that after the request is send, the program does not wait
-        until the response arrives. For asynchronously we use the library asyncio.
-        For sending and dealing with requests/responses the library aiohttp is used.
-
-        The methods gets the requests matching url out of request_urls.
-        If it does not exist None will be returned. Otherwise it sends and awaits the response(.json).
-
-        :return: (str, bool)
-            Tuple of the following structure:
-                (exchange_name, response)
-                response represents the result of the connectivity test
-        :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
-                    Exception: the given response of an exchange could not be evaluated
-        """
-        if self.request_urls.get("test_connection"):
-            async with aiohttp.ClientSession() as session:
-                request_url_and_params = self.request_urls["test_connection"]
-                try:
-                    response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
-                    response_json = await response.json(content_type=None)
-                    return self.name, True, response_json
-                except ClientConnectionError:
-                    return self.name, False, {}
-                except Exception:
-                    return self.name, False, {}
 
     async def request(self,
                       request_table: object,
@@ -823,3 +791,38 @@ class Exchange:
         self.interval = self.interval_strings[index]
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
+
+
+# Currently unused Methods
+
+# async def test_connection(self) -> tuple[str, bool, dict[str, Any]]:
+# """
+# This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
+# or, if no calls like this are available or exist in the public web api, a ticker request will be send.
+# Exceptions will be caught and in this case the connectivity test failed.
+#
+# The Method is asynchronous so that after the request is send, the program does not wait
+# until the response arrives. For asynchronously we use the library asyncio.
+# For sending and dealing with requests/responses the library aiohttp is used.
+#
+# The methods gets the requests matching url out of request_urls.
+# If it does not exist None will be returned. Otherwise it sends and awaits the response(.json).
+#
+# :return: (str, bool)
+#     Tuple of the following structure:
+#         (exchange_name, response)
+#         response represents the result of the connectivity test
+# :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
+#             Exception: the given response of an exchange could not be evaluated
+# """
+# if self.request_urls.get("test_connection"):
+#     async with aiohttp.ClientSession() as session:
+#         request_url_and_params = self.request_urls["test_connection"]
+#         try:
+#             response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
+#             response_json = await response.json(content_type=None)
+#             return self.name, True, response_json
+#         except ClientConnectionError:
+#             return self.name, False, {}
+#         except Exception:
+#             return self.name, False, {}
