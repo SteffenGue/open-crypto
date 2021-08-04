@@ -10,6 +10,7 @@ for a high amount of currency-pairs, to avoid filling the RAM.
 import asyncio
 import logging
 from asyncio import Future
+import tqdm
 from typing import Callable, Any, Optional, Union, Coroutine
 
 from model.database.db_handler import DatabaseHandler

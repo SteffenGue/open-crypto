@@ -186,14 +186,14 @@ class Exchange:
                 assert resp.status in range(200, 300)
                 return await resp.json(content_type=None)
 
-        except ClientConnectorCertificateError as e:
+        except ClientConnectorCertificateError as ssl_exception:
             kwargs = dict()
             kwargs['ssl_context'] = provide_ssl_context()
             if kwargs.get('ssl_context') and retry:
                 return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
             print("SSL-ClientConnectorCertificateError. \n"
                   "Either no root certificate was found on your local machine or the server-side "
-                  "SSL-certificate is invalid. The exception reads: \n{} \n".format(e))
+                  "SSL-certificate is invalid. The exception reads: \n{} \n".format(ssl_exception))
             logging.error("ClientConnectorCertificateError")
             return None
 
@@ -811,8 +811,3 @@ class Exchange:
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
 
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return str(self)
