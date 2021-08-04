@@ -112,7 +112,7 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
     @type database_handler: object
     """
     # loader = Loader('Initializing open_crypto..', '', 0.1).start()
-    with Loader("Initializing open_crypto..", ""):
+    with Loader("Initializing open_crypto...", ""):
         config = read_config(file=None, section=None)
         logging.info("Loading jobs.")
         jobs = await initialize_jobs(job_config=config["jobs"],

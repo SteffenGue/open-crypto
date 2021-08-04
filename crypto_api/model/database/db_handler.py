@@ -12,7 +12,6 @@ from itertools import product
 import importlib
 from typing import List, Iterable, Optional, Generator, Any, Iterator
 
-import tqdm
 from pandas import DataFrame
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, func, inspect
@@ -428,7 +427,8 @@ class DatabaseHandler:
             # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             i: int = 0
             with self.session_scope() as session:
-                for currency_pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
+                # for currency_pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
+                for currency_pair in currency_pairs:
                     exchange_name = currency_pair[0]
                     first_currency_name = currency_pair[1]
                     second_currency_name = currency_pair[2]

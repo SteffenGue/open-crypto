@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.pyplot import GridSpec
 from sqlalchemy import func
+from sqlalchemy.orm import Session
 
 # noinspection PyUnresolvedReferences
 import _paths  # pylint: disable=unused-import
@@ -37,6 +38,17 @@ class Examples:
             run(configuration_file)
         except SystemExit:
             return
+
+    @staticmethod
+    def __clear_database_table(session: Session, table: DatabaseTable) -> None:
+        """
+        Deletes all entries from a database table.
+        @param session: SQLAlchemy-ORM Session.
+        @param table: Database table
+        """
+        print("Clearing table: {}.".format(table.__name__))
+        session.query(table).delete()
+        session.commit()
 
     @staticmethod
     def static() -> plt.hist:
@@ -187,11 +199,10 @@ class Examples:
         @return: pd.DataFrame with the top 15 exchanges.
         """
 
-        # configuration_file = 'minute_candles'
-        # Examples.__start_catch_systemexit(configuration_file)
-        #
-        # session = get_session(configuration_file)
-        pass
+        configuration_file = 'minute_candles'
+        session = get_session(configuration_file)
+        Examples.__clear_database_table(session, HistoricRate)
+        Examples.__start_catch_systemexit(configuration_file)
 
     @staticmethod
     def exchange_listings() -> plt.plot:
