@@ -19,6 +19,7 @@ from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
+from model.utilities.loading_bar import Loader
 
 
 def signal_handler(signal_number: Any, stack: Any) -> None:
@@ -110,22 +111,23 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
     @param: Instance of the DatabaseHandler
     @type database_handler: object
     """
-    config = read_config(file=None, section=None)
+    # loader = Loader('Initializing open_crypto..', '', 0.1).start()
+    with Loader("Initializing open_crypto...", ""):
+        config = read_config(file=None, section=None)
+        logging.info("Loading jobs.")
+        jobs = await initialize_jobs(job_config=config["jobs"],
+                                     timeout=config["general"]["operation_settings"].get("timeout", 10),
+                                     interval=config["general"]["operation_settings"].get("interval", "days"),
+                                     db_handler=database_handler)
+        frequency = config["general"]["operation_settings"]["frequency"]
+        logging.info("Configuring Scheduler.")
+        scheduler = Scheduler(database_handler, jobs, frequency)
+        await scheduler.validate_job()
 
-    logging.info("Loading jobs.")
-    jobs = await initialize_jobs(job_config=config["jobs"],
-                                 timeout=config["general"]["operation_settings"].get("timeout", 10),
-                                 interval=config["general"]["operation_settings"].get("interval", "days"),
-                                 db_handler=database_handler)
-    frequency = config["general"]["operation_settings"]["frequency"]
-    logging.info("Configuring Scheduler.")
-    scheduler = Scheduler(database_handler, jobs, frequency)
-    await scheduler.validate_job()
-
-    desc = f"\nJob(s) were created and will run with frequency: {frequency}."
-
-    print(desc)
-    logging.info(desc)
+        desc = f"\nJob(s) were created and will run with frequency: {frequency}."
+        # print(desc)
+        logging.info(desc)
+        # loader.stop()
 
     while True:
         if frequency == "once":

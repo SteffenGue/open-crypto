@@ -328,6 +328,10 @@ def provide_ssl_context() -> ssl.SSLContext:
             # ToDo: Check PATH on MAC if correctly specified
             os.system("/Application/Python " + platform.python_version()[0:3] + "/Install Certificate.command")
         except (FileNotFoundError, Exception):
+            print("Warning: No root SSL-certificate found on your local machine.\n"
+                  "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
+                  "try to install certification by executing the following file on your MacOS: \n"
+                  "'/Applications/Python [your/version/number]/Install Certificates.command'.")
             ssl_context.load_verify_locations(
                 cafile=os.path.relpath(certifi.where()),
                 capath=None,

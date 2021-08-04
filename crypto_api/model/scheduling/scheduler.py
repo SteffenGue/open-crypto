@@ -11,13 +11,14 @@ import asyncio
 import logging
 from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
-
 from model.database.db_handler import DatabaseHandler
+import tqdm
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
 from model.utilities.time_helper import TimeHelper
+from model.utilities.loading_bar import Loader
 
 
 class Scheduler:
@@ -72,16 +73,16 @@ class Scheduler:
         request_fun = request.get("function")
         request_table = request.get("table")
 
-        for key, value in job.exchanges_with_pairs.items():
-            for item in value:
-                continue_run = True
-                while continue_run:
-                    continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
-                    if not continue_run:
-                        continue
-        # continue_run = True
-        # while continue_run:
-        #     continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
+        # for key, value in job.exchanges_with_pairs.items():
+        #     for item in value:
+        #         continue_run = True
+        #         while continue_run:
+        #             continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+        #             if not continue_run:
+        #                 continue
+        continue_run = True
+        while continue_run:
+            continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> dict[str, Union[Callable[..., None]]]:
         """
@@ -163,12 +164,12 @@ class Scheduler:
                     # Delete exchanges with no API for that request type
                     if job.request_name not in list(exchange.file["requests"].keys()):
                         job.exchanges_with_pairs.pop(exchange)
-                        print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
-                              f" removed.")
+                        logging.info("%s has no %s request method and was removed.",
+                                     exchange.name.capitalize(), job.request_name)
                     # Delete exchanges with no matching Currency_Pairs
                     elif not job.exchanges_with_pairs[exchange]:
                         job.exchanges_with_pairs.pop(exchange)
-                        print(f"{exchange.name.capitalize()} has no matching currency_pairs.")
+                        logging.info("%s has no matching currency_pairs.", exchange.name.capitalize())
 
                 # Delete empty jobs, if the previous conditions removed all exchanges
                 if not job.exchanges_with_pairs:
@@ -180,6 +181,8 @@ class Scheduler:
 
         if jobs:
             # If there are jobs left, return them
+            for job in jobs:
+                print("Requesting {} exchange(s) for job: {}.".format(len(job.exchanges_with_pairs.keys()), job.name))
             return jobs
         else:
             # Reentry the method to get into the first else (down) condition and shut down process
@@ -225,19 +228,21 @@ class Scheduler:
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
-            print("Loading and/or updating exchange currency pairs..")
-            for exchange in exchanges:
-                if job_params["update_cp"] or job.request_name == "currency_pairs" or \
-                        not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
-                    await self.update_currency_pairs(exchange)
+            logging.info("Loading and/or updating exchange currency pairs..")
 
-                if job.request_name != "currency_pairs":
-                    job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
-                        exchange.name,
-                        job_params["currency_pairs"],
-                        job_params["first_currencies"],
-                        job_params["second_currencies"]
-                    )
+            with Loader("Loading exchange currency-pairs...", ""):
+                for exchange in tqdm.tqdm(exchanges, disable=len(exchanges) < 10, desc="Exchanges"):
+                    if job_params["update_cp"] or job.request_name == "currency_pairs" or \
+                            not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
+                        await self.update_currency_pairs(exchange)
+
+                    if job.request_name != "currency_pairs":
+                        job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
+                            exchange.name,
+                            job_params["currency_pairs"],
+                            job_params["first_currencies"],
+                            job_params["second_currencies"]
+                        )
         return job_list
 
     async def request_format_persist(self,
@@ -277,9 +282,11 @@ class Scheduler:
         logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
-        responses = await asyncio.gather(
-            *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
-        )
+
+        with Loader("Requesting data...", ""):
+            responses = await asyncio.gather(
+                *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+            )
 
         counter = {}
 

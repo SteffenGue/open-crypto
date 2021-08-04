@@ -10,19 +10,17 @@ general:
 
   operation_settings:
     frequency: once # once or any number in minutes
-    interval: days # minutes, hours, days, weeks, months
+    interval: minutes # minutes, hours, days, weeks, months
     timeout: 10
   utilities:
     enable_logging: false
     yaml_path: resources/running_exchanges/all/
 jobs:
-  HistoricRates:
+  MinuteCandles:
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
-      - binance
-      - bitfinex
-      - coinbase
+      - all
     excluded: null
     currency_pairs: # all or an arbitrary list of currency-pairs
 #      - all

@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.pyplot import GridSpec
 from sqlalchemy import func
+from sqlalchemy.orm import Session
 
 # noinspection PyUnresolvedReferences
 import _paths  # pylint: disable=unused-import
@@ -32,11 +33,22 @@ class Examples:
     pd.set_option("display.max_columns", None)
 
     @staticmethod
-    def __start_with_except(configuration_file: str) -> None:
+    def __start_catch_systemexit(configuration_file: str) -> None:
         try:
             run(configuration_file)
         except SystemExit:
             return
+
+    @staticmethod
+    def __clear_database_table(session: Session, table: DatabaseTable) -> None:
+        """
+        Deletes all entries from a database table.
+        @param session: SQLAlchemy-ORM Session.
+        @param table: Database table
+        """
+        print("Clearing table: {}.".format(table.__name__))
+        session.query(table).delete()
+        session.commit()
 
     @staticmethod
     def static() -> plt.hist:
@@ -46,7 +58,7 @@ class Examples:
         configuration_file = 'static'
         session = get_session(configuration_file)
 
-        Examples.__start_with_except(configuration_file)
+        Examples.__start_catch_systemexit(configuration_file)
 
         query = session.query(ExchangeCurrencyPairView)
         dataframe = pd.read_sql(query.statement, con=session.bind)
@@ -65,10 +77,12 @@ class Examples:
         """
         configuration_file = 'platform'
 
-        Examples.__start_with_except(configuration_file)
+        Examples.__start_catch_systemexit(configuration_file)
 
         session = get_session(configuration_file)
-        query = session.query(HistoricRate)
+        query = session.query(HistoricRateView).filter(HistoricRateView.exchange == 'COINGECKO',
+                                                       HistoricRateView.first_currency == "BITCOIN",
+                                                       HistoricRateView.second_currency == "USD")
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
         dataframe.sort_index(inplace=True)
 
@@ -91,7 +105,7 @@ class Examples:
         plt.title("Bitcoin Daily Volume in US-Dollar")
 
         ax2 = fig.add_subplot(grid_spec[3:4, :])
-        ax2.plot((dataframe.market_cap / dataframe.close) / 1e6, label="Supply")
+        ax2.plot((dataframe.market_cap.divide(dataframe.close, axis=0) / 1e6), label="Supply")
         ax2.grid(True)
         ax2.set_ylabel("Million")
         ax2.set_xlabel("Time (Daily)")
@@ -105,7 +119,7 @@ class Examples:
         """
         configuration_file = 'historic'
 
-        Examples.__start_with_except(configuration_file)
+        Examples.__start_catch_systemexit(configuration_file)
 
         exchanges = ('BITFINEX', 'BINANCE', 'COINBASE')
         session = get_session(configuration_file)
@@ -130,7 +144,7 @@ class Examples:
         """
         configuration_file = 'trades'
 
-        Examples.__start_with_except(configuration_file)
+        Examples.__start_catch_systemexit(configuration_file)
 
         exchange = "COINBASE"
         session = get_session(configuration_file)
@@ -160,7 +174,7 @@ class Examples:
         configuration_file = 'order_books'
         exchange = 'COINBASE'
         session = get_session(configuration_file)
-        Examples.__start_with_except(configuration_file)
+        Examples.__start_catch_systemexit(configuration_file)
 
         (timestamp,) = session.query(func.max(OrderBookView.time)).first()
         query = session.query(OrderBookView).filter(OrderBookView.exchange == exchange,
@@ -175,4 +189,46 @@ class Examples:
         plt.ylabel("Accum. Size in BTC")
         plt.legend()
         plt.tight_layout()
+        plt.show()
+
+    @staticmethod
+    def minute_candles() -> pd.DataFrame:
+        """
+        Collects minutes candles from all exchanges, calculates the timedelta in minutes and compares it with
+        the total amount of received candles.
+        @return: pd.DataFrame with the top 15 exchanges.
+        """
+
+        configuration_file = 'minute_candles'
+        session = get_session(configuration_file)
+        Examples.__clear_database_table(session, HistoricRate)
+        Examples.__start_catch_systemexit(configuration_file)
+
+    @staticmethod
+    def exchange_listings() -> plt.plot:
+        """
+        Collects historical data for 10 currency-pairs quoted against USD(T) and plots the amount of exchanges,
+        each currency was listed on over time.
+        """
+        configuration_file = 'exchange_listings'
+        Examples.__start_catch_systemexit(configuration_file)
+
+        session = get_session(configuration_file)
+        base_currencies = ('BTC', 'LINK', 'ETH', 'XRP', 'LTC', 'ATOM', 'ADA', 'XLM', 'BCH', 'DOGE')
+        query = session.query(HistoricRateView.time,
+                              HistoricRateView.exchange,
+                              HistoricRateView.first_currency,
+                              HistoricRateView.close).filter(HistoricRateView.first_currency.in_(base_currencies))
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
+        dataframe = pd.pivot_table(dataframe, columns=[dataframe.exchange, dataframe.first_currency],
+                                   index=dataframe.index).close['2010-01-01':]
+
+        for currency in base_currencies:
+            temp = dataframe.loc[:, (slice(None), currency.upper())]
+            temp = temp.resample("d").mean()
+            temp = temp.resample("m").median()
+            temp.count(axis=1).plot(label="/".join([currency, "USD(T)"]))
+        plt.legend()
+        plt.xlabel("Time (Monthly)")
+        plt.ylabel("Number of Exchanges")
         plt.show()
