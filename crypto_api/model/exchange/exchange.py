@@ -191,19 +191,17 @@ class Exchange:
             kwargs['ssl_context'] = provide_ssl_context()
             if kwargs.get('ssl_context') and retry:
                 return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
-            print("SSL-ClientConnectorCertificateError. \n"
-                  "Either no root certificate was found on your local machine or the server-side "
-                  "SSL-certificate is invalid. The exception reads: \n{} \n".format(ssl_exception))
-            logging.error("ClientConnectorCertificateError")
+            logging.error("\nSSL-ClientConnectorCertificateError. \n"
+                          "Either no root certificate was found on your local machine or the server-side "
+                          "SSL-certificate is invalid. The exception reads: \n{} \n".format(ssl_exception))
             return None
 
         except (asyncio.TimeoutError, ClientConnectionError):
-            print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
+            # print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
             logging.error("No connection to %s. Timeout or ConnectionError!", self.name.capitalize())
             return None
 
         except AssertionError:
-            logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
 
             if resp.status == 429:
                 # Retry when hitting rate-limit.
@@ -211,15 +209,15 @@ class Exchange:
                 return await self.fetch(session=session, url=url, params=params, **kwargs)
 
             if resp.status in range(400, 500):
-                print(f"Failed request for {self.name.capitalize()}. Client-side error: Status {resp.status}.")
+                logging.error("Failed request for %s. Client-side error: Status %s.", self.name.capitalize(),
+                              resp.status)
                 return None
             elif resp.status in range(500, 600):
-                print(f"Failed request for {self.name.capitalize()}. Server-side error: Status {resp.status}.")
+                logging.error("Failed request for %s. Server-side error: Status %s.", self.name.capitalize(),
+                              resp.status)
                 return None
 
         except Exception:
-            print(f"Unable to perform request for {self.name}. \n"
-                  f"Url: {url}, Parameters: {params}.")
             logging.error("Unable to perform request for {self.name}. \n"
                           "Url: %s, Parameters: %s.", url, params)
             return None
@@ -810,4 +808,3 @@ class Exchange:
         self.interval = self.interval_strings[index]
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
-

@@ -18,9 +18,9 @@ general:
 jobs:
   AAAA:
     yaml_request_name: historic_rates
-    update_cp: true
+    update_cp: false
     exchanges:
-      - hydax
+      - all
 #      - bitfinex
 #      - gemini
 #      - omgfin

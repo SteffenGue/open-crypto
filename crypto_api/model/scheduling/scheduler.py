@@ -11,13 +11,13 @@ import asyncio
 import logging
 from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
-
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
 from model.utilities.time_helper import TimeHelper
+from model.utilities.loading_bar import Loader
 
 
 class Scheduler:
@@ -163,12 +163,12 @@ class Scheduler:
                     # Delete exchanges with no API for that request type
                     if job.request_name not in list(exchange.file["requests"].keys()):
                         job.exchanges_with_pairs.pop(exchange)
-                        print(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
-                              f" removed.")
+                        logging.info(f"{exchange.name.capitalize()} has no {job.request_name} request method and was"
+                                     f" removed.")
                     # Delete exchanges with no matching Currency_Pairs
                     elif not job.exchanges_with_pairs[exchange]:
                         job.exchanges_with_pairs.pop(exchange)
-                        print(f"{exchange.name.capitalize()} has no matching currency_pairs.")
+                        logging.info(f"{exchange.name.capitalize()} has no matching currency_pairs.")
 
                 # Delete empty jobs, if the previous conditions removed all exchanges
                 if not job.exchanges_with_pairs:
@@ -225,7 +225,8 @@ class Scheduler:
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
-            print("Loading and/or updating exchange currency pairs..")
+            logging.info("Loading and/or updating exchange currency pairs..")
+            loader = Loader("Loading and/or updating exchange currency-pairs", "Done", 0.1).start()
             for exchange in exchanges:
                 if job_params["update_cp"] or job.request_name == "currency_pairs" or \
                         not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
@@ -238,6 +239,7 @@ class Scheduler:
                         job_params["first_currencies"],
                         job_params["second_currencies"]
                     )
+            loader.stop()
         return job_list
 
     async def request_format_persist(self,
@@ -277,10 +279,11 @@ class Scheduler:
         logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
+        loader = Loader('Requesting data...', '', 0.1).start()
         responses = await asyncio.gather(
             *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
         )
-
+        loader.stop()
         counter = {}
 
         # ToDo: Print Statement too often if interval != days.

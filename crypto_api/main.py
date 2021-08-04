@@ -19,6 +19,7 @@ from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
+from model.utilities.loading_bar import Loader
 
 
 def signal_handler(signal_number: Any, stack: Any) -> None:
@@ -110,8 +111,8 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
     @param: Instance of the DatabaseHandler
     @type database_handler: object
     """
+    loader = Loader('Initializing open_crypto..', '', 0.1).start()
     config = read_config(file=None, section=None)
-
     logging.info("Loading jobs.")
     jobs = await initialize_jobs(job_config=config["jobs"],
                                  timeout=config["general"]["operation_settings"].get("timeout", 10),
@@ -126,6 +127,7 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
 
     print(desc)
     logging.info(desc)
+    loader.stop()
 
     while True:
         if frequency == "once":
