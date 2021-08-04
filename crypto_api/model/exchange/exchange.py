@@ -193,7 +193,7 @@ class Exchange:
                 return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
             logging.error("\nSSL-ClientConnectorCertificateError. \n"
                           "Either no root certificate was found on your local machine or the server-side "
-                          "SSL-certificate is invalid. The exception reads:\n %s \n".format(ssl_exception))
+                          "SSL-certificate is invalid. The exception reads:\n %s \n", ssl_exception)
             return None
 
         except (asyncio.TimeoutError, ClientConnectionError):

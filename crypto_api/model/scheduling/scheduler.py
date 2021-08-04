@@ -284,6 +284,7 @@ class Scheduler:
             responses = await asyncio.gather(
                 *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
             )
+
         counter = {}
 
         # ToDo: Print Statement too often if interval != days.
