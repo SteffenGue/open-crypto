@@ -22,12 +22,11 @@ jobs:
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
       - coingecko
+    excluded: null
     currency_pairs: # all or an arbitrary list of currency-pairs
       - first: bitcoin
         second: usd
-    first_currencies: # filter database by the first currency and take all
-      - null
-    second_currencies: # filter database by the second currency and take all.
-      - null
+    first_currencies: null  # filter database by the first currency and take all
+    second_currencies: null  # filter database by the second currency and take all.
 
 

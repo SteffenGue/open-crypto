@@ -6,11 +6,11 @@ general:
     password: Thw_kiel
     host: localhost
     port: 5432
-    db_name: Coinpaprika
+    db_name: ExampleDB
   operation_settings:
     frequency: once
     timeout: 10
-    interval: hours  #minutes, hours, days, weeks, months
+    interval: days  #minutes, hours, days, weeks, months
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: false
@@ -18,9 +18,9 @@ general:
 jobs:
   AAAA:
     yaml_request_name: historic_rates
-    update_cp: false
+    update_cp: true
     exchanges:
-      - coinpaprika
+      - hydax
 #      - bitfinex
 #      - gemini
 #      - omgfin
@@ -29,9 +29,9 @@ jobs:
       - bittrex
 
     currency_pairs:
-      - all
-#      - first: eth
-#        second: btc
+#      - all
+      - first: eth
+        second: btc
 #      - first: btc
 #        second: usdt
 #      - all

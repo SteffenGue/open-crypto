@@ -22,13 +22,14 @@ jobs:
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
       - coinbase
+    excluded: null
+
     currency_pairs: # all or an arbitrary list of currency-pairs
 #      - all
       - first: eth
         second: btc
-    first_currencies: # filter database by the first currency and take all
-      - null
-    second_currencies: # filter database by the second currency and take all.
-      - null
+
+    first_currencies: null  # filter database by the first currency and take all
+    second_currencies: null  # filter database by the second currency and take all.
 
 

@@ -144,7 +144,6 @@ class Exchange:
         self.base_interval = interval
         self.get_first_timestamp = db_first_timestamp
 
-
         self.api_url = yaml_file["api_url"]
         if yaml_file.get("rate_limit"):
             if yaml_file["rate_limit"]["max"] <= 0:
@@ -165,7 +164,7 @@ class Exchange:
                     session: aiohttp.ClientSession,
                     url: str,
                     params: dict[str, Any],
-                    retry: bool = False,
+                    retry: bool = True,
                     **kwargs: object) -> Optional[dict]:
         """
         Executes the actual request and exception handling.
@@ -187,22 +186,16 @@ class Exchange:
                 assert resp.status in range(200, 300)
                 return await resp.json(content_type=None)
 
-        except ClientConnectorCertificateError:
-            try:
-                kwargs = dict()
-                kwargs['ssl_context'] = provide_ssl_context()
-                if not kwargs.get('ssl_context'):
-                    kwargs.pop('ssl_context')
-                return await self.fetch(session=session, url=url, params=params, **kwargs)
-
-            except ClientConnectorCertificateError:
-                print("SSL-ClientConnectorCertificateError. No SSL-Certification found. "
-                      "Providing new SSL-context instance in the meantime failed. \n"
-                      "To avoid this error in the future: If you are running on MacOS, \n"
-                      "try to install certification by executing: \n"
-                      "/Applications/Python [version/number]/Install Certificates.command.")
-                logging.error("ClientConnectorCertificateError")
-                return None
+        except ClientConnectorCertificateError as e:
+            kwargs = dict()
+            kwargs['ssl_context'] = provide_ssl_context()
+            if kwargs.get('ssl_context') and retry:
+                return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
+            print("SSL-ClientConnectorCertificateError. \n"
+                  "Either no root certificate was found on your local machine or the server-side "
+                  "SSL-certificate is invalid. The exception reads: \n{} \n".format(e))
+            logging.error("ClientConnectorCertificateError")
+            return None
 
         except (asyncio.TimeoutError, ClientConnectionError):
             print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
@@ -213,6 +206,7 @@ class Exchange:
             logging.error("Failed request for %s. Status %s.", self.name.capitalize(), resp.status)
 
             if resp.status == 429:
+                # Retry when hitting rate-limit.
                 await asyncio.sleep(self.rate_limit * 2)
                 return await self.fetch(session=session, url=url, params=params, **kwargs)
 

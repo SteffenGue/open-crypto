@@ -20,16 +20,24 @@ jobs:
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
-      - binance
-      - bitfinex
-      - coinbase
-    excluded: null
-    currency_pairs: # all or an arbitrary list of currency-pairs
-#      - all
-      - first: eth
-        second: btc
-
-    first_currencies: null  # filter database by the first currency and take all
-    second_currencies: null  # filter database by the second currency and take all.
+      - all
+    excluded:
+      - bittrex
+      - ftx
+    currency_pairs: null # all or an arbitrary list of currency-pairs
+    first_currencies: # filter database by the first currency and take all
+      - btc
+      - link
+      - eth
+      - atom
+      - bch
+      - xrp
+      - ltc
+      - xlm
+      - doge
+      - ada
+    second_currencies: # filter database by the second currency and take all.
+      - usd
+      - usdt
 
 
