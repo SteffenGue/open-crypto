@@ -187,11 +187,10 @@ class Examples:
         @return: pd.DataFrame with the top 15 exchanges.
         """
 
-        configuration_file = 'minute_candles'
-        Examples.__start_catch_systemexit(configuration_file)
-
-        session = get_session(configuration_file)
-
+        # configuration_file = 'minute_candles'
+        # Examples.__start_catch_systemexit(configuration_file)
+        #
+        # session = get_session(configuration_file)
         pass
 
     @staticmethod
@@ -209,11 +208,12 @@ class Examples:
                               HistoricRateView.exchange,
                               HistoricRateView.first_currency,
                               HistoricRateView.close).filter(HistoricRateView.first_currency.in_(base_currencies))
-        df = pd.read_sql(query.statement, con=session.bind, index_col="time")
-        df = pd.pivot_table(df, columns=[df.exchange, df.first_currency], index=df.index).close['2010-01-01':]
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
+        dataframe = pd.pivot_table(dataframe, columns=[dataframe.exchange, dataframe.first_currency],
+                                   index=dataframe.index).close['2010-01-01':]
 
         for currency in base_currencies:
-            temp = df.loc[:, (slice(None), currency.upper())]
+            temp = dataframe.loc[:, (slice(None), currency.upper())]
             temp = temp.resample("d").mean()
             temp = temp.resample("m").median()
             temp.count(axis=1).plot(label="/".join([currency, "USD(T)"]))

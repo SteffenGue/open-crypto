@@ -40,10 +40,10 @@ class Loader:
         """
         # ToDo
         """
-        for c in cycle(self.steps):
+        for step in cycle(self.steps):
             if self.done:
                 break
-            print(f"\r{self.desc} {c}", flush=True, end="")
+            print(f"\r{self.desc} {step}", flush=True, end="")
             sleep(self.timeout)
 
     def __enter__(self) -> None:
@@ -61,7 +61,7 @@ class Loader:
         print("\r" + " " * cols, end="", flush=True)
         print(f"\r{self.end}", flush=True)
 
-    def __exit__(self, exc_type: Any, exc_value: Any, tb: Any) -> None:
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """
         # ToDo
         """
