@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 """
 TODO: Fill out module docstring.
-Credit: https://stackoverflow.com/a/66558182
+Full credit to: https://stackoverflow.com/a/66558182
 """
 
 from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
+from typing import Any
 
 
 class Loader:
@@ -28,14 +29,14 @@ class Loader:
         self.steps = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
         self.done = False
 
-    def start(self):
+    def start(self) -> object:
         """
         # Todo
         """
         self._thread.start()
         return self
 
-    def _animate(self):
+    def _animate(self) -> None:
         """
         # ToDo
         """
@@ -45,13 +46,13 @@ class Loader:
             print(f"\r{self.desc} {c}", flush=True, end="")
             sleep(self.timeout)
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         """
         # ToDo
         """
         self.start()
 
-    def stop(self):
+    def stop(self) -> None:
         """
         # ToDo
         """
@@ -60,11 +61,9 @@ class Loader:
         print("\r" + " " * cols, end="", flush=True)
         print(f"\r{self.end}", flush=True)
 
-    def __exit__(self, exc_type, exc_value, tb):
+    def __exit__(self, exc_type: Any, exc_value: Any, tb: Any) -> None:
         """
         # ToDo
         """
         # handle exceptions with those variables
         self.stop()
-
-
