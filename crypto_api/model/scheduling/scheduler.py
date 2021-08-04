@@ -226,20 +226,20 @@ class Scheduler:
             exchanges = list(job.exchanges_with_pairs.keys())
 
             logging.info("Loading and/or updating exchange currency pairs..")
-            loader = Loader("Loading and/or updating exchange currency-pairs", "Done", 0.1).start()
-            for exchange in exchanges:
-                if job_params["update_cp"] or job.request_name == "currency_pairs" or \
-                        not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
-                    await self.update_currency_pairs(exchange)
 
-                if job.request_name != "currency_pairs":
-                    job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
-                        exchange.name,
-                        job_params["currency_pairs"],
-                        job_params["first_currencies"],
-                        job_params["second_currencies"]
-                    )
-            loader.stop()
+            with Loader("Loading and/or updating exchange currency-pairs", ""):
+                for exchange in exchanges:
+                    if job_params["update_cp"] or job.request_name == "currency_pairs" or \
+                            not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
+                        await self.update_currency_pairs(exchange)
+
+                    if job.request_name != "currency_pairs":
+                        job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
+                            exchange.name,
+                            job_params["currency_pairs"],
+                            job_params["first_currencies"],
+                            job_params["second_currencies"]
+                        )
         return job_list
 
     async def request_format_persist(self,
@@ -279,11 +279,11 @@ class Scheduler:
         logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
-        loader = Loader('Requesting data...', '', 0.1).start()
-        responses = await asyncio.gather(
-            *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
-        )
-        loader.stop()
+
+        with Loader("Requesting data...", ""):
+            responses = await asyncio.gather(
+                *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+            )
         counter = {}
 
         # ToDo: Print Statement too often if interval != days.

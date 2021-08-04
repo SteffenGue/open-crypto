@@ -111,23 +111,23 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
     @param: Instance of the DatabaseHandler
     @type database_handler: object
     """
-    loader = Loader('Initializing open_crypto..', '', 0.1).start()
-    config = read_config(file=None, section=None)
-    logging.info("Loading jobs.")
-    jobs = await initialize_jobs(job_config=config["jobs"],
-                                 timeout=config["general"]["operation_settings"].get("timeout", 10),
-                                 interval=config["general"]["operation_settings"].get("interval", "days"),
-                                 db_handler=database_handler)
-    frequency = config["general"]["operation_settings"]["frequency"]
-    logging.info("Configuring Scheduler.")
-    scheduler = Scheduler(database_handler, jobs, frequency)
-    await scheduler.validate_job()
+    # loader = Loader('Initializing open_crypto..', '', 0.1).start()
+    with Loader("Initializing open_crypto..", ""):
+        config = read_config(file=None, section=None)
+        logging.info("Loading jobs.")
+        jobs = await initialize_jobs(job_config=config["jobs"],
+                                     timeout=config["general"]["operation_settings"].get("timeout", 10),
+                                     interval=config["general"]["operation_settings"].get("interval", "days"),
+                                     db_handler=database_handler)
+        frequency = config["general"]["operation_settings"]["frequency"]
+        logging.info("Configuring Scheduler.")
+        scheduler = Scheduler(database_handler, jobs, frequency)
+        await scheduler.validate_job()
 
-    desc = f"\nJob(s) were created and will run with frequency: {frequency}."
-
-    print(desc)
-    logging.info(desc)
-    loader.stop()
+        desc = f"\nJob(s) were created and will run with frequency: {frequency}."
+        # print(desc)
+        logging.info(desc)
+        # loader.stop()
 
     while True:
         if frequency == "once":
