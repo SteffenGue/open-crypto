@@ -21,7 +21,8 @@ jobs:
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
       - all
-    excluded: null
+    excluded:
+      - xt
     currency_pairs: null # all or an arbitrary list of currency-pairs
     first_currencies: # filter database by the first currency and take all
       - btc

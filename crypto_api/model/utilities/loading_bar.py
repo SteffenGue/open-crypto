@@ -41,7 +41,7 @@ class Loader:
         self._thread.start()
         return self
 
-    def increment(self, step_size: Union[int, float] = 1):
+    def increment(self, step_size: Union[int, float] = 1) -> None:
         """
         Increments the counter.
         """
