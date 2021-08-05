@@ -202,7 +202,8 @@ class Examples:
         configuration_file = 'minute_candles'
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
-        Examples.__start_catch_systemexit(configuration_file)
+        # Examples.__start_catch_systemexit(configuration_file)
+        print("Note, this example takes several hours to complete. It is therefore temporarily disabled.")
 
     @staticmethod
     def exchange_listings() -> plt.plot:
@@ -228,6 +229,7 @@ class Examples:
             temp = temp.resample("d").mean()
             temp = temp.resample("m").median()
             temp.count(axis=1).plot(label="/".join([currency, "USD(T)"]))
+
         plt.legend()
         plt.xlabel("Time (Monthly)")
         plt.ylabel("Number of Exchanges")

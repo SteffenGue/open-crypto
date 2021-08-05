@@ -11,8 +11,8 @@ import asyncio
 import logging
 from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
+
 from model.database.db_handler import DatabaseHandler
-import tqdm
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
@@ -230,8 +230,9 @@ class Scheduler:
 
             logging.info("Loading and/or updating exchange currency pairs..")
 
-            with Loader("Loading exchange currency-pairs...", ""):
-                for exchange in tqdm.tqdm(exchanges, disable=len(exchanges) < 10, desc="Exchanges"):
+            with Loader("Loading exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
+                # for exchange in tqdm.tqdm(exchanges, disable=len(exchanges) < 100, desc="Exchanges"):
+                for exchange in exchanges:
                     if job_params["update_cp"] or job.request_name == "currency_pairs" or \
                             not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
                         await self.update_currency_pairs(exchange)
@@ -243,6 +244,7 @@ class Scheduler:
                             job_params["first_currencies"],
                             job_params["second_currencies"]
                         )
+                    loader.increment()
         return job_list
 
     async def request_format_persist(self,
