@@ -122,11 +122,11 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
         frequency = config["general"]["operation_settings"]["frequency"]
         logging.info("Configuring Scheduler.")
         scheduler = Scheduler(database_handler, jobs, frequency)
-        await scheduler.validate_job()
+    await scheduler.validate_job()
 
-        desc = f"\nJob(s) were created and will run with frequency: {frequency}."
+    desc = f"\nJob(s) were created and will run with frequency: {frequency}."
         # print(desc)
-        logging.info(desc)
+    logging.info(desc)
         # loader.stop()
 
     while True:
