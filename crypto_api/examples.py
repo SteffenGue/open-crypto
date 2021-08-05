@@ -199,9 +199,9 @@ class Examples:
         @return: pd.DataFrame with the top 15 exchanges.
         """
 
-        # configuration_file = 'minute_candles'
-        # session = get_session(configuration_file)
-        # Examples.__clear_database_table(session, HistoricRate)
+        configuration_file = 'minute_candles'
+        session = get_session(configuration_file)
+        Examples.__clear_database_table(session, HistoricRate)
         # Examples.__start_catch_systemexit(configuration_file)
         print("Note, this example takes several hours to complete. It is therefore temporarily disabled.")
 

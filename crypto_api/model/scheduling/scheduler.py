@@ -11,8 +11,8 @@ import asyncio
 import logging
 from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
+
 from model.database.db_handler import DatabaseHandler
-import tqdm
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
