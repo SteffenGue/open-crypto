@@ -311,7 +311,7 @@ class ExchangeCurrencyPairView(Base):
         selectable=select(
             [
                 ExchangeCurrencyPair.id,
-                Exchange.name.label("exchange"),
+                Exchange.name.label("exchange_name"),
                 first.name.label("first_name"),
                 second.name.label("second_name"),
             ],
