@@ -7,7 +7,6 @@ Classes:
  - Examples: Contains examples and illustrations to demonstrate all request methods.
 """
 import os
-import time
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.pyplot import GridSpec

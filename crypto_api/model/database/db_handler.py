@@ -81,7 +81,7 @@ class DatabaseHandler:
             host: str,
             port: str,
             db_name: str,
-            min_return_tuples: int,
+            min_return_tuples: int = 1,
             path: str = None,
             debug: bool = False):
         """

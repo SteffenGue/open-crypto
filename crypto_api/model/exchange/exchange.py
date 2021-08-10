@@ -153,7 +153,7 @@ class Exchange:
                  yaml_file: dict[str, Any],
                  db_first_timestamp: Callable[[DatabaseTable, int], datetime],
                  timeout: int,
-                 comparator: str,
+                 comparator: str = 'equal_or_lower',
                  interval: Any = "days"):
         """
         Creates a new Exchange-object.
@@ -318,7 +318,7 @@ class Exchange:
 
         if not all(self.request_urls.get(request_name).get('params').values()):
             logging.warning("%s has not all parameters defined for %s request. Exchange is dropped.",
-                            self.name.capitalize(), request_name, self.name)
+                            self.name.capitalize(), request_name)
             print(f"\n{self.name.capitalize()} has 'None type' parameters and is dropped.")
             return None
 

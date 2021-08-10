@@ -9,8 +9,8 @@ Classes:
 import os
 import shutil
 from typing import Union
-import oyaml as yaml
 import logging
+import oyaml as yaml
 
 
 class Setting:
@@ -29,14 +29,19 @@ class Setting:
 
     @staticmethod
     def set(block: str, key: str, val: Union[str, int, float]) -> None:
-
+        """
+        Sets a new value in the config file.
+        @param block: Config file block
+        @param key: Key within the block
+        @param val: value to be set
+        """
         try:
-            with open(os.getcwd() + Setting.PATH, "r") as f:
-                file = yaml.load(f, Loader=yaml.FullLoader)
+            with open(os.getcwd() + Setting.PATH, "r") as file:
+                config = yaml.load(file, Loader=yaml.FullLoader)
 
-            file.get(block).update({key: val})
-            with open(os.getcwd() + Setting.PATH, "w") as f:
-                yaml.dump(file, f)
+            config.get(block).update({key: val})
+            with open(os.getcwd() + Setting.PATH, "w") as file:
+                yaml.dump(config, file)
 
         except (KeyError, FileNotFoundError):
             logging.error("Program config could not be updated.")
@@ -59,6 +64,3 @@ class Setting:
                     os.path.join(destination, filename.split("_")[1]))
 
         print("Settings reset successful.")
-
-
-
