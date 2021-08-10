@@ -18,7 +18,7 @@ from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
-from model.utilities.utilities import read_config, yaml_loader, get_exchange_names
+from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config
 from model.utilities.loading_bar import Loader
 
 
@@ -36,6 +36,7 @@ signal.signal(signal.SIGINT, signal_handler)
 async def initialize_jobs(job_config: dict[str, Any],
                           timeout: int,
                           interval: Any,
+                          comparator: str,
                           db_handler: DatabaseHandler) -> list[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
@@ -62,6 +63,7 @@ async def initialize_jobs(job_config: dict[str, Any],
         exchanges: [Exchange] = [Exchange(exchange_name,
                                           db_handler.get_first_timestamp,
                                           timeout,
+                                          comparator=comparator,
                                           interval=interval) for exchange_name in exchange_names]
 
         exchanges_with_pairs: [Exchange, list[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
@@ -72,20 +74,24 @@ async def initialize_jobs(job_config: dict[str, Any],
     return jobs
 
 
-def init_logger(path: str) -> None:
+def init_logger(path: str, program_config: dict) -> None:
     """
     Initializes the logger, specifies the path to the logging files, the logging massage as well as the logging level.
 
     @param path: Path to store the logging file. By default the CWD.
+    @param program_config: Config file with some advanced program settings.
     """
-    if not read_config(file=None, section="utilities")["enable_logging"]:
+    if not read_config(file=None, section="utilities").get('enable_logging', True):
         logging.disable()
     else:
-        if not os.path.exists(path + "/resources/log/"):
-            os.makedirs("resources/log/")
+        dirname = program_config['logging'].get("dirname", 'resources/log/')
+        if not os.path.exists(path + dirname):
+            os.makedirs(path + dirname)
+
+        time_format = program_config['logging'].get('filename_format', '%Y-%m-%d_%H-%M-%S')
         logging.basicConfig(
-            filename=path + f"/resources/log/{TimeHelper.now().strftime('%Y-%m-%d_%H-%M-%S')}.log",
-            level=logging.ERROR)
+            filename= path + dirname + f"{TimeHelper.now().strftime(time_format)}.log",
+            level=program_config['logging'].get('level', 'ERROR'))
 
 
 def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
@@ -99,7 +105,7 @@ def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
     logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
 
-async def main(database_handler: DatabaseHandler) -> Scheduler.start:
+async def main(database_handler: DatabaseHandler, program_config: dict) -> Scheduler.start:
     """
     The model() function to run the program. Loads the database, including the database_handler.
     The exchange_names are extracted with a helper method in utilities based on existing yaml-files.
@@ -110,24 +116,29 @@ async def main(database_handler: DatabaseHandler) -> Scheduler.start:
 
     @param: Instance of the DatabaseHandler
     @type database_handler: object
+    @param program_config: Additional advanced program settings
+    @type program_config: dict
     """
-    # loader = Loader('Initializing open_crypto..', '', 0.1).start()
+
     with Loader("Initializing open_crypto...", ""):
         config = read_config(file=None, section=None)
         logging.info("Loading jobs.")
         jobs = await initialize_jobs(job_config=config["jobs"],
                                      timeout=config["general"]["operation_settings"].get("timeout", 10),
                                      interval=config["general"]["operation_settings"].get("interval", "days"),
+                                     comparator=program_config['request_settings'].get('interval_settings',
+                                                                                       'lower_or_equal'),
                                      db_handler=database_handler)
         frequency = config["general"]["operation_settings"]["frequency"]
         logging.info("Configuring Scheduler.")
-        scheduler = Scheduler(database_handler, jobs, frequency)
+        scheduler = Scheduler(database_handler,
+                              jobs,
+                              program_config.get('request_settings').get('request_direction', 0),
+                              frequency)
     await scheduler.validate_job()
 
-    desc = f"\nJob(s) were created and will run with frequency: {frequency}."
-        # print(desc)
+    desc = f"Job(s) were created and will run with frequency: {frequency}."
     logging.info(desc)
-        # loader.stop()
 
     while True:
         if frequency == "once":
@@ -153,15 +164,20 @@ def run(file: str = None, path: str = None) -> None:
     """
 
     # sys.excepthook = handler
-    logging.info("Reading Database Configuration")
+
+    program_config = load_program_config()
+
     db_params = read_config(file=file, section="database")
-    init_logger(path)
+    init_logger(path, program_config)
 
     logging.info("Establishing Database Connection")
-    database_handler = DatabaseHandler(metadata, path=path, **db_params)
+    database_handler = DatabaseHandler(metadata,
+                                       path=path,
+                                       min_return_tuples=program_config["request_settings"].get("min_return_tuples", 2),
+                                       **db_params)
 
     # See Github Issue for bug and work-around:
     # https://github.com/encode/httpx/issues/914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    asyncio.run(main(database_handler))
+    asyncio.run(main(database_handler, program_config))

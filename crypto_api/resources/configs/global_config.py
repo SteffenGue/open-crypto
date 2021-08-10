@@ -33,15 +33,17 @@ class GlobalConfig(object):
     def __init__(self) -> None:
         if not self.__is_initialized:
             self.__filename: Optional[str] = None
-            self.path = os.path.dirname(os.path.realpath(__file__))
             self.__is_initialized = True
 
-        # The first path is used normally. The second (os.getcwd()) is needed when the directory
-        # of the program and the resources differs. That is the case for the Python Package as
-        # we want the User to manipulate the resources (i.e. config files and exchange mappings). The resources
-        # will be copied into the current working directory and taken by the program from there.
-
-        # self.path = os.getcwd() + "/resources/configs/"
+            self.path = os.getcwd() + "/resources/configs/user_configs/"
+        try:
+            # The first (os.getcwd()/...) is needed when the directory of the program and the resources differs.
+            # That is the case for the Python Package installed via pip as we want the user to manipulate the resources
+            # (i.e. config files and exchange mappings). The resources will be copied into the current working
+            # directory and taken by the program from there.
+            os.path.dirname(os.path.realpath(__file__)).index(self.path)
+        except ValueError:
+            self.path = os.path.dirname(os.path.realpath(__file__)) + "/user_configs"
 
     def set_file(self, file: Optional[str] = None) -> None:
         """
@@ -54,7 +56,8 @@ class GlobalConfig(object):
         if not file:
             file = input("Enter config file name: ").lower()
             if file in ["quit", "exit"]:
-                sys.exit(0)
+                raise SystemExit
+                # sys.exit(0)
         if ".yaml" not in file:
             file = file + ".yaml"
         self.__filename = file

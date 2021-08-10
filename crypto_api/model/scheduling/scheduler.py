@@ -13,7 +13,7 @@ from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine
 
 from model.database.db_handler import DatabaseHandler
-from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, PairInfo
+from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
@@ -28,7 +28,8 @@ class Scheduler:
     Attributes like frequency or job_list can also be set by the user in config.yaml.
     """
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job], frequency: Union[str, int, float]):
+    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job],
+                 request_direction: int, frequency: Union[str, int, float]):
         """
         Initializer for a Scheduler.
 
@@ -41,8 +42,9 @@ class Scheduler:
         """
         self.database_handler = database_handler
         self.job_list = job_list
+        self.request_direction = request_direction
         self.frequency = frequency * 60 if isinstance(frequency, (int, float)) else frequency
-        self.validated = False
+        self._validated = False
 
     async def start(self) -> None:
         """
@@ -66,23 +68,25 @@ class Scheduler:
         @type job: Job
         """
 
-        if not self.validated:
+        if not self._validated:
             await self.validate_job()
 
         request = self.determine_task(job.request_name)
         request_fun = request.get("function")
         request_table = request.get("table")
 
-        # for key, value in job.exchanges_with_pairs.items():
-        #     for item in value:
-        #         continue_run = True
-        #         while continue_run:
-        #             continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
-        #             if not continue_run:
-        #                 continue
-        continue_run = True
-        while continue_run:
-            continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
+        if self.request_direction == 1:
+            for key, value in job.exchanges_with_pairs.items():
+                for item in value:
+                    continue_run = True
+                    while continue_run:
+                        continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+                        if not continue_run:
+                            continue
+        else:
+            continue_run = True
+            while continue_run:
+                continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
     def determine_task(self, request_name: str) -> dict[str, Union[Callable[..., None]]]:
         """
@@ -98,9 +102,6 @@ class Scheduler:
             "currency_pairs":
                 {"function": self.get_currency_pairs,
                  "table": ExchangeCurrencyPair},
-            "pair_infos":
-                {"function": self.request_format_persist,
-                 "table": PairInfo},
             "tickers":
                 {"function": self.request_format_persist,
                  "table": Ticker},
@@ -132,7 +133,7 @@ class Scheduler:
         self.job_list = await self.get_currency_pairs(self.job_list)
         self.remove_invalid_jobs(self.job_list)
         if self.job_list:
-            self.validated = True
+            self._validated = True
 
     def remove_invalid_jobs(self, jobs: list[Job]) -> list[Job]:
         """
@@ -141,7 +142,6 @@ class Scheduler:
 
         @param jobs: List of all jobs specified by the config
         @type jobs: list[Job]
-
         @return: List of jobs, cleaned by empty or invalid jobs
         @rtype: list[Job]
         """
@@ -185,7 +185,7 @@ class Scheduler:
                 print("Requesting {} exchange(s) for job: {}.".format(len(job.exchanges_with_pairs.keys()), job.name))
             return jobs
         else:
-            # Reentry the method to get into the first else (down) condition and shut down process
+            # Reenter the method to get into the first else (down) condition and shut down process
             self.remove_invalid_jobs(jobs)
 
     async def update_currency_pairs(self, ex: Exchange) -> list[None]:  # TODO: Make the return value nicer?
@@ -292,9 +292,10 @@ class Scheduler:
 
         counter = {}
 
-        # ToDo: Print Statement too often if interval != days.
-        # print("Formatting and writing Data into the database..")
         for response in responses:
+            if not response:
+                continue
+
             response_time = response[0]
             exchange_name = response[1]
             found_exchange: Optional[Exchange] = None

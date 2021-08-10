@@ -222,13 +222,26 @@ TYPE_CONVERSIONS = {
         the number of additional parameters needed
 """
 
+COMPARATOR = {'equal': lambda x, y: x == y,
+              'lower': lambda x, y: x < y,
+              'lower_or_equal': lambda x, y: x <= y,
+              'higher': lambda x, y: x > y,
+              'higher_or_equal': lambda x, y: x >= y}
+"""
+Dict providing basic compare functionality.
+"""
 
-def read_config(file: Optional[str] = None, section: Optional[str] = None) -> dict[str, Any]:
+
+def read_config(file: Optional[str] = None,
+                section: Optional[str] = None,
+                program_config: bool = False) -> dict[str, Any]:
     """
     @param file: Name of the config file.
     @type file: str
     @param section: Name of the section the information is stored in.
     @type section: str
+    @param program_config: Returns the program config file.
+    @rtype: bool
 
     @return: Parameters for the program as a dictionary.
              Keys are the names of the parameters in the config-file.
@@ -287,6 +300,23 @@ def yaml_loader(exchange: str) -> dict[str, Any]:
         print(ex)
         logging.exception("Error loading yaml of %s.\n", exchange)
         raise ex
+
+
+def load_program_config() -> dict[str, Any]:
+    """
+    # ToDo
+    @return: Program config.
+    @rtype: dict
+    """
+    try:
+        path = 'resources/configs/program_config/config.yaml'
+        with open(path, "r") as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
+
+    except FileNotFoundError:
+        path = 'resources/templates/program_config.yaml'
+        with open(path, "r") as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
 
 
 def get_exchange_names() -> list[str]:

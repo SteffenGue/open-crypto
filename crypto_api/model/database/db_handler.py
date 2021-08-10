@@ -19,7 +19,7 @@ from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, PairInfo, DatabaseTable
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, DatabaseTable
 from model.utilities.time_helper import TimeHelper
 
 
@@ -81,6 +81,7 @@ class DatabaseHandler:
             host: str,
             port: str,
             db_name: str,
+            min_return_tuples: int,
             path: str = None,
             debug: bool = False):
         """
@@ -147,6 +148,7 @@ class DatabaseHandler:
 
         self.session_factory: sessionmaker = sessionmaker(bind=engine)
         self.insert = importlib.import_module("sqlalchemy.dialects.{}".format(sqltype))
+        self._min_return_tuples = min_return_tuples
 
     @contextmanager
     def session_scope(self) -> Generator[Session, None, None]:
@@ -387,7 +389,6 @@ class DatabaseHandler:
                 session.add(exchange)
 
         # NEVER CALL THIS OUTSIDE OF THIS CLASS
-
     def persist_exchange_currency_pair(self,
                                        exchange_name: str,
                                        first_currency_name: str,
@@ -577,129 +578,7 @@ class DatabaseHandler:
                 break
 
         return [item for item in exchanges_with_pairs[exchange] if
-                (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
-
-
-    # def persist_response(self,
-    #                      exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]],
-    #                      exchange: Exchange,
-    #                      db_table: DatabaseTable,
-    #                      formatted_response: Iterable[Any]) -> list[ExchangeCurrencyPair]:
-    #     """
-    #     This method persists the given tuples of data. The method currently works for all methods,
-    #     despite currency_pairs. If the program is augmented with a new request-method, use this method to
-    #     persist data.
-    #
-    #     The method first gets all columns and primary keys for the request-method from the database.
-    #     As the table-objects are created using **kwargs, it is important that the database column names and the
-    #     .yaml-mapping keys match. Otherwise an exception is raised.
-    #
-    #     Further, the method checks if the data tuple contains the 'currency_pair_id'. This is done as some
-    #     exchanges offer to query all data (especially tickers) with one request. The data tuple then does not
-    #     contain the currency_pair_id, as the method Exchange.format_data() does not have any database connection to
-    #     query the respective ids. If the user specified only certain exchange currency pairs in the config-file,
-    #     it would not be filtered but persisted as a whole. Therefore we check for the existence of the
-    #     exchange currency pair replace the currency_pair string with the id or add it, if it does not exist.
-    #
-    #     The method then continues to check the existence of each data tuple. The other option, to "ask for forgiveness,
-    #     rather then permission" leads to a lot of "UniqueConstraintError", therefore rollbacks and consequently
-    #     heavily fills up especially PostgreSQL log files. We avoid that by querying the object beforehand.
-    #
-    #     If the object is not existing in the database, it will be added.
-    #
-    #     @param exchanges_with_pairs: Dict
-    #         Containing the Exchanges and all exchanges_currency_pairs to request specified in the config
-    #     @param exchange: Object
-    #         The Exchange instance from a particular request.
-    #     @param db_table: object
-    #         The database table object for the respective method, i.e. Ticker, OrderBook
-    #     @param formatted_response: Iterable, Tuple
-    #         The actual response values
-    #     """
-    #
-    #     col_names = [key.name for key in inspect(db_table).columns]
-    #     primary_keys = [key.name for key in inspect(db_table).primary_key]
-    #     new_pairs: list[dict[str, Any]] = list()
-    #     tuple_counter: int = 0
-    #     counter_dict: dict[int, int] = dict()
-    #     requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
-    #
-    #     with self.session_scope() as session:
-    #         while True:
-    #             try:
-    #                 data, mappings = next(formatted_response)
-    #
-    #                 for data_tuple in data:
-    #                     data_tuple = dict(zip(mappings, data_tuple))
-    #
-    #                     if "exchange_pair_id" not in data_tuple.keys():
-    #                         temp_currency_pair = {"exchange_name": exchange.name,
-    #                                               "first_currency_name": data_tuple["currency_pair_first"],
-    #                                               "second_currency_name": data_tuple["currency_pair_second"]}
-    #
-    #                         currency_pair: ExchangeCurrencyPair = _get_exchange_currency_pair(session,
-    #                                                                                           **temp_currency_pair)
-    #                         if not currency_pair:
-    #                             new_pairs.append(temp_currency_pair)
-    #
-    #                         if currency_pair and (currency_pair.id in requested_cp_ids):
-    #                             data_tuple.update({"exchange_pair_id": currency_pair.id})
-    #                         else:
-    #                             continue
-    #                     # else:
-    #                     exchange_pair_id = data_tuple.get("exchange_pair_id")
-    #
-    #                     data_tuple = {key: data_tuple.get(key) for key in col_names if data_tuple.get(key) is not None}
-    #                     check_columns = [pkey in data_tuple.keys() for pkey in primary_keys]
-    #                     if not all(check_columns):
-    #                         failed_columns = dict(zip([pkey for pkey in primary_keys], check_columns))
-    #                         logging.exception(NotAllPrimaryKeysException(exchange.name, failed_columns))
-    #                         continue
-    #
-    #                     p_key_filter = {key: data_tuple.get(key, None) for key in primary_keys}
-    #                     query = session.query(db_table).filter_by(**p_key_filter)
-    #                     query_exists = session.query(query.exists()).scalar()
-    #
-    #                     if not query_exists:
-    #                         if db_table.__name__ != Ticker.__name__:
-    #                             counter_dict[exchange_pair_id] = counter_dict.get(exchange_pair_id, 0) + 1
-    #                         tuple_counter += 1
-    #                         # add_tuple =
-    #                         session.add(db_table(**data_tuple))
-    #
-    #                 print(f"Pair-ID {exchange_pair_id if counter_dict else 'ALL'} - {exchange.name.capitalize()}: "
-    #                       f"{counter_dict.get(exchange_pair_id, tuple_counter)} tuple(s)")
-    #             except StopIteration:
-    #                 break
-    #             except UnboundLocalError:
-    #                 pass
-    #
-    #     # counter_dict = {k: counter_list.count(k) for k in set(counter_list)}
-    #     # print(f"{tuple_counter} tuple(s) added to {db_table.__name__} for {exchange.name.capitalize()}.")
-    #     logging.info("%s tuple(s) added to %s for %s.", tuple_counter, db_table.__name__, exchange.name.capitalize())
-    #
-    #     # if counter_dict:
-    #     #     for item in counter_dict.items():
-    #     #         print(f"CuPair-ID {item[0]}: {item[1]}")
-    #
-    #     # Persist currency_pairs if not already in the database. This can only happen if an response contains
-    #     # all pairs at once. Problem: Some exchange return "derivatives" which include only a first-currency.
-    #     # Those will be filtered out when updating the currency_pairs in the method Exchange.format_currency_pairs().
-    #     # However, we do not have an instance of
-    #     #
-    #     if len(new_pairs) > 0:
-    #         added_cp_counter: int = 0
-    #         for item in new_pairs:
-    #             if all(item.values()):
-    #                 self.persist_exchange_currency_pair(**item, is_exchange=exchange.is_exchange)
-    #                 added_cp_counter += 1
-    #         if added_cp_counter > 0:
-    #             print(f"Added {added_cp_counter} new currency pairs to {exchange.name.capitalize()}\n"
-    #                   f"Data will be persisted next time.")
-    #             logging.info("Added %s new currency pairs to %s.", added_cp_counter, exchange.name.capitalize())
-    #
-    #     return [item for item in exchanges_with_pairs[exchange] if
-    #             (item.id in counter_dict.keys()) and (counter_dict.get(item.id) > 1)]
+                (item.id in counter_dict.keys()) and (counter_dict.get(item.id) >= self._min_return_tuples)]
 
     def get_readable_query(self,
                            db_table: DatabaseTable,
@@ -854,17 +733,17 @@ class DatabaseHandler:
                 .filter(table.exchange_pair_id == exchange_pair_id) \
                 .first()
 
-        last_ts_query = session.query(PairInfo.end).filter(PairInfo.exchange_pair_id == exchange_pair_id)
+        # last_ts_query = session.query(PairInfo.end).filter(PairInfo.exchange_pair_id == exchange_pair_id)
 
         # ToDo: Check if correctly working
         # two days as some exchanges lag behind one day for historic_rates
         if earliest_timestamp and (TimeHelper.now() - oldest_timestamp) < timedelta(days=2):
             return earliest_timestamp
 
-        if earliest_timestamp and session.query(last_ts_query.exists()).scalar():
-            return earliest_timestamp
-
-        if last_ts := last_ts_query.first():
-            return last_ts[0]
+        # if earliest_timestamp and session.query(last_ts_query.exists()).scalar():
+        #     return earliest_timestamp
+        #
+        # if last_ts := last_ts_query.first():
+        #     return last_ts[0]
 
         return TimeHelper.now()

@@ -18,7 +18,7 @@ from model.database import tables
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata
 from model.utilities.time_helper import TimeHelper
-from model.utilities.utilities import read_config
+from model.utilities.utilities import read_config, load_program_config
 
 
 def database_session(filename: str = None, db_path: str = None) -> Session:
@@ -28,7 +28,9 @@ def database_session(filename: str = None, db_path: str = None) -> Session:
     @param db_path: Path to the database. Default: current working directory
     @return: SqlAlchemy-Session
     """
-    db_handler = DatabaseHandler(metadata=metadata, path=db_path, **read_config(file=filename, section="database"))
+    min_return_tuples = load_program_config().get('request_settings').get('min_return_tuples', 1)
+    db_handler = DatabaseHandler(metadata=metadata, path=db_path, min_return_tuples=min_return_tuples,
+                                 **read_config(file=filename, section="database"))
     return db_handler.session_factory()
 
 

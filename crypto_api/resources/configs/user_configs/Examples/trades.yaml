@@ -13,7 +13,7 @@ general:
     interval: days # minutes, hours, days, weeks, months
     timeout: 10
   utilities:
-    enable_logging: false
+    enable_logging: true
     yaml_path: resources/running_exchanges/all/
     timeout: 10
 jobs:

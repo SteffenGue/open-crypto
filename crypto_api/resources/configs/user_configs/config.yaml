@@ -10,39 +10,30 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: days  #minutes, hours, days, weeks, months
+    interval: minutes  #minutes, hours, days, weeks, months
   utilities:
     yaml_path: resources/running_exchanges/all/
-    enable_logging: false
+    enable_logging: true
 
 jobs:
   AAAA:
     yaml_request_name: historic_rates
     update_cp: true
     exchanges:
-      - all
-#      - bitfinex
-#      - gemini
-#      - omgfin
-
-    excluded:
+      - coinbase
       - bittrex
+
+    excluded: null
+#      - bittrex
 
     currency_pairs:
 #      - all
       - first: eth
         second: btc
-#      - first: btc
-#        second: usdt
-#      - all
-#        - first: bitcoin
-#          second: usd
-#        - first: dogecoin
-#          second: usd
-#        - first: ethereum
-#          second: usd
-#        - first: btc-bitcoin
-#          second: usd
+      - first: btc
+        second: usd
+      - first: btc
+        second: usdt
 
     first_currencies: null
     second_currencies: null

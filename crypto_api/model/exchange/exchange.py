@@ -28,8 +28,7 @@ from model.exchange.mapping import convert_type, extract_mappings, Mapping
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
 from model.utilities.time_helper import TimeHelper
-from model.utilities.utilities import provide_ssl_context
-from model.utilities.utilities import replace_list_item
+from model.utilities.utilities import provide_ssl_context, replace_list_item, COMPARATOR
 
 
 def format_request_url(url: str,
@@ -136,6 +135,7 @@ class Exchange:
             Boolean which represents if this exchange is active or passive. If an exchange will throw three exception
             consecutive, it will be set to passive and will no longer be requested.
     """
+    # ToDo Variaben aufräumen
     name: str
     is_exchange: bool
     api_url: str
@@ -153,6 +153,7 @@ class Exchange:
                  yaml_file: dict[str, Any],
                  db_first_timestamp: Callable[[DatabaseTable, int], datetime],
                  timeout: int,
+                 comparator: str,
                  interval: Any = "days"):
         """
         Creates a new Exchange-object.
@@ -161,8 +162,8 @@ class Exchange:
         If searched keys exist, the constructor sets the values for the described attributes.
         The constructor also calls extract_request_urls() and extract_mappings()
         to create request_urls and the necessary Mapping-Objects.
-
-        :param yaml_file: Dict
+        # ToDo: Params
+        @param yaml_file: Dict
             Content of a .yaml file as a dict-object.
             Constructor does not check if content is viable.
         """
@@ -171,6 +172,7 @@ class Exchange:
         self.name = yaml_file["name"]
         self.interval = interval
         self.base_interval = interval
+        self.comparator = comparator
         self.get_first_timestamp = db_first_timestamp
 
         self.api_url = yaml_file["api_url"]
@@ -314,6 +316,12 @@ class Exchange:
             logging.error("Exception extracting request URLs for: %s.", self.name, exc_info=ex)
             return None
 
+        if not all(self.request_urls.get(request_name).get('params').values()):
+            logging.warning("%s has not all parameters defined for %s request. Exchange is dropped.",
+                            self.name.capitalize(), request_name, self.name)
+            print(f"\n{self.name.capitalize()} has 'None type' parameters and is dropped.")
+            return None
+
         if not all((request_name in self.request_urls.keys(), bool(self.request_urls[request_name]))):
             logging.warning("%s has no %s request. Check %s.yaml if it should.", self.name, request_name, self.name)
             print(f"{self.name} has no {request_name} request.")
@@ -394,7 +402,7 @@ class Exchange:
 
         self.request_urls = self.extract_request_urls(self.file["requests"][request_name],
                                                       request_name=request_name)
-        # response_json = None
+
         if request_name in self.request_urls.keys() and self.request_urls[request_name]:
             request_url_and_params = self.request_urls[request_name]
 
@@ -490,6 +498,7 @@ class Exchange:
             """
             Extract the configured value from all allowed values. If there is no match, return str "default".
             @param val: dict of allowed key, value pairs.
+            @param kwargs: unused additional arguments needed in other methods.
             @return: value if key in dict, else None.
             """
             if isinstance(self.interval, dict):
@@ -499,8 +508,12 @@ class Exchange:
 
             # in order to change the Class interval to the later used default value. The KEY is needed, therefore
             # is the dict-comprehension {v: k for k, v ...}.
+
             if not bool(value):
-                self.interval = {v: k for k, v in val.items()}
+                all_intervals = {'minutes': 1, 'hours': 2, 'days': 3, 'weeks': 4, 'months': 5}
+                compare = COMPARATOR.get(self.comparator)
+                self.interval = {v: k for k, v in val.items() if compare(all_intervals.get(k),
+                                                                         all_intervals.get(self.base_interval))}
             return value
 
         def function(val: str, **kwargs: dict) -> dict[ExchangeCurrencyPair, datetime]:
@@ -523,9 +536,9 @@ class Exchange:
             """
             default_val = val if not bool(kwargs.get("has_value")) else kwargs.get("has_value")
             if isinstance(self.interval, dict):
-                self.interval = self.interval.get(default_val)
+                self.interval = self.interval.get(default_val, None)
                 self.base_interval = self.interval
-            return default_val
+            return default_val if self.interval else None
 
         def type_con(val: Any, **kwargs: dict) -> Any:
             """
@@ -784,7 +797,6 @@ class Exchange:
         self.interval = self.interval_strings[index]
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
-
 
 # Currently unused Methods
 

@@ -6,16 +6,17 @@ This module contains scripts to demonstrate the features of the application.
 Classes:
  - Examples: Contains examples and illustrations to demonstrate all request methods.
 """
-
+import os
+import time
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.pyplot import GridSpec
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 
 # noinspection PyUnresolvedReferences
 import _paths  # pylint: disable=unused-import
-from main import run
+from main import run as main_run
 from model.database.tables import *
 from export import database_session as get_session
 
@@ -34,7 +35,7 @@ class Examples:
     @staticmethod
     def __start_catch_systemexit(configuration_file: str) -> None:
         try:
-            run(configuration_file)
+            main_run(configuration_file, os.getcwd())
         except SystemExit:
             return
 
@@ -48,13 +49,22 @@ class Examples:
         print("Clearing table: {}.".format(table.__name__))
         session.query(table).delete()
         session.commit()
+    #
+    # @staticmethod
+    # def run_for_period(period):
+    #     time_end = time.time() + period * 60
+    #     try:
+    #         run(configuration_file)
+    #
+    #     except SystemExit:
+    #         return
 
     @staticmethod
     def static() -> plt.hist:
         """
         Request all available exchanges currency-pairs and create a histogram of their distribution.
         """
-        configuration_file = 'static'
+        configuration_file = 'Examples/static'
         session = get_session(configuration_file)
 
         Examples.__start_catch_systemexit(configuration_file)
@@ -74,7 +84,7 @@ class Examples:
         """
         Request BTC-USD data from the platform 'www.coingecko.com' and create a plot.
         """
-        configuration_file = 'platform'
+        configuration_file = 'Examples/platform'
 
         Examples.__start_catch_systemexit(configuration_file)
 
@@ -116,7 +126,7 @@ class Examples:
         """
         Request BTC-USD(T) data from several exchanges and plot them simultaneously.
         """
-        configuration_file = 'historic'
+        configuration_file = 'Examples/historic'
 
         Examples.__start_catch_systemexit(configuration_file)
 
@@ -141,13 +151,14 @@ class Examples:
         """
         Request ETH-BTC transaction data from Coinbase and plot the price series and trade direction.
         """
-        configuration_file = 'trades'
+        configuration_file = 'Examples/trades'
 
         Examples.__start_catch_systemexit(configuration_file)
 
         exchange = "COINBASE"
         session = get_session(configuration_file)
-        query = session.query(TradeView).filter(TradeView.exchange == exchange)
+        query = session.query(TradeView).filter(TradeView.exchange == exchange).\
+            order_by(desc(TradeView.time)).limit(1000)
 
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
         dataframe.sort_index(inplace=True)
@@ -170,7 +181,7 @@ class Examples:
         """
         Requests the current order-book snapshot from Coinbase and plot the market depth.
         """
-        configuration_file = 'order_books'
+        configuration_file = 'Examples/order_books'
         exchange = 'COINBASE'
         session = get_session(configuration_file)
         Examples.__start_catch_systemexit(configuration_file)
@@ -191,14 +202,14 @@ class Examples:
         plt.show()
 
     @staticmethod
-    def minute_candles() -> pd.DataFrame:
+    def minute_candles() -> None:
         """
         Collects minutes candles from all exchanges, calculates the timedelta in minutes and compares it with
         the total amount of received candles.
         @return: pd.DataFrame with the top 15 exchanges.
         """
 
-        configuration_file = 'minute_candles'
+        configuration_file = 'Examples/minute_candles'
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
         # Examples.__start_catch_systemexit(configuration_file)
@@ -211,7 +222,7 @@ class Examples:
         each currency was listed on over time.
         """
         print("Warning: This example takes several minutes to complete.")
-        configuration_file = 'exchange_listings'
+        configuration_file = 'Examples/exchange_listings'
         Examples.__start_catch_systemexit(configuration_file)
 
         session = get_session(configuration_file)
