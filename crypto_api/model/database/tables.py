@@ -1,8 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+This module provides the database defining classes as well as specific views on all unreadable database tables.
+
+Classes:
+ - Exchange: Defines the exchanges table.
+ - Currency: Defines the currencies table.
+ - ExchangesCurrencyPair: Defines the exchanges_currency_pairs table.
+ - Ticker: Defines the tickers tables.
+ - Trade: Defines the trades table.
+ - HistoricRate: Defines the historic_rates table.
+ - OrderBook: Defines the order_books table.
+
+ - ExchangeCurrencyPairView: Provides a view on the exchanges_currency_pairs table.
+ - TickerView: Provides a view on the tickers table.
+ - TradeView: Provides a view on the trades table.
+ - HistoricRateView: Provides a view on the historic_rates table.
+ - OrderBookView: Provides a view on the order_books table.
 """
+
 from typing import Union
 
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, select
@@ -115,19 +131,6 @@ class ExchangeCurrencyPair(Base):
 
     def __str__(self) -> str:
         return self.__repr__()
-
-
-class PairInfo(Base):
-    """
-    Table for additional information for each exchange-currency-pair.
-    """
-    __tablename__ = "pair_infos"
-
-    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
-    exchange_pair = relationship("ExchangeCurrencyPair", backref="pair_infos")
-
-    start = Column(UnixTimestampMs)
-    end = Column(UnixTimestampMs)
 
 
 class Ticker(Base):
@@ -308,14 +311,14 @@ class ExchangeCurrencyPairView(Base):
         selectable=select(
             [
                 ExchangeCurrencyPair.id,
-                Exchange.name.label("exchange_name"),
+                Exchange.name.label("exchange"),
                 first.name.label("first_name"),
                 second.name.label("second_name"),
             ],
             from_obj=(
                 ExchangeCurrencyPair.__table__.join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                              .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                              .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -346,9 +349,9 @@ class TickerView(Base):
             ],
             from_obj=(
                 Ticker.__table__.join(ExchangeCurrencyPair, Ticker.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                                .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -381,9 +384,9 @@ class TradeView(Base):
             ],
             from_obj=(
                 Trade.__table__.join(ExchangeCurrencyPair, Trade.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                               .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                               .join(first, ExchangeCurrencyPair.first_id == first.id)
+                               .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -415,9 +418,9 @@ class OrderBookView(Base):
             ],
             from_obj=(
                 OrderBook.__table__.join(ExchangeCurrencyPair, OrderBook.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                   .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                                   .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                   .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
@@ -452,37 +455,27 @@ class HistoricRateView(Base):
             from_obj=(
                 HistoricRate.__table__.join(ExchangeCurrencyPair,
                                             HistoricRate.exchange_pair_id == ExchangeCurrencyPair.id)
-                    .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
-                    .join(first, ExchangeCurrencyPair.first_id == first.id)
-                    .join(second, ExchangeCurrencyPair.second_id == second.id)
+                                      .join(Exchange, ExchangeCurrencyPair.exchange_id == Exchange.id)
+                                      .join(first, ExchangeCurrencyPair.first_id == first.id)
+                                      .join(second, ExchangeCurrencyPair.second_id == second.id)
             )
         ),
         metadata=Base.metadata
     )
 
 
-####################################### unused classes
-# class Blockchain(Base):
-#     __tablename__ = "blockchain"
+DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook]
+
+# Currently unused classes:
+
+# class PairInfo(Base):
+#     """
+#     Table for additional information for each exchange-currency-pair.
+#     """
+#     __tablename__ = "pair_infos"
 #
 #     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
-#     exchange_pair = relationship("ExchangeCurrencyPair", backref="blockchain")
-#     time = Column(UnixTimestamp, primary_key=True)
+#     exchange_pair = relationship("ExchangeCurrencyPair", backref="pair_infos")
 #
-#     zero_balance_addresses_all_time = Column(Float)
-#     unique_addresses_all_time = Column(Float)
-#     new_addresses = Column(Float)
-#     active_addresses = Column(Float)
-#     transaction_count = Column(Float)
-#     transaction_count_all_time = Column(Float)
-#     large_transaction_count = Column(Float)
-#     average_transaction_value = Column(Float)
-#     block_height = Column(Float)
-#     difficulty = Column(Float)
-#     block_time = Column(Float)
-#     block_size = Column(Float)
-#     current_supply = Column(Float)
-#     hash_rate = Column(Float)
-#
-
-DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook, PairInfo]
+#     start = Column(UnixTimestampMs)
+#     end = Column(UnixTimestampMs)
