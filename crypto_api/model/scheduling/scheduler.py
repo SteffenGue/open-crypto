@@ -37,6 +37,7 @@ class Scheduler:
         @type database_handler: DatabaseHandler
         @param job_list: List of Jobs. A job can be created with the specific yaml-template in config.yaml.
         @type job_list: list[Job]
+        @param request_direction: Specifies the requesting method, horizontal or vertical.
         @param frequency: The interval in minutes with that the run() method gets called.
         @type frequency: Any
         """
@@ -155,7 +156,7 @@ class Scheduler:
 
         for job in jobs:
             if job.request_name == "currency_pairs":
-                print("\n\nDone loading Currency-Pairs.")
+                print("\nDone loading Currency-Pairs.")
                 raise SystemExit
 
             # TODO: Philipp: Check out if loops work without continues.

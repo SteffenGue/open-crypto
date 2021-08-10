@@ -8,7 +8,7 @@ Classes:
 """
 import os
 import shutil
-from typing import Union
+from typing import Union, Any
 import logging
 import oyaml as yaml
 
@@ -20,12 +20,34 @@ class Setting:
 
     PATH = "/resources/configs/program_config/config.yaml"
 
+    def __init__(self):
+        self.config = Setting.get()
+
     @staticmethod
-    def get() -> os.startfile:
+    def open() -> os.startfile:
         """
         Opens the current program config file in a text editor.
         """
         os.startfile(os.getcwd() + Setting.PATH)
+
+    @staticmethod
+    def get() -> dict:
+        """
+        Returns the current program config.
+        @return: Program config
+        """
+
+        with open(os.getcwd() + Setting.PATH) as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
+
+    @staticmethod
+    def _dump(config: dict) -> None:
+        """
+        Overwrites the current program config.
+        @param config: The config to dump.
+        """
+        with open(os.getcwd() + Setting.PATH, "w") as file:
+            yaml.dump(config, file)
 
     @staticmethod
     def set(block: str, key: str, val: Union[str, int, float]) -> None:
@@ -64,3 +86,23 @@ class Setting:
                     os.path.join(destination, filename.split("_")[1]))
 
         print("Settings reset successful.")
+
+    def _copy(self) -> None:
+        """
+        Copies the current config file.
+        """
+        self.copy = self.config.copy()
+
+    def __enter__(self):
+        """
+        Enters the context manager.
+        """
+        self._copy()
+        return self
+        # pass
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
+        """
+        Exit the context manager.
+        """
+        self._dump(self.copy)

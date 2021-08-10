@@ -319,7 +319,7 @@ class Exchange:
         if not all(self.request_urls.get(request_name).get('params').values()):
             logging.warning("%s has not all parameters defined for %s request. Exchange is dropped.",
                             self.name.capitalize(), request_name)
-            print(f"\n{self.name.capitalize()} has 'None type' parameters and is dropped.")
+            # print(f"\n{self.name.capitalize()} has 'None type' parameters and is dropped.")
             return None
 
         if not all((request_name in self.request_urls.keys(), bool(self.request_urls[request_name]))):

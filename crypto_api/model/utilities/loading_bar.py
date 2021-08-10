@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Class providing a loading bar animation. Either an instance of the class can be created or the class
+may be used within the context manager framework.
+
+Classes:
+  - Loader
 """
 
 from itertools import cycle
@@ -13,7 +17,8 @@ from typing import Any, Union
 
 class Loader:
     """
-    # ToDo
+    Providing loading bar animation.
+
     Credit to: https://stackoverflow.com/a/66558182
     """
     def __init__(self, desc: str = "Loading...", end: str = "Done", timeout: float = 0.1, max_counter: int = None):
@@ -23,6 +28,7 @@ class Loader:
         @param desc (str, optional): The loader's description. Defaults to "Loading...".
         @param end (str, optional): Final print. Defaults to "Done!".
         @param timeout (float, optional): Sleep time between prints. Defaults to 0.1.
+        @param max_counter: Maximum value of the counter.
         """
         self.desc = desc
         self.end = end
@@ -37,7 +43,8 @@ class Loader:
 
     def start(self) -> object:
         """
-        # Todo
+        Starts the loading bar.
+        @return self.
         """
         self._thread.start()
         return self
@@ -45,12 +52,13 @@ class Loader:
     def increment(self, step_size: Union[int, float] = 1) -> None:
         """
         Increments the counter.
+        @param step_size: Incrementation size.
         """
         self.counter += step_size
 
     def _animate(self) -> None:
         """
-        # ToDo
+        Prints the loading bar
         """
         for step in cycle(self.steps):
             if self.done:
@@ -62,16 +70,16 @@ class Loader:
                 print(f"\r{self.desc} {step}", flush=True, end="")
             sleep(self.timeout)
 
-    def __enter__(self) -> None:
+    def __enter__(self) -> object:
         """
-        # ToDo
+        Enter class as context manager.
         """
         self.start()
         return self
 
     def stop(self) -> None:
         """
-        # ToDo
+        Stops the animation.
         """
         self.done = True
         cols = get_terminal_size((80, 20)).columns
@@ -80,7 +88,7 @@ class Loader:
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """
-        # ToDo
+        Exits the context manager.
         """
         # handle exceptions with those variables
         self.stop()

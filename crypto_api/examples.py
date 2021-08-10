@@ -18,6 +18,7 @@ import _paths  # pylint: disable=unused-import
 from main import run as main_run
 from model.database.tables import *
 from export import database_session as get_session
+from settings import Setting
 
 
 class Examples:
@@ -222,7 +223,10 @@ class Examples:
         """
         print("Warning: This example takes several minutes to complete.")
         configuration_file = 'Examples/exchange_listings'
-        Examples.__start_catch_systemexit(configuration_file)
+        with Setting() as settings:
+            settings.set("request_settings", 'min_return_tuples', 100)
+            settings.set("request_settings", "interval_settings", "equal")
+            Examples.__start_catch_systemexit(configuration_file)
 
         session = get_session(configuration_file)
         base_currencies = ('BTC', 'LINK', 'ETH', 'XRP', 'LTC', 'ATOM', 'ADA', 'XLM', 'BCH', 'DOGE')
