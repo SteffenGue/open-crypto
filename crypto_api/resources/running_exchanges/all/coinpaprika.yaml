@@ -68,7 +68,7 @@ requests:
         type:
           - str
           - dateparser
-
+#
   historic_rates:
     request:
       template: tickers/{currency_pair}/historical
@@ -82,7 +82,7 @@ requests:
             - datetime
             - timedelta
             - interval
-            - 5000
+            - 25000
         end:
           function: last_timestamp
           type:
@@ -136,6 +136,15 @@ requests:
         type:
           - float
 
+
+#  sentiments:
+#    request:
+#      template: tickers/{currency_pair}/historical
+#      pair_template:
+#        template: "{first}"
+#        lower_case: true
+#      params:
+#
 #  historic_rates:
 #    request:
 #      template: coins/{currency_pair}/ohlcv/historical

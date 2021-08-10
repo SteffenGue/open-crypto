@@ -27,7 +27,6 @@ class Examples:
     The respective configuration files are named according to the class-methods and can be found in the
     resources/configs folder. All requests are configured to terminate after a single run.
     """
-
     configuration_file: str
     plt.style.use("ggplot")
     pd.set_option("display.max_columns", None)
@@ -211,6 +210,7 @@ class Examples:
         Collects historical data for 10 currency-pairs quoted against USD(T) and plots the amount of exchanges,
         each currency was listed on over time.
         """
+        print("Warning: This example takes several minutes to complete.")
         configuration_file = 'exchange_listings'
         Examples.__start_catch_systemexit(configuration_file)
 

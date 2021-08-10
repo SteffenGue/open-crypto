@@ -74,8 +74,8 @@ def format_request_url(url: str,
     return url_formatted, parameters
 
 
-def sort_order_book(temp_results: dict[str, list[Any, ...], ...],
-                    len_results: int) -> dict[str, Union[datetime, str, int, range, list], ...]:
+def sort_order_book(temp_results: dict[str, list[Any]],
+                    len_results: int) -> dict[str, Union[datetime, str, int, range, list]]:
     """
     Sorts the order-book result according to the bid and ask prices.
     @param temp_results: Exchange response and extracted values
@@ -99,6 +99,7 @@ def sort_order_book(temp_results: dict[str, list[Any, ...], ...],
 
     # Implement the order-book position for easy query afterwards.
     temp_results["position"] = range(len_results)
+
     return temp_results
 
 
@@ -485,7 +486,7 @@ class Exchange:
             urls[request_name] = request_parameters
             return urls
 
-        def allowed(val: dict, **kwargs: Any) -> Any:
+        def allowed(val: dict, **kwargs: dict) -> Any:
             """
             Extract the configured value from all allowed values. If there is no match, return str "default".
             @param val: dict of allowed key, value pairs.
@@ -502,7 +503,7 @@ class Exchange:
                 self.interval = {v: k for k, v in val.items()}
             return value
 
-        def function(val: str, **kwargs: Any) -> dict[ExchangeCurrencyPair, datetime]:
+        def function(val: str, **kwargs: dict) -> dict[ExchangeCurrencyPair, datetime]:
             """
             Execute function for all currency-pairs. Function returns the first timestamp in the DB, or
             datetime.now() if none exists.
@@ -513,7 +514,7 @@ class Exchange:
             if val == "last_timestamp":
                 return {cp: self.get_first_timestamp(request_table, cp.id) for cp in currency_pairs}
 
-        def default(val: str, **kwargs: Any) -> str:
+        def default(val: str, **kwargs: dict) -> str:
             """
             Returns the default value if kwargs value (the parameter) is None.
             @param val: Default value.
@@ -526,7 +527,7 @@ class Exchange:
                 self.base_interval = self.interval
             return default_val
 
-        def type_con(val: Any, **kwargs: Any) -> Any:
+        def type_con(val: Any, **kwargs: dict) -> Any:
             """
             Performs type conversions.
             @param val: The conversion values specified under "type".

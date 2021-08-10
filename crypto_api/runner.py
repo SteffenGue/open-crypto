@@ -8,12 +8,14 @@ into csv-files.
 import os
 import shutil
 from typing import Any, Optional
-
 import pandas as pd
 from sqlalchemy.orm.session import Session
 
 # noinspection PyUnresolvedReferences
-import _paths  # pylint: disable=unused-import
+try:
+    from open_crypto import _paths  # pylint: disable=unused-import
+except (ImportError, Exception):
+    import _paths  # pylint: disable=unused-import
 import main
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
@@ -33,7 +35,7 @@ def check_path(path: str) -> None:
         update_maps(path)
 
 
-def update_maps(directory: str) -> None:
+def update_maps(directory: str = os.getcwd()) -> None:
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
@@ -94,14 +96,13 @@ def exchanges_and_methods(return_dataframe: bool = False) -> Optional[pd.DataFra
     @return: Print or return dataframe
     @rtype: Optional[pd.DataFrame]
     """
-    # TODO: Print or return is strange behaviour! Always return and let the caller print?
     dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
     pd.set_option('display.max_rows', 500)
 
     if return_dataframe:
         return dataframe.transpose()
     else:
-        print(prepend_spaces_to_columns(dataframe.transpose(), 3))
+        return prepend_spaces_to_columns(dataframe.transpose(), 3)
 
 
 def get_config(filename: Optional[str] = None) -> dict[str, Any]:
@@ -165,6 +166,8 @@ def run(configuration_file: Optional[str] = None) -> None:
     check_path(working_directory)
     main.run(configuration_file, working_directory)
 
+
+check_path(os.getcwd())
 
 if __name__ == "__main__":
     run()

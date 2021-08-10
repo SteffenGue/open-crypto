@@ -28,10 +28,11 @@ class Loader:
         self.end = end
         self.timeout = timeout
         self.counter = 0
-        self.max_count = max_counter
+        self.max_count = max_counter if isinstance(max_counter, (int, float)) and max_counter > 1 else None
 
         self._thread = Thread(target=self._animate, daemon=True)
-        self.steps = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
+        # self.steps = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
+        self.steps = ["|", "/", "-", "\\"]
         self.done = False
 
     def start(self) -> object:
