@@ -17,7 +17,8 @@ from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
-from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config, handler
+from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config
+from model.utilities.utilities import handler  # pylint: disable=unused-import
 from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
 

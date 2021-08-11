@@ -42,19 +42,19 @@ class KillSwitch(object):
             self.__is_initialized = True
             self.stay_alive = True
 
-    def kill(self):
+    def kill(self) -> None:
         """
         Set state to False in order to kill process.
         """
         self.stay_alive = False
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Reset the kill-switch.
         """
         self.stay_alive = True
 
-    def set_timer(self, timer):
+    def set_timer(self, timer: int) -> None:
         """
         Sets the timer for the kill-switch.
         @param timer: Seconds to kill thread.
@@ -68,7 +68,7 @@ class KillSwitch(object):
         """
         return self
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """
         Kill the process and exits the context manager.
         """
