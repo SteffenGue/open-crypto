@@ -162,8 +162,6 @@ class Ticker(Base):
     daily_volume: float
         The traded volume of an currency_pair on an exchange. Definition can differ for each exchange!
 
-    TODO: Describe __table_args__ as soon as the database structure is defined.
-    __table_args__ = ??
     """
     __tablename__ = "tickers"
 
@@ -175,8 +173,6 @@ class Ticker(Base):
     last_price = Column(Float)
     best_ask = Column(Float)
     best_bid = Column(Float)
-
-    # daily_volume = Column(Float)
 
     def __repr__(self) -> str:
         return f"#{self.exchange_pair_id}, {self.exchange_pair.exchange.name}: " \

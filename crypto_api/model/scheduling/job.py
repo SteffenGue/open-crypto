@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module providing a job which defines the request method and exchanges currency-pairs.
+
+Classes:
+    - Job
 """
 from typing import Any
 

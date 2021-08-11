@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module for interacting with the database.
+
+Classes:
+    - DatabaseHandler
 """
 
 import logging

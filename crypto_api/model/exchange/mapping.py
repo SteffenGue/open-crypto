@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module to find, extract and convert values from the exchange responses.
+
+Classes:
+    - Mapping
+Functions:
+    - convert_type
+    - extract_mappings
+    - is_scalar
 """
 
 import logging

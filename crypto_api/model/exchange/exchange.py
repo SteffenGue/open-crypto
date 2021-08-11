@@ -288,10 +288,6 @@ class Exchange:
         Exceptions will be caught and a suitable message is printed.
         None will be returned in this case.
 
-        TODO: Good Exception handling
-        TODO: Logging von Exceptions / option in config
-        TODO: Saving responses / option in config
-
         @param request_table: object
             Object of the request table. i.e. 'Ticker' for tickers-request
         @param currency_pairs:

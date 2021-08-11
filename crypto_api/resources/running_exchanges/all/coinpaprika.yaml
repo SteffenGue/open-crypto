@@ -41,34 +41,34 @@ requests:
           - constant
           - 'USD'
 
-  pair_infos:
-    request:
-      template: coins/{currency_pair}
-      pair_template:
-        template: "{first}"
-        lower_case: true
-      params: null
-    response:
-      type: dict
-      values:
-        first_data_at:
-          type: str
-        last_data_at:
-          type: str
-    mapping:
-      - key: start
-        path:
-          - first_data_at
-        type:
-          - str
-          - dateparser
-      - key: end
-        path:
-          - last_data_at
-        type:
-          - str
-          - dateparser
-#
+#  pair_infos:
+#    request:
+#      template: coins/{currency_pair}
+#      pair_template:
+#        template: "{first}"
+#        lower_case: true
+#      params: null
+#    response:
+#      type: dict
+#      values:
+#        first_data_at:
+#          type: str
+#        last_data_at:
+#          type: str
+#    mapping:
+#      - key: start
+#        path:
+#          - first_data_at
+#        type:
+#          - str
+#          - dateparser
+#      - key: end
+#        path:
+#          - last_data_at
+#        type:
+#          - str
+#          - dateparser
+##
   historic_rates:
     request:
       template: tickers/{currency_pair}/historical

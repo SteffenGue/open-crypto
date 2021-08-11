@@ -294,19 +294,23 @@ def read_config(file: Optional[str] = None,
     raise KeyError()
 
 
-def yaml_loader(exchange: str) -> dict[str, Any]:
+def yaml_loader(exchange: str, path: str = None) -> dict[str, Any]:
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
     @param exchange: The file name to load (exchange).
     @type exchange: str
 
+    @param path: path to the yaml-files
+    @type path: str
+
     @return: Returns a dict of the loaded data from the .yaml-file.
     @rtype: dict
 
     @raise Exception: If the .yaml file could not be evaluated for a given exchange.
     """
-    path = read_config(file=None, section="utilities")["yaml_path"]
+    if not path:
+        path = read_config(file=None, section="utilities")["yaml_path"]
     try:
         with open(path + exchange + ".yaml", "r") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
@@ -335,18 +339,20 @@ def load_program_config() -> dict[str, Any]:
             return yaml.load(file, Loader=yaml.FullLoader)
 
 
-def get_exchange_names() -> list[str]:
+def get_exchange_names(yaml_path: str = None) -> list[str]:
     """
     Gives information about all exchange that the program will send
     requests to. This means if the name of a exchange is not part of the
     list that is returned, the program will not send any request to said
     exchange.
-
+    @param: yaml-path
+    @type yaml_path: str
     @return: Names from all the exchange, which have a .yaml-file in
              the directory described in YAML_PATH.
     @rtype: list[str]
     """
-    yaml_path = read_config(file=None, section="utilities")["yaml_path"]
+    if not yaml_path:
+        yaml_path = read_config(file=None, section="utilities")["yaml_path"]
     path_to_resources: Path = pathlib.Path().parent.absolute()
 
     exchanges = os.listdir(Path.joinpath(path_to_resources, yaml_path))
@@ -406,9 +412,10 @@ def get_all_exchanges_and_methods() -> dict[str, dict]:
     @rtype: list
     """
     result_dict = dict()
-    exchanges = get_exchange_names()
+    yaml_path = os.getcwd() + "/resources/running_exchanges/all/"
+    exchanges = get_exchange_names(yaml_path=yaml_path)
     for exchange in exchanges:
-        file = yaml_loader(exchange)
+        file = yaml_loader(exchange, path=yaml_path)
         result_dict.update({exchange: {method: True for method in list(file.get('requests').keys())}})
 
     return result_dict

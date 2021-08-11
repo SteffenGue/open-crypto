@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Module providing additional exception classes.
+
+Classes:
+    - MappingNotFoundException
+    - DifferentExchangeContentException
+    - NoCurrencyPairProvidedException
+    - NotAllPrimaryKeysException
 """
 
 

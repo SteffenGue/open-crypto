@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-TODO: Fill out module docstring.
+Singleton class providing a global configuration file.
+
+Classes:
+    - GlobalConfig
 """
 from __future__ import annotations
 
