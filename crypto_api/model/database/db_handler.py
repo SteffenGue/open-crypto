@@ -388,7 +388,7 @@ class DatabaseHandler:
                 exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
                 session.add(exchange)
 
-        # NEVER CALL THIS OUTSIDE OF THIS CLASS
+    # NEVER CALL THIS OUTSIDE OF THIS CLASS
     def persist_exchange_currency_pair(self,
                                        exchange_name: str,
                                        first_currency_name: str,

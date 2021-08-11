@@ -7,6 +7,7 @@ into csv-files.
 """
 import os
 import shutil
+import threading
 from typing import Any, Optional
 import pandas as pd
 from sqlalchemy.orm.session import Session
@@ -17,6 +18,7 @@ try:
 except (ImportError, Exception):
     import _paths  # pylint: disable=unused-import
 import main
+from kill_switch import KillSwitch
 from export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
 from model.database.tables import *  # pylint: disable=unused-import
@@ -155,21 +157,26 @@ def export(file: Optional[str] = None, file_format: str = "csv", *args: Any, **k
     CsvExport(file).export(data_type=file_format, *args, **kwargs)
 
 
-def run(configuration_file: Optional[str] = None) -> None:
+def run(configuration_file: Optional[str] = None, kill_after: int = None) -> None:
     """
    Starts the program after checking if all necessary folder are available (i.e. config and yaml-maps).
 
     @param configuration_file: The configuration file.
     @type configuration_file: Optional[str]
+    @param kill_after: Kills the thread.
+    @type kill_after: int
     """
     working_directory = os.getcwd()
-
     check_path(working_directory)
+
+    if kill_after and isinstance(kill_after, int):
+        thread = threading.Timer(kill_after, KillSwitch().kill)
+        thread.start()
+
     main.run(configuration_file, working_directory)
 
 
 check_path(os.getcwd())
 
 if __name__ == "__main__":
-    run()
-#     Examples.historic_rates()
+    run(kill_after=5)

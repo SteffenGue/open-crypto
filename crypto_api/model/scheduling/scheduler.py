@@ -19,6 +19,7 @@ from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
 from model.utilities.time_helper import TimeHelper
 from model.utilities.loading_bar import Loader
+from kill_switch import KillSwitch
 
 
 class Scheduler:
@@ -81,13 +82,21 @@ class Scheduler:
                 for item in value:
                     continue_run = True
                     while continue_run:
+                        if KillSwitch().stay_alive is False:
+                            print("Thread got terminated.")
+                            break
                         continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
                         if not continue_run:
                             continue
+
         else:
             continue_run = True
             while continue_run:
+                if KillSwitch().stay_alive is False:
+                    print("Thread got terminated.")
+                    break
                 continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
+
 
     def determine_task(self, request_name: str) -> dict[str, Union[Callable[..., None]]]:
         """

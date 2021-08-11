@@ -107,6 +107,8 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
             loop = asyncio.get_event_loop()
             try:
                 loop.run_until_complete(await scheduler.start())
+                # This part below the loop will never be arrived as the scheduler will raise an RuntimeError
+                # as soon as the job_list is empty.
             except RuntimeError as exc:
                 raise SystemExit from exc
 
@@ -124,7 +126,7 @@ def run(file: str = None, path: str = None) -> None:
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
 
-    sys.excepthook = handler
+    # sys.excepthook = handler
 
     program_config = load_program_config()
     db_params = read_config(file=file, section="database")

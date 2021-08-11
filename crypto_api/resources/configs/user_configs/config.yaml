@@ -10,7 +10,7 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: minutes  #minutes, hours, days, weeks, months
+    interval: days  #minutes, hours, days, weeks, months
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: true
@@ -21,7 +21,7 @@ jobs:
     update_cp: true
     exchanges:
       - coinbase
-      - bittrex
+#      - bittrex
 
     excluded: null
 #      - bittrex
