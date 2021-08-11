@@ -38,7 +38,6 @@ class KillSwitch(object):
         Constructor
         """
         if not self.__is_initialized:
-            self.__filename: Optional[str] = None
             self.__is_initialized = True
             self.stay_alive = True
 
