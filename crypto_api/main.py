@@ -7,7 +7,6 @@ signal_handler adds the possibility to interrupt the process, the handler functi
 
 import asyncio
 import logging
-import os
 import signal
 import sys
 from typing import Any
@@ -18,16 +17,9 @@ from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
-from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config
+from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config, handler
+from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
-
-
-def signal_handler(signal_number: Any, stack: Any) -> None:
-    """
-    Helper function to exit the program. When CTRL+C is hit, the program will shut down with exit code(0).
-    """
-    print("\nExiting program.")
-    sys.exit(0)
 
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -46,6 +38,7 @@ async def initialize_jobs(job_config: dict[str, Any],
                         perform database queries for variable request parameters.
     @param timeout: Request timeout for the Exchange Class.
     @param interval: Request Interval for HistoricRate (i.e. Daily, Minutes,..)
+    @param comparator: Defines if the request interval of exchanges must match, be smaller or equal, ect.
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
@@ -72,37 +65,6 @@ async def initialize_jobs(job_config: dict[str, Any],
         jobs.append(new_job)
 
     return jobs
-
-
-def init_logger(path: str, program_config: dict) -> None:
-    """
-    Initializes the logger, specifies the path to the logging files, the logging massage as well as the logging level.
-
-    @param path: Path to store the logging file. By default the CWD.
-    @param program_config: Config file with some advanced program settings.
-    """
-    if not read_config(file=None, section="utilities").get('enable_logging', True):
-        logging.disable()
-    else:
-        dirname = program_config['logging'].get("dirname", 'resources/log/')
-        if not os.path.exists(path + dirname):
-            os.makedirs(path + dirname)
-
-        time_format = program_config['logging'].get('filename_format', '%Y-%m-%d_%H-%M-%S')
-        logging.basicConfig(
-            filename= path + dirname + f"{TimeHelper.now().strftime(time_format)}.log",
-            level=program_config['logging'].get('level', 'ERROR'))
-
-
-def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
-    """
-    Method to catch and log unexpected exceptions.
-
-    @param ex_type: Exception type
-    @param ex_value: Values causing the exception
-    @param ex_traceback: Traceback attribute of the exception
-    """
-    logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
 
 async def main(database_handler: DatabaseHandler, program_config: dict) -> Scheduler.start:
@@ -158,15 +120,13 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
 def run(file: str = None, path: str = None) -> None:
     """
     Starts the program and initializes the asyncio-event-loop.
-
     @param file:
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
 
-    # sys.excepthook = handler
+    sys.excepthook = handler
 
     program_config = load_program_config()
-
     db_params = read_config(file=file, section="database")
     init_logger(path, program_config)
 

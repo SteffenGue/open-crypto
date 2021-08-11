@@ -14,6 +14,9 @@ Functions:
     - replace_list_item: Function replacing a specific item from a list.
     - get_all_exchanges_and_methods: Function returning all exchanges and supported request methods.
     - prepend_spaces_to_columns: Function prepending spaces to columns for readability.
+    - handler: Exception handler logging uncaught exceptions.
+    - signal_handler: Function recognizing kill signals and raising SystemExit.
+    - init_logger: Function initializing the global logger.
 """
 
 import calendar
@@ -435,3 +438,42 @@ def prepend_spaces_to_columns(dataframe: pd.DataFrame, space_count: int = 3) -> 
     dataframe = dataframe.astype(str)
     dataframe = spaces + dataframe
     return dataframe
+
+
+def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
+    """
+    Method to catch and log unexpected exceptions.
+
+    @param ex_type: Exception type
+    @param ex_value: Values causing the exception
+    @param ex_traceback: Traceback attribute of the exception
+    """
+    logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
+
+
+def signal_handler(signal_number: Any, stack: Any) -> None:
+    """
+    Helper function to exit the program. When CTRL+C is hit, the program will shut down with exit code(0).
+    """
+    print("\nExiting program.")
+    raise SystemExit
+
+
+def init_logger(path: str, program_config: dict) -> None:
+    """
+    Initializes the logger, specifies the path to the logging files, the logging massage as well as the logging level.
+
+    @param path: Path to store the logging file. By default the CWD.
+    @param program_config: Config file with some advanced program settings.
+    """
+    if not read_config(file=None, section="utilities").get('enable_logging', True):
+        logging.disable()
+    else:
+        dirname = program_config['logging'].get("dirname", 'resources/log/')
+        if not os.path.exists(path + dirname):
+            os.makedirs(path + dirname)
+
+        time_format = program_config['logging'].get('filename_format', '%Y-%m-%d_%H-%M-%S')
+        logging.basicConfig(
+            filename=path + dirname + f"{TimeHelper.now().strftime(time_format)}.log",
+            level=program_config['logging'].get('level', 'ERROR'))

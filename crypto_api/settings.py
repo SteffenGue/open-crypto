@@ -75,7 +75,6 @@ class Setting:
         """
         Creates a new template config file with all default settings.
         """
-
         filename = "program_config.yaml"
 
         source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates/"
@@ -100,7 +99,6 @@ class Setting:
         """
         self._copy()
         return self
-        # pass
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """
