@@ -21,7 +21,7 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 from model.utilities.utilities import handler  # pylint: disable=unused-import
 from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
-
+from kill_switch import KillSwitch
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -104,6 +104,11 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
     logging.info(desc)
 
     while True:
+        if not KillSwitch().stay_alive:
+            print("Task got terminated.")
+            logging.info("Task got terminated.")
+            break
+
         if frequency == "once":
             loop = asyncio.get_event_loop()
             try:

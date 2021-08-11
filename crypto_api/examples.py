@@ -116,7 +116,7 @@ class Examples:
         plt.show()
 
     @staticmethod
-    def historic_rates(timer: int = 60) -> plt.plot:
+    def minute_candles(timer: int = 60) -> plt.plot:
         """
         Request BTC-USD(T) data from several exchanges and plot them simultaneously.
         """

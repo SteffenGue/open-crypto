@@ -84,6 +84,7 @@ class Scheduler:
                     while continue_run:
                         if KillSwitch().stay_alive is False:
                             print("\nTask got terminated.")
+                            logging.info("Task got terminated.")
                             break
                         continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
                         if not continue_run:
@@ -94,6 +95,7 @@ class Scheduler:
             while continue_run:
                 if KillSwitch().stay_alive is False:
                     print("\nTask got terminated.")
+                    logging.info("Task got terminated.")
                     break
                 continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 

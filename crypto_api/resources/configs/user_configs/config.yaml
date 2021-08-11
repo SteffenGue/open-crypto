@@ -10,7 +10,7 @@ general:
   operation_settings:
     frequency: once
     timeout: 10
-    interval: days  #minutes, hours, days, weeks, months
+    interval: minutes  #minutes, hours, days, weeks, months
   utilities:
     yaml_path: resources/running_exchanges/all/
     enable_logging: true
