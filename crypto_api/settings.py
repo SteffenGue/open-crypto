@@ -20,8 +20,9 @@ class Setting:
 
     PATH = "/resources/configs/program_config/config.yaml"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.config = Setting.get()
+        self.copy = None
 
     @staticmethod
     def open() -> os.startfile:
@@ -93,7 +94,7 @@ class Setting:
         """
         self.copy = self.config.copy()
 
-    def __enter__(self):
+    def __enter__(self) -> object:
         """
         Enters the context manager.
         """
@@ -101,7 +102,7 @@ class Setting:
         return self
         # pass
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """
         Exit the context manager.
         """
