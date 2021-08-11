@@ -83,7 +83,7 @@ class Scheduler:
                     continue_run = True
                     while continue_run:
                         if KillSwitch().stay_alive is False:
-                            print("Thread got terminated.")
+                            print("\nTask got terminated.")
                             break
                         continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
                         if not continue_run:
@@ -93,10 +93,9 @@ class Scheduler:
             continue_run = True
             while continue_run:
                 if KillSwitch().stay_alive is False:
-                    print("Thread got terminated.")
+                    print("\nTask got terminated.")
                     break
                 continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
-
 
     def determine_task(self, request_name: str) -> dict[str, Union[Callable[..., None]]]:
         """

@@ -8,6 +8,7 @@ Classes:
 """
 
 from __future__ import annotations
+import threading
 from typing import Optional, Any
 
 
@@ -47,6 +48,20 @@ class KillSwitch(object):
         """
         self.stay_alive = False
 
+    def reset(self):
+        """
+        Reset the kill-switch.
+        """
+        self.stay_alive = True
+
+    def set_timer(self, timer):
+        """
+        Sets the timer for the kill-switch.
+        @param timer: Seconds to kill thread.
+        """
+        thread = threading.Timer(timer, self.kill)
+        thread.start()
+
     def __enter__(self) -> object:
         """
         Enters the context manager.
@@ -57,4 +72,4 @@ class KillSwitch(object):
         """
         Kill the process and exits the context manager.
         """
-        self.stay_alive = False
+        self.stay_alive = True

@@ -21,7 +21,6 @@ jobs:
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
       - binance
-      - bitfinex
       - bittrex
     excluded: null
     currency_pairs: # all or an arbitrary list of currency-pairs

@@ -7,6 +7,7 @@ Classes:
  - Examples: Contains examples and illustrations to demonstrate all request methods.
 """
 import os
+import threading
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.pyplot import GridSpec
@@ -19,6 +20,7 @@ from main import run as main_run
 from model.database.tables import *
 from export import database_session as get_session
 from settings import Setting
+from kill_switch import KillSwitch
 
 
 class Examples:
@@ -49,15 +51,6 @@ class Examples:
         print("Clearing table: {}.".format(table.__name__))
         session.query(table).delete()
         session.commit()
-    #
-    # @staticmethod
-    # def run_for_period(period):
-    #     time_end = time.time() + period * 60
-    #     try:
-    #         run(configuration_file)
-    #
-    #     except SystemExit:
-    #         return
 
     @staticmethod
     def static() -> plt.hist:
@@ -119,31 +112,39 @@ class Examples:
         ax2.set_ylabel("Million")
         ax2.set_xlabel("Time (Daily)")
         plt.title("Bitcoin Total Coin Supply")
+        plt.tight_layout()
         plt.show()
 
     @staticmethod
-    def historic_rates() -> plt.plot:
+    def historic_rates(timer: int = 60) -> plt.plot:
         """
         Request BTC-USD(T) data from several exchanges and plot them simultaneously.
         """
-        configuration_file = 'Examples/historic'
 
+        configuration_file = 'Examples/historic'
+        session = get_session(configuration_file)
+        Examples.__clear_database_table(session, HistoricRate)
+        thread = threading.Timer(timer, KillSwitch().kill)
+        thread.start()
         Examples.__start_catch_systemexit(configuration_file)
 
-        exchanges = ('BITFINEX', 'BINANCE', 'COINBASE')
+        exchanges = ('BINANCE', 'BITTREX')
         session = get_session(configuration_file)
         query = session.query(HistoricRateView)
         query = query.filter(HistoricRateView.exchange.in_(exchanges))
 
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
         dataframe = pd.pivot_table(dataframe, columns=dataframe.exchange, index=dataframe.index)
-        dataframe = dataframe.resample("d").last()
+        dataframe = dataframe.close
 
-        plt.plot(dataframe.close, linestyle="dotted", label=dataframe.close.columns)
-        plt.title("ETH/BTC - Daily Candles")
-        plt.xlabel("Time in Days")
+        for column in dataframe.columns:
+            plt.plot(dataframe.loc[:, column].dropna(), linestyle="dotted", linewidth=.5, label=column)
+        plt.title("ETH/BTC - Minute Candles")
+        plt.xlabel("Time")
         plt.ylabel("Price in US-Dollar")
         plt.legend()
+        plt.xticks(rotation=45)
+        plt.tight_layout()
         plt.show()
 
     @staticmethod
@@ -202,20 +203,6 @@ class Examples:
         plt.show()
 
     @staticmethod
-    def minute_candles() -> None:
-        """
-        Collects minutes candles from all exchanges, calculates the timedelta in minutes and compares it with
-        the total amount of received candles.
-        @return: pd.DataFrame with the top 15 exchanges.
-        """
-
-        configuration_file = 'Examples/minute_candles'
-        session = get_session(configuration_file)
-        Examples.__clear_database_table(session, HistoricRate)
-        # Examples.__start_catch_systemexit(configuration_file)
-        print("Note, this example takes several hours to complete. It is therefore temporarily disabled.")
-
-    @staticmethod
     def exchange_listings() -> plt.plot:
         """
         Collects historical data for 10 currency-pairs quoted against USD(T) and plots the amount of exchanges,
@@ -247,4 +234,5 @@ class Examples:
         plt.legend()
         plt.xlabel("Time (Monthly)")
         plt.ylabel("Number of Exchanges")
+        plt.tight_layout()
         plt.show()
