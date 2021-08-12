@@ -20,7 +20,6 @@ class KillSwitch(object):
     The KillSwitch terminates the data collector after writing the data into the database and before making
     new requests.
     """
-    stay_alive = True
     __instance: Optional[KillSwitch] = None
     __is_initialized = False
 
@@ -36,6 +35,7 @@ class KillSwitch(object):
     def __init__(self) -> None:
         """
         Constructor
+        # ToDo Bug in examples wenn Kill bevor Daten gesammelt wurden. KillSwitch geht nicht zurück auf True.
         """
         if not self.__is_initialized:
             self.__is_initialized = True
@@ -71,4 +71,4 @@ class KillSwitch(object):
         """
         Kill the process and exits the context manager.
         """
-        self.stay_alive = True
+        self.reset()

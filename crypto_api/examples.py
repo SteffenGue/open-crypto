@@ -145,9 +145,10 @@ class Examples:
         configuration_file = 'Examples/minute_candles'
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
-        thread = threading.Timer(timer, KillSwitch().kill)
-        thread.start()
-        Examples.__start_catch_systemexit(configuration_file)
+
+        with KillSwitch() as switch:
+            switch.set_timer(timer)
+            Examples.__start_catch_systemexit(configuration_file)
 
         exchanges = ('BINANCE', 'BITTREX', 'HITBTC')
         session = get_session(configuration_file)
@@ -155,6 +156,8 @@ class Examples:
         query = query.filter(HistoricRateView.exchange.in_(exchanges))
 
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        if dataframe.empty:
+            return
         dataframe = pd.pivot_table(dataframe, columns=dataframe.exchange, index=dataframe.index)
         dataframe = dataframe.close
 
