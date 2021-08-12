@@ -14,7 +14,6 @@ import asyncio
 import itertools
 import logging
 import string
-import traceback
 from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Optional, Any, Generator, Callable, Union
@@ -105,9 +104,8 @@ def sort_order_book(temp_results: dict[str, list[Any]],
 class Exchange:
     """
     Attributes:
-        # ToDo: Docu check
         Embodies the characteristics of a crypto-currency-exchange.
-        Each exchange is an Exchange-object.
+        Each crypto-exchange is an Exchange-object.
         Each 'job' is in the end a method called on every exchange.
 
         The Attributes and mappings are all extracted from the
@@ -115,10 +113,18 @@ class Exchange:
 
         name: str
             Name of this exchange.
-        timeout: int
-            Timeout for every request before throwing an exception
+        is_exchange: bool
+            Is crypto-exchange or crypto-platform
         api_url: str
             Url for the public_api of this exchange.
+        rate_limit: float
+            Rate limit of an exchange API
+        interval: str
+            Request interval for historic-rates (i.e. minutes, days,..)
+        base_interval: str
+            Request interval that remains if interval gets changed.
+        comparator: str
+            Compares if the interval is an available intervals for an exchanges (e.g. equal, equal_or_lower)
         request_urls: dict[request_name: List[url, params]
             Dictionary which contains for each request(key)
             the given url and necessary parameters.
@@ -127,26 +133,24 @@ class Exchange:
             Dictionary which contains for each request(key)
             the necessary mapping-objects for extracting the value.
             (See .yaml and def extract_mappings() for more info)
-        exception_counter: int
-            Integer which counts the exceptions thrown by this exchange.
-        consecutive_exception: bool
-            Boolean which represents if the exceptions has been thrown consecutive.
-        active_flag: bool
-            Boolean which represents if this exchange is active or passive. If an exchange will throw three exception
-            consecutive, it will be set to passive and will no longer be requested.
+        timeout: int
+            Timeout for every request before throwing an exception
+        get_first_timestamp: object
+            Method from the DatabaseHandler returning the first timestamp from the database
+        exchange_currency_pairs: list
+            List of exchange-currency-pair objects which are requested.
     """
-    # ToDo Variaben aufräumen
     name: str
     is_exchange: bool
     api_url: str
     rate_limit: float
-    interval: Any
+    interval: str
+    base_interval: Any
+    comparator: str
     request_urls: dict[str, Any]
     response_mappings: dict[str, list[Mapping]]
-    exception_counter: int
-    consecutive_exception: bool
-    active_flag: bool
     timeout: int
+    get_first_timestamp: Callable
     exchange_currency_pairs: list[ExchangeCurrencyPair]
 
     def __init__(self,
@@ -162,10 +166,18 @@ class Exchange:
         If searched keys exist, the constructor sets the values for the described attributes.
         The constructor also calls extract_request_urls() and extract_mappings()
         to create request_urls and the necessary Mapping-Objects.
-        # ToDo: Params
+
         @param yaml_file: Dict
             Content of a .yaml file as a dict-object.
             Constructor does not check if content is viable.
+        @param db_first_timestamp: Callable
+            Method from the DatabaseHandler returning the first timestamp
+        @param timeout: int
+            Max seconds an exchange has time to response before being skipped.
+        @param comparator: str
+            Checks is the requested interval is available in the exchange intervals.
+        @param interval: str
+            Request interval (e.g. minutes, days,...)
         """
         self.file = yaml_file
         self.timeout = timeout
@@ -185,9 +197,6 @@ class Exchange:
             self.rate_limit = 0
 
         self.response_mappings = extract_mappings(self.name, yaml_file["requests"])
-        self.exception_counter = 0
-        self.active_flag = True
-        self.consecutive_exception = False
         self.is_exchange = yaml_file.get("exchange")
         self.exchange_currency_pairs = list()
 
@@ -418,12 +427,10 @@ class Exchange:
                              request_name: str,
                              request_table: object = None,
                              currency_pairs: list[ExchangeCurrencyPair] = None) -> dict[str, dict[str, dict]]:
-        # ToDo: Doku der Variables
-        # ToDo: Doku Update mit variablen request parametern.
         """
-        Helper-Method which should be only called by the constructor.
-        Extracts from the section of requests from the .yaml-file
-        the necessary attachment for the url and parameters for each request.
+        Extracts from the section of requests from the .yaml-file the necessary attachment
+        for the url and parameters for each request and inserts variable parameter values
+        into the request url body.
 
         api_url has to be initialized already.
 
@@ -470,10 +477,10 @@ class Exchange:
                          <func parameter>
                          ...
 
-        @param request_name: str representation of the request method
+        @param request_dict: Dict[str: Dict[param_name: value]] representation of the request method
+        @param request_name: str
         @param currency_pairs: list of all exchange-currency-pairs
         @param request_table: object of the database table
-        @param request_dict: Dict[str: Dict[param_name: value]] requests-section from the exchange.yaml
         @return: dict of request url, pair template and parameters.
             See example above.
         """
@@ -732,8 +739,8 @@ class Exchange:
                             temp_results[mapping.key] = [temp_results[mapping.key]]
 
                 except Exception:
-                    print(f"Error while formatting {method}, {mapping.key}: {currency_pair}")
-                    traceback.print_exc()
+                    # print(f"Error while formatting {method}, {mapping.key}: {currency_pair}")
+                    logging.exception("Error while formatting %s, %s: %s", method, mapping.key, currency_pair)
 
                 else:
                     # CHANGE: One filed invalid -> all fields invalid.
@@ -793,37 +800,3 @@ class Exchange:
         self.interval = self.interval_strings[index]
 
     interval_strings = ["seconds", "minutes", "hours", "days"]
-
-# Currently unused Methods
-
-# async def test_connection(self) -> tuple[str, bool, dict[str, Any]]:
-# """
-# This method sends either a connectivity test ( like a ping call or a call which sends the exchange server time )
-# or, if no calls like this are available or exist in the public web api, a ticker request will be send.
-# Exceptions will be caught and in this case the connectivity test failed.
-#
-# The Method is asynchronous so that after the request is send, the program does not wait
-# until the response arrives. For asynchronously we use the library asyncio.
-# For sending and dealing with requests/responses the library aiohttp is used.
-#
-# The methods gets the requests matching url out of request_urls.
-# If it does not exist None will be returned. Otherwise it sends and awaits the response(.json).
-#
-# :return: (str, bool)
-#     Tuple of the following structure:
-#         (exchange_name, response)
-#         response represents the result of the connectivity test
-# :exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
-#             Exception: the given response of an exchange could not be evaluated
-# """
-# if self.request_urls.get("test_connection"):
-#     async with aiohttp.ClientSession() as session:
-#         request_url_and_params = self.request_urls["test_connection"]
-#         try:
-#             response = await session.get(request_url_and_params[0], params=request_url_and_params[1])
-#             response_json = await response.json(content_type=None)
-#             return self.name, True, response_json
-#         except ClientConnectionError:
-#             return self.name, False, {}
-#         except Exception:
-#             return self.name, False, {}
