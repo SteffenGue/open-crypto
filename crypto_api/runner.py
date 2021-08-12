@@ -174,4 +174,3 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
         thread.start()
 
     main.run(configuration_file, working_directory)
-
