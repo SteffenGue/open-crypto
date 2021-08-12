@@ -20,6 +20,7 @@ from itertools import product
 import importlib
 from typing import List, Iterable, Optional, Generator, Any, Iterator
 
+import sqlalchemy.orm
 from pandas import DataFrame
 from pandas import read_sql_query as pd_read_sql_query
 from sqlalchemy import create_engine, MetaData, or_, and_, tuple_, func, inspect
@@ -208,8 +209,10 @@ class DatabaseHandler:
 
         return found_currency_pairs
 
-    def _get_exchange_currency_pair(self, exchange_name: str, first_currency_name: str, second_currency_name: str) \
-            -> Optional[ExchangeCurrencyPair]:
+    @staticmethod
+    def _get_exchange_currency_pair(session: sqlalchemy.orm.Session,
+                                    exchange_name: str, first_currency_name: str,
+                                    second_currency_name: str) -> Optional[ExchangeCurrencyPair]:
         """
         Checks if there is a currency pair in the database with the given parameters and
         returns it if so.
@@ -226,16 +229,16 @@ class DatabaseHandler:
         """
         if exchange_name is None or first_currency_name is None or second_currency_name is None:
             return None
-        with self.session_scope() as session:
-            ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
-            first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
-            second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
 
-            return session.query(ExchangeCurrencyPair).filter(
-                ExchangeCurrencyPair.exchange == ex,
-                ExchangeCurrencyPair.first == first,
-                ExchangeCurrencyPair.second == second
-            ).first()
+        ex = session.query(Exchange).filter(Exchange.name == exchange_name.upper()).first()
+        first = session.query(Currency).filter(Currency.name == first_currency_name.upper()).first()
+        second = session.query(Currency).filter(Currency.name == second_currency_name.upper()).first()
+
+        return session.query(ExchangeCurrencyPair).filter(
+            ExchangeCurrencyPair.exchange == ex,
+            ExchangeCurrencyPair.first == first,
+            ExchangeCurrencyPair.second == second
+        ).first()
 
     def get_exchanges_currency_pairs(self,
                                      exchange_name: str,
@@ -501,13 +504,14 @@ class DatabaseHandler:
                               "first_currency_name": first_currency_name,
                               "second_currency_name": second_currency_name}
 
-        currency_pair: ExchangeCurrencyPair = self._get_exchange_currency_pair(**temp_currency_pair)
+        with self.session_scope() as session:
+            currency_pair: ExchangeCurrencyPair = self._get_exchange_currency_pair(session, **temp_currency_pair)
 
-        if not currency_pair and all([exchange_name, first_currency_name, second_currency_name, is_exchange]):
-            self.persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
-            return self.get_or_create_exchange_pair_id(is_exchange=is_exchange, **temp_currency_pair)
-        else:
-            return currency_pair.id
+            if not currency_pair and all([exchange_name, first_currency_name, second_currency_name, is_exchange]):
+                self.persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
+                return self.get_or_create_exchange_pair_id(is_exchange=is_exchange, **temp_currency_pair)
+            else:
+                return currency_pair.id
 
     def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int) -> datetime:
         """

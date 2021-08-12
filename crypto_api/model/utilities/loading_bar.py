@@ -21,7 +21,7 @@ class Loader:
 
     Credit to: https://stackoverflow.com/a/66558182
     """
-    def __init__(self, desc: str = "Loading...", end: str = "Done", timeout: float = 0.1, max_counter: int = None):
+    def __init__(self, desc: str = "Loading...", end: str = "Done", timeout: float = 0.15, max_counter: int = None):
         """
         A loader-like context manager
 
