@@ -217,6 +217,8 @@ class DatabaseHandler:
         Checks if there is a currency pair in the database with the given parameters and
         returns it if so.
 
+        @param session: Session from the session-factory
+        @type: session: sqlalchemy.orm.Session
         @param exchange_name: Name of the exchange.
         @type exchange_name: str
         @param first_currency_name: Name of the first currency in the currency pair.
