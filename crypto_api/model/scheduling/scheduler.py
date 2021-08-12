@@ -19,7 +19,7 @@ from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
 from model.utilities.time_helper import TimeHelper
 from model.utilities.loading_bar import Loader
-from kill_switch import KillSwitch
+from model.utilities.kill_switch import KillSwitch
 
 
 class Scheduler:

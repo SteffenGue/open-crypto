@@ -18,9 +18,9 @@ from sqlalchemy.orm import Session
 import _paths  # pylint: disable=unused-import
 from main import run as main_run
 from model.database.tables import *
-from export import database_session as get_session
-from settings import Setting
-from kill_switch import KillSwitch
+from model.utilities.export import database_session as get_session
+from model.utilities.settings import Setting
+from model.utilities.kill_switch import KillSwitch
 
 
 class Examples:

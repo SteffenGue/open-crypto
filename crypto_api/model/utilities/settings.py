@@ -18,7 +18,7 @@ class Setting:
     Class to get and manipulate advanced program settings.
     """
 
-    PATH = "/resources/configs/program_config/config.yaml"
+    PATH = "../../resources/configs/program_config/config.yaml"
 
     def __init__(self) -> None:
         self.config = Setting.get()
