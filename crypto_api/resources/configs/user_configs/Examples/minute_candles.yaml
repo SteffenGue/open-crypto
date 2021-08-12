@@ -22,6 +22,7 @@ jobs:
     exchanges: # all or an arbitrary list of exchanges
       - binance
       - bittrex
+      - hitbtc
     excluded: null
     currency_pairs: # all or an arbitrary list of currency-pairs
 #      - all

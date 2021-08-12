@@ -112,7 +112,7 @@ class Examples:
         ax2.set_ylabel("Million")
         ax2.set_xlabel("Time (Daily)")
         plt.title("Bitcoin Total Coin Supply")
-        plt.tight_layout()
+        # plt.tight_layout()
         plt.show()
 
     @staticmethod
@@ -120,6 +120,7 @@ class Examples:
         """
         Request BTC-USD(T) data from several exchanges and plot them simultaneously.
         """
+        print(f"Note: The program will run for {timer} seconds before terminating automatically.")
 
         configuration_file = 'Examples/minute_candles'
         session = get_session(configuration_file)
@@ -128,7 +129,7 @@ class Examples:
         thread.start()
         Examples.__start_catch_systemexit(configuration_file)
 
-        exchanges = ('BINANCE', 'BITTREX')
+        exchanges = ('BINANCE', 'BITTREX', 'HITBTC')
         session = get_session(configuration_file)
         query = session.query(HistoricRateView)
         query = query.filter(HistoricRateView.exchange.in_(exchanges))
@@ -138,7 +139,7 @@ class Examples:
         dataframe = dataframe.close
 
         for column in dataframe.columns:
-            plt.plot(dataframe.loc[:, column].dropna(), linestyle="dotted", linewidth=.5, label=column)
+            plt.plot(dataframe.loc[:, column].dropna(), linestyle="dotted", linewidth=.75, label=column)
         plt.title("ETH/BTC - Minute Candles")
         plt.xlabel("Time")
         plt.ylabel("Price in US-Dollar")
@@ -169,10 +170,11 @@ class Examples:
         plt.plot(dataframe[dataframe.direction == "buy"].loc[:, "price"], linestyle="dotted",
                  color="green", label="Buys", linewidth=1.5)
 
+        plt.xlabel("Timestamp")
         plt.xticks(rotation=45)
         plt.legend()
         plt.title("ETH/BTC Trades from Coinbase")
-        plt.xlabel("Timestamp")
+
         plt.ylabel("Price in BTC")
         plt.tight_layout()
         plt.show()
@@ -208,11 +210,12 @@ class Examples:
         Collects historical data for 10 currency-pairs quoted against USD(T) and plots the amount of exchanges,
         each currency was listed on over time.
         """
-        print("Warning: This example takes several minutes to complete.")
+        print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
         configuration_file = 'Examples/exchange_listings'
         with Setting() as settings:
             settings.set("request_settings", 'min_return_tuples', 100)
             settings.set("request_settings", "interval_settings", "equal")
+
             Examples.__start_catch_systemexit(configuration_file)
 
         session = get_session(configuration_file)

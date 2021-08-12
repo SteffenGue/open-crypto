@@ -22,7 +22,8 @@ jobs:
     exchanges: # all or an arbitrary list of exchanges
       - all
     excluded:
-      - xt
+      - coingecko
+      - coinpaprika
     currency_pairs: null # all or an arbitrary list of currency-pairs
     first_currencies: # filter database by the first currency and take all
       - btc

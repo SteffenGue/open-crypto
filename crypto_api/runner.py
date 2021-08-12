@@ -18,6 +18,7 @@ try:
 except (ImportError, Exception):
     import _paths  # pylint: disable=unused-import
 import main
+from examples import Examples  # pylint: disable=unused-import
 from model.utilities.kill_switch import KillSwitch
 from model.utilities.export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
