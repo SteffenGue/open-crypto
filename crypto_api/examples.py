@@ -8,9 +8,9 @@ Classes:
 """
 import os
 import threading
+from typing import Optional
 import matplotlib.pyplot as plt
 import pandas as pd
-from typing import Optional
 from matplotlib.pyplot import GridSpec
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
