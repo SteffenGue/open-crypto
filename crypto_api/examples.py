@@ -121,7 +121,7 @@ class Examples:
         Request BTC-USD(T) data from several exchanges and plot them simultaneously.
         """
 
-        configuration_file = 'Examples/historic'
+        configuration_file = 'Examples/minute_candles'
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
         thread = threading.Timer(timer, KillSwitch().kill)

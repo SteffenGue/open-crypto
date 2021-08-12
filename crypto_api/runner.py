@@ -129,12 +129,12 @@ def get_config_template(csv: bool = False) -> None:
     @type csv: bool
     """
     if csv:
-        filename = "csv_config_template.yaml"
+        filename = "csv_export_template.yaml"
     else:
-        filename = "config_template.yaml"
+        filename = "request_template.yaml"
 
     source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates"
-    destination = os.getcwd() + "/resources/configs"
+    destination = os.getcwd() + "/resources/configs/user_configs"
 
     if os.path.exists(os.path.join(destination, filename)):
         os.remove(os.path.join(destination, filename))

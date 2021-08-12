@@ -17,7 +17,7 @@ general:
     yaml_path: resources/running_exchanges/all/
     timeout: 10
 jobs:
-  JobName:
+  StaticExample:
     yaml_request_name: currency_pairs # ticker, trades, order_books, historic_rates
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges

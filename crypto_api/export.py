@@ -42,7 +42,7 @@ class CsvExport:
 
     def __init__(self, file: str = None):
         self.config = read_config(file=file, section=None)
-        self.db_handler = DatabaseHandler(metadata, **self.config["database"])
+        self.db_handler = DatabaseHandler(metadata, **self.config.get("database"))
         self.options = self.config["query_options"]
         self.filename = f"{self.options.get('table_name')}_{TimeHelper.now().strftime('%Y-%m-%dT%H-%M-%S')}"
         self.path = os.getcwd()
@@ -99,9 +99,10 @@ class CsvExport:
         else:
             output_path: str = os.path.join(self.path, f"{self.filename}.csv")
 
-        export_format = {'csv': ticker_data.to_csv,
-                         'hdf': ticker_data.to_hdf,
-                         'excel': ticker_data.to_excel}
+        export_format = {'csv': {'function': ticker_data.to_csv,
+                                 'parameters': ['path_or_buf', 'sep', 'decimal', 'index']},
+                         'hdf': {'function': ticker_data.to_hdf,
+                                 'parameters': ['path_or_buf']}}
 
         parameters = {'path_or_buf': output_path,
                       'sep': self.options.get("delimiter", ";"),
@@ -109,10 +110,11 @@ class CsvExport:
                       'index': False,
                       }
 
+        parameters = {k: v for k, v in parameters.items() if k in export_format.get(data_type).get('parameters')}
         parameters.update(**kwargs)
 
         # if data_type not in export_format:
         #     print(f"Format not supported. Choose between: {list(export_format.keys())}.")
 
-        export_format.get(data_type, 'csv')(*args, **parameters)
+        export_format.get(data_type, 'csv').get('function')(*args, **parameters)
         print(output_path)
