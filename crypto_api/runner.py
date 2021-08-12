@@ -22,7 +22,7 @@ from examples import Examples  # pylint: disable=unused-import
 from model.utilities.kill_switch import KillSwitch
 from model.utilities.export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
-from model.utilities.settings import Setting  # pylint: disable=unused-import
+from model.utilities.settings import Settings  # pylint: disable=unused-import
 from model.database.tables import *  # pylint: disable=unused-import
 
 

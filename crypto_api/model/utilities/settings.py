@@ -13,7 +13,7 @@ import logging
 import oyaml as yaml
 
 
-class Setting:
+class Settings:
     """
     Class to get and manipulate advanced program settings.
     """
@@ -21,7 +21,7 @@ class Setting:
     PATH = "/resources/configs/program_config/config.yaml"
 
     def __init__(self) -> None:
-        self.config = Setting.get()
+        self.config = Settings.get()
         self.copy = None
 
     @staticmethod
@@ -29,7 +29,7 @@ class Setting:
         """
         Opens the current program config file in a text editor.
         """
-        os.startfile(os.getcwd() + Setting.PATH)
+        os.startfile(os.getcwd() + Settings.PATH)
 
     @staticmethod
     def get() -> dict:
@@ -38,7 +38,7 @@ class Setting:
         @return: Program config
         """
 
-        with open(os.getcwd() + Setting.PATH) as file:
+        with open(os.getcwd() + Settings.PATH) as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     @staticmethod
@@ -47,7 +47,7 @@ class Setting:
         Overwrites the current program config.
         @param config: The config to dump.
         """
-        with open(os.getcwd() + Setting.PATH, "w") as file:
+        with open(os.getcwd() + Settings.PATH, "w") as file:
             yaml.dump(config, file)
 
     @staticmethod
@@ -59,11 +59,11 @@ class Setting:
         @param val: value to be set
         """
         try:
-            with open(os.getcwd() + Setting.PATH, "r") as file:
+            with open(os.getcwd() + Settings.PATH, "r") as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
 
             config.get(block).update({key: val})
-            with open(os.getcwd() + Setting.PATH, "w") as file:
+            with open(os.getcwd() + Settings.PATH, "w") as file:
                 yaml.dump(config, file)
 
         except (KeyError, FileNotFoundError):

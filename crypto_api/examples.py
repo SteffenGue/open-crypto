@@ -19,7 +19,7 @@ import _paths  # pylint: disable=unused-import
 from main import run as main_run
 from model.database.tables import *
 from model.utilities.export import database_session as get_session
-from model.utilities.settings import Setting
+from model.utilities.settings import Settings
 from model.utilities.kill_switch import KillSwitch
 
 
@@ -212,7 +212,7 @@ class Examples:
         """
         print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
         configuration_file = 'Examples/exchange_listings'
-        with Setting() as settings:
+        with Settings() as settings:
             settings.set("request_settings", 'min_return_tuples', 100)
             settings.set("request_settings", "interval_settings", "equal")
 
