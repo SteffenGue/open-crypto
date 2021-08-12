@@ -175,8 +175,3 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
 
     main.run(configuration_file, working_directory)
 
-
-check_path(os.getcwd())
-
-if __name__ == "__main__":
-    run()

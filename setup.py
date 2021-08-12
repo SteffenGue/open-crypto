@@ -11,7 +11,7 @@ with open("README.md", "r") as file:
 
 setup(
     name="crypto-stguen",
-    version="0.0.9",
+    version="0.9",
     author="Steffen Guenther",
     author_email="crypto@uni-bremen.de",
     long_description=long_description,
@@ -30,13 +30,10 @@ setup(
         "aioschedule",
         "certifi",
         "datetime_periods",
-        "mariadb",
         "matplotlib",
         "numpy != 1.19.4",
         "oyaml",
         "pandas",
-        "psycopg2-binary",
-        "pymysql",
         "pytest",
         "python-dateutil",
         "sqlalchemy",
