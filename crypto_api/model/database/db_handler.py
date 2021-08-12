@@ -501,14 +501,13 @@ class DatabaseHandler:
                               "first_currency_name": first_currency_name,
                               "second_currency_name": second_currency_name}
 
-        with self.session_scope() as session:
-            currency_pair: ExchangeCurrencyPair = self._get_exchange_currency_pair(session, **temp_currency_pair)
+        currency_pair: ExchangeCurrencyPair = self._get_exchange_currency_pair(**temp_currency_pair)
 
-            if not currency_pair and all([exchange_name, first_currency_name, second_currency_name, is_exchange]):
-                self.persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
-                return self.get_or_create_exchange_pair_id(is_exchange=is_exchange, **temp_currency_pair)
-            else:
-                return currency_pair.id
+        if not currency_pair and all([exchange_name, first_currency_name, second_currency_name, is_exchange]):
+            self.persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
+            return self.get_or_create_exchange_pair_id(is_exchange=is_exchange, **temp_currency_pair)
+        else:
+            return currency_pair.id
 
     def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int) -> datetime:
         """
