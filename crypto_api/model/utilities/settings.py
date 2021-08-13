@@ -24,12 +24,12 @@ class Settings:
         self.config = Settings.get()
         self.copy = None
 
-    @staticmethod
-    def open() -> os.startfile:
-        """
-        Opens the current program config file in a text editor.
-        """
-        os.startfile(os.getcwd() + Settings.PATH)
+    # @staticmethod
+    # def open() -> os.startfile:
+    #     """
+    #     Opens the current program config file in a text editor.
+    #     """
+    #     os.startfile(os.getcwd() + Settings.PATH)
 
     @staticmethod
     def get() -> dict:
