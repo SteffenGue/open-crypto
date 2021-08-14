@@ -51,7 +51,6 @@ from typing import Any, Iterable, Text, Type, Union, Optional
 
 import oyaml as yaml
 import validators
-from sqlalchemy import inspect
 
 # pylint: disable=too-many-lines
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, Trade
