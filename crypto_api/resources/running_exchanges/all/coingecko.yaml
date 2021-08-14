@@ -53,7 +53,7 @@ requests:
           type: int
           default: max
 
-    reponse:
+    response:
       type: dict
       values:
         prices:
