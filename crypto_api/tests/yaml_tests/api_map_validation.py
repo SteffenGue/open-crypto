@@ -2060,25 +2060,25 @@ class RequestMappingValidator(Validator):
         # TODO: Philipp: Does not work, fix later
         self.report = Report(Valid("Need to be fixed later."))
         return True
-        requests = self.value
-        for request in requests.keys():
-            table = self.determine_table(request)
-
-            if not isinstance(table, dict):
-                return False
-
-            match_table = table['table']
-            class_keys = [key.name for key in inspect(match_table).columns]
-            for mapping in requests[request]['mapping']:
-                mapping_key = mapping['key']
-                if mapping_key != 'currency_pair_first' or mapping_key != 'currency_pair_second':
-                    try:
-                        class_keys.index(mapping_key)
-                    except ValueError as error:
-                        is_type_list = Report(Valid(error))
-                        self.report = is_type_list
-            primary_keys = self.determine_primary_keys(request)
-            for primary_key in primary_keys:
-                if primary_key == requests[request]['mapping']:
-                    return False
-        return True
+        # requests = self.value
+        # for request in requests.keys():
+        #     table = self.determine_table(request)
+        #
+        #     if not isinstance(table, dict):
+        #         return False
+        #
+        #     match_table = table['table']
+        #     class_keys = [key.name for key in inspect(match_table).columns]
+        #     for mapping in requests[request]['mapping']:
+        #         mapping_key = mapping['key']
+        #         if mapping_key != 'currency_pair_first' or mapping_key != 'currency_pair_second':
+        #             try:
+        #                 class_keys.index(mapping_key)
+        #             except ValueError as error:
+        #                 is_type_list = Report(Valid(error))
+        #                 self.report = is_type_list
+        #     primary_keys = self.determine_primary_keys(request)
+        #     for primary_key in primary_keys:
+        #         if primary_key == requests[request]['mapping']:
+        #             return False
+        # return True
