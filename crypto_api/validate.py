@@ -11,20 +11,23 @@ import os
 import sys
 from typing import Optional
 
-from tests.yaml_tests.api_map_validation import ApiMapFileValidator, Report, CompositeReport
+from model.validating.base import Report, CompositeReport
+from model.validating.validators import ApiMapFileValidator
 
-YAML_PATH = "../resources/running_exchanges/all/"
+YAML_PATH = "resources/running_exchanges/all/"
 
 
 class ExchangeValidator:
     """
-    This class will validate a single exchange yaml-file. The first method ValidateMapFile checks the yaml-file
-    if in the right format, i.e. performs unit-testing.
-    The second methods ValidateYAML plugs the yaml-file in a cooked-down version of the main program and checks
-    the functionality.
+    A validator that validates the YAML of a single exchange.
     """
 
     def __init__(self, exchange_name: str):
+        """
+        Create a new ExchangeValidator instance.
+
+        @param exchange_name: The name of the exchange to be validated.
+        """
         self.exchange_name = exchange_name
 
     def validate(self) -> bool:
