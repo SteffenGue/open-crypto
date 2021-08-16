@@ -18,7 +18,7 @@ import oyaml as yaml
 from model.exchange.exchange import Exchange
 import _paths  # pylint: disable=unused-import
 
-path = os.getcwd() + "/crypto_api/tests/unit_tests"
+path = os.getcwd() + "/open_crypto/tests/unit_tests"
 
 
 with open(path + "/test_file.yaml", "r") as file:
