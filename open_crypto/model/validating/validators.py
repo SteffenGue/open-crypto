@@ -780,6 +780,7 @@ class PairTemplateValidator(Validator):
                                     + " was in template"
                                 )
                             )
+                            break
 
                         substring_reports.append_report(substring_report)
 
