@@ -11,6 +11,7 @@ import signal
 import sys
 from typing import Any
 
+from model.utilities.patch_event_loop import PatchEventLoop
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
@@ -21,7 +22,6 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
-from model.utilities.utilities import handler  # pylint: disable=unused-import
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -115,7 +115,7 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
                 loop.run_until_complete(await scheduler.start())
                 # This part below the loop will never be arrived as the scheduler will raise an RuntimeError
                 # as soon as the job_list is empty.
-            except RuntimeError as exc:
+            except (RuntimeError, TypeError) as exc:
                 raise SystemExit from exc
 
         else:
@@ -148,4 +148,8 @@ def run(file: str = None, path: str = None) -> None:
     # https://github.com/encode/httpx/issues/914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    if PatchEventLoop.check_event_loop_exists():
+        PatchEventLoop.apply_patch()
+
     asyncio.run(main(database_handler, program_config))
