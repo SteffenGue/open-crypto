@@ -377,9 +377,6 @@ def provide_ssl_context() -> ssl.SSLContext:
 
     if platform.system().lower() == 'darwin':
         try:
-            # ToDo: Check PATH on MAC if correctly specified
-            os.system("/Application/Python " + platform.python_version()[0:3] + "/Install Certificate.command")
-        except (FileNotFoundError, Exception):
             print("Warning: No root SSL-certificate found on your local machine.\n"
                   "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
                   "try to install certification by executing the following file on your MacOS: \n"
@@ -389,6 +386,8 @@ def provide_ssl_context() -> ssl.SSLContext:
                 capath=None,
                 cadata=None)
             return ssl_context
+        except Exception:
+            return None
 
 
 def replace_list_item(replace_list: list, condition: str, value: str) -> list:

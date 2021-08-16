@@ -78,7 +78,8 @@ class Examples:
 
         query = session.query(ExchangeCurrencyPairView)
         dataframe = pd.read_sql(query.statement, con=session.bind)
-
+        if dataframe.empty:
+            return
         dataframe.exchange_name.value_counts().hist(bins=len(set(dataframe.exchange_name)))
         plt.title("Traded Pairs on Exchanges")
         plt.ylabel("Number of Exchanges")
@@ -103,6 +104,8 @@ class Examples:
                                                        HistoricRateView.first_currency == "BITCOIN",
                                                        HistoricRateView.second_currency == "USD")
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        if dataframe.empty:
+            return
         dataframe.sort_index(inplace=True)
 
         fig = plt.figure(constrained_layout=True, figsize=(8, 6))
@@ -188,6 +191,8 @@ class Examples:
             order_by(desc(TradeView.time)).limit(1000)
 
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        if dataframe.empty:
+            return
         dataframe.sort_index(inplace=True)
 
         plt.plot(dataframe[dataframe.direction == "sell"].loc[:, "price"], linestyle="dotted",
