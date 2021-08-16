@@ -24,7 +24,7 @@ setup(
         "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.9',
+    python_requires='>=3.8',
     install_requires=[
         "aiohttp",
         "aioschedule",
@@ -39,6 +39,7 @@ setup(
         "sqlalchemy >= 1.4.22",
         "sqlalchemy_utils >= 0.37.8",
         "tqdm",
-        "validators"
+        "validators",
+        "nest_asyncio"
     ]
 )
