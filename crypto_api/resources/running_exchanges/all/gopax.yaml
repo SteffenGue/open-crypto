@@ -229,8 +229,7 @@ requests:
       template: /trading-pairs/{currency_pair}/book
       pair_template:
         template: "{first}-{second}"
-        lower_case:
-        alias:
+        lower_case: false
       params:
         level:
           type: int

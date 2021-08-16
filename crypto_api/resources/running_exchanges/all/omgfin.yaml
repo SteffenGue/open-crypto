@@ -16,7 +16,7 @@ requests:
       pair_template: null
       params: null
 
-    resposse:
+    response:
       type: dict
       values:
         symbols:

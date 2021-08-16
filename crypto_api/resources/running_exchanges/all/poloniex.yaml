@@ -216,31 +216,31 @@ requests:
           type: int
           default: 100
 
-      response:
-        type: dict
-        values:
-          ask:
+    response:
+      type: dict
+      values:
+        ask:
+          type: list
+          values:
             type: list
             values:
-              type: list
-              values:
-                0:
-                  type: str
-                1:
-                  type: float
-          bids:
+              0:
+                type: str
+              1:
+                type: float
+        bids:
+          type: list
+          values:
             type: list
             values:
-              type: list
-              values:
-                0:
-                  type: str
-                1:
-                  type: float
-          is_frozen:
-            type: str
-          seq:
-            type: int
+              0:
+                type: str
+              1:
+                type: float
+        is_frozen:
+          type: str
+        seq:
+          type: int
 
     mapping:
     - key: time

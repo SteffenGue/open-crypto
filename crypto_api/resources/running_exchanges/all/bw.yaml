@@ -259,28 +259,28 @@ requests:
           type: int
           max: 20
           default: 20
-      response:
-        type: dict
-        values:
-          datas:
+    response:
+      type: dict
+      values:
+        datas:
+          type: list
+          values:
             type: list
             values:
-              type: list
-              values:
-                0:  #trade data
-                  type: str
-                1: # market ID
-                  type: str
-                2: # timestamp
-                  type: str
-                3: # symbol
-                  type: str
-                4: # direction
-                  type: str
-                5: # price
-                  type: str
-                6: # amount
-                  type: str
+              0:  #trade data
+                type: str
+              1: # market ID
+                type: str
+              2: # timestamp
+                type: str
+              3: # symbol
+                type: str
+              4: # direction
+                type: str
+              5: # price
+                type: str
+              6: # amount
+                type: str
     mapping:
       - key: time
         path:
