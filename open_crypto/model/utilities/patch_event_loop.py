@@ -3,13 +3,12 @@
 """
 This class patches the open issue with nested asyncio EventLoops under several environments.
 """
+from typing import Optional
 
 import asyncio
 import logging
-
-import nest_asyncio
 from asyncio import AbstractEventLoop
-from typing import Optional
+import nest_asyncio
 
 
 class PatchEventLoop:
@@ -45,6 +44,3 @@ class PatchEventLoop:
                         "if this package should depreciate in the future, extent this class by applying main.main() \n"
                         "as new task to the already running EventLoop.")
         nest_asyncio.apply()
-
-
-
