@@ -172,5 +172,7 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
     if kill_after and isinstance(kill_after, int):
         thread = threading.Timer(kill_after, KillSwitch().kill)
         thread.start()
-
-    main.run(configuration_file, working_directory)
+    try:
+        main.run(configuration_file, working_directory)
+    except SystemExit:
+        pass

@@ -135,7 +135,7 @@ def run(file: str = None, path: str = None) -> None:
     # sys.excepthook = handler
 
     program_config = load_program_config()
-    db_params = read_config(file=file, section="database")
+    db_params = read_config(file=file, section="database", reset=True)
     init_logger(path, program_config)
 
     logging.info("Establishing Database Connection")

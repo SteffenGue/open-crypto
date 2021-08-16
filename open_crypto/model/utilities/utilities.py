@@ -247,16 +247,12 @@ Dict providing basic compare functionality.
 """
 
 
-def read_config(file: Optional[str] = None,
-                section: Optional[str] = None,
-                program_config: bool = False) -> Dict[str, Any]:
+def read_config(file: Optional[str] = None, section: Optional[str] = None, reset: bool = False) -> Dict[str, Any]:
     """
     @param file: Name of the config file.
     @type file: str
     @param section: Name of the section the information is stored in.
     @type section: str
-    @param program_config: Returns the program config file.
-    @rtype: bool
 
     @return: Parameters for the program as a dictionary.
              Keys are the names of the parameters in the config-file.
@@ -264,6 +260,9 @@ def read_config(file: Optional[str] = None,
 
     @raise KeyError: If the section does not exist in the config.
     """
+    if reset:
+        GlobalConfig().set_file()
+
     if file:
         GlobalConfig().set_file(file)
 
