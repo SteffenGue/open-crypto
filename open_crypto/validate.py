@@ -14,7 +14,7 @@ from typing import Optional
 from model.validating.base import Report, CompositeReport
 from model.validating.validators import ApiMapFileValidator
 
-YAML_PATH = "resources/running_exchanges/all/"
+YAML_PATH = "open_crypto/resources/running_exchanges/all/"
 
 
 class ExchangeValidator:
