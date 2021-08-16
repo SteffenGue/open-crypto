@@ -1,0 +1,35 @@
+general:
+  database:
+    sqltype: sqlite #sqlite, mariadb, mysql or postgres
+    client: null # mariadb, pymysql or psycopg2
+    user_name:
+    password:
+    host: localhost
+    port: 5432
+    db_name: ExampleDB
+
+  operation_settings:
+    frequency: once # once or any number in minutes
+    interval: days # minutes, hours, days, weeks, months
+    timeout: 10
+  utilities:
+    enable_logging: true
+    yaml_path: resources/running_exchanges/all/
+    timeout: 10
+jobs:
+  TradeExample:
+    yaml_request_name: trades # ticker, trades, order_books, historic_rates
+    update_cp: false
+    exchanges: # all or an arbitrary list of exchanges
+      - coinbase
+    excluded: null
+
+    currency_pairs: # all or an arbitrary list of currency-pairs
+#      - all
+      - first: eth
+        second: btc
+
+    first_currencies: null  # filter database by the first currency and take all
+    second_currencies: null  # filter database by the second currency and take all.
+
+
