@@ -260,7 +260,7 @@ def read_config(file: Optional[str] = None, section: Optional[str] = None, reset
 
     @raise KeyError: If the section does not exist in the config.
     """
-    if reset:
+    if reset and not file:
         GlobalConfig().set_file()
 
     if file:
