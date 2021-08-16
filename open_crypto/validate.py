@@ -4,7 +4,7 @@
 A command line tool to validate the exchange YAMLs.
 
 How to use:
-python validate.py (all | <exchange_name>)
+python validate.py { all | <exchange_name> }
 """
 
 import os
@@ -86,6 +86,8 @@ def validate_exchange(exchange_name: str) -> bool:
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
+        print("How to use:")
+        print("python validate.py { all | <exchange_name> }")
         sys.exit(1)
 
     exchange = sys.argv[1]
