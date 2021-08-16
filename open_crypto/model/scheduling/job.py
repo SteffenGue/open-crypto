@@ -6,7 +6,7 @@ Module providing a job which defines the request method and exchanges currency-p
 Classes:
     - Job
 """
-from typing import Any
+from typing import Any, Dict, List
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
@@ -21,8 +21,8 @@ class Job:
 
     def __init__(self,
                  name: str,
-                 job_params: dict[str, Any],
-                 exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]):
+                 job_params: Dict[str, Any],
+                 exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]):
         """
         Initializer of a job.
 

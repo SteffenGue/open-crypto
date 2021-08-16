@@ -9,8 +9,9 @@ import asyncio
 import logging
 import signal
 import sys
-from typing import Any
+from typing import Any, Dict, List
 
+from model.utilities.patch_event_loop import PatchEventLoop
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
@@ -21,16 +22,15 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
-from model.utilities.utilities import handler  # pylint: disable=unused-import
 
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: dict[str, Any],
+async def initialize_jobs(job_config: Dict[str, Any],
                           timeout: int,
                           interval: Any,
                           comparator: str,
-                          db_handler: DatabaseHandler) -> list[Job]:
+                          db_handler: DatabaseHandler) -> List[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
@@ -43,7 +43,7 @@ async def initialize_jobs(job_config: dict[str, Any],
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
-    jobs: list[Job] = list()
+    jobs: List[Job] = list()
 
     for job in job_config.keys():
         job_params = job_config[job]
@@ -60,7 +60,7 @@ async def initialize_jobs(job_config: dict[str, Any],
                                           comparator=comparator,
                                           interval=interval) for exchange_name in exchange_names]
 
-        exchanges_with_pairs: [Exchange, list[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
+        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
 
         new_job: Job = Job(job, job_params, exchanges_with_pairs)
         jobs.append(new_job)
@@ -115,7 +115,7 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
                 loop.run_until_complete(await scheduler.start())
                 # This part below the loop will never be arrived as the scheduler will raise an RuntimeError
                 # as soon as the job_list is empty.
-            except RuntimeError as exc:
+            except (RuntimeError, TypeError) as exc:
                 raise SystemExit from exc
 
         else:
@@ -148,4 +148,8 @@ def run(file: str = None, path: str = None) -> None:
     # https://github.com/encode/httpx/issues/914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    if PatchEventLoop.check_event_loop_exists():
+        PatchEventLoop.apply_patch()
+
     asyncio.run(main(database_handler, program_config))

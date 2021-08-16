@@ -18,8 +18,7 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
 import importlib
-from typing import List, Iterable, Optional, Generator, Any, Iterator
-
+from typing import List, Iterable, Optional, Generator, Any, Iterator, Dict, Tuple
 import sqlalchemy.orm
 from pandas import DataFrame
 from pandas import read_sql_query as pd_read_sql_query
@@ -169,8 +168,8 @@ class DatabaseHandler:
         with self.session_scope() as session:
             return session.query(Exchange.id).filter(Exchange.name == exchange_name.upper()).scalar()
 
-    def get_currency_pairs(self, exchange_name: str, currency_pairs: list[dict[str, str]]) \
-            -> list[ExchangeCurrencyPair]:
+    def get_currency_pairs(self, exchange_name: str, currency_pairs: List[Dict[str, str]]) \
+            -> List[ExchangeCurrencyPair]:
         """
         Returns all ExchangeCurrencyPairs for the given exchange if they fit any
         currency pairs in the given list of dictionaries.
@@ -244,9 +243,9 @@ class DatabaseHandler:
 
     def get_exchanges_currency_pairs(self,
                                      exchange_name: str,
-                                     currency_pairs: list[dict[str, str]],
-                                     first_currencies: list[str],
-                                     second_currencies: list[str]) -> list[ExchangeCurrencyPair]:
+                                     currency_pairs: List[Dict[str, str]],
+                                     first_currencies: List[str],
+                                     second_currencies: List[str]) -> List[ExchangeCurrencyPair]:
 
         """
         Collects and returns all currency pairs for the given exchange that either have any
@@ -293,7 +292,7 @@ class DatabaseHandler:
                 result.append(pair)
         return result
 
-    def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> list[ExchangeCurrencyPair]:
+    def get_all_currency_pairs_from_exchange(self, exchange_name: str) -> List[ExchangeCurrencyPair]:
         """
         @param exchange_name: Name of the exchange that the currency-pairs should be queried for.
         @type exchange_name: str
@@ -311,8 +310,8 @@ class DatabaseHandler:
 
         return currency_pairs
 
-    def get_currency_pairs_with_first_currency(self, exchange_name: str, currency_names: list[str]) \
-            -> list[ExchangeCurrencyPair]:
+    def get_currency_pairs_with_first_currency(self, exchange_name: str, currency_names: List[str]) \
+            -> List[ExchangeCurrencyPair]:
         """
         Returns all currency-pairs for the given exchange that have any of the given currencies
         as the first currency.
@@ -327,7 +326,7 @@ class DatabaseHandler:
                  List is empty if there are no currency pairs in the database which fulfill the requirements.
         @rtype: list[ExchangeCurrencyPair]
         """
-        all_found_currency_pairs: list[ExchangeCurrencyPair] = list()
+        all_found_currency_pairs: List[ExchangeCurrencyPair] = list()
         if exchange_name is not None and exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
@@ -346,8 +345,8 @@ class DatabaseHandler:
                 session.expunge_all()
         return all_found_currency_pairs
 
-    def get_currency_pairs_with_second_currency(self, exchange_name: str, currency_names: list[str]) \
-            -> list[ExchangeCurrencyPair]:
+    def get_currency_pairs_with_second_currency(self, exchange_name: str, currency_names: List[str]) \
+            -> List[ExchangeCurrencyPair]:
         """
         Returns all currency-pairs for the given exchange that have any of the given currencies
         as the second currency.
@@ -362,7 +361,7 @@ class DatabaseHandler:
                  List is empty if there are no currency pairs in the database which fulfill the requirements.
         @rtype: list[ExchangeCurrencyPair]
         """
-        all_found_currency_pairs: list[ExchangeCurrencyPair] = list()
+        all_found_currency_pairs: List[ExchangeCurrencyPair] = list()
         if exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)
 
@@ -387,10 +386,10 @@ class DatabaseHandler:
                            query_everything: bool,
                            from_timestamp: datetime = None,
                            to_timestamp: datetime = TimeHelper.now(),
-                           exchanges: list[str] = None,
-                           currency_pairs: list[dict[str, str]] = None,
-                           first_currencies: list[str] = None,
-                           second_currencies: list[str] = None) -> DataFrame:
+                           exchanges: List[str] = None,
+                           currency_pairs: List[Dict[str, str]] = None,
+                           first_currencies: List[str] = None,
+                           second_currencies: List[str] = None) -> DataFrame:
 
         """
              Queries based on the parameters readable database data and returns it.
@@ -581,7 +580,7 @@ class DatabaseHandler:
         self.persist_exchange_currency_pairs([(exchange_name, first_currency_name, second_currency_name)],
                                              is_exchange=is_exchange)
 
-    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[tuple[str, str, str]],
+    def persist_exchange_currency_pairs(self, currency_pairs: Iterable[Tuple[str, str, str]],
                                         is_exchange: bool) -> None:
         """
         Persists the given already formatted ExchangeCurrencyPair-tuple if they not already exist.
@@ -644,11 +643,11 @@ class DatabaseHandler:
                         session.commit()
 
     def persist_response(self,
-                         exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]],
+                         exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
                          exchange: Exchange,
                          db_table: DatabaseTable,
                          formatted_response: Iterator[Any],
-                         update_on_conflict: bool = False) -> list[ExchangeCurrencyPair]:
+                         update_on_conflict: bool = False) -> List[ExchangeCurrencyPair]:
         """
         Method to persist the formatted response into the database. Every data tuple get is inspected for
         valid data, i.e. the mapping key and corresponding data must be one of the table columns of the database.
@@ -671,12 +670,12 @@ class DatabaseHandler:
 
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
-        counter_dict: dict[int, int] = dict()
+        counter_dict: Dict[int, int] = dict()
         requested_cp_ids = [pair.id for pair in exchanges_with_pairs[exchange]]
 
         while True:
             try:
-                data_to_persist: list[dict, ...] = list()
+                data_to_persist: List[dict, ...] = list()
                 data, mappings = next(formatted_response)
 
                 for data_tuple in data:

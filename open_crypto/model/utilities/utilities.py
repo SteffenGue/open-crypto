@@ -28,7 +28,7 @@ import platform
 import ssl
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Dict, List
 
 import certifi
 import dateutil.parser
@@ -249,7 +249,7 @@ Dict providing basic compare functionality.
 
 def read_config(file: Optional[str] = None,
                 section: Optional[str] = None,
-                program_config: bool = False) -> dict[str, Any]:
+                program_config: bool = False) -> Dict[str, Any]:
     """
     @param file: Name of the config file.
     @type file: str
@@ -294,7 +294,7 @@ def read_config(file: Optional[str] = None,
     raise KeyError()
 
 
-def yaml_loader(exchange: str, path: str = None) -> dict[str, Any]:
+def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     """
     Loads, reads and returns the data of a .yaml-file specified by the param exchange.
 
@@ -321,7 +321,7 @@ def yaml_loader(exchange: str, path: str = None) -> dict[str, Any]:
         raise ex
 
 
-def load_program_config() -> dict[str, Any]:
+def load_program_config() -> Dict[str, Any]:
     """
     Loads the program configuration from a predefined directory. If the file is not found, it will return
     the template with default settings.
@@ -339,7 +339,7 @@ def load_program_config() -> dict[str, Any]:
             return yaml.load(file, Loader=yaml.FullLoader)
 
 
-def get_exchange_names(yaml_path: str = None) -> list[str]:
+def get_exchange_names(yaml_path: str = None) -> List[str]:
     """
     Gives information about all exchange that the program will send
     requests to. This means if the name of a exchange is not part of the
@@ -356,7 +356,7 @@ def get_exchange_names(yaml_path: str = None) -> list[str]:
     path_to_resources: Path = pathlib.Path().parent.absolute()
 
     exchanges = os.listdir(Path.joinpath(path_to_resources, yaml_path))
-    exchanges = [x.removesuffix(".yaml") for x in exchanges if x.endswith(".yaml")]
+    exchanges = [x.split(".yaml")[0] for x in exchanges if x.endswith(".yaml")]
     exchanges.sort()
 
     return exchanges
@@ -375,6 +375,7 @@ def provide_ssl_context() -> ssl.SSLContext:
     ssl_context.check_hostname = True
     ssl_context.load_default_certs()
 
+    # ToDo: Test under new MacOS!
     if platform.system().lower() == 'darwin':
         try:
             print("Warning: No root SSL-certificate found on your local machine.\n"
@@ -404,7 +405,7 @@ def replace_list_item(replace_list: list, condition: str, value: str) -> list:
     return replace_list
 
 
-def get_all_exchanges_and_methods() -> dict[str, dict]:
+def get_all_exchanges_and_methods() -> Dict[str, dict]:
     """
     Returns the exchange names and all supported methods.
     @return: List of exchanges with supported request methods.

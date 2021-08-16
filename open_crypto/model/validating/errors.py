@@ -4,7 +4,7 @@
 Contains exceptions to represent validation failures.
 """
 
-from typing import Text, Any, Iterable, Union, Type
+from typing import Text, Any, Iterable, Union, Type, Set, Dict
 
 import validators
 
@@ -26,9 +26,9 @@ class KeyNotInDictError(ValidationError):
             A dict, in which a certain key shall be contained.
     """
     missing_key: Text
-    inspected_dict: dict[Text, Any]
+    inspected_dict: Dict[Text, Any]
 
-    def __init__(self, missing_key: Text, inspected_dict: dict[Text, Any]):
+    def __init__(self, missing_key: Text, inspected_dict: Dict[Text, Any]):
         """
         Constructor of KeyNotInDictError.
 
@@ -65,7 +65,7 @@ class KeyNotIntendedError(ValidationError):
         actual_key:
             A key, which is not intended to be in a dict.
     """
-    intended_keys: set[Text]
+    intended_keys: Set[Text]
     actual_key: Text
 
     def __init__(self, intended_keys: Iterable[Text], actual_key: Text):

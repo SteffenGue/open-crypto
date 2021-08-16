@@ -233,10 +233,6 @@ requests:
       params:
         level:
           type: int
-          allowed:
-            - 1 # best bid and best ask
-            - 2 # first 50 bid and ask
-            - 3 # all
           default: 2
 
     response:
