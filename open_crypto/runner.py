@@ -8,7 +8,7 @@ into csv-files.
 import os
 import shutil
 import threading
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 import pandas as pd
 from sqlalchemy.orm.session import Session
 
@@ -108,7 +108,7 @@ def exchanges_and_methods(return_dataframe: bool = False) -> Optional[pd.DataFra
         return prepend_spaces_to_columns(dataframe.transpose(), 3)
 
 
-def get_config(filename: Optional[str] = None) -> dict[str, Any]:
+def get_config(filename: Optional[str] = None) -> Dict[str, Any]:
     """
     Parses the specified configuration file.
 

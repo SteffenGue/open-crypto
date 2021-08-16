@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-
+This class patches the open issue with nested asyncio EventLoops under several environments.
 """
+
 import asyncio
 import logging
 

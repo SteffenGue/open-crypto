@@ -10,7 +10,7 @@ for a high amount of currency-pairs, to avoid filling the RAM.
 import asyncio
 import logging
 from asyncio import Future
-from typing import Callable, Any, Optional, Union, Coroutine
+from typing import Callable, Any, Optional, Union, Coroutine, List, Dict, Tuple
 
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
@@ -29,7 +29,7 @@ class Scheduler:
     Attributes like frequency or job_list can also be set by the user in config.yaml.
     """
 
-    def __init__(self, database_handler: DatabaseHandler, job_list: list[Job],
+    def __init__(self, database_handler: DatabaseHandler, job_list: List[Job],
                  request_direction: int, frequency: Union[str, int, float]):
         """
         Initializer for a Scheduler.
@@ -99,7 +99,7 @@ class Scheduler:
                     break
                 continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
-    def determine_task(self, request_name: str) -> dict[str, Union[Callable[..., None]]]:
+    def determine_task(self, request_name: str) -> Dict[str, Union[Callable[..., None]]]:
         """
         Returns the method that is to execute based on the given request name.
 
@@ -146,7 +146,7 @@ class Scheduler:
         if self.job_list:
             self._validated = True
 
-    def remove_invalid_jobs(self, jobs: list[Job]) -> list[Job]:
+    def remove_invalid_jobs(self, jobs: List[Job]) -> List[Job]:
         """
         Method to clean up the job list. If the job list is empty, shut down program.
         Else the algorithm will go through every job specification and delete empty jobs or exchanges.
@@ -199,7 +199,7 @@ class Scheduler:
             # Reenter the method to get into the first else (down) condition and shut down process
             self.remove_invalid_jobs(jobs)
 
-    async def update_currency_pairs(self, ex: Exchange) -> list[None]:  # TODO: Make the return value nicer?
+    async def update_currency_pairs(self, ex: Exchange) -> List[None]:  # TODO: Make the return value nicer?
         """
         This method requests the currency_pairs.
 
@@ -222,7 +222,7 @@ class Scheduler:
             return []
 
     # ToDo: Asynchronicity.
-    async def get_currency_pairs(self, job_list: list[Job]) -> list[Job]:
+    async def get_currency_pairs(self, job_list: List[Job]) -> List[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
         api for all currency pairs is called.
@@ -260,8 +260,8 @@ class Scheduler:
 
     async def request_format_persist(self,
                                      request_table: object,
-                                     exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]) \
-            -> tuple[bool, dict[Exchange, list[ExchangeCurrencyPair]]]:
+                                     exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]) \
+            -> Tuple[bool, Dict[Exchange, List[ExchangeCurrencyPair]]]:
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -335,7 +335,7 @@ class Scheduler:
                     continue
 
         if request_table.__name__ == "HistoricRate":
-            updated_job: dict[Exchange, Any] = {}
+            updated_job: Dict[Exchange, Any] = {}
             for exchange, value in counter.items():
                 if value:
                     exchange.decrease_interval()

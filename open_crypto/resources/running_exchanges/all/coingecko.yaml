@@ -44,7 +44,6 @@ requests:
       pair_template:
         template: "{first}"
         lower_case: true
-        alias: null
       params:
         vs_currency:
           type: str

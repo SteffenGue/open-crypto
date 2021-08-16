@@ -10,6 +10,8 @@ Classes:
     - NotAllPrimaryKeysException
 """
 
+from typing import Dict
+
 
 class MappingNotFoundException(Exception):
     """
@@ -63,7 +65,7 @@ class NotAllPrimaryKeysException(Exception):
     to any database interaction.
     """
 
-    def __init__(self, exchange_name: str, primary_keys: dict[str, bool]):  # TODO: List instead of dict?
+    def __init__(self, exchange_name: str, primary_keys: Dict[str, bool]):  # TODO: List instead of dict?
         """
         @param exchange_name: Name of the Exchange that had a missing primary key.
         @type exchange_name: str

@@ -9,7 +9,7 @@ import asyncio
 import logging
 import signal
 import sys
-from typing import Any
+from typing import Any, Dict, List
 
 from model.utilities.patch_event_loop import PatchEventLoop
 from model.database.db_handler import DatabaseHandler
@@ -26,11 +26,11 @@ from model.utilities.kill_switch import KillSwitch
 signal.signal(signal.SIGINT, signal_handler)
 
 
-async def initialize_jobs(job_config: dict[str, Any],
+async def initialize_jobs(job_config: Dict[str, Any],
                           timeout: int,
                           interval: Any,
                           comparator: str,
-                          db_handler: DatabaseHandler) -> list[Job]:
+                          db_handler: DatabaseHandler) -> List[Job]:
     """
     Initializes and creates new Job Objects and stores them in a list. There will be one Job-Object for every request
     method, independent of the amount of exchanges or currency_pairs specified in the config. The Dict
@@ -43,7 +43,7 @@ async def initialize_jobs(job_config: dict[str, Any],
     @param job_config: Dictionary with job parameter gathered from the config-file.
     @return: A list of Job objects.
     """
-    jobs: list[Job] = list()
+    jobs: List[Job] = list()
 
     for job in job_config.keys():
         job_params = job_config[job]
@@ -60,7 +60,7 @@ async def initialize_jobs(job_config: dict[str, Any],
                                           comparator=comparator,
                                           interval=interval) for exchange_name in exchange_names]
 
-        exchanges_with_pairs: [Exchange, list[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
+        exchanges_with_pairs: [Exchange, List[ExchangeCurrencyPair]] = dict.fromkeys(exchanges)
 
         new_job: Job = Job(job, job_params, exchanges_with_pairs)
         jobs.append(new_job)

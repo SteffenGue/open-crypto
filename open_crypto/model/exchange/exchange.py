@@ -16,7 +16,7 @@ import logging
 import string
 from collections import deque, OrderedDict
 from datetime import datetime
-from typing import Iterator, Optional, Any, Generator, Callable, Union
+from typing import Iterator, Optional, Any, Generator, Callable, Union, Tuple, Dict, List
 import aiohttp
 import tqdm
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
@@ -31,10 +31,10 @@ from model.utilities.utilities import provide_ssl_context, replace_list_item, CO
 
 
 def format_request_url(url: str,
-                       pair_template: dict[str, Any],
+                       pair_template: Dict[str, Any],
                        pair_formatted: str,
                        pair: ExchangeCurrencyPair,
-                       parameters: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+                       parameters: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
     """
     Formats the request url, inserts the currency-pair representation and/or extracts the parameters
     specified for the exchange and request.
@@ -72,8 +72,8 @@ def format_request_url(url: str,
     return url_formatted, parameters
 
 
-def sort_order_book(temp_results: dict[str, list[Any]],
-                    len_results: int) -> dict[str, Union[datetime, str, int, range, list]]:
+def sort_order_book(temp_results: Dict[str, List[Any]],
+                    len_results: int) -> Dict[str, Union[datetime, str, int, range, list]]:
     """
     Sorts the order-book result according to the bid and ask prices.
     @param temp_results: Exchange response and extracted values
@@ -147,14 +147,14 @@ class Exchange:
     interval: str
     base_interval: Any
     comparator: str
-    request_urls: dict[str, Any]
-    response_mappings: dict[str, list[Mapping]]
+    request_urls: Dict[str, Any]
+    response_mappings: Dict[str, List[Mapping]]
     timeout: int
     get_first_timestamp: Callable
-    exchange_currency_pairs: list[ExchangeCurrencyPair]
+    exchange_currency_pairs: List[ExchangeCurrencyPair]
 
     def __init__(self,
-                 yaml_file: dict[str, Any],
+                 yaml_file: Dict[str, Any],
                  db_first_timestamp: Callable[[DatabaseTable, int], datetime],
                  timeout: int,
                  comparator: str = 'equal_or_lower',
@@ -203,7 +203,7 @@ class Exchange:
     async def fetch(self,
                     session: aiohttp.ClientSession,
                     url: str,
-                    params: dict[str, Any],
+                    params: Dict[str, Any],
                     retry: bool = True,
                     **kwargs: object) -> Optional[dict]:
         """
@@ -262,7 +262,7 @@ class Exchange:
                           "Url: %s, Parameters: %s.", url, params)
             return None
 
-    def add_exchange_currency_pairs(self, currency_pairs: list[ExchangeCurrencyPair]) -> None:
+    def add_exchange_currency_pairs(self, currency_pairs: List[ExchangeCurrencyPair]) -> None:
         """
         Method that adds the given currency-pairs to exchange-currency-pairs.
         TODO: check if contains is enough to prevent duplicates of pairs
@@ -275,8 +275,8 @@ class Exchange:
 
     async def request(self,
                       request_table: object,
-                      currency_pairs: list[ExchangeCurrencyPair]) -> \
-            Optional[tuple[datetime, str, dict[Optional[ExchangeCurrencyPair], Any]]]:
+                      currency_pairs: List[ExchangeCurrencyPair]) -> \
+            Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
 
         """
         Method tries to request data for all given methods and currency pairs.
@@ -317,6 +317,7 @@ class Exchange:
                                                           request_table=request_table,
                                                           currency_pairs=currency_pairs)
         except Exception as ex:
+            print(ex)
             print(f"Exception extracting request URLs for: {self.name}.")
             logging.error("Exception extracting request URLs for: %s.", self.name, exc_info=ex)
             return None
@@ -392,7 +393,7 @@ class Exchange:
 
         return formatted_string
 
-    async def request_currency_pairs(self, request_name: str = "currency_pairs") -> tuple[str, Optional[dict]]:
+    async def request_currency_pairs(self, request_name: str = "currency_pairs") -> Tuple[str, Optional[dict]]:
         """
         Tries to retrieve all available currency-pairs that are traded on this exchange.
 
@@ -426,7 +427,7 @@ class Exchange:
                              request_dict: dict,
                              request_name: str,
                              request_table: object = None,
-                             currency_pairs: list[ExchangeCurrencyPair] = None) -> dict[str, dict[str, dict]]:
+                             currency_pairs: List[ExchangeCurrencyPair] = None) -> Dict[str, Dict[str, dict]]:
         """
         Extracts from the section of requests from the .yaml-file the necessary attachment
         for the url and parameters for each request and inserts variable parameter values
@@ -519,7 +520,7 @@ class Exchange:
                                                                          all_intervals.get(self.base_interval))}
             return value
 
-        def function(val: str, **kwargs: dict) -> dict[ExchangeCurrencyPair, datetime]:
+        def function(val: str, **kwargs: dict) -> Dict[ExchangeCurrencyPair, datetime]:
             """
             Execute function for all currency-pairs. Function returns the first timestamp in the DB, or
             datetime.now() if none exists.
@@ -585,7 +586,7 @@ class Exchange:
         urls[request_name] = request_parameters
         return urls
 
-    def format_currency_pairs(self, response: tuple[str, dict]) -> Optional[Iterator[tuple[str, str, str]]]:
+    def format_currency_pairs(self, response: Tuple[str, dict]) -> Optional[Iterator[Tuple[str, str, str]]]:
         """
         Extracts the currency-pairs of out of the given json-response
         that was collected from the Rest-API of this exchange.
@@ -629,7 +630,7 @@ class Exchange:
 
     def format_data(self,
                     method: str,
-                    response: tuple[str, dict[object, dict]],
+                    response: Tuple[str, Dict[object, dict]],
                     start_time: datetime,
                     time: datetime) -> Generator[Any, None, None]:
         """

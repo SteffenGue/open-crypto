@@ -42,7 +42,7 @@ Since:
 Version:
     26.04.2019
 """
-from typing import Any, Text
+from typing import Any, Text, Dict
 
 import oyaml as yaml
 import validators
@@ -182,7 +182,7 @@ class ApiMapValidator(CompositeValidator):
     Validator for calling the other required Validators.
     """
 
-    def __init__(self, value: dict[Text, Any]):
+    def __init__(self, value: Dict[Text, Any]):
         """Constructor of ApiMapValidator.
 
         Args:
@@ -323,7 +323,7 @@ class ApiUrlValidator(Validator):
             The root dict that should contain the 'api_url' field.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -475,7 +475,7 @@ class RequestsValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -555,7 +555,7 @@ class RequestValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def __init__(self, value: Any):
         """Constructor of RequestValidator.
@@ -565,7 +565,7 @@ class RequestValidator(CompositeValidator):
                 The value to get validated.
         """
 
-        request: dict[Text, Any] = value.get("request")
+        request: Dict[Text, Any] = value.get("request")
         super().__init__(
             value,
             # TODO: Validate whether all keys of 'template' are in 'pair_template' or 'params'
@@ -626,7 +626,7 @@ class TemplateValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -679,7 +679,7 @@ class PairTemplateValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1066,7 +1066,7 @@ class ResponseValidator(ProcessingValidator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def process(self) -> Any:
         """Processes the value.
@@ -1128,7 +1128,7 @@ class MappingValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1187,7 +1187,7 @@ class MappingEntryValidator(CompositeValidator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def __init__(self, value: Any):
         """Constructor of MappingEntryValidator.
@@ -1244,7 +1244,7 @@ class KeyValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1298,7 +1298,7 @@ class PathValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1353,7 +1353,7 @@ class TypeValidator(Validator):
             The dict that shall be checked.
     """
 
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def validate(self) -> bool:
         """Validates the value.
@@ -1400,7 +1400,7 @@ class RequestMappingValidator(Validator):
     """
     TODO: Fill out
     """
-    value: dict[Text, Any]
+    value: Dict[Text, Any]
 
     def determine_table(self, table_name: str) -> dict:
         """
