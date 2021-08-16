@@ -1,7 +1,7 @@
 image: "python:3.9.5"
 
 variables:
-  MODULE_PATH: "./crypto_api"
+  MODULE_PATH: "./open_crypto"
 
 before_script:
   - python --version
