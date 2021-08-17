@@ -1167,8 +1167,6 @@ class RequestMappingValidator(Validator):
             "order_books":
                 ['position'],
             "trades":
-                ['time'],
-            "ohlcvm":
                 ['time']
         }
         return possible_primary_keys.get(table_name, lambda: "Invalid request class")
