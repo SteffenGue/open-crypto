@@ -42,6 +42,7 @@ Since:
 Version:
     26.04.2019
 """
+import re
 from typing import Any, Text, Dict
 
 import oyaml as yaml
@@ -175,19 +176,17 @@ class ApiMapValidator(CompositeValidator):
 
 
 class NameValidator(Validator):
-    """Validator for the key 'name'.
+    """
+    Validator to validate a given exchange with respect to the 'name' key.
 
-    Validator for validating a given YAML file regarding the key 'name'.
-    Checks whether 'name' exists in the file, is a String and meets the naming
-    convention.
+    Checks if 'name' exists in the file, is a string and conforms to the naming convention.
 
     Attributes:
         name_regex:
             The Regex pattern for valid names must meet.
             i.e. 'exchange', 'crypto_exchange'
     """
-
-    name_regex: Text = r"^(?:[a-z.?!]+[_]{1})*[a-z.?!]+$"
+    name_pattern: Text = r"[a-z0-9\-_]+(\.){0,1}[a-z0-9]+"
 
     def validate(self) -> bool:
         """
@@ -211,22 +210,16 @@ class NameValidator(Validator):
                 is_name_string = Report(error)
                 self.report = CompositeReport(has_name, is_name_string)
             else:
-                is_name_string = Report("Value of keys 'name' is a String")
+                is_name_string = Report("Value of the 'name' key is a string.")
                 try:
-                    pass  # TODO: Philipp: Naming conventions fix
-                    # if the naming convention does not match
-                    # if not re.match(self.name_regex, name):
-                    # raise NamingConventionError(self.name_regex, name)
+                    if not re.fullmatch(self.name_pattern, name):
+                        raise NamingConventionError(self.name_pattern, name)
                 except NamingConventionError as error:
                     meets_convention = Report(error)
                 else:
                     meets_convention = Report("Naming convention met.")
 
-                self.report = CompositeReport(
-                    has_name,
-                    is_name_string,
-                    meets_convention
-                )
+                self.report = CompositeReport(has_name, is_name_string, meets_convention)
 
         return True
 
