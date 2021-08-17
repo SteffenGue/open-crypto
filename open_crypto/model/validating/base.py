@@ -310,7 +310,7 @@ class Report:
         sign = "+" if self else "-"
         return sign + " " + str(self.messages)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         A method for representing a message in text format.
 
