@@ -15,7 +15,7 @@ The program is highly customizable and not necessarily limited to cryptocurrency
 We offer an open-source tool which fits the needs for a new, fast, flexible and in many cases unexplored industry. 
 Along with this short introduction we provide an in-depth __Handbook__ (forthcoming) with detailed information about the code, selected points to alter or augment the functionality.
 ## Prerequisits
-- [Python >= 3.9](<https://www.python.org/downloads/>)
+- [Python >= 3.8](<https://www.python.org/downloads/>)
 
 ## Getting started
 The program is uploaded to __PyPI__. For installation, execute:
@@ -39,6 +39,7 @@ The following third-party libraries are installed with __open_crypto__:
 - python-dateutil
 - sqlalchemy
 - sqlalchemy_utils
+- nest-asyncio
 
 ## Run the program
 
@@ -81,7 +82,7 @@ and type in the name of the configuration file.
 
 
 ## Examples
-By default, several example skripts are offered and can easily be executed:
+By default, several example scripts are offered and can easily be executed:
 - __exchange_listings()__  # plots the amount of listings on exchanges over time for the top 10 cryptos
 - __static()__             # histogram of currency-pairs over exchanges
 - __trades()__             # queries the most recent 1,000 transactions from Coinbase and plots them

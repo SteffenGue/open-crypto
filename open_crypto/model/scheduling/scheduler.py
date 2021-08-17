@@ -221,7 +221,6 @@ class Scheduler:
         else:
             return []
 
-    # ToDo: Asynchronicity.
     async def get_currency_pairs(self, job_list: List[Job]) -> List[Job]:
         """
         Method to get all exchange currency pairs. First the database is queried, if the result is [], the exchanges
@@ -241,13 +240,22 @@ class Scheduler:
 
             logging.info("Loading and/or updating exchange currency pairs..")
 
-            with Loader("Loading exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
-                # for exchange in tqdm.tqdm(exchanges, disable=len(exchanges) < 100, desc="Exchanges"):
+            with Loader("Checking exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
+
+                exchanges_to_update = list()
                 for exchange in exchanges:
                     if job_params["update_cp"] or job.request_name == "currency_pairs" or \
                             not self.database_handler.get_all_currency_pairs_from_exchange(exchange.name):
-                        await self.update_currency_pairs(exchange)
+                        exchanges_to_update.append(self.update_currency_pairs(exchange))
+                    loader.increment()
 
+            with Loader("Requesting exchange currency-pairs...", "", max_counter=len(exchanges_to_update)) as loader:
+                for exchange in exchanges_to_update:
+                    await exchange
+                    loader.increment()
+
+            with Loader("Loading exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
+                for exchange in exchanges:
                     if job.request_name != "currency_pairs":
                         job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
                             exchange.name,
