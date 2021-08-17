@@ -311,6 +311,14 @@ class Report:
         return sign + " " + str(self.messages)
 
     def __repr__(self):
+        """
+        A method for representing a message in text format.
+
+        A text value returning "-" and the respective message, if message is a
+        Exception, otherwise "+" and the respective message.
+
+        @return: "-" for Exceptions, "+" otherwise.
+        """
         return self.__str__()
 
 
