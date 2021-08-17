@@ -12,7 +12,7 @@ import sys
 from typing import Optional
 
 from model.validating.base import Report, CompositeReport
-from model.validating.validators import ApiMapFileValidator
+from model.validating.api_map_validators import ApiMapFileValidator
 
 YAML_PATH = "open_crypto/resources/running_exchanges/all/"
 
