@@ -48,11 +48,13 @@ from typing import Any, Text, Dict
 import oyaml as yaml
 import validators
 
-# pylint: disable=too-many-lines
 from model.database.tables import ExchangeCurrencyPair, Ticker, HistoricRate, OrderBook, Trade
 from model.validating.base import Report, CompositeReport, Validator, CompositeValidator, ProcessingValidator
 from model.validating.errors import KeyNotInDictError, SubstringNotInStringError, WrongTypeError, UrlValidationError, \
     NamingConventionError
+
+
+# pylint: disable=too-many-lines
 
 
 class ApiMapFileValidator(CompositeValidator):
@@ -240,13 +242,11 @@ class UrlValidator(Validator):
         try:
             if not isinstance(self.value, str):
                 raise WrongTypeError(str, type(self.value))
-
         except WrongTypeError as error:
             is_url_str = Report(error)
             self.report = is_url_str
         else:
             is_url_str = Report("URL is a str.")
-
             try:
                 url_validation_result = validators.url(self.value)
                 if self.value != "" and not url_validation_result:
@@ -272,7 +272,6 @@ class ApiUrlValidator(Validator):
         value:
             The root dict that should contain the 'api_url' field.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -291,11 +290,10 @@ class ApiUrlValidator(Validator):
             has_api_url = Report("Key 'api_url' exists.")
             api_url = self.value.get("api_url")
 
-            # checking whether the api_url is valid
             url_validator = UrlValidator(api_url)
             url_validator.validate()
-            valid_url = url_validator.report
-            self.report = CompositeReport(has_api_url, valid_url)
+
+            self.report = CompositeReport(has_api_url, url_validator.report)
 
         return True
 
@@ -370,9 +368,7 @@ class RateLimitValidator(Validator):
                     are_keys_valid
                 )
         else:
-            is_rate_limit_key = Report("Optional key 'rate_limit' does not exist.")
-            # TODO: Philipp: Correct just add?
-            self.report = CompositeReport(is_rate_limit_key)
+            self.report = CompositeReport(Report("Optional key 'rate_limit' does not exist."))
 
         return True
 
@@ -387,7 +383,6 @@ class RequestsValidator(CompositeValidator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -454,7 +449,6 @@ class RequestValidator(CompositeValidator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def __init__(self, value: Any):
@@ -494,13 +488,10 @@ class RequestValidator(CompositeValidator):
                 if not isinstance(request, dict):
                     raise WrongTypeError(dict, type(request))
             except WrongTypeError as error:
-                is_request_dict = Report(error)
-                self.append_report(is_request_dict)
+                self.append_report(Report(error))
                 return True
             else:
-                is_request_dict = Report("Value of key 'request' is a dict.")
-                self.append_report(is_request_dict)
-
+                self.append_report(Report("Value of key 'request' is a dict."))
                 return super().validate()
 
 
@@ -514,7 +505,6 @@ class TemplateValidator(Validator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -559,7 +549,6 @@ class PairTemplateValidator(Validator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -626,15 +615,14 @@ class PairTemplateValidator(Validator):
                     for substring in ("{first}", "{second}"):
                         try:
                             if substring not in template_value:
-                                raise SubstringNotInStringError(
-                                    substring,
-                                    template_value
-                                )
+                                raise SubstringNotInStringError(substring, template_value)
                         except SubstringNotInStringError as error:
-                            substring_report = Report(error)
+                            if substring_reports:
+                                substring_report = Report(f"Optional substring {substring} was not in template")
+                            else:
+                                substring_report = Report(error)
                         else:
                             substring_report = Report(f"Substring {substring} was in template")
-                            break
 
                         substring_reports.append_report(substring_report)
 
@@ -835,7 +823,7 @@ class ParamValidator(Validator):
         return True
 
 
-class ResponseValidator(ProcessingValidator):
+class ResponseValidator(CompositeValidator):
     """
     Validator for validating a given API method dict regarding the key 'response'.
 
@@ -845,16 +833,7 @@ class ResponseValidator(ProcessingValidator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
-
-    def process(self) -> Any:
-        """
-        Returns the result value from processing the initial value.
-
-        @return: The result value as a dict.
-        """
-        # TODO: implement
 
     def validate(self) -> bool:
         """
@@ -896,7 +875,6 @@ class MappingValidator(CompositeValidator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -943,7 +921,6 @@ class MappingEntryValidator(CompositeValidator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def __init__(self, value: Any):
@@ -989,7 +966,6 @@ class KeyValidator(Validator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -1034,7 +1010,6 @@ class PathValidator(Validator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -1080,7 +1055,6 @@ class TypeValidator(Validator):
         value:
             The dict that shall be checked.
     """
-
     value: Dict[Text, Any]
 
     def validate(self) -> bool:
@@ -1124,12 +1098,13 @@ class RequestMappingValidator(Validator):
     value: Dict[Text, Any]
 
     @staticmethod
-    def determine_table(table_name: str) -> dict:
+    def determine_table(request_name: str) -> dict:
         """
-        Returns the method that is to execute based on the given request name.
+        Returns the database table based on the specified request name.
 
-        @param table_name: Name of the request.
-        @return: Method for the request name or a string that the request is false.
+        @param request_name: The name of the request.
+
+        @return: The database table based on the specified request name.
         """
         possible_class = {
             "currency_pairs":
@@ -1143,12 +1118,16 @@ class RequestMappingValidator(Validator):
             "trades":
                 {'table': Trade}
         }
-        return possible_class.get(table_name, lambda: "Invalid request class.")
+        return possible_class.get(request_name, lambda: "Invalid request class.")
 
     @staticmethod
     def determine_primary_keys(table_name: str) -> list:
         """
-        TODO: Fill out
+        Returns the primary keys based on the specified database table.
+
+        @param table_name: The database table.
+
+        @return: The primary keys based on the specified database table.
         """
         possible_primary_keys = {
             "currency_pairs":
@@ -1189,4 +1168,3 @@ class RequestMappingValidator(Validator):
         #     for primary_key in primary_keys:
         #         if primary_key == requests[request]['mapping']:
         #             return False
-        # return True

@@ -372,3 +372,11 @@ class CompositeReport(Report):
         """
         sign = "+" if self else "-"
         return sign + " " + str(self.reports)
+
+    def __len__(self) -> int:
+        """
+        Gets the report count.
+
+        @return: The report count.
+        """
+        return len(self.reports)
