@@ -46,7 +46,7 @@ def update_maps(directory: str = os.getcwd()) -> None:
     @param directory: The directory.
     @type directory: Current working directory
     """
-    # ToDo Check if works correctly.
+
     print(f"Copying resources to {directory} ...")
     source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
 

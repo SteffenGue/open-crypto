@@ -9,12 +9,47 @@ python validate.py { all | <exchange_name> }
 
 import os
 import sys
-from typing import Optional
+from typing import Optional, Union, Tuple
 
 from model.validating.base import Report, CompositeReport
 from model.validating.api_map_validators import ApiMapFileValidator
+from model.validating.config_file_validator import ConfigFileValidator
+from resources.configs.global_config import GlobalConfig
 
 YAML_PATH = "open_crypto/resources/running_exchanges/all/"
+
+
+def report_error(report: Report) -> Optional[Report]:
+    """
+    Recursive method to find the lowest False in a nested list
+    """
+    if report:
+        return report
+
+    if not isinstance(report, CompositeReport):
+        return None
+
+    for nested_report in report.reports:
+        if not nested_report:
+            try:
+                report_error(nested_report)
+            except AttributeError:
+                print(nested_report)
+                break
+
+
+class ConfigValidator:
+    """
+    # ToDo
+    """
+
+    @staticmethod
+    def validate_config_file() -> Tuple[bool, Report]:
+        validator = ConfigFileValidator(GlobalConfig().file)
+        if validator.validate():
+            return True, validator.report
+        else:
+            return False, validator.report
 
 
 class ExchangeValidator:
@@ -48,26 +83,8 @@ class ExchangeValidator:
 
         print("API Map is Invalid! \n"
               f"Inspect report: {'~/reports/report_' + self.exchange_name + '.txt'}")
-        self.report_error(validator.report)
+        report_error(validator.report)
         return False
-
-    def report_error(self, report: Report) -> Optional[Report]:
-        """
-        Recursive method to find the lowest False in a nested list
-        """
-        if report:
-            return report
-
-        if not isinstance(report, CompositeReport):
-            return None
-
-        for nested_report in report.reports:
-            if not nested_report:
-                try:
-                    self.report_error(nested_report)
-                except AttributeError:
-                    print(nested_report)
-                    break
 
 
 def validate_exchange(exchange_name: str) -> bool:

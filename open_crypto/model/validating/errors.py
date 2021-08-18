@@ -4,7 +4,7 @@
 Contains exceptions to represent validation failures.
 """
 
-from typing import Text, Any, Iterable, Union, Type, Set, Dict
+from typing import Text, Any, Iterable, Union, Type, Set, Dict, List
 
 import validators
 
@@ -241,3 +241,85 @@ class NamingConventionError(ValidationError):
             A Text.
         """
         return f"'{self.name}' did not match naming convention's Regex Pattern {self.naming_pattern}."
+
+
+class WrongValueError(ValidationError):
+    """
+    Exception in case that a value has a wrong type.
+
+    Attributes:
+        expected_value:
+            A type that is expected.
+        actual_value:
+            The actual type, which is not the expected type.
+    """
+    expected_value: List[Any]
+    actual_value: Union[str, int, float]
+
+    def __init__(
+            self,
+            expected_value: List[Any],
+            actual_value: Union[str, int, float]):
+        """
+        Constructor of WrongValueError.
+
+        Args:
+            expected_value:
+                A value that is expected.
+            actual_value:
+                The actual value, which is not the expected value.
+        """
+        super().__init__("Key has wrong value.")
+        self.expected_value = expected_value \
+            if not isinstance(expected_value, Iterable) else set(expected_value)
+        self.actual_value = actual_value
+
+    def __repr__(self) -> Text:
+        """A method for representing a text.
+
+        A text value returning the expected value(s), which is/are unlike the
+        actual value.
+
+        Returns:
+            A Text.
+        """
+        return "Expected value(s) {expected} != actual value {actual}.".format(
+            expected=repr(self.expected_value),
+            actual=repr(self.actual_value)
+        )
+
+
+class WrongCompositeValueError(ValidationError):
+    """
+    Exception in case that a composition of values have the wrong type.
+
+    Attributes:
+        keys:
+            The keys containing the wrong values.
+
+    """
+    keys: List[Union[str, Type]]
+
+    def __init__(self, keys: List[Union[str, Type]]):
+        """
+        Constructor of WrongCompositeValueError.
+
+        Args:
+            keys:
+                A type that is expected.
+        """
+        super().__init__("Too many None values.")
+        self.keys = keys
+
+    def __repr__(self) -> Text:
+        """A method for representing a text.
+
+        A text value returning the expected value(s), which is/are unlike the
+        expected value.
+
+        Returns:
+            A Text.
+        """
+        return "Expected one keys(s) {keys} != None.".format(
+            keys=repr(self.keys)
+        )

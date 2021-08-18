@@ -32,4 +32,3 @@ jobs:
     first_currencies: null  # filter database by the first currency and take all
     second_currencies: null  # filter database by the second currency and take all.
 
-

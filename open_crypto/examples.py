@@ -226,6 +226,8 @@ class Examples:
         query = session.query(OrderBookView).filter(OrderBookView.exchange == exchange,
                                                     OrderBookView.time == timestamp)
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        if dataframe.empty:
+            return
         plt.step(dataframe.bids_price, dataframe.bids_amount.cumsum(), color='green', label='bids')
         plt.step(dataframe.asks_price, dataframe.asks_amount.cumsum(), color='red', label='asks')
 
@@ -261,6 +263,8 @@ class Examples:
                               HistoricRateView.first_currency,
                               HistoricRateView.close).filter(HistoricRateView.first_currency.in_(base_currencies))
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
+        if dataframe.empty:
+            return
         dataframe = pd.pivot_table(dataframe, columns=[dataframe.exchange, dataframe.first_currency],
                                    index=dataframe.index).close['2010-01-01':]
 

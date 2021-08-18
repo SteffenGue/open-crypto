@@ -11,7 +11,7 @@ general:
   operation_settings:
     frequency: 0.1 # once or any number in minutes
     interval: days # minutes, hours, days, weeks, months
-    timeout: 10
+    timeout: 10 # any number in seconds
   utilities:
     enable_logging: false
     yaml_path: resources/running_exchanges/

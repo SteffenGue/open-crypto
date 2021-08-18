@@ -1,13 +1,15 @@
-from typing import Any, Text, Dict
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+# ToDo: Module description and class-tree
+"""
 
-import oyaml as yaml
-import validators
+from typing import Any, Text, Dict
 
 # pylint: disable=too-many-lines
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
-from model.validating.base import Report, CompositeReport, Valid, Validator, CompositeValidator, ProcessingValidator
-from model.validating.errors import KeyNotInDictError, SubstringNotInStringError, WrongTypeError, UrlValidationError, \
-    NamingConventionError
+from model.validating.base import Report, CompositeReport, Valid, Validator, CompositeValidator
+from model.validating.errors import KeyNotInDictError, WrongTypeError,WrongValueError, WrongCompositeValueError
 
 
 class ConfigFileValidator(CompositeValidator):
@@ -31,6 +33,7 @@ class ConfigFileValidator(CompositeValidator):
         Returns:
             Whether further Validators may continue validating.
         """
+
         load_file = LoadFileValidator(self.value)
         is_file_loaded = load_file.validate()
         self.append_report(load_file)
@@ -60,7 +63,7 @@ class ConfigFileValidator(CompositeValidator):
         if not self.report:
             self.validate()
 
-        return
+        return True
 
 
 class ConfigYamlValidator(CompositeValidator):
@@ -80,29 +83,43 @@ class ConfigYamlValidator(CompositeValidator):
         super().__init__(
             value,
             ConfigSectionValidator(value),
-            DatabaseStringValidator(value),
-            # OperationSettingValidator(value),
-            # RequestJobValidator(value),
+            DatabaseStringValidator(value['general']['database']),
+            OperationSettingValidator(value['general']['operation_settings']),
+            UtilitiesValidator(value['general']['utilities']),
+            RequestKeysValidator(value['jobs']),
+            RequestValueValidator(value['jobs'])
         )
 
 
 class ConfigSectionValidator(Validator):
     """
     Validator for ...
-    # ToDo
+
     """
+    block = ['general', 'jobs']
+    section = ['database', 'operation_settings', 'utilities']
+
     def validate(self) -> bool:
-        keys_to_check = ['general', 'jobs']
+
         try:
             for key in self.value.keys():
-                if key not in keys_to_check:
-                    raise KeyNotInDictError(key, dict.fromkeys(keys_to_check))
+                if key not in ConfigSectionValidator.block:
+                    raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
         except KeyNotInDictError as error:
-            has_section = Report(Valid(error))
-            self.report = has_section
+            self.report = Report(Valid(error))
+            return False
         else:
-            has_section = Report(Valid("All keys contained in the config file."))
-            self.report = has_section
+            has_blocks = Report(Valid("All blocks contained in the config file."))
+
+        try:
+            for key in self.value.get('general'):
+                if key not in ConfigSectionValidator.section:
+                    raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.section))
+        except KeyNotInDictError as error:
+            self.report = CompositeReport(has_blocks, Report(Valid(error)))
+            return False
+        else:
+            self.report = Report(Valid("All blocks in configuration file exist."))
 
         return True
 
@@ -112,6 +129,11 @@ class DatabaseStringValidator(Validator):
     Validator for ...
     # ToDo
     """
+    db_strings = {'sqlite': ['sqltype', 'db_name'],
+                  'mariadb': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
+                  'mysql': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
+                  'postgres': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
+                  }
 
     def validate(self) -> bool:
         """Validates the value.
@@ -123,45 +145,46 @@ class DatabaseStringValidator(Validator):
         """
 
         try:
-            db_section = self.value.get("general").\
-                get('database', KeyNotInDictError('database', self.value.get("general")))
+            if 'sqltype' not in self.value:
+                raise KeyNotInDictError('sqltype', self.value)
         except KeyNotInDictError as error:
-            has_keys = Report(Valid(error))
-            self.report = has_keys
+            self.report = Report(Valid(error))
+            return False
         else:
-            has_keys = Report(Valid("Database Section found."))
-            self.report = has_keys
+            sqltype = Report(Valid("Sqltype in keys."))
 
         try:
-            if db_section.get("sqltype", KeyNotInDictError("sql_type", db_section)) == 'sqlite':
-                necessary_keys = ['sqltype', 'db_name']
-                for key in necessary_keys:
-                    db_section.get(key, WrongTypeError('str', type(db_section.get(key))))
-
-            if db_section.get("postgres", KeyNotInDictError("sql_type", db_section)) == 'postgres':
-                necessary_keys = ['sqltype', 'client', 'user_name', 'password', 'host', 'port']
-                for key in necessary_keys:
-                    db_section.get(key, WrongTypeError('str', type(db_section.get(key))))
-
-            if db_section.get("mariadb", KeyNotInDictError("sql_type", db_section)) == 'mariadb':
-                necessary_keys = ['sqltype', 'client', 'user_name', 'password', 'host', 'port']
-                for key in necessary_keys:
-                    db_section.get(key, WrongTypeError('str', type(db_section.get(key))))
-
-        except (KeyNotInDictError, WrongTypeError) as error:
-            has_keys = Report(Valid(error))
-            self.report = has_keys
-
+            for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
+                if key not in self.value.keys():
+                    raise KeyNotInDictError(key, self.value)
+        except KeyNotInDictError as error:
+            self.report = CompositeReport(sqltype, Report(Valid(error)))
+            return False
         else:
-            has_keys = Report(Valid("Database string is complete."))
-            self.report = has_keys
+            db_string = Report(Valid("All keys for database connection string found."))
+
+        try:
+            for key in DatabaseStringValidator.db_strings.get(self.value.get("sqltype")):
+                if self.value.get(key) is None:
+                    raise WrongTypeError(str, type(self.value.get(key)))
+        except WrongTypeError as error:
+            self.report = CompositeReport(sqltype, db_string, Report(Valid(error)))
+            return False
+        else:
+            self.report = Report(Valid("Database section is valid"))
+
+        return True
 
 
 class OperationSettingValidator(Validator):
     """
     # ToDo
-    Validator for ...
     """
+
+    sections = {'frequency': {'type': (str, int), 'values': ['once', *range(0, 44640)]},  # max 31 days
+                'interval': {'type': str, 'values': ['minutes', 'hours', 'days', 'weeks', 'months']},
+                'timeout': {'type': (int, float), 'values': [*range(0, 600)]}  # max 10 minutes
+                }
 
     def validate(self) -> bool:
         """
@@ -171,14 +194,42 @@ class OperationSettingValidator(Validator):
         @return: bool
             Whether further Validators may continue validating.
         """
+
+        try:
+            for key in OperationSettingValidator.sections.keys():
+                if key not in self.value.keys():
+                    raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
+        except KeyNotInDictError as error:
+            self.report = Report(Valid(error))
+            return False
+        else:
+            sections_keys = Report(Valid("All keys for operational_settings exist."))
+
+        try:
+            for key in OperationSettingValidator.sections.keys():
+                if not isinstance(self.value.get(key), OperationSettingValidator.sections.get(key).get('type')):
+                    raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
+                                         type(self.value.get(key)))
+
+                if not self.value.get(key) in OperationSettingValidator.sections.get(key).get('values'):
+                    raise WrongValueError(OperationSettingValidator.sections.get(key).get('values'),
+                                          self.value.get(key))
+        except (WrongTypeError, WrongValueError) as error:
+            self.report = CompositeReport(sections_keys, Report(Valid(error)))
+            return False
+        else:
+            self.report = Report(Valid("Block operation_settings is valid."))
+
         return True
 
 
-class RequestJobValidator(Validator):
+class UtilitiesValidator(Validator):
     """
     Validator for the ??.
 
     """
+    sections = {'enable_logging': {'type': bool},
+                'yaml_path': {'type': str}}
 
     def validate(self) -> bool:
         """Validates the value.
@@ -188,4 +239,115 @@ class RequestJobValidator(Validator):
         @return: bool
             Whether further Validators may continue validating.
         """
+        try:
+            for key in UtilitiesValidator.sections:
+                if key not in self.value.keys():
+                    raise KeyNotInDictError(key, self.value)
+                if not isinstance(self.value.get(key), UtilitiesValidator.sections.get(key).get('type')):
+                    raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
+                                         self.value.get(key))
+
+        except (KeyNotInDictError, WrongTypeError) as error:
+            self.report = Report(Valid(error))
+            return False
+
+        else:
+            self.report = Report(Valid('Block utilities is valid.'))
+
+        return True
+
+
+class RequestKeysValidator(Validator):
+    """
+    Validator for the ??.
+
+    """
+    sections = {'yaml_request_name': {'type': str},
+                'update_cp': {'type': bool, 'nullable': True},
+                'exchanges': {'type': list},
+                'excluded': {'type': list, 'nullable': True},
+                'currency_pairs': {'type': list, 'nullable': True},
+                'first_currencies': {'type': list, 'nullable': True},
+                'second_currencies': {'type': list, 'nullable': True},
+                }
+
+    def validate(self) -> bool:
+        """Validates the value.
+
+        Validates the value attribute while generating a validation Report.
+
+        @return: bool
+            Whether further Validators may continue validating.
+        """
+
+        # if key is not nullable and not in the configuration file or empty
+        try:
+            for job in self.value.keys():
+                for key in RequestKeysValidator.sections.keys():
+                    if not RequestKeysValidator.sections.get(key).get("nullable", False) \
+                            and (key not in self.value.get(job).keys() or not self.value.get(job).get(key)):
+                        raise KeyNotInDictError(key, self.value.get(job))
+        except KeyNotInDictError as error:
+            self.report = Report(Valid(error))
+            return False
+        else:
+            all_keys_exist = Report(Valid("All request keys exist."))
+
+        # if types of configuration file values exist but are not allowed
+        try:
+            for job in self.value.keys():
+                for key in RequestKeysValidator.sections.keys():
+                    if self.value.get(job).get(key) and not \
+                            isinstance(self.value.get(job).get(key), RequestKeysValidator.sections[key].get('type')):
+                        raise WrongTypeError(RequestKeysValidator.sections.get(key).get('type'),
+                                             self.value.get(job).get(key))
+        except WrongTypeError as error:
+            self.report = CompositeReport(all_keys_exist, Report(Valid(error)))
+            return False
+        else:
+            key_types = Report(Valid("All types of existing keys are valid."))
+
+        # if there exist any currency-pairs to request
+        try:
+            for job in self.value.keys():
+                if self.value.get(job).get('yaml_request_name') == 'currency_pairs':
+                    continue
+                if all([self.value.get(job).get("currency_pairs") is None,
+                        self.value.get(job).get("first_currencies") is None,
+                        self.value.get(job).get("second_currencies") is None]):
+
+                    raise WrongCompositeValueError(["currency_pairs", "first_currencies", "second_currencies"])
+
+        except WrongCompositeValueError as error:
+            self.report = CompositeReport(all_keys_exist,
+                                          key_types,
+                                          Report(Valid(error)))
+            return False
+        else:
+            self.report = Report(Valid('Request keys and types are valid.'))
+
+        return True
+
+
+class RequestValueValidator(Validator):
+    """
+    # ToDo
+    """
+    def validate(self) -> bool:
+        try:
+            for job in self.value.keys():
+                if self.value.get(job).get("currency_pairs"):
+                    for item in self.value.get(job).get('currency_pairs'):
+                        if item == 'all':
+                            continue
+                        for key in ['first', 'second']:
+                            if key not in item.keys() and item.keys:
+                                raise KeyNotInDictError(key, item.keys())
+
+        except KeyNotInDictError as error:
+            self.report = Report(Valid(error))
+            return False
+        else:
+            self.report = Report(Valid("Values of currency-pair keys are valid."))
+
         return True
