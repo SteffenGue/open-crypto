@@ -8,8 +8,8 @@ from typing import Any, Text, Dict
 
 # pylint: disable=too-many-lines
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
-from model.validating.base import Report, CompositeReport, Valid, Validator, CompositeValidator
-from model.validating.errors import KeyNotInDictError, WrongTypeError,WrongValueError, WrongCompositeValueError
+from model.validating.base import Report, CompositeReport, Validator, CompositeValidator
+from model.validating.errors import KeyNotInDictError, WrongTypeError, WrongValueError, WrongCompositeValueError
 
 
 class ConfigFileValidator(CompositeValidator):
@@ -106,20 +106,20 @@ class ConfigSectionValidator(Validator):
                 if key not in ConfigSectionValidator.block:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
         except KeyNotInDictError as error:
-            self.report = Report(Valid(error))
+            self.report = Report(error)
             return False
         else:
-            has_blocks = Report(Valid("All blocks contained in the config file."))
+            has_blocks = Report("All blocks contained in the config file.")
 
         try:
             for key in self.value.get('general'):
                 if key not in ConfigSectionValidator.section:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.section))
         except KeyNotInDictError as error:
-            self.report = CompositeReport(has_blocks, Report(Valid(error)))
+            self.report = CompositeReport(has_blocks, Report(error))
             return False
         else:
-            self.report = Report(Valid("All blocks in configuration file exist."))
+            self.report = Report("All blocks in configuration file exist.")
 
         return True
 
@@ -148,30 +148,30 @@ class DatabaseStringValidator(Validator):
             if 'sqltype' not in self.value:
                 raise KeyNotInDictError('sqltype', self.value)
         except KeyNotInDictError as error:
-            self.report = Report(Valid(error))
+            self.report = Report(error)
             return False
         else:
-            sqltype = Report(Valid("Sqltype in keys."))
+            sqltype = Report("Sqltype in keys.")
 
         try:
             for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
                 if key not in self.value.keys():
                     raise KeyNotInDictError(key, self.value)
         except KeyNotInDictError as error:
-            self.report = CompositeReport(sqltype, Report(Valid(error)))
+            self.report = CompositeReport(sqltype, Report(error))
             return False
         else:
-            db_string = Report(Valid("All keys for database connection string found."))
+            db_string = Report("All keys for database connection string found.")
 
         try:
             for key in DatabaseStringValidator.db_strings.get(self.value.get("sqltype")):
                 if self.value.get(key) is None:
                     raise WrongTypeError(str, type(self.value.get(key)))
         except WrongTypeError as error:
-            self.report = CompositeReport(sqltype, db_string, Report(Valid(error)))
+            self.report = CompositeReport(sqltype, db_string, Report(error))
             return False
         else:
-            self.report = Report(Valid("Database section is valid"))
+            self.report = Report("Database section is valid")
 
         return True
 
@@ -200,10 +200,10 @@ class OperationSettingValidator(Validator):
                 if key not in self.value.keys():
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
         except KeyNotInDictError as error:
-            self.report = Report(Valid(error))
+            self.report = Report(error)
             return False
         else:
-            sections_keys = Report(Valid("All keys for operational_settings exist."))
+            sections_keys = Report("All keys for operational_settings exist.")
 
         try:
             for key in OperationSettingValidator.sections.keys():
@@ -215,10 +215,10 @@ class OperationSettingValidator(Validator):
                     raise WrongValueError(OperationSettingValidator.sections.get(key).get('values'),
                                           self.value.get(key))
         except (WrongTypeError, WrongValueError) as error:
-            self.report = CompositeReport(sections_keys, Report(Valid(error)))
+            self.report = CompositeReport(sections_keys, Report(error))
             return False
         else:
-            self.report = Report(Valid("Block operation_settings is valid."))
+            self.report = Report("Block operation_settings is valid.")
 
         return True
 
@@ -248,11 +248,11 @@ class UtilitiesValidator(Validator):
                                          self.value.get(key))
 
         except (KeyNotInDictError, WrongTypeError) as error:
-            self.report = Report(Valid(error))
+            self.report = Report(error)
             return False
 
         else:
-            self.report = Report(Valid('Block utilities is valid.'))
+            self.report = Report('Block utilities is valid.')
 
         return True
 
@@ -288,10 +288,10 @@ class RequestKeysValidator(Validator):
                             and (key not in self.value.get(job).keys() or not self.value.get(job).get(key)):
                         raise KeyNotInDictError(key, self.value.get(job))
         except KeyNotInDictError as error:
-            self.report = Report(Valid(error))
+            self.report = Report(error)
             return False
         else:
-            all_keys_exist = Report(Valid("All request keys exist."))
+            all_keys_exist = Report("All request keys exist.")
 
         # if types of configuration file values exist but are not allowed
         try:
@@ -302,10 +302,10 @@ class RequestKeysValidator(Validator):
                         raise WrongTypeError(RequestKeysValidator.sections.get(key).get('type'),
                                              self.value.get(job).get(key))
         except WrongTypeError as error:
-            self.report = CompositeReport(all_keys_exist, Report(Valid(error)))
+            self.report = CompositeReport(all_keys_exist, Report(error))
             return False
         else:
-            key_types = Report(Valid("All types of existing keys are valid."))
+            key_types = Report("All types of existing keys are valid.")
 
         # if there exist any currency-pairs to request
         try:
@@ -321,10 +321,10 @@ class RequestKeysValidator(Validator):
         except WrongCompositeValueError as error:
             self.report = CompositeReport(all_keys_exist,
                                           key_types,
-                                          Report(Valid(error)))
+                                          Report(error))
             return False
         else:
-            self.report = Report(Valid('Request keys and types are valid.'))
+            self.report = Report('Request keys and types are valid.')
 
         return True
 
@@ -345,9 +345,9 @@ class RequestValueValidator(Validator):
                                 raise KeyNotInDictError(key, item.keys())
 
         except KeyNotInDictError as error:
-            self.report = Report(Valid(error))
+            self.report = Report(error)
             return False
         else:
-            self.report = Report(Valid("Values of currency-pair keys are valid."))
+            self.report = Report("Values of currency-pair keys are valid.")
 
         return True
