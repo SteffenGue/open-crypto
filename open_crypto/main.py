@@ -22,7 +22,6 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
-from validate import ConfigValidator
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -140,11 +139,11 @@ def run(file: str = None, path: str = None) -> None:
     db_params = read_config(file=file, section="database", reset=True)
     init_logger(path, program_config)
 
-    logging.info('Validating user configuration file.')
-    valid, report = ConfigValidator.validate_config_file()
-    if not valid:
-        print(report)
-        raise SystemExit
+    # logging.info('Validating user configuration file.')
+    # valid, report = ConfigValidator.validate_config_file()
+    # if not valid:
+    #     print(report)
+    #     raise SystemExit
 
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata,
