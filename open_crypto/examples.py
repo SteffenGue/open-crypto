@@ -132,7 +132,7 @@ class Examples:
         ax2.set_ylabel("Million")
         ax2.set_xlabel("Time (Daily)")
         plt.title("Bitcoin Total Coin Supply")
-        # plt.tight_layout()
+        plt.tight_layout()
         plt.show()
 
     @staticmethod
