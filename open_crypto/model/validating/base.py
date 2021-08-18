@@ -2,6 +2,13 @@
 # -*- coding: utf-8 -*-
 """
 Contains base validators and reports to represent validation results.
+
+Classes:
+    - Validator
+    - CompositeValidator
+    - ProcessingValidator
+    - Report
+    - CompositeReport
 """
 
 from __future__ import annotations
@@ -9,13 +16,14 @@ from __future__ import annotations
 import abc
 import re
 import textwrap
-from typing import Text, Union, Any, Optional
+from typing import Text, Union, Any
 
 
 class Validator(abc.ABC):
-    """Validator Base Class.
+    """
+    Base class for all validators.
 
-    Class for validating the value used in instantiation.
+    It offers functionality to validate a given value and to create a report of the validation process.
 
     Attributes:
         value:
@@ -24,12 +32,9 @@ class Validator(abc.ABC):
             The report created during validation.
     """
 
-    value: Any
-    report: Optional[Report]
-
     def __init__(self, value: Union[Any, Validator]):
         """
-        Constructor of Validator Base class.
+        Constructor of Validator.
 
         @param value: The value to get validated or a validator having the result value.
         """
@@ -42,7 +47,7 @@ class Validator(abc.ABC):
 
     def get_result_value(self) -> Any:
         """
-        Returns the value of the validator.
+        Gets the value of the validator.
 
         @return: The value of the Validator.
         """
@@ -51,11 +56,9 @@ class Validator(abc.ABC):
     @abc.abstractmethod
     def validate(self) -> bool:
         """
-        Validates the value.
+        Validates the value and produces a report of the validation process.
 
-        Validates the value attribute while generating a validation Report.
-
-        @return: Whether further Validators may continue validating.
+        @return: True if the value is valid, False otherwise.
         """
         raise NotImplementedError
 
@@ -67,18 +70,15 @@ class Validator(abc.ABC):
 
 
 class CompositeValidator(Validator):
-    """Composite Validator.
-
-    CompositeValidator containing a list of Validators while being
-    a Validator itself.
+    """
+    A composite validator that combines multiple validators.
 
     Attributes:
         validators:
             A List of children Validators.
     """
-    validators: list[Validator]
 
-    def __init__(self, value: Any, *child_validators: Validator):
+    def __init__(self, value: Union[Any, Validator], *child_validators: Validator):
         """
         Constructor of CompositeValidator.
 
@@ -92,16 +92,14 @@ class CompositeValidator(Validator):
 
     def append_validator(self, validator: Validator) -> None:
         """
-        Appends a validator to validators.
+        Adds a validator to the composite validator.
 
-        @param validator: The validator to get appended to list of validators.
+        @param validator: The validator to be added to the composite validator.
         """
         self.validators.append(validator)
 
     def append_report(self, report: Union[Validator, Report]) -> None:
         """
-        Appends a Report.
-
         Appends a Report or the Report of a Validator to the CompositeReport.
 
         @param report: A Validator whose Report will get appended or a Report.
@@ -127,8 +125,6 @@ class CompositeValidator(Validator):
 
     def validate(self) -> bool:
         """
-        Validates the value.
-
         Validates the value attribute while generating a validation Report.
 
         @return: Whether further Validators may continue validating.
@@ -146,66 +142,58 @@ class CompositeValidator(Validator):
 
 
 class ProcessingValidator(Validator):
-    """Special Validator for processing the value.
+    """
+    Special Validator for processing a value.
 
-    Special validator for producing a result value from
-    the processing of the given value.
+    It produces a result value from the given value.
 
     Attributes:
         result:
             The result produced from the initial value.
     """
 
-    result: Any
-
     def __init__(self, value: Any):
-        """Constructor of ProcessingValidator.
-
-        Args:
-            value:
-                The value to get validated.
         """
+        Constructor of ProcessingValidator.
 
+        @param value: The value to get validated.
+        """
         super().__init__(value)
 
         self.result = None
 
     @abc.abstractmethod
     def process(self) -> Any:
-        """Processes the value.
+        """
+        Processes the value.
 
         Returns the result value from processing the initial value.
 
-        Returns:
-            The result value.
+        @return: The result value.
         """
-
         raise NotImplementedError
 
     def get_result_value(self) -> Any:
-        """Returns the result.
+        """
+        Gets the result value.
 
-        Returns the result value.
-
-        Returns:
-            The result value.
+        @return: The result value.
         """
         return self.result
 
     def validate(self) -> bool:
-        """Validates the value.
-
+        """
         Validates the value attribute while generating a validation Report.
 
-        Returns:
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
         self.result = self.process()
+        return True
 
 
-class Valid:
+class _Valid:
     """
-    Wrapper class for Exception or Text
+    Wrapper class for Exception or Text.
 
     Wrapper class for wrapping Exceptions or Text while providing a
     boolean value (False for Exceptions, True otherwise).
@@ -214,7 +202,6 @@ class Valid:
         message:
             An Exception instance or a Text message (str).
     """
-    message: Union[Exception, Text]
 
     def __init__(self, message: Union[Exception, Text]):
         """
@@ -230,7 +217,7 @@ class Valid:
         """
         return not isinstance(self.message, Exception)
 
-    def __repr__(self) -> Text:
+    def __str__(self) -> Text:
         """
         A method for representing a message in text format.
 
@@ -240,7 +227,7 @@ class Valid:
         @return: "-" for Exceptions, "+" otherwise.
         """
         sign = "+" if self else "-"
-        return sign + " " + repr(self.message)
+        return sign + " " + str(self.message)
 
 
 class Report:
@@ -254,26 +241,23 @@ class Report:
         messages:
             List of wrapped Exceptions or Messages.
     """
-    messages: list[Valid]
 
-    def __init__(self, *messages: Valid):
+    def __init__(self, *messages: Union[Exception, Text]):
         """
         Constructor of Report.
 
         @param messages: A variable-length sequence of Valid objects.
         """
-        self.messages = list(messages)
+        self.messages = [_Valid(message) for message in messages]
 
     def indented_report(self) -> Text:
         """
-        Indents the report.
-
         Indents the generated report representation according to the
         opening and closing brackets.
 
         @return: The indented representation.
         """
-        report = repr(self)
+        report = str(self)
 
         report = re.sub(r"\[", "[\n", report)
         report = re.sub(r",", ",\n", report)
@@ -304,8 +288,6 @@ class Report:
 
     def __bool__(self) -> bool:
         """
-        A boolean value.
-
         A boolean value returning True if all elements in messages are True,
         otherwise returning False.
 
@@ -313,7 +295,7 @@ class Report:
         """
         return all(self.messages)
 
-    def __repr__(self) -> Text:
+    def __str__(self) -> Text:
         """
         A method for representing a message in text format.
 
@@ -323,10 +305,21 @@ class Report:
         @return: "-" for Exceptions, "+" otherwise.
         """
         if len(self.messages) == 1:
-            return repr(self.messages[0])
+            return str(self.messages[0])
 
         sign = "+" if self else "-"
-        return sign + " " + repr(self.messages)
+        return sign + " " + str(self.messages)
+
+    def __repr__(self) -> str:
+        """
+        A method for representing a message in text format.
+
+        A text value returning "-" and the respective message, if message is a
+        Exception, otherwise "+" and the respective message.
+
+        @return: "-" for Exceptions, "+" otherwise.
+        """
+        return self.__str__()
 
 
 class CompositeReport(Report):
@@ -337,7 +330,6 @@ class CompositeReport(Report):
         reports:
             A list of child Reports.
     """
-    reports: list[Report]
 
     def __init__(self, *reports: Report):
         """
@@ -351,8 +343,6 @@ class CompositeReport(Report):
 
     def append_report(self, report: Union[Report, Validator]) -> None:
         """
-        Appends a Report to reports.
-
         Appends a Report or a Validator's Report to children reports.
 
         @param report: A Report or Validator containing a Report.
@@ -364,8 +354,6 @@ class CompositeReport(Report):
 
     def __bool__(self) -> bool:
         """
-        A boolean value.
-
         A boolean value returning True if all elements in reports are True,
         otherwise returning False.
 
@@ -373,7 +361,7 @@ class CompositeReport(Report):
         """
         return all(self.reports)
 
-    def __repr__(self) -> Text:
+    def __str__(self) -> Text:
         """
         A method for representing a report in text format.
 
@@ -383,4 +371,12 @@ class CompositeReport(Report):
         @return: "-" for Exceptions, "+" otherwise.
         """
         sign = "+" if self else "-"
-        return sign + " " + repr(self.reports)
+        return sign + " " + str(self.reports)
+
+    def __len__(self) -> int:
+        """
+        Gets the report count.
+
+        @return: The report count.
+        """
+        return len(self.reports)
