@@ -44,8 +44,9 @@ class GlobalConfig(object):
             # (i.e. config files and exchange mappings). The resources will be copied into the current working
             # directory and taken by the program from there.
             os.path.dirname(os.path.realpath(__file__)).index(self.path)
+            self.path = os.path.dirname(os.path.realpath(__file__)) + "/user_configs/"
         except ValueError:
-            self.path = os.path.dirname(os.path.realpath(__file__)) + "/user_configs"
+            pass
 
     def set_file(self, file: Optional[str] = None) -> None:
         """

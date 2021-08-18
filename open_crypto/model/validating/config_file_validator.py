@@ -181,7 +181,7 @@ class OperationSettingValidator(Validator):
     # ToDo
     """
 
-    sections = {'frequency': {'type': (str, int), 'values': ['once', *range(0, 44640)]},  # max 31 days
+    sections = {'frequency': {'type': (str, int, float), 'values': ['once', *range(0, 44640)]},  # max 31 days
                 'interval': {'type': str, 'values': ['minutes', 'hours', 'days', 'weeks', 'months']},
                 'timeout': {'type': (int, float), 'values': [*range(0, 600)]}  # max 10 minutes
                 }
