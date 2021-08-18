@@ -176,7 +176,3 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
         main.run(configuration_file, working_directory)
     except SystemExit:
         pass
-
-
-if __name__ == '__main__':
-    run()
