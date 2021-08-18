@@ -29,7 +29,6 @@ import ssl
 from datetime import timedelta
 from pathlib import Path
 from typing import Any, Optional, Dict, List
-
 import certifi
 import dateutil.parser
 import oyaml as yaml
