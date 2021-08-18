@@ -9,7 +9,7 @@ python validate.py { all | <exchange_name> }
 
 import os
 import sys
-from typing import Optional, Union, Tuple
+from typing import Optional, Tuple
 
 from model.validating.base import Report, CompositeReport
 from model.validating.api_map_validators import ApiMapFileValidator
@@ -40,11 +40,15 @@ def report_error(report: Report) -> Optional[Report]:
 
 class ConfigValidator:
     """
-    # ToDo
+    Class to validate the configuration file.
     """
 
     @staticmethod
     def validate_config_file() -> Tuple[bool, Report]:
+        """
+        Calls the ConfigValidator
+        :return: Validation result and report.
+        """
         validator = ConfigFileValidator(GlobalConfig().file)
         if validator.validate():
             return True, validator.report

@@ -4,7 +4,7 @@
 Contains exceptions to represent validation failures.
 """
 
-from typing import Text, Any, Iterable, Union, Type, Set, Dict, List
+from typing import Text, Any, Iterable, Union, Type, Dict, List
 
 import validators
 

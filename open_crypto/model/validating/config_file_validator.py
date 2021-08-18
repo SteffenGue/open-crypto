@@ -102,7 +102,7 @@ class ConfigSectionValidator(Validator):
     def validate(self) -> bool:
 
         try:
-            for key in self.value.keys():
+            for key in self.value:
                 if key not in ConfigSectionValidator.block:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
         except KeyNotInDictError as error:
@@ -155,7 +155,7 @@ class DatabaseStringValidator(Validator):
 
         try:
             for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
-                if key not in self.value.keys():
+                if key not in self.value:
                     raise KeyNotInDictError(key, self.value)
         except KeyNotInDictError as error:
             self.report = CompositeReport(sqltype, Report(error))
@@ -196,8 +196,8 @@ class OperationSettingValidator(Validator):
         """
 
         try:
-            for key in OperationSettingValidator.sections.keys():
-                if key not in self.value.keys():
+            for key in OperationSettingValidator.sections:
+                if key not in self.value:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
         except KeyNotInDictError as error:
             self.report = Report(error)
@@ -206,7 +206,7 @@ class OperationSettingValidator(Validator):
             sections_keys = Report("All keys for operational_settings exist.")
 
         try:
-            for key in OperationSettingValidator.sections.keys():
+            for key in OperationSettingValidator.sections:
                 if not isinstance(self.value.get(key), OperationSettingValidator.sections.get(key).get('type')):
                     raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
                                          type(self.value.get(key)))
@@ -241,7 +241,7 @@ class UtilitiesValidator(Validator):
         """
         try:
             for key in UtilitiesValidator.sections:
-                if key not in self.value.keys():
+                if key not in self.value:
                     raise KeyNotInDictError(key, self.value)
                 if not isinstance(self.value.get(key), UtilitiesValidator.sections.get(key).get('type')):
                     raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
@@ -282,8 +282,8 @@ class RequestKeysValidator(Validator):
 
         # if key is not nullable and not in the configuration file or empty
         try:
-            for job in self.value.keys():
-                for key in RequestKeysValidator.sections.keys():
+            for job in self.value:
+                for key in RequestKeysValidator.sections:
                     if not RequestKeysValidator.sections.get(key).get("nullable", False) \
                             and (key not in self.value.get(job).keys() or not self.value.get(job).get(key)):
                         raise KeyNotInDictError(key, self.value.get(job))
@@ -295,8 +295,8 @@ class RequestKeysValidator(Validator):
 
         # if types of configuration file values exist but are not allowed
         try:
-            for job in self.value.keys():
-                for key in RequestKeysValidator.sections.keys():
+            for job in self.value:
+                for key in RequestKeysValidator.sections:
                     if self.value.get(job).get(key) and not \
                             isinstance(self.value.get(job).get(key), RequestKeysValidator.sections[key].get('type')):
                         raise WrongTypeError(RequestKeysValidator.sections.get(key).get('type'),
@@ -309,7 +309,7 @@ class RequestKeysValidator(Validator):
 
         # if there exist any currency-pairs to request
         try:
-            for job in self.value.keys():
+            for job in self.value:
                 if self.value.get(job).get('yaml_request_name') == 'currency_pairs':
                     continue
                 if all([self.value.get(job).get("currency_pairs") is None,
@@ -335,7 +335,7 @@ class RequestValueValidator(Validator):
     """
     def validate(self) -> bool:
         try:
-            for job in self.value.keys():
+            for job in self.value:
                 if self.value.get(job).get("currency_pairs"):
                     for item in self.value.get(job).get('currency_pairs'):
                         if item == 'all':
