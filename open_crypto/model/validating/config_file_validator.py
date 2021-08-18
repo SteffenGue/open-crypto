@@ -296,10 +296,10 @@ class RequestKeysValidator(Validator):
         # if types of configuration file values exist but are not allowed
         try:
             for job in self.value:
-                for key in RequestKeysValidator.sections:
+                for key, val in RequestKeysValidator.sections.items():
                     if self.value.get(job).get(key) and not \
-                            isinstance(self.value.get(job).get(key), RequestKeysValidator.sections[key].get('type')):
-                        raise WrongTypeError(RequestKeysValidator.sections.get(key).get('type'),
+                            isinstance(self.value.get(job).get(key), val.get('type')):
+                        raise WrongTypeError(val.get('type'),
                                              self.value.get(job).get(key))
         except WrongTypeError as error:
             self.report = CompositeReport(all_keys_exist, Report(error))
