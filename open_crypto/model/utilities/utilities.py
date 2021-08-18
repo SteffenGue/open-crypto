@@ -35,8 +35,9 @@ import oyaml as yaml
 import pandas as pd
 
 from model.utilities.time_helper import TimeHelper, TimeUnit
-from resources.configs.global_config import GlobalConfig
 from model.utilities.kill_switch import KillSwitch
+from resources.configs.global_config import GlobalConfig
+
 
 TYPE_CONVERSIONS = {
     ("float", "from_timestamp"): {
