@@ -37,6 +37,7 @@ import pandas as pd
 
 from model.utilities.time_helper import TimeHelper, TimeUnit
 from resources.configs.global_config import GlobalConfig
+from model.utilities.kill_switch import KillSwitch
 
 TYPE_CONVERSIONS = {
     ("float", "from_timestamp"): {
@@ -465,6 +466,7 @@ def signal_handler(signal_number: Any, stack: Any) -> None:
     """
     Helper function to exit the program. When CTRL+C is hit, the program will shut down with exit code(0).
     """
+    KillSwitch().reset()
     print("\nExiting program.")
     raise SystemExit
 
