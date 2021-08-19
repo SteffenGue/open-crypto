@@ -22,7 +22,7 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 from model.utilities.utilities import signal_handler, init_logger
 from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
-from validate import ConfigValidator, report_error
+from validate import ConfigValidator
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -145,8 +145,8 @@ def run(file: str = None, path: str = None) -> None:
 
     if not valid:
         logging.error(report.print_report())
-        for r in report.reports:
-            print(r)
+        for nested_report in report.reports:
+            print(nested_report)
             raise SystemExit
 
     logging.info("Establishing Database Connection")

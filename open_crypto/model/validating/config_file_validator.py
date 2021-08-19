@@ -9,7 +9,7 @@ from pandas import Interval
 
 # pylint: disable=too-many-lines
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
-from model.validating.base import Report, CompositeReport, Validator, CompositeValidator
+from model.validating.base import Report, Validator, CompositeValidator
 from model.validating.errors import KeyNotInDictError, WrongTypeError, WrongValueError, WrongCompositeValueError
 
 
@@ -54,8 +54,8 @@ class ConfigFileValidator(CompositeValidator):
         config_file = ConfigYamlValidator(load_yaml.get_result_value())
         can_continue = config_file.validate()
         try:
-            for r in config_file.report.reports:
-                self.append_report(r)
+            for report in config_file.report.reports:
+                self.append_report(report)
         except (TypeError, Exception):
             self.append_report(config_file)
 
@@ -270,7 +270,7 @@ class UtilitiesValidator(Validator):
                     raise KeyNotInDictError(key, self.value)
 
                 if not isinstance(self.value.get(key), UtilitiesValidator.sections.get(key).get('type')):
-                    raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
+                    raise WrongTypeError(UtilitiesValidator.sections.get(key).get('type'),
                                          self.value.get(key))
 
         except (KeyNotInDictError, WrongTypeError) as error:
