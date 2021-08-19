@@ -35,7 +35,6 @@ class KillSwitch(object):
     def __init__(self) -> None:
         """
         Constructor
-        # ToDo Bug in examples wenn Kill bevor Daten gesammelt wurden. KillSwitch geht nicht zurück auf True.
         """
         if not self.__is_initialized:
             self.__is_initialized = True
@@ -67,8 +66,9 @@ class KillSwitch(object):
         """
         return self
 
-    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> True:
         """
         Kill the process and exits the context manager.
         """
         self.reset()
+        return True

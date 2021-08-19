@@ -1,7 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-# ToDo: Module description and class-tree
+Validator classes to validate the configuration file passed by the user. The module checks for existence, types and
+values of necessary parameters. The file is executed in main.py before initializing the program.
+
+Classes:
+    - ConfigFileValidator(
+        - ConfigYamlValidator(
+            -> super().__init__(
+            -    ConfigSectionValidator
+            -    DatabaseStringValidator
+            -    OperationSettingKeyValidator
+            -    OperationSettingValueValidator
+            -    UtilitiesValidator
+            -    RequestKeysValidator
+            -    RequestValueValidator
+            )
+        )
+    )
+
+
 """
 
 from typing import Any, Text, Dict
@@ -80,9 +98,8 @@ class ConfigYamlValidator(CompositeValidator):
     def __init__(self, value: Dict[Text, Any]):
         """Constructor of ApiMapValidator.
 
-        Args:
-            value:
-                The value to get validated.
+        @param value:
+            The value to get validated.
         """
 
         super().__init__(
@@ -99,7 +116,7 @@ class ConfigYamlValidator(CompositeValidator):
 
 class ConfigSectionValidator(Validator):
     """
-    Validator for ...
+    Validates if all sections and blocks are present.
 
     """
     block = ['general', 'jobs']
@@ -129,8 +146,8 @@ class ConfigSectionValidator(Validator):
 
 class DatabaseStringValidator(Validator):
     """
-    Validator for ...
-    # ToDo
+    Validates if all required database parameters exist to form the connection string.
+
     """
     db_strings = {'sqlite': ['sqltype', 'db_name'],
                   'mariadb': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
@@ -171,7 +188,8 @@ class DatabaseStringValidator(Validator):
 
 class OperationSettingKeyValidator(Validator):
     """
-    # ToDo
+    Validates if all necessary keys exist in the section 'operational_settings'.
+
     """
 
     sections = {'frequency': (str, int, float),  # max 31 days
@@ -188,7 +206,7 @@ class OperationSettingKeyValidator(Validator):
             Whether further Validators may continue validating.
         """
 
-        # Does key exist in cofig file
+        # Does key exist in config file
         try:
             for key, val in OperationSettingKeyValidator.sections.items():
 
@@ -209,7 +227,8 @@ class OperationSettingKeyValidator(Validator):
 
 class OperationSettingValueValidator(Validator):
     """
-    # ToDo
+    Validates if all necessary keys have correctly specified values in the section 'operational_settings'.
+
     """
 
     sections = {'frequency': Interval(0, 44640, "both"),  # max 31 days
@@ -249,7 +268,7 @@ class OperationSettingValueValidator(Validator):
 
 class UtilitiesValidator(Validator):
     """
-    Validator for the ??.
+    Validates if all necessary keys exist in the section 'utilities' and if the types are correct.
 
     """
     sections = {'enable_logging': {'type': bool},
@@ -284,7 +303,7 @@ class UtilitiesValidator(Validator):
 
 class RequestKeysValidator(Validator):
     """
-    Validator for the ??.
+    Validates if all keys exist and types are correct for the request itself.
 
     """
     sections = {'yaml_request_name': {'type': str},
@@ -327,7 +346,7 @@ class RequestKeysValidator(Validator):
 
 class RequestValueValidator(Validator):
     """
-    # ToDo
+    Validates if exchange and currency-pairs are specified and not None.
     """
 
     def validate(self) -> bool:
@@ -351,9 +370,6 @@ class RequestValueValidator(Validator):
                         self.value.get(job).get("first_currencies") is None,
                         self.value.get(job).get("second_currencies") is None]):
                     raise WrongCompositeValueError(["currency_pairs", "first_currencies", "second_currencies"])
-
-
-
 
         except (WrongCompositeValueError, KeyNotInDictError) as error:
             self.report = Report(error)
