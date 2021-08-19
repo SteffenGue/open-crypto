@@ -89,7 +89,8 @@ class ConfigYamlValidator(CompositeValidator):
             value,
             ConfigSectionValidator(value),
             DatabaseStringValidator(value['general']['database']),
-            OperationSettingValidator(value['general']['operation_settings']),
+            OperationSettingKeyValidator(value['general']['operation_settings']),
+            OperationSettingValueValidator(value['general']['operation_settings']),
             UtilitiesValidator(value['general']['utilities']),
             RequestKeysValidator(value['jobs']),
             RequestValueValidator(value['jobs'])
@@ -107,25 +108,23 @@ class ConfigSectionValidator(Validator):
     def validate(self) -> bool:
 
         try:
+
             for key in self.value:
                 if key not in ConfigSectionValidator.block:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
+
+            for key in self.value.get('general'):
+                if key not in ConfigSectionValidator.section:
+                    raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.section))
+
         except KeyNotInDictError as error:
             self.report = Report(error)
             return False
 
-        try:
-            for key in self.value.get('general'):
-                if key not in ConfigSectionValidator.section:
-                    raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.section))
-        except KeyNotInDictError as error:
-            self.report = CompositeReport(has_blocks, Report(error))
-            return False
         else:
             self.report = Report(f"Configuration contains all blocks {ConfigSectionValidator.block} and"
                                  f" sections: {ConfigSectionValidator.section}")
-
-        return True
+            return True
 
 
 class DatabaseStringValidator(Validator):
@@ -149,40 +148,35 @@ class DatabaseStringValidator(Validator):
         """
 
         try:
+
             if 'sqltype' not in self.value:
                 raise KeyNotInDictError('sqltype', self.value)
-        except KeyNotInDictError as error:
+
+            for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
+
+                if key not in self.value:
+                    raise KeyNotInDictError(key, self.value)
+
+                if self.value.get(key) is None:
+                    raise WrongTypeError(str, type(self.value.get(key)))
+
+        except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)
             return False
 
-        try:
-            for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
-                if key not in self.value:
-                    raise KeyNotInDictError(key, self.value)
-        except KeyNotInDictError as error:
-            self.report = CompositeReport(sqltype, Report(error))
-            return False
-
-        try:
-            for key in DatabaseStringValidator.db_strings.get(self.value.get("sqltype")):
-                if self.value.get(key) is None:
-                    raise WrongTypeError(str, type(self.value.get(key)))
-        except WrongTypeError as error:
-            self.report = CompositeReport(sqltype, db_string, Report(error))
-            return False
         else:
             self.report = Report("Database connection string is valid")
             return True
 
 
-class OperationSettingValidator(Validator):
+class OperationSettingKeyValidator(Validator):
     """
     # ToDo
     """
 
-    sections = {'frequency': {'type': (str, int, float), 'values': ['once', Interval(0, 44640, "both")]},  # max 31 days
-                'interval': {'type': (str, type(None)), 'values': ['minutes', 'hours', 'days', 'weeks', 'months']},
-                'timeout': {'type': (int, float), 'values': [Interval(0, 600, 'both')]}  # max 10 minutes
+    sections = {'frequency': (str, int, float),  # max 31 days
+                'interval':  (str, type(None)),
+                'timeout': (int, float),   # max 10 minutes
                 }
 
     def validate(self) -> bool:
@@ -196,20 +190,56 @@ class OperationSettingValidator(Validator):
 
         # Does key exist in cofig file
         try:
-            for key, val in OperationSettingValidator.sections.items():
+            for key, val in OperationSettingKeyValidator.sections.items():
 
                 if key not in self.value:
-                    raise KeyNotInDictError(key, dict.fromkeys(OperationSettingValidator.sections))
+                    raise KeyNotInDictError(key, dict.fromkeys(OperationSettingKeyValidator.sections))
 
-                if not isinstance(self.value.get(key), val.get('type')):
-                    raise WrongTypeError(val.get('type'), type(self.value.get(key)))
+                if not isinstance(self.value.get(key), val):
+                    raise WrongTypeError(val, type(self.value.get(key)))
 
-        except KeyNotInDictError as error:
+        except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)
             return False
 
-        except WrongTypeError as error:
-            self.report = CompositeReport(sections_keys, Report(error))
+        else:
+            self.report = Report("Operation_settings have valid keys")
+            return True
+
+
+class OperationSettingValueValidator(Validator):
+    """
+    # ToDo
+    """
+
+    sections = {'frequency': Interval(0, 44640, "both"),  # max 31 days
+                'interval':['minutes', 'hours', 'days', 'weeks', 'months'],
+                'timeout': Interval(0, 600, 'both'),  # max 10 minutes
+                }
+
+    def validate(self) -> bool:
+        """
+        Validates the value.
+        Validates the value attribute while generating a validation Report.
+
+        @return: bool
+            Whether further Validators may continue validating.
+        """
+
+
+        try:
+            for key, val in OperationSettingValueValidator.sections.items():
+
+                if key == 'frequency' and isinstance(self.value.get(key), str):
+                    if not self.value.get(key) == 'once':
+                        raise WrongValueError(["once", val], self.value.get(key))
+                    continue
+
+                if not self.value.get(key) in val:
+                    raise WrongValueError(val, self.value.get(key))
+
+        except WrongValueError as error:
+            self.report = Report(error)
             return False
 
         else:
@@ -235,8 +265,10 @@ class UtilitiesValidator(Validator):
         """
         try:
             for key in UtilitiesValidator.sections:
+
                 if key not in self.value:
                     raise KeyNotInDictError(key, self.value)
+
                 if not isinstance(self.value.get(key), UtilitiesValidator.sections.get(key).get('type')):
                     raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
                                          self.value.get(key))
@@ -247,8 +279,7 @@ class UtilitiesValidator(Validator):
 
         else:
             self.report = Report('Utilities are valid')
-
-        return True
+            return True
 
 
 class RequestKeysValidator(Validator):
@@ -285,42 +316,25 @@ class RequestKeysValidator(Validator):
                     if not isinstance(self.value.get(job).get(key), val.get('type')):
                         raise WrongTypeError(val.get('type'), self.value.get(job).get(key))
 
-        except KeyNotInDictError as error:
+        except (KeyNotInDictError, KeyNotInDictError) as error:
             self.report = Report(error)
             return False
-        except WrongTypeError as error:
-            self.report = CompositeReport(all_keys_exist, Report(error))
-            return False
 
-        # if there exist any currency-pairs to request
-        try:
-            for job in self.value:
-                if self.value.get(job).get('yaml_request_name') == 'currency_pairs':
-                    continue
-                if all([self.value.get(job).get("currency_pairs") is None,
-                        self.value.get(job).get("first_currencies") is None,
-                        self.value.get(job).get("second_currencies") is None]):
-
-                    raise WrongCompositeValueError(["currency_pairs", "first_currencies", "second_currencies"])
-
-        except WrongCompositeValueError as error:
-            self.report = CompositeReport(all_keys_exist,
-                                          key_types,
-                                          Report(error))
-            return False
         else:
             self.report = Report('Request keys and types are valid.')
-
-        return True
+            return True
 
 
 class RequestValueValidator(Validator):
     """
     # ToDo
     """
+
     def validate(self) -> bool:
         try:
             for job in self.value:
+
+                # if key 'currency-pairs' is specified
                 if self.value.get(job).get("currency_pairs"):
                     for item in self.value.get(job).get('currency_pairs'):
                         if item == 'all':
@@ -329,10 +343,22 @@ class RequestValueValidator(Validator):
                             if key not in item.keys() and item.keys:
                                 raise KeyNotInDictError(key, item.keys())
 
-        except KeyNotInDictError as error:
+                # if neither currency-pairs nor first_currencies or second_currencies are specified. That is only
+                # allowed for the request method 'currency_pairs'.
+                if self.value.get(job).get('yaml_request_name') == 'currency_pairs':
+                    continue
+                if all([self.value.get(job).get("currency_pairs") is None,
+                        self.value.get(job).get("first_currencies") is None,
+                        self.value.get(job).get("second_currencies") is None]):
+                    raise WrongCompositeValueError(["currency_pairs", "first_currencies", "second_currencies"])
+
+
+
+
+        except (WrongCompositeValueError, KeyNotInDictError) as error:
             self.report = Report(error)
             return False
+
         else:
             self.report = Report("Currency-pairs are valid.")
-
-        return True
+            return True

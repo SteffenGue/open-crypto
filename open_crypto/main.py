@@ -142,10 +142,12 @@ def run(file: str = None, path: str = None) -> None:
 
     logging.info('Validating user configuration file.')
     valid, report = ConfigValidator.validate_config_file()
+
     if not valid:
+        logging.error(report.print_report())
         for r in report.reports:
             print(r)
-        raise SystemExit
+            raise SystemExit
 
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata,
