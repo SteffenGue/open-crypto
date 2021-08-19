@@ -10,12 +10,12 @@ with open("README.md", "r") as file:
     long_description = file.read()
 
 setup(
-    name="crypto-stguen",
-    version="0.0.9",
+    name="open-crypto",
+    version="3.9.1.3",
     author="Steffen Guenther",
     author_email="crypto@uni-bremen.de",
     long_description=long_description,
-    url="https://gitlab.informatik.uni-bremen.de/fiwi-crypto/crypto_high_frequency",
+    url="https://github.com/SteffenGue/open_crypto",
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
@@ -24,24 +24,22 @@ setup(
         "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.9',
+    python_requires='>=3.8',
     install_requires=[
         "aiohttp",
         "aioschedule",
         "certifi",
         "datetime_periods",
-        "mariadb",
         "matplotlib",
         "numpy != 1.19.4",
         "oyaml",
         "pandas",
-        "psycopg2-binary",
-        "pymysql",
         "pytest",
         "python-dateutil",
-        "sqlalchemy",
-        "sqlalchemy_utils",
+        "sqlalchemy >= 1.4.22",
+        "sqlalchemy_utils >= 0.37.8",
         "tqdm",
-        "validators"
+        "validators",
+        "nest_asyncio"
     ]
 )

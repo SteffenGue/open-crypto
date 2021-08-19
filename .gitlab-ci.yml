@@ -1,7 +1,7 @@
 image: "python:3.9.5"
 
 variables:
-  MODULE_PATH: "./crypto_api"
+  MODULE_PATH: "./open_crypto"
 
 before_script:
   - python --version
@@ -25,6 +25,11 @@ linting:
     - pip install pylint
     - shopt -s globstar
     - pylint --disable=R,C0301,W0511,W0613,W0703,E1121,W0614,C0302,E1101,W0401,W1113,W0603 $MODULE_PATH/**/*.py
+
+exchange_validating:
+  stage: static_analysis
+  script:
+    - python $MODULE_PATH/validate.py all
 
 unit_testing:
   stage: test
