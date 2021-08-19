@@ -147,7 +147,7 @@ def run(file: str = None, path: str = None) -> None:
         logging.error(report.print_report())
         for nested_report in report.reports:
             print(nested_report)
-            raise SystemExit
+        raise SystemExit
 
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata,

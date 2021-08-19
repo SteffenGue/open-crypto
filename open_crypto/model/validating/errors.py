@@ -132,7 +132,8 @@ class WrongTypeError(ValidationError):
     def __init__(
             self,
             expected_type: Union[Type, Iterable[Type]],
-            actual_type: Type):
+            actual_type: Type,
+            key: str = None):
         """
         Constructor of WrongTypeError.
 
@@ -142,6 +143,7 @@ class WrongTypeError(ValidationError):
         super().__init__("Value has wrong type.")
         self.expected_type = set(expected_type) if isinstance(expected_type, Iterable) else expected_type
         self.actual_type = actual_type
+        self.key = key
 
     def __str__(self) -> Text:
         """
@@ -152,10 +154,8 @@ class WrongTypeError(ValidationError):
 
         @return: A Text.
         """
-        return "Expected type(s) '{expected}' != actual type '{actual}'.".format(
-            expected=repr(self.expected_type),
-            actual=repr(self.actual_type)
-        )
+        return f"{'Key '+ self.key + ': ' if self.key else ''}Expected type(s) '{self.expected_type}' " \
+               f"!= actual type '{self.actual_type}'."
 
 
 class UrlValidationError(ValidationError):

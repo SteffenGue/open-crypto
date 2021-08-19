@@ -318,11 +318,16 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     try:
         with open(path + exchange + ".yaml", "r") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
-    except Exception as ex:
-        print(f"Error loading yaml of {exchange}. Try validating the file or look in the log-files.")
-        print(ex)
+
+    except FileNotFoundError:
+        print(f"\nFile '{path + exchange + '.yaml'}' not found.")
         logging.exception("Error loading yaml of %s.\n", exchange)
-        raise ex
+        raise SystemExit
+
+    except Exception:
+        print(f"\nError loading yaml of {exchange}. ")
+        logging.exception("Error loading yaml of %s.\n", exchange)
+        raise SystemExit
 
 
 def load_program_config() -> Dict[str, Any]:
