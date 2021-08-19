@@ -46,7 +46,7 @@ class KeyNotInDictError(ValidationError):
 
         @return: A Text.
         """
-        return f"Key {self.missing_key} not in keys {list(self.inspected_dict.keys())}"
+        return f"Key '{self.missing_key}' not in keys {list(self.inspected_dict.keys())}"
 
 
 class KeyNotIntendedError(ValidationError):
@@ -81,7 +81,7 @@ class KeyNotIntendedError(ValidationError):
 
         @return: A Text.
         """
-        return f"Key {self.actual_key} not intended to be in Dict, Allowed: {self.intended_keys}."
+        return f"Key '{self.actual_key}' not intended to be in Dict, Allowed: {self.intended_keys}."
 
 
 class SubstringNotInStringError(ValidationError):
@@ -115,7 +115,7 @@ class SubstringNotInStringError(ValidationError):
 
         @return: A Text.
         """
-        return f"Substring {self.missing_substring} not in {self.inspected_string}"
+        return f"Substring '{self.missing_substring}' not in '{self.inspected_string}'"
 
 
 class WrongTypeError(ValidationError):
@@ -152,7 +152,7 @@ class WrongTypeError(ValidationError):
 
         @return: A Text.
         """
-        return "Expected type(s) {expected} != actual type {actual}.".format(
+        return "Expected type(s) '{expected}' != actual type '{actual}'.".format(
             expected=repr(self.expected_type),
             actual=repr(self.actual_type)
         )
@@ -182,7 +182,7 @@ class UrlValidationError(ValidationError):
 
         @return: A Text.
         """
-        return f"URL {self.url} is not valid."
+        return f"URL '{self.url}' is not valid."
 
 
 class NamingConventionError(ValidationError):
@@ -210,7 +210,7 @@ class NamingConventionError(ValidationError):
 
         @return: A Text.
         """
-        return f"'{self.name}' did not match naming convention's Regex Pattern {self.naming_pattern}."
+        return f"'{self.name}' did not match naming convention's Regex Pattern '{self.naming_pattern}'."
 
 
 class WrongValueError(ValidationError):

@@ -5,6 +5,7 @@
 """
 
 from typing import Any, Text, Dict
+from pandas import Interval
 
 # pylint: disable=too-many-lines
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
@@ -52,7 +53,11 @@ class ConfigFileValidator(CompositeValidator):
 
         config_file = ConfigYamlValidator(load_yaml.get_result_value())
         can_continue = config_file.validate()
-        self.append_report(config_file)
+        try:
+            for r in config_file.report.reports:
+                self.append_report(r)
+        except (TypeError, Exception):
+            self.append_report(config_file)
 
         return can_continue
 
@@ -108,8 +113,6 @@ class ConfigSectionValidator(Validator):
         except KeyNotInDictError as error:
             self.report = Report(error)
             return False
-        else:
-            has_blocks = Report("All blocks contained in the config file.")
 
         try:
             for key in self.value.get('general'):
@@ -119,7 +122,8 @@ class ConfigSectionValidator(Validator):
             self.report = CompositeReport(has_blocks, Report(error))
             return False
         else:
-            self.report = Report("All blocks in configuration file exist.")
+            self.report = Report(f"Configuration contains all blocks {ConfigSectionValidator.block} and"
+                                 f" sections: {ConfigSectionValidator.section}")
 
         return True
 
@@ -150,8 +154,6 @@ class DatabaseStringValidator(Validator):
         except KeyNotInDictError as error:
             self.report = Report(error)
             return False
-        else:
-            sqltype = Report("Sqltype in keys.")
 
         try:
             for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
@@ -160,8 +162,6 @@ class DatabaseStringValidator(Validator):
         except KeyNotInDictError as error:
             self.report = CompositeReport(sqltype, Report(error))
             return False
-        else:
-            db_string = Report("All keys for database connection string found.")
 
         try:
             for key in DatabaseStringValidator.db_strings.get(self.value.get("sqltype")):
@@ -171,9 +171,8 @@ class DatabaseStringValidator(Validator):
             self.report = CompositeReport(sqltype, db_string, Report(error))
             return False
         else:
-            self.report = Report("Database section is valid")
-
-        return True
+            self.report = Report("Database connection string is valid")
+            return True
 
 
 class OperationSettingValidator(Validator):
@@ -181,9 +180,9 @@ class OperationSettingValidator(Validator):
     # ToDo
     """
 
-    sections = {'frequency': {'type': (str, int, float)},  # max 31 days
-                'interval': {'type': str, 'values': ['minutes', 'hours', 'days', 'weeks', 'months']},
-                'timeout': {'type': (int, float), 'values': [*range(0, 600)]}  # max 10 minutes
+    sections = {'frequency': {'type': (str, int, float), 'values': ['once', Interval(0, 44640, "both")]},  # max 31 days
+                'interval': {'type': (str, type(None)), 'values': ['minutes', 'hours', 'days', 'weeks', 'months']},
+                'timeout': {'type': (int, float), 'values': [Interval(0, 600, 'both')]}  # max 10 minutes
                 }
 
     def validate(self) -> bool:
@@ -195,32 +194,27 @@ class OperationSettingValidator(Validator):
             Whether further Validators may continue validating.
         """
 
+        # Does key exist in cofig file
         try:
-            for key in OperationSettingValidator.sections:
+            for key, val in OperationSettingValidator.sections.items():
+
                 if key not in self.value:
-                    raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
+                    raise KeyNotInDictError(key, dict.fromkeys(OperationSettingValidator.sections))
+
+                if not isinstance(self.value.get(key), val.get('type')):
+                    raise WrongTypeError(val.get('type'), type(self.value.get(key)))
+
         except KeyNotInDictError as error:
             self.report = Report(error)
             return False
-        else:
-            sections_keys = Report("All keys for operational_settings exist.")
 
-        try:
-            for key in OperationSettingValidator.sections:
-                if not isinstance(self.value.get(key), OperationSettingValidator.sections.get(key).get('type')):
-                    raise WrongTypeError(OperationSettingValidator.sections.get(key).get('type'),
-                                         type(self.value.get(key)))
-
-                if not self.value.get(key) in OperationSettingValidator.sections.get(key).get('values'):
-                    raise WrongValueError(OperationSettingValidator.sections.get(key).get('values'),
-                                          self.value.get(key))
-        except (WrongTypeError, WrongValueError) as error:
+        except WrongTypeError as error:
             self.report = CompositeReport(sections_keys, Report(error))
             return False
-        else:
-            self.report = Report("Block operation_settings is valid.")
 
-        return True
+        else:
+            self.report = Report("Operation_settings are valid")
+            return True
 
 
 class UtilitiesValidator(Validator):
@@ -252,7 +246,7 @@ class UtilitiesValidator(Validator):
             return False
 
         else:
-            self.report = Report('Block utilities is valid.')
+            self.report = Report('Utilities are valid')
 
         return True
 
@@ -263,12 +257,12 @@ class RequestKeysValidator(Validator):
 
     """
     sections = {'yaml_request_name': {'type': str},
-                'update_cp': {'type': bool, 'nullable': True},
+                'update_cp': {'type': (bool, type(None))},
                 'exchanges': {'type': list},
-                'excluded': {'type': list, 'nullable': True},
-                'currency_pairs': {'type': list, 'nullable': True},
-                'first_currencies': {'type': list, 'nullable': True},
-                'second_currencies': {'type': list, 'nullable': True},
+                'excluded': {'type': (list, type(None))},
+                'currency_pairs': {'type': (list, type(None))},
+                'first_currencies': {'type': (list, type(None))},
+                'second_currencies': {'type': (list, type(None))},
                 }
 
     def validate(self) -> bool:
@@ -283,29 +277,20 @@ class RequestKeysValidator(Validator):
         # if key is not nullable and not in the configuration file or empty
         try:
             for job in self.value:
-                for key in RequestKeysValidator.sections:
-                    if not RequestKeysValidator.sections.get(key).get("nullable", False) \
-                            and (key not in self.value.get(job).keys() or not self.value.get(job).get(key)):
+                for key, val in RequestKeysValidator.sections.items():
+
+                    if key not in self.value.get(job):
                         raise KeyNotInDictError(key, self.value.get(job))
+
+                    if not isinstance(self.value.get(job).get(key), val.get('type')):
+                        raise WrongTypeError(val.get('type'), self.value.get(job).get(key))
+
         except KeyNotInDictError as error:
             self.report = Report(error)
             return False
-        else:
-            all_keys_exist = Report("All request keys exist.")
-
-        # if types of configuration file values exist but are not allowed
-        try:
-            for job in self.value:
-                for key, val in RequestKeysValidator.sections.items():
-                    if self.value.get(job).get(key) and not \
-                            isinstance(self.value.get(job).get(key), val.get('type')):
-                        raise WrongTypeError(val.get('type'),
-                                             self.value.get(job).get(key))
         except WrongTypeError as error:
             self.report = CompositeReport(all_keys_exist, Report(error))
             return False
-        else:
-            key_types = Report("All types of existing keys are valid.")
 
         # if there exist any currency-pairs to request
         try:
@@ -348,6 +333,6 @@ class RequestValueValidator(Validator):
             self.report = Report(error)
             return False
         else:
-            self.report = Report("Values of currency-pair keys are valid.")
+            self.report = Report("Currency-pairs are valid.")
 
         return True
