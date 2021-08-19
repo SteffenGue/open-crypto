@@ -116,17 +116,18 @@ class Examples:
         plt.show()
 
     @staticmethod
-    def historic_rates(timer: int = 60) -> plt.plot:
+    def minute_candles(timer: int = 60) -> plt.plot:
         """
         Request BTC-USD(T) data from several exchanges and plot them simultaneously.
         """
 
-        configuration_file = 'Examples/historic'
+        configuration_file = 'Examples/minute_candles'
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
-        thread = threading.Timer(timer, KillSwitch().kill)
-        thread.start()
-        Examples.__start_catch_systemexit(configuration_file)
+
+        with KillSwitch() as switch:
+            switch.set_timer(timer)
+            Examples.__start_catch_systemexit(configuration_file)
 
         exchanges = ('BINANCE', 'BITTREX')
         session = get_session(configuration_file)
