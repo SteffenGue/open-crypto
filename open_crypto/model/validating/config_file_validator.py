@@ -217,8 +217,8 @@ class OperationSettingKeyValidator(Validator):
 
                 try:
                     check_type(key, self.value.get(key), val)
-                except TypeError:
-                    raise WrongTypeError(val, type(self.value.get(key)))
+                except TypeError as error:
+                    raise WrongTypeError(val, type(self.value.get(key))) from error
 
         except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)
@@ -293,8 +293,8 @@ class UtilitiesValidator(Validator):
 
                 try:
                     check_type(key, self.value.get(key), val)
-                except TypeError:
-                    raise WrongTypeError(val, self.value.get(key), key)
+                except TypeError as error:
+                    raise WrongTypeError(val, self.value.get(key), key) from error
 
         except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)
@@ -338,8 +338,8 @@ class RequestKeysValidator(Validator):
 
                     try:
                         check_type(key, self.value.get(job).get(key), val)
-                    except TypeError:
-                        raise WrongTypeError(val.get('type'), self.value.get(job).get(key), key)
+                    except TypeError as error:
+                        raise WrongTypeError(val.get('type'), self.value.get(job).get(key), key) from error
 
         except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)
