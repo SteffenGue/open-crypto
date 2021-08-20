@@ -111,7 +111,6 @@ requests:
         alias: symbol
       params:
         depth:
-          type: int
           default: 50
 
     response:
@@ -197,7 +196,6 @@ requests:
             weeks: W1
           default: D1
         limit:
-          type: int
           default: 1000
         endTime:
           function: last_timestamp
@@ -211,7 +209,6 @@ requests:
             - timedeltams
             - interval
             - 1000
-
 
     response:
       type: list

@@ -48,6 +48,9 @@ async def initialize_jobs(job_config: Dict[str, Any],
 
     for job in job_config.keys():
         job_params = job_config[job]
+
+        if isinstance(job_params.get("exchanges"), str):
+            job_params['exchanges'] = job_params.get('exchanges').rsplit(",")
         exchange_names = job_params["exchanges"] if job_params["exchanges"][0] != "all" else get_exchange_names()
 
         if job_params.get("excluded"):
@@ -84,25 +87,25 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
     @type program_config: dict
     """
 
-    with Loader("Initializing open_crypto...", ""):
-        config = read_config(file=None, section=None)
-        logging.info("Loading jobs.")
-        jobs = await initialize_jobs(job_config=config["jobs"],
-                                     timeout=config["general"]["operation_settings"].get("timeout", 10),
-                                     interval=config["general"]["operation_settings"].get("interval", "days"),
-                                     comparator=program_config['request_settings'].get('interval_settings',
-                                                                                       'lower_or_equal'),
-                                     db_handler=database_handler)
-        frequency = config["general"]["operation_settings"]["frequency"]
-        logging.info("Configuring Scheduler.")
-        scheduler = Scheduler(database_handler,
-                              jobs,
-                              program_config.get('request_settings').get('request_direction', 0),
-                              frequency)
+    # with Loader("Initializing open_crypto...", ""):
+
+    config = read_config(file=None, section=None)
+    logging.info("Loading jobs.")
+    jobs = await initialize_jobs(job_config=config["jobs"],
+                                 timeout=config["general"]["operation_settings"].get("timeout", 10),
+                                 interval=config["general"]["operation_settings"].get("interval", "days"),
+                                 comparator=program_config['request_settings'].get('interval_settings',
+                                                                                   'lower_or_equal'),
+                                 db_handler=database_handler)
+    frequency = config["general"]["operation_settings"]["frequency"]
+    logging.info("Configuring Scheduler.")
+    scheduler = Scheduler(database_handler,
+                          jobs,
+                          program_config.get('request_settings').get('request_direction', 0),
+                          frequency)
     await scheduler.validate_job()
 
-    desc = f"Job(s) were created and will run with frequency: {frequency}."
-    logging.info(desc)
+    logging.info("Job(s) were created and will run with frequency: %s", frequency)
 
     while True:
         if not KillSwitch().stay_alive:

@@ -18,7 +18,7 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
 import importlib
-from typing import List, Iterable, Optional, Generator, Any, Iterator, Dict, Tuple
+from typing import List, Iterable, Optional, Generator, Any, Iterator, Dict, Tuple, Union
 import sqlalchemy.orm
 from pandas import DataFrame
 from pandas import read_sql_query as pd_read_sql_query
@@ -244,8 +244,8 @@ class DatabaseHandler:
     def get_exchanges_currency_pairs(self,
                                      exchange_name: str,
                                      currency_pairs: List[Dict[str, str]],
-                                     first_currencies: List[str],
-                                     second_currencies: List[str]) -> List[ExchangeCurrencyPair]:
+                                     first_currencies: Union[List[str], str],
+                                     second_currencies: Union[List[str], str]) -> List[ExchangeCurrencyPair]:
 
         """
         Collects and returns all currency pairs for the given exchange that either have any
@@ -269,6 +269,14 @@ class DatabaseHandler:
             All ExchangeCurrencyPairs of the given Exchange that fulfill any
             of the above stated conditions.
         """
+
+        if isinstance(first_currencies, str):
+            first_currencies = first_currencies.rsplit(",")
+            first_currencies = [item.replace(" ", "") for item in first_currencies]
+        if isinstance(second_currencies, str):
+            first_currencies = second_currencies.rsplit(",")
+            first_currencies = [item.replace(" ", "") for item in second_currencies]
+
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
         if currency_pairs:
             if "all" in currency_pairs:
@@ -326,6 +334,8 @@ class DatabaseHandler:
                  List is empty if there are no currency pairs in the database which fulfill the requirements.
         @rtype: list[ExchangeCurrencyPair]
         """
+        if isinstance(currency_names, str):
+            currency_names = [currency_names]
         all_found_currency_pairs: List[ExchangeCurrencyPair] = list()
         if exchange_name is not None and exchange_name:
             exchange_id: int = self.get_exchange_id(exchange_name)

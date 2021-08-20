@@ -1,6 +1,6 @@
 # ToDo: Tickers fehlerhaft
 name: coinpaprika
-exchange: true
+exchange: false
 
 rate_limit:
   max: 600

@@ -313,6 +313,8 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
 
     @raise Exception: If the .yaml file could not be evaluated for a given exchange.
     """
+    exchange = exchange.replace(" ", "")
+
     if not path:
         path = read_config(file=None, section="utilities")["yaml_path"]
     try:
