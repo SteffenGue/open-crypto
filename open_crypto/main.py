@@ -51,9 +51,14 @@ async def initialize_jobs(job_config: Dict[str, Any],
 
         if isinstance(job_params.get("exchanges"), str):
             job_params['exchanges'] = job_params.get('exchanges').rsplit(",")
+            job_params['exchanges'] = [item.replace(" ", "") for item in job_params.get('exchanges')]
         exchange_names = job_params["exchanges"] if job_params["exchanges"][0] != "all" else get_exchange_names()
 
+        # ToDo Bugfix funktioniert nicht richtig
         if job_params.get("excluded"):
+            if isinstance(job_params.get("excluded"), str):
+                job_params['excluded'] = job_params.get('excluded').rsplit(",")
+                job_params['excluded'] = [item.replace(" ", "") for item in job_params.get('excluded')]
             exchange_names = [item for item in exchange_names if item not in job_params.get("excluded", [])]
 
         exchange_names = [yaml_loader(exchange) for exchange in exchange_names if yaml_loader(exchange) is not None]

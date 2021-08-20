@@ -19,6 +19,7 @@ jobs:
   JobName:
     yaml_request_name: null # ticker, trades, order_books, historic_rates
     update_cp: false
+    excluded: null
     exchanges: # all or an arbitrary list of exchanges
       - exchange1
       - exchange2

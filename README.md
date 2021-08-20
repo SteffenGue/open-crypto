@@ -38,6 +38,7 @@ The following third-party libraries are installed with __open-crypto__:
 - sqlalchemy
 - sqlalchemy_utils
 - nest-asyncio
+- typeguard
 
 ## Run the program
 
@@ -99,6 +100,114 @@ To run __open_crypto__ with one of the mentioned configuration files:
 ```
 Note that all examples will result in a plot of the received data. Furthermore, especially _static_, _exchange_listings_ may take several minutes.
 
+## Valid requests
+The following will present the configuration file and show some possible valid requests which should serve as a template to create your own.
+The file is structured into ```general``` settings, including ```database```, ```operation_settings``` and ```utilities```. Furthermore, the section ```jobs``` lists all important parameters for the request itself:
+
+```yaml
+general:
+  database:
+    sqltype: sqlite #sqlite, mariadb, mysql or postgres
+    client: null # mariadb, pymysql or psycopg2
+    user_name:
+    password:
+    host: localhost
+    port: 5432
+    db_name: ExampleDB
+
+  operation_settings:
+    frequency: once # once or any number in minutes (i.e. 0.1 for 6 sec)
+    interval: days # minutes, hours, days, weeks, months
+    timeout: 10 # any number in seconds (max response time for an exchange)
+  utilities:
+    enable_logging: true
+    yaml_path: resources/running_exchanges/
+    
+jobs:
+  JobName:  # An arbitrarily chosen name
+    yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
+    update_cp: false
+    excluded: null # name of exchange excluded
+    exchanges: # 'all' or an arbitrary list of exchanges
+      - exchange1
+      - exchange2
+#     - all
+    currency_pairs: # all or an arbitrary list of currency-pairs
+      - all
+#     - first: null
+#       second: null
+    first_currencies: # filter database by the first currency and take all
+      - null
+    second_currencies: # filter database by the second currency and take all.
+      - null
+```
+
+Leaving all ```general``` settings untouched will save the requested data into a ```SQLite``` database within your current working directory. A valid request, simply catching (daily) historical candles from ```Coinbase``` and ```Bitfinex``` for the currency-pair ```BTC-ETH```, looks like the following:
+
+```yaml
+general:
+  database: <...>
+  operation_settings: <...>
+  utilities: <...>
+ 
+jobs:
+  Example:  
+    yaml_request_name: historic_rates
+    update_cp: false
+    excluded: null
+    exchanges:
+      - coinbase
+      - bitfinex
+    currency_pairs:
+      - first: btc
+        second: eth
+    first_currencies: null
+    second_currencies: null
+```
+Note that the request interval (```minutes```, ```days```, ...) and frequency (only ```once``` and not iteratively) is listed under ```operation_settings```. Further currency-pairs can easily be appended in the same format. However, if one is interested in catching all currency-pairs from the same exchanges with base-currency Bitcoin (i.e. ```BTC-USD```, ```BTC-ETH```, ```...```):
+```yaml
+general:
+  database: <...>
+  operation_settings: <...>
+  utilities: <...>
+ 
+jobs:
+  Example:  
+    yaml_request_name: historic_rates
+    update_cp: false
+    excluded: null
+    exchanges:
+      - coinbase
+      - bitfinex
+    currency_pairs: null
+    first_currencies:
+      - btc
+    second_currencies: null
+```
+Note, when applying a further filter for Ethereum to ```second_currencies```, both former requests are identical. Lastly, one may be interested in all historical ```BTC-ETH``` time series available, therefore:
+
+```yaml
+general:
+  database: <...>
+  operation_settings: <...>
+  utilities: <...>
+ 
+jobs:
+  Example:  
+    yaml_request_name: historic_rates
+    update_cp: false
+    excluded: null
+    exchanges:
+      - all
+    currency_pairs:
+      - first: btc
+        second: eth
+    first_currencies: null
+    second_currencies: null
+```
+
 ## Troubleshooting
 - If you are running on MacOS and do not receive any data, it is likely that ```Python``` does not have access to your root ssl-certificate. In that case, try executing the following file: ```applications/Python [your/version]/Install Certificates.command```.
 - Some ```IPython``` distributions, used for example by ```Spyder``` or ```Jupyter Notebook```, run within an ```asyncio.BaseEventLoop```. Unfortunately, ```asyncio``` is not supportive of nested event-loops, therefore raising an ```RuntimeError``` when executing __open-crypto__. We applied a patch, namely the package ```nest-asyncio``` which should cover most distributions. However, if the error still remains, consider changing the IDE (e.g. PyCharm) or run __open-crypto__ with plain ```Python``` in your terminal.
+
+
