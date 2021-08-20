@@ -7,7 +7,7 @@ may be used within the context manager framework.
 Classes:
   - Loader
 """
-
+import sys
 from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
@@ -84,7 +84,8 @@ class Loader:
         self.done = True
         cols = get_terminal_size((80, 20)).columns
         print("\r" + " " * cols, end="", flush=True)
-        print(f"\r{self.end}", flush=True)
+        sys.stdout.write(f"\r{self.end}")
+        sys.stdout.flush()
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """

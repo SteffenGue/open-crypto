@@ -87,17 +87,18 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
     @type program_config: dict
     """
 
-    # with Loader("Initializing open_crypto...", ""):
+    with Loader("Initializing open_crypto...", ""):
 
-    config = read_config(file=None, section=None)
-    logging.info("Loading jobs.")
-    jobs = await initialize_jobs(job_config=config["jobs"],
-                                 timeout=config["general"]["operation_settings"].get("timeout", 10),
-                                 interval=config["general"]["operation_settings"].get("interval", "days"),
-                                 comparator=program_config['request_settings'].get('interval_settings',
-                                                                                   'lower_or_equal'),
-                                 db_handler=database_handler)
-    frequency = config["general"]["operation_settings"]["frequency"]
+        config = read_config(file=None, section=None)
+        logging.info("Loading jobs.")
+        jobs = await initialize_jobs(job_config=config["jobs"],
+                                     timeout=config["general"]["operation_settings"].get("timeout", 10),
+                                     interval=config["general"]["operation_settings"].get("interval", "days"),
+                                     comparator=program_config['request_settings'].get('interval_settings',
+                                                                                       'lower_or_equal'),
+                                     db_handler=database_handler)
+        frequency = config["general"]["operation_settings"]["frequency"]
+
     logging.info("Configuring Scheduler.")
     scheduler = Scheduler(database_handler,
                           jobs,

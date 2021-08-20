@@ -16,7 +16,7 @@ from model.validating.api_map_validators import ApiMapFileValidator
 from model.validating.config_file_validator import ConfigFileValidator
 from resources.configs.global_config import GlobalConfig
 
-YAML_PATH = "open_crypto/resources/running_exchanges/all/"
+YAML_PATH = "open_crypto/resources/running_exchanges/"
 
 
 def report_error(report: Report) -> Optional[Report]:
