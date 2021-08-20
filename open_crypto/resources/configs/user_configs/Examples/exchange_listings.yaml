@@ -14,7 +14,7 @@ general:
     timeout: 10
   utilities:
     enable_logging: false
-    yaml_path: resources/running_exchanges/all/
+    yaml_path: resources/running_exchanges/
 jobs:
   ExchangeListingExample:
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates

@@ -40,7 +40,7 @@ setup(
         "sqlalchemy_utils >= 0.37.8",
         "tqdm",
         "validators",
-        "nest_asyncio"
+        "nest_asyncio",
 		"typeguard >= 2.12.1"
     ]
 )
