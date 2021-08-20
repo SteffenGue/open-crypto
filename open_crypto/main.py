@@ -153,7 +153,6 @@ def run(file: str = None, path: str = None) -> None:
     valid, report = ConfigValidator.validate_config_file()
 
     if not valid:
-        logging.error(report.print_report())
         for nested_report in report.reports:
             print(nested_report)
         raise SystemExit

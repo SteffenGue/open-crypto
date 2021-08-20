@@ -9,15 +9,15 @@ general:
     db_name: ExampleDB
 
   operation_settings:
-    frequency: 0.1 # once or any number in minutes
+    frequency: once # once or any number in minutes
     interval: days # minutes, hours, days, weeks, months
     timeout: 10 # any number in seconds
   utilities:
-    enable_logging: false
+    enable_logging: true
     yaml_path: resources/running_exchanges/
 jobs:
   JobName:
-    yaml_request_name: null # ticker, trades, order_books, historic_rates
+    yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
     excluded: null
     exchanges: # all or an arbitrary list of exchanges
