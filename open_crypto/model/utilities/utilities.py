@@ -423,7 +423,7 @@ def get_all_exchanges_and_methods() -> Dict[str, dict]:
     @rtype: list
     """
     result_dict = dict()
-    yaml_path = os.getcwd() + "/resources/running_exchanges/all/"
+    yaml_path = os.getcwd() + "/resources/running_exchanges/"
     exchanges = get_exchange_names(yaml_path=yaml_path)
     for exchange in exchanges:
         file = yaml_loader(exchange, path=yaml_path)
