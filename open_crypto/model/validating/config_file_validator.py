@@ -22,7 +22,7 @@ Classes:
 
 """
 
-from typing import Any, Text, Dict, Union, Optional
+from typing import Any, Text, Dict, Union, Optional, List
 from pandas import Interval
 from typeguard import check_type
 
@@ -314,7 +314,7 @@ class RequestKeysValidator(Validator):
                 'update_cp': Optional[bool],
                 'exchanges': Optional[Union[list, str]],
                 'excluded': Optional[Union[list, str]],
-                'currency_pairs': Optional[list[dict[str, str]]],
+                'currency_pairs': Optional[List[Dict[str, str]]],
                 'first_currencies': Optional[Union[list, str]],
                 'second_currencies': Optional[Union[list, str]],
                 }
