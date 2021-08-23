@@ -7,7 +7,6 @@ into csv-files.
 """
 import os
 import shutil
-import threading
 from typing import Any, Optional, Dict
 import pandas as pd
 from sqlalchemy.orm.session import Session
