@@ -274,7 +274,7 @@ def read_config(file: Optional[str] = None,
     while True:
         try:
             filename = GlobalConfig().file
-            config_yaml = open(filename)
+            config_yaml = open(filename, encoding='UTF-8')
             break
         except FileNotFoundError:
             print("File not found. Retry!")
@@ -318,7 +318,7 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     if not path:
         path = read_config(file=None, section="utilities")["yaml_path"]
     try:
-        with open(path + exchange + ".yaml", "r") as file:
+        with open(path + exchange + ".yaml", "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError as error:
@@ -341,12 +341,12 @@ def load_program_config() -> Dict[str, Any]:
     """
     try:
         path = 'resources/configs/program_config/config.yaml'
-        with open(path, "r") as file:
+        with open(path, "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError:
         path = 'resources/templates/program_config.yaml'
-        with open(path, "r") as file:
+        with open(path, "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
 

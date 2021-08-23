@@ -21,7 +21,7 @@ import _paths  # pylint: disable=unused-import
 path = os.getcwd() + "/open_crypto/tests/unit_tests"
 
 
-with open(path + "/test_file.yaml", "r") as file:
+with open(path + "/test_file.yaml", "r", encoding='UTF-8') as file:
     test_file: dict = yaml.load(file, Loader=yaml.FullLoader)
 
 

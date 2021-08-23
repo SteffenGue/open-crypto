@@ -38,7 +38,7 @@ class Settings:
         @return: Program config
         """
 
-        with open(os.getcwd() + Settings.PATH) as file:
+        with open(os.getcwd() + Settings.PATH, encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     @staticmethod
@@ -47,7 +47,7 @@ class Settings:
         Overwrites the current program config.
         @param config: The config to dump.
         """
-        with open(os.getcwd() + Settings.PATH, "w") as file:
+        with open(os.getcwd() + Settings.PATH, "w",  encoding='UTF-8') as file:
             yaml.dump(config, file)
 
     @staticmethod
@@ -59,11 +59,11 @@ class Settings:
         @param val: value to be set
         """
         try:
-            with open(os.getcwd() + Settings.PATH, "r") as file:
+            with open(os.getcwd() + Settings.PATH, "r",  encoding='UTF-8') as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
 
             config.get(block).update({key: val})
-            with open(os.getcwd() + Settings.PATH, "w") as file:
+            with open(os.getcwd() + Settings.PATH, "w",  encoding='UTF-8') as file:
                 yaml.dump(config, file)
 
         except (KeyError, FileNotFoundError):
