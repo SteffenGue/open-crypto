@@ -170,8 +170,8 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
     check_path(working_directory)
 
     if kill_after and isinstance(kill_after, int):
-        thread = threading.Timer(kill_after, KillSwitch().kill)
-        thread.start()
+        with KillSwitch() as switch:
+            switch.set_timer(kill_after)
     try:
         main.run(configuration_file, working_directory)
     except SystemExit:

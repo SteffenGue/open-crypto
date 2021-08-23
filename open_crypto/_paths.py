@@ -7,3 +7,10 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+
+# ToDo: PATHs im Program auf _paths.py umstellen.
+all_paths = {
+    'yaml_path': "",
+    'program_config_path': "",
+    'template_path': "",
+}
