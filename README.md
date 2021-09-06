@@ -142,7 +142,7 @@ jobs:
       - null
 ```
 
-Leaving all ```general``` settings untouched will save the requested data into a ```SQLite``` database within your current working directory. A valid request, simply catching (daily) historical candles from ```Coinbase``` and ```Bitfinex``` for the currency-pair ```BTC-ETH```, looks like the following:
+Leaving all ```general``` settings untouched will save the requested data into a ```SQLite``` database within your current working directory. A valid request, simply catching (daily) historical candles from ```Coinbase``` and ```Bitfinex``` for the currency-pair ```BTC-USD```, looks like the following:
 
 ```yaml
 general:
@@ -160,11 +160,11 @@ jobs:
       - bitfinex
     currency_pairs:
       - first: btc
-        second: eth
+        second: usd
     first_currencies: null
     second_currencies: null
 ```
-Note that the request interval (```minutes```, ```days```, ...) and frequency (only ```once``` and not iteratively) is listed under ```operation_settings```. Further currency-pairs can easily be appended in the same format. However, if one is interested in catching all currency-pairs from the same exchanges with base-currency Bitcoin (i.e. ```BTC-USD```, ```BTC-ETH```, ```...```):
+Note that the request interval (```minutes```, ```days```, ...) and frequency (only ```once``` and not iteratively) is listed under ```operation_settings```. Further currency-pairs can easily be appended in the same format. However, if one is interested in catching all currency-pairs from the same exchanges with base-currency Bitcoin (i.e. ```BTC-USD```, ```BTC-EUR```, ```...```):
 ```yaml
 general:
   database: <...>
@@ -184,7 +184,7 @@ jobs:
       - btc
     second_currencies: null
 ```
-Note, when applying a further filter for Ethereum to ```second_currencies```, both former requests are identical. Lastly, one may be interested in all historical ```BTC-ETH``` time series available, therefore:
+Note, when applying a further filter for US-Dollar to ```second_currencies```, both former requests are identical. Lastly, one may be interested in all historical ```BTC-USD``` time series available, therefore:
 
 ```yaml
 general:
@@ -201,7 +201,7 @@ jobs:
       - all
     currency_pairs:
       - first: btc
-        second: eth
+        second: usd
     first_currencies: null
     second_currencies: null
 ```
