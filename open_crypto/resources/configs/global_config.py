@@ -11,7 +11,7 @@ from __future__ import annotations
 import os
 from typing import Optional
 
-
+# ToDo Alle paths hier hinterlegen
 class GlobalConfig(object):
     """
     Global config built after the Singleton pattern. That is, there can only exists ONE instance of a class or,

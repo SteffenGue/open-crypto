@@ -45,9 +45,9 @@ for exchange in exchanges:
             second_currency: str = currency_pair.second.name
             json_file = open(os.path.join(full_saving_path,
                                           f"{exchange.name.upper()}_{first_currency}_{second_currency}"),
-                             "w")
+                             "w", encoding='UTF-8')
         else:
-            json_file = open(os.path.join(full_saving_path, f"{exchange.name.upper()}_ALL"), "w")
+            json_file = open(os.path.join(full_saving_path, f"{exchange.name.upper()}_ALL"), "w", encoding='UTF-8')
 
         json.dump(responses[currency_pair], json_file, indent=4)
         json_file.close()

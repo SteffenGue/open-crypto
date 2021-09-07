@@ -82,7 +82,7 @@ class ExchangeValidator:
             return True
 
         os.makedirs("reports/", exist_ok=True)
-        with open("reports/report_" + self.exchange_name + ".txt", "w") as report:
+        with open("reports/report_" + self.exchange_name + ".txt", "w", encoding='UTF-8') as report:
             report.writelines(validator.report.indented_report())
 
         print("API Map is Invalid! \n"

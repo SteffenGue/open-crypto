@@ -21,7 +21,7 @@ jobs:
     update_cp: false
     exchanges: # all or an arbitrary list of exchanges
       - coinbase
-    exlcuded: null
+    excluded: null
     currency_pairs: # all or an arbitrary list of currency-pairs
       - first: btc
         second: usdt

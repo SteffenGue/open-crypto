@@ -159,9 +159,8 @@ class Scheduler:
         if not jobs:
             logging.error("No or invalid Jobs.")
 
-            print("\nNo or invalid Jobs. This error occurs when the job list is empty due to no \n"
-                  "matching currency pairs found for all exchanges. Please check your \n"
-                  "parameters in the configuration.")
+            print("\nNo matching currency-pairs for the requested exchanges. "
+                  "Please check your request settings in the configuration.")
             raise SystemExit
 
         for job in jobs:
