@@ -20,12 +20,9 @@ jobs:
   PlatformExample:
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: # all or an arbitrary list of exchanges
-      - coingecko
+    exchanges: coingecko  # all or an arbitrary list of exchanges
     excluded: null
-    currency_pairs: # all or an arbitrary list of currency-pairs
-      - first: bitcoin
-        second: usd
+    currency_pairs: bitcoin-usd # all or an arbitrary list of currency-pairs
     first_currencies: null  # filter database by the first currency and take all
     second_currencies: null  # filter database by the second currency and take all.
 

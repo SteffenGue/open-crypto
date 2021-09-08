@@ -20,8 +20,7 @@ jobs:
   StaticExample:
     yaml_request_name: currency_pairs # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: # all or an arbitrary list of exchanges
-      - all
+    exchanges: all # all or an arbitrary list of exchanges
     excluded: null
     currency_pairs: null  # all or an arbitrary list of currency-pairs
 

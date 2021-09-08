@@ -19,16 +19,9 @@ jobs:
   MinuteCandleExample:
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: # all or an arbitrary list of exchanges
-      - binance
-      - bittrex
-      - hitbtc
+    exchanges: binance, bittrex, hitbtc
     excluded: null
-    currency_pairs: # all or an arbitrary list of currency-pairs
-#      - all
-      - first: eth
-        second: btc
-
+    currency_pairs: eth-btc
     first_currencies: null  # filter database by the first currency and take all
     second_currencies: null  # filter database by the second currency and take all.
 

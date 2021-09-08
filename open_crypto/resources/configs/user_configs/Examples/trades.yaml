@@ -20,14 +20,10 @@ jobs:
   TradeExample:
     yaml_request_name: trades # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: # all or an arbitrary list of exchanges
-      - coinbase
+    exchanges: coinbase # all or an arbitrary list of exchanges
     excluded: null
 
-    currency_pairs: # all or an arbitrary list of currency-pairs
-#      - all
-      - first: eth
-        second: btc
+    currency_pairs: eth-btc  # all or an arbitrary list of currency-pairs
 
     first_currencies: null  # filter database by the first currency and take all
     second_currencies: null  # filter database by the second currency and take all.

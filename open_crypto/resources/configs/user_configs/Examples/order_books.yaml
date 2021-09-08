@@ -19,12 +19,9 @@ jobs:
   OrderBookExample:
     yaml_request_name: order_books # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: # all or an arbitrary list of exchanges
-      - coinbase
+    exchanges: coinbase
     excluded: null
-    currency_pairs: # all or an arbitrary list of currency-pairs
-      - first: btc
-        second: usdt
+    currency_pairs: btc-usdt # all or an arbitrary list of currency-pairs
     first_currencies: null  # filter database by the first currency and take all
     second_currencies: null  # filter database by the second currency and take all.
 

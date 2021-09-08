@@ -19,25 +19,8 @@ jobs:
   ExchangeListingExample:
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: # all or an arbitrary list of exchanges
-      - all
-    excluded:
-      - coingecko
-      - coinpaprika
+    exchanges: all # all or an arbitrary list of exchanges
+    excluded: coingecko, coinpaprika
     currency_pairs: null # all or an arbitrary list of currency-pairs
-    first_currencies: # filter database by the first currency and take all
-      - btc
-      - link
-      - eth
-      - atom
-      - bch
-      - xrp
-      - ltc
-      - xlm
-      - doge
-      - ada
-    second_currencies: # filter database by the second currency and take all.
-      - usd
-      - usdt
-
-
+    first_currencies: btc, link, eth, atom, bch, xrp, ltc, xlm, doge, ada
+    second_currencies: usd, usdt

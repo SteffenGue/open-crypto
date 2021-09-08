@@ -58,7 +58,7 @@ def copy_resources(directory: str = os.getcwd()) -> None:
     @type directory: Current working directory
     """
 
-    print(f"Copying resources to {directory} ...")
+    print(f"\nCopying resources to {directory} ...")
     source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
 
     destination = directory + "/resources"

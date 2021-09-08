@@ -16,12 +16,7 @@ query_options:
   query_everything: true # if true, all filters below are ignored
   from_timestamp: null
   to_timestamp: null
-  exchanges:
-    - all
+  exchanges: all
+  currency_pairs: eth-btc
   first_currencies:
-#    - btc
   second_currencies:
-#    - eth
-  currency_pairs:
-    - first: eth
-      second: btc
