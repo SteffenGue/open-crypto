@@ -6,8 +6,8 @@ This module is essentially taken from 'https://github.com/sdushantha/gitdir'. Fu
 Smaller adjustments are made, in particular regarding the print statements. The functions are refactored into methods
 or moved to different classes.
 """
-from typing import Tuple
 
+from typing import Tuple
 import re
 import os
 import urllib.request
