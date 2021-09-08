@@ -19,7 +19,7 @@ from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config
-from model.utilities.utilities import signal_handler, init_logger
+from model.utilities.utilities import signal_handler, init_logger, split_str_to_list, handler
 from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
 from validate import ConfigValidator
@@ -50,15 +50,13 @@ async def initialize_jobs(job_config: Dict[str, Any],
         job_params = job_config[job]
 
         if isinstance(job_params.get("exchanges"), str):
-            job_params['exchanges'] = job_params.get('exchanges').rsplit(",")
-            job_params['exchanges'] = [item.replace(" ", "") for item in job_params.get('exchanges')]
+            job_params['exchanges'] = split_str_to_list(job_params.get('exchanges'))
         exchange_names = job_params["exchanges"] if job_params["exchanges"][0] != "all" else get_exchange_names()
 
-        # ToDo Bugfix funktioniert nicht richtig
+        # ToDo: Funnktioniert richtig?
         if job_params.get("excluded"):
             if isinstance(job_params.get("excluded"), str):
-                job_params['excluded'] = job_params.get('excluded').rsplit(",")
-                job_params['excluded'] = [item.replace(" ", "") for item in job_params.get('excluded')]
+                job_params['exchanges'] = split_str_to_list(job_params.get('excluded'))
             exchange_names = [item for item in exchange_names if item not in job_params.get("excluded", [])]
 
         exchange_names = [yaml_loader(exchange) for exchange in exchange_names if yaml_loader(exchange) is not None]
@@ -94,21 +92,24 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
 
     with Loader("Initializing open_crypto...", ""):
 
+        if program_config.get("exception_hook", True):
+            sys.excepthook = handler
+
         config = read_config(file=None, section=None)
+        operation_settings = config['general']['operation_settings']
+
         logging.info("Loading jobs.")
         jobs = await initialize_jobs(job_config=config["jobs"],
-                                     timeout=config["general"]["operation_settings"].get("timeout", 10),
-                                     interval=config["general"]["operation_settings"].get("interval", "days"),
+                                     timeout=operation_settings.get("timeout", 10),
+                                     interval=operation_settings.get("interval", "days"),
                                      comparator=program_config['request_settings'].get('interval_settings',
                                                                                        'lower_or_equal'),
                                      db_handler=database_handler)
-        frequency = config["general"]["operation_settings"]["frequency"]
+        frequency = operation_settings["frequency"]
 
     logging.info("Configuring Scheduler.")
-    scheduler = Scheduler(database_handler,
-                          jobs,
-                          program_config.get('request_settings').get('request_direction', 0),
-                          frequency)
+    scheduler = Scheduler(database_handler, jobs,
+                          program_config['request_settings'].get('request_direction', 0), frequency)
     await scheduler.validate_job()
 
     logging.info("Job(s) were created and will run with frequency: %s", frequency)
@@ -142,8 +143,6 @@ def run(file: str = None, path: str = None) -> None:
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
 
-    # sys.excepthook = handler
-
     program_config = load_program_config()
 
     db_params = read_config(file=file, section="database", reset=True)
@@ -163,6 +162,7 @@ def run(file: str = None, path: str = None) -> None:
                                        min_return_tuples=program_config["request_settings"].get("min_return_tuples", 2),
                                        **db_params)
 
+    # ToDo: Still neccessary?
     # See Github Issue for bug and work-around:
     # https://github.com/encode/httpx/issues/914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):

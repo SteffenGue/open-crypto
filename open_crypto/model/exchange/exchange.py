@@ -109,7 +109,7 @@ class Exchange:
         Each 'job' is in the end a method called on every exchange.
 
         The Attributes and mappings are all extracted from the
-        .yaml-files whose location is described in the trades.yaml file.
+        .yaml-files whose location is described in the config.yaml file.
 
         name: str
             Name of this exchange.

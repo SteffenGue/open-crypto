@@ -30,6 +30,8 @@ from typeguard import check_type
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
 from model.validating.base import Report, Validator, CompositeValidator
 from model.validating.errors import KeyNotInDictError, WrongTypeError, WrongValueError, WrongCompositeValueError
+from model.validating.errors import WrongCurrencyPairFormatError
+from model.utilities.utilities import split_str_to_list
 
 # ToDo Implement typeguard for type-checking the config file using generic types.
 
@@ -294,7 +296,7 @@ class UtilitiesValidator(Validator):
                 try:
                     check_type(key, self.value.get(key), val)
                 except TypeError as error:
-                    raise WrongTypeError(val, self.value.get(key), key) from error
+                    raise WrongTypeError(val, type(self.value.get(key)), key) from error
 
         except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)
@@ -312,11 +314,11 @@ class RequestKeysValidator(Validator):
     """
     sections = {'yaml_request_name': str,
                 'update_cp': Optional[bool],
-                'exchanges': Optional[Union[list, str]],
-                'excluded': Optional[Union[list, str]],
-                'currency_pairs': Optional[List[Dict[str, str]]],
-                'first_currencies': Optional[Union[list, str]],
-                'second_currencies': Optional[Union[list, str]],
+                'exchanges': Optional[str],
+                'excluded': Optional[str],
+                'currency_pairs': Optional[str],
+                'first_currencies': Optional[str],
+                'second_currencies': Optional[str],
                 }
 
     def validate(self) -> bool:
@@ -339,9 +341,13 @@ class RequestKeysValidator(Validator):
                     try:
                         check_type(key, self.value.get(job).get(key), val)
                     except TypeError as error:
-                        raise WrongTypeError(val.get('type'), self.value.get(job).get(key), key) from error
+                        raise WrongTypeError(val, type(self.value.get(job).get(key)), key) from error
 
-        except (KeyNotInDictError, WrongTypeError) as error:
+                    if self.value.get(job).get(key) == 'None':
+                        raise WrongValueError(['null'], self.value.get(job).get(key), key)
+
+
+        except (KeyNotInDictError, WrongTypeError, WrongValueError) as error:
             self.report = Report(error)
             return False
 
@@ -360,13 +366,14 @@ class RequestValueValidator(Validator):
             for job in self.value:
 
                 # if key 'currency-pairs' is specified
-                if self.value.get(job).get("currency_pairs"):
-                    for item in self.value.get(job).get('currency_pairs'):
-                        if item == 'all':
-                            continue
-                        for key in ['first', 'second']:
-                            if key not in item.keys() and item.keys:
-                                raise KeyNotInDictError(key, item.keys())
+                if pair_string := self.value.get(job).get("currency_pairs"):
+                    # One way to check if the splitting value ("-") for currency-pairs and between (",") are
+                    # correctly specified is to check if count("-") is >= 0 and always equal to count(",") + 1.
+                    if pair_string.count("-") >= 0 and (pair_string.count("-") == pair_string.count(",") + 1):
+                        continue
+
+                    else:
+                        raise WrongCurrencyPairFormatError(["-", ","], pair_string, 'currency_pairs')
 
                 # if neither currency-pairs nor first_currencies or second_currencies are specified. That is only
                 # allowed for the request method 'currency_pairs'.
@@ -377,7 +384,7 @@ class RequestValueValidator(Validator):
                         self.value.get(job).get("second_currencies") is None]):
                     raise WrongCompositeValueError(["currency_pairs", "first_currencies", "second_currencies"])
 
-        except (WrongCompositeValueError, KeyNotInDictError) as error:
+        except (WrongCompositeValueError, KeyNotInDictError, WrongCurrencyPairFormatError) as error:
             self.report = Report(error)
             return False
 

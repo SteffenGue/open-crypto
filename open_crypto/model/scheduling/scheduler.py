@@ -157,10 +157,10 @@ class Scheduler:
         @rtype: list[Job]
         """
         if not jobs:
-            logging.error("No or invalid Jobs.")
+            logging.error("No or invalid Job(s).")
 
-            print("\nNo matching currency-pairs for the requested exchanges. "
-                  "Please check your request settings in the configuration.")
+            print("\nNo currency-pair(s) found for the specified exchange(s). "
+                  "Please check your request settings in the configuration file.")
             raise SystemExit
 
         for job in jobs:

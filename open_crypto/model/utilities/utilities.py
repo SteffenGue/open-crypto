@@ -350,7 +350,7 @@ def load_program_config() -> Dict[str, Any]:
             return yaml.load(file, Loader=yaml.FullLoader)
 
 
-def get_exchange_names(yaml_path: str = None) -> List[str]:
+def get_exchange_names(yaml_path: str = None) -> Optional[List[str]]:
     """
     Gives information about all exchange that the program will send
     requests to. This means if the name of a exchange is not part of the
@@ -364,11 +364,17 @@ def get_exchange_names(yaml_path: str = None) -> List[str]:
     """
     if not yaml_path:
         yaml_path = read_config(file=None, section="utilities")["yaml_path"]
-    path_to_resources: Path = pathlib.Path().parent.absolute()
+    path_absolut: Path = pathlib.Path().parent.absolute()
+    path_to_resources = Path.joinpath(path_absolut, yaml_path)
 
-    exchanges = os.listdir(Path.joinpath(path_to_resources, yaml_path))
-    exchanges = [x.split(".yaml")[0] for x in exchanges if x.endswith(".yaml")]
-    exchanges.sort()
+    try:
+        exchanges = os.listdir(path_to_resources)
+        exchanges = [x.split(".yaml")[0] for x in exchanges if x.endswith(".yaml")]
+        exchanges.sort()
+    except FileNotFoundError:
+        print(f"YAML files not found. The path {path_to_resources} is incorrect.")
+        logging.error("Exchange YAML-files not found. Path %s seems incorrect.", path_to_resources)
+        return
 
     return exchanges
 
@@ -381,25 +387,23 @@ def provide_ssl_context() -> ssl.SSLContext:
     @return: SSLContext
     """
 
+    print("Warning: No root SSL-certificate found on your local machine.\n"
+          "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
+          "try to install certification by executing the following file on your MacOS: \n"
+          "'/Applications/Python [your/version/number]/Install Certificates.command'.")
+
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     ssl_context.verify_mode = ssl.CERT_REQUIRED
     ssl_context.check_hostname = True
     ssl_context.load_default_certs()
 
     # ToDo: Test under new MacOS!
-    if platform.system().lower() == 'darwin':
-        try:
-            print("Warning: No root SSL-certificate found on your local machine.\n"
-                  "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
-                  "try to install certification by executing the following file on your MacOS: \n"
-                  "'/Applications/Python [your/version/number]/Install Certificates.command'.")
-            ssl_context.load_verify_locations(
-                cafile=os.path.relpath(certifi.where()),
-                capath=None,
-                cadata=None)
-            return ssl_context
-        except Exception:
-            return None
+    ssl_context.load_verify_locations(
+        cafile=os.path.relpath(certifi.where()),
+        capath=None,
+        cadata=None)
+
+    return ssl_context
 
 
 def replace_list_item(replace_list: list, condition: str, value: str) -> list:
@@ -466,7 +470,7 @@ def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
     @param ex_value: Values causing the exception
     @param ex_traceback: Traceback attribute of the exception
     """
-    logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
+    logging.exception("Uncaught exception: %s: %s \n %s", ex_type, ex_value, ex_traceback)
 
 
 def signal_handler(signal_number: Any, stack: Any) -> None:
@@ -496,3 +500,16 @@ def init_logger(path: str, program_config: dict) -> None:
         logging.basicConfig(
             filename=path + dirname + f"{TimeHelper.now().strftime(time_format)}.log",
             level=program_config['logging'].get('level', 'ERROR'))
+
+
+def split_str_to_list(string: str, splitter: str = ",") -> List[str]:
+    """
+    Splits a string into a list of string.
+    @param string: A long string.
+    @param splitter: The splitting parameter
+    @return: List of strings
+    """
+    items = string.rsplit(splitter)
+
+    # remove possiple blanks from strings
+    return [item.replace(" ", "") for item in items]

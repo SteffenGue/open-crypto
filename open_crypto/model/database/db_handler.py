@@ -29,6 +29,7 @@ from sqlalchemy_utils import database_exists, create_database
 
 from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, DatabaseTable
 from model.utilities.time_helper import TimeHelper
+from model.utilities.utilities import split_str_to_list
 
 
 class DatabaseHandler:
@@ -271,18 +272,22 @@ class DatabaseHandler:
         """
 
         if isinstance(first_currencies, str):
-            first_currencies = first_currencies.rsplit(",")
-            first_currencies = [item.replace(" ", "") for item in first_currencies]
+            first_currencies = split_str_to_list(first_currencies)
+
         if isinstance(second_currencies, str):
-            first_currencies = second_currencies.rsplit(",")
-            first_currencies = [item.replace(" ", "") for item in second_currencies]
+            second_currencies = split_str_to_list(second_currencies)
 
         found_currency_pairs: List[ExchangeCurrencyPair] = list()
+
         if currency_pairs:
+
             if "all" in currency_pairs:
                 found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
-            elif currency_pairs[0] is not None:
-                found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+            if isinstance(currency_pairs, str):
+                currency_pairs = split_str_to_list(currency_pairs)
+                currency_pairs = [{"first": split_str_to_list(pair, "-")[0],
+                                   "second": split_str_to_list(pair, "-")[1]} for pair in currency_pairs]
+            found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
 
         if first_currencies and second_currencies:
             currency_pairs = list(product(first_currencies, second_currencies))

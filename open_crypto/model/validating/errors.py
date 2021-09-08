@@ -221,7 +221,8 @@ class WrongValueError(ValidationError):
     def __init__(
             self,
             expected_value: List[Any],
-            actual_value: Union[str, int, float]):
+            actual_value: Union[str, int, float],
+            key: str):
         """
         Constructor of WrongValueError.
 
@@ -235,6 +236,7 @@ class WrongValueError(ValidationError):
         self.expected_value = expected_value \
             if not isinstance(expected_value, Iterable) else set(expected_value)
         self.actual_value = actual_value
+        self.key = key
 
     def __str__(self) -> Text:
         """A method for representing a text.
@@ -244,7 +246,7 @@ class WrongValueError(ValidationError):
 
         @return: A Text.
         """
-        return f"Expected value(s) '{self.expected_value}' != actual value '{self.actual_value}'."
+        return f"Expected value(s) '{self.expected_value}' != actual value '{self.actual_value}' in '{self.key}'."
 
 
 class WrongCompositeValueError(ValidationError):
@@ -277,3 +279,39 @@ class WrongCompositeValueError(ValidationError):
         @return: A Text.
         """
         return f"Expected one keys(s) '{self.keys}' != None."
+
+
+class WrongCurrencyPairFormatError(ValidationError):
+    """
+    Exception in case that a value has a wrong type.
+    """
+
+    def __init__(
+            self,
+            expected_value: List[str],
+            actual_value: Union[Any],
+            key: str):
+        """
+        Constructor of WrongValueError.
+
+        Args:
+            expected_value:
+                A value that is expected.
+            actual_value:
+                The actual value, which is not the expected value.
+        """
+        super().__init__("Key has wrong value.")
+        self.expected_value = expected_value
+        self.actual_value = actual_value
+        self.key = key
+
+    def __str__(self) -> Text:
+        """A method for representing a text.
+
+        A text value returning the expected value(s), which is/are unlike the
+        actual value.
+
+        @return: A Text.
+        """
+        return f"Expected splitting value(s) '{self.expected_value}' != actual value '{self.actual_value}' " \
+               f"in '{self.key}'."
