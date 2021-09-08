@@ -470,7 +470,7 @@ def handler(ex_type: Any, ex_value: Any, ex_traceback: Any) -> None:
     @param ex_value: Values causing the exception
     @param ex_traceback: Traceback attribute of the exception
     """
-    logging.exception("Uncaught exception: %s: %s \n %s", ex_type, ex_value, ex_traceback)
+    logging.exception("Uncaught exception: %s: %s", ex_type, ex_value)
 
 
 def signal_handler(signal_number: Any, stack: Any) -> None:

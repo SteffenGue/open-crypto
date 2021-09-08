@@ -278,7 +278,7 @@ class WrongCompositeValueError(ValidationError):
 
         @return: A Text.
         """
-        return f"Expected one keys(s) '{self.keys}' != None."
+        return f"Expected one key(s) '{self.keys}' != None."
 
 
 class WrongCurrencyPairFormatError(ValidationError):

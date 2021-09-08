@@ -84,7 +84,7 @@ class GitDownloader:
                 # bring the cursor to the beginning, erase the current line, and dont make a new line
                 GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(data["name"]), "green", in_place=True)
 
-            with Loader("Updating exchange mappings from Github..", "✔ Exchange mapping update complete", max_counter=len(data)) as loader:
+            with Loader("Updating exchange mappings from GitHub..", "✔ Exchange mapping update complete", max_counter=len(data)) as loader:
                 for file in data:
                     file_url = file["download_url"]
                     file_name = file["name"]

@@ -49,13 +49,14 @@ In order to make adjustments, all files and collected data will be copied to you
 The module ```runner``` offers several functionalities to control the program:
 ```python
 >>>runner.check_path() # check if resources are in your working directory.
->>>runner.update_maps() # copies (and overrides) all files (exchange maps and configurations) to your cwd.
->>>runner.get_session() # returns an open database connection.
->>>runner.exchanges_and_methods() # returns all implemented exchanges and their supported API endpoints.
->>>runner.get_config() # prints a specified or the actual configuration file
->>>runner.get_config_template() # returns an empty configuration file to the resource directory.
->>>runner.export() # allows exporting data from the database into csv/hdf-files.
->>>runner.run() # starts the program.
+>>>runner.update_maps() # download the lastest exchanges mappings from the GitHub repository
+>>>runner.copy_resources() # copy the resources into the currency working directory
+>>>runner.get_session() # return an open database connection.
+>>>runner.exchanges_and_methods() # return all implemented exchanges and their supported API endpoints.
+>>>runner.get_config() # print a specified or the actual configuration file
+>>>runner.get_config_template() # return an empty configuration file to the resource directory.
+>>>runner.export() # allow exporting data from the database into csv/hdf-files.
+>>>runner.run() # start the program.
 ```
 For more details, make use of the _help_ function:
 ```python
@@ -65,9 +66,9 @@ To start the data collector, open ```Python``` within your working directory of 
 ```python
 >>>from open_crypto import runner
 >>>runner.update_maps()
-Copying resources to [your/current/cwd]..
+Updating exchange mappings from GitHub.. 100%
 ```
-The first command will import the module ```runner```. Within ```runner``` the function ```update_maps``` will copy (or update if it already exists) all ```resources``` into your working directory.
+The first command will import the module ```runner```. Within ```runner``` the function ```update_maps``` will download the latest exchange mappings from GitHub and (if the folder already exists overwrite) all ```resources``` into your working directory.
 
 Personalized requests can be made by first creating a new configuration file template:
 ```python
@@ -80,7 +81,7 @@ Finally, read in the file and execute the program:
 ```python
 >>>from open_crypto import runner
 >>>runner.run()
-Enter config file name: [your/file/name]
+Enter config file name: <your_file_name>
 ```
 For a first impression, consider executing the following examples before creating personalized tasks.
 
@@ -127,22 +128,15 @@ jobs:
   JobName:  # An arbitrarily chosen name
     yaml_request_name: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
-    excluded: null # name of exchange excluded
-    exchanges: # 'all' or an arbitrary list of exchanges
-      - exchange1
-      - exchange2
-#     - all
-    currency_pairs: # all or an arbitrary list of currency-pairs
-      - all
-#     - first: null
-#       second: null
-    first_currencies: # filter database by the first currency and take all
-      - null
-    second_currencies: # filter database by the second currency and take all.
-      - null
+    excluded: null # comma-separated list of exchange names
+    
+    exchanges: # all or an comma-separated list of exchange names
+    currency_pairs: # all or an comma-separated list of currency-pairs (e.g. eth-btc, btc-usd, ..)
+    first_currencies: null # comma-separated list of currencies (e.g. eth, btc, ..)
+    second_currencies: null 
 ```
 
-Leaving all ```general``` settings untouched will save the requested data into a ```SQLite``` database within your current working directory. A valid request, simply catching (daily) historical candles from ```Coinbase``` and ```Bitfinex``` for the currency-pair ```BTC-USD```, looks like the following:
+Leaving all ```general``` settings untouched will save the requested data into a ```SQLite``` database within your current working directory. A valid request, simply catching (daily) historical candles from ```Coinbase``` and ```Bitfinex``` for the currency-pair ```btc-usd```, looks like the following:
 
 ```yaml
 general:
@@ -155,16 +149,12 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     excluded: null
-    exchanges:
-      - coinbase
-      - bitfinex
-    currency_pairs:
-      - first: btc
-        second: usd
+    exchanges: coinbase, bitfinex
+    currency_pairs: btc-usd
     first_currencies: null
     second_currencies: null
 ```
-Note that the request interval (```minutes```, ```days```, ...) and frequency (only ```once``` and not iteratively) is listed under ```operation_settings```. Further currency-pairs can easily be appended in the same format. However, if one is interested in catching all currency-pairs from the same exchanges with base-currency Bitcoin (i.e. ```BTC-USD```, ```BTC-EUR```, ```...```):
+Note that the request interval (```minutes```, ```days```, ...) and frequency (only ```once``` and not iteratively) is listed under ```operation_settings```. Further currency-pairs can easily be appended in the same format. However, if one is interested in catching all currency-pairs from the same exchanges with base-currency Bitcoin (i.e. ```btc-usd```, ```btc-eur```, ```...```):
 ```yaml
 general:
   database: <...>
@@ -176,15 +166,12 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     excluded: null
-    exchanges:
-      - coinbase
-      - bitfinex
+    exchanges: coinbase, bitfinex
     currency_pairs: null
-    first_currencies:
-      - btc
+    first_currencies: btc
     second_currencies: null
 ```
-Note, when applying a further filter for US-Dollar to ```second_currencies```, both former requests are identical. Lastly, one may be interested in all historical ```BTC-USD``` time series available, therefore:
+Note, when applying a further filter for US-Dollar to ```second_currencies```, both former requests are identical. Lastly, one may be interested in all historical ```btc-usd``` time series available, therefore:
 
 ```yaml
 general:
@@ -197,11 +184,8 @@ jobs:
     yaml_request_name: historic_rates
     update_cp: false
     excluded: null
-    exchanges:
-      - all
-    currency_pairs:
-      - first: btc
-        second: usd
+    exchanges: all
+    currency_pairs: btc-usd
     first_currencies: null
     second_currencies: null
 ```
