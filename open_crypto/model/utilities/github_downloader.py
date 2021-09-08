@@ -73,8 +73,6 @@ class GitDownloader:
 
         with open(response[0], "r") as f:
             data = json.load(f)
-            # getting the total number of files so that we
-            # can use it for the output information later
 
             # If the data is a file, download it as one.
             if isinstance(data, dict) and data["type"] == "file":
@@ -98,11 +96,6 @@ class GitDownloader:
                         # download the file
                         urllib.request.urlretrieve(file_url, output_dir + file['name'])
 
-                        # bring the cursor to the beginning, erase the current line, and dont make a new line
-                        # GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(file_name),
-                        #                          "green", in_place=False, end="\n", flush=True)
-
-
                     else:
                         GitDownloader.download(file["html_url"], flatten, output_dir)
 
@@ -121,6 +114,3 @@ class GitDownloader:
 
         GitDownloader.download(url, output_dir= resource_path)
         # GitDownloader.print_text("✔ Exchange mapping update complete", "green", in_place=True)
-#
-
-
