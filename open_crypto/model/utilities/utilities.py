@@ -446,7 +446,7 @@ def prepend_spaces_to_columns(dataframe: pd.DataFrame, space_count: int = 3) -> 
     @return: DataFrame with appended spaced.
     @rtype: pd.DataFrame
     """
-
+    dataframe.replace(pd.NA, False, inplace=True)
     spaces = ' ' * space_count
     # ensure every column name has the leading spaces:
     if isinstance(dataframe.columns, pd.MultiIndex):
