@@ -58,7 +58,7 @@ class GlobalConfig(object):
         """
         if not file:
             file = input("Enter config file name: ").lower()
-            if file in ["quit", "exit"]:
+            if file in ["quit", "exit", "exit()", "quit()"]:
                 raise SystemExit
                 # sys.exit(0)
         if ".yaml" not in file:

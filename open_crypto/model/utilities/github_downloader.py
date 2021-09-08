@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 """
 This module is essentially taken from 'https://github.com/sdushantha/gitdir'. Full credit to the author and many thanks!
-Smaller adjustments are made, in particular regarding the print statements. The main functionality remains untouched.
+Smaller adjustments are made, in particular regarding the print statements. The functions are refactored into methods.
+The functionality itself remains unchanged.
 """
+from typing import Tuple
 
 import re
 import os
@@ -16,6 +19,8 @@ import sys
 from colorama import Fore, Style, init
 from pathlib import Path
 
+from _paths import package_path
+
 init()
 
 # this ANSI code lets us erase the current line
@@ -25,26 +30,35 @@ COLOR_NAME_TO_CODE = {"default": "", "red": Fore.RED, "green": Style.BRIGHT + Fo
 
 
 class GitDownloader:
+    """
+    Class to download, in this case update, files directly from the Github repository. This is needed to react on
+    frequently changing exchange API mappings without the need to create a new PyPI version. The class is called
+    in the runner module, in particular with: runner.update_maps().
+    """
 
     @staticmethod
     def print_text(text: str, color: str = "default", in_place: bool = False, **kwargs) -> None:
         """
         print text to console, a wrapper to built-in print
 
-        :param text: text to print
-        :param color: can be one of "red" or "green", or "default"
-        :param in_place: whether to erase previous line and print in place
-        :param kwargs: other keywords passed to built-in print
+        @param text: text to print
+        @param color: can be one of "red" or "green", or "default"
+        @param in_place: whether to erase previous line and print in place
+        @param kwargs: other keywords passed to built-in print
         """
+
         if in_place:
             print("\r" + ERASE_LINE, end="")
         print(COLOR_NAME_TO_CODE[color] + text + Style.RESET_ALL, **kwargs)
 
     @staticmethod
-    def create_url(url: str):
+    def create_url(url: str) -> Tuple[str, str]:
         """
         From the given url, produce a URL that is compatible with Github's REST API. Can handle blob or tree paths.
+        @param url: The repository url.
+        @return api_url, download_dirs
         """
+
         repo_only_url = re.compile(r"https:\/\/github\.com\/[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}\/[a-zA-Z0-9]+$")
         re_branch = re.compile("/(tree|blob)/(.+?)/")
 
@@ -63,117 +77,67 @@ class GitDownloader:
         return api_url, download_dirs
 
     @staticmethod
-    def download(repo_url, flatten=False, output_dir="./"):
-        """ Downloads the files and directories in repo_url. If flatten is specified, the contents of any and all
-         sub-directories will be pulled upwards into the root folder. """
+    def download(repo_url: str,  output_dir: str = "./resources/running_exchanges/") -> None:
+        """
+        Downloads the files and directories
+
+        @param repo_url: The repository-url.
+        @param output_dir: The output directory
+        """
 
         # generate the url which returns the JSON data
         api_url, download_dirs = GitDownloader.create_url(repo_url)
 
-        # To handle file names.
-        if not flatten:
-            if len(download_dirs.split(".")) == 0:
-                dir_out = os.path.join(output_dir, download_dirs)
-            else:
-                dir_out = os.path.join(output_dir, "/".join(download_dirs.split("/")[:-1]))
-        else:
-            dir_out = output_dir
-
-        try:
-            opener = urllib.request.build_opener()
-            opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-            urllib.request.install_opener(opener)
-            response = urllib.request.urlretrieve(api_url)
-        except KeyboardInterrupt:
-            # when CTRL+C is pressed during the execution of this script,
-            # bring the cursor to the beginning, erase the current line, and dont make a new line
-            GitDownloader.print_text("✘ Got interrupted", "red", in_place=True)
-            sys.exit()
-
-        if not flatten:
-            # make a directory with the name which is taken from
-            # the actual repo
-            os.makedirs(dir_out, exist_ok=True)
-
-        # total files count
-        total_files = 0
+        opener = urllib.request.build_opener()
+        opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+        urllib.request.install_opener(opener)
+        response = urllib.request.urlretrieve(api_url)
 
         with open(response[0], "r") as f:
             data = json.load(f)
             # getting the total number of files so that we
             # can use it for the output information later
-            total_files += len(data)
 
             # If the data is a file, download it as one.
             if isinstance(data, dict) and data["type"] == "file":
-                try:
-                    # download the file
-                    opener = urllib.request.build_opener()
-                    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-                    urllib.request.install_opener(opener)
-                    urllib.request.urlretrieve(data["download_url"], os.path.join(dir_out, data["name"]))
-                    # bring the cursor to the beginning, erase the current line, and dont make a new line
-                    GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(data["name"]), "green", in_place=True)
-
-                    return total_files
-                except KeyboardInterrupt:
-                    # when CTRL+C is pressed during the execution of this script,
-                    # bring the cursor to the beginning, erase the current line, and dont make a new line
-                    print_text("✘ Got interrupted", 'red', in_place=False)
-                    sys.exit()
+                # download the file
+                opener = urllib.request.build_opener()
+                opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+                urllib.request.install_opener(opener)
+                urllib.request.urlretrieve(data["download_url"], os.path.join(dir_out, data["name"]))
+                # bring the cursor to the beginning, erase the current line, and dont make a new line
+                GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(data["name"]), "green", in_place=True)
 
             for file in data:
                 file_url = file["download_url"]
                 file_name = file["name"]
 
-                if flatten:
-                    path = os.path.basename(file["path"])
-                else:
-                    path = file["path"]
-                dirname = os.path.dirname(path)
-
-                if dirname != '':
-                    os.makedirs(os.path.dirname(path), exist_ok=True)
-                else:
-                    pass
-
                 if file_url is not None:
-                    try:
-                        opener = urllib.request.build_opener()
-                        opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-                        urllib.request.install_opener(opener)
-                        # download the file
-                        urllib.request.urlretrieve(file_url, path)
+                    opener = urllib.request.build_opener()
+                    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+                    urllib.request.install_opener(opener)
+                    # download the file
+                    urllib.request.urlretrieve(file_url, output_dir + file['name'])
 
-                        # bring the cursor to the beginning, erase the current line, and dont make a new line
-                        GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(file_name),
-                                                 "green", in_place=False, end="\n", flush=True)
+                    # bring the cursor to the beginning, erase the current line, and dont make a new line
+                    GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(file_name),
+                                             "green", in_place=False, end="\n", flush=True)
 
-                    except KeyboardInterrupt:
-                        # when CTRL+C is pressed during the execution of this script,
-                        # bring the cursor to the beginning, erase the current line, and dont make a new line
-                        print_text("✘ Got interrupted", 'red', in_place=False)
-                        sys.exit()
                 else:
-                    GitDownloader.download(file["html_url"], flatten, dir_out)
+                    GitDownloader.download(file["html_url"], flatten, output_dir)
 
-        return total_files
 
     @staticmethod
-    def main():
+    def main() -> None:
         if sys.platform != 'win32':
             # disbale CTRL+Z
             signal.signal(signal.SIGTSTP, signal.SIG_IGN)
 
         url = "https://github.com/SteffenGue/open-crypto/tree/master/open_crypto/resources/running_exchanges"
 
-        resource_path = "/resources/running_exchanges/"
-        path_absolut: Path = pathlib.Path().parent.absolute()
-        path_to_resources = Path.joinpath(path_absolut, resource_path)
+        resource_path = package_path + "/resources/running_exchanges/"
 
-        flatten = True
-
-        total_files = GitDownloader.download(url, flatten, path_to_resources)
+        GitDownloader.download(url, output_dir= resource_path)
         GitDownloader.print_text("✔ Exchange mapping update complete", "green", in_place=True)
 
 

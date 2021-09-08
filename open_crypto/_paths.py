@@ -14,3 +14,6 @@ all_paths = {
     'program_config_path': "",
     'template_path': "",
 }
+
+package_path = os.path.dirname(os.path.realpath(__file__))
+

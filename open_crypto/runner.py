@@ -28,12 +28,14 @@ from examples import Examples  # pylint: disable=unused-import
 
 def update_maps() -> None:
     """
-    Checks if all resources are in the current working directory. If not, calls the function update_maps()
+    Downloads the most recent exchange mappings from Github and saves them within the package directory.
+    If the CWD differs from the package directory (i.e. the site-packages directory), further copys the updated
+    resources to the current working directory.
     """
 
-    working_directory = os.getcwd()
-    check_path(working_directory)
     GitDownloader.main()
+    if os.getcwd() != _paths.package_path:
+        copy_resources()
 
 def check_path(path: str) -> None:
     """
@@ -190,4 +192,4 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
         pass
 
 if __name__ == '__main__':
-    run()
+    update_maps()
