@@ -84,15 +84,15 @@ class Loader:
         """
 
         # this ANSI code lets us erase the current line
-        ERASE_LINE = "\x1b[2K"
-        COLOR_NAME_TO_CODE = {"default": "", "red": Fore.RED, "green": Style.BRIGHT + Fore.GREEN}
+        erase_line = "\x1b[2K"
+        color_name_to_code = {"default": "", "red": Fore.RED, "green": Style.BRIGHT + Fore.GREEN}
 
         self.done = True
         cols = get_terminal_size((80, 20)).columns
         print("\r" + " " * cols, end="", flush=True)
-        sys.stdout.write(COLOR_NAME_TO_CODE[color] + f"\r{self.end}" + Style.RESET_ALL)
+        sys.stdout.write(color_name_to_code[color] + f"\r{self.end}" + Style.RESET_ALL)
         if in_place:
-            print("\r" + ERASE_LINE, end="")
+            print("\r" + erase_line, end="")
 
         sys.stdout.flush()
 

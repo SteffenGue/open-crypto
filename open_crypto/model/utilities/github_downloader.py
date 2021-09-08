@@ -11,12 +11,9 @@ from typing import Tuple
 import re
 import os
 import urllib.request
-import pathlib
 import signal
-import argparse
 import json
 import sys
-from pathlib import Path
 
 from _paths import package_path
 from model.utilities.loading_bar import Loader
@@ -43,8 +40,7 @@ class GitDownloader:
         # Check if the given url is a url to a GitHub repo. If it is, tell the
         # user to use 'git clone' to download it
         if re.match(repo_only_url,url):
-            print_text("✘ The given url is a complete repository. Use 'git clone' to download the repository",
-                       "red", in_place=True)
+            print("✘ The given url is a complete repository. Use 'git clone' to download the repository")
             sys.exit()
 
         # extract the branch name from the given url (e.g master)
@@ -52,7 +48,7 @@ class GitDownloader:
         download_dirs = url[branch.end():]
         api_url = (url[:branch.start()].replace("github.com", "api.github.com/repos", 1) +
                   "/contents/" + download_dirs + "?ref=" + branch.group(2))
-        return api_url, download_dirs
+        return api_url
 
     @staticmethod
     def download(repo_url: str,  output_dir: str = "./resources/running_exchanges/") -> None:
@@ -64,15 +60,15 @@ class GitDownloader:
         """
 
         # generate the url which returns the JSON data
-        api_url, download_dirs = GitDownloader.create_url(repo_url)
+        api_url = GitDownloader.create_url(repo_url)
 
         opener = urllib.request.build_opener()
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
         urllib.request.install_opener(opener)
         response = urllib.request.urlretrieve(api_url)
 
-        with open(response[0], "r") as f:
-            data = json.load(f)
+        with open(response[0], "r", encoding='UTF-8') as resp:
+            data = json.load(resp)
 
             # If the data is a file, download it as one.
             if isinstance(data, dict) and data["type"] == "file":
@@ -80,14 +76,12 @@ class GitDownloader:
                 opener = urllib.request.build_opener()
                 opener.addheaders = [('User-agent', 'Mozilla/5.0')]
                 urllib.request.install_opener(opener)
-                urllib.request.urlretrieve(data["download_url"], os.path.join(dir_out, data["name"]))
+                urllib.request.urlretrieve(data["download_url"], os.path.join(output_dir, data["name"]))
                 # bring the cursor to the beginning, erase the current line, and dont make a new line
-                GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(data["name"]), "green", in_place=True)
 
             with Loader("Updating exchange mappings from GitHub..", "✔ Exchange mapping update complete", max_counter=len(data)) as loader:
                 for file in data:
                     file_url = file["download_url"]
-                    file_name = file["name"]
 
                     if file_url is not None:
                         opener = urllib.request.build_opener()
@@ -97,13 +91,17 @@ class GitDownloader:
                         urllib.request.urlretrieve(file_url, output_dir + file['name'])
 
                     else:
-                        GitDownloader.download(file["html_url"], flatten, output_dir)
+                        GitDownloader.download(file["html_url"], output_dir)
 
                     loader.increment()
 
 
     @staticmethod
     def main() -> None:
+        """
+        Run the downloader.
+        """
+
         if sys.platform != 'win32':
             # disbale CTRL+Z
             signal.signal(signal.SIGTSTP, signal.SIG_IGN)

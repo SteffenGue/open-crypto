@@ -24,7 +24,6 @@ import datetime
 import logging
 import os
 import pathlib
-import platform
 import ssl
 from datetime import timedelta
 from pathlib import Path

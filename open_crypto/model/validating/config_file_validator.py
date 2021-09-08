@@ -22,7 +22,7 @@ Classes:
 
 """
 
-from typing import Any, Text, Dict, Union, Optional, List
+from typing import Any, Text, Dict, Union, Optional
 from pandas import Interval
 from typeguard import check_type
 
@@ -31,9 +31,6 @@ from model.validating.api_map_validators import LoadFileValidator, LoadYamlValid
 from model.validating.base import Report, Validator, CompositeValidator
 from model.validating.errors import KeyNotInDictError, WrongTypeError, WrongValueError, WrongCompositeValueError
 from model.validating.errors import WrongCurrencyPairFormatError
-from model.utilities.utilities import split_str_to_list
-
-# ToDo Implement typeguard for type-checking the config file using generic types.
 
 
 class ConfigFileValidator(CompositeValidator):
