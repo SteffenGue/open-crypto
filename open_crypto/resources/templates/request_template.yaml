@@ -17,18 +17,12 @@ general:
     yaml_path: resources/running_exchanges/
 jobs:
   JobName:
-    yaml_request_name: historic_rates
+    yaml_request_name:  # historic_rates, trades, order_books, tickers
     update_cp: false
-    excluded: null
-    exchanges:
-      - exchange1
-      - exchange2
-      - all
-    currency_pairs:
-      - all
-#      - first: null
-#        second: null
-    first_currencies: null
+    excluded: null  # all or an comma-separated list of exchange names
+    exchanges:  # all or an comma-separated list of exchange names
+    currency_pairs:  # all or an comma-separated list of pairs (e.g. eth-btc, btc-usd,..)
+    first_currencies: null  # comma-separated list of currencies (e.g. eth, btc,...)
     second_currencies: null
 
 

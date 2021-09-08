@@ -139,7 +139,7 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
 def run(file: str = None, path: str = None) -> None:
     """
     Starts the program and initializes the asyncio-event-loop.
-    @param file:
+    @param file: string representation of the configuration file
     @param path: String representation to the current working directory or any PATH specified in runner.py
     """
 
