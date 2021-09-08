@@ -21,9 +21,19 @@ from model.utilities.kill_switch import KillSwitch
 from model.utilities.export import CsvExport, database_session
 from model.utilities.utilities import read_config, get_all_exchanges_and_methods, prepend_spaces_to_columns
 from model.utilities.settings import Settings  # pylint: disable=unused-import
+from model.utilities.github_downloader import GitDownloader
 from model.database.tables import *  # pylint: disable=unused-import
 from examples import Examples  # pylint: disable=unused-import
 
+
+def update_maps() -> None:
+    """
+    Checks if all resources are in the current working directory. If not, calls the function update_maps()
+    """
+
+    working_directory = os.getcwd()
+    check_path(working_directory)
+    GitDownloader.main()
 
 def check_path(path: str) -> None:
     """
@@ -34,10 +44,10 @@ def check_path(path: str) -> None:
     """
     destination = path + "/resources"
     if not os.path.exists(destination):
-        update_maps(path)
+        copy_resources(path)
 
 
-def update_maps(directory: str = os.getcwd()) -> None:
+def copy_resources(directory: str = os.getcwd()) -> None:
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
@@ -98,6 +108,9 @@ def exchanges_and_methods(return_dataframe: bool = False) -> Optional[pd.DataFra
     @return: Print or return dataframe
     @rtype: Optional[pd.DataFrame]
     """
+    working_directory = os.getcwd()
+    check_path(working_directory)
+
     dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
     pd.set_option('display.max_rows', 500)
 
@@ -175,3 +188,6 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
         main.run(configuration_file, working_directory)
     except SystemExit:
         pass
+
+if __name__ == '__main__':
+    run()
