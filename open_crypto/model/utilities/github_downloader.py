@@ -3,8 +3,8 @@
 
 """
 This module is essentially taken from 'https://github.com/sdushantha/gitdir'. Full credit to the author and many thanks!
-Smaller adjustments are made, in particular regarding the print statements. The functions are refactored into methods.
-The functionality itself remains unchanged.
+Smaller adjustments are made, in particular regarding the print statements. The functions are refactored into methods
+or moved to different classes.
 """
 from typing import Tuple
 
@@ -16,17 +16,10 @@ import signal
 import argparse
 import json
 import sys
-from colorama import Fore, Style, init
 from pathlib import Path
 
 from _paths import package_path
-
-init()
-
-# this ANSI code lets us erase the current line
-ERASE_LINE = "\x1b[2K"
-
-COLOR_NAME_TO_CODE = {"default": "", "red": Fore.RED, "green": Style.BRIGHT + Fore.GREEN}
+from model.utilities.loading_bar import Loader
 
 
 class GitDownloader:
@@ -35,21 +28,6 @@ class GitDownloader:
     frequently changing exchange API mappings without the need to create a new PyPI version. The class is called
     in the runner module, in particular with: runner.update_maps().
     """
-
-    @staticmethod
-    def print_text(text: str, color: str = "default", in_place: bool = False, **kwargs) -> None:
-        """
-        print text to console, a wrapper to built-in print
-
-        @param text: text to print
-        @param color: can be one of "red" or "green", or "default"
-        @param in_place: whether to erase previous line and print in place
-        @param kwargs: other keywords passed to built-in print
-        """
-
-        if in_place:
-            print("\r" + ERASE_LINE, end="")
-        print(COLOR_NAME_TO_CODE[color] + text + Style.RESET_ALL, **kwargs)
 
     @staticmethod
     def create_url(url: str) -> Tuple[str, str]:
@@ -108,23 +86,27 @@ class GitDownloader:
                 # bring the cursor to the beginning, erase the current line, and dont make a new line
                 GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(data["name"]), "green", in_place=True)
 
-            for file in data:
-                file_url = file["download_url"]
-                file_name = file["name"]
+            with Loader("Updating exchange mappings from Github..", "✔ Exchange mapping update complete", max_counter=len(data)) as loader:
+                for file in data:
+                    file_url = file["download_url"]
+                    file_name = file["name"]
 
-                if file_url is not None:
-                    opener = urllib.request.build_opener()
-                    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-                    urllib.request.install_opener(opener)
-                    # download the file
-                    urllib.request.urlretrieve(file_url, output_dir + file['name'])
+                    if file_url is not None:
+                        opener = urllib.request.build_opener()
+                        opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+                        urllib.request.install_opener(opener)
+                        # download the file
+                        urllib.request.urlretrieve(file_url, output_dir + file['name'])
 
-                    # bring the cursor to the beginning, erase the current line, and dont make a new line
-                    GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(file_name),
-                                             "green", in_place=False, end="\n", flush=True)
+                        # bring the cursor to the beginning, erase the current line, and dont make a new line
+                        # GitDownloader.print_text("Downloaded: " + Fore.WHITE + "{}".format(file_name),
+                        #                          "green", in_place=False, end="\n", flush=True)
 
-                else:
-                    GitDownloader.download(file["html_url"], flatten, output_dir)
+
+                    else:
+                        GitDownloader.download(file["html_url"], flatten, output_dir)
+
+                    loader.increment()
 
 
     @staticmethod
@@ -138,7 +120,7 @@ class GitDownloader:
         resource_path = package_path + "/resources/running_exchanges/"
 
         GitDownloader.download(url, output_dir= resource_path)
-        GitDownloader.print_text("✔ Exchange mapping update complete", "green", in_place=True)
-
+        # GitDownloader.print_text("✔ Exchange mapping update complete", "green", in_place=True)
+#
 
 

@@ -7,12 +7,16 @@ may be used within the context manager framework.
 Classes:
   - Loader
 """
+from typing import Any, Union
+
 import sys
 from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
-from typing import Any, Union
+from colorama import Fore, Style, init
+
+init()
 
 
 class Loader:
@@ -70,6 +74,29 @@ class Loader:
                 print(f"\r{self.desc} {step}", flush=True, end="")
             sleep(self.timeout)
 
+    def stop(self, color: str = "green", in_place: bool = False) -> None:
+        """
+        print text to console, a wrapper to built-in print
+
+        @param text: text to print
+        @param color: can be one of "red" or "green", or "default"
+        @param in_place: whether to erase previous line and print in place
+        """
+
+        # this ANSI code lets us erase the current line
+        ERASE_LINE = "\x1b[2K"
+        COLOR_NAME_TO_CODE = {"default": "", "red": Fore.RED, "green": Style.BRIGHT + Fore.GREEN}
+
+        self.done = True
+        cols = get_terminal_size((80, 20)).columns
+        print("\r" + " " * cols, end="", flush=True)
+        sys.stdout.write(COLOR_NAME_TO_CODE[color] + f"\r{self.end}" + Style.RESET_ALL)
+        if in_place:
+            print("\r" + ERASE_LINE, end="")
+
+        sys.stdout.flush()
+
+
     def __enter__(self) -> object:
         """
         Enter class as context manager.
@@ -77,15 +104,7 @@ class Loader:
         self.start()
         return self
 
-    def stop(self) -> None:
-        """
-        Stops the animation.
-        """
-        self.done = True
-        cols = get_terminal_size((80, 20)).columns
-        print("\r" + " " * cols, end="", flush=True)
-        sys.stdout.write(f"\r{self.end}")
-        sys.stdout.flush()
+
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """
@@ -93,3 +112,14 @@ class Loader:
         """
         # handle exceptions with those variables
         self.stop()
+
+
+        # def stop(self) -> None:
+        #     """
+        #     Stops the animation.
+        #     """
+        #     self.done = True
+        #     cols = get_terminal_size((80, 20)).columns
+        #     print("\r" + " " * cols, end="", flush=True)
+        #     sys.stdout.write(f"\r{self.end}")
+        #     sys.stdout.flush()
