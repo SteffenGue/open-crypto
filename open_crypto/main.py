@@ -51,7 +51,8 @@ async def initialize_jobs(job_config: Dict[str, Any],
 
         if isinstance(job_params.get("exchanges"), str):
             job_params['exchanges'] = split_str_to_list(job_params.get('exchanges'))
-        exchange_names = job_params["exchanges"] if job_params["exchanges"][0] != "all" else get_exchange_names()
+
+        exchange_names = get_exchange_names() if "all" in job_params['exchanges'] else job_params["exchanges"]
 
         # ToDo: Funnktioniert richtig?
         if job_params.get("excluded"):

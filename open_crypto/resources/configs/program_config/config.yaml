@@ -5,5 +5,5 @@ logging:
   exception_hook: true
 request_settings:
   min_return_tuples: 2
-  interval_settings: equal_or_lower
+  interval_settings: lower_or_equal
   request_direction: 0
