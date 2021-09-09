@@ -292,13 +292,15 @@ class WrongCurrencyPairFormatError(ValidationError):
             actual_value: Union[Any],
             key: str):
         """
-        Constructor of WrongValueError.
+        Constructor of WrongCurrencyPairFormatError.
 
         Args:
             expected_value:
                 A value that is expected.
             actual_value:
                 The actual value, which is not the expected value.
+            key:
+                The incorrectly specified key.
         """
         super().__init__("Key has wrong value.")
         self.expected_value = expected_value

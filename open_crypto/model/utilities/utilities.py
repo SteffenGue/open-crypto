@@ -240,8 +240,10 @@ TYPE_CONVERSIONS = {
 COMPARATOR = {'equal': lambda x, y: x == y,
               'lower': lambda x, y: x < y,
               'lower_or_equal': lambda x, y: x <= y,
+              'equal_or_lower': lambda x, y: x <= y,
               'higher': lambda x, y: x > y,
-              'higher_or_equal': lambda x, y: x >= y}
+              'higher_or_equal': lambda x, y: x >= y,
+              'equal_or_higher': lambda x, y: x >= y}
 """
 Dict providing basic compare functionality.
 """
@@ -386,10 +388,10 @@ def provide_ssl_context() -> ssl.SSLContext:
     @return: SSLContext
     """
 
-    print("Warning: No root SSL-certificate found on your local machine.\n"
-          "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
-          "try to install certification by executing the following file on your MacOS: \n"
-          "'/Applications/Python [your/version/number]/Install Certificates.command'.")
+    # print("Warning: No root SSL-certificate found on your local machine.\n"
+    #       "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
+    #       "try to install certification by executing the following file on your MacOS: \n"
+    #       "'/Applications/Python [your/version/number]/Install Certificates.command'.")
 
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     ssl_context.verify_mode = ssl.CERT_REQUIRED
