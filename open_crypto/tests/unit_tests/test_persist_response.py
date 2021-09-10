@@ -334,9 +334,10 @@ class TestPersistResponse:
         dictionaries (representing currency pairs), al ist of first currencies and a list of second currencies.
         For simplicity, only the id's will be compared (not the whole objects).
         """
-        currency_pairs = [{"first": "BTC", "second": "LTC"}]
-        firsts = ["DIO"]
-        seconds = []
+        # currency_pairs = [{"first": "BTC", "second": "LTC"}]
+        currency_pairs = "BTC-LTC"
+        firsts = "DIO"
+        seconds = None
         test_result = self.db_handler.get_exchanges_currency_pairs("TESTEXCHANGE", currency_pairs, firsts, seconds)
         test_result = [(item.exchange_id,
                         item.first_id,
@@ -357,9 +358,9 @@ class TestPersistResponse:
         dictionaries (representing currency pairs), al ist of first currencies and a list of second currencies.
         For simplicity, only the id's will be compared (not the whole objects).
         """
-        currency_pairs = [{"first": "BTC", "second": "DASH"}]
-        firsts = ["XRP"]
-        seconds = ["ETH"]
+        currency_pairs = "BTC-DASH"
+        firsts = "XRP"
+        seconds = "ETH"
         test_result = self.db_handler.get_exchanges_currency_pairs("TESTEXCHANGE", currency_pairs, firsts, seconds)
         test_result = [(item.exchange_id,
                         item.first_id,

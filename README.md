@@ -10,7 +10,7 @@ This is a short introduction to the package called __open-crypto__. The program 
 - __Aggreg. Platform__ data
 
 We offer an open-source tool which fits the needs for unprocessed and aggregated data in a new, fast, flexible and in many cases unexplored industry.
-Along with this short introduction we provide an in-depth __Handbook__ (forthcoming) with detailed information about the code and several examples to execute listed at the end.
+Along with this short introduction we provide several examples to execute listed at the end.
 
 ## Prerequisites
 - [Python >= 3.8](<https://www.python.org/downloads/>)
@@ -39,6 +39,7 @@ The following third-party libraries are installed with __open-crypto__:
 - sqlalchemy_utils
 - nest-asyncio
 - typeguard
+- colorama
 
 ## Run the program
 
