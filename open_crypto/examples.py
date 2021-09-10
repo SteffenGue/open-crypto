@@ -71,6 +71,7 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
+        print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
         configuration_file = 'Examples/static'
         session = get_session(configuration_file)
 

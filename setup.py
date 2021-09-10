@@ -42,6 +42,6 @@ setup(
         "validators",
         "nest_asyncio",
         "typeguard >= 2.12.1",
-	"colorama",
+        "colorama",
     ]
 )
