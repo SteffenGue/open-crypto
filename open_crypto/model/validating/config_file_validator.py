@@ -368,6 +368,8 @@ class RequestValueValidator(Validator):
                     # correctly specified is to check if count("-") is >= 0 and always equal to count(",") + 1.
                     if pair_string.count("-") >= 0 and (pair_string.count("-") == pair_string.count(",") + 1):
                         continue
+                    elif "all" in pair_string:
+                        continue
 
                     else:
                         raise WrongCurrencyPairFormatError(["-", ","], pair_string, 'currency_pairs')

@@ -283,11 +283,11 @@ class DatabaseHandler:
 
             if "all" in currency_pairs:
                 found_currency_pairs.extend(self.get_all_currency_pairs_from_exchange(exchange_name))
-            if isinstance(currency_pairs, str):
+            elif isinstance(currency_pairs, str):
                 currency_pairs = split_str_to_list(currency_pairs)
                 currency_pairs = [{"first": split_str_to_list(pair, "-")[0],
-                                   "second": split_str_to_list(pair, "-")[1]} for pair in currency_pairs]
-            found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
+                                   "second": split_str_to_list(pair, "-")[-1]} for pair in currency_pairs]
+                found_currency_pairs.extend(self.get_currency_pairs(exchange_name, currency_pairs))
 
         if first_currencies and second_currencies:
             currency_pairs = list(product(first_currencies, second_currencies))

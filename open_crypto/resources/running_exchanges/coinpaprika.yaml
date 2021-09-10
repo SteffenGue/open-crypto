@@ -82,7 +82,7 @@ requests:
             - datetime
             - timedelta
             - interval
-            - 25000
+            - 5000
         end:
           function: last_timestamp
           type:
