@@ -529,7 +529,7 @@ class DatabaseHandler:
             else:
                 return currency_pair.id
 
-    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int) -> datetime:
+    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int, last_row_id: int) -> datetime:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old.
         If the table is empty, the method trys to catch information from the helper table PairInfo.
@@ -545,6 +545,11 @@ class DatabaseHandler:
         """
 
         with self.session_scope() as session:
+            if last_row_id:
+                timestamp = session.execute(f'SELECT time FROM historic_rates where rowid = {last_row_id} '
+                                            f'ORDER BY time DESC').first()[0]
+                return datetime.utcfromtimestamp(timestamp/1000)
+
             (earliest_timestamp,) = session \
                 .query(func.min(table.time)) \
                 .filter(table.exchange_pair_id == exchange_pair_id) \
@@ -662,7 +667,7 @@ class DatabaseHandler:
                          exchange: Exchange,
                          db_table: DatabaseTable,
                          formatted_response: Iterator[Any],
-                         update_on_conflict: bool = False) -> List[ExchangeCurrencyPair]:
+                         update_on_conflict: bool = False) -> Dict[ExchangeCurrencyPair, Optional[int]]:
         """
         Method to persist the formatted response into the database. Every data tuple get is inspected for
         valid data, i.e. the mapping key and corresponding data must be one of the table columns of the database.
@@ -680,7 +685,7 @@ class DatabaseHandler:
         @param db_table: Affected database table, i.e. request-method
         @param formatted_response: Generator of extracted and formatted response.
         @param update_on_conflict: Bool if conflicting rows should be updated or ignored
-        @return: List containing ExchangeCurrencyPair-Object
+        @return: Dict containing ExchangeCurrencyPair-Object and the last inserted row_id
         """
 
         col_names = [key.name for key in inspect(db_table).columns]
@@ -715,6 +720,11 @@ class DatabaseHandler:
                 if not data_to_persist:
                     continue
 
+                # Sort data by timestamp in order to ensure the last_row_id (see below) to be with the oldest timestamp.
+                # This is used for historic_rates.get_first_timestamp(), if the oldest timestamp of the previous
+                # request is wanted, instead of the oldest timestamp in the database.
+                data_to_persist = sorted(data_to_persist, key=lambda i: i['time'], reverse=True)
+
                 with self.session_scope() as session:
 
                     stmt = self.insert.insert(db_table).values(data_to_persist)
@@ -734,8 +744,8 @@ class DatabaseHandler:
             except StopIteration:
                 break
 
-        return [item for item in exchanges_with_pairs[exchange] if
-                (item.id in counter_dict.keys()) and (counter_dict.get(item.id) >= self._min_return_tuples)]
+        return {item: row_count.lastrowid for item in exchanges_with_pairs[exchange] if
+                (item.id in counter_dict.keys()) and (counter_dict.get(item.id) >= self._min_return_tuples)}
 
     # def delete_all_than_first_entry(self, table: DatabaseTable, exchange_pair_id: int):
     #     """

@@ -275,7 +275,7 @@ class Exchange:
 
     async def request(self,
                       request_table: object,
-                      currency_pairs: List[ExchangeCurrencyPair]) -> \
+                      currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]]) -> \
             Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
 
         """
@@ -427,7 +427,7 @@ class Exchange:
                              request_dict: dict,
                              request_name: str,
                              request_table: object = None,
-                             currency_pairs: List[ExchangeCurrencyPair] = None) -> Dict[str, Dict[str, dict]]:
+                             currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]] = None) -> Dict[str, Dict[str, dict]]:
         """
         Extracts from the section of requests from the .yaml-file the necessary attachment
         for the url and parameters for each request and inserts variable parameter values
@@ -529,7 +529,7 @@ class Exchange:
             @return:
             """
             if val == "last_timestamp":
-                return {cp: self.get_first_timestamp(request_table, cp.id) for cp in currency_pairs}
+                return {cp: self.get_first_timestamp(request_table, cp.id, last_row) for cp, last_row in currency_pairs.items()}
 
         def default(val: str, **kwargs: dict) -> str:
             """

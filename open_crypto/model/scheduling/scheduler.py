@@ -256,19 +256,19 @@ class Scheduler:
             with Loader("Loading exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
                 for exchange in exchanges:
                     if job.request_name != "currency_pairs":
-                        job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
+                        job.exchanges_with_pairs[exchange] = dict.fromkeys(self.database_handler.get_exchanges_currency_pairs(
                             exchange.name,
                             job_params["currency_pairs"],
                             job_params["first_currencies"],
                             job_params["second_currencies"]
-                        )
+                        ))
                     loader.increment()
         return job_list
 
     async def request_format_persist(self,
                                      request_table: object,
-                                     exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]) \
-            -> Tuple[bool, Dict[Exchange, List[ExchangeCurrencyPair]]]:
+                                     exchanges_with_pairs: Dict[Exchange, Dict[ExchangeCurrencyPair, None]]) \
+            -> Tuple[bool, Dict[Exchange, Dict[ExchangeCurrencyPair, None]]]:
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -290,8 +290,10 @@ class Scheduler:
 
         @param request_table: The database table storing the data.
         @type request_table: object
-        @param exchanges_with_pairs: The exchanges including currency pairs to be queried and stored.
-        @type exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]
+        @param exchanges_with_pairs: The exchanges including currency pairs to be queried. The value of the dict
+                                    contains the last row_id of the last insert. Useful to retrieve the next timestamp
+                                    for HR requests.
+        @type exchanges_with_pairs: dict[Exchange, Dict[ExchangeCurrencyPair, Optional[int]]
 
         @return: A bool whether the job has to run again and a list of updated exchanges.
         @rtype: tuple[bool, dict[Exchange, list[ExchangeCurrencyPair]]]
@@ -345,11 +347,11 @@ class Scheduler:
             updated_job: Dict[Exchange, Any] = {}
             for exchange, value in counter.items():
                 if value:
-                    exchange.decrease_interval()
+                    # exchange.decrease_interval()
                     updated_job[exchange] = value
-                elif exchange.interval != "days":  # if days had no results, kick out exchange
-                    exchange.increase_interval()
-                    updated_job[exchange] = value
+                # elif exchange.interval != "days":  # if days had no results, kick out exchange
+                #     exchange.increase_interval()
+                #     updated_job[exchange] = value
 
             if updated_job:
                 return True, updated_job
