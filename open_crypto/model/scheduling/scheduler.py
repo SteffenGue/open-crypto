@@ -86,6 +86,7 @@ class Scheduler:
                             print("\nTask got terminated.")
                             logging.info("Task got terminated.")
                             break
+                        last_row_id = job.exchanges_with_pairs.get(exchange).get(currency_pair)
                         continue_run, job.exchanges_with_pairs =\
                             await request_fun(request_table, {exchange: {currency_pair: last_row_id}})
                         if not continue_run:

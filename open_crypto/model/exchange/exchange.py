@@ -18,7 +18,6 @@ from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Optional, Any, Generator, Callable, Union, Tuple, Dict, List
 import aiohttp
-import tqdm
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 
 # Own modules
@@ -351,7 +350,7 @@ class Exchange:
         async with aiohttp.ClientSession() as session:
             # ToDO: Test method format_request_url
             if pair_template_dict:
-                for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 1000)):
+                for pair in currency_pairs:
                     url_formatted, params_adj = format_request_url(url,
                                                                    pair_template_dict,
                                                                    pair_formatted[pair],
