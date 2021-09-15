@@ -78,15 +78,16 @@ class Scheduler:
         request_table = request.get("table")
 
         if self.request_direction == 1:
-            for key, value in job.exchanges_with_pairs.items():
-                for item in value:
+            for exchange, currency_pairs in job.exchanges_with_pairs.items():
+                for currency_pair, last_row_id in currency_pairs.items():
                     continue_run = True
                     while continue_run:
                         if KillSwitch().stay_alive is False:
                             print("\nTask got terminated.")
                             logging.info("Task got terminated.")
                             break
-                        continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+                        continue_run, job.exchanges_with_pairs =\
+                            await request_fun(request_table, {exchange: {currency_pair: last_row_id}})
                         if not continue_run:
                             continue
 
@@ -194,9 +195,8 @@ class Scheduler:
             for job in jobs:
                 print("Requesting {} exchange(s) for job: {}.".format(len(job.exchanges_with_pairs.keys()), job.name))
             return jobs
-        else:
-            # Reenter the method to get into the first else (down) condition and shut down process
-            self.remove_invalid_jobs(jobs)
+        # Reenter the method to get into the first else (down) condition and shut down process
+        self.remove_invalid_jobs(jobs)
 
     async def update_currency_pairs(self, ex: Exchange) -> List[None]:  # TODO: Make the return value nicer?
         """
@@ -305,9 +305,10 @@ class Scheduler:
 
         start_time = TimeHelper.now()
 
-        with Loader("Requesting data...", ""):
+        total = sum([len(v) for k, v in exchanges_with_pairs.items()])
+        with Loader("Requesting data...", "", max_counter=total) as loader:
             responses = await asyncio.gather(
-                *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+                *(ex.request(request_table, exchanges_with_pairs[ex], loader=loader) for ex in exchanges_with_pairs.keys())
             )
 
         counter = {}

@@ -28,6 +28,7 @@ from model.utilities.exceptions import MappingNotFoundException, DifferentExchan
     NoCurrencyPairProvidedException
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import provide_ssl_context, replace_list_item, COMPARATOR
+from model.utilities.loading_bar import Loader
 
 
 def format_request_url(url: str,
@@ -275,7 +276,8 @@ class Exchange:
 
     async def request(self,
                       request_table: object,
-                      currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]]) -> \
+                      currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]],
+                      loader: Loader) -> \
             Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
 
         """
@@ -301,6 +303,7 @@ class Exchange:
             Object of the request table. i.e. 'Ticker' for tickers-request
         @param currency_pairs:
             List of currency pairs that should be requested.
+        @param loader: Instance of the loading-bar
 
         @return: (str, datetime, datetime, .json)
             Tuple of the following structure:
@@ -348,7 +351,7 @@ class Exchange:
         async with aiohttp.ClientSession() as session:
             # ToDO: Test method format_request_url
             if pair_template_dict:
-                for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 100)):
+                for pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) < 1000)):
                     url_formatted, params_adj = format_request_url(url,
                                                                    pair_template_dict,
                                                                    pair_formatted[pair],
@@ -359,6 +362,8 @@ class Exchange:
                     if response_json:
                         responses[pair] = response_json
                     await asyncio.sleep(self.rate_limit)
+                    loader.increment()
+
 
             else:
                 url_formatted, params_adj = url, params
@@ -420,8 +425,7 @@ class Exchange:
                 if response_json:
                     return self.name, response_json
 
-                else:
-                    return self.name, None
+                return self.name, None
 
     def extract_request_urls(self,
                              request_dict: dict,
@@ -529,7 +533,8 @@ class Exchange:
             @return:
             """
             if val == "last_timestamp":
-                return {cp: self.get_first_timestamp(request_table, cp.id, last_row) for cp, last_row in currency_pairs.items()}
+                return {cp: self.get_first_timestamp(request_table, cp.id, last_row)
+                        for cp, last_row in currency_pairs.items()}
 
         def default(val: str, **kwargs: dict) -> str:
             """

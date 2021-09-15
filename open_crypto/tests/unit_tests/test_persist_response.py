@@ -58,7 +58,7 @@ class TestPersistResponse:
             (TimeHelper.now(), TimeHelper.now(), 4, 4.0, 4.0, 4.0)]
 
         exchanges_with_pairs = {
-            self.session.query(Exchange).first(): list(self.session.query(ExchangeCurrencyPair).limit(4))
+            self.session.query(Exchange).first(): dict.fromkeys(list(self.session.query(ExchangeCurrencyPair).limit(4)))
         }
 
         exchange = list(exchanges_with_pairs.keys())[0]
@@ -97,7 +97,7 @@ class TestPersistResponse:
             (TimeHelper.now(), TimeHelper.now(), 4.0, 4.0, 4.0, 4, None)]
 
         exchanges_with_pairs = {
-            self.session.query(Exchange).first(): list(self.session.query(ExchangeCurrencyPair).limit(4))
+            self.session.query(Exchange).first(): dict.fromkeys(list(self.session.query(ExchangeCurrencyPair).limit(4)))
         }
 
         exchange = list(exchanges_with_pairs.keys())[0]
@@ -160,7 +160,7 @@ class TestPersistResponse:
             (TimeHelper.now(), TimeHelper.now(), 4.0, 4.0, 4.0, 4), ]
 
         exchanges_with_pairs = {self.session.query(Exchange).first():
-                                    list(self.session.query(ExchangeCurrencyPair).limit(4))}
+                                    dict.fromkeys(list(self.session.query(ExchangeCurrencyPair).limit(4)))}
 
         exchange = list(exchanges_with_pairs.keys())[0]
         mappings = ["start_time", "time", "best_ask", "best_bid", "last_price", "exchange_pair_id"]
