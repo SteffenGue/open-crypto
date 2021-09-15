@@ -6,7 +6,7 @@ Module providing a job which defines the request method and exchanges currency-p
 Classes:
     - Job
 """
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from model.database.tables import ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
