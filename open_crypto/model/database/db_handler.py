@@ -123,7 +123,7 @@ class DatabaseHandler:
             logging.warning(message)
 
         self.session_factory: sessionmaker = sessionmaker(bind=engine)
-        self.insert = importlib.import_module("sqlalchemy.dialects.{}".format(sqltype))
+        self.insert = importlib.import_module(f"sqlalchemy.dialects.{sqltype}")
         self._min_return_tuples = min_return_tuples
 
     @contextmanager

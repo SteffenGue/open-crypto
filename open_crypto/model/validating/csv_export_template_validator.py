@@ -241,7 +241,7 @@ class BlockQueryOptionsValidator(Validator):
                 raise WrongTypeError((str, type(None)), type(self.value["currency_pairs"]))
 
             if pair_string := self.value["currency_pairs"]:
-                if "all" == pair_string or pair_string.count("-") >= 0 and pair_string.count("-") == pair_string.count(
+                if pair_string == "all" or pair_string.count("-") >= 0 and pair_string.count("-") == pair_string.count(
                         ",") + 1:
                     raise WrongCurrencyPairFormatError(["-", ","], pair_string, "currency_pairs")
 
@@ -266,5 +266,5 @@ class BlockQueryOptionsValidator(Validator):
 
 
 if __name__ == "__main__":
-    is_valid = CsvExportTemplateValidator("open_crypto/resources/templates/csv_export_template.yaml").validate()
-    sys.exit(int(not is_valid))
+    IS_VALID = CsvExportTemplateValidator("open_crypto/resources/templates/csv_export_template.yaml").validate()
+    sys.exit(int(not IS_VALID))

@@ -68,7 +68,7 @@ class Loader:
             if self.done:
                 break
             if self.max_count:
-                progress = "{:.2f}".format((self.counter/self.max_count) * 100)
+                progress = f"{(self.counter / self.max_count) * 100:.2f}"
                 print(f"\r{self.desc} {progress} % {step} ", flush=True, end="")
             else:
                 print(f"\r{self.desc} {step}", flush=True, end="")

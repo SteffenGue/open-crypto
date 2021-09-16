@@ -269,5 +269,5 @@ class RequestKeysValidator(Validator):
 
 
 if __name__ == "__main__":
-    is_valid = RequestTemplateValidator("open_crypto/resources/templates/request_template.yaml").validate()
-    sys.exit(int(not is_valid))
+    IS_VALID = RequestTemplateValidator("open_crypto/resources/templates/request_template.yaml").validate()
+    sys.exit(int(not IS_VALID))
