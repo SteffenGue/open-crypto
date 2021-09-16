@@ -78,15 +78,17 @@ class Scheduler:
         request_table = request.get("table")
 
         if self.request_direction == 1:
-            for key, value in job.exchanges_with_pairs.items():
-                for item in value:
+            for exchange, currency_pairs in job.exchanges_with_pairs.items():
+                for currency_pair, last_row_id in currency_pairs.items():
                     continue_run = True
                     while continue_run:
                         if KillSwitch().stay_alive is False:
                             print("\nTask got terminated.")
                             logging.info("Task got terminated.")
                             break
-                        continue_run, job.exchanges_with_pairs = await request_fun(request_table, {key: [item]})
+                        last_row_id = job.exchanges_with_pairs.get(exchange).get(currency_pair)
+                        continue_run, job.exchanges_with_pairs =\
+                            await request_fun(request_table, {exchange: {currency_pair: last_row_id}})
                         if not continue_run:
                             continue
 
@@ -194,9 +196,8 @@ class Scheduler:
             for job in jobs:
                 print("Requesting {} exchange(s) for job: {}.".format(len(job.exchanges_with_pairs.keys()), job.name))
             return jobs
-        else:
-            # Reenter the method to get into the first else (down) condition and shut down process
-            self.remove_invalid_jobs(jobs)
+        # Reenter the method to get into the first else (down) condition and shut down process
+        self.remove_invalid_jobs(jobs)
 
     async def update_currency_pairs(self, ex: Exchange) -> List[None]:  # TODO: Make the return value nicer?
         """
@@ -256,19 +257,19 @@ class Scheduler:
             with Loader("Loading exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
                 for exchange in exchanges:
                     if job.request_name != "currency_pairs":
-                        job.exchanges_with_pairs[exchange] = self.database_handler.get_exchanges_currency_pairs(
+                        job.exchanges_with_pairs[exchange] = dict.fromkeys(self.database_handler.get_exchanges_currency_pairs(
                             exchange.name,
                             job_params["currency_pairs"],
                             job_params["first_currencies"],
                             job_params["second_currencies"]
-                        )
+                        ))
                     loader.increment()
         return job_list
 
     async def request_format_persist(self,
                                      request_table: object,
-                                     exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]]) \
-            -> Tuple[bool, Dict[Exchange, List[ExchangeCurrencyPair]]]:
+                                     exchanges_with_pairs: Dict[Exchange, Dict[ExchangeCurrencyPair, None]]) \
+            -> Tuple[bool, Dict[Exchange, Dict[ExchangeCurrencyPair, None]]]:
         """"
         Gets the job done. The request are sent concurrently and awaited. Afterwards the responses
         are formatted via "found_exchange.format_data()", a method from the Exchange Class. The formatted
@@ -290,8 +291,10 @@ class Scheduler:
 
         @param request_table: The database table storing the data.
         @type request_table: object
-        @param exchanges_with_pairs: The exchanges including currency pairs to be queried and stored.
-        @type exchanges_with_pairs: dict[Exchange, list[ExchangeCurrencyPair]]
+        @param exchanges_with_pairs: The exchanges including currency pairs to be queried. The value of the dict
+                                    contains the last row_id of the last insert. Useful to retrieve the next timestamp
+                                    for HR requests.
+        @type exchanges_with_pairs: dict[Exchange, Dict[ExchangeCurrencyPair, Optional[int]]
 
         @return: A bool whether the job has to run again and a list of updated exchanges.
         @rtype: tuple[bool, dict[Exchange, list[ExchangeCurrencyPair]]]
@@ -303,9 +306,10 @@ class Scheduler:
 
         start_time = TimeHelper.now()
 
-        with Loader("Requesting data...", ""):
+        total = sum([len(v) for k, v in exchanges_with_pairs.items()])
+        with Loader("Requesting data...", "", max_counter=total) as loader:
             responses = await asyncio.gather(
-                *(ex.request(request_table, exchanges_with_pairs[ex]) for ex in exchanges_with_pairs.keys())
+                *(ex.request(request_table, exchanges_with_pairs[ex], loader=loader) for ex in exchanges_with_pairs.keys())
             )
 
         counter = {}
@@ -345,11 +349,11 @@ class Scheduler:
             updated_job: Dict[Exchange, Any] = {}
             for exchange, value in counter.items():
                 if value:
-                    exchange.decrease_interval()
+                    # exchange.decrease_interval()
                     updated_job[exchange] = value
-                elif exchange.interval != "days":  # if days had no results, kick out exchange
-                    exchange.increase_interval()
-                    updated_job[exchange] = value
+                # elif exchange.interval != "days":  # if days had no results, kick out exchange
+                #     exchange.increase_interval()
+                #     updated_job[exchange] = value
 
             if updated_job:
                 return True, updated_job

@@ -529,7 +529,7 @@ class DatabaseHandler:
             else:
                 return currency_pair.id
 
-    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int) -> datetime:
+    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int, last_row_id: int) -> datetime:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old.
         If the table is empty, the method trys to catch information from the helper table PairInfo.
@@ -539,12 +539,18 @@ class DatabaseHandler:
         @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
         @param exchange_pair_id: The exchange_pair_id of interest.
         @type exchange_pair_id: int
-
+        @param last_row_id: The row-id of the last entry of previous request.
+        @type: last_row_id: int
         @return: datetime: Earliest timestamp of specified table or timestamp from now.
         @rtype: datetime
         """
 
         with self.session_scope() as session:
+            if last_row_id:
+                timestamp = session.execute(f'SELECT time FROM historic_rates where rowid = {last_row_id} '
+                                            f'ORDER BY time DESC').first()[0]
+                return datetime.utcfromtimestamp(timestamp/1000)
+
             (earliest_timestamp,) = session \
                 .query(func.min(table.time)) \
                 .filter(table.exchange_pair_id == exchange_pair_id) \
@@ -662,7 +668,7 @@ class DatabaseHandler:
                          exchange: Exchange,
                          db_table: DatabaseTable,
                          formatted_response: Iterator[Any],
-                         update_on_conflict: bool = False) -> List[ExchangeCurrencyPair]:
+                         update_on_conflict: bool = False) -> Dict[ExchangeCurrencyPair, Optional[int]]:
         """
         Method to persist the formatted response into the database. Every data tuple get is inspected for
         valid data, i.e. the mapping key and corresponding data must be one of the table columns of the database.
@@ -680,7 +686,7 @@ class DatabaseHandler:
         @param db_table: Affected database table, i.e. request-method
         @param formatted_response: Generator of extracted and formatted response.
         @param update_on_conflict: Bool if conflicting rows should be updated or ignored
-        @return: List containing ExchangeCurrencyPair-Object
+        @return: Dict containing ExchangeCurrencyPair-Object and the last inserted row_id
         """
 
         col_names = [key.name for key in inspect(db_table).columns]
@@ -708,12 +714,20 @@ class DatabaseHandler:
                         else:
                             continue
 
-                    exchange_pair_id = data_tuple.get("exchange_pair_id")
+                    # exchange_pair_id = data_tuple.get("exchange_pair_id")
                     data_tuple = {key: data_tuple.get(key, None) for key in col_names}
                     data_to_persist.append(data_tuple)
+                    exchange_pair_id = [item.get("exchange_pair_id") for item in data_to_persist]
+                    # remove duplicates
+                    exchange_pair_id = list(dict.fromkeys(exchange_pair_id))
 
                 if not data_to_persist:
                     continue
+
+                # Sort data by timestamp in order to ensure the last_row_id (see below) to be with the oldest timestamp.
+                # This is used for historic_rates.get_first_timestamp(), if the oldest timestamp of the previous
+                # request is wanted, instead of the oldest timestamp in the database.
+                data_to_persist = sorted(data_to_persist, key=lambda i: i['time'], reverse=True)
 
                 with self.session_scope() as session:
 
@@ -726,16 +740,20 @@ class DatabaseHandler:
 
                     row_count = session.execute(stmt)
 
-                    counter_dict.update({exchange_pair_id: row_count.rowcount})
+                    print(f"Pair-ID {exchange_pair_id[0] if len(exchange_pair_id)==1 else 'ALL'}"
+                          f" - {exchange.name.capitalize()}: {row_count.rowcount} tuple(s)")
 
-                    print(f"Pair-ID {exchange_pair_id if counter_dict else 'ALL'} - {exchange.name.capitalize()}: "
-                          f"{counter_dict.get(exchange_pair_id, 0)} tuple(s)")
+                    # Dict containing the ExchangeCurrencyPair as key and the last_row_id as value, if and only if
+                    # at least self._min_return_tuples are persisted. If not, the ExchangeCurrencyPair will be kicked
+                    # out in the next run. The strange subscription of the dict-comprehension is because of the nested
+                    # dict in exchange_with_pairs: Dict[Exchange, Dict[ExchangeCurrencyPair, Optional[int]]].
+                    counter_dict.update({k: row_count.lastrowid for k, v in exchanges_with_pairs[exchange].items()
+                                         if k.id in exchange_pair_id and row_count.rowcount >= self._min_return_tuples})
 
             except StopIteration:
                 break
 
-        return [item for item in exchanges_with_pairs[exchange] if
-                (item.id in counter_dict.keys()) and (counter_dict.get(item.id) >= self._min_return_tuples)]
+        return counter_dict if counter_dict else {}
 
     # def delete_all_than_first_entry(self, table: DatabaseTable, exchange_pair_id: int):
     #     """
