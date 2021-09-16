@@ -151,9 +151,9 @@ class DatabaseStringValidator(Validator):
 
     """
     db_strings = {'sqlite': ['sqltype', 'db_name'],
-                  'mariadb': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
-                  'mysql': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
-                  'postgres': ['sqltype', 'username', 'password', 'host', 'port', 'db_name'],
+                  'mariadb': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
+                  'mysql': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
+                  'postgres': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
                   }
 
     def validate(self) -> bool:
