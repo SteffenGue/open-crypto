@@ -194,7 +194,7 @@ class Scheduler:
         if jobs:
             # If there are jobs left, return them
             for job in jobs:
-                print("Requesting {} exchange(s) for job: {}.".format(len(job.exchanges_with_pairs.keys()), job.name))
+                print(f"Requesting {len(job.exchanges_with_pairs.keys())} exchange(s) for job: {job.name}.")
             return jobs
         # Reenter the method to get into the first else (down) condition and shut down process
         self.remove_invalid_jobs(jobs)

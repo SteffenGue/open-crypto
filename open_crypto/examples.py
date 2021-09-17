@@ -49,7 +49,7 @@ class Examples:
         @param session: SQLAlchemy-ORM Session.
         @param table: Database table
         """
-        print("Clearing table: {}.".format(table.__name__))
+        print(f"Clearing table: {table.__name__}.")
         session.query(table).delete()
         session.commit()
 
