@@ -23,6 +23,8 @@ from typing import Any, Text, Dict, Union
 from pandas import Interval
 from typeguard import check_type
 
+from model.utilities.utilities import load_program_config
+
 # pylint: disable=too-many-lines
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
 from model.validating.base import Report, Validator, CompositeValidator
