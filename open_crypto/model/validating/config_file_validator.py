@@ -12,7 +12,6 @@ Classes:
             -    DatabaseStringValidator
             -    OperationSettingKeyValidator
             -    OperationSettingValueValidator
-            -    UtilitiesValidator
             -    RequestKeysValidator
             -    RequestValueValidator
             )
@@ -109,7 +108,6 @@ class ConfigYamlValidator(CompositeValidator):
             DatabaseStringValidator(value['general']['database']),
             OperationSettingKeyValidator(value['general']['operation_settings']),
             OperationSettingValueValidator(value['general']['operation_settings']),
-            UtilitiesValidator(value['general']['utilities']),
             RequestKeysValidator(value['jobs']),
             RequestValueValidator(value['jobs'])
         )
@@ -237,6 +235,8 @@ class OperationSettingValueValidator(Validator):
     sections = {'frequency': Interval(0, 44640, "both"),  # max 31 days
                 'interval': ['minutes', 'hours', 'days', 'weeks', 'months'],
                 'timeout': Interval(0, 600, 'both'),  # max 10 minutes
+                'enable_logging': [True, False, 0, 1],
+                'asynchronicity':  [True, False, 0, 1]
                 }
 
     def validate(self) -> bool:
@@ -268,48 +268,12 @@ class OperationSettingValueValidator(Validator):
             return True
 
 
-class UtilitiesValidator(Validator):
-    """
-    Validates if all necessary keys exist in the section 'utilities' and if the types are correct.
-
-    """
-    sections = {'enable_logging': Optional[bool],
-                'yaml_path':  str}
-
-    def validate(self) -> bool:
-        """Validates the value.
-
-        Validates the value attribute while generating a validation Report.
-
-        @return: bool
-            Whether further Validators may continue validating.
-        """
-        try:
-            for key, val in UtilitiesValidator.sections.items():
-
-                if key not in self.value:
-                    raise KeyNotInDictError(key, self.value)
-
-                try:
-                    check_type(key, self.value.get(key), val)
-                except TypeError as error:
-                    raise WrongTypeError(val, type(self.value.get(key)), key) from error
-
-        except (KeyNotInDictError, WrongTypeError) as error:
-            self.report = Report(error)
-            return False
-
-        else:
-            self.report = Report('Utilities are valid')
-            return True
-
-
 class RequestKeysValidator(Validator):
     """
     Validates if all keys exist and types are correct for the request itself.
 
     """
-    sections = {'yaml_request_name': str,
+    sections = {'request_method': str,
                 'update_cp': Optional[bool],
                 'exchanges': str,
                 'excluded': Optional[str],
@@ -375,7 +339,7 @@ class RequestValueValidator(Validator):
 
                 # if neither currency-pairs nor first_currencies or second_currencies are specified. That is only
                 # allowed for the request method 'currency_pairs'.
-                if self.value.get(job).get('yaml_request_name') == 'currency_pairs':
+                if self.value.get(job).get('request_method') == 'currency_pairs':
                     continue
                 if all([self.value.get(job).get("currency_pairs") is None,
                         self.value.get(job).get("first_currencies") is None,

@@ -35,6 +35,6 @@ class Job:
         @type exchanges_with_pairs: dict[Exchange, Dict[ExchangeCurrencyPair], Optional[int]]
         """
         self.name = name
-        self.request_name = job_params["yaml_request_name"]
+        self.request_name = job_params["request_method"]
         self.exchanges_with_pairs = exchanges_with_pairs
         self.job_params = job_params

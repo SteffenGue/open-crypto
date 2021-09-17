@@ -10,8 +10,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 # ToDo: PATHs im Program auf _paths.py umstellen.
 all_paths = {
-    'yaml_path': "",
-    'program_config_path': "",
+    'yaml_path': "resources/running_exchanges/",
+    'program_config_path': "resources/configs/program_config/",
     'template_path': "",
 }
 

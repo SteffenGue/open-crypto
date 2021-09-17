@@ -12,13 +12,12 @@ general:
     frequency: once # once or any number in minutes
     interval: days # minutes, hours, days, weeks, months
     timeout: 10
-  utilities:
     enable_logging: true
-    yaml_path: resources/running_exchanges/
-    timeout: 10
+    asynchronicity: true
+
 jobs:
   TradeExample:
-    yaml_request_name: trades # ticker, trades, order_books, historic_rates
+    request_method: trades # ticker, trades, order_books, historic_rates
     update_cp: false
     exchanges: coinbase # all or an arbitrary list of exchanges
     excluded: null

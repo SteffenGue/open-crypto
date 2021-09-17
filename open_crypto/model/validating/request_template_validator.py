@@ -14,7 +14,6 @@ Validators structure:
     - ConfigSectionValidator
     - DatabaseStringValidator
     - OperationSettingKeyValidator
-    - UtilitiesValidator
     - RequestKeysValidator
 """
 import sys
@@ -90,7 +89,6 @@ class RequestTemplateCoreValidator(CompositeValidator):
             ConfigSectionValidator(value),
             DatabaseStringValidator(value["general"]["database"]),
             OperationSettingKeyValidator(value["general"]["operation_settings"]),
-            UtilitiesValidator(value["general"]["utilities"]),
             RequestKeysValidator(value["jobs"])
         )
 
@@ -166,7 +164,9 @@ class OperationSettingKeyValidator(Validator):
     db_strings = (
         ("frequency", str, "once"),
         ("interval", str, "days"),
-        ("timeout", int, 10)
+        ("timeout", int, 10),
+        ("enable_logging", bool, True),
+        ("asynchronicity", bool, True)
     )
 
     def validate(self) -> bool:
@@ -189,40 +189,7 @@ class OperationSettingKeyValidator(Validator):
             self.report = Report(error)
             return False
         else:
-            self.report = Report("Database connection string is valid")
-            return True
-
-
-class UtilitiesValidator(Validator):
-    """
-    Validates if all necessary keys exist in the section 'utilities' and if the types are correct.
-    """
-    db_strings = (
-        ("enable_logging", bool, True),
-        ("yaml_path", str, "resources/running_exchanges/")
-    )
-
-    def validate(self) -> bool:
-        """
-        Validates the value.
-
-        @return: Whether further Validators may continue validating.
-        """
-        try:
-            for (key, ex_type, ex_value) in UtilitiesValidator.db_strings:
-                if key not in self.value:
-                    raise KeyNotInDictError(key, self.value)
-
-                if not isinstance(self.value[key], ex_type):
-                    raise WrongTypeError(ex_type, type(self.value[key]), key)
-
-                if self.value[key] != ex_value:
-                    raise WrongValueError(ex_value, self.value[key], key)
-        except (KeyNotInDictError, WrongTypeError) as error:
-            self.report = Report(error)
-            return False
-        else:
-            self.report = Report("Database connection string is valid")
+            self.report = Report("Operation settings are valid")
             return True
 
 
@@ -231,7 +198,7 @@ class RequestKeysValidator(Validator):
     Validates if all keys exist and types are correct for the request itself.
     """
     sections = (
-        ("yaml_request_name", type(None), None),
+        ("request_method", type(None), None),
         ("update_cp", bool, False),
         ("excluded", type(None), None),
         ("exchanges", type(None), None),

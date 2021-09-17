@@ -33,6 +33,7 @@ import dateutil.parser
 import oyaml as yaml
 import pandas as pd
 
+import _paths
 from model.utilities.time_helper import TimeHelper, TimeUnit
 from model.utilities.kill_switch import KillSwitch
 from resources.configs.global_config import GlobalConfig
@@ -317,7 +318,8 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     exchange = exchange.replace(" ", "")
 
     if not path:
-        path = read_config(file=None, section="utilities")["yaml_path"]
+        # path = read_config(file=None, section="utilities")["yaml_path"]
+        path = _paths.all_paths.get("yaml_path")
     try:
         with open(path + exchange + ".yaml", "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
@@ -340,7 +342,7 @@ def load_program_config(return_path: bool = False) -> Union[str, Dict]:
     @return: Program config.
     @rtype: dict
     """
-    path = 'resources/configs/program_config/config.yaml'
+    path = _paths.all_paths.get("program_config_path") + "config.yaml"
     if return_path:
         return path
 
@@ -367,7 +369,8 @@ def get_exchange_names(yaml_path: str = None) -> Optional[List[str]]:
     @rtype: list[str]
     """
     if not yaml_path:
-        yaml_path = read_config(file=None, section="utilities")["yaml_path"]
+        # yaml_path = read_config(file=None, section="utilities")["yaml_path"]
+        yaml_path = _paths.all_paths.get("yaml_path")
     path_absolut: Path = pathlib.Path().parent.absolute()
     path_to_resources = Path.joinpath(path_absolut, yaml_path)
 
@@ -431,7 +434,8 @@ def get_all_exchanges_and_methods() -> Dict[str, dict]:
     @rtype: list
     """
     result_dict = dict()
-    yaml_path = os.getcwd() + "/resources/running_exchanges/"
+    yaml_path = os.getcwd() + _paths.all_paths.get("yaml_path")
+
     exchanges = get_exchange_names(yaml_path=yaml_path)
     for exchange in exchanges:
         file = yaml_loader(exchange, path=yaml_path)
@@ -493,7 +497,7 @@ def init_logger(path: str, program_config: dict) -> None:
     @param path: Path to store the logging file. By default the CWD.
     @param program_config: Config file with some advanced program settings.
     """
-    if not read_config(file=None, section="utilities").get('enable_logging', True):
+    if not read_config(file=None, section="operation_settings").get('enable_logging', True):
         logging.disable()
     else:
         dirname = program_config['logging'].get("dirname", 'resources/log/')

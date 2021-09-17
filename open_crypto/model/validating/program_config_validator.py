@@ -115,7 +115,7 @@ class ConfigSectionValidator(Validator):
     """
     blocks = ['logging', 'request_settings']
     sections = ['dirname', 'filename_format', 'level', 'exception_hook',
-                'min_return_tuples', 'interval_settings', 'asynchronicity']
+                'min_return_tuples', 'interval_settings']
 
     def validate(self) -> bool:
 
@@ -152,7 +152,6 @@ class ProgramSettingKeyValidator(Validator):
                 'exception_hook': Union[int, bool],
                 'min_return_tuples': int,
                 'interval_settings': str,
-                'asynchronicity': Union[int, bool]
                 }
 
     def validate(self) -> bool:
@@ -193,7 +192,6 @@ class ProgramSettingValueValidator(Validator):
     sections = {'level': ['NOTSET', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
                 'min_return_tuples': Interval(0, 1000000, 'both'),
                 'interval_settings': ['equal', 'lower', 'higher', 'lower_or_equal', 'high_or_equal'],
-                'asynchronicity': [0, 1]
                 }
 
     def validate(self) -> bool:

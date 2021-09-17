@@ -77,7 +77,7 @@ class Scheduler:
         request_fun = request.get("function")
         request_table = request.get("table")
 
-        if self.asynchronicity is True:
+        if self.asynchronicity is False:
             for exchange, currency_pairs in job.exchanges_with_pairs.items():
                 for currency_pair, last_row_id in currency_pairs.items():
                     continue_run = True

@@ -50,13 +50,13 @@ async def initialize_jobs(job_config: Dict[str, Any],
         job_params = job_config[job]
 
         if isinstance(job_params.get("exchanges"), str):
-            job_params['exchanges'] = split_str_to_list(job_params.get('exchanges'))
+            job_params["exchanges"] = split_str_to_list(job_params.get("exchanges"))
 
-        exchange_names = get_exchange_names() if "all" in job_params['exchanges'] else job_params["exchanges"]
+        exchange_names = get_exchange_names() if "all" in job_params["exchanges"] else job_params["exchanges"]
 
         if job_params.get("excluded"):
             if isinstance(job_params.get("excluded"), str):
-                job_params['exchanges'] = split_str_to_list(job_params.get('excluded'))
+                job_params["exchanges"] = split_str_to_list(job_params.get("excluded"))
             exchange_names = [item for item in exchange_names if item not in job_params.get("excluded", [])]
 
         exchange_names = [yaml_loader(exchange) for exchange in exchange_names if yaml_loader(exchange) is not None]
@@ -92,25 +92,25 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
 
     with Loader("Initializing open_crypto...", ""):
 
-        # ToDo: Disable exception hook when exiting the program
+        # ToDo: Disable exception hook automatically when terminating the program
         if program_config.get("exception_hook", True):
             sys.excepthook = handler
 
-        config = read_config(file=None, section=None)
-        operation_settings = config['general']['operation_settings']
+        job_config = read_config(file=None, section=None)
+        operation_settings = job_config["general"]["operation_settings"]
 
         logging.info("Loading jobs.")
-        jobs = await initialize_jobs(job_config=config["jobs"],
+        jobs = await initialize_jobs(job_config=job_config["jobs"],
                                      timeout=operation_settings.get("timeout", 10),
                                      interval=operation_settings.get("interval", "days"),
                                      comparator=program_config['request_settings'].get('interval_settings',
                                                                                        'lower_or_equal'),
                                      db_handler=database_handler)
+
         frequency = operation_settings["frequency"]
 
     logging.info("Configuring Scheduler.")
-    scheduler = Scheduler(database_handler, jobs,
-                          program_config['request_settings'].get('asynchronicity', 0), frequency)
+    scheduler = Scheduler(database_handler, jobs, operation_settings.get('asynchronicity', 1), frequency)
     await scheduler.validate_job()
 
     logging.info("Job(s) were created and will run with frequency: %s", frequency)
@@ -152,13 +152,13 @@ def run(file: str = None, path: str = None) -> None:
     logging.info('Validating user configuration files.')
     program_valid, program_report = ProgramSettingValidator.validate_config_file()
     config_valid, config_report = ConfigValidator.validate_config_file()
-
     validating_results = {program_valid: program_report, config_valid: config_report}
 
     for is_valid in validating_results.keys():
         if not is_valid:
             for nested_report in validating_results.get(is_valid).reports:
                 print(nested_report)
+                logging.error(nested_report)
             raise SystemExit
 
     logging.info("Establishing Database Connection")
