@@ -18,6 +18,7 @@ Functions:
     - signal_handler: Function recognizing kill signals and raising SystemExit.
     - init_logger: Function initializing the global logger.
 """
+from typing import Any, Optional, Dict, List, Union
 
 import calendar
 import datetime
@@ -27,7 +28,6 @@ import pathlib
 import ssl
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, Optional, Dict, List
 import certifi
 import dateutil.parser
 import oyaml as yaml
@@ -333,15 +333,18 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
         raise SystemExit from error
 
 
-def load_program_config() -> Dict[str, Any]:
+def load_program_config(return_path: bool = False) -> Union[str, Dict]:
     """
     Loads the program configuration from a predefined directory. If the file is not found, it will return
     the template with default settings.
     @return: Program config.
     @rtype: dict
     """
+    path = 'resources/configs/program_config/config.yaml'
+    if return_path:
+        return path
+
     try:
-        path = 'resources/configs/program_config/config.yaml'
         with open(path, "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 

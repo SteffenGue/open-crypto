@@ -30,7 +30,7 @@ class Scheduler:
     """
 
     def __init__(self, database_handler: DatabaseHandler, job_list: List[Job],
-                 request_direction: int, frequency: Union[str, int, float]):
+                 asynchronicity: Union[int, bool], frequency: Union[str, int, float]):
         """
         Initializer for a Scheduler.
 
@@ -38,13 +38,13 @@ class Scheduler:
         @type database_handler: DatabaseHandler
         @param job_list: List of Jobs. A job can be created with the specific yaml-template in config.yaml.
         @type job_list: list[Job]
-        @param request_direction: Specifies the requesting method, horizontal or vertical.
+        @param asynchronicity: Specifies the requesting method, horizontal or vertical.
         @param frequency: The interval in minutes with that the run() method gets called.
         @type frequency: Any
         """
         self.database_handler = database_handler
         self.job_list = job_list
-        self.request_direction = request_direction
+        self.asynchronicity = asynchronicity
         self.frequency = frequency * 60 if isinstance(frequency, (int, float)) else frequency
         self._validated = False
 
@@ -77,7 +77,7 @@ class Scheduler:
         request_fun = request.get("function")
         request_table = request.get("table")
 
-        if self.request_direction == 1:
+        if self.asynchronicity is True:
             for exchange, currency_pairs in job.exchanges_with_pairs.items():
                 for currency_pair, last_row_id in currency_pairs.items():
                     continue_run = True

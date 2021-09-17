@@ -311,7 +311,7 @@ class RequestKeysValidator(Validator):
     """
     sections = {'yaml_request_name': str,
                 'update_cp': Optional[bool],
-                'exchanges': Optional[str],
+                'exchanges': str,
                 'excluded': Optional[str],
                 'currency_pairs': Optional[str],
                 'first_currencies': Optional[str],
@@ -342,7 +342,6 @@ class RequestKeysValidator(Validator):
 
                     if self.value.get(job).get(key) == 'None':
                         raise WrongValueError(['null'], self.value.get(job).get(key), key)
-
 
         except (KeyNotInDictError, WrongTypeError, WrongValueError) as error:
             self.report = Report(error)

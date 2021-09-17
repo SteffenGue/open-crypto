@@ -11,9 +11,11 @@ import os
 import sys
 from typing import Optional, Tuple
 
+from model.utilities.utilities import load_program_config
 from model.validating.base import Report, CompositeReport
 from model.validating.api_map_validators import ApiMapFileValidator
 from model.validating.config_file_validator import ConfigFileValidator
+from model.validating.program_config_validator import ProgramConfigValidator
 from resources.configs.global_config import GlobalConfig
 
 YAML_PATH = "open_crypto/resources/running_exchanges/"
@@ -50,6 +52,23 @@ class ConfigValidator:
         :return: Validation result and report.
         """
         validator = ConfigFileValidator(GlobalConfig().file)
+        if validator.validate():
+            return True, validator.report
+        else:
+            return False, validator.report
+
+
+class ProgramSettingValidator:
+    """
+    Class to validate the program configuration file.
+    """
+    @staticmethod
+    def validate_config_file() -> Tuple[bool, Report]:
+        """
+        Calls the ConfigValidator
+        :return: Validation result and report.
+        """
+        validator = ProgramConfigValidator(load_program_config(return_path=True))
         if validator.validate():
             return True, validator.report
         else:

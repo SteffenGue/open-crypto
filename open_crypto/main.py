@@ -22,7 +22,7 @@ from model.utilities.utilities import read_config, yaml_loader, get_exchange_nam
 from model.utilities.utilities import signal_handler, init_logger, split_str_to_list, handler
 from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
-from validate import ConfigValidator
+from validate import ConfigValidator, ProgramSettingValidator
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -54,7 +54,6 @@ async def initialize_jobs(job_config: Dict[str, Any],
 
         exchange_names = get_exchange_names() if "all" in job_params['exchanges'] else job_params["exchanges"]
 
-        # ToDo: Funnktioniert richtig?
         if job_params.get("excluded"):
             if isinstance(job_params.get("excluded"), str):
                 job_params['exchanges'] = split_str_to_list(job_params.get('excluded'))
@@ -93,6 +92,7 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
 
     with Loader("Initializing open_crypto...", ""):
 
+        # ToDo: Disable exception hook when exiting the program
         if program_config.get("exception_hook", True):
             sys.excepthook = handler
 
@@ -110,7 +110,7 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
 
     logging.info("Configuring Scheduler.")
     scheduler = Scheduler(database_handler, jobs,
-                          program_config['request_settings'].get('request_direction', 0), frequency)
+                          program_config['request_settings'].get('asynchronicity', 0), frequency)
     await scheduler.validate_job()
 
     logging.info("Job(s) were created and will run with frequency: %s", frequency)
@@ -149,13 +149,17 @@ def run(file: str = None, path: str = None) -> None:
     db_params = read_config(file=file, section="database", reset=True)
     init_logger(path, program_config)
 
-    logging.info('Validating user configuration file.')
-    valid, report = ConfigValidator.validate_config_file()
+    logging.info('Validating user configuration files.')
+    program_valid, program_report = ProgramSettingValidator.validate_config_file()
+    config_valid, config_report = ConfigValidator.validate_config_file()
 
-    if not valid:
-        for nested_report in report.reports:
-            print(nested_report)
-        raise SystemExit
+    validating_results = {program_valid: program_report, config_valid: config_report}
+
+    for is_valid in validating_results.keys():
+        if not is_valid:
+            for nested_report in validating_results.get(is_valid).reports:
+                print(nested_report)
+            raise SystemExit
 
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata,
@@ -163,7 +167,7 @@ def run(file: str = None, path: str = None) -> None:
                                        min_return_tuples=program_config["request_settings"].get("min_return_tuples", 2),
                                        **db_params)
 
-    # ToDo: Still neccessary?
+    # ToDo: Still necessary?
     # See Github Issue for bug and work-around:
     # https://github.com/encode/httpx/issues/914
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
