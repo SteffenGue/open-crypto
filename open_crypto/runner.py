@@ -186,7 +186,11 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
     if kill_after and isinstance(kill_after, int):
         with KillSwitch() as switch:
             switch.set_timer(kill_after)
+
     try:
         main.run(configuration_file, working_directory)
     except SystemExit:
         pass
+
+if __name__ == '__main__':
+    run('request_template')
