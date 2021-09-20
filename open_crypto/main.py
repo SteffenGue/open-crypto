@@ -110,7 +110,7 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
         frequency = operation_settings["frequency"]
 
     logging.info("Configuring Scheduler.")
-    scheduler = Scheduler(database_handler, jobs, operation_settings.get('asynchronicity', 1), frequency)
+    scheduler = Scheduler(database_handler, jobs, operation_settings.get('asynchronously', 1), frequency)
     await scheduler.validate_job()
 
     logging.info("Job(s) were created and will run with frequency: %s", frequency)

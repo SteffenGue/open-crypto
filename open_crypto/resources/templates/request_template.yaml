@@ -13,7 +13,7 @@ general:
     interval: days  # minutes, hours, days, weeks, months
     timeout: 10  # any number in seconds
     enable_logging: true
-    asynchronicity: true  # run requests in parallel or iterate over the currency-pairs
+    asynchronously: true  # run requests in parallel or iterate over the currency-pairs
 
 jobs:
   JobName:

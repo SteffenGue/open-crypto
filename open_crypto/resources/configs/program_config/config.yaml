@@ -6,4 +6,3 @@ logging:
 request_settings:
   min_return_tuples: 2
   interval_settings: lower_or_equal
-

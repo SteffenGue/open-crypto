@@ -13,7 +13,7 @@ general:
     interval: minutes # minutes, hours, days, weeks, months
     timeout: 10
     enable_logging: false
-    asynchronicity: true
+    asynchronously: true
 jobs:
   MinuteCandleExample:
     request_method: historic_rates # ticker, trades, order_books, historic_rates

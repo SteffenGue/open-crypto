@@ -13,7 +13,7 @@ general:
     interval: days # minutes, hours, days, weeks, months
     timeout: 10
     enable_logging: false
-    asynchronicity: true
+    asynchronously: true
 
 jobs:
   StaticExample:

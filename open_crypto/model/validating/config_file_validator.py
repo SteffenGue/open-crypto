@@ -236,7 +236,7 @@ class OperationSettingValueValidator(Validator):
                 'interval': ['minutes', 'hours', 'days', 'weeks', 'months'],
                 'timeout': Interval(0, 600, 'both'),  # max 10 minutes
                 'enable_logging': [True, False, 0, 1],
-                'asynchronicity':  [True, False, 0, 1]
+                'asynchronously':  [True, False, 0, 1]
                 }
 
     def validate(self) -> bool:

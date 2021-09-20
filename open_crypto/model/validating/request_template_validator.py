@@ -166,7 +166,7 @@ class OperationSettingKeyValidator(Validator):
         ("interval", str, "days"),
         ("timeout", int, 10),
         ("enable_logging", bool, True),
-        ("asynchronicity", bool, True)
+        ("asynchronously", bool, True)
     )
 
     def validate(self) -> bool:
