@@ -434,7 +434,7 @@ def get_all_exchanges_and_methods() -> Dict[str, dict]:
     @rtype: list
     """
     result_dict = dict()
-    yaml_path = os.getcwd() + _paths.all_paths.get("yaml_path")
+    yaml_path = os.getcwd() + "/" + _paths.all_paths.get("yaml_path")
 
     exchanges = get_exchange_names(yaml_path=yaml_path)
     for exchange in exchanges:

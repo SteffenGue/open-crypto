@@ -146,7 +146,7 @@ class ConfigSectionValidator(Validator):
 class DatabaseStringValidator(Validator):
     """
     Validates if all required database parameters exist to form the connection string.
-
+    #ToDo: Client is missing
     """
     db_strings = {'sqlite': ['sqltype', 'db_name'],
                   'mariadb': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
