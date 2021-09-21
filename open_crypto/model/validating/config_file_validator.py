@@ -29,7 +29,7 @@ from typeguard import check_type
 from model.validating.api_map_validators import LoadFileValidator, LoadYamlValidator
 from model.validating.base import Report, Validator, CompositeValidator
 from model.validating.errors import KeyNotInDictError, WrongTypeError, WrongValueError, WrongCompositeValueError
-from model.validating.errors import WrongCurrencyPairFormatError
+from model.validating.errors import WrongCurrencyPairFormatError, CustomBaseExceptionError
 
 
 class ConfigFileValidator(CompositeValidator):
@@ -119,12 +119,12 @@ class ConfigSectionValidator(Validator):
 
     """
     block = ['general', 'jobs']
-    section = ['database', 'operation_settings', 'utilities']
+    section = ['database', 'operation_settings']
 
     def validate(self) -> bool:
 
         try:
-
+        # ToDo: Falsch herum. So können nur fehlerhalfte Werte in der Config erkannt werden, jedoch nicht fehlende!
             for key in self.value:
                 if key not in ConfigSectionValidator.block:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
@@ -149,9 +149,9 @@ class DatabaseStringValidator(Validator):
     #ToDo: Client is missing
     """
     db_strings = {'sqlite': ['sqltype', 'db_name'],
-                  'mariadb': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
-                  'mysql': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
-                  'postgres': ['sqltype', 'user_name', 'password', 'host', 'port', 'db_name'],
+                  'mariadb': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
+                  'mysql': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
+                  'postgres': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
                   }
 
     def validate(self) -> bool:
@@ -320,20 +320,31 @@ class RequestValueValidator(Validator):
     """
     Validates if exchange and currency-pairs are specified and not None.
     """
+    VALID_JOBS = ['historic_rates', 'tickers', 'trades', 'order_books', 'currency_pairs']
 
     def validate(self) -> bool:
         try:
             for job in self.value:
 
+                if self.value.get(job).get("request_method") not in RequestValueValidator.VALID_JOBS:
+                    raise WrongValueError(RequestValueValidator.VALID_JOBS, self.value.get(job).get("request_method"),
+                                          'request_method')
+
                 # if key 'currency-pairs' is specified
                 if pair_string := self.value.get(job).get("currency_pairs"):
+
+                    # Coinpaprika splits first currencies with "-", therefore "btc-bitcoin-usd" can't be read out.
+                    if self.value.get(job).get("exchanges").lower() in ["coinpaprika", "coingecko"]:
+                        msg = "Specifying currency-pairs is not allowed for platform data. " \
+                              "Specify first- and second-currencies instead"
+                        raise CustomBaseExceptionError("currency_pairs", msg)
+
                     # One way to check if the splitting value ("-") for currency-pairs and between (",") are
                     # correctly specified is to check if count("-") is >= 0 and always equal to count(",") + 1.
                     if pair_string.count("-") >= 0 and (pair_string.count("-") == pair_string.count(",") + 1):
                         continue
                     elif "all" in pair_string:
                         continue
-
                     else:
                         raise WrongCurrencyPairFormatError(["-", ","], pair_string, 'currency_pairs')
 
@@ -346,7 +357,8 @@ class RequestValueValidator(Validator):
                         self.value.get(job).get("second_currencies") is None]):
                     raise WrongCompositeValueError(["currency_pairs", "first_currencies", "second_currencies"])
 
-        except (WrongCompositeValueError, KeyNotInDictError, WrongCurrencyPairFormatError) as error:
+        except (WrongCompositeValueError, KeyNotInDictError, WrongCurrencyPairFormatError,
+                CustomBaseExceptionError, WrongValueError) as error:
             self.report = Report(error)
             return False
 

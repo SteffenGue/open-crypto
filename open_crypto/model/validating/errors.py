@@ -317,3 +317,32 @@ class WrongCurrencyPairFormatError(ValidationError):
         """
         return f"Expected splitting value(s) '{self.expected_value}' != actual value '{self.actual_value}' " \
                f"in '{self.key}'."
+
+
+class CustomBaseExceptionError(ValidationError):
+    """
+    Custom base exception
+    """
+
+    def __init__(self, key: Any, msg: Text):
+        """
+        Constructor of WrongCurrencyPairFormatError.
+
+        @param key:
+            The incorrectly specified key.
+        @param msg:
+            The exception message to return.
+        """
+        super().__init__("Custom base exception raised.")
+        self.key = key
+        self.msg = msg
+
+    def __str__(self) -> Text:
+        """A method for representing a text.
+
+        A text value returning the expected value(s), which is/are unlike the
+        actual value.
+
+        @return: A Text.
+        """
+        return f"Error in key '{self.key}': {self.msg}."

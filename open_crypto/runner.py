@@ -37,6 +37,7 @@ def update_maps() -> None:
     if os.getcwd() != _paths.package_path:
         copy_resources()
 
+
 def check_path(path: str) -> None:
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()

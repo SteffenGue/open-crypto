@@ -7,6 +7,8 @@ Classes:
  - Examples: Contains examples and illustrations to demonstrate all request methods.
 """
 import os
+import pathlib
+import datetime
 from typing import Optional
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -32,8 +34,10 @@ class Examples:
     """
     configuration_file: str
     plt.style.use("ggplot")
-    pd.set_option("display.max_columns", None)
-    PATH = os.getcwd() + "/resources"
+    pd.set_option("display.max_columns", 99)
+    pd.set_option('expand_frame_repr', False)
+
+    PATH = pathlib.Path.joinpath(_paths.PATH_ABSOLUT, "resources")
 
     @staticmethod
     def __start_catch_systemexit(configuration_file: str) -> None:
@@ -175,7 +179,7 @@ class Examples:
         plt.show()
 
     @staticmethod
-    def trades() -> plt.plot:
+    def trades() -> Optional[pd.DataFrame]:
         """
         Request ETH-BTC transaction data from Coinbase and plot the price series and trade direction.
         """
@@ -209,9 +213,10 @@ class Examples:
         plt.ylabel("Price in BTC")
         plt.tight_layout()
         plt.show()
+        return dataframe.head(10)
 
     @staticmethod
-    def order_books() -> plt.plot:
+    def order_books() -> Optional[pd.DataFrame]:
         """
         Requests the current order-book snapshot from Coinbase and plot the market depth.
         """
@@ -225,10 +230,24 @@ class Examples:
 
         (timestamp,) = session.query(func.max(OrderBookView.time)).first()
         query = session.query(OrderBookView).filter(OrderBookView.exchange == exchange,
-                                                    OrderBookView.time == timestamp)
+                                                    OrderBookView.time == timestamp,
+                                                    OrderBookView.position <= 50)
+
         dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
         if dataframe.empty:
             return
+
+        # insert row that plot starts at amount = 0.
+        timestamp = dataframe.index[0]-datetime.timedelta(days=1)
+        new_data = dataframe.iloc[0, :].to_dict()
+        template = {timestamp: {'bids_price': None, 'bids_amount': 0, 'asks_price': None,
+                                'asks_amount': 0, 'position': -1}}
+        template.get(timestamp).update((k, new_data[k]) for k in set(new_data).intersection(template.get(timestamp))
+                                       if template.get(timestamp).get(k) is None)
+
+        dataframe = pd.concat([dataframe, pd.DataFrame.from_dict(template, orient='index')], axis=0)
+        dataframe.sort_values(by="position", ascending=True, inplace=True)
+
         plt.step(dataframe.bids_price, dataframe.bids_amount.cumsum(), color='green', label='bids')
         plt.step(dataframe.asks_price, dataframe.asks_amount.cumsum(), color='red', label='asks')
 
@@ -239,6 +258,7 @@ class Examples:
         plt.legend()
         plt.tight_layout()
         plt.show()
+        return dataframe.iloc[1:10, :]
 
     @staticmethod
     def exchange_listings() -> plt.plot:

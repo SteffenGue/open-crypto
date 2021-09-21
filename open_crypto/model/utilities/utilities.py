@@ -318,14 +318,15 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     exchange = exchange.replace(" ", "")
 
     if not path:
-        # path = read_config(file=None, section="utilities")["yaml_path"]
-        path = _paths.all_paths.get("yaml_path")
+        path = pathlib.Path(_paths.all_paths.get("yaml_path"))
+    path = Path.joinpath(_paths.all_paths.get('path_absolut'), Path(path))
+
     try:
-        with open(path + exchange + ".yaml", "r", encoding='UTF-8') as file:
+        with open(Path.joinpath(path, Path(".".join([exchange, "yaml"]))), "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError as error:
-        print(f"\nFile '{path + exchange + '.yaml'}' not found.")
+        print(f"\nFile {Path.joinpath(path, Path('.'.join([exchange, 'yaml'])))} not found.")
         logging.exception("Error loading yaml of %s.\n", exchange)
         raise SystemExit from error
 
@@ -342,7 +343,8 @@ def load_program_config(return_path: bool = False) -> Union[str, Dict]:
     @return: Program config.
     @rtype: dict
     """
-    path = _paths.all_paths.get("program_config_path") + "config.yaml"
+    path = _paths.all_paths.get('program_config_path')
+
     if return_path:
         return path
 
@@ -369,10 +371,8 @@ def get_exchange_names(yaml_path: str = None) -> Optional[List[str]]:
     @rtype: list[str]
     """
     if not yaml_path:
-        # yaml_path = read_config(file=None, section="utilities")["yaml_path"]
         yaml_path = _paths.all_paths.get("yaml_path")
-    path_absolut: Path = pathlib.Path().parent.absolute()
-    path_to_resources = Path.joinpath(path_absolut, yaml_path)
+    path_to_resources = Path.joinpath(_paths.all_paths.get("path_absolut"), Path(yaml_path))
 
     try:
         exchanges = os.listdir(path_to_resources)
@@ -434,7 +434,7 @@ def get_all_exchanges_and_methods() -> Dict[str, dict]:
     @rtype: list
     """
     result_dict = dict()
-    yaml_path = os.getcwd() + "/" + _paths.all_paths.get("yaml_path")
+    yaml_path = _paths.all_paths.get("yaml_path")
 
     exchanges = get_exchange_names(yaml_path=yaml_path)
     for exchange in exchanges:

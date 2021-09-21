@@ -5,13 +5,15 @@ This module is preparing the python path to access all modules.
 """
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-# ToDo: PATHs im Program auf _paths.py umstellen.
+PATH_ABSOLUT = Path().parent.absolute()
 all_paths = {
-    'yaml_path': "resources/running_exchanges/",
-    'program_config_path': "resources/configs/program_config/",
+    'yaml_path': Path.joinpath(PATH_ABSOLUT, Path("resources/running_exchanges/")),
+    'program_config_path': Path.joinpath(PATH_ABSOLUT, Path("resources/configs/program_config/config.yaml")),
+    'path_absolut': Path.joinpath(PATH_ABSOLUT, Path().parent.absolute()),
     'template_path': "",
 }
 
