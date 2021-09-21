@@ -13,7 +13,7 @@ PATH_ABSOLUT = Path().parent.absolute()
 all_paths = {
     'yaml_path': Path.joinpath(PATH_ABSOLUT, Path("resources/running_exchanges/")),
     'program_config_path': Path.joinpath(PATH_ABSOLUT, Path("resources/configs/program_config/config.yaml")),
-    'path_absolut': Path.joinpath(PATH_ABSOLUT, Path().parent.absolute()),
+    'path_absolut': Path().parent.absolute(),
     'template_path': "",
 }
 

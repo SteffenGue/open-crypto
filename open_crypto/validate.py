@@ -12,7 +12,6 @@ import sys
 from typing import Optional, Tuple
 
 import _paths
-from model.utilities.utilities import load_program_config
 from model.validating.base import Report, CompositeReport
 from model.validating.api_map_validators import ApiMapFileValidator
 from model.validating.config_file_validator import ConfigFileValidator
@@ -126,6 +125,8 @@ def validate_exchange(exchange_name: str) -> bool:
 
 if __name__ == "__main__":
 
+    PATH = "open_crypto/resources/running_exchanges/"
+
     if len(sys.argv) == 1:
         print("How to use:")
         print("python validate.py { all | <exchange_name> }")
@@ -136,7 +137,7 @@ if __name__ == "__main__":
     if exchange != "all":
         sys.exit(int(not validate_exchange(exchange)))
     else:
-        exchanges = [os.path.splitext(file)[0] for file in os.listdir(YAML_PATH) if file.endswith(".yaml")]
+        exchanges = [os.path.splitext(file)[0] for file in os.listdir(PATH) if file.endswith(".yaml")]
 
         valid_count = 0  # pylint: disable=C0103
         for exchange in exchanges:
