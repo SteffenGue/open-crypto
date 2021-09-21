@@ -318,15 +318,15 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     exchange = exchange.replace(" ", "")
 
     if not path:
-        path = pathlib.Path(_paths.all_paths.get("yaml_path"))
+        path = _paths.all_paths.get("yaml_path")
     path = Path.joinpath(_paths.all_paths.get('path_absolut'), Path(path))
 
     try:
-        with open(Path.joinpath(path, Path(".".join([exchange, "yaml"]))), "r", encoding='UTF-8') as file:
+        with open(Path.joinpath(path, ".".join([exchange, "yaml"])), "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError as error:
-        print(f"\nFile {Path.joinpath(path, Path('.'.join([exchange, 'yaml'])))} not found.")
+        print(f"\nFile {Path.joinpath(path, '.'.join([exchange, 'yaml']))} not found.")
         logging.exception("Error loading yaml of %s.\n", exchange)
         raise SystemExit from error
 

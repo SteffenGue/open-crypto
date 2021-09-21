@@ -19,6 +19,7 @@ from model.validating.program_config_validator import ProgramConfigValidator
 from resources.configs.global_config import GlobalConfig
 
 YAML_PATH = _paths.all_paths.get("yaml_path")
+PATH = "open_crypto/resources/running_exchanges/"
 
 
 def report_error(report: Report) -> Optional[Report]:
@@ -94,7 +95,7 @@ class ExchangeValidator:
 
         @return: True if the YAML of the exchange is valid, False otherwise.
         """
-        validator = ApiMapFileValidator(f"{YAML_PATH}/{self.exchange_name}.yaml")
+        validator = ApiMapFileValidator(f"{PATH}/{self.exchange_name}.yaml")
         validator.validate()
 
         if validator.report:
@@ -124,8 +125,6 @@ def validate_exchange(exchange_name: str) -> bool:
 
 
 if __name__ == "__main__":
-
-    PATH = "open_crypto/resources/running_exchanges/"
 
     if len(sys.argv) == 1:
         print("How to use:")
