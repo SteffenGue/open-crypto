@@ -88,8 +88,8 @@ For a first impression, consider executing the following examples before creatin
 
 ## Examples
 By default, several example scripts are offered and can easily be executed:
-- __exchange_listings()__  
-- __static()__             
+- __static()__   
+- __exchange_listings()__            
 - __trades()__             
 - __order_books()__        
 - __platform()__           
@@ -100,11 +100,11 @@ To run __open_crypto__ with one of the mentioned configuration files:
 >>>from open_crypto import runner
 >>>runner.Examples.minute_candles()
 ```
-Note that all examples will result in a plot of the received data. Furthermore, especially _static_, _exchange_listings_ may take several minutes.
+Note that all examples will result in a plot of the received data. Furthermore, especially _static_ and _exchange_listings_ may take several minutes.
 
 ## Valid requests
 The following will present the configuration file and show some possible valid requests which should serve as a template to create your own.
-The file is structured into ```general``` settings, including ```database```, ```operation_settings``` and ```utilities```. Furthermore, the section ```jobs``` lists all important parameters for the request itself:
+The file is structured into ```general``` settings, including ```database``` and ```operation_settings```. Furthermore, the section ```jobs``` lists all important parameters for the request itself:
 
 ```yaml
 general:
@@ -121,9 +121,8 @@ general:
     frequency: once # once or any number in minutes (i.e. 0.1 for 6 sec)
     interval: days # minutes, hours, days, weeks, months
     timeout: 10 # any number in seconds (max response time for an exchange)
-  utilities:
     enable_logging: true
-    yaml_path: resources/running_exchanges/
+    asynchronously: true # run in parallel or iteratively request currency-pairs
     
 jobs:
   JobName:  # An arbitrarily chosen name
@@ -143,11 +142,10 @@ Leaving all ```general``` settings untouched will save the requested data into a
 general:
   database: <...>
   operation_settings: <...>
-  utilities: <...>
  
 jobs:
   Example:  
-    yaml_request_name: historic_rates
+    request_method: historic_rates
     update_cp: false
     excluded: null
     exchanges: coinbase, bitfinex
@@ -160,11 +158,10 @@ Note that the request interval (```minutes```, ```days```, ...) and frequency (o
 general:
   database: <...>
   operation_settings: <...>
-  utilities: <...>
  
 jobs:
   Example:  
-    yaml_request_name: historic_rates
+    request_method: historic_rates
     update_cp: false
     excluded: null
     exchanges: coinbase, bitfinex
@@ -178,6 +175,42 @@ Note, when applying a further filter for US-Dollar to ```second_currencies```, b
 general:
   database: <...>
   operation_settings: <...>
+ 
+jobs:
+  Example:  
+    request_method: historic_rates
+    update_cp: false
+    excluded: null
+    exchanges: all
+    currency_pairs: btc-usd
+    first_currencies: null
+    second_currencies: null
+```
+
+## Invalid requests
+In order to provide users feedback when specifying invalid request configurations, __open-crypto__ validates the file before starting requests. The following will show examples of misspecifications and the respective response from the program. 
+
+Let's first create an empty configuration file and plug it in (see above). Note that neither the request_method, exchanges nor currency-pairs are selected.
+```python
+>>>runner.get_config_template()
+Created new config template.
+>>>runner.run()
+Enter config file name: request_template
++ Load file was valid.
++ YAML Parsing successful.
++ Configuration contains all blocks: ['general', 'jobs'] and sections: ['database', 'operation_settings']
++ Database connection string is valid
++ Operation_settings have valid keys
++ Operation settings are valid
+- Key request_method: Expected type(s) '<class 'str'>' != actual type '<class 'NoneType'>'.
+```
+(+) symbolizes a positive result, whereas (-) symbolizes an error. In this case, the key __request_method__ is of class ```NoneType```, whereas the program expected a ```String```. __open-crypto__ stops validating after an error.
+
+Let's step further and take the following config file, where the currency-pair is falsely specified:
+```yaml
+general:
+  database: <...>
+  operation_settings: <...>
   utilities: <...>
  
 jobs:
@@ -186,9 +219,42 @@ jobs:
     update_cp: false
     excluded: null
     exchanges: all
-    currency_pairs: btc-usd
+    currency_pairs: btc/usd
     first_currencies: null
     second_currencies: null
+```
+will result in the follwing error message indicating that only the splitting values (-) between currencies and (,) between currency-pairs are allowed:
+```python
+>>>runner.run()
+Enter config file name: request_template
++ Load file was valid.
+<...>
+- Expected splitting value(s) '['-', ',']' != actual value 'btc/usd' in 'currency_pairs'.
+```
+Last, let's try a request without specifying any currency-pair, i.e.:
+```yaml
+general:
+  database: <...>
+  operation_settings: <...>
+  utilities: <...>
+ 
+jobs:
+  Example:  
+    yaml_request_name: historic_rates
+    update_cp: false
+    excluded: null
+    exchanges: all
+    currency_pairs: null
+    first_currencies: null
+    second_currencies: null
+```
+will result in the following response:
+```python
+>>>runner.run()
+Enter config file name: request_template
++ Load file was valid.
+<...>
+- Expected one key(s) '['currency_pairs', 'first_currencies', 'second_currencies']' != None.
 ```
 
 ## Troubleshooting

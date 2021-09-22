@@ -214,7 +214,7 @@ requests:
       type:
         - str
         - float
-    - key: quote_volume
+    - key: volume
       path:
         - data
         - data

@@ -203,7 +203,7 @@ class HistoricRate(Base):
     low = Column(Float)
     close = Column(Float)
     volume = Column(Float)
-    base_volume = Column(Float)  # ToDo: check if base_volume is correct.
+    # base_volume = Column(Float)  # ToDo: check if base_volume is correct.
     market_cap = Column(Float)
 
     def __repr__(self) -> str:
@@ -445,7 +445,7 @@ class HistoricRateView(Base):
                 HistoricRate.low,
                 HistoricRate.close,
                 HistoricRate.volume,
-                HistoricRate.base_volume,
+                # HistoricRate.base_volume,
                 HistoricRate.market_cap,
             ],
             from_obj=(
