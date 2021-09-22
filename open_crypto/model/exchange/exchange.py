@@ -319,8 +319,8 @@ class Exchange:
                                                           request_table=request_table,
                                                           currency_pairs=currency_pairs)
         except KeyError:
-            logging.error(f"No request method '{request_name}' exists for '{self.name}'.")
-            print("No request method: '%s' exists for '%s'.", request_name, self.name)
+            print(f"No request method '{request_name}' exists for '{self.name}'.")
+            logging.error("No request method: '%s' exists for '%s'.", request_name, self.name)
             return None
 
         except Exception as ex:
