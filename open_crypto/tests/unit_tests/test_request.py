@@ -5,8 +5,8 @@
 Test module for requesting data
 """
 
+import os
 import asyncio
-from pathlib import Path
 import pytest
 import yaml
 
@@ -14,15 +14,15 @@ from model.database.tables import ExchangeCurrencyPair, Ticker, Currency, Trade
 from model.database.tables import Exchange as DBExchange
 from model.exchange.exchange import Exchange
 
-path = Path().parent.absolute()
-
 
 class TestRequest:
     """
     Test class to perform several unit tests.
     """
 
-    with open(path.joinpath("test_file.yaml"), "r", encoding='UTF-8') as file:
+    path = os.getcwd() + "/open_crypto/tests/unit_tests"
+
+    with open(path + "/test_file.yaml", "r", encoding='UTF-8') as file:
         test_file: dict = yaml.load(file, Loader=yaml.FullLoader)
         # 'tickers' will be the non-existing request-method in this test file.
         test_file.get("requests").__delitem__("tickers")
