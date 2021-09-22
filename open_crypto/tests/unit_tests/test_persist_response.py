@@ -260,7 +260,8 @@ class TestPersistResponse:
         # todo : Eingabeparameter in der Methode get_currency_pairs_with_second_currency in db_handler
         #       müsste eigentlich eine Liste an Currencies entgegennehmen, wie in der Methode
         #       get_currency_pairs_with_first_currency, und nicht nur einen einzelnen String.
-        # Ich habe das noch nicht gefixt, da ich nicht genau weiß, ob dann eventuell Fehlermeldungen geworfen werden, bei den vorhandenen Aufrufen der Methode. Diese Aufrufe müssten dann eventuell angepasst werden.
+        # Ich habe das noch nicht gefixt, da ich nicht genau weiß, ob dann eventuell Fehlermeldungen geworfen werden,
+        # bei den vorhandenen Aufrufen der Methode. Diese Aufrufe müssten dann eventuell angepasst werden.
         test_result = self.db_handler.get_currency_pairs_with_second_currency("TESTEXCHANGE", ["BTC"])
         test_result = [item.second_id for item in test_result]
         result = self.session.query(ExchangeCurrencyPair).filter(ExchangeCurrencyPair.second_id.__eq__(1)).all()

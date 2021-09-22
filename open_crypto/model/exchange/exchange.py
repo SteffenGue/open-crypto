@@ -318,6 +318,11 @@ class Exchange:
                                                           request_name=request_name,
                                                           request_table=request_table,
                                                           currency_pairs=currency_pairs)
+        except KeyError:
+            logging.error(f"No request method '{request_name}' exists for '{self.name}'.")
+            print(f"No request method: '{request_name}' exists for '{self.name}'.")
+            return None
+
         except Exception as ex:
             print(ex)
             print(f"Exception extracting request URLs for: {self.name}.")

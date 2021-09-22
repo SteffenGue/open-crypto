@@ -319,7 +319,8 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
 
     if not path:
         path = _paths.all_paths.get("yaml_path")
-    path = Path.joinpath(_paths.all_paths.get('path_absolut'), Path(path))
+
+    path = _paths.all_paths.get('path_absolut').joinpath(Path(path))
 
     try:
         with open(Path.joinpath(path, ".".join([exchange, "yaml"])), "r", encoding='UTF-8') as file:

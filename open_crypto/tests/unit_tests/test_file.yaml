@@ -197,7 +197,6 @@ requests:
        type:
          - int
 
-
   trades:
     request:
       template: products/{currency_pair}/trades
