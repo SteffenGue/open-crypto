@@ -34,7 +34,7 @@ def update_maps() -> None:
     """
 
     GitDownloader.main()
-    if os.getcwd() != _paths.package_path:
+    if os.getcwd() != _paths.all_paths.get("package_path"):
         copy_resources()
 
 

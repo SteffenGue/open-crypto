@@ -10,11 +10,12 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 
 PATH_ABSOLUT = Path().parent.absolute()
+
 all_paths = {
-    'yaml_path': Path.joinpath(PATH_ABSOLUT, Path("resources/running_exchanges/")),
-    'program_config_path': Path.joinpath(PATH_ABSOLUT, Path("resources/configs/program_config/config.yaml")),
-    'path_absolut': Path().parent.absolute(),
-    'template_path': "",
+    "yaml_path": PATH_ABSOLUT.joinpath(Path("resources/running_exchanges/")),
+    "program_config_path": PATH_ABSOLUT.joinpath(Path("resources/configs/program_config/config.yaml")),
+    "path_absolut": Path().parent.absolute(),
+    "template_path": "",
+    "package_path": os.path.dirname(os.path.realpath(__file__))
 }
 
-package_path = os.path.dirname(os.path.realpath(__file__))

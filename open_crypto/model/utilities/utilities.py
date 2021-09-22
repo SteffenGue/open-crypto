@@ -24,7 +24,6 @@ import calendar
 import datetime
 import logging
 import os
-import pathlib
 import ssl
 from datetime import timedelta
 from pathlib import Path
@@ -322,11 +321,11 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     path = Path.joinpath(_paths.all_paths.get('path_absolut'), Path(path))
 
     try:
-        with open(Path.joinpath(path, ".".join([exchange, "yaml"])), "r", encoding='UTF-8') as file:
+        with open(path.joinpath(".".join([exchange, "yaml"])), "r", encoding='UTF-8') as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError as error:
-        print(f"\nFile {Path.joinpath(path, '.'.join([exchange, 'yaml']))} not found.")
+        print(f"\nFile {path.joinpath('.'.join([exchange, 'yaml']))} not found.")
         logging.exception("Error loading yaml of %s.\n", exchange)
         raise SystemExit from error
 

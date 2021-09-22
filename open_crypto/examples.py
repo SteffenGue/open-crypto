@@ -37,7 +37,7 @@ class Examples:
     pd.set_option("display.max_columns", 99)
     pd.set_option('expand_frame_repr', False)
 
-    PATH = pathlib.Path.joinpath(_paths.PATH_ABSOLUT, "resources")
+    PATH = pathlib.Path.joinpath(_paths.all_paths.get("path_absolut"), "resources")
 
     @staticmethod
     def __start_catch_systemexit(configuration_file: str) -> None:

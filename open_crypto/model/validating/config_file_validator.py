@@ -151,7 +151,7 @@ class DatabaseStringValidator(Validator):
     db_strings = {'sqlite': ['sqltype', 'db_name'],
                   'mariadb': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
                   'mysql': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
-                  'postgres': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
+                  'postgresql': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
                   }
 
     def validate(self) -> bool:
@@ -164,17 +164,22 @@ class DatabaseStringValidator(Validator):
         """
 
         try:
-
+            # check if sqltype exists in config file
             if 'sqltype' not in self.value:
                 raise KeyNotInDictError('sqltype', self.value)
 
-            for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype')):
+            # Check if sqltype is correctly specified
+            if self.value.get('sqltype') not in DatabaseStringValidator.db_strings.keys():
+                raise KeyNotInDictError(self.value.get('sqltype'), DatabaseStringValidator.db_strings)
+
+            # check if db-connection string is complete and not None
+            for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype'), []):
 
                 if key not in self.value:
                     raise KeyNotInDictError(key, self.value)
 
                 if self.value.get(key) is None:
-                    raise WrongTypeError(str, type(self.value.get(key)), key)
+                    raise WrongTypeError([str, int], type(self.value.get(key)), key)
 
         except (KeyNotInDictError, WrongTypeError) as error:
             self.report = Report(error)

@@ -15,7 +15,7 @@ import signal
 import json
 import sys
 
-from _paths import package_path
+from _paths import all_paths
 from model.utilities.loading_bar import Loader
 
 
@@ -108,7 +108,7 @@ class GitDownloader:
 
         url = "https://github.com/SteffenGue/open-crypto/tree/master/open_crypto/resources/running_exchanges"
 
-        resource_path = package_path + "/resources/running_exchanges/"
+        resource_path = all_paths.get('package_path') +  "/resources/running_exchanges/"
 
         GitDownloader.download(url, output_dir= resource_path)
         # GitDownloader.print_text("✔ Exchange mapping update complete", "green", in_place=True)
