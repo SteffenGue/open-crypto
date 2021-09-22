@@ -50,12 +50,13 @@ class TestRequest:
         exchange_object = DBExchange(name="TestExchange")
         first_currency = Currency(name="TestCurrency1")
         second_currency = Currency(name="TestCurrency2")
-        ExCuPair = ExchangeCurrencyPair(exchange=exchange_object, first=first_currency, second=second_currency)
+        exchange_currency_pair = ExchangeCurrencyPair(exchange=exchange_object, first=first_currency,
+                                                      second=second_currency)
         request_urls = TestRequest.exchange.extract_request_urls(TestRequest.test_file['requests']['trades'], 'trades',
-                                                                 Trade, ExCuPair)
+                                                                 Trade, exchange_currency_pair)
         TestRequest.exchange.request_urls = request_urls
 
-        result = TestRequest.exchange.apply_currency_pair_format('trades', ExCuPair)
+        result = TestRequest.exchange.apply_currency_pair_format('trades', exchange_currency_pair)
         expected = 'TESTCURRENCY1-TESTCURRENCY2'
         assert result == expected
 
@@ -63,16 +64,16 @@ class TestRequest:
         """
         Test apply currency-pair format specified in the exchange-yaml file.
         """
-        ex = DBExchange(name="TestExchange")
-        c1 = Currency(name="TestCurrency1")
+        exchange_object = DBExchange(name="TestExchange")
+        first_currency = Currency(name="TestCurrency1")
 
-        ExCuPair = ExchangeCurrencyPair(exchange=ex, first=c1)
+        exchange_currency_pair = ExchangeCurrencyPair(exchange=exchange_object, first=first_currency)
         request_urls = TestRequest.exchange.extract_request_urls(TestRequest.test_file['requests']['trades'], 'trades',
-                                                                 Trade, ExCuPair)
+                                                                 Trade, exchange_currency_pair)
         TestRequest.exchange.request_urls = request_urls
 
         with pytest.raises(AttributeError):
-            TestRequest.exchange.apply_currency_pair_format('trades', ExCuPair)
+            TestRequest.exchange.apply_currency_pair_format('trades', exchange_currency_pair)
 
 #
 # def test_request_name_empty_info(self):
