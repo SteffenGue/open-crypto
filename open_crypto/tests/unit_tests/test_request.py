@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import Dict
+"""
+Test module for requesting data
+"""
 
 import asyncio
 from pathlib import Path
@@ -16,6 +18,10 @@ path = Path().parent.absolute()
 
 
 class TestRequest:
+    """
+    Test class to perform several unit tests.
+    """
+
     with open(path.joinpath("test_file.yaml"), "r", encoding='UTF-8') as file:
         test_file: dict = yaml.load(file, Loader=yaml.FullLoader)
         # 'tickers' will be the non-existing request-method in this test file.
@@ -23,28 +29,28 @@ class TestRequest:
 
     exchange = Exchange(test_file, None, None, None, None)
 
-    def test_request_name_not_in_request_urls(self):
+    def test_request_name_not_in_request_urls(self) -> None:
         """ Name of the request is not in the request_urls-dict."""
 
         loop = asyncio.get_event_loop()
         result = loop.run_until_complete(TestRequest.exchange.request(Ticker, [], None))
         assert result is None
 
-    def test_extract_request_urls_of_not_existing_request_method(self):
+    def test_extract_request_urls_of_not_existing_request_method(self) -> None:
         """
         Test non existing request method
         """
         with pytest.raises(KeyError):
             TestRequest.exchange.extract_request_urls(TestRequest.test_file, 'tickers', Ticker, None)
 
-    def test_apply_currency_pair_format(self):
+    def test_apply_currency_pair_format(self) -> None:
         """
         Test apply currency-pair format specified in the exchange-yaml file.
         """
-        ex = DBExchange(name="TestExchange")
-        c1 = Currency(name="TestCurrency1")
-        c2 = Currency(name="TestCurrency2")
-        ExCuPair = ExchangeCurrencyPair(exchange=ex, first=c1, second=c2)
+        exchange_object = DBExchange(name="TestExchange")
+        first_currency = Currency(name="TestCurrency1")
+        second_currency = Currency(name="TestCurrency2")
+        ExCuPair = ExchangeCurrencyPair(exchange=exchange_object, first=first_currency, second=second_currency)
         request_urls = TestRequest.exchange.extract_request_urls(TestRequest.test_file['requests']['trades'], 'trades',
                                                                  Trade, ExCuPair)
         TestRequest.exchange.request_urls = request_urls
@@ -53,7 +59,7 @@ class TestRequest:
         expected = 'TESTCURRENCY1-TESTCURRENCY2'
         assert result == expected
 
-    def test_apply_currency_pair_format_with_missing_currency(self):
+    def test_apply_currency_pair_format_with_missing_currency(self) -> None:
         """
         Test apply currency-pair format specified in the exchange-yaml file.
         """
