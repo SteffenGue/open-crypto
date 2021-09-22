@@ -445,7 +445,7 @@ class HistoricRateView(Base):
                 HistoricRate.low,
                 HistoricRate.close,
                 HistoricRate.volume,
-                HistoricRate.base_volume,
+                # HistoricRate.base_volume,
                 HistoricRate.market_cap,
             ],
             from_obj=(
