@@ -17,11 +17,10 @@ Classes:
             )
         )
     )
-
-
 """
 
 from typing import Any, Text, Dict, Union, Optional
+
 from pandas import Interval
 from typeguard import check_type
 
@@ -46,18 +45,17 @@ class ConfigFileValidator(CompositeValidator):
     value: Text
 
     def validate(self) -> bool:
-        """Validates the value.
+        """
+        Validates the value.
 
         Validates the value attribute while generating a validation Report.
 
-        Returns:
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
         load_file = LoadFileValidator(self.value)
         is_file_loaded = load_file.validate()
         self.append_report(load_file)
 
-        # if file did not load
         if not is_file_loaded:
             return False
 
@@ -65,7 +63,6 @@ class ConfigFileValidator(CompositeValidator):
         is_yaml_loaded = load_yaml.validate()
         self.append_report(load_yaml)
 
-        # if yaml did not load
         if not is_yaml_loaded:
             return False
 
@@ -90,46 +87,46 @@ class ConfigFileValidator(CompositeValidator):
 
 
 class ConfigYamlValidator(CompositeValidator):
-    """Validator for loading Validators.
+    """
+    Validator for loading Validators.
 
     Validator for calling the other required Validators.
     """
 
     def __init__(self, value: Dict[Text, Any]):
-        """Constructor of ApiMapValidator.
+        """
+        Constructor of ApiMapValidator.
 
-        @param value:
-            The value to get validated.
+        @param value: The value to get validated.
         """
 
         super().__init__(
             value,
             ConfigSectionValidator(value),
-            DatabaseStringValidator(value['general']['database']),
-            OperationSettingKeyValidator(value['general']['operation_settings']),
-            OperationSettingValueValidator(value['general']['operation_settings']),
-            RequestKeysValidator(value['jobs']),
-            RequestValueValidator(value['jobs'])
+            DatabaseStringValidator(value["general"]["database"]),
+            OperationSettingKeyValidator(value["general"]["operation_settings"]),
+            OperationSettingValueValidator(value["general"]["operation_settings"]),
+            RequestKeysValidator(value["jobs"]),
+            RequestValueValidator(value["jobs"])
         )
 
 
 class ConfigSectionValidator(Validator):
     """
     Validates if all sections and blocks are present.
-
     """
-    block = ['general', 'jobs']
-    section = ['database', 'operation_settings']
+    block = ["general", "jobs"]
+    section = ["database", "operation_settings"]
 
     def validate(self) -> bool:
 
         try:
-        # ToDo: Falsch herum. So können nur fehlerhalfte Werte in der Config erkannt werden, jedoch nicht fehlende!
+            # ToDo: Falsch herum. So können nur fehlerhalfte Werte in der Config erkannt werden, jedoch nicht fehlende!
             for key in self.value:
                 if key not in ConfigSectionValidator.block:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.block))
 
-            for key in self.value.get('general'):
+            for key in self.value.get("general"):
                 if key not in ConfigSectionValidator.section:
                     raise KeyNotInDictError(key, dict.fromkeys(ConfigSectionValidator.section))
 
@@ -148,32 +145,32 @@ class DatabaseStringValidator(Validator):
     Validates if all required database parameters exist to form the connection string.
     #ToDo: Client is missing
     """
-    db_strings = {'sqlite': ['sqltype', 'db_name'],
-                  'mariadb': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
-                  'mysql': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
-                  'postgresql': ['sqltype', 'client', 'user_name', 'password', 'host', 'port', 'db_name'],
+    db_strings = {"sqlite": ["sqltype", "db_name"],
+                  "mariadb": ["sqltype", "client", "user_name", "password", "host", "port", "db_name"],
+                  "mysql": ["sqltype", "client", "user_name", "password", "host", "port", "db_name"],
+                  "postgresql": ["sqltype", "client", "user_name", "password", "host", "port", "db_name"],
                   }
 
     def validate(self) -> bool:
-        """Validates the value.
+        """
+        Validates the value.
 
         Validates the value attribute while generating a validation Report.
 
-        @return: bool
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
 
         try:
             # check if sqltype exists in config file
-            if 'sqltype' not in self.value:
-                raise KeyNotInDictError('sqltype', self.value)
+            if "sqltype" not in self.value:
+                raise KeyNotInDictError("sqltype", self.value)
 
             # Check if sqltype is correctly specified
-            if self.value.get('sqltype') not in DatabaseStringValidator.db_strings.keys():
-                raise KeyNotInDictError(self.value.get('sqltype'), DatabaseStringValidator.db_strings)
+            if self.value.get("sqltype") not in DatabaseStringValidator.db_strings.keys():
+                raise KeyNotInDictError(self.value.get("sqltype"), DatabaseStringValidator.db_strings)
 
             # check if db-connection string is complete and not None
-            for key in DatabaseStringValidator.db_strings.get(self.value.get('sqltype'), []):
+            for key in DatabaseStringValidator.db_strings.get(self.value.get("sqltype"), []):
 
                 if key not in self.value:
                     raise KeyNotInDictError(key, self.value)
@@ -193,12 +190,11 @@ class DatabaseStringValidator(Validator):
 class OperationSettingKeyValidator(Validator):
     """
     Validates if all necessary keys exist in the section 'operational_settings'.
-
     """
 
-    sections = {'frequency': Union[str, int, float],  # max 31 days
-                'interval':  Optional[str],
-                'timeout': Union[int, float],   # max 10 minutes
+    sections = {"frequency": Union[str, int, float],  # max 31 days
+                "interval": Optional[str],
+                "timeout": Union[int, float],  # max 10 minutes
                 }
 
     def validate(self) -> bool:
@@ -206,8 +202,7 @@ class OperationSettingKeyValidator(Validator):
         Validates the value.
         Validates the value attribute while generating a validation Report.
 
-        @return: bool
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
 
         # Does key exist in config file
@@ -234,30 +229,29 @@ class OperationSettingKeyValidator(Validator):
 class OperationSettingValueValidator(Validator):
     """
     Validates if all necessary keys have correctly specified values in the section 'operational_settings'.
-
     """
 
-    sections = {'frequency': Interval(0, 44640, "both"),  # max 31 days
-                'interval': ['minutes', 'hours', 'days', 'weeks', 'months'],
-                'timeout': Interval(0, 600, 'both'),  # max 10 minutes
-                'enable_logging': [True, False, 0, 1],
-                'asynchronously':  [True, False, 0, 1]
+    sections = {"frequency": Interval(0, 44640, "both"),  # max 31 days
+                "interval": ["minutes", "hours", "days", "weeks", "months"],
+                "timeout": Interval(0, 600, "both"),  # max 10 minutes
+                "enable_logging": [True, False, 0, 1],
+                "asynchronously": [True, False, 0, 1]
                 }
 
     def validate(self) -> bool:
         """
         Validates the value.
+
         Validates the value attribute while generating a validation Report.
 
-        @return: bool
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
 
         try:
             for key, val in OperationSettingValueValidator.sections.items():
 
-                if key == 'frequency' and isinstance(self.value.get(key), str):
-                    if not self.value.get(key) == 'once':
+                if key == "frequency" and isinstance(self.value.get(key), str):
+                    if not self.value.get(key) == "once":
                         raise WrongValueError(["once", val], self.value.get(key), key)
                     continue
 
@@ -276,24 +270,23 @@ class OperationSettingValueValidator(Validator):
 class RequestKeysValidator(Validator):
     """
     Validates if all keys exist and types are correct for the request itself.
-
     """
-    sections = {'request_method': str,
-                'update_cp': Optional[bool],
-                'exchanges': str,
-                'excluded': Optional[str],
-                'currency_pairs': Optional[str],
-                'first_currencies': Optional[str],
-                'second_currencies': Optional[str],
+    sections = {"request_method": str,
+                "update_cp": Optional[bool],
+                "exchanges": str,
+                "excluded": Optional[str],
+                "currency_pairs": Optional[str],
+                "first_currencies": Optional[str],
+                "second_currencies": Optional[str],
                 }
 
     def validate(self) -> bool:
-        """Validates the value.
+        """
+        Validates the value.
 
         Validates the value attribute while generating a validation Report.
 
-        @return: bool
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
 
         # if key is not nullable and not in the configuration file or empty
@@ -309,15 +302,15 @@ class RequestKeysValidator(Validator):
                     except TypeError as error:
                         raise WrongTypeError(val, type(self.value.get(job).get(key)), key) from error
 
-                    if self.value.get(job).get(key) == 'None':
-                        raise WrongValueError(['null'], self.value.get(job).get(key), key)
+                    if self.value.get(job).get(key) == "None":
+                        raise WrongValueError(["null"], self.value.get(job).get(key), key)
 
         except (KeyNotInDictError, WrongTypeError, WrongValueError) as error:
             self.report = Report(error)
             return False
 
         else:
-            self.report = Report('Request keys and types are valid.')
+            self.report = Report("Request keys and types are valid.")
             return True
 
 
@@ -325,7 +318,7 @@ class RequestValueValidator(Validator):
     """
     Validates if exchange and currency-pairs are specified and not None.
     """
-    VALID_JOBS = ['historic_rates', 'tickers', 'trades', 'order_books', 'currency_pairs']
+    VALID_JOBS = ["historic_rates", "tickers", "trades", "order_books", "currency_pairs"]
 
     def validate(self) -> bool:
         try:
@@ -333,7 +326,7 @@ class RequestValueValidator(Validator):
 
                 if self.value.get(job).get("request_method") not in RequestValueValidator.VALID_JOBS:
                     raise WrongValueError(RequestValueValidator.VALID_JOBS, self.value.get(job).get("request_method"),
-                                          'request_method')
+                                          "request_method")
 
                 # if key 'currency-pairs' is specified
                 if pair_string := self.value.get(job).get("currency_pairs"):
@@ -355,7 +348,7 @@ class RequestValueValidator(Validator):
 
                 # if neither currency-pairs nor first_currencies or second_currencies are specified. That is only
                 # allowed for the request method 'currency_pairs'.
-                if self.value.get(job).get('request_method') == 'currency_pairs':
+                if self.value.get(job).get("request_method") == "currency_pairs":
                     continue
                 if all([self.value.get(job).get("currency_pairs") is None,
                         self.value.get(job).get("first_currencies") is None,

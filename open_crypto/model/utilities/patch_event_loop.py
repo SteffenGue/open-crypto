@@ -3,11 +3,11 @@
 """
 This class patches the open issue with nested asyncio EventLoops under several environments.
 """
-from typing import Optional
-
 import asyncio
 import logging
 from asyncio import AbstractEventLoop
+from typing import Optional
+
 import nest_asyncio
 
 
@@ -20,16 +20,17 @@ class PatchEventLoop:
     def _catch_event_loop() -> Optional[AbstractEventLoop]:
         """
         Catches an already running event-loop.
-        Returns: BaseEventLoop or None
-        """
 
+        @return: BaseEventLoop or None
+        """
         return asyncio.get_event_loop()
 
     @staticmethod
     def check_event_loop_exists() -> bool:
         """
         Checks for an running event-loop.
-        Returns: bool.
+
+        @return: bool.
         """
         return asyncio.get_event_loop().is_running()
 

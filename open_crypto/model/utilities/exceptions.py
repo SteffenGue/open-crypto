@@ -7,10 +7,7 @@ Classes:
     - MappingNotFoundException
     - DifferentExchangeContentException
     - NoCurrencyPairProvidedException
-    - NotAllPrimaryKeysException
 """
-
-from typing import Dict
 
 
 class MappingNotFoundException(Exception):
@@ -57,19 +54,3 @@ class NoCurrencyPairProvidedException(Exception):
         """
         super().__init__(f"For the exchange '{exchange_name}' for the method '{method_name}' currency pair info is"
                          f"needed but not sufficiently provided.")
-
-
-class NotAllPrimaryKeysException(Exception):
-    """
-    Custom exception indicating that not all primary keys are in the formatted_response. This exception is raised prior
-    to any database interaction.
-    """
-
-    def __init__(self, exchange_name: str, primary_keys: Dict[str, bool]):  # TODO: List instead of dict?
-        """
-        @param exchange_name: Name of the Exchange that had a missing primary key.
-        @type exchange_name: str
-        @param primary_keys: String representation of all missing primary keys.
-        @type primary_keys: dict
-        """
-        super().__init__(f"The exchange '{exchange_name}' is missing a primary key: '{primary_keys}'")

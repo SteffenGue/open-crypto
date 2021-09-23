@@ -231,7 +231,7 @@ class RequestKeysValidator(Validator):
             self.report = Report(error)
             return False
         else:
-            self.report = Report('Request keys and types are valid.')
+            self.report = Report("Request keys and types are valid.")
             return True
 
 

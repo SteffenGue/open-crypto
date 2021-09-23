@@ -17,6 +17,7 @@ import string
 from collections import deque, OrderedDict
 from datetime import datetime
 from typing import Iterator, Optional, Any, Generator, Callable, Union, Tuple, Dict, List
+
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 
@@ -25,9 +26,9 @@ from model.database.tables import ExchangeCurrencyPair, DatabaseTable
 from model.exchange.mapping import convert_type, extract_mappings, Mapping
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
     NoCurrencyPairProvidedException
+from model.utilities.loading_bar import Loader
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import provide_ssl_context, replace_list_item, COMPARATOR
-from model.utilities.loading_bar import Loader
 
 
 def format_request_url(url: str,
@@ -368,7 +369,6 @@ class Exchange:
                     await asyncio.sleep(self.rate_limit)
                     loader.increment()
 
-
             else:
                 url_formatted, params_adj = url, params
                 response_json = await self.fetch(session, url=url_formatted, params=params_adj)
@@ -435,7 +435,8 @@ class Exchange:
                              request_dict: dict,
                              request_name: str,
                              request_table: object = None,
-                             currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]] = None) -> Dict[str, Dict[str, dict]]:
+                             currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]] = None) \
+            -> Dict[str, Dict[str, dict]]:
         """
         Extracts from the section of requests from the .yaml-file the necessary attachment
         for the url and parameters for each request and inserts variable parameter values
@@ -522,7 +523,7 @@ class Exchange:
             # is the dict-comprehension {v: k for k, v ...}.
 
             if not bool(value):
-                all_intervals = {'minutes': 1, 'hours': 2, 'days': 3, 'weeks': 4, 'months': 5}
+                all_intervals = {"minutes": 1, "hours": 2, "days": 3, "weeks": 4, "months": 5}
                 compare = COMPARATOR.get(self.comparator)
                 self.interval = {v: k for k, v in val.items() if compare(all_intervals.get(k),
                                                                          all_intervals.get(self.base_interval))}
@@ -729,8 +730,8 @@ class Exchange:
                     # extraction of actual values; note that currencies might not be in mappings (later important)
                     for mapping in mappings:
 
-                        if 'interval' in mapping.types:
-                            mapping.types = replace_list_item(mapping.types, 'interval', self.interval)
+                        if "interval" in mapping.types:
+                            mapping.types = replace_list_item(mapping.types, "interval", self.interval)
 
                         if currency_pair:
                             temp_results[mapping.key] = mapping.extract_value(current_response,
@@ -749,7 +750,6 @@ class Exchange:
                             temp_results[mapping.key] = [temp_results[mapping.key]]
 
                 except Exception:
-                    # print(f"Error while formatting {method}, {mapping.key}: {currency_pair}")
                     logging.exception("Error while formatting %s, %s: %s", method, mapping.key, currency_pair)
 
                 else:

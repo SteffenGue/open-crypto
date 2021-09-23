@@ -461,17 +461,3 @@ class HistoricRateView(Base):
 
 
 DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook]
-
-# Currently unused classes:
-
-# class PairInfo(Base):
-#     """
-#     Table for additional information for each exchange-currency-pair.
-#     """
-#     __tablename__ = "pair_infos"
-#
-#     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
-#     exchange_pair = relationship("ExchangeCurrencyPair", backref="pair_infos")
-#
-#     start = Column(UnixTimestampMs)
-#     end = Column(UnixTimestampMs)

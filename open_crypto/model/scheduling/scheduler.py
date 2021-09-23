@@ -17,9 +17,9 @@ from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, Exchan
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
-from model.utilities.time_helper import TimeHelper
-from model.utilities.loading_bar import Loader
 from model.utilities.kill_switch import KillSwitch
+from model.utilities.loading_bar import Loader
+from model.utilities.time_helper import TimeHelper
 
 
 class Scheduler:
@@ -87,7 +87,7 @@ class Scheduler:
                             logging.info("Task got terminated.")
                             break
                         last_row_id = job.exchanges_with_pairs.get(exchange).get(currency_pair)
-                        continue_run, job.exchanges_with_pairs =\
+                        continue_run, job.exchanges_with_pairs = \
                             await request_fun(request_table, {exchange: {currency_pair: last_row_id}})
                         if not continue_run:
                             continue
@@ -170,7 +170,6 @@ class Scheduler:
                 print("\nDone loading Currency-Pairs.")
                 raise SystemExit
 
-            # TODO: Philipp: Check out if loops work without continues.
             if job.exchanges_with_pairs:
                 for exchange in job.exchanges_with_pairs.copy():
                     # Delete exchanges with no API for that request type
@@ -257,12 +256,13 @@ class Scheduler:
             with Loader("Loading exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
                 for exchange in exchanges:
                     if job.request_name != "currency_pairs":
-                        job.exchanges_with_pairs[exchange] = dict.fromkeys(self.database_handler.get_exchanges_currency_pairs(
-                            exchange.name,
-                            job_params["currency_pairs"],
-                            job_params["first_currencies"],
-                            job_params["second_currencies"]
-                        ))
+                        job.exchanges_with_pairs[exchange] = dict.fromkeys(
+                            self.database_handler.get_exchanges_currency_pairs(
+                                exchange.name,
+                                job_params["currency_pairs"],
+                                job_params["first_currencies"],
+                                job_params["second_currencies"]
+                            ))
                     loader.increment()
         return job_list
 
@@ -309,7 +309,8 @@ class Scheduler:
         total = sum([len(v) for k, v in exchanges_with_pairs.items()])
         with Loader("Requesting data...", "", max_counter=total) as loader:
             responses = await asyncio.gather(
-                *(ex.request(request_table, exchanges_with_pairs[ex], loader=loader) for ex in exchanges_with_pairs.keys())
+                *(ex.request(request_table, exchanges_with_pairs[ex], loader=loader) for ex in
+                  exchanges_with_pairs.keys())
             )
 
         counter = {}
@@ -349,16 +350,11 @@ class Scheduler:
             updated_job: Dict[Exchange, Any] = {}
             for exchange, value in counter.items():
                 if value:
-                    # exchange.decrease_interval()
                     updated_job[exchange] = value
-                # elif exchange.interval != "days":  # if days had no results, kick out exchange
-                #     exchange.increase_interval()
-                #     updated_job[exchange] = value
 
             if updated_job:
                 return True, updated_job
 
-        # print(f"\nDone collecting {table_name}.", end="\n\n")
         logging.info("Done collecting %s.", table_name)
 
         return False, exchanges_with_pairs

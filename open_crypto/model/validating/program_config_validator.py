@@ -15,7 +15,6 @@ Classes:
             )
         )
     )
-
 """
 
 from typing import Any, Text, Dict, Union
@@ -113,9 +112,9 @@ class ConfigSectionValidator(Validator):
     Validates if all sections and blocks are present.
 
     """
-    blocks = ['logging', 'request_settings']
-    sections = ['dirname', 'filename_format', 'level', 'exception_hook',
-                'min_return_tuples', 'interval_settings']
+    blocks = ["logging", "request_settings"]
+    sections = ["dirname", "filename_format", "level", "exception_hook",
+                "min_return_tuples", "interval_settings"]
 
     def validate(self) -> bool:
 
@@ -143,15 +142,14 @@ class ConfigSectionValidator(Validator):
 class ProgramSettingKeyValidator(Validator):
     """
     Validates if all necessary keys exist in the section 'operational_settings'.
-
     """
 
-    sections = {'dirname': str,
-                'filename_format': str,
-                'level': str,
-                'exception_hook': Union[int, bool],
-                'min_return_tuples': int,
-                'interval_settings': str,
+    sections = {"dirname": str,
+                "filename_format": str,
+                "level": str,
+                "exception_hook": Union[int, bool],
+                "min_return_tuples": int,
+                "interval_settings": str,
                 }
 
     def validate(self) -> bool:
@@ -159,8 +157,7 @@ class ProgramSettingKeyValidator(Validator):
         Validates the value.
         Validates the value attribute while generating a validation Report.
 
-        @return: bool
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
 
         # Does key exist in config file
@@ -189,18 +186,18 @@ class ProgramSettingValueValidator(Validator):
     Validates if all necessary keys have correctly specified values in the section 'operational_settings'.
 
     """
-    sections = {'level': ['NOTSET', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-                'min_return_tuples': Interval(0, 1000000, 'both'),
-                'interval_settings': ['equal', 'lower', 'higher', 'lower_or_equal', 'high_or_equal'],
+    sections = {"level": ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+                "min_return_tuples": Interval(0, 1000000, "both"),
+                "interval_settings": ["equal", "lower", "higher", "lower_or_equal", "high_or_equal"],
                 }
 
     def validate(self) -> bool:
         """
         Validates the value.
+
         Validates the value attribute while generating a validation Report.
 
-        @return: bool
-            Whether further Validators may continue validating.
+        @return: Whether further Validators may continue validating.
         """
 
         try:

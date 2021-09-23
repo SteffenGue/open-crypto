@@ -12,13 +12,14 @@ Classes:
             - Persist methods
 """
 
+import importlib
 import logging
 import os
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from itertools import product
-import importlib
 from typing import List, Iterable, Optional, Generator, Any, Iterator, Dict, Tuple, Union
+
 import sqlalchemy.orm
 from pandas import DataFrame
 from pandas import read_sql_query as pd_read_sql_query
@@ -547,9 +548,9 @@ class DatabaseHandler:
 
         with self.session_scope() as session:
             if last_row_id:
-                timestamp = session.execute(f'SELECT time FROM historic_rates where rowid = {last_row_id} '
-                                            f'ORDER BY time DESC').first()[0]
-                return datetime.utcfromtimestamp(timestamp/1000)
+                timestamp = session.execute(f"SELECT time FROM historic_rates where rowid = {last_row_id} "
+                                            f"ORDER BY time DESC").first()[0]
+                return datetime.utcfromtimestamp(timestamp / 1000)  # TODO: Replace with TimeHelper call.
 
             (earliest_timestamp,) = session \
                 .query(func.min(table.time)) \
@@ -581,7 +582,7 @@ class DatabaseHandler:
                 exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
                 session.add(exchange)
 
-    # NEVER CALL THIS OUTSIDE OF THIS CLASS
+    # NEVER CALL THIS OUTSIDE OF THIS CLASS TODO: Rename with underscore to clarify private?
     def persist_exchange_currency_pair(self,
                                        exchange_name: str,
                                        first_currency_name: str,
@@ -617,10 +618,8 @@ class DatabaseHandler:
 
         if currency_pairs is not None:
 
-            # ex_currency_pairs: List[ExchangeCurrencyPair] = list()
             i: int = 0
             with self.session_scope() as session:
-                # for currency_pair in tqdm.tqdm(currency_pairs, disable=(len(currency_pairs) == 1)):
                 for currency_pair in currency_pairs:
                     exchange_name = currency_pair[0]
                     first_currency_name = currency_pair[1]
@@ -727,7 +726,7 @@ class DatabaseHandler:
                 # Sort data by timestamp in order to ensure the last_row_id (see below) to be with the oldest timestamp.
                 # This is used for historic_rates.get_first_timestamp(), if the oldest timestamp of the previous
                 # request is wanted, instead of the oldest timestamp in the database.
-                data_to_persist = sorted(data_to_persist, key=lambda i: i['time'], reverse=True)
+                data_to_persist = sorted(data_to_persist, key=lambda i: i["time"], reverse=True)
 
                 with self.session_scope() as session:
 
@@ -740,7 +739,7 @@ class DatabaseHandler:
 
                     row_count = session.execute(stmt)
 
-                    print(f"Pair-ID {exchange_pair_id[0] if len(exchange_pair_id)==1 else 'ALL'}"
+                    print(f"Pair-ID {exchange_pair_id[0] if len(exchange_pair_id) == 1 else 'ALL'}"
                           f" - {exchange.name.capitalize()}: {row_count.rowcount} tuple(s)")
 
                     # Dict containing the ExchangeCurrencyPair as key and the last_row_id as value, if and only if
@@ -754,25 +753,3 @@ class DatabaseHandler:
                 break
 
         return counter_dict if counter_dict else {}
-
-    # def delete_all_than_first_entry(self, table: DatabaseTable, exchange_pair_id: int):
-    #     """
-    #     Delete every entry except the most recent one. This method is used by the scheduler when increasing
-    #     the interval for iterative requests. If, for example, the interval is increased from hours to days,
-    #     and decreased afterwards (in order to overcome null-trade periods), the program would take the oldest
-    #     timestamp from the DB for further requests. That would leave a certain period without data in the requested
-    #     period.
-    #
-    #     @param table: The database table to be queried.
-    #     @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
-    #     @param exchange_pair_id: The exchange_pair_id of interest.
-    #     @type exchange_pair_id: int
-    #     """
-    #
-    #     with self.session_scope() as session:
-    #         (max_timestamp,) = session \
-    #             .query(func.max(table.time)) \
-    #             .filter(table.exchange_pair_id == exchange_pair_id) \
-    #             .first()
-    #         session.query(table).filter(table.exchange_pair_id == exchange_pair_id,
-    #                                     table.time < max_timestamp).delete()

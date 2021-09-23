@@ -215,7 +215,7 @@ class Mapping:
                 # Iterate through list of results
                 result = list()
 
-                # special case for bitfinex, der ganz lange auskommentiert war -> ganzes if, else war entsprechend einen nach links gerürckt
+                # special case for bitfinex
                 if len(response) == 1:
                     response = response[0]
                     continue  # because instance of response has to be checked
@@ -242,8 +242,7 @@ class Mapping:
                 # Return converted scalar value
                 return convert_type(response, types_queue)
 
-            # Zusätzlich eingefügt für den Fall eines leeren Dict/List. Hier wurden bei Bitz 0.0 zurückgegeben,
-            # was im Folgenden zu einem Integrity-Error beim persisiteren geführt hat.
+            # Special case for Bitz to handle empty dicts/lists.
             elif not response:
                 return None
 
@@ -251,7 +250,7 @@ class Mapping:
                 # Traverse path
                 response = self.traverse_path(response, path_queue, currency_pair_info=currency_pair_info)
 
-        if types_queue and response is not None:  # hier zu None geändert, weil sonst nicht zu 0 zo Bool geändert werden kann
+        if types_queue and response is not None:  # None to allow to change 0 to boolean.
 
             if isinstance(response, list):
 
@@ -262,7 +261,7 @@ class Mapping:
                         convert_type(item, deque(types_queue))
                     )
 
-                # for dict_key special_case aka.  test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
+                # for dict_key special_case aka. test_extract_value_list_containing_dict_where_key_is_value() in test_mapping.py
                 if len(result) == 1:
                     result = result[0]
 
@@ -344,5 +343,4 @@ def is_scalar(value: Any) -> bool:
     @return: Bool indicating whether the provided value is a single value or not.
     @rtype: bool
     """
-    # TODO: Philipp: Check if return isinstance(value, Iterator) works
     return isinstance(value, str) or not isinstance(value, Iterable)

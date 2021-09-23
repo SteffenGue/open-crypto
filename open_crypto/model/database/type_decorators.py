@@ -43,4 +43,4 @@ class UnixTimestampMs(TypeDecorator):
         return TimeHelper.from_timestamp(value, TimeUnit.MILLISECONDS)
 
     def process_literal_param(self, value: int, dialect: Dialect) -> str:
-        pass  # TODO: Abstract method from super class. Fix if it causes trouble...
+        pass

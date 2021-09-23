@@ -6,10 +6,11 @@ This module contains possibilities to adjust several settings
 Classes:
  - Setting: Contains advanced options for the program.
 """
+import logging
 import os
 import shutil
 from typing import Union, Any
-import logging
+
 import oyaml as yaml
 
 
@@ -24,46 +25,41 @@ class Settings:
         self.config = Settings.get()
         self.copy = None
 
-    # @staticmethod
-    # def open() -> os.startfile:
-    #     """
-    #     Opens the current program config file in a text editor.
-    #     """
-    #     os.startfile(os.getcwd() + Settings.PATH)
-
     @staticmethod
     def get() -> dict:
         """
         Returns the current program config.
-        @return: Program config
-        """
 
-        with open(os.getcwd() + Settings.PATH, encoding='UTF-8') as file:
+        @return: The current program config.
+        """
+        with open(os.getcwd() + Settings.PATH, encoding="UTF-8") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     @staticmethod
     def _dump(config: dict) -> None:
         """
         Overwrites the current program config.
+
         @param config: The config to dump.
         """
-        with open(os.getcwd() + Settings.PATH, "w",  encoding='UTF-8') as file:
+        with open(os.getcwd() + Settings.PATH, "w", encoding="UTF-8") as file:
             yaml.dump(config, file)
 
     @staticmethod
     def set(block: str, key: str, val: Union[str, int, float]) -> None:
         """
         Sets a new value in the config file.
+
         @param block: Config file block
         @param key: Key within the block
         @param val: value to be set
         """
         try:
-            with open(os.getcwd() + Settings.PATH, "r",  encoding='UTF-8') as file:
+            with open(os.getcwd() + Settings.PATH, "r", encoding="UTF-8") as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
 
             config.get(block).update({key: val})
-            with open(os.getcwd() + Settings.PATH, "w",  encoding='UTF-8') as file:
+            with open(os.getcwd() + Settings.PATH, "w", encoding="UTF-8") as file:
                 yaml.dump(config, file)
 
         except (KeyError, FileNotFoundError):

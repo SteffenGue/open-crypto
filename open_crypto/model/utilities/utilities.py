@@ -18,8 +18,6 @@ Functions:
     - signal_handler: Function recognizing kill signals and raising SystemExit.
     - init_logger: Function initializing the global logger.
 """
-from typing import Any, Optional, Dict, List, Union
-
 import calendar
 import datetime
 import logging
@@ -27,16 +25,17 @@ import os
 import ssl
 from datetime import timedelta
 from pathlib import Path
+from typing import Any, Optional, Dict, List, Union
+
 import certifi
 import dateutil.parser
 import oyaml as yaml
 import pandas as pd
 
 import _paths
-from model.utilities.time_helper import TimeHelper, TimeUnit
 from model.utilities.kill_switch import KillSwitch
+from model.utilities.time_helper import TimeHelper, TimeUnit
 from resources.configs.global_config import GlobalConfig
-
 
 TYPE_CONVERSIONS = {
     ("float", "from_timestamp"): {
@@ -237,13 +236,13 @@ TYPE_CONVERSIONS = {
         the number of additional parameters needed
 """
 
-COMPARATOR = {'equal': lambda x, y: x == y,
-              'lower': lambda x, y: x < y,
-              'lower_or_equal': lambda x, y: x <= y,
-              'equal_or_lower': lambda x, y: x <= y,
-              'higher': lambda x, y: x > y,
-              'higher_or_equal': lambda x, y: x >= y,
-              'equal_or_higher': lambda x, y: x >= y}
+COMPARATOR = {"equal": lambda x, y: x == y,
+              "lower": lambda x, y: x < y,
+              "lower_or_equal": lambda x, y: x <= y,
+              "equal_or_lower": lambda x, y: x <= y,
+              "higher": lambda x, y: x > y,
+              "higher_or_equal": lambda x, y: x >= y,
+              "equal_or_higher": lambda x, y: x >= y}
 """
 Dict providing basic compare functionality.
 """
@@ -275,7 +274,7 @@ def read_config(file: Optional[str] = None,
     while True:
         try:
             filename = GlobalConfig().file
-            config_yaml = open(filename, encoding='UTF-8')
+            config_yaml = open(filename, encoding="UTF-8")
             break
         except FileNotFoundError:
             print("File not found. Retry!")
@@ -287,7 +286,6 @@ def read_config(file: Optional[str] = None,
     if section is None:
         return config_dict
 
-    # TODO: Philipp: Make recursive function to find key so it works for any search depth?
     for general_section in config_dict.keys():
         if section == general_section:
             return config_dict[general_section]
@@ -319,10 +317,10 @@ def yaml_loader(exchange: str, path: str = None) -> Dict[str, Any]:
     if not path:
         path = _paths.all_paths.get("yaml_path")
 
-    path = _paths.all_paths.get('path_absolut').joinpath(Path(path))
+    path = _paths.all_paths.get("path_absolut").joinpath(Path(path))
 
     try:
-        with open(path.joinpath(".".join([exchange, "yaml"])), "r", encoding='UTF-8') as file:
+        with open(path.joinpath(".".join([exchange, "yaml"])), "r", encoding="UTF-8") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError as error:
@@ -343,18 +341,18 @@ def load_program_config(return_path: bool = False) -> Union[str, Dict]:
     @return: Program config.
     @rtype: dict
     """
-    path = _paths.all_paths.get('program_config_path')
+    path = _paths.all_paths.get("program_config_path")
 
     if return_path:
         return path
 
     try:
-        with open(path, "r", encoding='UTF-8') as file:
+        with open(path, "r", encoding="UTF-8") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     except FileNotFoundError:
-        path = 'resources/templates/program_config.yaml'
-        with open(path, "r", encoding='UTF-8') as file:
+        path = "resources/templates/program_config.yaml"
+        with open(path, "r", encoding="UTF-8") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
 
@@ -393,12 +391,6 @@ def provide_ssl_context() -> ssl.SSLContext:
     default SSL-Context plugged into the request method.
     @return: SSLContext
     """
-
-    # print("Warning: No root SSL-certificate found on your local machine.\n"
-    #       "You are provided with a temporary SSl-context in the meantime. To avoid this warning, \n"
-    #       "try to install certification by executing the following file on your MacOS: \n"
-    #       "'/Applications/Python [your/version/number]/Install Certificates.command'.")
-
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     ssl_context.verify_mode = ssl.CERT_REQUIRED
     ssl_context.check_hostname = True
@@ -439,7 +431,7 @@ def get_all_exchanges_and_methods() -> Dict[str, dict]:
     exchanges = get_exchange_names(yaml_path=yaml_path)
     for exchange in exchanges:
         file = yaml_loader(exchange, path=yaml_path)
-        result_dict.update({exchange: {method: True for method in list(file.get('requests').keys())}})
+        result_dict.update({exchange: {method: True for method in list(file.get("requests").keys())}})
 
     return result_dict
 
@@ -455,7 +447,8 @@ def prepend_spaces_to_columns(dataframe: pd.DataFrame, space_count: int = 3) -> 
     @rtype: pd.DataFrame
     """
     dataframe.replace(pd.NA, False, inplace=True)
-    spaces = ' ' * space_count
+    spaces = " " * space_count
+
     # ensure every column name has the leading spaces:
     if isinstance(dataframe.columns, pd.MultiIndex):
         for i in range(dataframe.columns.nlevels):
@@ -500,24 +493,26 @@ def init_logger(path: str, program_config: dict) -> None:
     if not read_config(file=None, section="operation_settings").get('enable_logging', True):
         logging.disable()
     else:
-        dirname = program_config['logging'].get("dirname", 'resources/log/')
+        dirname = program_config["logging"].get("dirname", "resources/log/")
         if not os.path.exists(path + dirname):
             os.makedirs(path + dirname)
 
-        time_format = program_config['logging'].get('filename_format', '%Y-%m-%d_%H-%M-%S')
+        time_format = program_config["logging"].get("filename_format", "%Y-%m-%d_%H-%M-%S")
         logging.basicConfig(
             filename=path + dirname + f"{TimeHelper.now().strftime(time_format)}.log",
-            level=program_config['logging'].get('level', 'ERROR'))
+            level=program_config["logging"].get("level", "ERROR"))
 
 
 def split_str_to_list(string: str, splitter: str = ",") -> List[str]:
     """
     Splits a string into a list of string.
+
     @param string: A long string.
-    @param splitter: The splitting parameter
-    @return: List of strings
+    @param splitter: The splitting parameter.
+
+    @return: List of strings.
     """
     items = string.rsplit(splitter)
 
-    # remove possiple blanks from strings
+    # remove possible blanks from strings
     return [item.replace(" ", "") for item in items]

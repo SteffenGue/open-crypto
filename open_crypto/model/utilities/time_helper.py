@@ -128,5 +128,4 @@ class TimeHelper:
         @return: datetime of start/end of period.
         @rtype: datetime
         """
-        # Method creates a tuple with (start, end) of period.
         return period(date_time, TimeHelper.freq_map[frequency])[int(to_end)]

@@ -154,7 +154,7 @@ class WrongTypeError(ValidationError):
 
         @return: A Text.
         """
-        return f"{'Key '+ self.key + ': ' if self.key else ''}Expected type(s) '{self.expected_type}' " \
+        return f"{'Key ' + self.key + ': ' if self.key else ''}Expected type(s) '{self.expected_type}' " \
                f"!= actual type '{self.actual_type}'."
 
 

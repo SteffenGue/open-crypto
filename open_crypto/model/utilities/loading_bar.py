@@ -7,13 +7,13 @@ may be used within the context manager framework.
 Classes:
   - Loader
 """
-from typing import Any, Union
-
 import sys
 from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
+from typing import Any, Union
+
 from colorama import Fore, Style, init
 
 init()
@@ -25,6 +25,7 @@ class Loader:
 
     Credit to: https://stackoverflow.com/a/66558182
     """
+
     def __init__(self, desc: str = "Loading...", end: str = "Done", timeout: float = 0.15, max_counter: int = None):
         """
         A loader-like context manager
@@ -41,7 +42,6 @@ class Loader:
         self.max_count = max_counter if isinstance(max_counter, (int, float)) and max_counter > 1 else None
 
         self._thread = Thread(target=self._animate, daemon=True)
-        # self.steps = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
         self.steps = ["|", "/", "-", "\\"]
         self.done = False
 
@@ -78,7 +78,6 @@ class Loader:
         """
         print text to console, a wrapper to built-in print
 
-        @param text: text to print
         @param color: can be one of "red" or "green", or "default"
         @param in_place: whether to erase previous line and print in place
         """
@@ -96,7 +95,6 @@ class Loader:
 
         sys.stdout.flush()
 
-
     def __enter__(self) -> object:
         """
         Enter class as context manager.
@@ -104,22 +102,9 @@ class Loader:
         self.start()
         return self
 
-
-
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """
         Exits the context manager.
         """
         # handle exceptions with those variables
         self.stop()
-
-
-        # def stop(self) -> None:
-        #     """
-        #     Stops the animation.
-        #     """
-        #     self.done = True
-        #     cols = get_terminal_size((80, 20)).columns
-        #     print("\r" + " " * cols, end="", flush=True)
-        #     sys.stdout.write(f"\r{self.end}")
-        #     sys.stdout.flush()

@@ -28,7 +28,7 @@ def database_session(filename: str = None, db_path: str = None) -> Session:
     @param db_path: Path to the database. Default: current working directory
     @return: SqlAlchemy-Session
     """
-    min_return_tuples = load_program_config().get('request_settings').get('min_return_tuples', 1)
+    min_return_tuples = load_program_config().get("request_settings").get("min_return_tuples", 1)
     db_handler = DatabaseHandler(metadata=metadata, path=db_path, min_return_tuples=min_return_tuples,
                                  **read_config(file=filename, section="database"))
     return db_handler.session_factory()
@@ -87,7 +87,7 @@ class CsvExport:
                                                          )
         return pd.DataFrame(ticker_data)
 
-    def export(self, data_type: str = 'csv', *args: Any, **kwargs: Any) -> Any:
+    def export(self, data_type: str = "csv", *args: Any, **kwargs: Any) -> Any:
         """
         Exports the data in the specified format.
         @param data_type: String representation of the export format. Default: csv.
@@ -99,22 +99,19 @@ class CsvExport:
         else:
             output_path: str = os.path.join(self.path, f"{self.filename}.csv")
 
-        export_format = {'csv': {'function': ticker_data.to_csv,
-                                 'parameters': ['path_or_buf', 'sep', 'decimal', 'index']},
-                         'hdf': {'function': ticker_data.to_hdf,
-                                 'parameters': ['path_or_buf']}}
+        export_format = {"csv": {"function": ticker_data.to_csv,
+                                 "parameters": ["path_or_buf", "sep", "decimal", "index"]},
+                         "hdf": {"function": ticker_data.to_hdf,
+                                 "parameters": ["path_or_buf"]}}
 
-        parameters = {'path_or_buf': output_path,
-                      'sep': self.options.get("delimiter", ";"),
-                      'decimal': self.options.get("decimal", "."),
-                      'index': False,
+        parameters = {"path_or_buf": output_path,
+                      "sep": self.options.get("delimiter", ";"),
+                      "decimal": self.options.get("decimal", "."),
+                      "index": False,
                       }
 
-        parameters = {k: v for k, v in parameters.items() if k in export_format.get(data_type).get('parameters')}
+        parameters = {k: v for k, v in parameters.items() if k in export_format.get(data_type).get("parameters")}
         parameters.update(**kwargs)
 
-        # if data_type not in export_format:
-        #     print(f"Format not supported. Choose between: {list(export_format.keys())}.")
-
-        export_format.get(data_type, 'csv').get('function')(*args, **parameters)
+        export_format.get(data_type, "csv").get("function")(*args, **parameters)
         print(output_path)
