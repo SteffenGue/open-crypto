@@ -9,7 +9,6 @@ The exchange class is build upon the specific exchange.yaml file and several inp
 While an exchange-object itself provides all necessary methods for an API-request, the execution itself is scheduled
 within the module scheduler.
 """
-# Third party packages and modules
 import asyncio
 import itertools
 import logging
@@ -21,7 +20,6 @@ from typing import Iterator, Optional, Any, Generator, Callable, Union, Tuple, D
 import aiohttp
 from aiohttp import ClientConnectionError, ClientConnectorCertificateError
 
-# Own modules
 from model.database.tables import ExchangeCurrencyPair, DatabaseTable
 from model.exchange.mapping import convert_type, extract_mappings, Mapping
 from model.utilities.exceptions import MappingNotFoundException, DifferentExchangeContentException, \
@@ -73,7 +71,7 @@ def format_request_url(url: str,
     return url_formatted, parameters
 
 
-def sort_order_book(temp_results: Dict[str, List[Any]],
+def sort_order_book(temp_results: Dict[str, Any],
                     len_results: int) -> Dict[str, Union[datetime, str, int, range, list]]:
     """
     Sorts the order-book result according to the bid and ask prices.
@@ -238,7 +236,6 @@ class Exchange:
             return None
 
         except (asyncio.TimeoutError, ClientConnectionError):
-            # print(f"No connection to {self.name.capitalize()}. Timeout or ConnectionError!")
             logging.error("No connection to %s. Timeout or ConnectionError!", self.name.capitalize())
             return None
 
@@ -275,7 +272,7 @@ class Exchange:
                 self.exchange_currency_pairs.append(pair)
 
     async def request(self,
-                      request_table: object,
+                      request_table: DatabaseTable,
                       currency_pairs: Dict[ExchangeCurrencyPair, Optional[int]],
                       loader: Loader) -> \
             Optional[Tuple[datetime, str, Dict[Optional[ExchangeCurrencyPair], Any]]]:
@@ -353,7 +350,6 @@ class Exchange:
             pair_formatted = {cp: self.apply_currency_pair_format(request_name, cp) for cp in currency_pairs}
 
         async with aiohttp.ClientSession() as session:
-            # ToDO: Test method format_request_url
             if pair_template_dict:
                 for pair in currency_pairs:
                     url_formatted, params_adj = format_request_url(url,
@@ -506,11 +502,11 @@ class Exchange:
             urls[request_name] = request_parameters
             return urls
 
-        def allowed(val: dict, **kwargs: dict) -> Any:
+        def allowed(val: dict, **_: dict) -> Any:
             """
             Extract the configured value from all allowed values. If there is no match, return str "default".
             @param val: dict of allowed key, value pairs.
-            @param kwargs: unused additional arguments needed in other methods.
+            @param _: unused additional arguments needed in other methods.
             @return: value if key in dict, else None.
             """
             if isinstance(self.interval, dict):
@@ -528,11 +524,11 @@ class Exchange:
                                                                          all_intervals.get(self.base_interval))}
             return value
 
-        def function(val: str, **kwargs: dict) -> Dict[ExchangeCurrencyPair, datetime]:
+        def function(val: str, **_: dict) -> Dict[ExchangeCurrencyPair, datetime]:
             """
             Execute function for all currency-pairs. Function returns the first timestamp in the DB, or
             datetime.now() if none exists.
-            @param kwargs: not used but needed for another function.
+            @param _: not used but needed for another function.
             @param val: contains the function name as string.
             @return:
             """
@@ -540,27 +536,27 @@ class Exchange:
                 return {cp: self.get_first_timestamp(request_table, cp.id, last_row)
                         for cp, last_row in currency_pairs.items()}
 
-        def default(val: str, **kwargs: dict) -> str:
+        def default(val: str, **arguments: dict) -> str:
             """
             Returns the default value if kwargs value (the parameter) is None.
             @param val: Default value.
-            @param kwargs: Parameter value. If None, return default value.
+            @param arguments: Parameter value. If None, return default value.
             @return: Default value as a string.
             """
-            default_val = val if not bool(kwargs.get("has_value")) else kwargs.get("has_value")
+            default_val = val if not bool(arguments.get("has_value")) else arguments.get("has_value")
             if isinstance(self.interval, dict):
                 self.interval = self.interval.get(default_val, None)
                 self.base_interval = self.interval
             return default_val if self.interval else None
 
-        def type_con(val: Any, **kwargs: dict) -> Any:
+        def type_con(val: Any, **arguments: dict) -> Any:
             """
             Performs type conversions.
             @param val: The conversion values specified under "type".
-            @param kwargs: The value to be converted.
+            @param arguments: The value to be converted.
             @return: Converted value.
             """
-            param_value = kwargs.get("has_value", None)
+            param_value = arguments.get("has_value", None)
             conv_params = val
             # to avoid conversion when only a type declaration was done. If a parameter is of type "int".
             if isinstance(conv_params, str) or len(conv_params) < 2:
@@ -699,9 +695,9 @@ class Exchange:
 
         @return List of Tuples with the formatted data and the name of the mapping_keys to map the data points.
         """
-
         if response[0] != self.name:
             raise DifferentExchangeContentException(response[0], self.name)
+
         results = list()
         if method in self.response_mappings.keys():
             mappings = self.response_mappings[method]
@@ -709,12 +705,12 @@ class Exchange:
                 raise MappingNotFoundException(self.name, method)
         else:
             raise MappingNotFoundException(self.name, method)
+
         responses = response[1]
         currency_pair: ExchangeCurrencyPair
         mapping_keys = [mapping.key for mapping in mappings]
 
         # creating dictionary where key is the name of the mapping which holds an empty list
-        # temp_results = dict.fromkeys(mapping_keys, [])
         temp_results = dict(zip((key for key in mapping_keys),
                                 itertools.repeat([], len(mappings))))
 

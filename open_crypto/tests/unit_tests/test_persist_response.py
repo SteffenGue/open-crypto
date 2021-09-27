@@ -210,7 +210,7 @@ class TestPersistResponse:
         currency pairs with the given exchange 'TESTEXCHANGE'.
         """
         self.session.query(ExchangeCurrencyPair).delete()
-        self.db_handler._persist_exchange_currency_pair("invalid", "BTC", "ETH", True)
+        self.db_handler._persist_exchange_currency_pair("invalid", "BTC", "ETH", True)  # pylint: protected-access
         test_result = self.db_handler.get_all_currency_pairs_from_exchange("TESTEXCHANGE")
         result = []
         assert result == test_result

@@ -21,7 +21,7 @@ import _paths  # pylint: disable=unused-import
 path = os.getcwd() + "/open_crypto/tests/unit_tests"
 
 
-with open(path + "/test_file.yaml", "r", encoding='UTF-8') as file:
+with open(path + "/test_file.yaml", "r", encoding="UTF-8") as file:
     test_file: dict = yaml.load(file, Loader=yaml.FullLoader)
 
 
@@ -29,7 +29,7 @@ class TestExchange:
     """Test class for Exchange."""
     # pylint: disable=too-many-public-methods
 
-    Exchange = Exchange(test_file, None, timeout=10, interval='seconds')
+    Exchange = Exchange(test_file, None, timeout=10, interval="seconds")
 
     def test_increase_interval(self) -> None:
         """
@@ -67,38 +67,38 @@ class TestExchange:
         self.Exchange.decrease_interval()
         assert self.Exchange.interval == self.Exchange.interval_strings[index]
 
-#     # def test_format_request_url(self):
-#     #     """
-#     #     # ToDo
-#     #     """
-#     #     pass
-#     #
-#     # def test_extract_request_urls(self):
-#     #     """
-#     #     # ToDo
-#     #     """
-#     #     pass
-#     #
-#     # def test_apply_currency_pair_format(self):
-#     #     """
-#     #     # ToDo
-#     #     """
-#     #     pass
-#     #
-#     # def test_format_currency_pairs(self):
-#     #     """
-#     #     # ToDo
-#     #     """
-#     #     pass
-#     #
-#     # def test_format_data(self):
-#     #     """
-#     #     # ToDo
-#     #     """
-#     #     pass
-#     #
-#     # def test_request(self):
-#     #     """
-#     #     # ToDo
-#     #     """
-#     #     pass
+    # def test_format_request_url(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_extract_request_urls(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_apply_currency_pair_format(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_format_currency_pairs(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_format_data(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass
+    #
+    # def test_request(self):
+    #     """
+    #     # ToDo
+    #     """
+    #     pass

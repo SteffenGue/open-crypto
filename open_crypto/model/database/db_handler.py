@@ -662,7 +662,7 @@ class DatabaseHandler:
                         session.commit()
 
     def persist_response(self,
-                         exchanges_with_pairs: Dict[Exchange, List[ExchangeCurrencyPair]],
+                         exchanges_with_pairs: Dict[Exchange, Dict[ExchangeCurrencyPair, Optional[int]]],
                          exchange: Exchange,
                          db_table: DatabaseTable,
                          formatted_response: Iterator[Any],

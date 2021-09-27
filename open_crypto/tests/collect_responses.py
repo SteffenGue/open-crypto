@@ -14,11 +14,11 @@ from model.database.tables import metadata
 from model.exchange.exchange import Exchange
 from model.utilities.utilities import read_config, get_exchange_names, yaml_loader
 
-job_name: str = 'historic_rates'  # currency-pairs, historic-rates...
-yaml_path: str = '../resources/running_exchanges/all/'
-saving_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'json_test_responses')
+job_name: str = "historic_rates"  # currency-pairs, historic-rates...
+yaml_path: str = "../resources/running_exchanges/all/"
+saving_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "json_test_responses")
 
-db_params = read_config('database')
+db_params = read_config("database")
 database_handler = DatabaseHandler(metadata, **db_params)
 
 exchange_names = get_exchange_names()
@@ -45,9 +45,9 @@ for exchange in exchanges:
             second_currency: str = currency_pair.second.name
             json_file = open(os.path.join(full_saving_path,
                                           f"{exchange.name.upper()}_{first_currency}_{second_currency}"),
-                             "w", encoding='UTF-8')
+                             "w", encoding="UTF-8")
         else:
-            json_file = open(os.path.join(full_saving_path, f"{exchange.name.upper()}_ALL"), "w", encoding='UTF-8')
+            json_file = open(os.path.join(full_saving_path, f"{exchange.name.upper()}_ALL"), "w", encoding="UTF-8")
 
         json.dump(responses[currency_pair], json_file, indent=4)
         json_file.close()
