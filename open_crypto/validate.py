@@ -9,7 +9,7 @@ python validate.py { all | <exchange_name> }
 
 import os
 import sys
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import _paths
 from model.validating.api_map_validators import ApiMapFileValidator
@@ -47,7 +47,7 @@ class ConfigValidator:
     """
 
     @staticmethod
-    def validate_config_file() -> Tuple[bool, Report]:
+    def validate_config_file() -> Tuple[bool, Union[Report, CompositeReport]]:
         """
         Calls the ConfigValidator
         :return: Validation result and report.
@@ -65,7 +65,7 @@ class ProgramSettingValidator:
     """
 
     @staticmethod
-    def validate_config_file() -> Tuple[bool, Report]:
+    def validate_config_file() -> Tuple[bool, Union[Report, CompositeReport]]:
         """
         Calls the ConfigValidator
         :return: Validation result and report.
