@@ -19,7 +19,7 @@ Classes:
  - OrderBookView: Provides a view on the order_books table.
 """
 
-from typing import Union
+from typing import Union, Type
 
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, CheckConstraint, Float, select
 from sqlalchemy.ext.declarative import declarative_base
@@ -46,7 +46,7 @@ class Exchange(Base):
     __tablename__ = "exchanges"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False, unique=True)
+    name: Column = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
     is_exchange = Column(Boolean, default=True)
     exceptions = Column(Integer, unique=False, nullable=True, default=0)
@@ -236,18 +236,18 @@ class Trade(Base):
     _direction = Column("direction", Integer)
 
     @hybrid_property
-    def direction(self) -> str:
+    def direction(self) -> Union[str, int]:
         """
-        Returns the attribute _direction.
+        Returns the direction.
         """
         return self._direction
 
     @direction.setter
-    def direction(self, direction: str) -> None:
+    def direction(self, direction: Union[str, int]) -> None:
         """
         Converts the string representation of the trade direction, i.e. 'sell' or 'buy', into an integer.
+
         @param: String representation of the direction.
-        @return: 0 or 1.
         """
         if isinstance(direction, str):
             if direction.lower() == "sell":
@@ -461,3 +461,6 @@ class HistoricRateView(Base):
 
 
 DatabaseTable = Union[Exchange, Currency, ExchangeCurrencyPair, Ticker, HistoricRate, Trade, OrderBook]
+
+DatabaseTableType = Union[Type[Exchange], Type[Currency], Type[ExchangeCurrencyPair], Type[Ticker], Type[HistoricRate],
+                          Type[Trade], Type[OrderBook]]

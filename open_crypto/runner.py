@@ -66,8 +66,8 @@ def copy_resources(directory: str = os.getcwd()) -> None:
     for src_dir, dirs, files in os.walk(source):
         dst_dir = src_dir.replace(source, destination, 1)
         try:
-            dirs.remove('templates')
-            dirs.remove('__pycache__')
+            dirs.remove("templates")
+            dirs.remove("__pycache__")
         except ValueError:
             pass
 
@@ -81,7 +81,7 @@ def copy_resources(directory: str = os.getcwd()) -> None:
                 if os.path.samefile(src_file, dst_file):
                     continue
                 os.remove(dst_file)
-            if not src_file.endswith('.py'):
+            if not src_file.endswith(".py"):
                 shutil.copy(src_file, dst_dir)
 
 
@@ -115,7 +115,7 @@ def exchanges_and_methods(return_dataframe: bool = False) -> Optional[pd.DataFra
     check_path(working_directory)
 
     dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
-    pd.set_option('display.max_rows', 500)
+    pd.set_option("display.max_rows", 500)
 
     if return_dataframe:
         return dataframe.transpose()
@@ -185,6 +185,7 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
     check_path(working_directory)
 
     if kill_after and isinstance(kill_after, int):
+        switch: KillSwitch
         with KillSwitch() as switch:
             switch.set_timer(kill_after)
 

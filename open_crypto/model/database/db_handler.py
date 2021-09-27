@@ -29,7 +29,7 @@ from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
 from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, DatabaseTable
-from model.utilities.time_helper import TimeHelper
+from model.utilities.time_helper import TimeHelper, TimeUnit
 from model.utilities.utilities import split_str_to_list
 
 
@@ -454,7 +454,6 @@ class DatabaseHandler:
         with self.session_scope() as session:
             first = aliased(Currency)
             second = aliased(Currency)
-            # col_names = [key.name for key in inspect(db_table).columns]
 
             data: Query = session.query(Exchange.name.label("exchange"),
                                         first.name.label("first_currency"),
@@ -497,6 +496,8 @@ class DatabaseHandler:
                 if to_timestamp:
                     result = result.filter(db_table.time <= to_timestamp)
 
+                # TODO: Philipp: Ask Steffen because result is not used?
+
                 result = pd_read_sql_query(data.statement, con=session.bind)
             session.expunge_all()
         return result
@@ -525,7 +526,7 @@ class DatabaseHandler:
             currency_pair: ExchangeCurrencyPair = self._get_exchange_currency_pair(session, **temp_currency_pair)
 
             if not currency_pair and all([exchange_name, first_currency_name, second_currency_name, is_exchange]):
-                self.persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
+                self._persist_exchange_currency_pair(is_exchange=is_exchange, **temp_currency_pair)
                 return self.get_or_create_exchange_pair_id(is_exchange=is_exchange, **temp_currency_pair)
             else:
                 return currency_pair.id
@@ -550,7 +551,7 @@ class DatabaseHandler:
             if last_row_id:
                 timestamp = session.execute(f"SELECT time FROM historic_rates where rowid = {last_row_id} "
                                             f"ORDER BY time DESC").first()[0]
-                return datetime.utcfromtimestamp(timestamp / 1000)  # TODO: Replace with TimeHelper call.
+                return TimeHelper.from_timestamp(timestamp, TimeUnit.MILLISECONDS)
 
             (earliest_timestamp,) = session \
                 .query(func.min(table.time)) \
@@ -582,12 +583,11 @@ class DatabaseHandler:
                 exchange = Exchange(name=exchange_name, is_exchange=is_exchange)
                 session.add(exchange)
 
-    # NEVER CALL THIS OUTSIDE OF THIS CLASS TODO: Rename with underscore to clarify private?
-    def persist_exchange_currency_pair(self,
-                                       exchange_name: str,
-                                       first_currency_name: str,
-                                       second_currency_name: str,
-                                       is_exchange: bool) -> None:
+    def _persist_exchange_currency_pair(self,
+                                        exchange_name: str,
+                                        first_currency_name: str,
+                                        second_currency_name: str,
+                                        is_exchange: bool) -> None:
         """
         Adds a single ExchangeCurrencyPair to the database is it does not already exist.
 
@@ -656,7 +656,6 @@ class DatabaseHandler:
 
                     if not existing_exchange_pair:
                         exchange_pair = ExchangeCurrencyPair(exchange=exchange, first=first, second=second)
-                        # ex_currency_pairs.append(exchange_pair)
                         session.add(exchange_pair)
                     # persist data every 500 CPs in order to avoid slowing down
                     if i % 500 == 0:
@@ -713,7 +712,6 @@ class DatabaseHandler:
                         else:
                             continue
 
-                    # exchange_pair_id = data_tuple.get("exchange_pair_id")
                     data_tuple = {key: data_tuple.get(key, None) for key in col_names}
                     data_to_persist.append(data_tuple)
                     exchange_pair_id = [item.get("exchange_pair_id") for item in data_to_persist]

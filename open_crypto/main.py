@@ -11,17 +11,17 @@ import signal
 import sys
 from typing import Any, Dict, List
 
-from model.utilities.patch_event_loop import PatchEventLoop
 from model.database.db_handler import DatabaseHandler
 from model.database.tables import metadata, ExchangeCurrencyPair
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.scheduling.scheduler import Scheduler
+from model.utilities.kill_switch import KillSwitch
+from model.utilities.loading_bar import Loader
+from model.utilities.patch_event_loop import PatchEventLoop
 from model.utilities.time_helper import TimeHelper
 from model.utilities.utilities import read_config, yaml_loader, get_exchange_names, load_program_config
 from model.utilities.utilities import signal_handler, init_logger, split_str_to_list, handler
-from model.utilities.loading_bar import Loader
-from model.utilities.kill_switch import KillSwitch
 from validate import ConfigValidator, ProgramSettingValidator
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -103,14 +103,14 @@ async def main(database_handler: DatabaseHandler, program_config: dict) -> Sched
         jobs = await initialize_jobs(job_config=job_config["jobs"],
                                      timeout=operation_settings.get("timeout", 10),
                                      interval=operation_settings.get("interval", "days"),
-                                     comparator=program_config['request_settings'].get('interval_settings',
-                                                                                       'lower_or_equal'),
+                                     comparator=program_config["request_settings"].get("interval_settings",
+                                                                                       "lower_or_equal"),
                                      db_handler=database_handler)
 
         frequency = operation_settings["frequency"]
 
     logging.info("Configuring Scheduler.")
-    scheduler = Scheduler(database_handler, jobs, operation_settings.get('asynchronously', 1), frequency)
+    scheduler = Scheduler(database_handler, jobs, operation_settings.get("asynchronously", 1), frequency)
     await scheduler.validate_job()
 
     logging.info("Job(s) were created and will run with frequency: %s", frequency)
@@ -149,7 +149,7 @@ def run(file: str = None, path: str = None) -> None:
     db_params = read_config(file=file, section="database", reset=True)
     init_logger(path, program_config)
 
-    logging.info('Validating user configuration files.')
+    logging.info("Validating user configuration files.")
     program_valid, program_report = ProgramSettingValidator.validate_config_file()
     config_valid, config_report = ConfigValidator.validate_config_file()
     validating_results = {program_valid: program_report, config_valid: config_report}

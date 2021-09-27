@@ -12,8 +12,8 @@ import sys
 from typing import Optional, Tuple
 
 import _paths
-from model.validating.base import Report, CompositeReport
 from model.validating.api_map_validators import ApiMapFileValidator
+from model.validating.base import Report, CompositeReport
 from model.validating.config_file_validator import ConfigFileValidator
 from model.validating.program_config_validator import ProgramConfigValidator
 from resources.configs.global_config import GlobalConfig
@@ -63,13 +63,14 @@ class ProgramSettingValidator:
     """
     Class to validate the program configuration file.
     """
+
     @staticmethod
     def validate_config_file() -> Tuple[bool, Report]:
         """
         Calls the ConfigValidator
         :return: Validation result and report.
         """
-        validator = ProgramConfigValidator(_paths.all_paths.get('program_config_path'))
+        validator = ProgramConfigValidator(_paths.all_paths.get("program_config_path"))
         if validator.validate():
             return True, validator.report
         else:
@@ -102,7 +103,7 @@ class ExchangeValidator:
             return True
 
         os.makedirs("reports/", exist_ok=True)
-        with open("reports/report_" + self.exchange_name + ".txt", "w", encoding='UTF-8') as report:
+        with open("reports/report_" + self.exchange_name + ".txt", "w", encoding="UTF-8") as report:
             report.writelines(validator.report.indented_report())
 
         print("API Map is Invalid! \n"

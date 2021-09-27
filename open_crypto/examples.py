@@ -6,10 +6,11 @@ This module contains scripts to demonstrate the features of the application.
 Classes:
  - Examples: Contains examples and illustrations to demonstrate all request methods.
 """
+import datetime
 import os
 import pathlib
-import datetime
 from typing import Optional
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.pyplot import GridSpec
@@ -21,8 +22,8 @@ import _paths  # pylint: disable=unused-import
 from main import run as main_run
 from model.database.tables import *
 from model.utilities.export import database_session as get_session
-from model.utilities.settings import Settings
 from model.utilities.kill_switch import KillSwitch
+from model.utilities.settings import Settings
 
 
 class Examples:
@@ -35,7 +36,7 @@ class Examples:
     configuration_file: str
     plt.style.use("ggplot")
     pd.set_option("display.max_columns", 99)
-    pd.set_option('expand_frame_repr', False)
+    pd.set_option("expand_frame_repr", False)
 
     PATH = pathlib.Path.joinpath(_paths.all_paths.get("path_absolut"), "resources")
 
@@ -47,7 +48,7 @@ class Examples:
             return
 
     @staticmethod
-    def __clear_database_table(session: Session, table: DatabaseTable) -> None:
+    def __clear_database_table(session: Session, table: DatabaseTableType) -> None:
         """
         Deletes all entries from a database table.
         @param session: SQLAlchemy-ORM Session.
@@ -76,7 +77,7 @@ class Examples:
             return
 
         print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
-        configuration_file = 'Examples/static'
+        configuration_file = "Examples/static"
         session = get_session(configuration_file)
 
         Examples.__start_catch_systemexit(configuration_file)
@@ -100,22 +101,22 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
-        configuration_file = 'Examples/platform'
+        configuration_file = "Examples/platform"
 
         Examples.__start_catch_systemexit(configuration_file)
 
         session = get_session(configuration_file)
-        query = session.query(HistoricRateView).filter(HistoricRateView.exchange == 'COINGECKO',
+        query = session.query(HistoricRateView).filter(HistoricRateView.exchange == "COINGECKO",
                                                        HistoricRateView.first_currency == "BITCOIN",
                                                        HistoricRateView.second_currency == "USD")
-        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
         if dataframe.empty:
             return
         dataframe.sort_index(inplace=True)
 
         fig = plt.figure(constrained_layout=True, figsize=(8, 6))
         grid_spec = GridSpec(4, 4, figure=fig)
-        plt.rc('grid', linestyle=":", color='black')
+        plt.rc("grid", linestyle=":", color="black")
 
         ax0 = fig.add_subplot(grid_spec[0:2, :])
         ax0.plot(dataframe.close, label="Close")
@@ -149,20 +150,21 @@ class Examples:
             return
 
         print(f"Note: The program will run for {timer} seconds before terminating automatically.")
-        configuration_file = 'Examples/minute_candles'
+        configuration_file = "Examples/minute_candles"
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
 
+        switch: KillSwitch
         with KillSwitch() as switch:
             switch.set_timer(timer)
             Examples.__start_catch_systemexit(configuration_file)
 
-        exchanges = ('BINANCE', 'BITTREX', 'HITBTC')
+        exchanges = ("BINANCE", "BITTREX", "HITBTC")
         session = get_session(configuration_file)
         query = session.query(HistoricRateView)
         query = query.filter(HistoricRateView.exchange.in_(exchanges))
 
-        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
         if dataframe.empty:
             return
         dataframe = pd.pivot_table(dataframe, columns=dataframe.exchange, index=dataframe.index)
@@ -186,16 +188,16 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
-        configuration_file = 'Examples/trades'
+        configuration_file = "Examples/trades"
 
         Examples.__start_catch_systemexit(configuration_file)
 
         exchange = "COINBASE"
         session = get_session(configuration_file)
-        query = session.query(TradeView).filter(TradeView.exchange == exchange).\
+        query = session.query(TradeView).filter(TradeView.exchange == exchange). \
             order_by(desc(TradeView.time)).limit(1000)
 
-        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
         if dataframe.empty:
             return
         dataframe.sort_index(inplace=True)
@@ -223,8 +225,8 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
-        configuration_file = 'Examples/order_books'
-        exchange = 'COINBASE'
+        configuration_file = "Examples/order_books"
+        exchange = "COINBASE"
         session = get_session(configuration_file)
         Examples.__start_catch_systemexit(configuration_file)
 
@@ -233,23 +235,23 @@ class Examples:
                                                     OrderBookView.time == timestamp,
                                                     OrderBookView.position <= 50)
 
-        dataframe = pd.read_sql(query.statement, con=session.bind, index_col='time')
+        dataframe = pd.read_sql(query.statement, con=session.bind, index_col="time")
         if dataframe.empty:
             return
 
         # insert row that plot starts at amount = 0.
-        timestamp = dataframe.index[0]-datetime.timedelta(days=1)
+        timestamp = dataframe.index[0] - datetime.timedelta(days=1)
         new_data = dataframe.iloc[0, :].to_dict()
-        template = {timestamp: {'bids_price': None, 'bids_amount': 0, 'asks_price': None,
-                                'asks_amount': 0, 'position': -1}}
+        template = {timestamp: {"bids_price": None, "bids_amount": 0, "asks_price": None,
+                                "asks_amount": 0, "position": -1}}
         template.get(timestamp).update((k, new_data[k]) for k in set(new_data).intersection(template.get(timestamp))
                                        if template.get(timestamp).get(k) is None)
 
-        dataframe = pd.concat([dataframe, pd.DataFrame.from_dict(template, orient='index')], axis=0)
+        dataframe = pd.concat([dataframe, pd.DataFrame.from_dict(template, orient="index")], axis=0)
         dataframe.sort_values(by="position", ascending=True, inplace=True)
 
-        plt.step(dataframe.bids_price, dataframe.bids_amount.cumsum(), color='green', label='bids')
-        plt.step(dataframe.asks_price, dataframe.asks_amount.cumsum(), color='red', label='asks')
+        plt.step(dataframe.bids_price, dataframe.bids_amount.cumsum(), color="green", label="bids")
+        plt.step(dataframe.asks_price, dataframe.asks_amount.cumsum(), color="red", label="asks")
 
         plt.ylim(ymin=0)
         plt.title("Market Depth BTC/USD(T)")
@@ -270,15 +272,17 @@ class Examples:
             return
 
         print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
-        configuration_file = 'Examples/exchange_listings'
+        configuration_file = "Examples/exchange_listings"
+
+        settings: Settings
         with Settings() as settings:
-            settings.set("request_settings", 'min_return_tuples', 100)
+            settings.set("request_settings", "min_return_tuples", 100)
             settings.set("request_settings", "interval_settings", "equal")
 
             Examples.__start_catch_systemexit(configuration_file)
 
         session = get_session(configuration_file)
-        base_currencies = ('BTC', 'LINK', 'ETH', 'XRP', 'LTC', 'ATOM', 'ADA', 'XLM', 'BCH', 'DOGE')
+        base_currencies = ("BTC", "LINK", "ETH", "XRP", "LTC", "ATOM", "ADA", "XLM", "BCH", "DOGE")
         query = session.query(HistoricRateView.time,
                               HistoricRateView.exchange,
                               HistoricRateView.first_currency,
@@ -287,7 +291,7 @@ class Examples:
         if dataframe.empty:
             return
         dataframe = pd.pivot_table(dataframe, columns=[dataframe.exchange, dataframe.first_currency],
-                                   index=dataframe.index).close['2010-01-01':]
+                                   index=dataframe.index).close["2010-01-01":]
 
         for currency in base_currencies:
             temp = dataframe.loc[:, (slice(None), currency.upper())]
