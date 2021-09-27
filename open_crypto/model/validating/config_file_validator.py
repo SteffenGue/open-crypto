@@ -332,9 +332,9 @@ class RequestValueValidator(Validator):
                 if pair_string := self.value.get(job).get("currency_pairs"):
 
                     # Coinpaprika splits first currencies with "-", therefore "btc-bitcoin-usd" can't be read out.
-                    if self.value.get(job).get("exchanges").lower() in ["coinpaprika", "coingecko"]:
-                        msg = "Specifying currency-pairs is not allowed for platform data. " \
-                              "Specify first- and second-currencies instead"
+                    if self.value.get(job).get("exchanges").lower() in ["coinpaprika"] and pair_string != 'all':
+                        msg = "Specifying currency-pairs is not allowed for Coinpaprika. " \
+                              "Specify first- and second-currencies instead."
                         raise CustomBaseExceptionError("currency_pairs", msg)
 
                     # One way to check if the splitting value ("-") for currency-pairs and between (",") are
