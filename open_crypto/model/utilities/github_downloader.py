@@ -12,7 +12,6 @@ import re
 import signal
 import sys
 import urllib.request
-from typing import Tuple
 
 from _paths import all_paths
 from model.utilities.loading_bar import Loader
@@ -26,14 +25,13 @@ class GitDownloader:
     """
 
     @staticmethod
-    def create_url(url: str) -> Tuple[str, str]:
+    def create_url(url: str) -> str:
         """
         From the given url, produce a URL that is compatible with Github's REST API. Can handle blob or tree paths.
         @param url: The repository url.
         @return api_url, download_dirs
         """
-
-        repo_only_url = re.compile(r"https:\/\/github\.com\/[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}\/[a-zA-Z0-9]+$")
+        repo_only_url = re.compile(r"https://github\.com/[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/[a-zA-Z0-9]+$")
         re_branch = re.compile("/(tree|blob)/(.+?)/")
 
         # Check if the given url is a url to a GitHub repo. If it is, tell the
@@ -57,7 +55,6 @@ class GitDownloader:
         @param repo_url: The repository-url.
         @param output_dir: The output directory
         """
-
         # generate the url which returns the JSON data
         api_url = GitDownloader.create_url(repo_url)
 
@@ -78,6 +75,7 @@ class GitDownloader:
                 urllib.request.urlretrieve(data["download_url"], os.path.join(output_dir, data["name"]))
                 # bring the cursor to the beginning, erase the current line, and dont make a new line
 
+            loader: Loader
             with Loader("Updating exchange mappings from GitHub..", "✔ Exchange mapping update complete",
                         max_counter=len(data)) as loader:
                 for file in data:
@@ -100,9 +98,8 @@ class GitDownloader:
         """
         Run the downloader.
         """
-
         if sys.platform != "win32":
-            # disbale CTRL+Z
+            # disable CTRL+Z
             signal.signal(signal.SIGTSTP, signal.SIG_IGN)
 
         url = "https://github.com/SteffenGue/open-crypto/tree/master/open_crypto/resources/running_exchanges"
