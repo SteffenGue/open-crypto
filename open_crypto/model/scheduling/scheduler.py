@@ -13,7 +13,7 @@ from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine, List, Dict, Tuple
 
 from model.database.db_handler import DatabaseHandler
-from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair
+from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, DatabaseTable
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
@@ -198,7 +198,7 @@ class Scheduler:
         # Reenter the method to get into the first else (down) condition and shut down process
         self.remove_invalid_jobs(jobs)
 
-    async def update_currency_pairs(self, ex: Exchange) -> List[None]:  # TODO: Make the return value nicer?
+    async def update_currency_pairs(self, ex: Exchange) -> List[None]:
         """
         This method requests the currency_pairs.
 
@@ -231,16 +231,15 @@ class Scheduler:
         @return job_list with updated exchange_currency_pairs.
         @rtype: list[Job]
         """
+        loader: Loader
 
         for job in job_list:
-
             job_params = job.job_params
             exchanges = list(job.exchanges_with_pairs.keys())
 
             logging.info("Loading and/or updating exchange currency pairs..")
 
             with Loader("Checking exchange currency-pairs...", "", max_counter=len(exchanges)) as loader:
-
                 exchanges_to_update = list()
                 for exchange in exchanges:
                     if job_params["update_cp"] or job.request_name == "currency_pairs" or \
@@ -264,10 +263,11 @@ class Scheduler:
                                 job_params["second_currencies"]
                             ))
                     loader.increment()
+
         return job_list
 
     async def request_format_persist(self,
-                                     request_table: object,
+                                     request_table: DatabaseTable,
                                      exchanges_with_pairs: Dict[Exchange, Dict[ExchangeCurrencyPair, None]]) \
             -> Tuple[bool, Dict[Exchange, Dict[ExchangeCurrencyPair, None]]]:
         """"
@@ -301,12 +301,13 @@ class Scheduler:
         """
         table_name = request_table.__tablename__.capitalize()
 
-        # print(f"\nStarting to request {table_name}.")
         logging.info("Starting to request %s.", table_name)
 
         start_time = TimeHelper.now()
 
         total = sum([len(v) for k, v in exchanges_with_pairs.items()])
+
+        loader: Loader
         with Loader("Requesting data...", "", max_counter=total) as loader:
             responses = await asyncio.gather(
                 *(ex.request(request_table, exchanges_with_pairs[ex], loader=loader) for ex in
