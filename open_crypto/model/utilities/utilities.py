@@ -213,11 +213,11 @@ TYPE_CONVERSIONS = {
         "params": 2
     },
     ("from_timestamp", "to_start"): {
-        "function": lambda time, interval: TimeHelper.start_end_conversion(time, interval, 0),
+        "function": lambda time, interval: TimeHelper.start_end_conversion(time, interval, False),
         "params": 1
     },
     ("from_timestamp", "to_end"): {
-        "function": lambda time, interval: TimeHelper.start_end_conversion(time, interval, 1),
+        "function": lambda time, interval: TimeHelper.start_end_conversion(time, interval, True),
         "params": 1
     }
 }
