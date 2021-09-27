@@ -1108,15 +1108,15 @@ class RequestMappingValidator(Validator):
         """
         possible_class = {
             "currency_pairs":
-                {'table': ExchangeCurrencyPair},
+                {"table": ExchangeCurrencyPair},
             "tickers":
-                {'table': Ticker},
+                {"table": Ticker},
             "historic_rates":
-                {'table': HistoricRate},
+                {"table": HistoricRate},
             "order_books":
-                {'table': OrderBook},
+                {"table": OrderBook},
             "trades":
-                {'table': Trade}
+                {"table": Trade}
         }
         return possible_class.get(request_name, lambda: "Invalid request class.")
 
@@ -1133,13 +1133,13 @@ class RequestMappingValidator(Validator):
             "currency_pairs":
                 [],
             "tickers":
-                ['time'],
+                ["time"],
             "historic_rates":
-                ['time'],
+                ["time"],
             "order_books":
-                ['position'],
+                ["position"],
             "trades":
-                ['time']
+                ["time"]
         }
         return possible_primary_keys.get(table_name, lambda: "Invalid request class")
 

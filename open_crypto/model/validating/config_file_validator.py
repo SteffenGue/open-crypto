@@ -344,7 +344,7 @@ class RequestValueValidator(Validator):
                     elif "all" in pair_string:
                         continue
                     else:
-                        raise WrongCurrencyPairFormatError(["-", ","], pair_string, 'currency_pairs')
+                        raise WrongCurrencyPairFormatError(["-", ","], pair_string, "currency_pairs")
 
                 # if neither currency-pairs nor first_currencies or second_currencies are specified. That is only
                 # allowed for the request method 'currency_pairs'.

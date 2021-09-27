@@ -158,7 +158,7 @@ class Exchange:
                  yaml_file: Dict[str, Any],
                  db_first_timestamp: Callable[[DatabaseTable, int], datetime],
                  timeout: int,
-                 comparator: str = 'equal_or_lower',
+                 comparator: str = "equal_or_lower",
                  interval: Any = "days"):
         """
         Creates a new Exchange-object.
@@ -229,8 +229,8 @@ class Exchange:
 
         except ClientConnectorCertificateError as ssl_exception:
             kwargs = dict()
-            kwargs['ssl_context'] = provide_ssl_context()
-            if kwargs.get('ssl_context') and retry:
+            kwargs["ssl_context"] = provide_ssl_context()
+            if kwargs.get("ssl_context") and retry:
                 return await self.fetch(session=session, url=url, params=params, retry=False, **kwargs)
             logging.error("\nSSL-ClientConnectorCertificateError. \n"
                           "Either no root certificate was found on your local machine or the server-side "
@@ -330,10 +330,9 @@ class Exchange:
             logging.error("Exception extracting request URLs for: %s.", self.name, exc_info=ex)
             return None
 
-        if not all(self.request_urls.get(request_name).get('params').values()):
+        if not all(self.request_urls.get(request_name).get("params").values()):
             logging.warning("%s has not all parameters defined for %s request. Exchange is dropped.",
                             self.name.capitalize(), request_name)
-            # print(f"\n{self.name.capitalize()} has 'None type' parameters and is dropped.")
             return None
 
         if not all((request_name in self.request_urls.keys(), bool(self.request_urls[request_name]))):
