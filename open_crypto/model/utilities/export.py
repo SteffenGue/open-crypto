@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Any
 
 import pandas as pd
-from dateutil import parser as dateparser
+from dateutil import parser as date_parser
 from sqlalchemy.orm.session import Session
 
 from model.database import tables
@@ -50,14 +50,14 @@ class CsvExport:
         # extract and convert starting point
         self.from_timestamp: str = self.options.get("from_timestamp", None)
         if self.from_timestamp:
-            self.from_timestamp = dateparser.parse(self.from_timestamp, dayfirst=True)
+            self.from_timestamp = date_parser.parse(self.from_timestamp, dayfirst=True)
         else:
             self.from_timestamp = datetime.min
 
         # extract and convert ending point
         self.to_timestamp: str = self.options.get("to_timestamp", None)
         if self.to_timestamp and self.to_timestamp != "now":
-            self.to_timestamp = dateparser.parse(self.to_timestamp, dayfirst=True)
+            self.to_timestamp = date_parser.parse(self.to_timestamp, dayfirst=True)
         else:
             self.to_timestamp = TimeHelper.now()
 
