@@ -57,7 +57,7 @@ class DatabaseHandler:
             port: str,
             db_name: str,
             min_return_tuples: int = 1,
-            path: str = None,
+            path: Optional[str] = None,
             debug: bool = False):
         """
         Initializes the database-handler.
@@ -124,7 +124,7 @@ class DatabaseHandler:
             logging.warning(message)
 
         self.session_factory: sessionmaker = sessionmaker(bind=engine)
-        self.insert = importlib.import_module(f"sqlalchemy.dialects.{sqltype}")
+        self.insert_module = importlib.import_module(f"sqlalchemy.dialects.{sqltype}")
         self._min_return_tuples = min_return_tuples
 
     @contextmanager
@@ -144,29 +144,23 @@ class DatabaseHandler:
 
     def get_currency_id(self, currency_name: str) -> Optional[int]:
         """
-        Gets the id of a currency.
+        Gets the ID of the given currency if it exists in the database.
 
-        @param currency_name:
-            Name of the currency.
-        @return:
-            Id of the given currency or None if no currency with the given name exists
-            in the database.
+        @param currency_name: The name of the currency.
+
+        @return: The ID of the given currency or None if no currency with the given name exists in the database.
         """
-
         with self.session_scope() as session:
             return session.query(Currency.id).filter(Currency.name == currency_name.upper()).scalar()
 
     def get_exchange_id(self, exchange_name: str) -> int:
         """
-        Returns the id of the given exchange if it exists in the database.
+        Gets the ID of the given exchange if it exists in the database.
 
-        @param exchange_name: str
-            Name of the exchange.
-        @return:
-            Id of the given exchange or None if no exchange with the given name exists
-            in the database.
+        @param exchange_name: The name of the exchange.
+
+        @return: The ID of the given exchange or None if no exchange with the given name exists in the database.
         """
-
         with self.session_scope() as session:
             return session.query(Exchange.id).filter(Exchange.name == exchange_name.upper()).scalar()
 
@@ -212,7 +206,8 @@ class DatabaseHandler:
 
     @staticmethod
     def _get_exchange_currency_pair(session: sqlalchemy.orm.Session,
-                                    exchange_name: str, first_currency_name: str,
+                                    exchange_name: str,
+                                    first_currency_name: str,
                                     second_currency_name: str) -> Optional[ExchangeCurrencyPair]:
         """
         Checks if there is a currency pair in the database with the given parameters and
@@ -271,7 +266,6 @@ class DatabaseHandler:
             All ExchangeCurrencyPairs of the given Exchange that fulfill any
             of the above stated conditions.
         """
-
         if isinstance(first_currencies, str):
             first_currencies = split_str_to_list(first_currencies)
 
@@ -450,7 +444,6 @@ class DatabaseHandler:
                       which fulfill the above stated requirements.
              @rtype: Pandas DataFrame
              """
-
         with self.session_scope() as session:
             first = aliased(Currency)
             second = aliased(Currency)
@@ -517,7 +510,6 @@ class DatabaseHandler:
 
         @return: Id of the existing or newly created exchange currency pair
         """
-
         temp_currency_pair = {"exchange_name": exchange_name,
                               "first_currency_name": first_currency_name,
                               "second_currency_name": second_currency_name}
@@ -546,7 +538,6 @@ class DatabaseHandler:
         @return: datetime: Earliest timestamp of specified table or timestamp from now.
         @rtype: datetime
         """
-
         with self.session_scope() as session:
             if last_row_id:
                 timestamp = session.execute(f"SELECT time FROM historic_rates where rowid = {last_row_id} "
@@ -576,7 +567,6 @@ class DatabaseHandler:
             Name that should is to persist.
         @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
-
         with self.session_scope() as session:
             exchange_id = session.query(Exchange.id).filter(Exchange.name == exchange_name.upper()).first()
             if exchange_id is None:
@@ -615,16 +605,14 @@ class DatabaseHandler:
             Iterator of currency-pair tuple that are to persist.
         @param is_exchange: boolean indicating if the exchange is indeed an exchange or a platform
         """
-
         if currency_pairs is not None:
 
-            i: int = 0
+            i = 0
             with self.session_scope() as session:
                 for currency_pair in currency_pairs:
                     exchange_name = currency_pair[0]
                     first_currency_name = currency_pair[1]
                     second_currency_name = currency_pair[2]
-                    is_exchange: bool = is_exchange
                     i += 1
 
                     if any([exchange_name, first_currency_name, second_currency_name]) is None:
@@ -686,7 +674,6 @@ class DatabaseHandler:
         @param update_on_conflict: Bool if conflicting rows should be updated or ignored
         @return: Dict containing ExchangeCurrencyPair-Object and the last inserted row_id
         """
-
         col_names = [key.name for key in inspect(db_table).columns]
         primary_keys = [key.name for key in inspect(db_table).primary_key]
         counter_dict: Dict[int, int] = dict()
@@ -728,7 +715,7 @@ class DatabaseHandler:
 
                 with self.session_scope() as session:
 
-                    stmt = self.insert.insert(db_table).values(data_to_persist)
+                    stmt = self.insert_module.insert(db_table).values(data_to_persist)
 
                     if update_on_conflict is False:
                         stmt = stmt.on_conflict_do_nothing(index_elements=primary_keys)

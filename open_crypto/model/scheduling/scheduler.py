@@ -305,7 +305,7 @@ class Scheduler:
 
         start_time = TimeHelper.now()
 
-        total = sum([len(v) for k, v in exchanges_with_pairs.items()])
+        total = sum([len(v) for v in exchanges_with_pairs.values()])
 
         loader: Loader
         with Loader("Requesting data...", "", max_counter=total) as loader:

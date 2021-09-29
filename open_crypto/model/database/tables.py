@@ -56,7 +56,7 @@ class Exchange(Base):
         return f"#{self.id}: {self.name}, Active: {self.active}"
 
     @validates("name")
-    def convert_upper(self, key: str, value: str) -> str:
+    def convert_upper(self, _: str, value: str) -> str:
         """
         Converts strings into upper cases.
         """
@@ -84,7 +84,7 @@ class Currency(Base):
         return f"#{self.id}: {self.name}"
 
     @validates("name")
-    def convert_upper(self, key: str, value: str) -> str:
+    def convert_upper(self, _: str, value: str) -> str:
         """
         Converts strings into upper cases.
         """
@@ -111,7 +111,6 @@ class ExchangeCurrencyPair(Base):
     __table_args__:
         First ID must be unequal to Second ID.
     """
-
     __tablename__ = "exchanges_currency_pairs"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -262,7 +261,7 @@ class Trade(Base):
                f"{self.exchange_pair.second.name}: {self.amount} for {self.price} at {self.time}"
 
     @validates("direction")
-    def convert_upper(self, key: str, value: str) -> str:
+    def convert_upper(self, _: str, value: str) -> str:
         """
         Converts strings into upper cases.
         """
@@ -429,7 +428,6 @@ class HistoricRateView(Base):
     Instead of only showing the ID of the ExchangeCurrencyPair the View displays
     the exchange name and the name of the first and second currency.
     """
-
     first = aliased(Currency)
     second = aliased(Currency)
     __table__ = create_view(
