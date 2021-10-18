@@ -111,6 +111,7 @@ class Scheduler:
         @return: Method for the request name or a string that the request is false.
         @rtype: dict[str, Callable]
         """
+
         possible_requests = {
             "currency_pairs":
                 {"function": self.get_currency_pairs,

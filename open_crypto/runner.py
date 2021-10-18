@@ -7,6 +7,7 @@ into csv-files.
 """
 import os
 import shutil
+from pathlib import Path
 from typing import Any, Optional, Dict
 import pandas as pd
 from sqlalchemy.orm.session import Session
@@ -38,15 +39,18 @@ def update_maps() -> None:
         copy_resources()
 
 
-def check_path(path: str) -> None:
+def check_path(path: str, check_only: False) -> None:
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
 
     @param path: The path.
+    @param check_only: Only check if path exists without copying resources.
     @type path: str
     """
-    destination = path + "/resources"
+    destination = path.joinpath("/resources")
     if not os.path.exists(destination):
+        if check_only:
+            return False
         copy_resources(path)
 
 
@@ -59,8 +63,9 @@ def copy_resources(directory: str = os.getcwd()) -> None:
     @type directory: Current working directory
     """
 
-    print(f"\nCopying resources to {directory} ...")
-    source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
+    print(f"\nCopying resources to '{directory}' ...")
+    # source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
+    source = Path(_paths.all_paths.get("package_path")).joinpath("/resources")
 
     destination = directory + "/resources"
     for src_dir, dirs, files in os.walk(source):
@@ -148,15 +153,25 @@ def get_config_template(csv: bool = False) -> None:
     else:
         filename = "request_template.yaml"
 
-    source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates"
-    destination = os.getcwd() + "/resources/configs/user_configs"
+    path_exists = check_path(_paths.all_paths.get("user_config_path"), check_only=True)
+    if not path_exists:
+        print("Copy all resources to your currenct working directory first.\n"
+              "Call 'runner.update_maps()' for this task.")
+        return
 
-    if os.path.exists(os.path.join(destination, filename)):
-        os.remove(os.path.join(destination, filename))
+    source = _paths.all_paths.get("template_path")
+    destination = _paths.all_paths.get("user_config_path")
 
-    shutil.copy(os.path.join(source, filename),
-                os.path.join(destination, filename))
-    print("Created new config template.")
+    # Uncommend if the above paths show any malfunction.
+    # source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates"
+    # destination = os.getcwd() + "/resources/configs/user_configs"
+
+    if os.path.exists(destination.joinpath(filename)):
+        os.remove(destination.joinpath(filename))
+
+    shutil.copy(source.joinpath(filename),
+                destination.joinpath(filename))
+    print(f"Created new config template. \nLocation: '{os.path.realpath(destination)}'.")
 
 
 def export(file: Optional[str] = None, file_format: str = "csv", *args: Any, **kwargs: Any) -> None:

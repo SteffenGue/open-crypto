@@ -15,6 +15,7 @@ all_paths = {
     "yaml_path": PATH_ABSOLUT.joinpath(Path("resources/running_exchanges/")),
     "program_config_path": PATH_ABSOLUT.joinpath(Path("resources/configs/program_config/config.yaml")),
     "path_absolut": Path().parent.absolute(),
-    "template_path": "",
+    "template_path":  Path(os.path.dirname(os.path.realpath(__file__))).joinpath("resources/templates"),
+    "user_config_path": PATH_ABSOLUT.joinpath("resources/configs/user_configs"),
     "package_path": os.path.dirname(os.path.realpath(__file__))
 }
