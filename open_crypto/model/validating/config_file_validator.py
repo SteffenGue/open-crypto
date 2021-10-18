@@ -143,7 +143,6 @@ class ConfigSectionValidator(Validator):
 class DatabaseStringValidator(Validator):
     """
     Validates if all required database parameters exist to form the connection string.
-    #ToDo: Client is missing
     """
     db_strings = {"sqlite": ["sqltype", "db_name"],
                   "mariadb": ["sqltype", "client", "user_name", "password", "host", "port", "db_name"],
@@ -192,9 +191,9 @@ class OperationSettingKeyValidator(Validator):
     Validates if all necessary keys exist in the section 'operational_settings'.
     """
 
-    sections = {"frequency": Union[str, int, float],  # max 31 days
+    sections = {"frequency": Union[str, int, float],
                 "interval": Optional[str],
-                "timeout": Union[int, float],  # max 10 minutes
+                "timeout": Union[int, float],
                 }
 
     def validate(self) -> bool:
@@ -333,8 +332,8 @@ class RequestValueValidator(Validator):
 
                     # Coinpaprika splits first currencies with "-", therefore "btc-bitcoin-usd" can't be read out.
                     if self.value.get(job).get("exchanges").lower() in ["coinpaprika"] and pair_string != 'all':
-                        msg = "Specifying currency-pairs is not allowed for Coinpaprika. " \
-                              "Specify first- and second-currencies instead."
+                        msg = "Specifying 'currency-pairs' is not allowed for Coinpaprika. " \
+                              "Specify 'first-' and 'second-currencies' instead."
                         raise CustomBaseExceptionError("currency_pairs", msg)
 
                     # One way to check if the splitting value ("-") for currency-pairs and between (",") are
