@@ -77,7 +77,7 @@ class Examples:
             return
 
         print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
-        configuration_file = "Examples/static"
+        configuration_file = "examples/static"
         session = get_session(configuration_file)
 
         Examples.__start_catch_systemexit(configuration_file)
@@ -101,7 +101,7 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
-        configuration_file = "Examples/platform"
+        configuration_file = "examples/platform"
 
         Examples.__start_catch_systemexit(configuration_file)
 
@@ -150,7 +150,7 @@ class Examples:
             return
 
         print(f"Note: The program will run for {timer} seconds before terminating automatically.")
-        configuration_file = "Examples/minute_candles"
+        configuration_file = "examples/minute_candles"
         session = get_session(configuration_file)
         Examples.__clear_database_table(session, HistoricRate)
 
@@ -188,7 +188,7 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
-        configuration_file = "Examples/trades"
+        configuration_file = "examples/trades"
 
         Examples.__start_catch_systemexit(configuration_file)
 
@@ -225,7 +225,7 @@ class Examples:
         if Examples.__check_resources() is False:
             return
 
-        configuration_file = "Examples/order_books"
+        configuration_file = "examples/order_books"
         exchange = "COINBASE"
         session = get_session(configuration_file)
         Examples.__start_catch_systemexit(configuration_file)
@@ -272,7 +272,7 @@ class Examples:
             return
 
         print("\nWarning: This example takes several minutes to complete. Do not interrupt the data requesting.")
-        configuration_file = "Examples/exchange_listings"
+        configuration_file = "examples/exchange_listings"
 
         settings: Settings
         with Settings() as settings:

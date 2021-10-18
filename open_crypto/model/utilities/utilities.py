@@ -277,12 +277,16 @@ def read_config(file: Optional[str] = None,
             config_yaml = open(filename, encoding="UTF-8")
             break
         except FileNotFoundError:
-            available_files = os.listdir(os.path.dirname(filename))
-            available_files = [file for file in available_files if not
-                                os.path.isdir(os.path.join(os.path.dirname(filename), file))]
-            print(f"File not found. Retry! Available file(s): {', '.join(available_files)}")
+            try:
+                available_files = os.listdir(os.path.dirname(filename))
+                available_files = [file for file in available_files if not
+                                    os.path.isdir(os.path.join(os.path.dirname(filename), file))]
+                print(f"File not found. Retry! \nAvailable file(s): {', '.join(available_files)}")
+            except FileNotFoundError:
+                print("File not found. Retry!")
+            finally:
+                GlobalConfig().set_file()
 
-            GlobalConfig().set_file()
 
     config_dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
     config_yaml.close()
