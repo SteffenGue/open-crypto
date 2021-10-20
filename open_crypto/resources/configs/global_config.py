@@ -58,7 +58,7 @@ class GlobalConfig(object):
         @type file: str
         """
         if not file:
-            file = input("Enter config file name: ").lower()
+            file = input("Enter config file name [<filename> | quit/exit]: ").lower()
             if file in ["quit", "exit", "exit()", "quit()"]:
                 raise SystemExit
                 # sys.exit(0)

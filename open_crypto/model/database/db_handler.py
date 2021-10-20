@@ -124,8 +124,12 @@ class DatabaseHandler:
             logging.warning(message)
 
         self.session_factory: sessionmaker = sessionmaker(bind=engine)
-        self.insert = importlib.import_module(f"sqlalchemy.dialects.{sqltype}")
         self._min_return_tuples = min_return_tuples
+
+        if sqltype == 'mariadb':
+            sqltype = "mysql"
+        self.insert = importlib.import_module(f"sqlalchemy.dialects.{sqltype}")
+
 
     @contextmanager
     def session_scope(self) -> Generator[Session, None, None]:
@@ -730,13 +734,13 @@ class DatabaseHandler:
 
                     stmt = self.insert.insert(db_table).values(data_to_persist)
 
-                    if update_on_conflict is False:
+                    try:
                         stmt = stmt.on_conflict_do_nothing(index_elements=primary_keys)
-                    else:
-                        stmt.on_conflict_do_update(index_elements=primary_keys)  # ToDo: check if correctly specified
+
+                    except AttributeError:
+                        stmt = stmt.prefix_with("IGNORE")
 
                     row_count = session.execute(stmt)
-
                     print(f"Pair-ID {exchange_pair_id[0] if len(exchange_pair_id) == 1 else 'ALL'}"
                           f" - {exchange.name.capitalize()}: {row_count.rowcount} tuple(s)")
 

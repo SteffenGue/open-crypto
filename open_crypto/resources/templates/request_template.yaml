@@ -1,7 +1,7 @@
 general:
   database:
     sqltype: sqlite # sqlite, mariadb, mysql or postgresql
-    client: null # mariadb, pymysql or psycopg2
+    client: null # pymysql or psycopg2
     user_name:
     password:
     host: localhost

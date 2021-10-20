@@ -39,7 +39,7 @@ def update_maps() -> None:
         copy_resources()
 
 
-def check_path(path: str, check_only: False) -> None:
+def check_path(path: str, check_only: bool = False) -> None:
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
 
@@ -67,7 +67,7 @@ def copy_resources(directory: str = os.getcwd()) -> None:
     # source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
     source = Path(_paths.all_paths.get("package_path")).joinpath("/resources")
 
-    destination = directory + "/resources"
+    destination = directory.joinpath("/resources")
     for src_dir, dirs, files in os.walk(source):
         dst_dir = src_dir.replace(source, destination, 1)
         try:
@@ -116,7 +116,7 @@ def exchanges_and_methods(return_dataframe: bool = False) -> Optional[pd.DataFra
     @return: Print or return dataframe
     @rtype: Optional[pd.DataFrame]
     """
-    working_directory = os.getcwd()
+    working_directory = Path(os.getcwd())
     check_path(working_directory)
 
     dataframe = pd.DataFrame.from_dict(get_all_exchanges_and_methods())
@@ -197,7 +197,7 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
     @type kill_after: int
     """
     working_directory = os.getcwd()
-    check_path(working_directory)
+    check_path(Path(working_directory))
 
     if kill_after and isinstance(kill_after, int):
         switch: KillSwitch
