@@ -47,7 +47,7 @@ def check_path(path: str, check_only: bool = False) -> None:
     @param check_only: Only check if path exists without copying resources.
     @type path: str
     """
-    destination = path.joinpath("/resources")
+    destination = path.joinpath("resources")
     if not os.path.exists(destination):
         if check_only:
             return False
@@ -67,7 +67,7 @@ def copy_resources(directory: str = os.getcwd()) -> None:
     # source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
     source = Path(_paths.all_paths.get("package_path")).joinpath("/resources")
 
-    destination = directory.joinpath("/resources")
+    destination = directory.joinpath("resources")
     for src_dir, dirs, files in os.walk(source):
         dst_dir = src_dir.replace(source, destination, 1)
         try:

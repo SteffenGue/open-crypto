@@ -197,7 +197,6 @@ class HistoricRate(Base):
     exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
     exchange_pair = relationship("ExchangeCurrencyPair", backref="historic_rates")
     time = Column(UnixTimestampMs, primary_key=True)
-
     open = Column(Float)
     high = Column(Float)
     low = Column(Float)
@@ -233,12 +232,15 @@ class Trade(Base):
     best_bid = Column(Float)
     best_ask = Column(Float)
     price = Column(Float)
-    _direction = Column("direction", Integer)
+    _direction = Column("direction", String) # This is changes from Integer to String as the Hybrid Property method
+                                             # does currently not work with insert().on_conflict_do_nothing().
+                                             # It Does however work with the standard session.add(Some_Instance)
 
     @hybrid_property
     def direction(self) -> Union[str, int]:
         """
         Returns the direction.
+        #ToDo: Make Hybrid Property work again with insert.on_conflict_do_nothing() method.
         """
         return self._direction
 

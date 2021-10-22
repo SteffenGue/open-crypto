@@ -1,117 +1,56 @@
-name: binance
+name: mandala
 exchange: true
-api_url: https://api.binance.com/api/
+
 rate_limit:
   max: 1200
   unit: 60
+
+api_url: ""
+
 requests:
   currency_pairs:
     request:
-      template: v1/exchangeInfo
+      template: https://trade.mandala.exchange/open/v1/common/symbols
       pair_template: null
       params: null
-    response:
-      type: dict
-      values:
-        timezone:
-          type: str # "UTC"
-        serverTime:
-          type:
-          - float
-          - from_timestamp
-          - 1
-        rateLimits:
-          type: list
-        exchangeFilters:
-          type: list
-        symbols:
-          type: list
-          values:
-            type: dict
-            values:
-              symbol: # i.e. "ETHBTC"
-                type: str
-              status: # i.e. "TRADING"
-                type: str
-              baseAsset: # i.e. ETH
-                type: str
-              baseAssetPrecision:
-                type: int
-              quoteAsset: # i.e. "BTC"
-                type: str
-              quotePrecision:
-                type: int
-              orderTypes:
-                type: list
-              icebergAllowed:
-                type: bool
-              filters:
-                type: list
-    mapping:
-    - key: currency_pair_first
-      path:
-      - symbols
-      - baseAsset
-      type:
-      - str
-    - key: currency_pair_second
-      path:
-      - symbols
-      - quoteAsset
-      type:
-      - str
 
-  tickers:
-    request:
-      template: v3/ticker/bookTicker
-      pair_template: # e.g. BNBBTC
-        template: "{first}{second}"
-        lower_case: false
-        alias: symbol
-      params: null
     response:
       type: dict
       values:
-        symbol:
-          type: str
-        bidPrice:
-          type:
-          - str
-          - float
-        bidQty:
-          type:
-          - str
-          - float
-        askPrice:
-          type:
-          - str
-          - float
-        askQty:
-          type:
-          - str
-          - float
+        data:
+          type: dict
+          values:
+            list:
+              type: list
+              values:
+                type: dict
+                values:
+                  symbol:
+                    type: str
+                  baseAsset:
+                    type: str
+                  quoteAsset:
+                    type: str
+
     mapping:
-    - key: time
-      path: []
-      type:
-      - none
-      - now
-    - key: best_bid
-      path:
-      - bidPrice
-      type:
-      - str
-      - float
-    - key: best_ask
-      path:
-      - askPrice
-      type:
-      - str
-      - float
+      - key: currency_pair_first
+        path:
+          - data
+          - list
+          - baseAsset
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - data
+          - list
+          - quoteAsset
+        type:
+          - str
 
   order_books:
     request:
-      template: v3/depth
+      template: https://api.binance.com/api/v3/depth
       pair_template: # e.g. BNBBTC
         template: "{first}{second}"
         lower_case: false
@@ -158,12 +97,11 @@ requests:
       type:
       - none
       - now
-
     - key: id
       path:
         - lastUpdateId
       type:
-        - str
+        - int
 
     - key: position
       path: []
@@ -201,7 +139,7 @@ requests:
 
   trades:
     request:
-      template: v1/trades
+      template: https://api.binance.com/api/v1/trades
       pair_template: # e.g. BNBBTC
         template: "{first}{second}"
         lower_case: false
@@ -273,7 +211,7 @@ requests:
 
   historic_rates:
     request:
-      template: v1/klines
+      template: https://api.binance.com/api/v1/klines
       pair_template: # e.g. BNBBTC
         template: "{first}{second}"
         lower_case: false
@@ -294,6 +232,9 @@ requests:
           type:
             - datetime
             - timestampms
+#            - timedeltams
+#            - interval
+#            - 1000
         limit:
           max: 1000
           default: 1000
