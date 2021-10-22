@@ -510,7 +510,7 @@ class Exchange:
             @return: value if key in dict, else None.
             """
             if isinstance(self.interval, dict):
-                value = None  # TODO: Philipp: To fix hashable problem. Better solution?
+                value = None
             else:
                 value = val.get(self.interval, None)
 
