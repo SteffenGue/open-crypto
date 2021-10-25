@@ -110,7 +110,7 @@ The file is structured into ```general``` settings, including ```database``` and
 general:
   database:
     sqltype: sqlite #sqlite, mariadb, mysql or postgres
-    client: null # mariadb, pymysql or psycopg2
+    client: null # pymysql or psycopg2
     user_name:
     password:
     host: localhost
