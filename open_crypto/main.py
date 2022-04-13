@@ -171,7 +171,6 @@ def run(file: str = None, path: str = None) -> None:
     if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith("win"):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-    if PatchEventLoop.check_event_loop_exists():
-        PatchEventLoop.apply_patch()
+    PatchEventLoop.apply_patch()
 
     asyncio.run(main(database_handler, program_config))

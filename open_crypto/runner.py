@@ -29,8 +29,8 @@ from examples import Examples  # pylint: disable=unused-import
 
 def update_maps() -> None:
     """
-    Downloads the most recent exchange mappings from Github and saves them within the package directory.
-    If the CWD differs from the package directory (i.e. the site-packages directory), further copys the updated
+    Downloads the most recent exchange mappings from GitHub and saves them within the package directory.
+    If the CWD differs from the package directory (i.e. the site-packages directory), further copies the updated
     resources to the current working directory.
     """
 
@@ -93,7 +93,7 @@ def copy_resources(directory: str = os.getcwd()) -> None:
 def get_session(filename: str, db_path: str = os.getcwd()) -> Session:
     """
     Returns an open SqlAlchemy-Session. The session is obtained from the DatabaseHandler via the module export.py.
-    Furthermore this functions imports all database defining classes to work with.
+    Furthermore, this functions imports all database defining classes to work with.
 
     @param filename: Name of the configuration file to init the DatabaseHandler
     @type filename: str
@@ -189,7 +189,7 @@ def export(file: Optional[str] = None, file_format: str = "csv", *args: Any, **k
 
 def run(configuration_file: Optional[str] = None, kill_after: int = None) -> None:
     """
-   Starts the program after checking if all necessary folder are available (i.e. config and yaml-maps).
+    Starts the program after checking if all necessary folder are available (i.e. config and yaml-maps).
 
     @param configuration_file: The configuration file.
     @type configuration_file: Optional[str]
