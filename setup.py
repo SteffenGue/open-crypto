@@ -11,7 +11,7 @@ with open("README.md", "r") as file:
 
 setup(
     name="open-crypto",
-    version="3.9.1.3",
+    version="3.9.9.1",
     author="Steffen Guenther",
     author_email="crypto@uni-bremen.de",
     long_description=long_description,
@@ -45,3 +45,4 @@ setup(
         "colorama",
     ]
 )
+

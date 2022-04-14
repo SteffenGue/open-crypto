@@ -6,12 +6,13 @@ This module contains possibilities to adjust several settings
 Classes:
  - Setting: Contains advanced options for the program.
 """
+from typing import Union, Any
 import logging
 import os
 import shutil
-from typing import Union, Any
-
 import oyaml as yaml
+
+import _paths
 
 
 class Settings:
@@ -19,7 +20,7 @@ class Settings:
     Class to get and manipulate advanced program settings.
     """
 
-    PATH = "/resources/configs/program_config/config.yaml"
+    PATH = _paths.all_paths.get("program_config_path")
 
     def __init__(self) -> None:
         self.config = Settings.get()
@@ -32,7 +33,7 @@ class Settings:
 
         @return: The current program config.
         """
-        with open(os.getcwd() + Settings.PATH, encoding="UTF-8") as file:
+        with open(Settings.PATH, encoding="UTF-8") as file:
             return yaml.load(file, Loader=yaml.FullLoader)
 
     @staticmethod
@@ -42,7 +43,7 @@ class Settings:
 
         @param config: The config to dump.
         """
-        with open(os.getcwd() + Settings.PATH, "w", encoding="UTF-8") as file:
+        with open(Settings.PATH, "w", encoding="UTF-8") as file:
             yaml.dump(config, file)
 
     @staticmethod
@@ -55,14 +56,16 @@ class Settings:
         @param val: value to be set
         """
         try:
-            with open(os.getcwd() + Settings.PATH, "r", encoding="UTF-8") as file:
+            with open(Settings.PATH, "r", encoding="UTF-8") as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
 
             config.get(block).update({key: val})
-            with open(os.getcwd() + Settings.PATH, "w", encoding="UTF-8") as file:
+            with open(Settings.PATH, "w", encoding="UTF-8") as file:
                 yaml.dump(config, file)
 
         except (KeyError, FileNotFoundError):
+            # Dump previous file if any unexpected error occurs.
+            Settings._dump(Settings.config)
             logging.error("Program config could not be updated.")
             print("Error updating program config!")
 
@@ -71,16 +74,16 @@ class Settings:
         """
         Creates a new template config file with all default settings.
         """
+
         filename = "program_config.yaml"
+        source = _paths.all_paths.get("template_path")
+        destination = Settings.PATH
 
-        source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates/"
-        destination = os.getcwd() + "/resources/configs/program_config/"
+        if destination.exists():
+            # Remove manipulated program config
+            os.remove(destination)
 
-        if os.path.exists(os.path.join(destination, filename)):
-            os.remove(os.path.join(destination, filename.split("_")[1]))
-        shutil.copy(os.path.join(source, filename),
-                    os.path.join(destination, filename.split("_")[1]))
-
+        shutil.copy(source.joinpath(filename), destination)
         print("Settings reset successful.")
 
     def _copy(self) -> None:

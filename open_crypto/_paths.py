@@ -17,5 +17,5 @@ all_paths = {
     "path_absolut": Path().parent.absolute(),
     "template_path":  Path(os.path.dirname(os.path.realpath(__file__))).joinpath("resources/templates"),
     "user_config_path": PATH_ABSOLUT.joinpath("resources/configs/user_configs"),
-    "package_path": os.path.dirname(os.path.realpath(__file__))
+    "package_path": Path(os.path.dirname(os.path.realpath(__file__)))
 }

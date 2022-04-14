@@ -279,14 +279,12 @@ def read_config(file: Optional[str] = None,
         except FileNotFoundError:
             try:
                 available_files = os.listdir(os.path.dirname(filename))
-                available_files = [file for file in available_files if not
-                                    os.path.isdir(os.path.join(os.path.dirname(filename), file))]
+                available_files = [file for file in available_files if not os.path.isdir(os.path.join(os.path.dirname(filename), file))]
                 print(f"File not found. Retry! \nAvailable file(s): {', '.join(available_files)}")
             except FileNotFoundError:
                 print("File not found. Retry!")
             finally:
                 GlobalConfig().set_file()
-
 
     config_dict = yaml.load(config_yaml, Loader=yaml.FullLoader)
     config_yaml.close()
@@ -378,15 +376,14 @@ def get_exchange_names(yaml_path: str = None) -> Optional[List[str]]:
     """
     if not yaml_path:
         yaml_path = _paths.all_paths.get("yaml_path")
-    path_to_resources = Path.joinpath(_paths.all_paths.get("path_absolut"), Path(yaml_path))
 
     try:
-        exchanges = os.listdir(path_to_resources)
+        exchanges = os.listdir(yaml_path)
         exchanges = [x.split(".yaml")[0] for x in exchanges if x.endswith(".yaml")]
         exchanges.sort()
     except FileNotFoundError:
-        print(f"YAML files not found. The path {path_to_resources} is incorrect.")
-        logging.error("Exchange YAML-files not found. Path %s seems incorrect.", path_to_resources)
+        print(f"YAML files not found. The path {yaml_path} is incorrect.")
+        logging.error("Exchange YAML-files not found. Path %s seems incorrect.", yaml_path)
         return
 
     return exchanges

@@ -33,28 +33,31 @@ def update_maps() -> None:
     If the CWD differs from the package directory (i.e. the site-packages directory), further copies the updated
     resources to the current working directory.
     """
-
     GitDownloader.main()
     if os.getcwd() != _paths.all_paths.get("package_path"):
         copy_resources()
 
 
-def check_path(path: str, check_only: bool = False) -> None:
+def check_path(path: Union[Path, str], check_only: bool = False) -> Boolean:
     """
     Checks if all resources are in the current working directory. If not, calls the function update_maps()
 
     @param path: The path.
     @param check_only: Only check if path exists without copying resources.
-    @type path: str
+    @return True if path exists, False otherwise
     """
+    if not isinstance(path, Path):
+        path = Path(path)
     destination = path.joinpath("resources")
-    if not os.path.exists(destination):
+    if not destination.exists():
         if check_only:
             return False
         copy_resources(path)
 
+    return True
 
-def copy_resources(directory: str = os.getcwd()) -> None:
+
+def copy_resources(directory: Union[Path, str] = os.getcwd()) -> None:
     """
     Copies everything from the folder "resources" into the current working directory. If files already exist,
     the method will override them (i.e. first delete and then copy).
@@ -62,32 +65,37 @@ def copy_resources(directory: str = os.getcwd()) -> None:
     @param directory: The directory.
     @type directory: Current working directory
     """
+    if not isinstance(directory, Path):
+        directory = Path(directory)
 
-    print(f"\nCopying resources to '{directory}' ...")
-    # source = os.path.dirname(os.path.realpath(__file__)) + "/resources"
-    source = Path(_paths.all_paths.get("package_path")).joinpath("/resources")
-
+    # Determine source and destination paths
+    source = _paths.all_paths.get("package_path").joinpath("resources")
     destination = directory.joinpath("resources")
+    unwanted_dirs = ["templates", "__pycache__", "log"]
+
+    print(f"\nCopying resources to {destination}... ", end="", flush=True)
     for src_dir, dirs, files in os.walk(source):
-        dst_dir = src_dir.replace(source, destination, 1)
-        try:
-            dirs.remove("templates")
-            dirs.remove("__pycache__")
-        except ValueError:
-            pass
+        dst_dir = src_dir.replace(source.__str__(), destination.__str__(), 1)
+
+        # Remove unnecessary folders.
+        [dirs.remove(folder) for folder in unwanted_dirs if folder in dirs]
 
         if not os.path.exists(dst_dir):
+            # Create folder if not already exist
             os.makedirs(dst_dir)
         for file_ in files:
             src_file = os.path.join(src_dir, file_)
             dst_file = os.path.join(dst_dir, file_)
+
             if os.path.exists(dst_file):
                 # in case of the src and dst are the same file
                 if os.path.samefile(src_file, dst_file):
                     continue
                 os.remove(dst_file)
             if not src_file.endswith(".py"):
+                # Copy all but Python files
                 shutil.copy(src_file, dst_dir)
+    print("Done.")
 
 
 def get_session(filename: str, db_path: str = os.getcwd()) -> Session:
@@ -145,7 +153,7 @@ def get_config_template(csv: bool = False) -> None:
     """
     Creates a copy of the config templates and puts it into the resources/configs folder.
 
-    @param csv: If True, create an csv-export config. Else create a config for the runner.
+    @param csv: If True, create a csv-export config. Else create a config for the runner.
     @type csv: bool
     """
     if csv:
@@ -155,14 +163,14 @@ def get_config_template(csv: bool = False) -> None:
 
     path_exists = check_path(_paths.all_paths.get("user_config_path"), check_only=True)
     if not path_exists:
-        print("Copy all resources to your currenct working directory first.\n"
+        print("Copy all resources to your current working directory first.\n"
               "Call 'runner.update_maps()' for this task.")
         return
 
     source = _paths.all_paths.get("template_path")
     destination = _paths.all_paths.get("user_config_path")
 
-    # Uncommend if the above paths show any malfunction.
+    # Uncomment if the above paths show any malfunction.
     # source = os.path.dirname(os.path.realpath(__file__)) + "/resources/templates"
     # destination = os.getcwd() + "/resources/configs/user_configs"
 
@@ -197,7 +205,7 @@ def run(configuration_file: Optional[str] = None, kill_after: int = None) -> Non
     @type kill_after: int
     """
     working_directory = os.getcwd()
-    check_path(Path(working_directory))
+    check_path(working_directory)
 
     if kill_after and isinstance(kill_after, int):
         switch: KillSwitch

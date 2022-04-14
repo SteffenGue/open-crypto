@@ -15,7 +15,7 @@ from typing import Optional, Any
 
 class KillSwitch(object):
     """
-    Global kill-switch built after the Singleton pattern. That is, there can only exists ONE instance of a class or,
+    Global kill-switch built after the Singleton pattern. That is, there can only exist ONE instance of a class or,
     equivalently, all instances share the same state.
 
     The KillSwitch terminates the data collector after writing the data into the database and before making

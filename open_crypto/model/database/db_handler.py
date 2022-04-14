@@ -114,7 +114,7 @@ class DatabaseHandler:
 
         if not database_exists(engine.url):
             create_database(engine.url)
-            print(f"Database '{db_name}' created", end="\n\n")
+            print(f"Database {db_name} created.", end="\n\n")
             logging.info("Database '%s' created", db_name)
 
         try:  # this is done since one can't test if view-table exists already. if it does an error occurs
@@ -297,7 +297,7 @@ class DatabaseHandler:
             found_currency_pairs.extend(self.get_currency_pairs_with_first_currency(exchange_name, first_currencies))
             found_currency_pairs.extend(self.get_currency_pairs_with_second_currency(exchange_name, second_currencies))
 
-        result: list[ExchangeCurrencyPair] = list()
+        result: List[ExchangeCurrencyPair] = list()
 
         for pair in found_currency_pairs:
             if not any(pair.id == result_pair.id for result_pair in result):
@@ -531,7 +531,7 @@ class DatabaseHandler:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old.
         If the table is empty, the method trys to catch information from the helper table PairInfo.
-        Otherwise the timestamp from now.
+        Otherwise, the timestamp from now.
 
         @param table: The database table to be queried.
         @type table: Union[HistoricRate, OrderBook, Ticker, Trade]
@@ -657,8 +657,7 @@ class DatabaseHandler:
                          exchanges_with_pairs: Dict[Exchange, Dict[ExchangeCurrencyPair, Optional[int]]],
                          exchange: Exchange,
                          db_table: DatabaseTable,
-                         formatted_response: Iterator[Any],
-                         update_on_conflict: bool = False) -> Dict[ExchangeCurrencyPair, Optional[int]]:
+                         formatted_response: Iterator[Any]) -> Dict[ExchangeCurrencyPair, Optional[int]]:
         """
         Method to persist the formatted response into the database. Every data tuple get is inspected for
         valid data, i.e. the mapping key and corresponding data must be one of the table columns of the database.
@@ -675,7 +674,6 @@ class DatabaseHandler:
         @param exchange: Exchange Object
         @param db_table: Affected database table, i.e. request-method
         @param formatted_response: Generator of extracted and formatted response.
-        @param update_on_conflict: Bool if conflicting rows should be updated or ignored
         @return: Dict containing ExchangeCurrencyPair-Object and the last inserted row_id
         """
         col_names = [key.name for key in inspect(db_table).columns]

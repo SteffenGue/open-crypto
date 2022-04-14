@@ -7,12 +7,13 @@ Classes:
     - GlobalConfig
 """
 from __future__ import annotations
-
 import os
 from typing import Optional
 
-
+import _paths
 # ToDo Alle paths hier hinterlegen
+
+
 class GlobalConfig(object):
     """
     Global config built after the Singleton pattern. That is, there can only exists ONE instance of a class or,
@@ -38,13 +39,14 @@ class GlobalConfig(object):
             self.__filename: Optional[str] = None
             self.__is_initialized = True
 
-            self.path = os.getcwd() + "/resources/configs/user_configs/"
+            # self.path = os.getcwd() + "/resources/configs/user_configs/"
+            self.path = _paths.all_paths.get("user_config_path")
         try:
             # The first (os.getcwd()/...) is needed when the directory of the program and the resources differs.
             # That is the case for the Python Package installed via pip as we want the user to manipulate the resources
             # (i.e. config files and exchange mappings). The resources will be copied into the current working
             # directory and taken by the program from there.
-            os.path.dirname(os.path.realpath(__file__)).index(self.path)
+            os.path.dirname(os.path.realpath(__file__)).index(self.path.__str__())
             self.path = os.path.dirname(os.path.realpath(__file__)) + "/user_configs/"
         except ValueError:
             pass

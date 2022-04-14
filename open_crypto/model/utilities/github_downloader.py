@@ -104,6 +104,6 @@ class GitDownloader:
 
         url = "https://github.com/SteffenGue/open-crypto/tree/master/open_crypto/resources/running_exchanges"
 
-        resource_path = all_paths.get("package_path") + "/resources/running_exchanges/"
+        resource_path = all_paths.get("package_path").__str__() + "/resources/running_exchanges/"
 
         GitDownloader.download(url, output_dir=resource_path)

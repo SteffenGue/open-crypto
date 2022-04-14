@@ -53,7 +53,7 @@ class Scheduler:
         Starts the process of requesting, filtering and persisting data for each job every x minutes.
         If a job takes longer than the frequency. The scheduler will wait until the job is finished
         and then start the jobs immediately again.
-        Otherwise the scheduler will wait x minutes until it starts the jobs again.
+        Otherwise, the scheduler will wait x minutes until it starts the jobs again.
         The interval begins counting down at the start of the current iteration.
         """
         runs: list[Union[Coroutine[Any, Any, None], Future[Any]]] = [self.run(job) for job in self.job_list]
@@ -101,6 +101,8 @@ class Scheduler:
                     break
                 continue_run, job.exchanges_with_pairs = await request_fun(request_table, job.exchanges_with_pairs)
 
+        print("Terminating.")
+
     def determine_task(self, request_name: str) -> Dict[str, Union[Callable[..., None]]]:
         """
         Returns the method that is to execute based on the given request name.
@@ -137,7 +139,7 @@ class Scheduler:
 
     async def validate_job(self) -> None:
         """
-        This methods validates the job_list given to the scheduler instance. If the job-list does not contain
+        This method validates the job_list given to the scheduler instance. If the job-list does not contain
         any "exchange_with_pairs" or no currency_pair for an exchange, the job is removed from the list.
         This happens of the user specified currency-pairs in the config but an exchange does not offer that pair.
 
@@ -326,7 +328,7 @@ class Scheduler:
             found_exchange: Optional[Exchange] = None
 
             for exchange in exchanges_with_pairs.keys():
-                # finding the right exchange object
+                # Find the right exchange object
                 if exchange.name.upper() == exchange_name.upper():
                     found_exchange = exchange
                     break
@@ -358,5 +360,4 @@ class Scheduler:
                 return True, updated_job
 
         logging.info("Done collecting %s.", table_name)
-
         return False, exchanges_with_pairs
