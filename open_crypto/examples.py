@@ -103,9 +103,9 @@ class Examples:
 
         configuration_file = "examples/platform"
 
+        session = get_session(configuration_file)
         Examples.__start_catch_systemexit(configuration_file)
 
-        session = get_session(configuration_file)
         query = session.query(HistoricRateView).filter(HistoricRateView.exchange == "COINGECKO",
                                                        HistoricRateView.first_currency == "BITCOIN",
                                                        HistoricRateView.second_currency == "USD")

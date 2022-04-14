@@ -161,7 +161,7 @@ def get_config_template(csv: bool = False) -> None:
     else:
         filename = "request_template.yaml"
 
-    path_exists = check_path(_paths.all_paths.get("user_config_path"), check_only=True)
+    path_exists = _paths.all_paths.get("user_config_path").exists()
     if not path_exists:
         print("Copy all resources to your current working directory first.\n"
               "Call 'runner.update_maps()' for this task.")
