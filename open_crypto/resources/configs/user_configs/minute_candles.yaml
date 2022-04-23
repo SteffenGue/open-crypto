@@ -6,7 +6,7 @@ general:
     password:
     host: localhost
     port: 5432
-    db_name: ExampleDB
+    db_name: ExampleDB2
 
   operation_settings:
     frequency: once # once or any number in minutes
@@ -16,11 +16,11 @@ general:
     asynchronously: true
 jobs:
   MinuteCandleExample:
-    request_method: tick_data # ticker, trades, order_books, historic_rates
+    request_method: historic_rates # ticker, trades, order_books, historic_rates
     update_cp: false
-    exchanges: coinbase
+    exchanges: dydx
     excluded: null
-    currency_pairs: eth-btc, eth-usdt, btc-usdt
+    currency_pairs: eth-btc, eth-usdt, btc-usd
     first_currencies: null  # filter database by the first currency and take all
     second_currencies: null  # filter database by the second currency and take all.
 

@@ -1,0 +1,329 @@
+name: dydx
+exchange: true
+
+rate_limit:
+  max: 1050
+  unit: 60
+
+api_url: https://api.dydx.exchange/
+
+requests:
+  currency_pairs:
+    request:
+      template: v3/markets
+      pair_template: null
+      params: null
+
+    response:
+      type: dict
+      values:
+        markets:
+          type: dict
+          values:
+            currency_pair:
+              type: dict
+              values:
+                baseAsset:
+                  type: str
+                quoteAsset:
+                  type: str
+
+    mapping:
+      - key: currency_pair_first
+        path:
+          - markets
+          - dict_values
+          - baseAsset
+        type:
+          - str
+      - key: currency_pair_second
+        path:
+          - markets
+          - dict_values
+          - quoteAsset
+        type:
+          - str
+
+#  tickers:
+#    request:
+#      template:
+#      pair_template: null
+#      params: null
+#    response:
+#      type:
+#
+#    mapping:
+#      - key: currency_pair_first
+#        path:
+#        type:
+#      - key: currency_pair_second
+#        path:
+#        type:
+#      - key: last_price
+#        path:
+#        type:
+#      - key: time
+#        path:
+#        type:
+#      - key: best_bid
+#        path:
+#        type:
+#      - key: best_ask
+#        path:
+#        type:
+#      - key: daily_volume
+#        path:
+#        type:
+
+  historic_rates:
+    request:
+      template: v3/candles/{currency_pair}
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        resolution:
+          allowed:
+            minutes: 1MIN
+            hours: 1HOUR
+            days: 1DAY
+          default: 1DAY
+        limit:
+          default: 100
+        toISO:
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
+
+    response:
+      type: dict
+      values:
+        candles:
+          type: list
+          values:
+            type: dict
+            values:
+              startedAt:
+                type: str
+              updatedAt:
+                type: str
+              open:
+                type: str
+              high:
+                type: str
+              low:
+                type: str
+              close:
+                type: str
+              baseTokenVolume:
+                type: str
+    mapping:
+    - key: time
+      path:
+        - candles
+        - updatedAt
+      type:
+        - str
+        - dateparser
+    - key: open
+      path:
+        - candles
+        - open
+      type:
+        - str
+        - float
+    - key: high
+      path:
+        - candles
+        - high
+      type:
+        - str
+        - float
+    - key: low
+      path:
+        - candles
+        - low
+      type:
+        - str
+        - float
+    - key: close
+      path:
+        - candles
+        - close
+      type:
+        - str
+        - float
+    - key: volume
+      path:
+        - candles
+        - baseTokenVolume
+      type:
+        - str
+        - float
+
+
+  trades:
+    request:
+      template: v3/trades/{currency_pair}
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        limit:
+          default: 100
+
+    response:
+      type: dict
+      values:
+        trades:
+          type: list
+          values:
+            type: dict
+            values:
+              side:
+                type: str
+              size:
+                type: str
+              price:
+                type: str
+              createdAt:
+                type: str
+
+    mapping:
+    - key: time
+      path:
+        - trades
+        - createdAt
+      type:
+        - str
+        - dateparser
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: direction
+      path:
+        - trades
+        - side
+      type:
+        - str
+    - key: price
+      path:
+        - trades
+        - price
+      type:
+        - str
+        - float
+    - key: amount
+      path:
+        - trades
+        - size
+      type:
+        - str
+        - float
+
+  tick_data:
+    request:
+      template: v3/trades/{currency_pair}
+      pair_template:
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        limit:
+          default: 100
+        startingBeforeOrAt:
+          function: last_timestamp
+          type:
+            - datetime
+            - format
+            - "%Y-%m-%dT%H:%M:%S.%fZ"
+    response:
+      type: dict
+      values:
+        trades:
+          type: list
+          values:
+            type: dict
+            values:
+              side:
+                type: str
+              size:
+                type: str
+              price:
+                type: str
+              createdAt:
+                type: str
+
+    mapping:
+    - key: time
+      path:
+        - trades
+        - createdAt
+      type:
+        - str
+        - dateparser
+    - key: id
+      path: []
+      type:
+        - none
+        - now_timestamp
+    - key: direction
+      path:
+        - trades
+        - side
+      type:
+        - str
+    - key: price
+      path:
+        - trades
+        - price
+      type:
+        - str
+        - float
+    - key: amount
+      path:
+        - trades
+        - size
+      type:
+        - str
+        - float
+
+#  order_books:
+#    request:
+#      template:
+#      pair_template:
+#        template: "{first}{second}"
+#        lower_case:
+#        alias:
+#      params: null
+#
+#    response:
+#      type:
+#
+#    mapping:
+#    - key: time
+#      path:
+#      type:
+#    - key: id
+#      path:
+#      type:
+#    - key: position
+#      path: []
+#      type:
+#        - none
+#        - range
+#    - key: bids_amount
+#      path:
+#      type:
+#    - key: bids_price
+#      path:
+#      type:
+#    - key: asks_amount
+#      path:
+#      type:
+#    - key: asks_price
+#      path:
+#      type:

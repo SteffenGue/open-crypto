@@ -288,6 +288,7 @@ requests:
            - last_value
            - 1
            - 1
+           - 0
 
     response:
       type: list
