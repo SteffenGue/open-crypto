@@ -13,7 +13,7 @@ from asyncio import Future
 from typing import Callable, Any, Optional, Union, Coroutine, List, Dict, Tuple
 
 from model.database.db_handler import DatabaseHandler
-from model.database.tables import Ticker, Trade, OrderBook, HistoricRate, ExchangeCurrencyPair, DatabaseTable
+from model.database.tables import Ticker, Trade, TickData, OrderBook, HistoricRate, ExchangeCurrencyPair, DatabaseTable
 from model.exchange.exchange import Exchange
 from model.scheduling.job import Job
 from model.utilities.exceptions import MappingNotFoundException
@@ -129,7 +129,10 @@ class Scheduler:
                  "table": OrderBook},
             "trades":
                 {"function": self.request_format_persist,
-                 "table": Trade}
+                 "table": Trade},
+            "tick_data":
+                {"function": self.request_format_persist,
+                 "table": TickData}
         }
 
         return possible_requests.get(request_name, {
@@ -350,7 +353,7 @@ class Scheduler:
                     logging.exception("Exception formatting or persisting data for %s", found_exchange.name)
                     continue
 
-        if request_table.__name__ == "HistoricRate":
+        if request_table.__name__ in ["HistoricRate", "TickData"]:
             updated_job: Dict[Exchange, Any] = {}
             for exchange, value in counter.items():
                 if value:

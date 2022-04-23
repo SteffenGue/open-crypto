@@ -28,7 +28,7 @@ from sqlalchemy.exc import ProgrammingError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, Query, aliased
 from sqlalchemy_utils import database_exists, create_database
 
-from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, DatabaseTable
+from model.database.tables import ExchangeCurrencyPair, Exchange, Currency, DatabaseTable, TickData
 from model.utilities.time_helper import TimeHelper, TimeUnit
 from model.utilities.utilities import split_str_to_list
 
@@ -527,7 +527,20 @@ class DatabaseHandler:
             else:
                 return currency_pair.id
 
-    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int, last_row_id: int) -> datetime:
+    def get_maximum_value_from_table(self, table, exchange_pair_id, direction, default=None, offset=0):
+
+        if direction in ["min", "Min", 0, "minimum", "Minimum"]:
+            query = "SELECT MIN(id) from %s WHERE exchange_pair_id == %d"
+        else:
+            query = "SELECT MAX(id) from %s WHERE exchange_pair_id == %d"
+
+        with self.session_scope() as session:
+            value = session.execute(format(query % (table.__tablename__, exchange_pair_id))).first()[0]
+
+        return value + offset if value else default + offset
+
+    def get_first_timestamp(self, table: DatabaseTable, exchange_pair_id: int, last_row_id: int) \
+            -> Union[datetime, int, str]:
         """
         Returns the earliest timestamp from the specified table if the latest timestamp is less than 2 days old.
         If the table is empty, the method trys to catch information from the helper table PairInfo.
@@ -542,10 +555,14 @@ class DatabaseHandler:
         @return: datetime: Earliest timestamp of specified table or timestamp from now.
         @rtype: datetime
         """
+
         with self.session_scope() as session:
             if last_row_id:
-                timestamp = session.execute(f"SELECT time FROM historic_rates where rowid = {last_row_id} "
-                                            f"ORDER BY time DESC").first()[0]
+                query = "SELECT time from %s WHERE rowid == %d"
+                timestamp = session.execute(format(query % (table.__tablename__, last_row_id))).first()[0]
+                #
+                # timestamp = session.execute(f"SELECT time FROM historic_rates where rowid = {last_row_id} "
+                #                             f"ORDER BY time DESC").first()[0]
                 return TimeHelper.from_timestamp(timestamp, TimeUnit.MILLISECONDS)
 
             (earliest_timestamp,) = session \

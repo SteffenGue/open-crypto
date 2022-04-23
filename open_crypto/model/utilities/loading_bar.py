@@ -50,6 +50,15 @@ class Loader:
         Starts the loading bar.
         @return self.
         """
+
+        # Checks if Python is in debug mode to disable the loading bar while debugging, as it is annoying as heck.
+        try:
+            gettrace = getattr(sys, 'gettrace', None)
+            if gettrace():
+                return self
+        except AttributeError:
+            pass
+
         self._thread.start()
         return self
 

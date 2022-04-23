@@ -150,7 +150,7 @@ class Ticker(Base):
         Timestamp of the response. Timestamps are created by the OS, the delivered ones from the exchange are not used.
         Timestamps are equal for each exchange for one run (resulting in an error of approx. 5 seconds average)
          to ease data usage later.
-        Timestamps are rounded to seconds (UTC)
+        Timestamps are rounded to second (UTC)
 
     last_price: float
         Latest price of the currency_pair given from the exchange.
@@ -180,7 +180,7 @@ class Ticker(Base):
 
 class HistoricRate(Base):
     """
-    Table for the method historic_rates. Tables contains the exchange_currency_pair_id, gathered from the
+    Table for the method historic_rates. Table contains the exchange_currency_pair_id, gathered from the
     foreign_keys.
 
     Primary_keys are Exchange_Pair_id and the timestamp.
@@ -209,9 +209,36 @@ class HistoricRate(Base):
                f"{self.exchange_pair.first.name}-{self.exchange_pair.second.name}, close {self.close} at {self.time}"
 
 
+class TickData(Base):
+    """
+    Table for the method trades. Table contains the exchange_currency_pair_id, gathered from the
+    foreign_keys.
+    Primary_keys are Exchange_Pair_id and the timestamp.
+
+    Table contains the last trades, trade amount, trade direction (buy/sell) and timestamp.
+
+    __repr__(self) describes the representation if queried.
+
+    """
+    __tablename__ = "tick_data"
+
+    exchange_pair_id = Column(Integer, ForeignKey("exchanges_currency_pairs.id"), primary_key=True)
+    exchange_pair = relationship("ExchangeCurrencyPair", backref="tick_data")
+    id = Column(Integer, primary_key=True)
+    time = Column(UnixTimestampMs, primary_key=True)
+
+    amount = Column(Float, primary_key=True)
+    best_bid = Column(Float)
+    best_ask = Column(Float)
+    price = Column(Float)
+    _direction = Column("direction", String) # This is changes from Integer to String as the Hybrid Property method
+                                             # does currently not work with insert().on_conflict_do_nothing().
+                                             # It Does however work with the standard session.add(Some_Instance)
+
+
 class Trade(Base):
     """
-    Table for the method trades. Tables contains the exchange_currency_pair_id, gathered from the
+    Table for the method trades. Table contains the exchange_currency_pair_id, gathered from the
     foreign_keys.
     Primary_keys are Exchange_Pair_id and the timestamp.
 
@@ -272,14 +299,14 @@ class Trade(Base):
 
 class OrderBook(Base):
     """
-    Table for the method order-books. Tables contains the exchange_currency_pair_id, gathered from the
+    Table for the method order-books. Table contains the exchange_currency_pair_id, gathered from the
     foreign_keys.
 
     Primary_keys are Exchange_Pair_id, id, and position.
 
     Table next to the bids and asks (both with Price and Amount) the position which indicates the position in
-    the order book at given time. I.e position 0 contains the highest Bid and the lowest Ask. The ID is gathered
-    directly from the exchange and is used to identify to identify changes in the order-book.
+    the order book at given time. I. e position 0 contains the highest Bid and the lowest Ask. The ID is gathered
+    directly from the exchange and is used to identify changes in the order-book.
     """
     __tablename__ = "order_books"
 

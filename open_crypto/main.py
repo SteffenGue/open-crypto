@@ -63,6 +63,7 @@ async def initialize_jobs(job_config: Dict[str, Any],
 
         exchanges: [Exchange] = [Exchange(exchange_name,
                                           db_handler.get_first_timestamp,
+                                          db_handler.get_maximum_value_from_table,
                                           timeout,
                                           comparator=comparator,
                                           interval=interval) for exchange_name in exchange_names]
@@ -157,7 +158,7 @@ def run(file: str = None, path: str = None) -> None:
             for nested_report in validating_results.get(is_valid).reports:
                 print(nested_report)
                 logging.error(nested_report)
-            raise SystemExit
+            # raise SystemExit
 
     logging.info("Establishing Database Connection")
     database_handler = DatabaseHandler(metadata,

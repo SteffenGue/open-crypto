@@ -253,6 +253,73 @@ requests:
       type:
         - int
 
+
+  tick_data:
+    request:
+      template: products/{currency_pair}/trades
+      pair_template:  # e.g. BTC-USD
+        template: "{first}-{second}"
+        lower_case: false
+      params:
+        limit:
+          default: 1000
+        after:
+          function:
+            - last_value # function
+            - 1          # min:0, max:1
+            - 1000       # default value
+            - 1000       # offset: value + offset
+          type:
+            - int
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          time:
+            type:
+            - str
+          trade_id:
+            type: int
+          price:
+            type:
+            - str
+          size:
+            type:
+            - str
+          side:
+            type: str
+    mapping:
+    - key: time
+      path:
+      - time
+      type:
+      - str
+      - dateparser
+    - key: price
+      path:
+      - price
+      type:
+      - str
+      - float
+    - key: amount
+      path:
+      - size
+      type:
+      - str
+      - float
+    - key: direction
+      path:
+      - side
+      type:
+      - str
+    - key: id
+      path:
+        - trade_id
+      type:
+        - int
+
   historic_rates: # Historical rates should not be polled frequently. If you need real-time information, use the trade and book endpoints along with the websocket feed.
     request:
       template: products/{currency_pair}/candles

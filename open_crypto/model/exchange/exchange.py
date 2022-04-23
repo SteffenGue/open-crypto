@@ -155,6 +155,7 @@ class Exchange:
     def __init__(self,
                  yaml_file: Dict[str, Any],
                  db_first_timestamp: Callable[[DatabaseTable, int], datetime],
+                 db_max_value: Callable,
                  timeout: int,
                  comparator: str = "equal_or_lower",
                  interval: Any = "days"):
@@ -185,6 +186,7 @@ class Exchange:
         self.base_interval = interval
         self.comparator = comparator
         self.get_first_timestamp = db_first_timestamp
+        self.get_maximum_value = db_max_value
 
         self.api_url = yaml_file["api_url"]
         if yaml_file.get("rate_limit"):
@@ -220,6 +222,7 @@ class Exchange:
         """
 
         timeout = aiohttp.ClientTimeout(total=self.timeout)
+        params = {k: v for k, v in params.items() if v is not None}
         try:
             async with session.get(url=url, params=params, timeout=timeout, **kwargs) as resp:
                 assert resp.status in range(200, 300)
@@ -282,13 +285,13 @@ class Exchange:
         Depending on if data can be received for all available currency pairs with one request
         the methods sends a request for each currency pair or just one request for all the data.
 
-        The Method is asynchronous so that after the request is send, the program does not wait
+        The Method is asynchronous so that after the request is sent, the program does not wait
         until the response arrives. For asynchronicity we use the library asyncio.
         For sending and dealing with requests/responses the library aiohttp is used.
 
-        The methods gets the requests matching url out of request_urls.
+        The methods get the requests matching url out of request_urls.
         Parameters are passed in a dictionary.
-        If it does not exist None will be returned. Otherwise it sends and awaits the response(.json)
+        If it does not exist None will be returned. Otherwise, it sends and awaits the response(.json)
         and tries afterwards to parse the json to a dictionary.
         The parsed json is then returned with the name of this exchange, so
         the response is assignable to this exchange and the time when the response arrived.
@@ -306,7 +309,7 @@ class Exchange:
             Tuple of the following structure:
                 (exchange_name, start time, response time, response)
                 - time of arrival is a datetime-object in utc
-        @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answered
+        @exceptions ClientConnectionError: the connection to the exchange timed out or the exchange did not answer
                     Exception: the given response of an exchange could not be evaluated
         """
 
@@ -532,8 +535,15 @@ class Exchange:
             @param val: contains the function name as string.
             @return:
             """
-            if val == "last_timestamp":
+            if not isinstance(val, list):
+                val = [val]
+
+            if "last_timestamp" in val:
                 return {cp: self.get_first_timestamp(request_table, cp.id, last_row)
+                        for cp, last_row in currency_pairs.items()}
+            elif "last_value" in val:
+
+                return {cp: self.get_maximum_value(request_table, cp.id, val[1], val[2], val[3])
                         for cp, last_row in currency_pairs.items()}
 
         def default(val: str, **arguments: dict) -> str:

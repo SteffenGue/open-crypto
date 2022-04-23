@@ -1,0 +1,27 @@
+general:
+  database:
+    sqltype: sqlite #sqlite, mariadb, mysql or postgres
+    client: null # mariadb, pymysql or psycopg2
+    user_name:
+    password:
+    host: localhost
+    port: 5432
+    db_name: ExampleDB
+
+  operation_settings:
+    frequency: once # once or any number in minutes
+    interval: minutes # minutes, hours, days, weeks, months
+    timeout: 10
+    enable_logging: true
+    asynchronously: true
+jobs:
+  MinuteCandleExample:
+    request_method: tick_data # ticker, trades, order_books, historic_rates
+    update_cp: false
+    exchanges: coinbase
+    excluded: null
+    currency_pairs: eth-btc, eth-usdt, btc-usdt
+    first_currencies: null  # filter database by the first currency and take all
+    second_currencies: null  # filter database by the second currency and take all.
+
+

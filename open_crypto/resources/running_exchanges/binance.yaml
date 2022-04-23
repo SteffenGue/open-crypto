@@ -4,6 +4,7 @@ api_url: https://api.binance.com/api/
 rate_limit:
   max: 1200
   unit: 60
+
 requests:
   currency_pairs:
     request:
@@ -270,6 +271,83 @@ requests:
         - sell
         - False
         - buy
+
+  tick_data:
+    request:
+      template: v1/aggTrades
+      pair_template: # e.g. BNBBTC
+        template: "{first}{second}"
+        lower_case: false
+        alias: symbol
+      params:
+        limit:
+          max: 1000
+          default: 1000
+        fromId:
+          function:
+           - last_value
+           - 1
+           - 1
+
+    response:
+      type: list
+      values:
+        type: dict
+        values:
+          a:
+            type: int
+          p:
+            type:
+              - str
+              - float
+          q:
+            type:
+              - str
+              - float
+          T:
+            type:
+              - float
+              - from_timestamp
+              - 1
+          m:
+            type: bool
+          isBestMatch:
+            type: bool
+    mapping:
+      - key: id
+        path:
+          - a
+        type:
+          - int
+      - key: price
+        path:
+          - p
+        type:
+          - str
+          - float
+      - key: amount
+        path:
+          - q
+        type:
+          - str
+          - float
+      - key: time
+        path:
+          - T
+        type:
+          - float
+          - from_timestamp
+          - 1
+      - key: direction
+        path:
+          - m
+        type:
+          - value
+          - map
+          - True
+          - sell
+          - False
+          - buy
 
   historic_rates:
     request:
