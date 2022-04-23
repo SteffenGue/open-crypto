@@ -31,7 +31,7 @@ setup(
         "certifi",
         "datetime_periods",
         "matplotlib",
-        "numpy != 1.19.4",
+        "numpy != 1.21",
         "oyaml",
         "pandas",
         "pytest",
